@@ -1,0 +1,17 @@
+wheel
+cython
+numpy==1.23.0
+protobuf==3.20.2
+pillow
+onnx==1.13.0
+progressbar
+onnxsim
+# from requirements.txt of onnxsim (requirements.txt is not installed in stup.py of onnxsim)
+# and also aligning onnx, protobuf and onnxruntime versions with the rest of the edgeai packages
+onnx == 1.13.0
+onnxoptimizer >= 0.2.5
+onnxruntime == 1.14.0
+protobuf == 3.20.2
+rich != 12.1.0
+# install edgeai-modeloptimization
+git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@main#subdirectory=torchmodelopt
