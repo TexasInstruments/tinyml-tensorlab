@@ -1,0 +1,50 @@
+
+common:
+    target_module: 'timeseries'
+    task_type: 'arc_fault'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+dataset:
+    # enable/disable dataset loading
+    enable: True #False
+    dataset_name: arc_fault_example_dsk
+    input_data_path: 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip'
+
+data_processing: # One or more can be cascaded in the list
+    # transform: [ DownSample, SimpleWindow ]
+    # transform: 'DownSample SimpleWindow'
+    variables: 1
+    transform: [ ]
+    org_sr: 1
+    new_sr: 1
+    stride_window: 1
+    unit: 'time' # time or samples
+
+feature_extraction:
+    feature_extraction_name: ArcFault_1024Input_FFT
+    feature_size_per_frame: 512
+    num_frame_concat: 1
+    min_fft_bin: 1
+    fft_bin_size: 1
+
+training:
+    # enable/disable training
+    enable: True #False
+    # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
+    # generic timeseries model names for other SoCs: TimeSeries_Generic_3k, TimeSeries_Generic_7k
+    # additional F28P55 model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
+    # other model names: ArcFault_model_200, ArcFault_model_300, ArcFault_model_700 + above models
+    model_name: 'TimeSeries_Generic_3k_t'
+    model_config: ''
+    dataset_loader: SimpleTSDataset
+    batch_size: 64
+    training_epochs: 10
+    num_gpus: 0
+    run_quant_train_only: True
+
+compilation:
+    # enable/disable compilation
+    enable: True #False
+    # No preset is required for F28P55
+    preset_name: least_memory_preset
+    # preset_name: best_performance_preset

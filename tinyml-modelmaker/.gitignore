@@ -1,0 +1,11 @@
+.idea/
+data/labelstudio/
+!data/labelstudio/readme.txt
+data/projects/
+!data/projects/readme.txt
+data/downloads
+!data/downloads/readme.txt
+*.pyc
+*.egg-info/
+.pkl_memoize_py3
+__pycache__/

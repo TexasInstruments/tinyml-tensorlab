@@ -1,0 +1,45 @@
+
+common:
+    target_module: 'timeseries'
+    task_type: 'motor_fault'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+dataset:
+    # enable/disable dataset loading
+    enable: True #False
+    dataset_name: motor_fault_example_dsk
+
+data_processing: # One or more can be cascaded in the list
+    transform: [ ]
+    org_sr: 1
+    new_sr: 1
+    stride_window: 1
+    sequence_window: 256
+    variables: 3
+    unit: 'samples' # time or samples
+
+feature_extraction:
+    feature_extraction_name: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
+
+training:
+    # enable/disable training
+    enable: True #False
+    # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
+    # generic timeseries model names for other SoCs: TimeSeries_Generic_3k, TimeSeries_Generic_7k
+    # additional F28P55 model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
+    # other model names: MotorFault_model_1, MotorFault_model_2, MotorFault_model_2 + above models
+    model_name: 'TimeSeries_Generic_3k_t'
+    # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_2l.py'
+    model_config: ''
+    dataset_loader: SimpleTSDataset
+    batch_size: 256
+    training_epochs: 5
+    num_gpus: 1
+    run_quant_train_only: True
+
+compilation:
+    # enable/disable compilation
+    enable: True #False
+    # No preset is required for F28P55
+  # preset_name: least_memory_preset
+  # preset_name: best_performance_preset
