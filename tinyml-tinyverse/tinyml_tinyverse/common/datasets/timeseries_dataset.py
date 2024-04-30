@@ -189,26 +189,26 @@ class SimpleTSDataset(Dataset):
                 # raise AttributeError("Stride(ms): 'stride_window' required for 'SimpleWindow' transform")
 
         if ('FFT' in self.transforms):
-            self.frame_size = kwargs.get('frame_size') if 'frame_size' in kwargs.keys() else 1024
+            self.frame_size = kwargs.get('frame_size', 1024)
 
-            self.feature_size_per_frame = kwargs.get('feature_size_per_frame') if 'feature_size_per_frame' in kwargs.keys() else 256
-            self.num_frame_concat = kwargs.get('num_frame_concat') if 'num_frame_concat' in kwargs.keys() else 1  # feature concatenation
+            self.feature_size_per_frame = kwargs.get('feature_size_per_frame', 256)
+            self.num_frame_concat = kwargs.get('num_frame_concat', 1)  # feature concatenation
             # self.feature_size_per_frame = round(self.feature_size / self.num_frame_concat)
             self.feature_size = self.feature_size_per_frame * self.num_frame_concat
 
-            self.frame_skip = kwargs.get('frame_skip') if 'frame_skip' in kwargs.keys() else 1  # skipped frames during feature concatenation
-            self.min_fft_bin = kwargs.get('min_fft_bin') if 'min_fft_bin' in kwargs.keys() else 1  # 1: remove dc 0: keep dc
-            self.fft_bin_size = kwargs.get('fft_bin_size') if 'fft_bin_size' in kwargs.keys() else 2
+            self.frame_skip = kwargs.get('frame_skip', 1)  # skipped frames during feature concatenation
+            self.min_fft_bin = kwargs.get('min_fft_bin', 1)  # 1: remove dc 0: keep dc
+            self.fft_bin_size = kwargs.get('fft_bin_size', 2)
 
             self.sequence_window = self.feature_size
 
         elif ('MotorFault' in self.transforms): # motor fault
-            self.frame_size = kwargs.get('frame_size') if 'frame_size' in kwargs.keys() else 256
-            self.feature_size_per_frame = kwargs.get('feature_size_per_frame') if 'feature_size_per_frame' in kwargs.keys() else 16
-            self.num_frame_concat = kwargs.get('num_frame_concat') if 'num_frame_concat' in kwargs.keys() else 8
-            # self.num_channel = kwargs.get('num_channel') if 'num_channel' in kwargs.keys() else 3
-            self.dc_remove = kwargs.get('dc_remove') if 'dc_remove' in kwargs.keys() else True
-            self.stacking = kwargs.get('stacking') if 'stacking' in kwargs.keys() else '1D'
+            self.frame_size = kwargs.get('frame_size', 256)
+            self.feature_size_per_frame = kwargs.get('feature_size_per_frame', 16)
+            self.num_frame_concat = kwargs.get('num_frame_concat', 8)
+            # self.num_channel = kwargs.get('num_channel', 3)
+            self.dc_remove = kwargs.get('dc_remove', True)
+            self.stacking = kwargs.get('stacking', '1D')
 
             if self.stacking == '1D':
                 self.ch = 1
@@ -218,9 +218,9 @@ class SimpleTSDataset(Dataset):
                 self.ch = self.variables
                 self.wl = self.feature_size_per_frame * self.num_frame_concat
                 self.hl = 1
-            self.offset = kwargs.get('offset') if 'offset' in kwargs.keys() else 0
-            self.scale = kwargs.get('scale') if 'scale' in kwargs.keys() else 1
-            self.fs = kwargs.get('fs') if 'fs' in kwargs.keys() else 1 # not used
+            self.offset = kwargs.get('offset', 0)
+            self.scale = kwargs.get('scale', 1)
+            self.fs = kwargs.get('fs', 1)  # not used
         
         # else:
         #     self.logger.warning("stride window not provided. It will be same as sequence window, i.e. ZERO OVERLAP")
