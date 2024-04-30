@@ -30,11 +30,11 @@ feature_extraction:
 training:
     # enable/disable training
     enable: True #False
-    # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
-    # generic timeseries model names for other SoCs: TimeSeries_Generic_3k, TimeSeries_Generic_7k
+    # F28x generic timeseries model names: TimeSeries_Generic_AF_3k_t, TimeSeries_Generic_AF_7k_t
+    # generic timeseries model names for other SoCs: TimeSeries_Generic_AF_3k, TimeSeries_Generic_AF_7k
     # additional F28P55 model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
     # other model names: ArcFault_model_200, ArcFault_model_300, ArcFault_model_700 + above models
-    model_name: 'TimeSeries_Generic_3k_t'
+    model_name: 'TimeSeries_Generic_AF_3k_t'
     model_config: ''
     dataset_loader: SimpleTSDataset
     batch_size: 64
@@ -46,5 +46,5 @@ compilation:
     # enable/disable compilation
     enable: True #False
     # No preset is required for F28P55
-    preset_name: least_memory_preset
-    # preset_name: best_performance_preset
+#    preset_name: default_preset
+#    preset_name: best_performance_preset
