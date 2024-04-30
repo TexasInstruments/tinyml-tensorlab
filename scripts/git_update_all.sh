@@ -34,3 +34,5 @@ git subtree pull --prefix tinyml-docs ssh://git@bitbucket.itg.ti.com/tinyml-algo
 git subtree pull --prefix tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git main --squash
 git subtree pull --prefix tinyml-modelmaker ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git main --squash
 git subtree pull --prefix tinyml-modelzoo ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git main --squash
+
+git submodule update --remote
