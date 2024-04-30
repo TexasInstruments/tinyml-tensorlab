@@ -640,7 +640,7 @@
         }
       }
     },
-    "TimeSeries_Generic_3k":{
+    "TimeSeries_Generic_AF_7k":{
       "common":{
         "verbose_mode":true,
         "download_path":"./data/downloads",
@@ -648,6 +648,1226 @@
         "project_path":null,
         "project_run_path":null,
         "task_type":"arc_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_AF_7k",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_7K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":1,
+        "with_input_batchnorm":false,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"ArcFault_1024Input_FFT",
+            "enum":[
+              {
+                "value":"ArcFault_1024Input_FFT",
+                "label":"ArcFault_1024Input_FFT",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "TimeSeries_Generic_AF_7k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"arc_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_AF_7k_t",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_7K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"ArcFault_1024Input_FFT",
+            "enum":[
+              {
+                "value":"ArcFault_1024Input_FFT",
+                "label":"ArcFault_1024Input_FFT",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "TimeSeries_Generic_MF_7k":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"motor_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_MF_7k",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_7K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":1,
+        "with_input_batchnorm":false,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+            "enum":[
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "TimeSeries_Generic_MF_7k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"motor_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_MF_7k_t",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_7K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+            "enum":[
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "TimeSeries_Generic_3k":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -693,22 +1913,22 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":2
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":2
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":2
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":2
           }
         },
         "generic_model":true,
@@ -962,7 +2182,7 @@
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":"arc_fault",
+        "task_type":"generic_timeseries_classification",
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -1008,27 +2228,27 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":3
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":3
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":3
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":3
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":1
           }
         },
         "generic_model":true,
@@ -1275,6 +2495,1226 @@
         }
       }
     },
+    "TimeSeries_Generic_AF_3k":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"arc_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_AF_3k",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_3K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":1,
+        "with_input_batchnorm":false,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"ArcFault_1024Input_FFT",
+            "enum":[
+              {
+                "value":"ArcFault_1024Input_FFT",
+                "label":"ArcFault_1024Input_FFT",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "TimeSeries_Generic_AF_3k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"arc_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_AF_3k_t",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_3K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"ArcFault_1024Input_FFT",
+            "enum":[
+              {
+                "value":"ArcFault_1024Input_FFT",
+                "label":"ArcFault_1024Input_FFT",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "TimeSeries_Generic_MF_3k":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"motor_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_MF_3k",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_3K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":1,
+        "with_input_batchnorm":false,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+            "enum":[
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "TimeSeries_Generic_MF_3k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"motor_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":0.6,
+        "split_names":[
+          "train",
+          "val"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_MF_3k_t",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_3K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          }
+        },
+        "generic_model":true,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":1024,
+        "learning_rate":0.002,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":15,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.002,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+            "enum":[
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                "tooltip":"Windowing and FFT"
+              },
+              {
+                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          },
+          {
+            "label":"Directly run Quantized Training",
+            "name":"run_quant_train_only",
+            "type":"enum",
+            "default":"True",
+            "enum":[
+              {
+                "value":"True",
+                "label":"True",
+                "tooltip":"Quant Training Only"
+              },
+              {
+                "value":"False",
+                "label":"False",
+                "tooltip":"Float + Quant Training"
+              }
+            ]
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
     "ArcFault_model_200":{
       "common":{
         "verbose_mode":true,
@@ -1328,22 +3768,22 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":4
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":4
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":4
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":4
           }
         },
         "generic_model":false,
@@ -1395,26 +3835,6 @@
               {
                 "value":"ArcFault_1024Input_FFT",
                 "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -1643,27 +4063,27 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":5
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":5
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":5
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":5
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":2
           }
         },
         "generic_model":false,
@@ -1715,26 +4135,6 @@
               {
                 "value":"ArcFault_1024Input_FFT",
                 "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -1963,22 +4363,22 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":6
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":6
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":6
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":6
           }
         },
         "generic_model":false,
@@ -2030,26 +4430,6 @@
               {
                 "value":"ArcFault_1024Input_FFT",
                 "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -2278,27 +4658,27 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":7
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":7
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":7
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":7
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":3
           }
         },
         "generic_model":false,
@@ -2350,26 +4730,6 @@
               {
                 "value":"ArcFault_1024Input_FFT",
                 "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -2598,22 +4958,22 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":8
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":8
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":8
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":8
           }
         },
         "generic_model":false,
@@ -2665,26 +5025,6 @@
               {
                 "value":"ArcFault_1024Input_FFT",
                 "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -2913,27 +5253,27 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":9
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":9
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":9
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":9
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":4
           }
         },
         "generic_model":false,
@@ -2985,26 +5325,6 @@
               {
                 "value":"ArcFault_1024Input_FFT",
                 "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -3233,22 +5553,22 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":4
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":4
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":4
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":4
           }
         },
         "generic_model":false,
@@ -3295,13 +5615,8 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
             "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
               {
                 "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                 "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
@@ -3548,27 +5863,27 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":5
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":5
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":5
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":5
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":2
           }
         },
         "generic_model":false,
@@ -3615,13 +5930,8 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
             "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
               {
                 "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                 "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
@@ -3868,22 +6178,22 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":6
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":6
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":6
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":6
           }
         },
         "generic_model":false,
@@ -3930,13 +6240,8 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
             "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
               {
                 "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                 "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
@@ -4183,27 +6488,27 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":7
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":7
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":7
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":7
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":3
           }
         },
         "generic_model":false,
@@ -4250,13 +6555,8 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
             "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
               {
                 "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                 "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
@@ -4503,22 +6803,22 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":8
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":8
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":8
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":8
           }
         },
         "generic_model":false,
@@ -4565,13 +6865,8 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
             "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
               {
                 "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                 "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
@@ -4818,27 +7113,27 @@
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":9
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":9
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":9
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":9
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":4
           }
         },
         "generic_model":false,
@@ -4885,13 +7180,8 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
             "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              },
               {
                 "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                 "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
@@ -5618,7 +7908,7 @@
       },
       "dataset":{
         "dataset_name":"motor_fault_example_dsk",
-        "input_data_path":"http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip"
+        "input_data_path":"http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip"
       },
       "info":{
         "dataset_url":"http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip",

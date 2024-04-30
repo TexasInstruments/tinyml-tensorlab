@@ -52,12 +52,29 @@ def run(config):
 
     # get supported pretrained models for the given params
     model_descriptions = ai_target_module.runner.ModelRunner.get_model_descriptions(params)
-
+    feature_extraction_preset_descriptions = ai_target_module.runner.ModelRunner.get_feature_extraction_preset_descriptions(params)
     # update descriptions
     model_descriptions_desc = dict()
     for k, v in model_descriptions.items():
         s = copy.deepcopy(params)
         s.update(copy.deepcopy(v)).update(config)
+        # if 'feature_extraction' in v.keys():  # Modify the feature_extraction_name choices as per model
+        # Only populate feature extraction names whose task_type is same as model's task type
+        feature_extraction_choices = [fe_name for fe_name, fe_dict in feature_extraction_preset_descriptions.items()
+                                      if s.get('common').get('task_type') == fe_dict.get('common').get('task_type')]
+        if feature_extraction_choices:
+            for property_dict in s.get('training').get('properties'):
+                # s.get('training').get('properties') is a list (of dicts)
+                # property_dict is a dict
+                if property_dict['name'] == 'feature_extraction_name':
+                    new_enum = []
+                    for feature_extraction_enum in property_dict['enum']:
+                        if feature_extraction_enum['value'] in feature_extraction_choices:
+                            new_enum.append(feature_extraction_enum)
+                    property_dict['enum'] = new_enum
+                    property_dict['default'] = new_enum[0]['value']  # Random to be set as default
+
+
         model_descriptions_desc[k] = s
     #
 

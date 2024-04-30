@@ -28,6 +28,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 import os
+
 # plugins/additional models
 # see the setup_all.sh file to understand how to set this
 PLUGINS_ENABLE_GPL = False
@@ -91,27 +92,24 @@ TRAINING_BATCH_SIZE_DEFAULT = {
     TASK_CATEGORY_TS_CLASSIFICATION: 1024,
 }
 
-
 TARGET_SDK_VERSION = '5.2'
 TARGET_SDK_RELEASE = '05_02_00'
 
-
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = \
-f'''* Tiny ML introduction: https://ti.com/tinyml
+    f'''* Tiny ML introduction: https://ti.com/tinyml
 * Tiny ML model development information: https://github.com/TexasInstruments/tinyml
 * Tiny ML tools introduction: https://dev.ti.com/tinyml/
 '''
 
 ##### AM263 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_AM263 = \
-f'''* Product information: https://www.ti.com/product/AM2634
+    f'''* Product information: https://www.ti.com/product/AM2634
 * Development board: https://www.ti.com/tool/LP-AM263
 * SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X
 * SDK release: {TARGET_SDK_RELEASE}'''
 
-
 TARGET_DEVICE_DETAILS_AM263 = \
-f'''Quad-core Arm® Cortex®-R5F MCU up to 400 MHz with real-time control and security
+    f'''Quad-core Arm® Cortex®-R5F MCU up to 400 MHz with real-time control and security
 * More details : https://www.ti.com/product/AM2634
 
 Important links:
@@ -120,17 +118,15 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
-
 ##### F28003 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_F28003 = \
-f'''* Product information: https://www.ti.com/product/TMS320F280039C
+    f'''* Product information: https://www.ti.com/product/TMS320F280039C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
 * SDK release: {TARGET_SDK_RELEASE}'''
 
-
 TARGET_DEVICE_DETAILS_F28003 = \
-f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
+    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
 * More details : https://www.ti.com/product/TMS320F280039C
 
 Important links:
@@ -141,14 +137,13 @@ Additional information:
 
 ##### F28004 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_F28004 = \
-f'''* Product information: https://www.ti.com/product/TMS320F280049C
+    f'''* Product information: https://www.ti.com/product/TMS320F280049C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
 * SDK release: {TARGET_SDK_RELEASE}'''
 
-
 TARGET_DEVICE_DETAILS_F28004 = \
-f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
+    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
 * More details : https://www.ti.com/product/TMS320F280049C
 
 Important links:
@@ -157,17 +152,15 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
-
 ##### F2837 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837 = \
-f'''* Product information: https://www.ti.com/product/TMS320F28377D
+    f'''* Product information: https://www.ti.com/product/TMS320F28377D
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
 * SDK release: {TARGET_SDK_RELEASE}'''
 
-
 TARGET_DEVICE_DETAILS_F2837 = \
-f'''C2000™ 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC
+    f'''C2000™ 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC
 * More details : https://www.ti.com/product/TMS320F28377D
 
 Important links:
@@ -176,17 +169,15 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
-
 ##### F28P65 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P65 = \
-f'''* Product information: https://www.ti.com/product/TMS320F28P650DK
+    f'''* Product information: https://www.ti.com/product/TMS320F28P650DK
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
 * SDK release: {TARGET_SDK_RELEASE}'''
 
-
 TARGET_DEVICE_DETAILS_F28P65 = \
-f'''C2000™ 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES
+    f'''C2000™ 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES
 * More details : https://www.ti.com/product/TMS320F28P650DK
 
 Important links:
@@ -195,17 +186,15 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
-
 ##### F28P55 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55 = \
-f'''* Product information: https://www.ti.com/product/TMS320F28P550SJ
+    f'''* Product information: https://www.ti.com/product/TMS320F28P550SJ
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
 * SDK release: {TARGET_SDK_RELEASE}'''
 
-
 TARGET_DEVICE_DETAILS_F28P55 = \
-f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
+    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
 * More details : https://www.ti.com/product/TMS320F280039C
 
 Important links:
@@ -213,7 +202,6 @@ Important links:
 
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
 
 # higher device_selection_factor indicates higher performance device.
 TARGET_DEVICE_DESCRIPTIONS = {
@@ -279,13 +267,13 @@ TASK_DESCRIPTIONS = {
         'target_module': 'timeseries',
         'target_devices': TARGET_DEVICES,
         'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
-    },    
+    },
     TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
         'task_name': 'Generic Time Series Classification',
         'target_module': 'timeseries',
         'target_devices': TARGET_DEVICES,
         'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
-    },       
+    },
     # TASK_TYPE_AUDIO_CLASSIFICATION: {
     #     'task_name': 'Image Classification',
     #     'target_module': 'vision',
@@ -296,33 +284,42 @@ TASK_DESCRIPTIONS = {
 
 DATA_PREPROCESSING_DEFAULT = 'default'
 DATA_PREPROCESSING_PRESET_DESCRIPTIONS = dict(
-    default=dict(downsampling_factor=1),)
+    default=dict(downsampling_factor=1), )
 FEATURE_EXTRACTION_DEFAULT = 'default'
 FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
-    default=dict(),
+    # default=dict(),
     # FFT256=dict(feature_extraction=dict(transform='FFT', frame_size=256, frame_skip=1,),
     #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=256)),
     # FFT512=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1,),
     #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512)),
-    ArcFault_1024Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=1024, frame_skip=1,),
-                    data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1,)),
+    ArcFault_1024Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=1024, frame_skip=1, ),
+                                data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+                                common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
 
-    MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D =dict(
-        feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16, num_frame_concat=8,
+    MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
+        feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
+                                num_frame_concat=8,
                                 dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3,)),
-    MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1 =dict(
-        feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16, num_frame_concat=8,
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3, ),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+    MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
+        feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
+                                num_frame_concat=8,
                                 dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3)),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
-        feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128, num_frame_concat=1,
+        feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
+                                num_frame_concat=1,
                                 dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3)),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
-        feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128, num_frame_concat=1,
+        feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
+                                num_frame_concat=1,
                                 dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3)),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
 )
 
 DATASET_EXAMPLES = dict(
@@ -334,13 +331,15 @@ DATASET_EXAMPLES = dict(
     ),
     arc_fault_example_dsi=dict(
         dataset=dict(input_data_path='http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsi.zip'),
-        data_processing=dict(transforms=['Downsample','SimpleWindow'], org_sr=313000, new_sr=3200, stride_window=0.001, sequence_window=0.16),
+        data_processing=dict(transforms=['Downsample', 'SimpleWindow'], org_sr=313000, new_sr=3200, stride_window=0.001,
+                             sequence_window=0.16),
         feature_extraction=dict(feature_extraction_name=None)
     ),
     motor_fault_example_dsk=dict(
         dataset=dict(input_data_path='http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
-        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D'))
+        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get(
+            'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D'))
     ),
 )
 DATASET_DEFAULT = 'default'
@@ -364,96 +363,107 @@ CROSS_COMPILER_OPTIONS_C28 = ("--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -
 '''
 --float_support=${C2000_DEVICE_FPU} --gen_func_subsections -I${C2000_CGT_PATH}/include -I${C2000WARE_PATH}/driverlib/${C2000_DEVICE}/driverlib -I${C2000WARE_PATH}/device_support/${C2000_DEVICE}/common/include -I
 '''
-CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu64', DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28P55.lower() + 'x')
-COMPILATION_C28_AUTOGEN = dict(target="c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CROSS_COMPILER_CL2000,)
-COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CROSS_COMPILER_CL2000,)
-COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CROSS_COMPILER_CL2000,)
+CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+                                                                  DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+                                                                  DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+                                                                 DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu64',
+                                                                  DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+                                                                  DEVICE_NAME=TARGET_DEVICE_F28P55.lower() + 'x')
+COMPILATION_C28_AUTOGEN = dict(target="c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+                               target_c_mcpu='c28', cross_compiler=CROSS_COMPILER_CL2000, )
+COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28',
+                                  cross_compiler=CROSS_COMPILER_CL2000, )
+COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28',
+                                  cross_compiler=CROSS_COMPILER_CL2000, )
 
 PRESET_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
         TASK_CATEGORY_TS_CLASSIFICATION: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang", cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type",)
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang", cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type",)
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(target= "c", target_c_mcpu= 'cortex_r5', cross_compiler= "tiarmclang", cross_compiler_options= "-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type",)
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
             ),
         },
     },
     TARGET_DEVICE_F28003: {
         TASK_TYPE_ARC_FAULT: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
         },
     },
     TARGET_DEVICE_F28004: {
         TASK_TYPE_ARC_FAULT: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
     },
@@ -463,10 +473,10 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65)
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
@@ -474,48 +484,48 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65)
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
-                },
+        },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_BEST_PERFORMANCE: dict(
                 compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65)
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65,)
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
-                },
+        },
     },
     TARGET_DEVICE_F28P55: {
         TASK_TYPE_ARC_FAULT: {
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55,)
+                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55,)
+                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55,)
+                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
         },
     },
     TARGET_DEVICE_F2837: {
         TASK_TYPE_ARC_FAULT: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837,),
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, ),
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, )
             ),
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
@@ -523,10 +533,10 @@ PRESET_DESCRIPTIONS = {
         },
         TASK_TYPE_MOTOR_FAULT: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837,),
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, ),
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, )
             ),
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
@@ -534,10 +544,10 @@ PRESET_DESCRIPTIONS = {
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837,),
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, ),
             ),
             COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837,)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, )
             ),
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
@@ -590,7 +600,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_example_dsk',
-            'input_data_path': 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip',
+            'input_data_path': 'http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip',
         },
         'info': {
             'dataset_url': 'http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip',

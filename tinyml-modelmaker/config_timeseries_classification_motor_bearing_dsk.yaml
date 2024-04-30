@@ -24,11 +24,11 @@ feature_extraction:
 training:
     # enable/disable training
     enable: True #False
-    # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
-    # generic timeseries model names for other SoCs: TimeSeries_Generic_3k, TimeSeries_Generic_7k
+    # F28x generic timeseries model names: TimeSeries_Generic_MF_3k_t, TimeSeries_Generic_MF_7k_t
+    # generic timeseries model names for other SoCs: TimeSeries_Generic_MF_3k, TimeSeries_Generic_MF_7k
     # additional F28P55 model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
     # other model names: MotorFault_model_1, MotorFault_model_2, MotorFault_model_2 + above models
-    model_name: 'TimeSeries_Generic_3k_t'
+    model_name: 'TimeSeries_Generic_MF_7k_t'
     # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_2l.py'
     model_config: ''
     dataset_loader: SimpleTSDataset
