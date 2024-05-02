@@ -113,9 +113,6 @@ def init_params(*args, **kwargs):
 
                 dict(label="Feature Extraction Name", name="feature_extraction_name", type="enum",
                      default='ArcFault_1024Input_FFT', enum=[
-                        # {"value":"default", "label":"None", "tooltip":"Simple windowing"},
-                        # {"value":"FFT256", "label":"FFT256", "tooltip":"Windowing and FFT"},
-                        # {"value":"FFT512", "label":"FFT512", "tooltip":"Windowing and FFT"},
                         {"value": "ArcFault_1024Input_FFT", "label": "ArcFault_1024Input_FFT", "tooltip": "Windowing and FFT"},
                         {"value": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                          "label": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
@@ -123,9 +120,9 @@ def init_params(*args, **kwargs):
                         {"value": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
                          "label": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
                          "tooltip": "Windowing and FFT"},
-                        {"value": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                         "label": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                         "tooltip": "Windowing and FFT"},
+                        # {"value": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                        #  "label": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+                        #  "tooltip": "Windowing and FFT"},
                         {"value": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                          "label": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
                          "tooltip": "Windowing and FFT"},
@@ -134,7 +131,7 @@ def init_params(*args, **kwargs):
 
                 # dict(label="Number of Input Channels", name="variables", type="integer", default=1, min=1, max=100),
 
-                dict(label="Feature Size per frame", name="feature_size", type="enum", default=256, enum=[
+                dict(label="Feature Size per frame", name="feature_size_per_frame", type="enum", default=256, enum=[
                     {"value": 16, "label": "16 features extracted per frame", "tooltip": "Extract 16 features per frame"},
                     {"value": 32, "label": "32 features extracted per frame", "tooltip": "Extract 32 features per frame"},
                     {"value": 64, "label": "64 features extracted per frame", "tooltip": "Extract 64 features per frame"},
