@@ -44,9 +44,7 @@ These are the devices that are supported currently. As additional devices are su
 * SDK release: 05_02_00
 
 ## Additional information
-* Tiny ML introduction: https://ti.com/tinyml
-* Tiny ML model development information: https://github.com/TexasInstruments/tinyml
-* Tiny ML tools introduction: https://dev.ti.com/tinyml/
+
 
 
 ## Dataset format

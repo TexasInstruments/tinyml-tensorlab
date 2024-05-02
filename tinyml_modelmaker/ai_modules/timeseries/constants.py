@@ -61,7 +61,6 @@ TARGET_DEVICE_F28P55 = 'F28P55'
 TARGET_DEVICE_F28P65 = 'F28P65'
 
 TARGET_DEVICES = [
-    # TARGET_DEVICE_AM263,
     TARGET_DEVICE_F2837,
     TARGET_DEVICE_F28003,
     TARGET_DEVICE_F28004,
@@ -69,8 +68,13 @@ TARGET_DEVICES = [
     TARGET_DEVICE_F28P65,
 ]
 
+# will not be listed in the GUI, but can be used in command line
+TARGET_DEVICES_ADDITIONAL = [
+    TARGET_DEVICE_AM263,
+]
+
 # include additional devices that are not currently supported in release.
-TARGET_DEVICES_ALL = TARGET_DEVICES
+TARGET_DEVICES_ALL = TARGET_DEVICES + TARGET_DEVICES_ADDITIONAL
 
 TARGET_DEVICE_TYPE_MCU = 'MCU'
 
@@ -95,8 +99,9 @@ TRAINING_BATCH_SIZE_DEFAULT = {
 TARGET_SDK_VERSION = '5.2'
 TARGET_SDK_RELEASE = '05_02_00'
 
-TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = \
-    f'''* Tiny ML introduction: https://ti.com/tinyml
+TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
+# TODO: Once the links are up add this
+f'''* Tiny ML introduction: https://ti.com/tinyml
 * Tiny ML model development information: https://github.com/TexasInstruments/tinyml
 * Tiny ML tools introduction: https://dev.ti.com/tinyml/
 '''
@@ -194,8 +199,8 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55 = \
 * SDK release: {TARGET_SDK_RELEASE}'''
 
 TARGET_DEVICE_DETAILS_F28P55 = \
-    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
-* More details : https://www.ti.com/product/TMS320F280039C
+    f'''C2000™ 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU
+* More details : https://www.ti.com/product/TMS320F28P550SJ
 
 Important links:
 {TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55}
@@ -216,7 +221,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28004: {
         'device_name': TARGET_DEVICE_F28004,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 0,
+        'device_selection_factor': 1,
         'device_details': TARGET_DEVICE_DETAILS_F28004,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
@@ -224,7 +229,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P55: {
         'device_name': TARGET_DEVICE_F28P55,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 1,
+        'device_selection_factor': 4,
         'device_details': TARGET_DEVICE_DETAILS_F28P55,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
@@ -232,7 +237,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P65: {
         'device_name': TARGET_DEVICE_F28P65,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 1,
+        'device_selection_factor': 3,
         'device_details': TARGET_DEVICE_DETAILS_F28P65,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
@@ -240,7 +245,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
         'device_name': TARGET_DEVICE_AM263,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 2,
+        'device_selection_factor':5,
         'device_details': TARGET_DEVICE_DETAILS_AM263,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
@@ -248,7 +253,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F2837: {
         'device_name': TARGET_DEVICE_F2837,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 3,
+        'device_selection_factor': 2,
         'device_details': TARGET_DEVICE_DETAILS_F2837,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
@@ -296,24 +301,24 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
                                 data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
                                 common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
 
-    MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
-        feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
-                                num_frame_concat=8,
-                                dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3, ),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+    # MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
+    #     feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
+    #                             num_frame_concat=8,
+    #                             dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
+    #     data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3, ),
+    #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
                                 num_frame_concat=8,
                                 dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
-    MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
-        feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
-                                num_frame_concat=1,
-                                dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+    # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
+    #     feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
+    #                             num_frame_concat=1,
+    #                             dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
+    #     data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+    #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
                                 num_frame_concat=1,
@@ -339,7 +344,7 @@ DATASET_EXAMPLES = dict(
         dataset=dict(input_data_path='http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get(
-            'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D'))
+            'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1'))
     ),
 )
 DATASET_DEFAULT = 'default'
@@ -382,6 +387,34 @@ COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=tru
 
 PRESET_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
+        TASK_TYPE_ARC_FAULT: {
+            COMPILATION_BEST_PERFORMANCE: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+            COMPILATION_LEAST_MEMORY: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+        },
+        TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_BEST_PERFORMANCE: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+            COMPILATION_LEAST_MEMORY: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+        },
         TASK_CATEGORY_TS_CLASSIFICATION: {
             COMPILATION_BEST_PERFORMANCE: dict(
                 compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",

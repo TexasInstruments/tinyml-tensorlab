@@ -109,7 +109,9 @@ def set_model_selection_factor(model_descriptions):
                 for paretto_id, xy in enumerate(xy_list_shortlisted):
                     xy_id = xy[2]
                     m = model_desc_list[xy_id]
-                    m.training.target_devices[target_device].model_selection_factor = paretto_id
+                    if m.training.target_devices[target_device].model_selection_factor is None:
+                        m.training.target_devices[target_device].model_selection_factor = paretto_id
+                    #
                 #
             #
         #
