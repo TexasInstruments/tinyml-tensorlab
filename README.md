@@ -17,6 +17,5 @@
 ## tinyml-modelmaker
 [tinyml-modelmaker](tinyml-modelmaker)
 - Bring your own data and train/compile models
-- Define your own models
 
 <hr>
