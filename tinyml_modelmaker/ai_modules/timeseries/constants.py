@@ -330,18 +330,18 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024'))
     ),
     arc_fault_example_dsi=dict(
-        dataset=dict(input_data_path='http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsi.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip'),
         data_processing=dict(transforms=['Downsample', 'SimpleWindow'], org_sr=313000, new_sr=3200, stride_window=0.001,
                              sequence_window=0.16),
         feature_extraction=dict(feature_extraction_name=None)
     ),
     motor_fault_example_dsk=dict(
-        dataset=dict(input_data_path='http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get(
             'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1'))
@@ -597,10 +597,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_classification_dsi',
-            'input_data_path': 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsi.zip',
+            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
         },
         'info': {
-            'dataset_url': 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsi.zip',
+            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
             'dataset_detailed_name': 'Arc Fault Classification Example1',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -615,10 +615,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_classification_dsk',
-            'input_data_path': 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Arc Fault Classification Example2',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -633,10 +633,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_example_dsk',
-            'input_data_path': 'http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Motor Bearing Fault Classification Example',
             'dataset_description': 'Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking',
             'dataset_size': None,
