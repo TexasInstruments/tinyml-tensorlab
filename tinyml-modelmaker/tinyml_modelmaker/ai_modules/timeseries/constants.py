@@ -93,7 +93,7 @@ TRAINING_DEVICES = [
 ]
 
 TRAINING_BATCH_SIZE_DEFAULT = {
-    TASK_CATEGORY_TS_CLASSIFICATION: 1024,
+    TASK_CATEGORY_TS_CLASSIFICATION: 32,
 }
 
 TARGET_SDK_VERSION = '5.2'
@@ -301,12 +301,12 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
                                 data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
                                 common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
 
-    # MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
-    #     feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
-    #                             num_frame_concat=8,
-    #                             dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
-    #     data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3, ),
-    #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+    MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
+        feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
+                                num_frame_concat=8,
+                                dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3, ),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
                                 num_frame_concat=8,
