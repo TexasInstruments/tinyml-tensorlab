@@ -26,7 +26,7 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \                             |\n                             |--annotations\n \
   \                                  |--instances_train_list.txt\n               \
   \                    |--instances_val_list.txt\n</pre>\n\n- Use a suitable dataset\
-  \ name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip)\
+  \ name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip)\
   \ to understand further.\n- In the config file, provide the name of the dataset\
   \ (dataset_name in this example) in the field dataset_name and provide the path\
   \ or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked\
@@ -146,7 +146,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -371,7 +371,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -596,7 +596,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -821,7 +821,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -854,8 +854,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
+      - default: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
         enum:
+        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
+          tooltip: Windowing and FFT
+          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
         - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
           tooltip: Windowing and FFT
           value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
@@ -1049,7 +1052,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1082,8 +1085,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
+      - default: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
         enum:
+        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
+          tooltip: Windowing and FFT
+          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
         - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
           tooltip: Windowing and FFT
           value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
@@ -1277,7 +1283,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1507,7 +1513,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1741,7 +1747,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1971,7 +1977,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 1024
+      batch_size: 32
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -2596,7 +2602,7 @@ sample_dataset_descriptions:
       task_type: arc_fault
     dataset:
       dataset_name: arc_fault_classification_dsi
-      input_data_path: http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsi.zip
+      input_data_path: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip
     info:
       dataset_description: Example arc-fault timeseries classification dataset with
         2 categories - arc, normal
@@ -2604,14 +2610,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsi.zip
+      dataset_url: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip
   arc_fault_example_dsk:
     common:
       task_category: timeseries_classification
       task_type: arc_fault
     dataset:
       dataset_name: arc_fault_classification_dsk
-      input_data_path: http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip
+      input_data_path: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip
     info:
       dataset_description: Example arc-fault timeseries classification dataset with
         2 categories - arc, normal
@@ -2619,14 +2625,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip
+      dataset_url: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip
   motor_fault_example_dsk:
     common:
       task_category: timeseries_classification
       task_type: motor_fault
     dataset:
       dataset_name: motor_fault_example_dsk
-      input_data_path: http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip
+      input_data_path: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip
     info:
       dataset_description: Example motor-fault timeseries classification dataset with
         4 categories - normal, localized, erosion, flaking
@@ -2634,7 +2640,7 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: http://uda0484689.dhcp.ti.com:8100/motor_fault_classification_dsk.zip
+      dataset_url: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip
 target_device_descriptions:
   AM263:
     device_details: "Quad-core Arm\xAE Cortex\xAE-R5F MCU up to 400 MHz with real-time\
