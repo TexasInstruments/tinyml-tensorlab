@@ -13,4 +13,4 @@ scipy==1.11.4
 torcheval==0.0.7
 torchinfo==1.8.0
 git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@main#subdirectory=torchmodelopt
-https://artifactory.itg.ti.com/artifactory/generic-epd-sdto-codegen-local/tvm/mcu/ti_mcu_nnc-1.2.0-cp310-cp310-linux_x86_64.whl
+https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.2.0-cp310-cp310-linux_x86_64.whl
