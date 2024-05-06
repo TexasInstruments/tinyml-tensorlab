@@ -152,7 +152,7 @@ model_descriptions:
       distributed: true
       enable: true
       generic_model: false
-      learning_rate: 0.002
+      learning_rate: 0.04
       log_file_path: null
       log_summary_regex: null
       model_architecture: backbone
@@ -165,14 +165,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -239,7 +239,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -377,7 +377,7 @@ model_descriptions:
       distributed: true
       enable: true
       generic_model: false
-      learning_rate: 0.002
+      learning_rate: 0.04
       log_file_path: null
       log_summary_regex: null
       model_architecture: backbone
@@ -390,14 +390,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -464,7 +464,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -602,7 +602,7 @@ model_descriptions:
       distributed: true
       enable: true
       generic_model: false
-      learning_rate: 0.002
+      learning_rate: 0.04
       log_file_path: null
       log_summary_regex: null
       model_architecture: backbone
@@ -615,14 +615,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -689,7 +689,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -821,13 +821,13 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 32
+      batch_size: 256
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
       enable: true
       generic_model: false
-      learning_rate: 0.002
+      learning_rate: 0.01
       log_file_path: null
       log_summary_regex: null
       model_architecture: backbone
@@ -840,14 +840,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -920,7 +920,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -1052,13 +1052,13 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 32
+      batch_size: 256
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
       enable: true
       generic_model: false
-      learning_rate: 0.002
+      learning_rate: 0.01
       log_file_path: null
       log_summary_regex: null
       model_architecture: backbone
@@ -1071,14 +1071,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -1151,7 +1151,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -1283,7 +1283,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 32
+      batch_size: 64
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1302,14 +1302,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -1385,7 +1385,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -1513,7 +1513,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 32
+      batch_size: 64
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1532,14 +1532,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -1615,7 +1615,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -1747,7 +1747,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 32
+      batch_size: 64
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1766,14 +1766,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -1849,7 +1849,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
@@ -1977,7 +1977,7 @@ model_descriptions:
       test_data: null
       test_quant_model: false
     training:
-      batch_size: 32
+      batch_size: 64
       dataset_loader: SimpleTSDataset
       dataset_path: null
       distributed: true
@@ -1996,14 +1996,14 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
-      - default: 15
+      - default: 50
         label: Epochs
         max: 300
         min: 1
         name: training_epochs
         type: integer
       - decimal_places: 3
-        default: 0.002
+        default: 0.04
         increment: 0.001
         label: Learning Rate
         max: 0.1
@@ -2079,7 +2079,7 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'True'
+      - default: 'False'
         enum:
         - label: 'True'
           tooltip: Quant Training Only
