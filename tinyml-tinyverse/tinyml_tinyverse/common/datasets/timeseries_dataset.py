@@ -87,7 +87,7 @@ class SimpleTSDataset(Dataset):
             [self.transforms.extend(x.split('_')) for x in transforms[0]]  # Accommodates both trannsforms like 'DownSample', 'SimpleWindow' as well as 'MotorFault_256IN_16FFTBIN_8FR_3CH_rmDC_1x384x1'
         self.org_sr = org_sr
         self.sequence_window = sequence_window
-        self.classes = set()
+        self.classes = list()
         self.label_map = dict()
         self.variables = variables
         self.resampling_factor = int(kwargs.get('resampling_factor')) if kwargs.get('resampling_factor') else 1
@@ -243,6 +243,8 @@ class SimpleTSDataset(Dataset):
         self.Y = []  # np.array([], dtype=np.uint8).reshape(0, num_classes)
 
         ''' Process Data '''
+        self.classes = sorted(set([opb(opd(datafile)) for datafile in self._walker]))
+
         for datafile in self._walker:
             file_extension = ops(datafile)[-1]
             if file_extension == ".npy":
@@ -266,9 +268,9 @@ class SimpleTSDataset(Dataset):
                 if len(x_temp.shape) > 1:
                     x_temp = x_temp[:, 1:]  # Remove the first auto numbered column by pandas
             else:
-                raise Exception("Supports only .npy, .pkl and .csv file formats for now")
+                raise Exception("Supports only .npy, .pkl, .txt and .csv file formats for now")
             label = opb(opd(datafile))
-            self.classes.add(label)
+            # self.classes.add(label)
             if 'Downsample' in self.transforms:
                 # Anyway the new_sr will be org_sr in case downsample is not given as a transform
                 x_temp = basic_transforms.Downsample(x_temp, self.org_sr, self.new_sr)
@@ -433,7 +435,7 @@ class SimpleTSDataset(Dataset):
 
             except ValueError as e:
                 self.logger.warning('Skipping {} as Error encountered: {}'.format(datafile, e))
-        
+
         self.label_map = {k: v for v, k in enumerate(self.classes)}  # E.g: {'arc': 0, 'non_arc': 1}
         if 'FFT' in self.transforms:
             # ArcFault_base1 requires an additional dimension N,C, H(features), W(1)
