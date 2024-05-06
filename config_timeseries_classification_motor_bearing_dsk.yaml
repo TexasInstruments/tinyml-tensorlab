@@ -27,13 +27,14 @@ training:
     # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
     model_name: 'TimeSeries_Generic_3k_t'
-    # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_2l.py'
+#    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
     dataset_loader: SimpleTSDataset
     batch_size: 256
-    training_epochs: 5
+    training_epochs: 15
     num_gpus: 1
-    run_quant_train_only: True
+    learning_rate: 0.04
+    run_quant_train_only: False
 
 compilation:
     # enable/disable compilation

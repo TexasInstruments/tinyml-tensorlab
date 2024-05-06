@@ -106,8 +106,8 @@ def init_params(*args, **kwargs):
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
             with_input_batchnorm=False,
             properties=[
-                dict(label="Epochs", name="training_epochs", type="integer", default=15, min=1, max=300),
-                dict(label="Learning Rate", name="learning_rate", type="float", default=0.002, min=0.001, max=0.1,
+                dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=300),
+                dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1,
                      decimal_places=3, increment=0.001),
                 # dict(label="Resampling Factor", name="resampling_factor", type="integer", default=15, min=1, max=100),
 
@@ -149,7 +149,7 @@ def init_params(*args, **kwargs):
                 dict(label="Minimum FFT Bin Number", name="min_fft_bin", type="integer", default=1, min=0, max=256),
                 dict(label="FFT Bins used per Feature", name="fft_bin_size", type="integer", default=1, min=1, max=8),
 
-                dict(label="Directly run Quantized Training", name="run_quant_train_only", type="enum", default='True',
+                dict(label="Directly run Quantized Training", name="run_quant_train_only", type="enum", default='False',
                      enum=[{"value": "True", "label": "True", "tooltip": "Quant Training Only"},
                            {"value": "False", "label": "False", "tooltip": "Float + Quant Training"}]),
             ]
