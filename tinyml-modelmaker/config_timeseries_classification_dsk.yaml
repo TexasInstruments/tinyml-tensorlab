@@ -8,7 +8,7 @@ dataset:
     # enable/disable dataset loading
     enable: True #False
     dataset_name: arc_fault_example_dsk
-    input_data_path: 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip'
+#    input_data_path: 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'
 
 data_processing: # One or more can be cascaded in the list
     # transform: [ DownSample, SimpleWindow ]
