@@ -58,9 +58,24 @@ ${C2000_CGT_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
 # now install c2000ware
 C2000WARE_INSTALLER=C2000Ware_5_02_00_00_setup.run
 C2000WARE_INSTALLER_FILE=${INSTALLER_PATH}/${C2000WARE_INSTALLER}
-rm -f ${C2000WARE_INSTALLER_FILE}
-wget  http://c2000-ubuntu-build-pc.dhcp.ti.com/c2000ware-builds/5.02.00.00/RC1/${C2000WARE_INSTALLER} -O ${C2000WARE_INSTALLER_FILE}
-chmod +x ${C2000WARE_INSTALLER_FILE}
-${C2000WARE_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
+# rm -f ${C2000WARE_INSTALLER_FILE}
+wget http://c2000-ubuntu-build-pc.dhcp.ti.com/c2000ware-builds/5.02.00.00/Release/${C2000WARE_INSTALLER} -O ${C2000WARE_INSTALLER_FILE}
+if [ -e ${C2000WARE_INSTALLER_FILE} ]; then
+    echo -e "\033[0;32mDownloaded ${C2000WARE_INSTALLER_FILE} from TI remote repository!\033[0m"
+    chmod +x ${C2000WARE_INSTALLER_FILE}
+    ${C2000WARE_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
+else
+  echo -e "\033[31;5mCRITICAL WARNING! C2000Ware could not be downloaded! \033[0m"  # Blinking Text
+  echo -e "\033[0;33mPlease note that C2000Ware requires SW Export License permissions. \033[0m"
+  echo -e "\033[0;33mIf you are installing this outside TI network, then you will need to separately download the Linux version: ${C2000WARE_INSTALLER} from: https://www.ti.com/tool/download/C2000WARE/ \033[0m"
+  echo -e "\033[0;33mAnd then run the following 2 commands:\033[0m"
+  echo "chmod +x ${C2000WARE_INSTALLER}"
+  echo "${C2000WARE_INSTALLER} --mode unattended --prefix ${TOOLS_PATH}"
+  echo -e "\033[0;33mPlease hit Ctrl+C repeatedly and manually download the C2000Ware and install it. \033[0m"
+  echo -e "\033[0;33mContinuing installation nevertheless- meaning you can do AI training, but not model compilation. \033[0m"
+  echo -e "\033[0;32mIgnore the above messages if you have already manually installed C2000Ware \033[0m"
+  echo -e "\033[33;5mWaiting for 90 seconds to let you make a decision.\033[0m"
+  sleep 90
+fi
 
 sudo apt update && sudo apt install -y binutils g++ gcc
