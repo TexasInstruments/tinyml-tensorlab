@@ -186,7 +186,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 
