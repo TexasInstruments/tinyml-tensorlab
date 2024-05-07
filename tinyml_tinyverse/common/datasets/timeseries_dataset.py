@@ -40,6 +40,7 @@ from ..transforms import basic_transforms
 import pickle
 import pdb
 
+
 def define_dataloader(args):
     with open(args.data_pkl, 'rb') as f:
         data_dict = pickle.load(f)
@@ -68,7 +69,8 @@ def define_dataloader(args):
 class SimpleTSDataset(Dataset):
     """Univariate & Multivariate Time Series Dataset."""
 
-    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], org_sr=313000, sequence_window=0.25, variables=1, **kwargs):
+    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], org_sr=313000,
+                 sequence_window=0.25, variables=1, **kwargs):
         """
         Parameters
         ----------
@@ -82,7 +84,7 @@ class SimpleTSDataset(Dataset):
         """
         self._path = dataset_dir
         self.transforms = transforms
-        if len(transforms) and type(transforms[0])==list:  # When input is received from modelmaker, it becomes [['DownSample', 'SimpleWindow']]
+        if len(transforms) and isinstance(transforms[0], list):  # When input is received from modelmaker, it becomes [['DownSample', 'SimpleWindow']]
             self.transforms = []
             [self.transforms.extend(x.split('_')) for x in transforms[0]]  # Accommodates both trannsforms like 'DownSample', 'SimpleWindow' as well as 'MotorFault_256IN_16FFTBIN_8FR_3CH_rmDC_1x384x1'
         self.org_sr = org_sr
@@ -111,52 +113,56 @@ class SimpleTSDataset(Dataset):
 
         ## Computes one side FFT ##
         def fft_oneside(y, fs):
-            n = len(y) # Length of signal
+            n = len(y)  # Length of signal
             k = np.arange(n)
-            T = n/fs
-            frq = k/T # two sides frequency range, center at Fs/2
+            T = n / fs
+            frq = k / T  # two sides frequency range, center at Fs/2
             # Y = np.fft.fft(y)/n  # compute fft and normalize.
             Y = np.fft.fft(y)  # compute fft; no normalize; this is to match C2000 RFFT_f32_mag_TMU0() implementation
-            frq = frq[0:(int(n/2)+1)] # returns DC + n/2 samples; for visualization only
-            Y = abs(Y[0:(int(n/2)+1)])
+            frq = frq[0:(int(n / 2) + 1)]  # returns DC + n/2 samples; for visualization only
+            Y = abs(Y[0:(int(n / 2) + 1)])
             return frq, Y
 
         ## Computes FFT and binning (mimic c implementation) ##
-        def fft_bin(s, fs, nbins, no_dc): 
-            f,fft1 = fft_oneside(s, fs)
+        def fft_bin(s, fs, nbins, no_dc):
+            f, fft1 = fft_oneside(s, fs)
             n_fft = len(fft1)
-            if(no_dc==True):
-                fft1 = fft1[1:] # skip the first DC bin
+            if (no_dc == True):
+                fft1 = fft1[1:]  # skip the first DC bin
                 f = f[1:]
-                nSamples = (n_fft-1)//nbins
+                nSamples = (n_fft - 1) // nbins
             else:
-                nSamples = n_fft//nbins    
-            fbins=[]; mbins=[]
-            for i in range(0,nbins):
+                nSamples = n_fft // nbins
+            fbins = []
+            mbins = []
+            for i in range(0, nbins):
                 tmp = 0
-                i1 = int(i*nSamples)
+                i1 = int(i * nSamples)
                 i2 = i1 + nSamples
-                for m in range(i1,i2):
+                for m in range(i1, i2):
                     tmp = tmp + fft1[m]
-                mbins.append(tmp/nSamples)
-                fbins.append(f[i2-1]) # for visualization only; not needed in training
+                mbins.append(tmp / nSamples)
+                fbins.append(f[i2 - 1])  # for visualization only; not needed in training
             return fbins, mbins
-        
+
         def mf_getLabel(fname):
-            p=fname.split('/')[-1].split('_')
-            q=[int(a.split('label')[1]) for a in p if 'label' in a]
+            p = fname.split('/')[-1].split('_')
+            q = [int(a.split('label')[1]) for a in p if 'label' in a]
             return q[0]
 
         if subset in ["validation", "val"]:
-            val = kwargs.get('validation_list') if kwargs.get('validation_list') else glob(os.path.join(self._path, "val*_list.txt"))[0]
+            val = kwargs.get('validation_list') if kwargs.get('validation_list') else \
+            glob(os.path.join(self._path, "val*_list.txt"))[0]
             self.logger.info("Loading validation data from {}".format(val))
             self._walker = load_list(val)
         elif subset in ["testing", "test"]:
-            test = kwargs.get('testing_list') if kwargs.get('testing_list') else glob(os.path.join(self._path, "test*_list.txt"))[0]
+            test = kwargs.get('testing_list') if kwargs.get('testing_list') else \
+            glob(os.path.join(self._path, "test*_list.txt"))[0]
             self.logger.info("Loading testing data from {}".format(test))
             self._walker = load_list(test)
         elif subset in ["training", "train"]:
-            train = kwargs.get('training_list') if kwargs.get('training_list') else glob(os.path.join(self._path, "train*_list.txt"))[0]
+            train = kwargs.get('training_list') if kwargs.get('training_list') else \
+            glob(os.path.join(self._path, "train*_list.txt"))[0]
             self.logger.info("Loading training data from {}".format(train))
             self._walker = load_list(train)
 
@@ -166,7 +172,7 @@ class SimpleTSDataset(Dataset):
         sequence_window: Each sequence duration
         """
         # print(type(self.resampling_factor))
-        self.new_sr = self.org_sr /self.resampling_factor # Resampling_factor=1 by default
+        self.new_sr = self.org_sr / self.resampling_factor  # Resampling_factor=1 by default
         self.stride_window = self.sequence_window
 
         """
@@ -202,7 +208,7 @@ class SimpleTSDataset(Dataset):
 
             self.sequence_window = self.feature_size
 
-        elif ('MotorFault' in self.transforms): # motor fault
+        elif ('MotorFault' in self.transforms):  # motor fault
             self.frame_size = kwargs.get('frame_size', 256)
             self.feature_size_per_frame = kwargs.get('feature_size_per_frame', 16)
             self.num_frame_concat = kwargs.get('num_frame_concat', 8)
@@ -221,7 +227,7 @@ class SimpleTSDataset(Dataset):
             self.offset = kwargs.get('offset', 0)
             self.scale = kwargs.get('scale', 1)
             self.fs = kwargs.get('fs', 1)  # not used
-        
+
         # else:
         #     self.logger.warning("stride window not provided. It will be same as sequence window, i.e. ZERO OVERLAP")
         #     # raise AttributeError("Stride(ms): 'stride_window' required for 'SimpleWindow' transform")
@@ -231,14 +237,15 @@ class SimpleTSDataset(Dataset):
         self.samples_in_stride = int(self.new_sr * self.stride_window)
 
         self.logger.info("Data samples in one frame: {}".format(self.sequence_window, self.samples_in_sequence))
-        self.logger.info("Stride of {} samples implies window is moved by {} samples".format(self.stride_window, self.samples_in_stride))
+        self.logger.info("Stride of {} samples implies window is moved by {} samples".format(self.stride_window,
+                                                                                             self.samples_in_stride))
 
         # if self.variables == 1:
         #     # Univariate TS
         #     self.X = np.array([]).reshape(0, self.samples_in_sequence)
         # else:
         #     # Multivariate TS
-        self.X = np.array([]).reshape(0, self.variables, self.samples_in_sequence,)
+        self.X = np.array([]).reshape(0, self.variables, self.samples_in_sequence, )
 
         self.Y = []  # np.array([], dtype=np.uint8).reshape(0, num_classes)
 
@@ -283,15 +290,12 @@ class SimpleTSDataset(Dataset):
             if 'FFT' in self.transforms:
                 num_frame = len(x_temp) // self.frame_size
                 feature_framecase = []
-                label_framecase = []
-                # label_for_wave_frame = np.ones(len(x_temp)) if label=='arc' else np.zeros(len(x_temp))  # TODO: put label related stuff in a separate loop, not even sure if this & frame_size/2 line is required
                 feature_frame = []
                 for index_frame in range(0, num_frame):
                     # Get one frame and run FFT
                     wave_frame = x_temp.squeeze()[index_frame * self.frame_size:(index_frame + 1) * self.frame_size]  # Take one batch of (self.frame_size,) -> (1024,)
-                    wave_frame = wave_frame * np.hanning(self.frame_size)
-                    # label_frame = label_for_wave_frame[index_frame * self.frame_size:(index_frame + 1) * self.frame_size]
-                    fft_out = np.fft.fft(wave_frame) / self.frame_size  # compute fft and normalize.  (1024,)
+                    wave_frame_win = wave_frame * np.hanning(self.frame_size)
+                    fft_out = np.fft.fft(wave_frame_win) / self.frame_size  # compute fft and normalize.  (1024,)
                     mag = abs(fft_out[0:(int(self.frame_size / 2) + self.min_fft_bin)])  # (513,)
                     fft_bin_out = np.zeros((self.feature_size_per_frame,))
                     for index_feature in range(0, self.feature_size_per_frame):
@@ -300,113 +304,98 @@ class SimpleTSDataset(Dataset):
                                 self.min_fft_bin + index_feature * self.fft_bin_size + index_bin]
                     magdB = 10 * np.log(1e-12 + fft_bin_out)
                     # feature_frame contains all feature in this file
-                    feature_frame.append(magdB)  # [[ ]] -> 'num_frames' number of lists of 'self.feature_size_per_frame' elements each
+                    feature_frame.append(
+                        magdB)  # [[ ]] -> 'num_frames' number of lists of 'self.feature_size_per_frame' elements each
                     # concatenate multiple previous frames if needed
                     # store feature with proper concatenation into feature_framecase
                     if (index_frame >= self.num_frame_concat - 1) and (index_frame % self.frame_skip == 0):
-                        temp = np.array(
-                            [x for item in feature_frame[index_frame - self.num_frame_concat + 1:index_frame + 1] for x in
-                             item])  # self.num_frame_concat*(self.feature_size_per_frame,)
-                        # if (sum(label_frame) > self.frame_size / 2):  # TODO: Ask Lei, coz this will fail if multivariate y label exists
-                        #     feature_framecase.append(temp)
-                        #     label_framecase.append(1)
-                        # elif (sum(label_frame) == 0):
-                        #     feature_framecase.append(temp)
-                        #     label_framecase.append(0)
+                        temp = np.array([x for item in feature_frame[index_frame - self.num_frame_concat + 1:index_frame + 1] for x in item])  # self.num_frame_concat*(self.feature_size_per_frame,)
                         feature_framecase.append(temp)
                 x_temp = np.array(feature_framecase)
-                # y_temp = np.array(label_framecase)
-                # y_temp = np.array([label for i in range(x_temp.shape[0])])
 
-            elif ('MotorFault' in self.transforms): # pre-process functions for Motor faults
+            elif ('MotorFault' in self.transforms):  # pre-process functions for Motor faults
                 # Calculate features per axis
-                vax=[[] for a in range(self.variables)]
+                vax = [[] for a in range(self.variables)]
                 for ax in range(self.variables):
-                    vsel = x_temp.iloc[:, ax]/self.scale
-                    vsel = np.floor(vsel).astype(int) # convert data to fixpoint 
+                    vsel = x_temp.iloc[:, ax] / self.scale
+                    vsel = np.floor(vsel).astype(int)  # convert data to fixpoint
 
                     # Calculate number of frames with or w/o sample overlap
-                    if(self.offset!=0): 
-                        Nos_steps = len(vsel)//self.offset # Number of segments with overlap
-                        Nlast = len(vsel[int((Nos_steps-1)*self.offset):])//self.frame_size  # Make sure the last segment has at least Ns samples
-                        if(Nlast==0):
-                            Nos_steps-=1 # skip last one
+                    if (self.offset != 0):
+                        Nos_steps = len(vsel) // self.offset  # Number of segments with overlap
+                        Nlast = len(vsel[int((Nos_steps - 1) * self.offset):]) // self.frame_size  # Make sure the last segment has at least Ns samples
+                        if (Nlast == 0):
+                            Nos_steps -= 1  # skip last one
                     else:
-                        Nos_steps = 1 # non-overlap mode; start with sample at 0 index
-                    
+                        Nos_steps = 1  # non-overlap mode; start with sample at 0 index
+
                     # Prepare features per frame
-                    vl=[]; vl_mf=[]
+                    vl = []
+                    vl_mf = []
                     for n in range(0, Nos_steps):
-                        Nsteps = len(vsel[int(n*self.offset):]) // self.frame_size
+                        Nsteps = len(vsel[int(n * self.offset):]) // self.frame_size
                         for m in range(0, Nsteps):
-                            m1=int(m*self.frame_size + n*self.offset); m2=m1+int(self.frame_size)
-                            vs=vsel[m1:m2] # segmented data
+                            m1 = int(m * self.frame_size + n * self.offset)
+                            m2 = m1 + int(self.frame_size)
+                            vs = vsel[m1:m2]  # segmented data
 
                             # Select pre-processing methods
                             if ('RAW' in self.transforms):
-                                if(self.dc_remove==True):
-                                    vs = vs - np.sum(vs)//len(vs)  # -np.mean(vs) 
+                                if (self.dc_remove == True):
+                                    vs = vs - np.sum(vs) // len(vs)  # -np.mean(vs)
                                 vs_m = list(vs)
-                            elif ('FFTBIN' in self.transforms): 
+                            elif ('FFTBIN' in self.transforms):
                                 vs_f, vs_m = fft_bin(vs, self.fs, self.feature_size_per_frame, self.dc_remove)
-                                vs_m = 20*np.log10(vs_m) # dB
+                                vs_m = 20 * np.log10(vs_m)  # dB
                                 vs_m = list(vs_m)
                             else:
-                                print('Unsupported transform !!')
+                                raise('Unsupported transform for MotorFault!!')
                             # end method
-                            vl.append(vs_m) # save result
-                        
-                        if(self.num_frame_concat>1): # concatenate multiple frames
-                            for o in range(0, Nsteps-self.num_frame_concat+1):
-                                o1=o; o2=o1+self.num_frame_concat
-                                vtmp=[]
+                            vl.append(vs_m)  # save result
+
+                        if (self.num_frame_concat > 1):  # concatenate multiple frames
+                            for o in range(0, Nsteps - self.num_frame_concat + 1):
+                                o1 = o
+                                o2 = o1 + self.num_frame_concat
+                                vtmp = []
                                 for a in vl[o1:o2]:
-                                    vtmp=vtmp+a
+                                    vtmp = vtmp + a
                                 vl_mf.append(vtmp)
 
-                    vax[ax] = vl_mf if (self.num_frame_concat>1) else vl # save result per axis; select from single and multi-frame
+                    vax[ax] = vl_mf if (self.num_frame_concat > 1) else vl  # save result per axis; select from single and multi-frame
                 # Complete feature pre-processing
 
                 # Pack data in 1d format: samples x features; features; for example, xaxis[0:128]-yaxis[128:256]-zaxis[256:384]
-                dd=[]
-                for a in range(len(vax[0])): # loop through each measurement samples
-                    cc=[]
-                    for c in range(self.variables): # concatenate x+y+z data
+                dd = []
+                for a in range(len(vax[0])):  # loop through each measurement samples
+                    cc = []
+                    for c in range(self.variables):  # concatenate x+y+z data
                         cc = cc + vax[c][a]
                     dd.append(cc)
                 # vs_data[icond] = vs_data[icond] + dd
-                x_temp = np.array(dd) # format: samples x features
-                # y_temp = np.array(np.repeat(mf_getLabel(datafile), len(x_temp)))
-                y_temp = np.array([label for i in range(x_temp.shape[0])])
+                x_temp = np.array(dd)  # format: samples x features
                 # Reshape data to ch,wl,hl per measurement; final format: N,C,W,H; For example, 1500,3,128,1; dataloader random pick from N
                 N = x_temp.shape[0]
-                data_packed = np.zeros((N, self.ch, self.wl, self.hl)) # sample x channel x feature_length x height_length
-                for n in range(0,N): 
-                    for i in range(0,self.ch):
-                        nc = x_temp[n].shape[0]//self.ch # length per channel
-                        o1=i*nc; o2=o1+nc
+                data_packed = np.zeros(
+                    (N, self.ch, self.wl, self.hl))  # sample x channel x feature_length x height_length
+                for n in range(0, N):
+                    for i in range(0, self.ch):
+                        nc = x_temp[n].shape[0] // self.ch  # length per channel
+                        o1 = i * nc
+                        o2 = o1 + nc
                         tmp2 = x_temp[n][o1:o2]
-                        nh = nc // self.hl # length per height (break sequential data into multi-segments; 2d)
-                        for m in range(0,self.hl):
-                            s1=m*nh; s2=s1+nh
-                            data_packed[n,i,:,m] = tmp2[s1:s2]
-                
-                # self.X = data_packed
-                # self.Y = y_temp
+                        nh = nc // self.hl  # length per height (break sequential data into multi-segments; 2d)
+                        for m in range(0, self.hl):
+                            s1 = m * nh
+                            s2 = s1 + nh
+                            data_packed[n, i, :, m] = tmp2[s1:s2]
                 x_temp = data_packed
             y_temp = np.array([label for i in range(x_temp.shape[0])])
-            # else:
-            #     y_temp = np.array([label for i in range(x_temp.shape[0])])
-            # if self.variables == 1:
-            #     x_temp = x_temp.squeeze()  # TODO: If it is univariate, then maybe better to remove the dummy dimension
-            #     # on the other hand, code will be more generalised if we retain the dummy dimension
-            # else:
-            # if ('MF' not in self.transforms):
             try:
                 if x_temp.ndim == 2:
                     x_temp = np.expand_dims(x_temp, axis=1)
                 elif x_temp.ndim == 3:
-                    x_temp = x_temp.transpose(0,2,1)  # Interchange N,H,C to N,C,H
+                    x_temp = x_temp.transpose(0, 2, 1)  # Interchange N,H,C to N,C,H
 
                 if self.X.size == 0:
                     self.X = x_temp
@@ -418,12 +407,12 @@ class SimpleTSDataset(Dataset):
                     if kwargs.get('feat_ext_store_dir'):
                         x_raw_out_file_path = os.path.join(
                             kwargs.get('feat_ext_store_dir'),
-                            os.path.splitext(os.path.basename(datafile))[0] + '__'+ 'raw' + '_X.npy')
+                            os.path.splitext(os.path.basename(datafile))[0] + '__' + 'raw' + '_X.npy')
                         np.save(x_raw_out_file_path, x_temp_raw_out)
                         self.logger.debug(f"Stored raw data in {x_raw_out_file_path}")
 
                         transforms_chosen = '_'.join(self.transforms)
-                        out_file_name = os.path.splitext(os.path.basename(datafile))[0] + '__'+ transforms_chosen
+                        out_file_name = os.path.splitext(os.path.basename(datafile))[0] + '__' + transforms_chosen
                         x_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_X.npy')
                         y_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_Y.npy')
                         np.save(x_out_file_path, x_temp)
@@ -431,7 +420,8 @@ class SimpleTSDataset(Dataset):
                         np.save(y_out_file_path, y_temp)
                         self.logger.debug(f"Stored intermediate targets in {y_out_file_path}")
                     else:
-                        self.logger.warning("'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")
+                        self.logger.warning(
+                            "'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")
 
             except ValueError as e:
                 self.logger.warning('Skipping {} as Error encountered: {}'.format(datafile, e))
@@ -462,7 +452,6 @@ class SimpleTSDataset(Dataset):
             self.logger.error("No data could be loaded. Either file paths were erroneous or dimensions mismatched."
                               " Check prior logger messages/ data processing configurations")
 
-
         # self.X = torch.from_numpy(self.X)
         # self.Y = torch.from_numpy(self.Y)
 
@@ -483,4 +472,3 @@ class SimpleTSDataset(Dataset):
         #     spectrogram = torch.sqrt(real ** 2 + imag ** 2)  # 1,129,63
         #     waveform = spectrogram#.squeeze(1)
         return torch.from_numpy(self.X[index]), self.Y[index]
-
