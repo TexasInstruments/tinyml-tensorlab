@@ -262,9 +262,12 @@ class SimpleTSDataset(Dataset):
         # Space for Dataset specific initialisations
         self._prepare_empty_variables(**kwargs)
         for datafile in self._walker:
-            x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
-            # Space for Dataset specific initialisations
-            self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
+            try:
+                x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
+                # Space for Dataset specific initialisations
+                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
+            except ValueError as v:
+                self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
         self._process_targets()
         return self
 
@@ -354,10 +357,14 @@ class ArcFaultDataset(SimpleTSDataset):
         # Space for Dataset specific initialisations
         self._prepare_empty_variables(**kwargs)
         for datafile in self._walker:
-            x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
-            # Space for Dataset specific feature_extractions
-            x_temp, x_temp_raw_out = self.__feature_extraction(x_temp)
-            self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
+            try:
+                x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
+                # Space for Dataset specific feature_extractions
+                x_temp, x_temp_raw_out = self.__feature_extraction(x_temp)
+                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
+            except ValueError as v:
+                self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
+
         # ArcFault_base1 requires an additional dimension N,C, H(features), W(1)
         self.X = np.expand_dims(self.X, axis=-1)
         self._process_targets()
@@ -536,9 +543,12 @@ class MotorFaultDataset(SimpleTSDataset):
         # Space for Dataset specific initialisations
         self._prepare_empty_variables(**kwargs)
         for datafile in self._walker:
-            x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
-            # Space for Dataset specific feature_extractions
-            x_temp, x_temp_raw_out = self.__feature_extraction(x_temp)
-            self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
+            try:
+                x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
+                # Space for Dataset specific feature_extractions
+                x_temp, x_temp_raw_out = self.__feature_extraction(x_temp)
+                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
+            except ValueError as v:
+                self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
         self._process_targets()
         return self
