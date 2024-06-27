@@ -56,3 +56,4 @@ username123@computer:~$
   * But you can certainly access, copy, and move files around between the drives as needed.
 
 ## Step 3: Installing Tiny ML Modelmaker
+- Follow the same steps as in the main [documentation](../README.md)
