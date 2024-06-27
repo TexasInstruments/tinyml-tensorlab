@@ -78,6 +78,8 @@ import os
 from logging import getLogger
 import numpy as np
 import random
+import pandas as pd
+from tabulate import tabulate
 
 try:
     from apex import amp
@@ -649,16 +651,20 @@ def evaluate(model, criterion, data_loader, device, transform, log_suffix='', pr
     # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
     logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f}')
     logger.info(f'{header} F1-Score {metric_logger.f1.global_avg:.3f}')
-    logger.info('\n' + '\n'.join([f"Ground Truth:(Class {i}), Predicted:(Class {j}): {int(confusion_matrix_total[i][j])}" for j in range(kwargs.get('num_classes')) for i in range(kwargs.get('num_classes'))]))
-    return metric_logger.acc1.global_avg
+    # logger.info('\n' + '\n'.join([f"Ground Truth:(Class {i}), Predicted:(Class {j}): {int(confusion_matrix_total[i][j])}" for j in range(kwargs.get('num_classes')) for i in range(kwargs.get('num_classes'))]))
+    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
+                  columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
+                  index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]),
+                                                         headers="keys", tablefmt='grid')))
+    return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, confusion_matrix_total
 
 
-def export_model(model, input_shape, output_dir, opset_version=18, quantization=0, quantization_error_logging=False, example_input=None):
+def export_model(model, input_shape, output_dir, opset_version=17, quantization=0, quantization_error_logging=False, example_input=None):
     logger = getLogger("root.export_model")
     device="cpu"  # torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # example_input[0].unsqueeze(0) will create a tensor with batch size 1: n,c,h,w -> 1,c,h,w
     dummy_input = torch.rand(size=input_shape).to(device) if example_input is None else \
-        torch.tensor(example_input[0].unsqueeze(0), dtype=torch.float, device=device)
+        example_input[0].unsqueeze(0).to(dtype=torch.float, device=device)
     onnx_file = os.path.join(output_dir, 'model.onnx')
     logger.debug(f"Quantization Mode: {quantization}, {type(quantization)}")
     logger.info(f'Exporting ONNX model from: {onnx_file}')
@@ -667,7 +673,7 @@ def export_model(model, input_shape, output_dir, opset_version=18, quantization=
     model_copy = model_copy.to(device)
     if quantization:
         if quantization_error_logging and example_input is not None and hasattr(model_copy, 'measure_stats'):
-            example_input = torch.tensor(example_input, dtype=torch.float, device=device)
+            example_input = example_input.to(dtype=torch.float, device=device)
             model_copy_for_log = copy.deepcopy(model_copy)         
             qdq_model_output = model_copy_for_log(example_input)
             model_copy_for_log = model_copy_for_log.convert(output_dequantize=quantization_error_logging)

@@ -85,10 +85,10 @@ class CNN_TS_GEN_BASE_7K(GenericModelWithSpec):
 
 if __name__ == '__main__':
     yaml.Dumper.ignore_aliases = lambda *data: True
-    filename = 'cnn_ts_gen_base_13k.yaml'
+    filename = 'cnn_ts_gen_base_7k.yaml'
     with open(filename, 'w') as fp:
-        yaml.dump(CNN_TS_GEN_BASE_6K(dict()).model_spec, fp, default_flow_style=False, sort_keys=False)
+        yaml.dump(CNN_TS_GEN_BASE_7K(dict()).model_spec, fp, default_flow_style=False, sort_keys=False)
 
     filename = 'cnn_ts_gen_base_3k.yaml'
     with open(filename, 'w') as fp:
-        yaml.dump(CNN_TS_GEN_BASE_2K(dict()).model_spec, fp, default_flow_style=False, sort_keys=False)
+        yaml.dump(CNN_TS_GEN_BASE_3K(dict()).model_spec, fp, default_flow_style=False, sort_keys=False)
