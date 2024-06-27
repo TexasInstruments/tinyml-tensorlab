@@ -223,6 +223,7 @@ Enabling CUDA GPU support inside a docker environment requires several additiona
 Once CUDA is installed, you will be able to model training much faster.
 
 ### Additional Docs
+- [Bring Your Own Model for Compilation](./docs/BYOM_for_Compilation.md)
 - [Understanding the config.yaml](./docs/UnderstandingConfigFile.md)
 - [Adding Models](./docs/AddingModels.md)
 - [Adding Modalities](./docs/AddingModalities.md)

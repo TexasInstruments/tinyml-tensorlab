@@ -46,16 +46,19 @@ def main(config):
     params = ai_target_module.runner.ModelRunner.init_params()
 
     # get pretrained model for the given model_name
+
     model_name = config['training']['model_name']
     model_description = ai_target_module.runner.ModelRunner.get_model_description(model_name)
-    if model_description is None:
-        print(f"please check if the given model_name is a supported one: {model_name}")
-        return False
+    if config['training']['enable']:
+        if model_description is None:
+            print(f"please check if the given model_name is a supported one: {model_name}")
+            return False
     #
     dataset_preset_descriptions = ai_target_module.runner.ModelRunner.get_dataset_preset_descriptions(params)
     dataset_preset_name = ai_target_module.constants.DATASET_DEFAULT
-    if 'dataset_name' in config['dataset']:
-        dataset_preset_name = config['dataset']['dataset_name']
+    if config['dataset']['enable']:
+        if 'dataset_name' in config['dataset']:
+            dataset_preset_name = config['dataset']['dataset_name']
     dataset_preset_description = dataset_preset_descriptions.get(dataset_preset_name) or dict()
 
     feature_extraction_preset_descriptions = ai_target_module.runner.ModelRunner.get_feature_extraction_preset_descriptions(params)

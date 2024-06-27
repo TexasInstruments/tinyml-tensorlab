@@ -152,10 +152,11 @@ class ModelRunner():
 
         #####################################################################
         # prepare model training
-        self.training_target_module = training.get_target_module(self.params.training.training_backend,
-                                                              self.params.common.task_category)
-        self.model_training = self.training_target_module.ModelTraining(self.params)
-        self.params.update(self.model_training.get_params())
+        if self.params.training.enable:
+            self.training_target_module = training.get_target_module(self.params.training.training_backend,
+                                                                  self.params.common.task_category)
+            self.model_training = self.training_target_module.ModelTraining(self.params)
+            self.params.update(self.model_training.get_params())
 
         #####################################################################
         # prepare for model compilation
