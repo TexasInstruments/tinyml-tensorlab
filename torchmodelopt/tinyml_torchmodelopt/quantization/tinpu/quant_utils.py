@@ -3,7 +3,16 @@ import edgeai_torchmodelopt.xmodelopt.quantization.v2.quant_fx_base
 import torch
 
 
-def compute_offset_scale_shift(offset, weight, num_bits_shift=8, num_bits_scale=1, print_mse=False):
+def compute_offset_scale_shift(offset, weight, num_bits_shift=5, num_bits_scale=1, print_mse=False):
+    """
+    Represent offset, weight using add, mult and right shift
+    :param offset: additive offset
+    :param weight: multiplicative weight
+    :param num_bits_shift: number of bits to represent the shift value. this is not the number of bits to shift (which depends on the weight value), but the number of bits to represent the shift value.
+    :param num_bits_scale: number of bits to represent the scale value.
+    :param print_mse:
+    :return:
+    """
     weight_abs = weight.abs()
     weight_sign = weight.sign()
     scale_max = (2**num_bits_scale)-1
@@ -15,7 +24,15 @@ def compute_offset_scale_shift(offset, weight, num_bits_shift=8, num_bits_scale=
     scale[mask] = 0
     shift[mask] = 1
 
-    assert(torch.sum(scale > scale_max) == 0)
+    if torch.sum(scale > scale_max) != 0:
+        raise RuntimeError(
+            f"Error in Quant convert:compute_offset_scale_shift. Output multipliation could not be converted. \n"
+            f"Invalid in output multipliation value: {weight.cpu().numpy()} \n"
+            f"Make sure that the model is trained properly with good hyper parameters. "
+            f"(try adjusting: training epochs, learning rate, QAT after float training etc): \n"
+        )
+    #
+
     scale = weight_sign*torch.round(scale)
     shift_mult = torch.pow(torch.tensor([2.0]), -shift)
 
@@ -27,7 +44,7 @@ def compute_offset_scale_shift(offset, weight, num_bits_shift=8, num_bits_scale=
 
     # add round offset to the offset. since the offset is before the scale, divide it by scale before adding
     shift_round_offset = torch.pow(torch.tensor([2.0]), (shift-1)) / scale
-    offset = torch.floor(offset + shift_round_offset)
+    offset = torch.round(offset + shift_round_offset)
 
     return offset, scale, shift_mult
 
@@ -153,20 +170,20 @@ class TINPUQuantizedReplacement:
     def from_q_qbn(model, start, end):
         qbn_module = dict(model.named_modules())[end.target]
         bn_sigma = torch.sqrt(qbn_module.running_var + qbn_module.eps)
-        bn_sigma_inv = 1.0 / bn_sigma
 
         scale2 = qbn_module.scale
         zero_point2 = qbn_module.zero_point
-        # zero_point_offset_for_activation = -128
-        # output_zero_point = + zero_point2 + zero_point_offset_for_activation
 
-        oss_offset = (- qbn_module.running_mean + qbn_module.bias*bn_sigma )
-        combined_weight = (qbn_module.weight / bn_sigma) / scale2
+        oss_offset = (- qbn_module.running_mean + qbn_module.bias*bn_sigma)
+        # first get the effective weight due to batchnorm
+        combined_weight = (qbn_module.weight / bn_sigma)
+        # then modify the weight by output scale so that the output is converted to output scale
+        combined_weight = combined_weight / scale2
         oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(oss_offset, combined_weight, num_bits_scale=8)
 
         oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -128, 127, ndim=4, dim=1)
-        oss_module.scale = qbn_module.scale
-        oss_module.zero_point = qbn_module.zero_point
+        oss_module.scale = scale2
+        oss_module.zero_point = zero_point2
         return oss_module
 
     @staticmethod
@@ -230,9 +247,8 @@ class TINPUQuantizedReplacement:
         qbias = qbias.int_repr()
 
         # conv_module.bias.data.copy_(qbias)
-        relative_scale = (qconvrelu_module.scale / acc_scale).float()
         relative_mult = (acc_scale / qconvrelu_module.scale).float()
-        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(qbias, torch.tensor(relative_mult), num_bits_shift=15)
+        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(qbias, relative_mult)
         if with_relu:
             oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -255, 255)
             seq_module = torch.nn.Sequential(conv_module, oss_module, torch.nn.ReLU(), torch.nn.Hardtanh(0, 255))
@@ -299,9 +315,8 @@ class TINPUQuantizedReplacement:
         qbias = qbias.int_repr()
 
         # conv_module.bias.data.copy_(qbias)
-        relative_scale = (qlinear_module.scale / acc_scale).float()
         relative_mult = (acc_scale / qlinear_module.scale).float()
-        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(qbias, torch.tensor(relative_mult), num_bits_shift=15)
+        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(qbias, relative_mult)
 
         if with_relu:
             oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 255, ndim=2, dim=1)
