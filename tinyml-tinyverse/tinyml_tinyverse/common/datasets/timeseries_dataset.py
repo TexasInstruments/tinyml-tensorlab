@@ -37,8 +37,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader, random_split
 from ..transforms import basic_transforms
-import pickle
-import pdb
+from tqdm import tqdm
 
 
 class SimpleTSDataset(Dataset):
@@ -261,7 +260,7 @@ class SimpleTSDataset(Dataset):
     def prepare(self, **kwargs):
         # Space for Dataset specific initialisations
         self._prepare_empty_variables(**kwargs)
-        for datafile in self._walker:
+        for datafile in tqdm(self._walker):
             try:
                 x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
                 # Space for Dataset specific initialisations
@@ -356,7 +355,7 @@ class ArcFaultDataset(SimpleTSDataset):
     def prepare(self, **kwargs):
         # Space for Dataset specific initialisations
         self._prepare_empty_variables(**kwargs)
-        for datafile in self._walker:
+        for datafile in tqdm(self._walker):
             try:
                 x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
                 # Space for Dataset specific feature_extractions
@@ -542,7 +541,7 @@ class MotorFaultDataset(SimpleTSDataset):
     def prepare(self, **kwargs):
         # Space for Dataset specific initialisations
         self._prepare_empty_variables(**kwargs)
-        for datafile in self._walker:
+        for datafile in tqdm(self._walker):
             try:
                 x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
                 # Space for Dataset specific feature_extractions
