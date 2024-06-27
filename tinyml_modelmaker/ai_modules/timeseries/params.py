@@ -59,8 +59,8 @@ def init_params(*args, **kwargs):
             dataset_name=None,
             dataset_path=None,  # dataset split will be created here
             extract_path=None,
-            split_factor=0.60,
-            split_names=('train', 'val'),
+            split_factor=(0.6, 0.3),
+            split_names=('train', 'val', 'test'),
             max_num_files=10000,
             input_data_path=None,  # input images
             input_annotation_path=None,  # annotation file
@@ -149,9 +149,9 @@ def init_params(*args, **kwargs):
                 dict(label="Minimum FFT Bin Number", name="min_fft_bin", type="integer", default=1, min=0, max=256),
                 dict(label="FFT Bins used per Feature", name="fft_bin_size", type="integer", default=1, min=1, max=8),
 
-                dict(label="Directly run Quantized Training", name="run_quant_train_only", type="enum", default='False',
-                     enum=[{"value": "True", "label": "True", "tooltip": "Quant Training Only"},
-                           {"value": "False", "label": "False", "tooltip": "Float + Quant Training"}]),
+                # dict(label="Directly run Quantized Training", name="run_quant_train_only", type="enum", default='False',
+                #      enum=[{"value": "True", "label": "True", "tooltip": "Quant Training Only"},
+                #            {"value": "False", "label": "False", "tooltip": "Float + Quant Training"}]),
             ]
         ),
         testing=dict(

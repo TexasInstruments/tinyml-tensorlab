@@ -296,6 +296,9 @@ These are the devices that are supported currently. As additional devices are su
 ### {constants.TARGET_DEVICE_F28003}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28003}
 
+### {constants.TARGET_DEVICE_F280015}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015}
+
 ## Additional information
 {constants.TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}
 

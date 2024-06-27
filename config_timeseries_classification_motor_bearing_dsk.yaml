@@ -24,17 +24,20 @@ feature_extraction:
 training:
     # enable/disable training
     enable: True #False
+    dataset_loader: MotorFaultDataset
     # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
-    model_name: 'TimeSeries_Generic_3k_t'
+    model_name: 'MotorFault_model_1_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
-    dataset_loader: SimpleTSDataset
     batch_size: 256
     training_epochs: 15
-    num_gpus: 1
+    num_gpus: 0  # 1
     learning_rate: 0.04
     run_quant_train_only: False
+
+testing:
+    test_quant_model: True
 
 compilation:
     # enable/disable compilation

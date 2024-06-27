@@ -39,12 +39,12 @@ HOME_DIR=$(realpath $HOME_DIR)
 
 #################################################################################
 # internal or external repositories
-USE_INTERNAL_REPO=1
+USE_INTERNAL_REPO=0
 
 if [[ ${USE_INTERNAL_REPO} -eq 1 ]]; then
     SOURCE_LOCATION="ssh://git@bitbucket.itg.ti.com/tinyml-algo/"
 else
-    SOURCE_LOCATION="https://github.com/TexasInstruments/"
+    SOURCE_LOCATION="https://github.com/TexasInstruments/tinyml-tensorlab/"
 fi
 # print
 echo "SOURCE_LOCATION="${SOURCE_LOCATION}

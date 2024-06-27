@@ -81,7 +81,7 @@ class DatasetHandling:
         pass
 
     def run(self):
-        max_num_files = self.get_max_num_files()
+        # max_num_files = self.get_max_num_files()
         # dataset reading/splitting
         need_to_create_splits = False
         # self.out_files = []
