@@ -70,8 +70,11 @@ import os
 import time
 import random
 import sys
-# import pandas as pd
+import pandas as pd
+import onnxruntime as ort
+import torcheval
 import numpy as np
+from tabulate import tabulate
 # Torch Modules
 import torch
 import torch.nn as nn
@@ -80,12 +83,15 @@ import torchinfo
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import utils, misc_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import command_display, Logger, create_dir
-from tinyml_tinyverse.common.datasets import SimpleTSDataset
+from tinyml_tinyverse.common.datasets import *
 from tinyml_tinyverse.common import models
 from edgeai_torchmodelopt.xnn.utils import is_url_or_file, load_weights
 import tinyml_torchmodelopt
+
+from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
 import pdb
-dataset_loader_dict = {'SimpleTSDataset': SimpleTSDataset}
+dataset_loader_dict = {'SimpleTSDataset': SimpleTSDataset, 'ArcFaultDataset': ArcFaultDataset, 'MotorFaultDataset': MotorFaultDataset}
+
 
 def split_weights(weights_name):
     weights_list = weights_name.split(',')
@@ -190,7 +196,7 @@ def get_args_parser():
     )
     parser.add_argument(
         "--test-only",
-        dest="test_only",
+        dest="test_onnx_only",
         help="Only test the model",
         action="store_true",
     )
@@ -238,7 +244,7 @@ def get_args_parser():
     parser.add_argument('--DEBUG', action='store_true', help='Log mode set to DEBUG')
 
     parser.add_argument("--compile-model", default=0, type=int, help="Compile the model using PyTorch2.0 functionality")
-    parser.add_argument("--opset-version", default=18, type=int, help="ONNX Opset version")
+    parser.add_argument("--opset-version", default=17, type=int, help="ONNX Opset version")
     
     parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int, choices=tinyml_torchmodelopt.quantization.TinyMLQuantizationVersion.get_choices(), help="Quantization Aware Training (QAT)")
     parser.add_argument("--quantization-type", default="DEFAULT", help="Actual Quantization Flavour - applies only if quantization is enabled") 
@@ -316,21 +322,22 @@ def load_data(datadir, args):
     logger.info("Loading data")
     dataset_loader = dataset_loader_dict.get(args.dataset_loader)
 
-
     st = time.time()
-    if args.test_only:
+    if args.test_onnx_only:
         # datadir is supposed to be test dir
         if args.dataset == 'modelmaker':
             test_folders = os.path.normpath(datadir).split(os.sep)
             test_anno = glob(
                 os.path.join(os.sep.join(test_folders[:-1]), 'annotations', f'{args.annotation_prefix}_test*_list.txt'))
             test_list = test_anno[0] if len(test_anno) == 1 and os.path.exists(test_anno[0]) else None
-            dataset_test = dataset_loader("test", dataset_dir=args.data_path, validation_list=test_list, **vars(args))
+            dataset_test = dataset_loader("test", dataset_dir=args.data_path, validation_list=test_list, **vars(args)).prepare(**vars(args))
         else:
             # dataset_test = torchvision.datasets.ImageFolder(datadir, val_transform)
-            dataset_test = dataset_loader("test", dataset_dir=args.data_path, **vars(args))
+            dataset_test = dataset_loader("test", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
         logger.info("Loading Test/Evaluation data")
-        logger.info('target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join([f"{i}: {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)]),))
+        logger.info('Test Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join([
+            f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
+            f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
         test_sampler = torch.utils.data.SequentialSampler(dataset_test)
         logger.info("Took {0:.2f} seconds".format(time.time() - st))
 
@@ -351,9 +358,9 @@ def load_data(datadir, args):
             train_folders = os.path.normpath(datadir).split(os.sep)
             train_anno = glob(os.path.join(os.sep.join(train_folders[:-1]), 'annotations', f'{args.annotation_prefix}_train*_list.txt'))
             training_list = train_anno[0] if len(train_anno)==1 and os.path.exists(train_anno[0]) else None
-            dataset = dataset_loader("training", dataset_dir=args.data_path, training_list=training_list, **vars(args))
+            dataset = dataset_loader("training", dataset_dir=args.data_path, training_list=training_list, **vars(args)).prepare(**vars(args))
         else:
-            dataset = dataset_loader("training", dataset_dir=args.data_path, **vars(args))
+            dataset = dataset_loader("training", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
         if args.cache_dataset:
             logger.info("Saving dataset_train to {}".format(cache_path))
             utils.mkdir(os.path.dirname(cache_path))
@@ -375,9 +382,9 @@ def load_data(datadir, args):
             val_folders = os.path.normpath(datadir).split(os.sep)
             val_anno = glob(os.path.join(os.sep.join(val_folders[:-1]), 'annotations', f'{args.annotation_prefix}_val*_list.txt'))
             val_list = val_anno[0] if len(val_anno)==1 and os.path.exists(val_anno[0]) else None
-            dataset_test = dataset_loader("val", dataset_dir=args.data_path, validation_list=val_list, **vars(args))
+            dataset_test = dataset_loader("val", dataset_dir=args.data_path, validation_list=val_list, **vars(args)).prepare(**vars(args))
         else:
-            dataset_test = dataset_loader("val", dataset_dir=args.data_path, **vars(args))
+            dataset_test = dataset_loader("val", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
         # TODO: Add utils and uncomment the if block
         # if args.cache_dataset:
         #     logger.info("Saving dataset_test to {}".format(cache_path))
@@ -390,8 +397,11 @@ def load_data(datadir, args):
         test_sampler = torch.utils.data.distributed.DistributedSampler(dataset_test)
     else:
         logger.info('Train Data: target count: {} : Split Up: {}'.format(len(dataset.Y), ';\t'.join(
-            [f"{[label_name for label_name, label_index in dataset.label_map.items() if label_index == i][0]}:"
+            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset.label_map.items() if label_index == i][0]}:"
              f" {len(np.where(dataset.Y == i)[0])} " for i in np.unique(dataset.Y)])))
+        logger.info('Val Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join(
+            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
+             f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
         # logger.critical('target train 0/1: {}/{} {}'.format(len(np.where(dataset.Y == np.unique(dataset.Y)[0])[0]), len(np.where(dataset.Y == np.unique(dataset.Y)[1])[0]), len(dataset.Y)))
         class_sample_count = np.array([len(np.where(dataset.Y == t)[0]) for t in np.unique(dataset.Y)])
         weight = 1. / class_sample_count
@@ -405,13 +415,57 @@ def load_data(datadir, args):
     return dataset, dataset_test, train_sampler, test_sampler
 
 
+def generate_golden_vectors(output_dir, dataset):
+    logger = getLogger("root.generate_golden_vectors")
+    import onnxruntime as ort
+    headerfile_info = {}
+    vector_files = []
+    ort_sess = ort.InferenceSession(os.path.join(output_dir, 'model.onnx'))
+    input_name = ort_sess.get_inputs()[0].name
+    output_name = ort_sess.get_outputs()[0].name
+
+    golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
+    create_dir(golden_vectors_dir)
+    logger.info(f"Creating Golden data for reference at {golden_vectors_dir}")
+    label_index_dict = {label: np.where(dataset.Y == label)[0] for label in np.unique(dataset.Y)}
+
+    for label, indices in label_index_dict.items():
+        # For each label, 4 random golden test vectors will be selected and printed out
+        for index in random.sample(list(indices), k=2):  # Originally k=4
+            np_raw = dataset.X_raw[index]
+            np_feat = dataset.X[index]
+            pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
+
+            half_path = os.path.join(golden_vectors_dir, f'test_vector_class{label}')
+
+            # Saving as .txt
+            np.savetxt(half_path + f'_X_adc_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'uint16_t test_vector_class{label}_X_adc_{index}[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'_X_adc_{index}.txt')
+            np.savetxt(half_path + f'_X_features_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'int8_t test_vector_class{label}_X_features_{index}[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'_X_features_{index}.txt')
+            np.savetxt(half_path + f'_Y_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'int8_t test_vector_class{label}_Y_{index}[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'_Y_{index}.txt')
+
+    headerfile_info = '\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()])
+    for file_path in vector_files:
+        file_name = os.path.splitext(os.path.basename(file_path))[0]
+        with open(file_path) as fp:
+            file_array = fp.read()
+        headerfile_info += f'\n{file_array}\n'
+
+    global_var_h = os.path.join(golden_vectors_dir, 'global.h')
+    with open(global_var_h, 'w') as fp:
+        fp.write(headerfile_info)
+    logger.info("Creating C header file for variables at: {}".format(global_var_h))
+
+
 def main(gpu, args):
+    transform = None
     if not args.output_dir:
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
         args.output_dir = os.path.join('./data/checkpoints/classification', output_folder, f'{args.model}', args.date)
     utils.mkdir(args.output_dir)
     log_file = os.path.join(args.output_dir, f'run.log')
-    # TODO: logger = xnn.utils.TeeLogger(log_file)
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True if args.quantization else False, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)
@@ -468,6 +522,38 @@ def main(gpu, args):
         sampler=test_sampler, num_workers=args.workers, pin_memory=True,
         collate_fn=collate_fn, )
 
+    if args.test_onnx_only:
+        ort_sess = ort.InferenceSession(os.path.join(args.output_dir, 'model.onnx'))
+        input_name = ort_sess.get_inputs()[0].name
+        output_name = ort_sess.get_outputs()[0].name
+        predicted = []
+        ground_truth = torch.tensor([])
+        for batched_data, batched_target in data_loader:
+            batched_data = batched_data.to(device, non_blocking=True).float()
+            batched_target = batched_target.to(device, non_blocking=True).long()
+            if transform:
+                batched_data = transform(batched_data)
+            for data in batched_data:
+                predicted.append(np.argmax(ort_sess.run([output_name], {input_name: np.array(data.unsqueeze(0)).astype(np.float32)})[0]))
+            ground_truth = torch.cat((ground_truth, batched_target))
+
+        metric = torcheval.metrics.MulticlassAccuracy()
+        metric.update(torch.Tensor(predicted), ground_truth)
+
+        logger.info(f"Test Data Evaluation Accuracy: {metric.compute()*100:.2f}%")
+
+        confusion_matrix = get_confusion_matrix(torch.Tensor(predicted).type(torch.int64), ground_truth.type(torch.int64), num_classes).cpu().numpy()
+        #
+        # logger.info('\n' + '\n'.join(
+        #     [f"Ground Truth:(Class {dataset.inverse_label_map[i]}), Predicted:(Class {dataset.inverse_label_map[j]}): {int(confusion_matrix[i][j])}" for j in
+        #      range(num_classes) for i in range(num_classes)]))
+        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix,
+                      columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+                      index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
+                                                             headers="keys", tablefmt='grid')))
+
+        return
+
     logger.info("Creating model")
     # Model Creation
     variables = dataset.X.shape[1]  # n,c,h,w --> c is 1 (args.variables. However, after motor fault was supported, it concatenates 3x128 to 1x384 hence channels have been changed
@@ -482,10 +568,10 @@ def main(gpu, args):
 
     if args.weights:
         if args.weights_url:
-            if args.test_only:
-                logger.info(f"loading pretrained checkpoint for test: {args.weights_url}")
-            else:
-                logger.info(f"loading pretrained checkpoint for training: {args.weights_url}")
+            # if args.test_onnx_only:
+            #     logger.info(f"loading pretrained checkpoint for test: {args.weights_url}")
+            # else:
+            logger.info(f"loading pretrained checkpoint for training: {args.weights_url}")
             model = load_weights(model, args.weights_url, state_dict_name=args.weights_state_dict_name)
 
     if args.quantization == tinyml_torchmodelopt.quantization.TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
@@ -565,23 +651,20 @@ def main(gpu, args):
         if model_ema:
             model_ema.load_state_dict(checkpoint['model_ema'])
     phase = 'QuantTrain' if args.quantization else 'FloatTrain'
-    transform = None
-    if args.test_only:
-        utils.evaluate(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes)
-        return
 
     logger.info("Start training")
     start_time = time.time()
-    best_accuracy = 0.0
+    best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
+
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
         utils.train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
                               print_freq=args.print_freq, phase=phase, num_classes=num_classes)
         lr_scheduler.step()
-        avg_accuracy = utils.evaluate(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes)
+        avg_accuracy, avg_f1, avg_conf_matrix = utils.evaluate(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes)
         if model_ema:
-            avg_accuracy = utils.evaluate(model_ema, criterion, data_loader_test, device=device, transform=transform,
+            avg_accuracy, avg_f1, avg_conf_matrix = utils.evaluate(model_ema, criterion, data_loader_test, device=device, transform=transform,
                                           log_suffix='EMA', print_freq=args.print_freq, phase=phase)
         if args.output_dir:
             checkpoint = {
@@ -595,43 +678,42 @@ def main(gpu, args):
             # utils.save_on_master(
             #     checkpoint,
             #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
-            if avg_accuracy > best_accuracy:
-                logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) > {best_accuracy:.2f} (So far best accuracy). Hence updating checkpoint.pth")
-                best_accuracy = avg_accuracy
+            if avg_accuracy > best['accuracy']:
+                logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) > {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
+                best['accuracy'] = avg_accuracy
+                best['f1'] = avg_f1
+                best['conf_matrix'] = avg_conf_matrix
+                best['epoch'] = epoch
                 utils.save_on_master(
                     checkpoint,
                     os.path.join(args.output_dir, 'checkpoint.pth'))
 
-    total_time = time.time() - start_time
-    total_time_str = str(datetime.timedelta(seconds=int(total_time)))
+    logger = getLogger("root.main.BestEpoch")
+    logger.info("")
+    logger.info("Printing statistics of best epoch:")
+    logger.info(f"Best Epoch: {best['epoch']}")
+    logger.info(f"Acc@1 {best['accuracy']:.3f}")
+    logger.info(f"F1-Score {best['f1']:.3f}")
+    # logger.info(f"Confusion Matrix:\n" + '\n'.join(
+    #     [f"Ground Truth:(Class {dataset.inverse_label_map[i]}), Predicted:(Class {dataset.inverse_label_map[j]}): {int(best['conf_matrix'][i][j])}" for j in
+    #      range(num_classes) for i in range(num_classes)]))
+    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
+                  columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+                  index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
+                                                         headers="keys", tablefmt='grid')))
+
+    logger = getLogger("root.main")
     logger.info('Exporting model after training.')
     if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
         example_input = next(iter(data_loader_test))[0]
         utils.export_model(model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version, 
                            quantization=args.quantization, quantization_error_logging=args.quantization_error_logging, example_input=example_input)
-
+    total_time = time.time() - start_time
+    total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
 
     if args.gen_golden_vectors:
-        import onnxruntime as ort
-        ort_sess = ort.InferenceSession(os.path.join(args.output_dir, 'model.onnx'))
-        input_name = ort_sess.get_inputs()[0].name
-        output_name = ort_sess.get_outputs()[0].name
-
-        golden_vectors_dir = os.path.join(args.output_dir, 'golden_vectors')
-        create_dir(golden_vectors_dir)
-        logger.info(f"Creating Golden data for reference at {golden_vectors_dir}")
-        label_index_dict = {label: np.where(dataset_test.Y == label)[0] for label in np.unique(dataset_test.Y)}
-        for label, indices in label_index_dict.items():
-            # For each label, 4 random golden test vectors will be selected and printed out
-            for index in random.sample(list(indices), 4):
-                np_feat = dataset.X[index]
-                pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
-
-                np.save(os.path.join(golden_vectors_dir, f'test_vector_class-{label}_X_{index}.npy'), np_feat)
-                # pd.DataFrame(np_feat).to_csv(os.path.join(golden_vectors_dir, f'test_vector_{label}_X_{index}.csv'))
-                np.save(os.path.join(golden_vectors_dir, f'test_vector_class-{label}_Y_{index}.npy'), pred)
-                # pd.DataFrame(pred).to_csv(os.path.join(golden_vectors_dir, f'test_vector_{label}_Y_{index}.csv'))
+        generate_golden_vectors(args.output_dir, dataset)
 
 
 def run(args):
