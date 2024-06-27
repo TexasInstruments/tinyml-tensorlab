@@ -187,6 +187,7 @@ def init_params(*args, **kwargs):
         ),
         compilation=dict(
             enable=True,
+            model_path = None,
             compile_output_path=None,
             compile_preset_name=None,
             properties=[dict(

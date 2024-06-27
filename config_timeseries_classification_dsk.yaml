@@ -50,6 +50,7 @@ testing:
 compilation:
     # enable/disable compilation
     enable: True #False
+#    model_path: Onnx/tflite Model Path fro BYOM for compilation only
     # No preset is required for F28P55
 #    preset_name: default_preset
 #    preset_name: best_performance_preset
