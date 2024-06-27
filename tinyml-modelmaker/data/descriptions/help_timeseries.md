@@ -43,6 +43,12 @@ These are the devices that are supported currently. As additional devices are su
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
 * SDK release: 05_02_00
 
+### F280015
+* Product information: https://www.ti.com/product/TMS320F2800157
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: 05_02_00
+
 ## Additional information
 
 

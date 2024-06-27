@@ -16,6 +16,8 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
   * SDK release: 05_02_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
+  * SDK release: 05_02_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
+  * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
   * SDK release: 05_02_00\n\n## Additional information\n\n\n\n## Dataset format\n\
   - The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
   \ dataset, but there are some changes as explained below.\n \n\n####  Dataset format\n\
@@ -119,10 +121,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -147,7 +152,7 @@ model_descriptions:
       test_quant_model: false
     training:
       batch_size: 32
-      dataset_loader: SimpleTSDataset
+      dataset_loader: ArcFaultDataset
       dataset_path: null
       distributed: true
       enable: true
@@ -158,7 +163,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_200_t
-      model_spec: null
+      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_200
       num_gpus: 1
       num_last_epochs: 5
@@ -239,39 +244,32 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 2
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 2
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
-          model_selection_factor: 0
+          model_selection_factor: 2
           performance_infer_time_ms: TBD
         F28004:
           accuracy_factor: TBD
-          model_selection_factor: 0
+          model_selection_factor: 2
           performance_infer_time_ms: TBD
         F2837:
           accuracy_factor: TBD
-          model_selection_factor: 0
+          model_selection_factor: 2
           performance_infer_time_ms: TBD
         F28P55:
           accuracy_factor: TBD
-          model_selection_factor: 0
+          model_selection_factor: 2
           performance_infer_time_ms: TBD
         F28P65:
           accuracy_factor: TBD
-          model_selection_factor: 0
+          model_selection_factor: 2
           performance_infer_time_ms: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -344,10 +342,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -372,7 +373,7 @@ model_descriptions:
       test_quant_model: false
     training:
       batch_size: 32
-      dataset_loader: SimpleTSDataset
+      dataset_loader: ArcFaultDataset
       dataset_path: null
       distributed: true
       enable: true
@@ -383,7 +384,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_300_t
-      model_spec: null
+      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_300
       num_gpus: 1
       num_last_epochs: 5
@@ -464,20 +465,13 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 2
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 1
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 1
@@ -569,10 +563,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -597,7 +594,7 @@ model_descriptions:
       test_quant_model: false
     training:
       batch_size: 32
-      dataset_loader: SimpleTSDataset
+      dataset_loader: ArcFaultDataset
       dataset_path: null
       distributed: true
       enable: true
@@ -608,7 +605,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_700_t
-      model_spec: null
+      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_700
       num_gpus: 1
       num_last_epochs: 5
@@ -689,39 +686,32 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 2
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 0
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
-          model_selection_factor: 2
+          model_selection_factor: 0
           performance_infer_time_ms: TBD
         F28004:
           accuracy_factor: TBD
-          model_selection_factor: 2
+          model_selection_factor: 0
           performance_infer_time_ms: TBD
         F2837:
           accuracy_factor: TBD
-          model_selection_factor: 2
+          model_selection_factor: 0
           performance_infer_time_ms: TBD
         F28P55:
           accuracy_factor: TBD
-          model_selection_factor: 2
+          model_selection_factor: 0
           performance_infer_time_ms: TBD
         F28P65:
           accuracy_factor: TBD
-          model_selection_factor: 2
+          model_selection_factor: 0
           performance_infer_time_ms: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -794,10 +784,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -822,7 +815,7 @@ model_descriptions:
       test_quant_model: false
     training:
       batch_size: 256
-      dataset_loader: SimpleTSDataset
+      dataset_loader: MotorFaultDataset
       dataset_path: null
       distributed: true
       enable: true
@@ -833,7 +826,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_1_t
-      model_spec: null
+      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_1l.py
       model_training_id: CNN_MF_1L
       num_gpus: 1
       num_last_epochs: 5
@@ -920,20 +913,13 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 2
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 0
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 0
@@ -1025,10 +1011,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -1053,7 +1042,7 @@ model_descriptions:
       test_quant_model: false
     training:
       batch_size: 256
-      dataset_loader: SimpleTSDataset
+      dataset_loader: MotorFaultDataset
       dataset_path: null
       distributed: true
       enable: true
@@ -1064,7 +1053,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_2_t
-      model_spec: null
+      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_2l.py
       model_training_id: CNN_MF_2L
       num_gpus: 1
       num_last_epochs: 5
@@ -1151,20 +1140,13 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 2
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 1
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 1
@@ -1256,10 +1238,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -1385,20 +1370,13 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 1
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 2
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 2
@@ -1486,10 +1464,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -1615,20 +1596,13 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 2
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 3
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 3
@@ -1720,10 +1694,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -1849,20 +1826,13 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 1
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 0
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 0
@@ -1950,10 +1920,13 @@ model_descriptions:
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
-      split_factor: 0.6
+      split_factor:
+      - 0.6
+      - 0.3
       split_names:
       - train
       - val
+      - test
     download:
       download_path: ''
       download_url: ''
@@ -2079,20 +2052,13 @@ model_descriptions:
         min: 1
         name: fft_bin_size
         type: integer
-      - default: 'False'
-        enum:
-        - label: 'True'
-          tooltip: Quant Training Only
-          value: 'True'
-        - label: 'False'
-          tooltip: Float + Quant Training
-          value: 'False'
-        label: Directly run Quantized Training
-        name: run_quant_train_only
-        type: enum
       quantization: 2
       run_quant_train_only: false
       target_devices:
+        F280015:
+          accuracy_factor: TBD
+          model_selection_factor: 1
+          performance_infer_time_ms: TBD
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 1
@@ -2194,6 +2160,100 @@ preset_descriptions:
             -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
           target: c
           target_c_mcpu: cortex_r5
+  F280015:
+    arc_fault:
+      best_performance_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      least_memory_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    generic_timeseries_classification:
+      best_performance_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      least_memory_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    motor_fault:
+      best_performance_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      least_memory_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
   F28003:
     arc_fault:
       best_performance_preset:
@@ -2389,7 +2449,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2398,7 +2459,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2407,7 +2469,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2417,7 +2480,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2426,7 +2490,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2435,7 +2500,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2445,7 +2511,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2454,7 +2521,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2463,7 +2531,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2596,21 +2665,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
 sample_dataset_descriptions:
-  arc_fault_example_dsi:
-    common:
-      task_category: timeseries_classification
-      task_type: arc_fault
-    dataset:
-      dataset_name: arc_fault_classification_dsi
-      input_data_path: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip
-    info:
-      dataset_description: Example arc-fault timeseries classification dataset with
-        2 categories - arc, normal
-      dataset_detailed_name: Arc Fault Classification Example1
-      dataset_license: TI Internal License
-      dataset_size: null
-      dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip
   arc_fault_example_dsk:
     common:
       task_category: timeseries_classification
@@ -2649,7 +2703,18 @@ target_device_descriptions:
       * Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n\
       * SDK release: 05_02_00\n\nAdditional information:\n\n"
     device_name: AM263
-    device_selection_factor: 5
+    device_selection_factor: 6
+    device_type: MCU
+    sdk_release: '05_02_00'
+    sdk_version: '5.2'
+  F280015:
+    device_details: "C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA,\
+      \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\
+      \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
+      * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
+      * SDK release: 05_02_00\n\nAdditional information:\n\n"
+    device_name: F280015
+    device_selection_factor: 0
     device_type: MCU
     sdk_release: '05_02_00'
     sdk_version: '5.2'
@@ -2660,7 +2725,7 @@ target_device_descriptions:
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
       * SDK release: 05_02_00\n\nAdditional information:\n\n"
     device_name: F28003
-    device_selection_factor: 0
+    device_selection_factor: 1
     device_type: MCU
     sdk_release: '05_02_00'
     sdk_version: '5.2'
@@ -2671,7 +2736,7 @@ target_device_descriptions:
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
       * SDK release: 05_02_00\n\nAdditional information:\n\n"
     device_name: F28004
-    device_selection_factor: 1
+    device_selection_factor: 2
     device_type: MCU
     sdk_release: '05_02_00'
     sdk_version: '5.2'
@@ -2682,7 +2747,7 @@ target_device_descriptions:
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
       * SDK release: 05_02_00\n\nAdditional information:\n\n"
     device_name: F2837
-    device_selection_factor: 2
+    device_selection_factor: 3
     device_type: MCU
     sdk_release: '05_02_00'
     sdk_version: '5.2'
@@ -2693,7 +2758,7 @@ target_device_descriptions:
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
       * SDK release: 05_02_00\n\nAdditional information:\n\n"
     device_name: F28P55
-    device_selection_factor: 4
+    device_selection_factor: 5
     device_type: MCU
     sdk_release: '05_02_00'
     sdk_version: '5.2'
@@ -2704,7 +2769,7 @@ target_device_descriptions:
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
       * SDK release: 05_02_00\n\nAdditional information:\n\n"
     device_name: F28P65
-    device_selection_factor: 3
+    device_selection_factor: 4
     device_type: MCU
     sdk_release: '05_02_00'
     sdk_version: '5.2'
@@ -2717,9 +2782,10 @@ task_descriptions:
     - training
     - compilation
     target_devices: &id001
-    - F2837
+    - F280015
     - F28003
     - F28004
+    - F2837
     - F28P55
     - F28P65
     target_module: timeseries
@@ -2795,4 +2861,4 @@ training_module_descriptions:
 version_descriptions:
   sdk_release: '05_02_00'
   sdk_version: '5.2'
-  version: 0.5.0
+  version: 0.7.0

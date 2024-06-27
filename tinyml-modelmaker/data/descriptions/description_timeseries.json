@@ -28,10 +28,14 @@
         "dataset_name":null,
         "dataset_path":null,
         "extract_path":null,
-        "split_factor":0.6,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
         "split_names":[
           "train",
-          "val"
+          "val",
+          "test"
         ],
         "max_num_files":10000,
         "input_data_path":null,
@@ -55,6 +59,11 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
@@ -225,24 +234,6 @@
             "default":1,
             "min":1,
             "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
           }
         ],
         "model_architecture":"backbone",
@@ -338,10 +329,14 @@
         "dataset_name":null,
         "dataset_path":null,
         "extract_path":null,
-        "split_factor":0.6,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
         "split_names":[
           "train",
-          "val"
+          "val",
+          "test"
         ],
         "max_num_files":10000,
         "input_data_path":null,
@@ -365,6 +360,11 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
@@ -540,24 +540,6 @@
             "default":1,
             "min":1,
             "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
           }
         ],
         "model_architecture":"backbone",
@@ -653,10 +635,14 @@
         "dataset_name":null,
         "dataset_path":null,
         "extract_path":null,
-        "split_factor":0.6,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
         "split_names":[
           "train",
-          "val"
+          "val",
+          "test"
         ],
         "max_num_files":10000,
         "input_data_path":null,
@@ -680,6 +666,11 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
@@ -850,24 +841,6 @@
             "default":1,
             "min":1,
             "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
           }
         ],
         "model_architecture":"backbone",
@@ -963,10 +936,14 @@
         "dataset_name":null,
         "dataset_path":null,
         "extract_path":null,
-        "split_factor":0.6,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
         "split_names":[
           "train",
-          "val"
+          "val",
+          "test"
         ],
         "max_num_files":10000,
         "input_data_path":null,
@@ -990,6 +967,11 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":3
+          },
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
@@ -1165,624 +1147,6 @@
             "default":1,
             "min":1,
             "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
-          }
-        ],
-        "model_architecture":"backbone",
-        "training_devices":{
-          "cpu":true,
-          "cuda":true
-        }
-      },
-      "testing":{
-        "test_quant_model":false,
-        "test_data":null
-      },
-      "data_processing":{
-        "org_sr":313000,
-        "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
-        "transforms":[],
-        "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
-        "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
-        "store_feat_ext_data":false,
-        "feat_ext_store_dir":null,
-        "dont_train_just_feat_ext":false,
-        "dc_remove":true,
-        "stacking":null,
-        "offset":0,
-        "scale":1
-      },
-      "compilation":{
-        "enable":true,
-        "compile_output_path":null,
-        "compile_preset_name":null,
-        "properties":[
-          {
-            "label":"Compilation Preset",
-            "name":"compile_preset_name",
-            "type":"enum",
-            "default":"default_preset",
-            "enum":[
-              {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
-                "value":"default_preset",
-                "label":"Default",
-                "tooltip":"Default Inference Mode"
-              }
-            ]
-          }
-        ],
-        "metric":{
-          "label_offset_pred":1
-        }
-      }
-    },
-    "ArcFault_model_200_t":{
-      "common":{
-        "verbose_mode":true,
-        "download_path":"./data/downloads",
-        "projects_path":"./data/projects",
-        "project_path":null,
-        "project_run_path":null,
-        "task_type":"arc_fault",
-        "task_category":"timeseries_classification",
-        "target_machine":"evm",
-        "target_device":null,
-        "run_name":"{date-time}/{model_name}",
-        "target_module":"timeseries"
-      },
-      "download":{
-        "download_url":"",
-        "download_path":""
-      },
-      "dataset":{
-        "enable":true,
-        "dataset_name":null,
-        "dataset_path":null,
-        "extract_path":null,
-        "split_factor":0.6,
-        "split_names":[
-          "train",
-          "val"
-        ],
-        "max_num_files":10000,
-        "input_data_path":null,
-        "input_annotation_path":null,
-        "data_path_splits":null,
-        "data_dir":"classes",
-        "annotation_path_splits":null,
-        "annotation_dir":"annotations",
-        "annotation_prefix":"instances",
-        "annotation_format":"univ_ts_json",
-        "dataset_download":false,
-        "dataset_reload":false
-      },
-      "training":{
-        "enable":true,
-        "model_name":"ArcFault_model_200_t",
-        "model_config":null,
-        "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
-        "model_training_id":"CNN_AF_3L_200",
-        "training_backend":"tinyml_tinyverse",
-        "pretrained_checkpoint_path":null,
-        "target_devices":{
-          "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":0
-          },
-          "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":0
-          },
-          "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":0
-          },
-          "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":0
-          },
-          "F28P55":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":0
-          }
-        },
-        "generic_model":false,
-        "project_path":null,
-        "dataset_path":null,
-        "training_path":null,
-        "training_path_quantization":null,
-        "log_file_path":null,
-        "log_summary_regex":null,
-        "training_epochs":10,
-        "warmup_epochs":1,
-        "num_last_epochs":5,
-        "batch_size":32,
-        "learning_rate":0.04,
-        "weight_decay":0.0001,
-        "training_device":"cuda",
-        "num_gpus":1,
-        "distributed":true,
-        "training_master_port":29500,
-        "train_output_path":null,
-        "run_quant_train_only":false,
-        "quantization":2,
-        "with_input_batchnorm":true,
-        "properties":[
-          {
-            "label":"Epochs",
-            "name":"training_epochs",
-            "type":"integer",
-            "default":50,
-            "min":1,
-            "max":300
-          },
-          {
-            "label":"Learning Rate",
-            "name":"learning_rate",
-            "type":"float",
-            "default":0.04,
-            "min":0.001,
-            "max":0.1,
-            "decimal_places":3,
-            "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
-            "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
-          }
-        ],
-        "model_architecture":"backbone",
-        "training_devices":{
-          "cpu":true,
-          "cuda":true
-        }
-      },
-      "testing":{
-        "test_quant_model":false,
-        "test_data":null
-      },
-      "data_processing":{
-        "org_sr":313000,
-        "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
-        "transforms":[],
-        "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
-        "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
-        "store_feat_ext_data":false,
-        "feat_ext_store_dir":null,
-        "dont_train_just_feat_ext":false,
-        "dc_remove":true,
-        "stacking":null,
-        "offset":0,
-        "scale":1
-      },
-      "compilation":{
-        "enable":true,
-        "compile_output_path":null,
-        "compile_preset_name":null,
-        "properties":[
-          {
-            "label":"Compilation Preset",
-            "name":"compile_preset_name",
-            "type":"enum",
-            "default":"default_preset",
-            "enum":[
-              {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
-                "value":"default_preset",
-                "label":"Default",
-                "tooltip":"Default Inference Mode"
-              }
-            ]
-          }
-        ],
-        "metric":{
-          "label_offset_pred":1
-        }
-      }
-    },
-    "ArcFault_model_300_t":{
-      "common":{
-        "verbose_mode":true,
-        "download_path":"./data/downloads",
-        "projects_path":"./data/projects",
-        "project_path":null,
-        "project_run_path":null,
-        "task_type":"arc_fault",
-        "task_category":"timeseries_classification",
-        "target_machine":"evm",
-        "target_device":null,
-        "run_name":"{date-time}/{model_name}",
-        "target_module":"timeseries"
-      },
-      "download":{
-        "download_url":"",
-        "download_path":""
-      },
-      "dataset":{
-        "enable":true,
-        "dataset_name":null,
-        "dataset_path":null,
-        "extract_path":null,
-        "split_factor":0.6,
-        "split_names":[
-          "train",
-          "val"
-        ],
-        "max_num_files":10000,
-        "input_data_path":null,
-        "input_annotation_path":null,
-        "data_path_splits":null,
-        "data_dir":"classes",
-        "annotation_path_splits":null,
-        "annotation_dir":"annotations",
-        "annotation_prefix":"instances",
-        "annotation_format":"univ_ts_json",
-        "dataset_download":false,
-        "dataset_reload":false
-      },
-      "training":{
-        "enable":true,
-        "model_name":"ArcFault_model_300_t",
-        "model_config":null,
-        "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
-        "model_training_id":"CNN_AF_3L_300",
-        "training_backend":"tinyml_tinyverse",
-        "pretrained_checkpoint_path":null,
-        "target_devices":{
-          "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":1
-          },
-          "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":1
-          },
-          "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":1
-          },
-          "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":1
-          },
-          "F28P55":{
-            "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
-            "model_selection_factor":1
-          }
-        },
-        "generic_model":false,
-        "project_path":null,
-        "dataset_path":null,
-        "training_path":null,
-        "training_path_quantization":null,
-        "log_file_path":null,
-        "log_summary_regex":null,
-        "training_epochs":10,
-        "warmup_epochs":1,
-        "num_last_epochs":5,
-        "batch_size":32,
-        "learning_rate":0.04,
-        "weight_decay":0.0001,
-        "training_device":"cuda",
-        "num_gpus":1,
-        "distributed":true,
-        "training_master_port":29500,
-        "train_output_path":null,
-        "run_quant_train_only":false,
-        "quantization":2,
-        "with_input_batchnorm":true,
-        "properties":[
-          {
-            "label":"Epochs",
-            "name":"training_epochs",
-            "type":"integer",
-            "default":50,
-            "min":1,
-            "max":300
-          },
-          {
-            "label":"Learning Rate",
-            "name":"learning_rate",
-            "type":"float",
-            "default":0.04,
-            "min":0.001,
-            "max":0.1,
-            "decimal_places":3,
-            "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
-            "enum":[
-              {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
           }
         ],
         "model_architecture":"backbone",
@@ -1878,10 +1242,14 @@
         "dataset_name":null,
         "dataset_path":null,
         "extract_path":null,
-        "split_factor":0.6,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
         "split_names":[
           "train",
-          "val"
+          "val",
+          "test"
         ],
         "max_num_files":10000,
         "input_data_path":null,
@@ -1899,12 +1267,599 @@
         "enable":true,
         "model_name":"ArcFault_model_700_t",
         "model_config":null,
-        "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
+        "dataset_loader":"ArcFaultDataset",
         "model_training_id":"CNN_AF_3L_700",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          }
+        },
+        "generic_model":false,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":32,
+        "learning_rate":0.04,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"ArcFault_1024Input_FFT",
+            "enum":[
+              {
+                "value":"ArcFault_1024Input_FFT",
+                "label":"ArcFault_1024Input_FFT",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size_per_frame",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "ArcFault_model_300_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"arc_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"ArcFault_model_300_t",
+        "model_config":null,
+        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
+        "dataset_loader":"ArcFaultDataset",
+        "model_training_id":"CNN_AF_3L_300",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          }
+        },
+        "generic_model":false,
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":32,
+        "learning_rate":0.04,
+        "weight_decay":0.0001,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "properties":[
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          },
+          {
+            "label":"Feature Extraction Name",
+            "name":"feature_extraction_name",
+            "type":"enum",
+            "default":"ArcFault_1024Input_FFT",
+            "enum":[
+              {
+                "value":"ArcFault_1024Input_FFT",
+                "label":"ArcFault_1024Input_FFT",
+                "tooltip":"Windowing and FFT"
+              }
+            ]
+          },
+          {
+            "label":"Feature Size per frame",
+            "name":"feature_size_per_frame",
+            "type":"enum",
+            "default":256,
+            "enum":[
+              {
+                "value":16,
+                "label":"16 features extracted per frame",
+                "tooltip":"Extract 16 features per frame"
+              },
+              {
+                "value":32,
+                "label":"32 features extracted per frame",
+                "tooltip":"Extract 32 features per frame"
+              },
+              {
+                "value":64,
+                "label":"64 features extracted per frame",
+                "tooltip":"Extract 64 features per frame"
+              },
+              {
+                "value":128,
+                "label":"128 features extracted per frame",
+                "tooltip":"Extract 128 features per frame"
+              },
+              {
+                "value":256,
+                "label":"256 features extracted per frame",
+                "tooltip":"Extract 256 features per frame"
+              },
+              {
+                "value":512,
+                "label":"512 features extracted per frame",
+                "tooltip":"Extract 512 features per frame"
+              }
+            ]
+          },
+          {
+            "label":"Frames to Concatenate",
+            "name":"num_frame_concat",
+            "type":"enum",
+            "default":1,
+            "enum":[
+              {
+                "value":1,
+                "label":"1 frame",
+                "tooltip":"1 frame concatenated for feature extraction"
+              },
+              {
+                "value":4,
+                "label":"4 frames",
+                "tooltip":"4 frames concatenated for feature extraction"
+              },
+              {
+                "value":8,
+                "label":"8 frames",
+                "tooltip":"8 frames concatenated for feature extraction"
+              },
+              {
+                "value":16,
+                "label":"16 frames",
+                "tooltip":"16 frames concatenated for feature extraction"
+              }
+            ]
+          },
+          {
+            "label":"Minimum FFT Bin Number",
+            "name":"min_fft_bin",
+            "type":"integer",
+            "default":1,
+            "min":0,
+            "max":256
+          },
+          {
+            "label":"FFT Bins used per Feature",
+            "name":"fft_bin_size",
+            "type":"integer",
+            "default":1,
+            "min":1,
+            "max":8
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "test_quant_model":false,
+        "test_data":null
+      },
+      "data_processing":{
+        "org_sr":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"best_performance_preset",
+                "label":"Best Performance",
+                "tooltip":"Best Performance Inference Mode"
+              },
+              {
+                "value":"least_memory_preset",
+                "label":"Least Memory Usage",
+                "tooltip":"Least Memory Consumed Inference Mode"
+              },
+              {
+                "value":"default_preset",
+                "label":"Default",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ],
+        "metric":{
+          "label_offset_pred":1
+        }
+      }
+    },
+    "ArcFault_model_200_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"arc_fault",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}/{model_name}",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"ArcFault_model_200_t",
+        "model_config":null,
+        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
+        "dataset_loader":"ArcFaultDataset",
+        "model_training_id":"CNN_AF_3L_200",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":2
+          },
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
@@ -2065,24 +2020,6 @@
             "default":1,
             "min":1,
             "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
           }
         ],
         "model_architecture":"backbone",
@@ -2178,10 +2115,14 @@
         "dataset_name":null,
         "dataset_path":null,
         "extract_path":null,
-        "split_factor":0.6,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
         "split_names":[
           "train",
-          "val"
+          "val",
+          "test"
         ],
         "max_num_files":10000,
         "input_data_path":null,
@@ -2199,12 +2140,17 @@
         "enable":true,
         "model_name":"MotorFault_model_1_t",
         "model_config":null,
-        "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_1l.py",
+        "dataset_loader":"MotorFaultDataset",
         "model_training_id":"CNN_MF_1L",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":0
+          },
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
@@ -2375,24 +2321,6 @@
             "default":1,
             "min":1,
             "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
           }
         ],
         "model_architecture":"backbone",
@@ -2488,10 +2416,14 @@
         "dataset_name":null,
         "dataset_path":null,
         "extract_path":null,
-        "split_factor":0.6,
+        "split_factor":[
+          0.6,
+          0.3
+        ],
         "split_names":[
           "train",
-          "val"
+          "val",
+          "test"
         ],
         "max_num_files":10000,
         "input_data_path":null,
@@ -2509,12 +2441,17 @@
         "enable":true,
         "model_name":"MotorFault_model_2_t",
         "model_config":null,
-        "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_2l.py",
+        "dataset_loader":"MotorFaultDataset",
         "model_training_id":"CNN_MF_2L",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "accuracy_factor":"TBD",
+            "model_selection_factor":1
+          },
           "F28003":{
             "performance_infer_time_ms":"TBD",
             "accuracy_factor":"TBD",
@@ -2685,24 +2622,6 @@
             "default":1,
             "min":1,
             "max":8
-          },
-          {
-            "label":"Directly run Quantized Training",
-            "name":"run_quant_train_only",
-            "type":"enum",
-            "default":"False",
-            "enum":[
-              {
-                "value":"True",
-                "label":"True",
-                "tooltip":"Quant Training Only"
-              },
-              {
-                "value":"False",
-                "label":"False",
-                "tooltip":"Float + Quant Training"
-              }
-            ]
           }
         ],
         "model_architecture":"backbone",
@@ -2857,6 +2776,86 @@
         }
       }
     },
+    "F280015":{
+      "arc_fault":{
+        "best_performance_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "least_memory_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "motor_fault":{
+        "best_performance_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "least_memory_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "best_performance_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "least_memory_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      }
+    },
     "F28003":{
       "arc_fault":{
         "best_performance_preset":{
@@ -3136,7 +3135,7 @@
             "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "least_memory_preset":{
@@ -3144,7 +3143,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "default_preset":{
@@ -3152,7 +3151,7 @@
             "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -3162,7 +3161,7 @@
             "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "least_memory_preset":{
@@ -3170,7 +3169,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "default_preset":{
@@ -3178,7 +3177,7 @@
             "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -3188,7 +3187,7 @@
             "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "least_memory_preset":{
@@ -3196,7 +3195,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "default_preset":{
@@ -3204,17 +3203,25 @@
             "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
     }
   },
   "target_device_descriptions":{
+    "F280015":{
+      "device_name":"F280015",
+      "device_type":"MCU",
+      "device_selection_factor":0,
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.2",
+      "sdk_release":"05_02_00"
+    },
     "F28003":{
       "device_name":"F28003",
       "device_type":"MCU",
-      "device_selection_factor":0,
+      "device_selection_factor":1,
       "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
       "sdk_version":"5.2",
       "sdk_release":"05_02_00"
@@ -3222,40 +3229,40 @@
     "F28004":{
       "device_name":"F28004",
       "device_type":"MCU",
-      "device_selection_factor":1,
+      "device_selection_factor":2,
       "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.2",
-      "sdk_release":"05_02_00"
-    },
-    "F28P55":{
-      "device_name":"F28P55",
-      "device_type":"MCU",
-      "device_selection_factor":4,
-      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.2",
-      "sdk_release":"05_02_00"
-    },
-    "F28P65":{
-      "device_name":"F28P65",
-      "device_type":"MCU",
-      "device_selection_factor":3,
-      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.2",
-      "sdk_release":"05_02_00"
-    },
-    "AM263":{
-      "device_name":"AM263",
-      "device_type":"MCU",
-      "device_selection_factor":5,
-      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
       "sdk_version":"5.2",
       "sdk_release":"05_02_00"
     },
     "F2837":{
       "device_name":"F2837",
       "device_type":"MCU",
-      "device_selection_factor":2,
+      "device_selection_factor":3,
       "device_details":"C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.2",
+      "sdk_release":"05_02_00"
+    },
+    "F28P65":{
+      "device_name":"F28P65",
+      "device_type":"MCU",
+      "device_selection_factor":4,
+      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.2",
+      "sdk_release":"05_02_00"
+    },
+    "F28P55":{
+      "device_name":"F28P55",
+      "device_type":"MCU",
+      "device_selection_factor":5,
+      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.2",
+      "sdk_release":"05_02_00"
+    },
+    "AM263":{
+      "device_name":"AM263",
+      "device_type":"MCU",
+      "device_selection_factor":6,
+      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 05_02_00\n\nAdditional information:\n\n",
       "sdk_version":"5.2",
       "sdk_release":"05_02_00"
     }
@@ -3265,9 +3272,10 @@
       "task_name":"ARC Fault",
       "target_module":"timeseries",
       "target_devices":[
-        "F2837",
+        "F280015",
         "F28003",
         "F28004",
+        "F2837",
         "F28P55",
         "F28P65"
       ],
@@ -3283,9 +3291,10 @@
       "task_name":"Motor Fault",
       "target_module":"timeseries",
       "target_devices":[
-        "F2837",
+        "F280015",
         "F28003",
         "F28004",
+        "F2837",
         "F28P55",
         "F28P65"
       ],
@@ -3301,9 +3310,10 @@
       "task_name":"Generic Time Series Classification",
       "target_module":"timeseries",
       "target_devices":[
-        "F2837",
+        "F280015",
         "F28003",
         "F28004",
+        "F2837",
         "F28P55",
         "F28P65"
       ],
@@ -3317,24 +3327,6 @@
     }
   },
   "sample_dataset_descriptions":{
-    "arc_fault_example_dsi":{
-      "common":{
-        "task_type":"arc_fault",
-        "task_category":"timeseries_classification"
-      },
-      "dataset":{
-        "dataset_name":"arc_fault_classification_dsi",
-        "input_data_path":"https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip"
-      },
-      "info":{
-        "dataset_url":"https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip",
-        "dataset_detailed_name":"Arc Fault Classification Example1",
-        "dataset_description":"Example arc-fault timeseries classification dataset with 2 categories - arc, normal",
-        "dataset_size":null,
-        "dataset_source":"Generated by Texas Instruments at a specialised test bed",
-        "dataset_license":"TI Internal License"
-      }
-    },
     "arc_fault_example_dsk":{
       "common":{
         "task_type":"arc_fault",
@@ -3373,7 +3365,7 @@
     }
   },
   "version_descriptions":{
-    "version":"0.5.0",
+    "version":"0.7.0",
     "sdk_version":"5.2",
     "sdk_release":"05_02_00"
   },
@@ -3419,5 +3411,5 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n* Generic Time Series Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n \n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nThree presets exist: \"default_preset\"(Recommended Option), \"least_memory_preset\"(Optimized for memory), \"best_performance_preset\"(Optimized for performance)\n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n* Generic Time Series Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n \n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nThree presets exist: \"default_preset\"(Recommended Option), \"least_memory_preset\"(Optimized for memory), \"best_performance_preset\"(Optimized for performance)\n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
 }

@@ -54,6 +54,7 @@ TASK_CATEGORIES = [
 
 # target_device
 TARGET_DEVICE_AM263 = 'AM263'
+TARGET_DEVICE_F280015 = 'F280015'
 TARGET_DEVICE_F28003 = 'F28003'
 TARGET_DEVICE_F28004 = 'F28004'
 TARGET_DEVICE_F2837 = 'F2837'
@@ -61,9 +62,10 @@ TARGET_DEVICE_F28P55 = 'F28P55'
 TARGET_DEVICE_F28P65 = 'F28P65'
 
 TARGET_DEVICES = [
-    TARGET_DEVICE_F2837,
+    TARGET_DEVICE_F280015,
     TARGET_DEVICE_F28003,
     TARGET_DEVICE_F28004,
+    TARGET_DEVICE_F2837,
     TARGET_DEVICE_F28P55,
     TARGET_DEVICE_F28P65,
 ]
@@ -121,6 +123,23 @@ TARGET_DEVICE_DETAILS_AM263 = \
 
 Important links:
 {TARGET_DEVICE_SETUP_INSTRUCTIONS_AM263}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F280015 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015 = \
+    f'''* Product information: https://www.ti.com/product/TMS320F2800157
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE}'''
+
+TARGET_DEVICE_DETAILS_F280015 = \
+    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
+* More details : https://www.ti.com/tool/LAUNCHXL-F2800157
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015}
 
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
@@ -212,10 +231,18 @@ Additional information:
 
 # higher device_selection_factor indicates higher performance device.
 TARGET_DEVICE_DESCRIPTIONS = {
+    TARGET_DEVICE_F280015: {
+        'device_name': TARGET_DEVICE_F280015,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 0,
+        'device_details': TARGET_DEVICE_DETAILS_F280015,
+        'sdk_version': TARGET_SDK_VERSION,
+        'sdk_release': TARGET_SDK_RELEASE,
+    },
     TARGET_DEVICE_F28003: {
         'device_name': TARGET_DEVICE_F28003,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 0,
+        'device_selection_factor': 1,
         'device_details': TARGET_DEVICE_DETAILS_F28003,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
@@ -223,40 +250,40 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28004: {
         'device_name': TARGET_DEVICE_F28004,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 1,
+        'device_selection_factor': 2,
         'device_details': TARGET_DEVICE_DETAILS_F28004,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
-    },
-    TARGET_DEVICE_F28P55: {
-        'device_name': TARGET_DEVICE_F28P55,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 4,
-        'device_details': TARGET_DEVICE_DETAILS_F28P55,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
-    },
-    TARGET_DEVICE_F28P65: {
-        'device_name': TARGET_DEVICE_F28P65,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 3,
-        'device_details': TARGET_DEVICE_DETAILS_F28P65,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
-    },
-    TARGET_DEVICE_AM263: {
-        'device_name': TARGET_DEVICE_AM263,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor':5,
-        'device_details': TARGET_DEVICE_DETAILS_AM263,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
     },
     TARGET_DEVICE_F2837: {
         'device_name': TARGET_DEVICE_F2837,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 2,
+        'device_selection_factor': 3,
         'device_details': TARGET_DEVICE_DETAILS_F2837,
+        'sdk_version': TARGET_SDK_VERSION,
+        'sdk_release': TARGET_SDK_RELEASE,
+    },
+    TARGET_DEVICE_F28P65: {
+        'device_name': TARGET_DEVICE_F28P65,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 4,
+        'device_details': TARGET_DEVICE_DETAILS_F28P65,
+        'sdk_version': TARGET_SDK_VERSION,
+        'sdk_release': TARGET_SDK_RELEASE,
+    },
+    TARGET_DEVICE_F28P55: {
+        'device_name': TARGET_DEVICE_F28P55,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 5,
+        'device_details': TARGET_DEVICE_DETAILS_F28P55,
+        'sdk_version': TARGET_SDK_VERSION,
+        'sdk_release': TARGET_SDK_RELEASE,
+    },
+    TARGET_DEVICE_AM263: {
+        'device_name': TARGET_DEVICE_AM263,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 6,
+        'device_details': TARGET_DEVICE_DETAILS_AM263,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
     },
@@ -302,6 +329,10 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     ArcFault_1024Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=1024, frame_skip=1, ),
                                 data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
                                 common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    # ArcFault_512Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1, ),
+    #                             data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+    #                             common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+
 
     MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
         feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
@@ -334,19 +365,21 @@ DATASET_EXAMPLES = dict(
     arc_fault_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512),
-        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024'))
+        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024'),
+        training=dict(dataset_loader='ArcFaultDataset'))
     ),
     arc_fault_example_dsi=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip'),
         data_processing=dict(transforms=['Downsample', 'SimpleWindow'], org_sr=313000, new_sr=3200, stride_window=0.001,
                              sequence_window=0.16),
-        feature_extraction=dict(feature_extraction_name=None)
+        feature_extraction=dict(feature_extraction_name=None),
     ),
     motor_fault_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get(
-            'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1'))
+            'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1')),
+        training=dict(dataset_loader='MotorFaultDataset')
     ),
 )
 DATASET_DEFAULT = 'default'
@@ -370,12 +403,14 @@ CROSS_COMPILER_OPTIONS_C28 = ("--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -
 '''
 --float_support=${C2000_DEVICE_FPU} --gen_func_subsections -I${C2000_CGT_PATH}/include -I${C2000WARE_PATH}/driverlib/${C2000_DEVICE}/driverlib -I${C2000WARE_PATH}/device_support/${C2000_DEVICE}/common/include -I
 '''
+CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+                                                                   DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
-                                                                 DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'x')
+                                                                 DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'xd')
 CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu64',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
@@ -429,6 +464,41 @@ PRESET_DESCRIPTIONS = {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
                                  cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+        },
+    },
+    TARGET_DEVICE_F280015: {
+        TASK_TYPE_ARC_FAULT: {
+            COMPILATION_BEST_PERFORMANCE: dict(
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+            COMPILATION_LEAST_MEMORY: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+        },
+        TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_BEST_PERFORMANCE: dict(
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+            COMPILATION_LEAST_MEMORY: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
+            COMPILATION_BEST_PERFORMANCE: dict(
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+            COMPILATION_LEAST_MEMORY: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),
         },
     },
@@ -592,24 +662,24 @@ PRESET_DESCRIPTIONS = {
 }
 
 SAMPLE_DATASET_DESCRIPTIONS = {
-    'arc_fault_example_dsi': {
-        'common': {
-            'task_type': TASK_TYPE_ARC_FAULT,
-            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-        },
-        'dataset': {
-            'dataset_name': 'arc_fault_classification_dsi',
-            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
-        },
-        'info': {
-            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
-            'dataset_detailed_name': 'Arc Fault Classification Example1',
-            'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
-            'dataset_size': None,
-            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-            'dataset_license': 'TI Internal License'
-        }
-    },
+    # 'arc_fault_example_dsi': {
+    #     'common': {
+    #         'task_type': TASK_TYPE_ARC_FAULT,
+    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+    #     },
+    #     'dataset': {
+    #         'dataset_name': 'arc_fault_classification_dsi',
+    #         'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
+    #     },
+    #     'info': {
+    #         'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
+    #         'dataset_detailed_name': 'Arc Fault Classification Example1',
+    #         'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
+    #         'dataset_size': None,
+    #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+    #         'dataset_license': 'TI Internal License'
+    #     }
+    # },
     'arc_fault_example_dsk': {
         'common': {
             'task_type': TASK_TYPE_ARC_FAULT,

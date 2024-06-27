@@ -30,7 +30,8 @@
 
 import os
 import datetime
-import tarfile
+# import tarfile
+from zipfile import ZipFile
 import torch
 import copy
 import yaml
@@ -75,7 +76,7 @@ class ModelRunner():
             self.params.training.training_path = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_base'))
             self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_quantization'))
             self.params.training.model_packaged_path = os.path.join(self.params.training.train_output_path,
-                                    '_'.join(os.path.split(self.params.common.run_name))+'.tar.gz')
+                                    '_'.join(os.path.split(self.params.common.run_name))+'.zip')
         else:
             self.params.common.projects_path = utils.absolute_path(self.params.common.projects_path)
             self.params.common.project_path = os.path.join(self.params.common.projects_path, self.params.dataset.dataset_name)
@@ -84,7 +85,7 @@ class ModelRunner():
             self.params.training.training_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'base'))
             self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'quantization'))
             self.params.training.model_packaged_path = os.path.join(self.params.training.training_path,
-                                    '_'.join(os.path.split(self.params.common.run_name))+'.tar.gz')
+                                    '_'.join(os.path.split(self.params.common.run_name))+'.zip')
 
         assert self.params.common.target_device in constants.TARGET_DEVICES_ALL, f'common.target_device must be set to one of: {constants.TARGET_DEVICES_ALL}'
         # target_device_compilation_folder = self.params.common.target_device
@@ -96,13 +97,13 @@ class ModelRunner():
             self.params.compilation.compilation_path = utils.absolute_path(self.params.compilation.compile_output_path)
             self.params.compilation.model_packaged_path = os.path.join(self.params.compilation.compile_output_path,
                                                                     '_'.join(os.path.split(
-                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.tar.gz')
+                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
         else:
             # self.params.compilation.compilation_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'compilation', target_device_compilation_folder))
             self.params.compilation.compilation_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'compilation'))
             self.params.compilation.model_packaged_path = os.path.join(self.params.compilation.compilation_path,
                                                                     '_'.join(os.path.split(
-                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.tar.gz')
+                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
 
         if self.params.common.target_device in self.params.training.target_devices:
             performance_infer_time_ms_list = {k:v['performance_infer_time_ms'] for k,v in self.params.training.target_devices.items()}
@@ -244,19 +245,26 @@ class ModelRunner():
 
         return run_params_file
 
-    def package_trained_model(self, input_files, tarfile_name):
-        tfp = tarfile.open(tarfile_name, 'w:gz', dereference=True)
-        for inpf in input_files:
-            inpf_list = inpf if isinstance(inpf, (list,tuple)) else [inpf]
-            for inpf_entry in inpf_list:
-                if inpf_entry is not None and os.path.exists(inpf_entry):
-                    outpf = os.path.basename(inpf_entry)
-                    tfp.add(inpf_entry, arcname=outpf)
+    def package_trained_model(self, input_files, compressed_file_name):
+        # tfp = tarfile.open(tarfile_name, 'w:gz', dereference=True)
+        with ZipFile(compressed_file_name, 'w') as tfp:
+            for inpf in input_files:
+                inpf_list = inpf if isinstance(inpf, (list,tuple)) else [inpf]
+                for inpf_entry in inpf_list:
+                    if inpf_entry is not None and os.path.exists(inpf_entry):
+                        if os.path.isdir(inpf_entry):
+                            for root, dirs, files in os.walk(inpf_entry):
+                                for file in files:
+                                    tfp.write(
+                                        os.path.join(root, file),
+                                        arcname=os.path.relpath(os.path.join(root, file), os.path.join(inpf_entry, '..')))
+                        else:
+                            tfp.write(inpf_entry, arcname=os.path.basename(inpf_entry))
                 #
             #
         #
-        tfp.close()
-        tarfile_size = os.path.getsize(tarfile_name)
+        # tfp.close()
+        tarfile_size = os.path.getsize(compressed_file_name)
         return tarfile_size
 
 

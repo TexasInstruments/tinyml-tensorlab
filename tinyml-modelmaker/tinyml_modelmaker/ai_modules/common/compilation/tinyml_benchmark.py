@@ -53,7 +53,7 @@ class ModelCompilation():
     def __init__(self, *args, quit_event=None, **kwargs):
         self.params = self.init_params(*args, **kwargs)
         self.quit_event = quit_event
-        self.artifact_ext = '.tar.gz'
+        self.artifact_ext = '.zip'
         # prepare for model compilation
         # TODO: self._prepare_pipeline_config()
         self.work_dir = os.path.join(self.params.get('compilation').get('compilation_path'), 'artifacts')

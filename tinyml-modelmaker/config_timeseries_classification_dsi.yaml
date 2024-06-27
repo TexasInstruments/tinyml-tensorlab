@@ -32,12 +32,12 @@ training:
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
-    model_name: 'TimeSeries_Generic_7k_t'
+    model_name: 'TimeSeries_Generic_3k_t'
     # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
     model_config: ''
     batch_size: 64
     training_epochs: 5 #10
-    num_gpus: 1
+    num_gpus: 0
 
 compilation:
     # enable/disable compilation

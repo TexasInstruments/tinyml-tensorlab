@@ -1,8 +1,8 @@
-# TinyML ModelMaker
+# Tiny ML ModelMaker
 
-TinyML Modelmaker is an end-to-end model development tool that contains dataset handling, model training and compilation. Currently, it doesn't have an integrated feature to annotate data, but can accept annotated Dataset from a tool such as [Label Studio](https://labelstud.io/)
+Tiny ML Modelmaker is an end-to-end model development tool that contains dataset handling, model training and compilation. Currently, it doesn't have an integrated feature to annotate data, but can accept annotated Dataset from a tool such as [Label Studio](https://labelstud.io/)
 
-This repository stitches individual core scripts and utilities present in TinyML Tinyverse to make a simple and consistent interface for model development. This does not support all the models that can be trained and compiled using our tools, but only a subset. This is a commandline tool and requires a Linux PC.
+This repository stitches individual core scripts and utilities present in Tiny ML Tinyverse to make a simple and consistent interface for model development. This does not support all the models that can be trained and compiled using our tools, but only a subset. This is a commandline tool and requires a Linux PC.
 
 The following are the key functionality supported by this tool:
 - Dataset handling: This dataset formats supported by this tool is described in a section below. This can convert dataset formats and can automatically split the given dataset into train and validation sets (if it is not already split).
