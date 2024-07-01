@@ -539,7 +539,7 @@ def main(gpu, args):
 
         metric = torcheval.metrics.MulticlassAccuracy()
         metric.update(torch.Tensor(predicted), ground_truth)
-
+        logger = getLogger("root.main.test_data")
         logger.info(f"Test Data Evaluation Accuracy: {metric.compute()*100:.2f}%")
 
         confusion_matrix = get_confusion_matrix(torch.Tensor(predicted).type(torch.int64), ground_truth.type(torch.int64), num_classes).cpu().numpy()
@@ -688,7 +688,7 @@ def main(gpu, args):
                     checkpoint,
                     os.path.join(args.output_dir, 'checkpoint.pth'))
 
-    logger = getLogger("root.main.BestEpoch")
+    logger = getLogger(f"root.main.{phase}.BestEpoch")
     logger.info("")
     logger.info("Printing statistics of best epoch:")
     logger.info(f"Best Epoch: {best['epoch']}")
