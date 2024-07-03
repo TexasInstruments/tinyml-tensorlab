@@ -93,24 +93,30 @@ This may be user dependant, for example, at TI, the proxies had to be set in `~/
 ### Step 3.2
 #### 3.2.1: System level proxy for `apt` to work
 
-#### Note: The following is for TI network connected machines only, it is meant to serve as an example to how proxy needs to be set for `apt` to work in WSL environment
+* Firstly check if you can do a `sudo apt install docker`, if you can- then skip this step.
+  * docker isn't really required. Just to check if connection is possible to an external network.
+* If not, you have to configure `apt` to be able to connect to your network
 
-To use apt, you will need to add the TI proxy.
+#### Note: The following is meant to serve as an example to how proxy needs to be set for `apt` to work in WSL environment
+#### * For those connected to TI proxy, here's a link with TI Internal proxies: https://confluence.itg.ti.com/x/TaSXOw
+
+To use apt, you will need to add the proxy based on your corporate settings.
+* Replace `your.proxy.settings:port` with the corresponding proxy settings
 
 1. Add the following to `/etc/apt/apt.conf` (even if the file doesn't exist) with nano or vi (with sudo)
 ```bash
-Acquire::http::proxy "http://webproxy.ext.ti.com:80";
-Acquire::https::proxy "http://webproxy.ext.ti.com:80";
+Acquire::http::proxy "http://your.proxy.settings:port";
+Acquire::https::proxy "http://your.proxy.settings:port";
 ```
 
 2. Create the following `/etc/profile.d/proxy.sh` file (with sudo)
 
 ```bash
-export http_proxy="http://webproxy.ext.ti.com:80/"
-export https_proxy="http://webproxy.ext.ti.com:80/"
+export http_proxy="http://your.proxy.settings:port"
+export https_proxy="http://your.proxy.settings:port"
 export no_proxy="localhost,127.0.0.1,.ti.com"
-export HTTP_PROXY="http://webproxy.ext.ti.com:80/"
-export HTTPS_PROXY="http://webproxy.ext.ti.com:80/"
+export HTTP_PROXY="http://your.proxy.settings:port"
+export HTTPS_PROXY="http://your.proxy.settings:port"
 export NO_PROXY="localhost,127.0.0.1,.ti.com"
 ```
 
