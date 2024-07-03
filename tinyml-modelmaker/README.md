@@ -27,6 +27,7 @@ This repository can be used from native Ubuntu bash terminal directly or from wi
 
 #### Step 1, Option 1: With native Ubuntu environment and pyenv (recommended)
 We have tested this tool in Ubuntu 22.04 and with Python 3.10
+* If you rather want to try this offering out on a Windows PC, then a [user guide](./docs/Windows_Subsytem_for_Linux.md) to use this toolchain on Windows Subsystem for Linux has been provided.
 
 In this option, we describe using this repository with the pyenv environment manager. 
 
