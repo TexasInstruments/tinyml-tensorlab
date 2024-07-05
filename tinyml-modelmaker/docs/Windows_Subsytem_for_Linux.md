@@ -22,29 +22,29 @@ You will have to restart the system after this installation completes
 * Reopen PowerShell and run ``` wsl --install --web-download --distribution Ubuntu-22.04  ``` command once again, this time it invokes wsl and you should see something like this:
 
 * You can enter a username and password of your choice. Has no relation with your enterprise login/PC actual name
-```commandline
-PS C:\WINDOWS\system32> wsl --install --distribution Ubuntu-22.04 --web-download
-Ubuntu 22.04 LTS is already installed.
-Launching Ubuntu 22.04 LTS...                                                                                           
-Installing, this may take a few minutes...
-Please create a default UNIX user account. The username does not need to match your Windows username.
-For more information visit: https://aka.ms/wslusers
-Enter new UNIX username: user_adithya
-New password:
-Retype new password:
-passwd: password updated successfully
-The operation completed successfully.
-Installation successful!
-To run a command as administrator (user "root"), use "sudo <command>".
-See "man sudo_root" for details.
-Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.153.1-microsoft-standard-WSL2 x86_64)
-* Documentation:  https://help.ubuntu.com
-* Management:     https://landscape.canonical.com
-* Support:        https://ubuntu.com/advantage
-This message is shown once a day. To disable it please create the
-/home/user_adithya/.hushlogin file.
-user_adithya@computer:~$  
-```
+  ```commandline
+  PS C:\WINDOWS\system32> wsl --install --distribution Ubuntu-22.04 --web-download
+  Ubuntu 22.04 LTS is already installed.
+  Launching Ubuntu 22.04 LTS...                                                                                           
+  Installing, this may take a few minutes...
+  Please create a default UNIX user account. The username does not need to match your Windows username.
+  For more information visit: https://aka.ms/wslusers
+  Enter new UNIX username: user_adithya
+  New password:
+  Retype new password:
+  passwd: password updated successfully
+  The operation completed successfully.
+  Installation successful!
+  To run a command as administrator (user "root"), use "sudo <command>".
+  See "man sudo_root" for details.
+  Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.153.1-microsoft-standard-WSL2 x86_64)
+  * Documentation:  https://help.ubuntu.com
+  * Management:     https://landscape.canonical.com
+  * Support:        https://ubuntu.com/advantage
+  This message is shown once a day. To disable it please create the
+  /home/user_adithya/.hushlogin file.
+  user_adithya@computer:~$  
+  ```
 ## Important Notes:
 * How do I access files in WSL2 from Windows?
   * On the File Explorer, type: ```\\wsl.localhost\Ubuntu-22.04``` and hit Enter
@@ -68,12 +68,12 @@ Type on the terminal `sudo nano /etc/resolv.conf` and put the following contents
 nameserver 8.8.8.8  # Required to search google
 ```
 * Note: For TI, I had to do the following changes to `/etc/resolv.conf`
-```bash
-search dhcp.ti.com ent.ti.com itg.ti.com ext.ti.com  # Required to connect to internal servers
-nameserver 192.0.2.2
-nameserver 192.0.2.3
-nameserver 8.8.8.8
-```
+  ```bash
+  search dhcp.ti.com ent.ti.com itg.ti.com ext.ti.com  # Required to connect to internal servers
+  nameserver 192.0.2.2
+  nameserver 192.0.2.3
+  nameserver 8.8.8.8
+  ```
 #### 3.1.2: Changes to /etc/wsl.conf
 Type on the terminal `sudo nano /etc/wsl.conf` and put the following contents on the file:
 ```bash
@@ -93,7 +93,7 @@ This may be user dependant, for example, at TI, the proxies had to be set in `~/
 ### Step 3.2
 #### 3.2.1: System level proxy for `apt` to work
 
-* Firstly check if you can do a `sudo apt install docker`, if you can- then skip this step.
+* Firstly check if you can do a `sudo apt install docker.io`, if you can- then skip this step.
   * docker isn't really required. Just to check if connection is possible to an external network.
 * If not, you have to configure `apt` to be able to connect to your network
 
@@ -145,5 +145,75 @@ sudo apt-get install build-essential
 * On a WSL, you can't use any GUI applications. However, for development, you could install Visual Studio Code on your Windows PC and connect to your WSL.
 * Refer [this article](https://learn.microsoft.com/en-us/windows/python/web-frameworks#set-up-visual-studio-code) from Microsoft 
 
-## Step 5: Installing Tiny ML Modelmaker
-- Follow the same steps as in the main [documentation](../README.md)
+## Step 5: Using Tiny ML Modelmaker
+### Step 5 Option 1: Installing Tiny ML Modelmaker
+* If your intention is to utilise the full functionality of the Tiny ML Modelmaker (possibly even development)
+- Follow Step 1 Opion 1 and the Step 2 as in the main [documentation](../README.md)
+
+### Step 5 Option 2: Utilising a Tiny ML Modelmaker docker image
+* If you just want to use the Modelmaker functionality and you are a little familiar with docker usage, then do the following steps
+
+* This is assuming you have been provided with a docker image, from TI
+  * if not, contact your TI FAE/Apps for a docker image
+  * A docker image has not been openly provided due to this not being the recommended methodology
+  ```bash
+  sudo apt update
+  sudo apt install docker.io
+  sudo usermod -aG docker ${USER}
+  sudo systemctl start docker
+  sudo systemctl enable docker
+  # logout and log back in and docker should be ready to use.
+  ```
+* Now do the following: 
+  1. Load the docker image 
+  ```bash
+  docker load < tinyml-mlbackend-0.6.0-20240528-dockerimage.tar # Replace with the docker image
+  ```
+  2. Get the image id
+  ```bash
+  docker images
+  ```
+  * The above command should return something like the below: 
+  * NOTE: (We need the IMAGE ID)
+  
+  ```commandline 
+  REPOSITORY         TAG       IMAGE ID       CREATED       SIZE                                                          
+  tinyml-mlbackend   0.6.0     39a0d50e76ff   5 weeks ago   10.2GB
+  ```
+  3. Log in to the docker image with the following command:
+  ```bash
+  docker run -it 39a0d50e76ff 
+  ```
+  * You will be logged in with a prompt like this:
+  ```bash
+  (py310) root@c8a762165b2f:~/code/tinyml-mlbackend#  
+  ```
+
+  * Now you can run:
+
+  ```bash
+  run.sh train mcconfig_timeseries_classification.yaml  # To train
+  run.sh compile mcconfig_timeseries_classification.yaml  # To compile
+  ```
+
+  #### Note: To edit the files inside the docker image: (e.g the config yaml)
+  * There are no default editors inside a docker. You have to install one like `vim` or `nano` 
+  ```bash
+  apt-get update
+  apt-get install nano
+  # You can install vim instead of nano based on your interest
+  ```
+  * Now you can use `nano` to edit the files.
+  #### To copy files in and out of the docker container, you can do the following:
+  * Refer the official [docker documentation](https://docs.docker.com/reference/cli/docker/container/cp/)
+  * TL:DR;
+    * Use `docker ps` from another WSL terminal (not docker terminal) to view listing which includes container_ids.
+    * For emphasis, `container_id` is a container ID, **not** an image ID.
+    * One specific file can be copied TO the container like:
+      * `docker cp foo.txt container_id:/foo.txt`
+    * One specific file can be copied FROM the container like:
+      * `docker cp container_id:/foo.txt foo.txt`
+    * Multiple files contained by the folder src can be copied into the target folder using:
+      * `docker cp src/. container_id:/target`
+      * `docker cp container_id:/src/. target`
+      
