@@ -75,7 +75,7 @@ pyenv activate py310
 
 #### Step 1, Option 2: With docker environment
 
-Step 1.1b: Install docker if you don't have it already. The following steps are for installation on Ubuntu 18.04
+Step 1.1b: Install docker if you don't have it already. The following steps are for installation on Ubuntu 22.04
 ```
 ./docker/docker_setup.sh
 ```
