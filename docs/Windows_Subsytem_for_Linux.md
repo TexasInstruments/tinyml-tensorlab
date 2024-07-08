@@ -93,7 +93,7 @@ This may be user dependant, for example, at TI, the proxies had to be set in `~/
 ### Step 3.2
 #### 3.2.1: System level proxy for `apt` to work
 
-* Firstly check if you can do a `sudo apt install docker.io`, if you can- then skip this step.
+* Firstly check if you can do a `sudo apt install docker.io`, if you can, then skip this step.
   * docker isn't really required. Just to check if connection is possible to an external network.
 * If not, you have to configure `apt` to be able to connect to your network
 
@@ -148,10 +148,10 @@ sudo apt-get install build-essential
 ## Step 5: Using Tiny ML Modelmaker
 ### Step 5 Option 1: Installing Tiny ML Modelmaker
 * If your intention is to utilise the full functionality of the Tiny ML Modelmaker (possibly even development)
-- Follow Step 1 Opion 1 and the Step 2 as in the main [documentation](../README.md)
+- Follow Step 1 (Option 1) and Step 2 as per the main [documentation](../README.md)
 
 ### Step 5 Option 2: Utilising a Tiny ML Modelmaker docker image
-* If you just want to use the Modelmaker functionality and you are a little familiar with docker usage, then do the following steps
+* If you just want to use the Modelmaker functionality, and you are a little familiar with docker usage, then do the following steps
 
 * This is assuming you have been provided with a docker image, from TI
   * if not, contact your TI FAE/Apps for a docker image
