@@ -69,7 +69,6 @@ nameserver 8.8.8.8  # Required to search google
 ```
 * Note: For TI, I had to do the following changes to `/etc/resolv.conf`
   ```bash
-  search dhcp.ti.com ent.ti.com itg.ti.com ext.ti.com  # Required to connect to internal servers
   nameserver 192.0.2.2
   nameserver 192.0.2.3
   nameserver 8.8.8.8
@@ -114,10 +113,10 @@ Acquire::https::proxy "http://your.proxy.settings:port";
 ```bash
 export http_proxy="http://your.proxy.settings:port"
 export https_proxy="http://your.proxy.settings:port"
-export no_proxy="localhost,127.0.0.1,.ti.com"
+export no_proxy="localhost,127.0.0.1"
 export HTTP_PROXY="http://your.proxy.settings:port"
 export HTTPS_PROXY="http://your.proxy.settings:port"
-export NO_PROXY="localhost,127.0.0.1,.ti.com"
+export NO_PROXY="localhost,127.0.0.1,"
 ```
 
 3. Shutdown WSL. In a separate command prompt, type the following
