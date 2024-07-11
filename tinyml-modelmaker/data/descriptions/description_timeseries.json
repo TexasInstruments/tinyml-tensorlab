@@ -243,8 +243,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -274,6 +276,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -549,8 +552,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -580,6 +585,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -850,8 +856,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -881,6 +889,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -1156,8 +1165,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -1187,6 +1198,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -1447,8 +1459,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -1478,6 +1492,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -1738,8 +1753,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -1769,6 +1786,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -2029,8 +2047,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -2060,6 +2080,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -2330,8 +2351,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -2361,6 +2384,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
@@ -2631,8 +2655,10 @@
         }
       },
       "testing":{
-        "test_quant_model":false,
-        "test_data":null
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
       },
       "data_processing":{
         "org_sr":313000,
@@ -2662,6 +2688,7 @@
       },
       "compilation":{
         "enable":true,
+        "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
         "properties":[
