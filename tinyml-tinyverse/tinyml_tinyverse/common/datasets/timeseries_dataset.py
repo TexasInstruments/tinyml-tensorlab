@@ -111,7 +111,6 @@ class SimpleTSDataset(Dataset):
         org_sr : Original Sample Rate
         sequence_window: Each sequence duration
         """
-        # print(type(self.resampling_factor))
         self.new_sr = self.org_sr / self.resampling_factor  # Resampling_factor=1 by default
         self.stride_window = self.sequence_window
 
