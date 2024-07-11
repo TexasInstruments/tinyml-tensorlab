@@ -100,7 +100,11 @@ def main(config):
 
     # finish up
     if model_runner.get_params().training.enable:
-        print(f'Trained model is at: {model_runner.get_params().training.training_path_quantization if model_runner.get_params().training.training_path_quantization else model_runner.get_params().training.training_path}')
+        if not (model_runner.get_params().testing.skip_train in [True, 'True', 'true', 1, '1']):
+            if model_runner.get_params().training.training_path_quantization:
+                print(f'Trained model is at: {model_runner.get_params().training.training_path_quantization}')
+            else:
+                print(f'Trained model is at: {model_runner.get_params().training.training_path}')
     if model_runner.get_params().compilation.enable:
         print(f'Compiled model is at: {model_runner.get_params().compilation.compilation_path}')
     return True

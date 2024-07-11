@@ -34,10 +34,9 @@ training:
     training_epochs: 15
     num_gpus: 0  # 1
     learning_rate: 0.04
-    run_quant_train_only: False
 
 testing:
-    test_quant_model: True
+    enable: True
 
 compilation:
     # enable/disable compilation

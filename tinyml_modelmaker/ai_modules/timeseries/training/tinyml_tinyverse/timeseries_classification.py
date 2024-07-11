@@ -1402,61 +1402,95 @@ class ModelTraining:
         args = train.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event
         # exit(1)
-        if self.params.training.run_quant_train_only in [True, 'True', 'true', 1, '1']:
-            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
-                argv = argv[:-2]  # Remove --output-dir <output-dir>
-                argv.extend([
-                    '--output-dir', f'{self.params.training.training_path_quantization}',
-                    '--quantization', f'{self.params.training.quantization}', ]),
+        if not (self.params.testing.skip_train in [True, 'True', 'true', 1, '1']):  # Is user wants to only test their model
+            if self.params.training.run_quant_train_only in [True, 'True', 'true', 1, '1']:
+                if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+                    argv = argv[:-2]  # Remove --output-dir <output-dir>
+                    argv.extend([
+                        '--output-dir', f'{self.params.training.training_path_quantization}',
+                        '--quantization', f'{self.params.training.quantization}', ]),
 
-                args = train.get_args_parser().parse_args(argv)
-                args.quit_event = self.quit_event
-                # launch the training
-                # TODO: originally train.main(args)
-                train.run(args)
+                    args = train.get_args_parser().parse_args(argv)
+                    args.quit_event = self.quit_event
+                    # launch the training
+                    # TODO: originally train.main(args)
+                    train.run(args)
+                else:
+                    raise f"quantization cannot be {TinyMLQuantizationVersion.NO_QUANTIZATION} if run_quant_train_only argument is chosen"
             else:
-                raise f"quantization cannot be {TinyMLQuantizationVersion.NO_QUANTIZATION} if run_quant_train_only argument is chosen"
-        else:
-            train.run(args)
-
-            if (self.params.feature_extraction.store_feat_ext_data in [True, 'True', 'true', 1, '1']
-                    and self.params.feature_extraction.dont_train_just_feat_ext in [True, 'True', 'true', 1, '1']):
-                return self.params
-
-            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
-                argv = argv[
-                       :-8]  # remove --store-feat-ext-data <True/False> --epochs <epochs> --lr <lr> --output-dir <output-dir>
-                argv.extend([
-                    '--output-dir', f'{self.params.training.training_path_quantization}',
-                    '--epochs', f'{max(5, self.params.training.training_epochs // 10)}',
-                    '--lr', f'{self.params.training.learning_rate / 100}',
-                    '--weights', f'{self.params.training.model_checkpoint_path}',
-                    '--quantization', f'{self.params.training.quantization}',
-                    '--lr-warmup-epochs', '0',
-                    '--store-feat-ext-data', 'False']),
-
-                args = train.get_args_parser().parse_args(argv)
-                args.quit_event = self.quit_event
-                # launch the training
-                # TODO: originally train.main(args)
                 train.run(args)
 
-        if self.params.testing.test_quant_model in [True, 'true', 1, '1']:
-            # test = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'timeseries_classification', 'train.py'), __name__, force_import=True)
-            test = train
-            argv = argv[
-                   :-8]  # remove --store-feat-ext-data <True/False> --epochs <epochs> --lr <lr> --output-dir <output-dir>
-            if self.params.testing.test_data and (os.path.exists(self.params.testing.test_data)):
-                argv = argv[:-2]  # remove --data-path <data_path>
-                argv.extend(['--data-path', f'{self.params.testing.test_data}'])
+                if (self.params.feature_extraction.store_feat_ext_data in [True, 'True', 'true', 1, '1']
+                        and
+                        self.params.feature_extraction.dont_train_just_feat_ext in [True, 'True', 'true', 1, '1']):
+                    return self.params
 
-            argv.extend([
+                if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+                    argv = argv[
+                           :-8]  # remove --store-feat-ext-data <True/False> --epochs <epochs> --lr <lr> --output-dir <output-dir>
+                    argv.extend([
+                        '--output-dir', f'{self.params.training.training_path_quantization}',
+                        '--epochs', f'{max(5, self.params.training.training_epochs // 10)}',
+                        '--lr', f'{self.params.training.learning_rate / 100}',
+                        '--weights', f'{self.params.training.model_checkpoint_path}',
+                        '--quantization', f'{self.params.training.quantization}',
+                        '--lr-warmup-epochs', '0',
+                        '--store-feat-ext-data', 'False']),
+
+                    args = train.get_args_parser().parse_args(argv)
+                    args.quit_event = self.quit_event
+                    # launch the training
+                    # TODO: originally train.main(args)
+                    train.run(args)
+
+        if self.params.testing.enable in [True, 'true', 1, '1']:
+            if self.params.testing.test_data and (os.path.exists(self.params.testing.test_data)):
+                data_path = self.params.testing.test_data
+            else:
+                data_path = f'{self.params.dataset.dataset_path}/{self.params.dataset.data_dir}'
+
+            if self.params.testing.model_path and (os.path.exists(self.params.testing.model_path)):
+                model_path = self.params.testing.model_path
+            else:
+                model_path = os.path.join(self.params.training.training_path_quantization, 'model.onnx')
+            argv = [
+                '--dataset', 'modelmaker',
+                '--dataset-loader', f'{self.params.training.dataset_loader}',
+                '--annotation-prefix', f'{self.params.dataset.annotation_prefix}',
+                '--gpus', f'{self.params.training.num_gpus}',
+                '--batch-size', f'{self.params.training.batch_size}',
+                '--distributed', f'0',
+                '--device', f'{device}',
+
+                '--variables', f'{self.params.data_processing.variables}',
+                '--org-sr', f'{self.params.data_processing.org_sr}',
+                '--resampling-factor', f'{self.params.data_processing.resampling_factor}',
+                '--new-sr', f'{self.params.data_processing.new_sr}',
+                '--stride_window', f'{self.params.data_processing.stride_window}',
+                '--sequence_window', f'{self.params.data_processing.sequence_window}',
+
+                '--data-proc-transforms', self.params.data_processing.transforms,
+                '--feat-ext-transform', f'{self.params.feature_extraction.transform}',
+                # Arc Fault and Motor Fault Related Params
+                '--frame-size', f'{self.params.feature_extraction.frame_size}',
+                '--feature-size-per-frame', f'{self.params.feature_extraction.feature_size_per_frame}',
+                '--num-frame-concat', f'{self.params.feature_extraction.num_frame_concat}',
+                '--frame-skip', f'{self.params.feature_extraction.frame_skip}',
+                '--min-fft-bin', f'{self.params.feature_extraction.min_fft_bin}',
+                '--fft-bin-size', f'{self.params.feature_extraction.fft_bin_size}',
+                '--dc-remove', f'{self.params.feature_extraction.dc_remove}',
+                # '--num-channel', f'{self.params.feature_extraction.num_channel}',
+                '--stacking', f'{self.params.feature_extraction.stacking}',
+                '--offset', f'{self.params.feature_extraction.offset}',
+                '--scale', f'{self.params.feature_extraction.scale}',
+
+                # '--tensorboard-logger', 'True',
+                '--lis', f'{self.params.training.log_file_path}',
+                '--data-path', f'{data_path}',
                 '--output-dir', f'{self.params.training.training_path_quantization}',
-                '--weights', f'{self.params.training.model_checkpoint_path_quantization}',
-                '--quantization', f'{self.params.training.quantization}',
-                '--distributed', '0',
-                '--test-only',
-            ]),
+                '--model-path', f'{model_path}'
+                ]
+            test = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'timeseries_classification', 'test_onnx.py'), __name__, force_import=True)
 
             args = test.get_args_parser().parse_args(argv)
             args.quit_event = self.quit_event
