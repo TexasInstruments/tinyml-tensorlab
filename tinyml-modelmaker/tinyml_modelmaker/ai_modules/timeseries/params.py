@@ -155,9 +155,12 @@ def init_params(*args, **kwargs):
             ]
         ),
         testing=dict(
-            test_quant_model=False,
+            enable=True,
+            skip_train=False,
+            # test_quant_model=False,
             # quant_model_path=None,
             test_data=None,
+            model_path=None,
         ),
         data_processing=dict(
             org_sr=313000,

@@ -4,7 +4,7 @@ common:
     task_type: 'arc_fault'
     target_device: 'F28P55'
     run_name: '{date-time}/{model_name}'
-#    run_name: '20240529-150933'
+#    run_name: '20240710-191631'
 dataset:
     # enable/disable dataset loading
     enable: True #False
@@ -41,17 +41,17 @@ training:
     batch_size: 64
     training_epochs: 10
     num_gpus: 0
-#    run_quant_train_only: True
-#    training_path_quantization:
+
 testing:
-    test_quant_model: True
-#    test_data: ./data/projects/arc_fault_example_dsk/dataset/classes
+    enable: True
+    skip_train: False  # True if only the model needs to be tested. model_path below needs to be given
+#    model_path: Onnx/tflite Model Path for BYOM for compilation only
+#    test_data: ./data/projects/arc_fault_example_dsk/dataset/classes  #  if dataset is being provided here then- dataset-> enable: False
 
 
 compilation:
     # enable/disable compilation
     enable: True #False
-#    model_path: Onnx/tflite Model Path fro BYOM for compilation only
     # No preset is required for F28P55
 #    preset_name: default_preset
 #    preset_name: best_performance_preset
