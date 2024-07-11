@@ -82,6 +82,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -148,8 +149,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 32
       dataset_loader: ArcFaultDataset
@@ -303,6 +306,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -369,8 +373,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 32
       dataset_loader: ArcFaultDataset
@@ -524,6 +530,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -590,8 +597,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 32
       dataset_loader: ArcFaultDataset
@@ -745,6 +754,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -811,8 +821,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 256
       dataset_loader: MotorFaultDataset
@@ -972,6 +984,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -1038,8 +1051,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 256
       dataset_loader: MotorFaultDataset
@@ -1199,6 +1214,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -1265,8 +1281,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 64
       dataset_loader: SimpleTSDataset
@@ -1425,6 +1443,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -1491,8 +1510,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 64
       dataset_loader: SimpleTSDataset
@@ -1655,6 +1676,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -1721,8 +1743,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 64
       dataset_loader: SimpleTSDataset
@@ -1881,6 +1905,7 @@ model_descriptions:
       enable: true
       metric:
         label_offset_pred: 1
+      model_path: null
       properties:
       - default: default_preset
         enum:
@@ -1947,8 +1972,10 @@ model_descriptions:
       store_feat_ext_data: false
       transform: ''
     testing:
+      enable: true
+      model_path: null
+      skip_train: false
       test_data: null
-      test_quant_model: false
     training:
       batch_size: 64
       dataset_loader: SimpleTSDataset
