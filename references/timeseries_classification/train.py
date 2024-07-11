@@ -89,7 +89,6 @@ from edgeai_torchmodelopt.xnn.utils import is_url_or_file, load_weights
 import tinyml_torchmodelopt
 
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
-import pdb
 dataset_loader_dict = {'SimpleTSDataset': SimpleTSDataset, 'ArcFaultDataset': ArcFaultDataset, 'MotorFaultDataset': MotorFaultDataset}
 
 
@@ -195,12 +194,6 @@ def get_args_parser():
         action="store_true",
     )
     parser.add_argument(
-        "--test-only",
-        dest="test_onnx_only",
-        help="Only test the model",
-        action="store_true",
-    )
-    parser.add_argument(
         "--pretrained",
         dest="pretrained",
         help="Use pre-trained models from the modelzoo",
@@ -256,163 +249,6 @@ def get_args_parser():
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
     
     return parser
-
-
-def pad_sequence(batch):
-    # Make all tensor in a batch the same length by padding with zeros
-    batch = [item.t() for item in batch]
-    batch = torch.nn.utils.rnn.pad_sequence(batch, batch_first=True, padding_value=0.)
-    if batch.ndim == 3:
-        return batch.permute(0, 2, 1)
-    else:
-        return batch
-
-
-def all_tensors_have_same_dimensions(tensors):
-    """Checks if all tensors in a list are of the same dimensions.
-
-    Args:
-    tensors: A list of tensors.
-
-    Returns:
-    True if all tensors in the list are of the same dimensions, False otherwise.
-    """
-    # Check if the list is empty.
-    if not tensors:
-        return True
-    # Get the dimensions of the first tensor.
-    first_tensor_dimensions = tensors[0].shape
-    # Check if the dimensions of all other tensors match the dimensions of the first tensor.
-    for tensor in tensors[1:]:
-        if tensor.shape != first_tensor_dimensions:
-            return False
-    # If all tensors have the same dimensions, return True.
-    return True
-
-
-def collate_fn(batch):
-    # A data tuple has the form:
-    # waveform, sample_rate, label, speaker_id, utterance_number
-    tensors, targets = [], []
-    # Gather in lists, and encode labels as indices
-    # for waveform, _, label, *_ in batch:
-    for sequence, label in batch:
-        tensors += [sequence]
-        targets += [torch.tensor(label)]
-    # Group the list of tensors into a batched tensor
-    if all_tensors_have_same_dimensions(tensors):
-        tensors = torch.stack((tensors))  # TODO: Is this correct
-    else:
-        tensors = pad_sequence(tensors)
-    targets = torch.stack(targets)
-    return tensors, targets
-
-
-def _get_cache_path(filepath):
-    import hashlib
-    h = hashlib.sha1(filepath.encode()).hexdigest()
-    cache_path = os.path.join("~", ".torch", "audio_classification", "datasets", "audiofolder", h[:10] + ".pt")
-    cache_path = os.path.expanduser(cache_path)
-    return cache_path
-
-
-def load_data(datadir, args):
-    # Data loading code
-    logger = getLogger("root.load_data")
-    logger.info("Loading data")
-    dataset_loader = dataset_loader_dict.get(args.dataset_loader)
-
-    st = time.time()
-    if args.test_onnx_only:
-        # datadir is supposed to be test dir
-        if args.dataset == 'modelmaker':
-            test_folders = os.path.normpath(datadir).split(os.sep)
-            test_anno = glob(
-                os.path.join(os.sep.join(test_folders[:-1]), 'annotations', f'{args.annotation_prefix}_test*_list.txt'))
-            test_list = test_anno[0] if len(test_anno) == 1 and os.path.exists(test_anno[0]) else None
-            dataset_test = dataset_loader("test", dataset_dir=args.data_path, validation_list=test_list, **vars(args)).prepare(**vars(args))
-        else:
-            # dataset_test = torchvision.datasets.ImageFolder(datadir, val_transform)
-            dataset_test = dataset_loader("test", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        logger.info("Loading Test/Evaluation data")
-        logger.info('Test Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join([
-            f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
-            f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
-        test_sampler = torch.utils.data.SequentialSampler(dataset_test)
-        logger.info("Took {0:.2f} seconds".format(time.time() - st))
-
-        return dataset_test, dataset_test, test_sampler, test_sampler
-
-    logger.info("Loading training data")
-    st = time.time()
-    cache_path = _get_cache_path(datadir)
-    if args.cache_dataset and os.path.exists(cache_path):
-        # Attention, as the transforms are also cached!
-        logger.info("Loading dataset_train from {}".format(cache_path))
-        dataset, _ = torch.load(cache_path)
-    else:
-        auto_augment_policy = getattr(args, "auto_augment", None)
-        random_erase_prob = getattr(args, "random_erase", 0.0)
-
-        if args.dataset == 'modelmaker':
-            train_folders = os.path.normpath(datadir).split(os.sep)
-            train_anno = glob(os.path.join(os.sep.join(train_folders[:-1]), 'annotations', f'{args.annotation_prefix}_train*_list.txt'))
-            training_list = train_anno[0] if len(train_anno)==1 and os.path.exists(train_anno[0]) else None
-            dataset = dataset_loader("training", dataset_dir=args.data_path, training_list=training_list, **vars(args)).prepare(**vars(args))
-        else:
-            dataset = dataset_loader("training", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        if args.cache_dataset:
-            logger.info("Saving dataset_train to {}".format(cache_path))
-            utils.mkdir(os.path.dirname(cache_path))
-            utils.save_on_master((dataset, datadir), cache_path)
-    logger.info("Took {0:.2f} seconds".format(time.time() - st))
-
-    logger.info("Loading validation data")
-    st = time.time()
-    cache_path = _get_cache_path(datadir)
-    if args.cache_dataset and os.path.exists(cache_path):
-        # Attention, as the transforms are also cached!
-        logger.info("Loading dataset_test from {}".format(cache_path))
-        dataset_test, _ = torch.load(cache_path)
-    else:
-        # val_transform = presets.ClassificationPresetEval(crop_size=crop_size, resize_size=resize_size,
-        #                                      interpolation=interpolation,
-        #                                      image_mean=args.image_mean, image_scale=args.image_scale)
-        if args.dataset == 'modelmaker':
-            val_folders = os.path.normpath(datadir).split(os.sep)
-            val_anno = glob(os.path.join(os.sep.join(val_folders[:-1]), 'annotations', f'{args.annotation_prefix}_val*_list.txt'))
-            val_list = val_anno[0] if len(val_anno)==1 and os.path.exists(val_anno[0]) else None
-            dataset_test = dataset_loader("val", dataset_dir=args.data_path, validation_list=val_list, **vars(args)).prepare(**vars(args))
-        else:
-            dataset_test = dataset_loader("val", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        # TODO: Add utils and uncomment the if block
-        # if args.cache_dataset:
-        #     logger.info("Saving dataset_test to {}".format(cache_path))
-        #     utils.mkdir(os.path.dirname(cache_path))
-        #     utils.save_on_master((dataset_test, datadir), cache_path)
-    logger.info("Took {:.2f} seconds".format(time.time() - st))
-    logger.info("\nCreating data loaders")
-    if args.distributed:
-        train_sampler = torch.utils.data.distributed.DistributedSampler(dataset)
-        test_sampler = torch.utils.data.distributed.DistributedSampler(dataset_test)
-    else:
-        logger.info('Train Data: target count: {} : Split Up: {}'.format(len(dataset.Y), ';\t'.join(
-            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset.label_map.items() if label_index == i][0]}:"
-             f" {len(np.where(dataset.Y == i)[0])} " for i in np.unique(dataset.Y)])))
-        logger.info('Val Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join(
-            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
-             f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
-        # logger.critical('target train 0/1: {}/{} {}'.format(len(np.where(dataset.Y == np.unique(dataset.Y)[0])[0]), len(np.where(dataset.Y == np.unique(dataset.Y)[1])[0]), len(dataset.Y)))
-        class_sample_count = np.array([len(np.where(dataset.Y == t)[0]) for t in np.unique(dataset.Y)])
-        weight = 1. / class_sample_count
-        samples_weight = np.array([weight[t] for t in np.array(dataset.Y).astype(int)])
-        samples_weight = torch.from_numpy(samples_weight)
-        # samples_weight = samples_weight.double()
-        train_sampler = torch.utils.data.WeightedRandomSampler(samples_weight, len(samples_weight))
-        # train_sampler = torch.utils.data.RandomSampler(dataset)
-        test_sampler = torch.utils.data.SequentialSampler(dataset_test)
-
-    return dataset, dataset_test, train_sampler, test_sampler
 
 
 def generate_golden_vectors(output_dir, dataset):
@@ -503,7 +339,7 @@ def main(gpu, args):
             args.transforms = [args.data_proc_transforms[0] + [args.feat_ext_transform]]  # args.data_proc_transforms is a list of lists
         else:
             args.transforms = [args.data_proc_transforms + [args.feat_ext_transform]]
-    dataset, dataset_test, train_sampler, test_sampler = load_data(args.data_path, args)  # (126073, 1, 152), 126073
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict)  # (126073, 1, 152), 126073
     if args.store_feat_ext_data and args.dont_train_just_feat_ext:
         logger.info("Exiting execution without training")
         sys.exit(0)
@@ -516,43 +352,11 @@ def main(gpu, args):
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size,
         sampler=train_sampler, num_workers=args.workers, pin_memory=True,
-        collate_fn=collate_fn)
+        collate_fn=utils.collate_fn)
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=args.batch_size,
         sampler=test_sampler, num_workers=args.workers, pin_memory=True,
-        collate_fn=collate_fn, )
-
-    if args.test_onnx_only:
-        ort_sess = ort.InferenceSession(os.path.join(args.output_dir, 'model.onnx'))
-        input_name = ort_sess.get_inputs()[0].name
-        output_name = ort_sess.get_outputs()[0].name
-        predicted = []
-        ground_truth = torch.tensor([])
-        for batched_data, batched_target in data_loader:
-            batched_data = batched_data.to(device, non_blocking=True).float()
-            batched_target = batched_target.to(device, non_blocking=True).long()
-            if transform:
-                batched_data = transform(batched_data)
-            for data in batched_data:
-                predicted.append(np.argmax(ort_sess.run([output_name], {input_name: np.array(data.unsqueeze(0)).astype(np.float32)})[0]))
-            ground_truth = torch.cat((ground_truth, batched_target))
-
-        metric = torcheval.metrics.MulticlassAccuracy()
-        metric.update(torch.Tensor(predicted), ground_truth)
-        logger = getLogger("root.main.test_data")
-        logger.info(f"Test Data Evaluation Accuracy: {metric.compute()*100:.2f}%")
-
-        confusion_matrix = get_confusion_matrix(torch.Tensor(predicted).type(torch.int64), ground_truth.type(torch.int64), num_classes).cpu().numpy()
-        #
-        # logger.info('\n' + '\n'.join(
-        #     [f"Ground Truth:(Class {dataset.inverse_label_map[i]}), Predicted:(Class {dataset.inverse_label_map[j]}): {int(confusion_matrix[i][j])}" for j in
-        #      range(num_classes) for i in range(num_classes)]))
-        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix,
-                      columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-                      index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
-                                                             headers="keys", tablefmt='grid')))
-
-        return
+        collate_fn=utils.collate_fn, )
 
     logger.info("Creating model")
     # Model Creation
@@ -568,9 +372,6 @@ def main(gpu, args):
 
     if args.weights:
         if args.weights_url:
-            # if args.test_onnx_only:
-            #     logger.info(f"loading pretrained checkpoint for test: {args.weights_url}")
-            # else:
             logger.info(f"loading pretrained checkpoint for training: {args.weights_url}")
             model = load_weights(model, args.weights_url, state_dict_name=args.weights_state_dict_name)
 

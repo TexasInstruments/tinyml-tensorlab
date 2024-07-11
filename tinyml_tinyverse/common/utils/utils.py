@@ -65,6 +65,7 @@ import re
 from collections import defaultdict, deque, OrderedDict
 import copy
 import datetime
+from glob import glob
 import hashlib
 import numbers
 import onnx
@@ -85,6 +86,162 @@ try:
     from apex import amp
 except ImportError:
     amp = None
+
+
+def all_tensors_have_same_dimensions(tensors):
+    """Checks if all tensors in a list are of the same dimensions.
+
+    Args:
+    tensors: A list of tensors.
+
+    Returns:
+    True if all tensors in the list are of the same dimensions, False otherwise.
+    """
+    # Check if the list is empty.
+    if not tensors:
+        return True
+    # Get the dimensions of the first tensor.
+    first_tensor_dimensions = tensors[0].shape
+    # Check if the dimensions of all other tensors match the dimensions of the first tensor.
+    for tensor in tensors[1:]:
+        if tensor.shape != first_tensor_dimensions:
+            return False
+    # If all tensors have the same dimensions, return True.
+    return True
+
+def pad_sequence(batch):
+    # Make all tensor in a batch the same length by padding with zeros
+    batch = [item.t() for item in batch]
+    batch = torch.nn.utils.rnn.pad_sequence(batch, batch_first=True, padding_value=0.)
+    if batch.ndim == 3:
+        return batch.permute(0, 2, 1)
+    else:
+        return batch
+
+
+def collate_fn(batch):
+    # A data tuple has the form:
+    # waveform, sample_rate, label, speaker_id, utterance_number
+    tensors, targets = [], []
+    # Gather in lists, and encode labels as indices
+    # for waveform, _, label, *_ in batch:
+    for sequence, label in batch:
+        tensors += [sequence]
+        targets += [torch.tensor(label)]
+    # Group the list of tensors into a batched tensor
+    if all_tensors_have_same_dimensions(tensors):
+        tensors = torch.stack(tensors)  # TODO: Is this correct
+    else:
+        tensors = pad_sequence(tensors)
+    targets = torch.stack(targets)
+    return tensors, targets
+
+
+def _get_cache_path(filepath):
+    import hashlib
+    h = hashlib.sha1(filepath.encode()).hexdigest()
+    cache_path = os.path.join("~", ".torch", "audio_classification", "datasets", "audiofolder", h[:10] + ".pt")
+    cache_path = os.path.expanduser(cache_path)
+    return cache_path
+
+
+def load_data(datadir, args, dataset_loader_dict, test_only=False):
+    # Data loading code
+    logger = getLogger("root.load_data")
+    logger.info("Loading data")
+    dataset_loader = dataset_loader_dict.get(args.dataset_loader)
+
+    st = time.time()
+    if test_only:
+        # datadir is supposed to be test dir
+        if args.dataset == 'modelmaker':
+            test_folders = os.path.normpath(datadir).split(os.sep)
+            test_anno = glob(
+                os.path.join(os.sep.join(test_folders[:-1]), 'annotations', f'{args.annotation_prefix}_test*_list.txt'))
+            test_list = test_anno[0] if len(test_anno) == 1 and os.path.exists(test_anno[0]) else None
+            dataset_test = dataset_loader("test", dataset_dir=args.data_path, validation_list=test_list, **vars(args)).prepare(**vars(args))
+        else:
+            # dataset_test = torchvision.datasets.ImageFolder(datadir, val_transform)
+            dataset_test = dataset_loader("test", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
+        logger.info("Loading Test/Evaluation data")
+        logger.info('Test Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join([
+            f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
+            f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
+        test_sampler = torch.utils.data.SequentialSampler(dataset_test)
+        logger.info("Took {0:.2f} seconds".format(time.time() - st))
+
+        return dataset_test, dataset_test, test_sampler, test_sampler
+
+    logger.info("Loading training data")
+    st = time.time()
+    cache_path = _get_cache_path(datadir)
+    if args.cache_dataset and os.path.exists(cache_path):
+        # Attention, as the transforms are also cached!
+        logger.info("Loading dataset_train from {}".format(cache_path))
+        dataset, _ = torch.load(cache_path)
+    else:
+        auto_augment_policy = getattr(args, "auto_augment", None)
+        random_erase_prob = getattr(args, "random_erase", 0.0)
+
+        if args.dataset == 'modelmaker':
+            train_folders = os.path.normpath(datadir).split(os.sep)
+            train_anno = glob(os.path.join(os.sep.join(train_folders[:-1]), 'annotations', f'{args.annotation_prefix}_train*_list.txt'))
+            training_list = train_anno[0] if len(train_anno)==1 and os.path.exists(train_anno[0]) else None
+            dataset = dataset_loader("training", dataset_dir=args.data_path, training_list=training_list, **vars(args)).prepare(**vars(args))
+        else:
+            dataset = dataset_loader("training", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
+        if args.cache_dataset:
+            logger.info("Saving dataset_train to {}".format(cache_path))
+            mkdir(os.path.dirname(cache_path))
+            save_on_master((dataset, datadir), cache_path)
+    logger.info("Took {0:.2f} seconds".format(time.time() - st))
+
+    logger.info("Loading validation data")
+    st = time.time()
+    cache_path = _get_cache_path(datadir)
+    if args.cache_dataset and os.path.exists(cache_path):
+        # Attention, as the transforms are also cached!
+        logger.info("Loading dataset_test from {}".format(cache_path))
+        dataset_test, _ = torch.load(cache_path)
+    else:
+        # val_transform = presets.ClassificationPresetEval(crop_size=crop_size, resize_size=resize_size,
+        #                                      interpolation=interpolation,
+        #                                      image_mean=args.image_mean, image_scale=args.image_scale)
+        if args.dataset == 'modelmaker':
+            val_folders = os.path.normpath(datadir).split(os.sep)
+            val_anno = glob(os.path.join(os.sep.join(val_folders[:-1]), 'annotations', f'{args.annotation_prefix}_val*_list.txt'))
+            val_list = val_anno[0] if len(val_anno)==1 and os.path.exists(val_anno[0]) else None
+            dataset_test = dataset_loader("val", dataset_dir=args.data_path, validation_list=val_list, **vars(args)).prepare(**vars(args))
+        else:
+            dataset_test = dataset_loader("val", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
+        # TODO: Add utils and uncomment the if block
+        # if args.cache_dataset:
+        #     logger.info("Saving dataset_test to {}".format(cache_path))
+        #     utils.mkdir(os.path.dirname(cache_path))
+        #     utils.save_on_master((dataset_test, datadir), cache_path)
+    logger.info("Took {:.2f} seconds".format(time.time() - st))
+    logger.info("\nCreating data loaders")
+    if args.distributed:
+        train_sampler = torch.utils.data.distributed.DistributedSampler(dataset)
+        test_sampler = torch.utils.data.distributed.DistributedSampler(dataset_test)
+    else:
+        logger.info('Train Data: target count: {} : Split Up: {}'.format(len(dataset.Y), ';\t'.join(
+            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset.label_map.items() if label_index == i][0]}:"
+             f" {len(np.where(dataset.Y == i)[0])} " for i in np.unique(dataset.Y)])))
+        logger.info('Val Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join(
+            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
+             f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
+        # logger.critical('target train 0/1: {}/{} {}'.format(len(np.where(dataset.Y == np.unique(dataset.Y)[0])[0]), len(np.where(dataset.Y == np.unique(dataset.Y)[1])[0]), len(dataset.Y)))
+        class_sample_count = np.array([len(np.where(dataset.Y == t)[0]) for t in np.unique(dataset.Y)])
+        weight = 1. / class_sample_count
+        samples_weight = np.array([weight[t] for t in np.array(dataset.Y).astype(int)])
+        samples_weight = torch.from_numpy(samples_weight)
+        # samples_weight = samples_weight.double()
+        train_sampler = torch.utils.data.WeightedRandomSampler(samples_weight, len(samples_weight))
+        # train_sampler = torch.utils.data.RandomSampler(dataset)
+        test_sampler = torch.utils.data.SequentialSampler(dataset_test)
+
+    return dataset, dataset_test, train_sampler, test_sampler
 
 
 class SmoothedValue:
