@@ -79,12 +79,10 @@ def main(config):
     compilation_preset_name = ai_target_module.constants.COMPILATION_DEFAULT  # 'default_preset'
     if 'compile_preset_name' in config['compilation']:
         compilation_preset_name = config['compilation']['compile_preset_name']
-    preset_description = preset_descriptions[target_device][task_type][compilation_preset_name]
+    compilation_preset_description = preset_descriptions[target_device][task_type][compilation_preset_name]
 
     # update the params with model_description, preset and config
-    # params = params.update(model_description).update(dataset_preset_description).update(feature_extraction_preset_description).update(preset_description).update(config)
-    # TODO: The below line replaced the abobe line because for motor fault the feature extraction name has all the details, and we dont want the config's stray user inputs to cause an error
-    params = params.update(model_description).update(dataset_preset_description).update(preset_description).update(config).update(feature_extraction_preset_description)
+    params = params.update(model_description).update(dataset_preset_description).update(feature_extraction_preset_description).update(compilation_preset_description).update(config)
 
     # create the runner
     model_runner = ai_target_module.runner.ModelRunner(

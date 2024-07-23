@@ -129,11 +129,11 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
             "enum":[
               {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
+                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
+                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
                 "tooltip":"Windowing and FFT"
               },
               {
@@ -279,6 +279,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -287,18 +288,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -438,11 +429,11 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
             "enum":[
               {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
+                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
+                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
                 "tooltip":"Windowing and FFT"
               },
               {
@@ -588,6 +579,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -596,18 +588,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -742,11 +724,11 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
             "enum":[
               {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
+                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
+                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
                 "tooltip":"Windowing and FFT"
               },
               {
@@ -892,6 +874,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -900,18 +883,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -1051,11 +1024,11 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
             "enum":[
               {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
+                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
+                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
                 "tooltip":"Windowing and FFT"
               },
               {
@@ -1201,6 +1174,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -1209,18 +1183,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -1360,11 +1324,11 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
             "enum":[
               {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
+                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
+                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -1495,6 +1459,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -1503,18 +1468,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -1654,11 +1609,11 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
             "enum":[
               {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
+                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
+                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -1789,6 +1744,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -1797,18 +1753,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -1948,11 +1894,11 @@
             "label":"Feature Extraction Name",
             "name":"feature_extraction_name",
             "type":"enum",
-            "default":"ArcFault_1024Input_FFT",
+            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
             "enum":[
               {
-                "value":"ArcFault_1024Input_FFT",
-                "label":"ArcFault_1024Input_FFT",
+                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
+                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
                 "tooltip":"Windowing and FFT"
               }
             ]
@@ -2083,6 +2029,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -2091,18 +2038,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -2387,6 +2324,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -2395,18 +2333,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -2691,6 +2619,7 @@
         "model_path":null,
         "compile_output_path":null,
         "compile_preset_name":null,
+        "keep_libc_files":false,
         "properties":[
           {
             "label":"Compilation Preset",
@@ -2699,18 +2628,8 @@
             "default":"default_preset",
             "enum":[
               {
-                "value":"best_performance_preset",
-                "label":"Best Performance",
-                "tooltip":"Best Performance Inference Mode"
-              },
-              {
-                "value":"least_memory_preset",
-                "label":"Least Memory Usage",
-                "tooltip":"Least Memory Consumed Inference Mode"
-              },
-              {
                 "value":"default_preset",
-                "label":"Default",
+                "label":"Default best",
                 "tooltip":"Default Inference Mode"
               }
             ]
@@ -2725,22 +2644,6 @@
   "preset_descriptions":{
     "AM263":{
       "arc_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex_r5",
-            "cross_compiler":"tiarmclang",
-            "cross_compiler_options":"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex_r5",
-            "cross_compiler":"tiarmclang",
-            "cross_compiler_options":"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-          }
-        },
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -2751,22 +2654,6 @@
         }
       },
       "motor_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex_r5",
-            "cross_compiler":"tiarmclang",
-            "cross_compiler_options":"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex_r5",
-            "cross_compiler":"tiarmclang",
-            "cross_compiler_options":"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-          }
-        },
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -2777,22 +2664,6 @@
         }
       },
       "timeseries_classification":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex_r5",
-            "cross_compiler":"tiarmclang",
-            "cross_compiler_options":"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex_r5",
-            "cross_compiler":"tiarmclang",
-            "cross_compiler_options":"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-          }
-        },
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -2805,25 +2676,9 @@
     },
     "F280015":{
       "arc_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
@@ -2831,25 +2686,9 @@
         }
       },
       "motor_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
@@ -2857,25 +2696,9 @@
         }
       },
       "generic_timeseries_classification":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
@@ -2885,25 +2708,9 @@
     },
     "F28003":{
       "arc_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
@@ -2911,25 +2718,9 @@
         }
       },
       "motor_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
@@ -2937,25 +2728,9 @@
         }
       },
       "generic_timeseries_classification":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
@@ -2965,25 +2740,9 @@
     },
     "F28004":{
       "arc_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
@@ -2991,25 +2750,9 @@
         }
       },
       "motor_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
@@ -3017,25 +2760,9 @@
         }
       },
       "generic_timeseries_classification":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
@@ -3045,25 +2772,9 @@
     },
     "F28P65":{
       "arc_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
@@ -3071,25 +2782,9 @@
         }
       },
       "motor_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
@@ -3097,25 +2792,9 @@
         }
       },
       "generic_timeseries_classification":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
@@ -3132,6 +2811,14 @@
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+          }
         }
       },
       "motor_fault":{
@@ -3142,12 +2829,28 @@
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+          }
         }
       },
       "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
@@ -3157,25 +2860,9 @@
     },
     "F2837":{
       "arc_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
@@ -3183,25 +2870,9 @@
         }
       },
       "motor_fault":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
@@ -3209,25 +2880,9 @@
         }
       },
       "generic_timeseries_classification":{
-        "best_performance_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
-        "least_memory_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
-          }
-        },
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
@@ -3420,7 +3075,7 @@
     "compilation":{
       "preset_name":{
         "name":"Preset Name",
-        "description":"Three presets exist: \"default_preset\"(Recommended Option), \"least_memory_preset\"(Optimized for memory), \"best_performance_preset\"(Optimized for performance)"
+        "description":"Two presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), "
       }
     },
     "deploy":{
@@ -3438,5 +3093,5 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n* Generic Time Series Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n \n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nThree presets exist: \"default_preset\"(Recommended Option), \"least_memory_preset\"(Optimized for memory), \"best_performance_preset\"(Optimized for performance)\n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n* Generic Time Series Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_02_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n \n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
 }

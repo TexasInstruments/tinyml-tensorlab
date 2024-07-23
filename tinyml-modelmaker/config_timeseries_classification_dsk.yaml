@@ -22,19 +22,19 @@ data_processing: # One or more can be cascaded in the list
     unit: 'time' # time or samples
 
 feature_extraction:
-    feature_extraction_name: ArcFault_1024Input_FFT
-    feature_size_per_frame: 512
-    num_frame_concat: 8
-    min_fft_bin: 1
-    fft_bin_size: 1
-    frame_skip: 3
+    feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
+#    feature_size_per_frame: 512
+#    num_frame_concat: 8
+#    min_fft_bin: 1
+#    fft_bin_size: 1
+#    frame_skip: 3
 
 training:
     # enable/disable training
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
-    model_name: 'TimeSeries_Generic_3k_t'
+    model_name: 'ArcFault_model_700_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
     model_config: ''
     dataset_loader: ArcFaultDataset
@@ -43,7 +43,7 @@ training:
     num_gpus: 0
 
 testing:
-    enable: True
+    enable: False
     skip_train: False  # True if only the model needs to be tested. model_path below needs to be given
 #    model_path: Onnx/tflite Model Path for BYOM for compilation only
 #    test_data: ./data/projects/arc_fault_example_dsk/dataset/classes  #  if dataset is being provided here then- dataset-> enable: False
@@ -52,6 +52,6 @@ testing:
 compilation:
     # enable/disable compilation
     enable: True #False
-    # No preset is required for F28P55
-#    preset_name: default_preset
-#    preset_name: best_performance_preset
+    # No preset is required for devices other than F28P55
+    #    preset_name: default_preset/ forced_soft_npu_preset
+#    compile_preset_name: forced_soft_npu_preset

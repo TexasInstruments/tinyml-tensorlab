@@ -102,7 +102,7 @@ Batch size specifies the number of inputs that are propagated through the neural
 Weight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.
 ### COMPILATION
 #### Preset Name
-Three presets exist: "default_preset"(Recommended Option), "least_memory_preset"(Optimized for memory), "best_performance_preset"(Optimized for performance)
+Two presets exist: "default_preset"(Recommended Option), "forced_soft_npu_preset"(Only available on HW-NPU devices to disable HW NPU), 
 ### DEPLOY
 #### Download trained model
 Trained model can be downloaded to the PC for inspection.

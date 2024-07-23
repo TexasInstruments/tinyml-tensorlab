@@ -123,6 +123,7 @@ class ModelCompilation():
             '--cross_compiler_options', f'{self.params.compilation.cross_compiler_options}',
             '--target', f'{self.params.compilation.target}',
             '--target_c_mcpu', f'{self.params.compilation.target_c_mcpu}',
+            '--keep_libc_files' if self.params.compilation.keep_libc_files else '--no-keep_libc_files',
             '--lis', f'{self.params.compilation.log_file_path}',
         ]
         compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)

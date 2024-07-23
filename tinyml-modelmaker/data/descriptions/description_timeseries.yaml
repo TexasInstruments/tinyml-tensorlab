@@ -55,13 +55,13 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ is a regularization technique that can improve stability and generalization of\
   \ a machine learning algorithm. It is typically done using L2 regularization that\
   \ penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n\
-  #### Preset Name\nThree presets exist: \"default_preset\"(Recommended Option), \"\
-  least_memory_preset\"(Optimized for memory), \"best_performance_preset\"(Optimized\
-  \ for performance)\n### DEPLOY\n#### Download trained model\nTrained model can be\
-  \ downloaded to the PC for inspection.\n#### Download compiled model artifacts to\
-  \ PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download\
-  \ compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM\
-  \ for running model inference in SDK. Instructions are given in the help section.\n"
+  #### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"\
+  forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n\
+  ### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the\
+  \ PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model\
+  \ can be downloaded to the PC for inspection.\n#### Download compiled model artifacts\
+  \ to EVM\nCompiled model can be downloaded into the EVM for running model inference\
+  \ in SDK. Instructions are given in the help section.\n"
 model_descriptions:
   ArcFault_model_200_t:
     common:
@@ -80,19 +80,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -187,11 +182,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: ArcFault_1024Input_FFT
+      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         enum:
-        - label: ArcFault_1024Input_FFT
+        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
           tooltip: Windowing and FFT
-          value: ArcFault_1024Input_FFT
+          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         label: Feature Extraction Name
         name: feature_extraction_name
         type: enum
@@ -304,19 +299,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -411,11 +401,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: ArcFault_1024Input_FFT
+      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         enum:
-        - label: ArcFault_1024Input_FFT
+        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
           tooltip: Windowing and FFT
-          value: ArcFault_1024Input_FFT
+          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         label: Feature Extraction Name
         name: feature_extraction_name
         type: enum
@@ -528,19 +518,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -635,11 +620,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: ArcFault_1024Input_FFT
+      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         enum:
-        - label: ArcFault_1024Input_FFT
+        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
           tooltip: Windowing and FFT
-          value: ArcFault_1024Input_FFT
+          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         label: Feature Extraction Name
         name: feature_extraction_name
         type: enum
@@ -752,19 +737,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -982,19 +962,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -1212,19 +1187,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -1319,11 +1289,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: ArcFault_1024Input_FFT
+      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         enum:
-        - label: ArcFault_1024Input_FFT
+        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
           tooltip: Windowing and FFT
-          value: ArcFault_1024Input_FFT
+          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
           tooltip: Windowing and FFT
           value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
@@ -1441,19 +1411,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -1548,11 +1513,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: ArcFault_1024Input_FFT
+      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         enum:
-        - label: ArcFault_1024Input_FFT
+        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
           tooltip: Windowing and FFT
-          value: ArcFault_1024Input_FFT
+          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
           tooltip: Windowing and FFT
           value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
@@ -1674,19 +1639,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -1781,11 +1741,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: ArcFault_1024Input_FFT
+      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         enum:
-        - label: ArcFault_1024Input_FFT
+        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
           tooltip: Windowing and FFT
-          value: ArcFault_1024Input_FFT
+          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
           tooltip: Windowing and FFT
           value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
@@ -1903,19 +1863,14 @@ model_descriptions:
       compile_output_path: null
       compile_preset_name: null
       enable: true
+      keep_libc_files: false
       metric:
         label_offset_pred: 1
       model_path: null
       properties:
       - default: default_preset
         enum:
-        - label: Best Performance
-          tooltip: Best Performance Inference Mode
-          value: best_performance_preset
-        - label: Least Memory Usage
-          tooltip: Least Memory Consumed Inference Mode
-          value: least_memory_preset
-        - label: Default
+        - label: Default best
           tooltip: Default Inference Mode
           value: default_preset
         label: Compilation Preset
@@ -2010,11 +1965,11 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: ArcFault_1024Input_FFT
+      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         enum:
-        - label: ArcFault_1024Input_FFT
+        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
           tooltip: Windowing and FFT
-          value: ArcFault_1024Input_FFT
+          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
         - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
           tooltip: Windowing and FFT
           value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
@@ -2122,21 +2077,7 @@ model_descriptions:
 preset_descriptions:
   AM263:
     arc_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: tiarmclang
-          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
-          target: c
-          target_c_mcpu: cortex_r5
       default_preset:
-        compilation:
-          cross_compiler: tiarmclang
-          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
-          target: c
-          target_c_mcpu: cortex_r5
-      least_memory_preset:
         compilation:
           cross_compiler: tiarmclang
           cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
@@ -2144,21 +2085,7 @@ preset_descriptions:
           target: c
           target_c_mcpu: cortex_r5
     motor_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: tiarmclang
-          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
-          target: c
-          target_c_mcpu: cortex_r5
       default_preset:
-        compilation:
-          cross_compiler: tiarmclang
-          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
-          target: c
-          target_c_mcpu: cortex_r5
-      least_memory_preset:
         compilation:
           cross_compiler: tiarmclang
           cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
@@ -2166,21 +2093,7 @@ preset_descriptions:
           target: c
           target_c_mcpu: cortex_r5
     timeseries_classification:
-      best_performance_preset:
-        compilation:
-          cross_compiler: tiarmclang
-          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
-          target: c
-          target_c_mcpu: cortex_r5
       default_preset:
-        compilation:
-          cross_compiler: tiarmclang
-          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
-          target: c
-          target_c_mcpu: cortex_r5
-      least_memory_preset:
         compilation:
           cross_compiler: tiarmclang
           cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
@@ -2189,27 +2102,7 @@ preset_descriptions:
           target_c_mcpu: cortex_r5
   F280015:
     arc_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2220,27 +2113,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2251,27 +2124,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f280015x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2283,27 +2136,7 @@ preset_descriptions:
           target_c_mcpu: c28
   F28003:
     arc_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2314,27 +2147,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2345,27 +2158,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28003x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2377,27 +2170,7 @@ preset_descriptions:
           target_c_mcpu: c28
   F28004:
     arc_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2408,27 +2181,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2439,27 +2192,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28004x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2471,27 +2204,7 @@ preset_descriptions:
           target_c_mcpu: c28
   F2837:
     arc_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2502,27 +2215,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2533,27 +2226,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f2837xd/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2575,6 +2248,16 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
+      forced_soft_npu_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -2586,6 +2269,16 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
+      forced_soft_npu_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
@@ -2596,30 +2289,20 @@ preset_descriptions:
             -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      forced_soft_npu_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p55x/common/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
   F28P65:
     arc_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2630,27 +2313,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2661,27 +2324,7 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
-      best_performance_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
       default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_02_00_00/device_support/f28p65x/common/include
-            -I. -Iartifacts --obj_directory=.
-          target: c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true
-          target_c_mcpu: c28
-      least_memory_preset:
         compilation:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.0.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
@@ -2841,8 +2484,8 @@ tooltip_descriptions:
   common: {}
   compilation:
     preset_name:
-      description: 'Three presets exist: "default_preset"(Recommended Option), "least_memory_preset"(Optimized
-        for memory), "best_performance_preset"(Optimized for performance)'
+      description: 'Two presets exist: "default_preset"(Recommended Option), "forced_soft_npu_preset"(Only
+        available on HW-NPU devices to disable HW NPU), '
       name: Preset Name
   dataset: {}
   deploy:

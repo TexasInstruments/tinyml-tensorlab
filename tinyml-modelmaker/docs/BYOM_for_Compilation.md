@@ -23,10 +23,10 @@ compilation:
 ```
 The last line of the above file is where you specify the model to be compiled.
 
-Then, you can run the following:
+Then, you can run the following using [config_byom_for_compilation.yaml](..%2Fconfig_byom_for_compilation.yaml)
 ```
 run_tinyml_modelmaker.sh  <target_device> <config_file>
 
 Example:
-run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_dsk.yaml
+run_tinyml_modelmaker.sh F28P55 config_byom_for_compilation.yaml
 ```

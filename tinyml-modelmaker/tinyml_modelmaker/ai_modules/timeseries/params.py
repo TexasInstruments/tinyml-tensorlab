@@ -106,14 +106,16 @@ def init_params(*args, **kwargs):
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
             with_input_batchnorm=False,
             properties=[
+                # dict(type="group", dynamic=False, name="train", label="Train", default=["training_epochs", "learning_rate"]),
+                # dict(type="group", dynamic=True, name="preprocessing", label="Preprocessing",),
                 dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=300),
                 dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1,
                      decimal_places=3, increment=0.001),
                 # dict(label="Resampling Factor", name="resampling_factor", type="integer", default=15, min=1, max=100),
 
                 dict(label="Feature Extraction Name", name="feature_extraction_name", type="enum",
-                     default='ArcFault_1024Input_FFT', enum=[
-                        {"value": "ArcFault_1024Input_FFT", "label": "ArcFault_1024Input_FFT", "tooltip": "Windowing and FFT"},
+                     default='FFT1024Input_256Feature_1Frame_Full_Bandwidth', enum=[
+                        {"value": "FFT1024Input_256Feature_1Frame_Full_Bandwidth", "label": "FFT1024Input_256Feature_1Frame_Full_Bandwidth", "tooltip": "Windowing and FFT"},
                         {"value": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                          "label": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
                          "tooltip": "Windowing and FFT"},
@@ -193,14 +195,13 @@ def init_params(*args, **kwargs):
             model_path = None,
             compile_output_path=None,
             compile_preset_name=None,
+            keep_libc_files=False,
             properties=[dict(
                 label="Compilation Preset", name="compile_preset_name", type="enum",
                 default=constants.COMPILATION_DEFAULT,
-                enum=[{"value": constants.COMPILATION_BEST_PERFORMANCE, "label": "Best Performance",
-                       "tooltip": "Best Performance Inference Mode"},
-                      {"value": constants.COMPILATION_LEAST_MEMORY, "label": "Least Memory Usage",
-                       "tooltip": "Least Memory Consumed Inference Mode"},
-                      {"value": constants.COMPILATION_DEFAULT, "label": "Default", "tooltip": "Default Inference Mode"},
+                enum=[
+                    # {"value": constants.COMPILATION_FORCED_SOFT_NPU, "label": "Forced Software NPU", "tooltip": "Only for F28P55, to disable HW NPU"},
+                      {"value": constants.COMPILATION_DEFAULT, "label": "Default best", "tooltip": "Default Inference Mode"},
                       ])
             ],
         ),
