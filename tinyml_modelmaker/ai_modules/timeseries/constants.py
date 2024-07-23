@@ -326,7 +326,16 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=256)),
     # FFT512=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1,),
     #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512)),
-    ArcFault_1024Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=1024, frame_skip=1, ),
+    FFT1024Input_256Feature_1Frame_Full_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_fft_bin=1, fft_bin_size=2, frame_skip=1, ),
+                                                    data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+                                                    common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    FFT1024Input_256Feature_1Frame_Half_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_fft_bin=122, fft_bin_size=2, frame_skip=1, ),
+                                data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+                                common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    FFT1024Input_64Feature_4Frame_Half_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=64, num_frame_concat=4, min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
+                                data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+                                common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    FFT1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
                                 data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
                                 common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     # ArcFault_512Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1, ),
@@ -346,6 +355,12 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
                                 dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+    MotorFault_256Input_FFT_128Feature_8Frame_3InputChannel_removeDC_2D1=dict(
+        feature_extraction=dict(transform='MotorFault_FFT', frame_size=256, feature_size_per_frame=128,
+                                num_frame_concat=1,
+                                dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
     #     feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
     #                             num_frame_concat=1,
@@ -387,8 +402,7 @@ DATASET_DEFAULT = 'default'
 # detection_threshold & detection_top_k are written to the prototxt - inside edgeai-benchmark.
 # prototxt is not used in AM62 - so those values does not have effect in AM62 - they are given just for completeness.
 # if we really wan't to change the detections settings in AM62, we will have to modify the onnx file, but that's not easy.
-COMPILATION_BEST_PERFORMANCE = 'best_performance_preset'
-COMPILATION_LEAST_MEMORY = 'least_memory_preset'
+COMPILATION_FORCED_SOFT_NPU = 'forced_soft_npu_preset'
 COMPILATION_DEFAULT = 'default_preset'
 
 HOME_DIR = os.getenv('HOME', '~')
@@ -415,8 +429,6 @@ CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOO
                                                                   DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28P55.lower() + 'x')
-COMPILATION_C28_AUTOGEN = dict(target="c, ti-npu type=soft mode=autogen skip_normalize=true output_int=true",
-                               target_c_mcpu='c28', cross_compiler=CROSS_COMPILER_CL2000, )
 COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28',
                                   cross_compiler=CROSS_COMPILER_CL2000, )
 COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28',
@@ -425,42 +437,18 @@ COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=tru
 PRESET_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
         TASK_TYPE_ARC_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
-                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
-                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
-            ),
             COMPILATION_DEFAULT: dict(
                 compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
                                  cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
-                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
-                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
-            ),
             COMPILATION_DEFAULT: dict(
                 compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
                                  cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
             ),
         },
         TASK_CATEGORY_TS_CLASSIFICATION: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
-                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
-                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
-            ),
             COMPILATION_DEFAULT: dict(
                 compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
                                  cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
@@ -469,141 +457,70 @@ PRESET_DESCRIPTIONS = {
     },
     TARGET_DEVICE_F280015: {
         TASK_TYPE_ARC_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
-            ),
+            
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),
         },
     },
     TARGET_DEVICE_F28003: {
         TASK_TYPE_ARC_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
         },
     },
     TARGET_DEVICE_F28004: {
         TASK_TYPE_ARC_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
     },
     TARGET_DEVICE_F28P65: {
         TASK_TYPE_ARC_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65)
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65)
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65)
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
         },
     },
@@ -612,50 +529,41 @@ PRESET_DESCRIPTIONS = {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
+            COMPILATION_FORCED_SOFT_NPU: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
         },
         TASK_TYPE_MOTOR_FAULT: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
+            COMPILATION_FORCED_SOFT_NPU: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+            COMPILATION_FORCED_SOFT_NPU: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
         },
     },
     TARGET_DEVICE_F2837: {
         TASK_TYPE_ARC_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, ),
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, ),
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
             ),
         },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-            COMPILATION_BEST_PERFORMANCE: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, ),
-            ),
-            COMPILATION_LEAST_MEMORY: dict(
-                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837, )
-            ),
             COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_C28_AUTOGEN, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
             ),
         },
     },

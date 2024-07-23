@@ -230,9 +230,8 @@ def get_tooltip_descriptions(params):
         'compilation': {
             'preset_name': {
                 'name': 'Preset Name',
-                'description': 'Three presets exist: "default_preset"(Recommended Option), '
-                               '"least_memory_preset"(Optimized for memory), '
-                               '"best_performance_preset"(Optimized for performance)'
+                'description': 'Two presets exist: "default_preset"(Recommended Option), '
+                               '"forced_soft_npu_preset"(Only available on HW-NPU devices to disable HW NPU), '
             },
         },
         'deploy': {

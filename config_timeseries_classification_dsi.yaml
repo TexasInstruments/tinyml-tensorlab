@@ -35,11 +35,14 @@ training:
     model_name: 'TimeSeries_Generic_3k_t'
     # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
     model_config: ''
-    batch_size: 64
-    training_epochs: 5 #10
+    batch_size: 2048
+    training_epochs: 10
     num_gpus: 0
+
+testing:
+    enable: True
 
 compilation:
     # enable/disable compilation
     enable: True #False
-#    compile_preset_name: 'default_preset'
+#    compile_preset_name: default_preset/forced_soft_npu_preset
