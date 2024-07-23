@@ -28,14 +28,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, Namespace, BooleanOptionalAction
 from glob import glob
 from jinja2 import Environment, FileSystemLoader
 from logging import getLogger
 import numpy as np
 import os
 import onnxruntime
-from shutil import copytree, rmtree
 from tinyml_tinyverse.common.compilation import default_tvm_args
 from tinyml_tinyverse.common.utils.mdcl_utils import command_display, Logger
 from tvm.driver.tvmc.compiler import drive_compile
@@ -94,7 +93,7 @@ def get_args_parser():
     parser.add_argument('--executor_aot_unpacked_api', help='', type=int, default=1, )
     parser.add_argument('--executor_aot_interface_api', help='', type=str, default='c', )
     parser.add_argument('--runtime', help="The runtime configuration.", type=str, default='crt', )
-    parser.add_argument('--keep_libc_files', help='Keep lib0.c, lib1.c, lib2.c... files', action='store_true')
+    parser.add_argument('--keep_libc_files', help='Keep lib0.c, lib1.c, lib2.c... files', action=BooleanOptionalAction)
 
     return parser
 

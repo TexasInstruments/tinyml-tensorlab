@@ -70,9 +70,9 @@ class CNN_TS_GEN_BASE_7K(GenericModelWithSpec):
     def gen_model_spec(self):
         layers = py_utils.DictPlus()
         layers += {'0':dict(type='BatchNormLayer', num_features=self.variables) if self.with_input_batchnorm else dict(type='IdentityLayer')}
-        layers += {'1':dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=6, kernel_size=(7,1), padding=0, stride=(2,1))}
+        layers += {'1':dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(7,1), padding=0, stride=(2,1))}
         layers += {'2':dict(type='MaxPoolLayer', kernel_size=(3,1), padding=0, stride=(2,1))}
-        layers += {'3':dict(type='ConvBNReLULayer', in_channels=6, out_channels=12, kernel_size=(3,1), padding=0, stride=(2,1))}
+        layers += {'3':dict(type='ConvBNReLULayer', in_channels=8, out_channels=12, kernel_size=(3,1), padding=0, stride=(2,1))}
         layers += {'4':dict(type='ConvBNReLULayer', in_channels=12, out_channels=12, kernel_size=(3,1), padding=0, stride=(1,1))}
         layers += {'5':dict(type='ConvBNReLULayer', in_channels=12, out_channels=24, kernel_size=(3,1), padding=0, stride=(2,1))}
         layers += {'6':dict(type='ConvBNReLULayer', in_channels=24, out_channels=24, kernel_size=(3,1), padding=0, stride=(1,1))}

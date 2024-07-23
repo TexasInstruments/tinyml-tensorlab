@@ -484,6 +484,24 @@ class MotorFaultDataset(SimpleTSDataset):
                         vs_f, vs_m = self.__fft_bin(vs, self.fs, self.feature_size_per_frame, self.dc_remove)
                         vs_m = 20 * np.log10(vs_m)  # dB
                         vs_m = list(vs_m)
+                    elif ('FFT' in self.transforms):
+                        # vs = vs*np.hamming(len(vs)) # windowing
+                        vs_f, vs_m = self.__fft_oneside(vs, self.fs)
+                        for a, b in enumerate(vs_m):
+                            if (b < 1e-100):  # avoid log very small value
+                                vs_m[a] = 1e-100
+                        vs_m = 20 * np.log10(vs_m[self.dc_remove:])  # dB
+                        vs_m = list(vs_m)
+                        vs_f = vs_f[self.dc_remove:]
+                    # elif ("PSD_BIN" in self.transforms):
+                    #     vs_f, vs_m = psd_bin(vs, self.fs, nbins=16, no_dc=self.dc_remove)
+                    #     vs_m = 10 * np.log10(vs_m)  # dB
+                    #     vs_m = list(vs_m)
+                    # elif ("LOG_MEL" in self.transforms):
+                    #     freq, mag = self.__fft_oneside(vs, self.fs)
+                    #     if (self.dc_remove == 1):
+                    #         mag[0] = 0
+                    #     vs_m, vs_f, fbank = log_mel_conv(mag[0:Ns // 2], Ns, self.fs, nfilt=16, b_dB=1)
                     else:
                         raise 'Unsupported transform for MotorFault!!'
                     # end method
