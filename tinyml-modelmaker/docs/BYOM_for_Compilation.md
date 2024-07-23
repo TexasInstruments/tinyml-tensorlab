@@ -6,7 +6,7 @@ The only change is that the config.yaml that you use will have to look something
 ```python
 common:  # The common section can be plainly copied as it is
     target_module: 'timeseries'
-    task_type: 'arc_fault'     
+    task_type: 'generic_timeseries_classification'     
     target_device: 'F28P55'
     run_name: '{date-time}/{model_name}'
 dataset:
