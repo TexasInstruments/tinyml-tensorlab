@@ -73,6 +73,7 @@ class SimpleTSDataset(Dataset):
         self.logger.info("Number of Time Series Components/variables/channels: {}".format(self.variables))
         self.logger.info("Original Sample rate: {}Hz".format(self.org_sr))
         self.feature_extraction_params = dict()  # This is just useful for header file as a part of golden vectors
+        self.preprocessing_flags = []
 
         # reorganize the list of data
         def load_list(filename):
@@ -314,6 +315,10 @@ class ArcFaultDataset(SimpleTSDataset):
         self.feature_extraction_params['min_fft_bin'] = self.min_fft_bin
         self.feature_extraction_params['fft_bin_size'] = self.fft_bin_size
 
+        for transform in self.transforms:
+            if 'FFT' in transform:
+                self.preprocessing_flags.append('FFT')
+
     def __feature_extraction(self, x_temp):
         num_frame = len(x_temp) // self.frame_size
         feature_framecase = []
@@ -404,6 +409,14 @@ class MotorFaultDataset(SimpleTSDataset):
         self.feature_extraction_params['offset'] = self.offset
         self.feature_extraction_params['scale'] = self.scale
         self.feature_extraction_params['fs'] = self.fs
+
+        for transform in self.transforms:
+            if 'FFT' in transform:
+                self.preprocessing_flags.append('FFT')
+            if 'BIN' in transform:
+                self.preprocessing_flags.append('BIN')
+            if 'RAW' in transform:
+                self.preprocessing_flags.append('RAW')
 
         ## Computes one side FFT ##
     def __fft_oneside(self, y, fs):
