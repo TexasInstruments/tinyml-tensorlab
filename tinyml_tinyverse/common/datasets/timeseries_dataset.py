@@ -73,6 +73,7 @@ class SimpleTSDataset(Dataset):
         self.logger.info("Number of Time Series Components/variables/channels: {}".format(self.variables))
         self.logger.info("Original Sample rate: {}Hz".format(self.org_sr))
         self.feature_extraction_params = dict()  # This is just useful for header file as a part of golden vectors
+        self.preprocessing_flags = []
 
         # reorganize the list of data
         def load_list(filename):
@@ -88,21 +89,22 @@ class SimpleTSDataset(Dataset):
 
         if subset in ["validation", "val"]:
             val = kwargs.get('validation_list') if kwargs.get('validation_list') else \
-            glob(os.path.join(self._path, '../annotations', "*val*_list.txt"))[0]
+            glob(os.path.join(self._path, '..', 'annotations', "*val*_list.txt"))[0]
             self.logger.info("Loading validation data from {}".format(val))
             self._walker = load_list(val)
         elif subset in ["testing", "test"]:
             try:
-                test_list = glob(os.path.join(self._path, '../annotations', "*test*_list.txt"))[0]
+                test_list = glob(os.path.join(self._path, '..', 'annotations', "*test*_list.txt"))[0]
             except IndexError:
-                test_list = glob(os.path.join(self._path, '../annotations', "*file*_list.txt"))[0]
+                test_list = glob(os.path.join(self._path, '..', 'annotations', "*file*_list.txt"))[0]
             test = kwargs.get('testing_list', test_list)
 
             self.logger.info("Loading testing data from {}".format(test))
             self._walker = load_list(test)
         elif subset in ["training", "train"]:
+
             train = kwargs.get('training_list') if kwargs.get('training_list') else \
-            glob(os.path.join(self._path, '../annotations', "*train*_list.txt"))[0]
+            glob(os.path.join(self._path, '..', 'annotations', "*train*_list.txt"))[0]
             self.logger.info("Loading training data from {}".format(train))
             self._walker = load_list(train)
 
@@ -314,6 +316,10 @@ class ArcFaultDataset(SimpleTSDataset):
         self.feature_extraction_params['min_fft_bin'] = self.min_fft_bin
         self.feature_extraction_params['fft_bin_size'] = self.fft_bin_size
 
+        for transform in self.transforms:
+            if 'FFT' in transform:
+                self.preprocessing_flags.append('FFT')
+
     def __feature_extraction(self, x_temp):
         num_frame = len(x_temp) // self.frame_size
         feature_framecase = []
@@ -405,6 +411,14 @@ class MotorFaultDataset(SimpleTSDataset):
         self.feature_extraction_params['scale'] = self.scale
         self.feature_extraction_params['fs'] = self.fs
 
+        for transform in self.transforms:
+            if 'FFT' in transform:
+                self.preprocessing_flags.append('FFT')
+            if 'BIN' in transform:
+                self.preprocessing_flags.append('BIN')
+            if 'RAW' in transform:
+                self.preprocessing_flags.append('RAW')
+
         ## Computes one side FFT ##
     def __fft_oneside(self, y, fs):
         n = len(y)  # Length of signal
@@ -439,10 +453,10 @@ class MotorFaultDataset(SimpleTSDataset):
             fbins.append(f[i2 - 1])  # for visualization only; not needed in training
         return fbins, mbins
 
-    def __mf_getLabel(self, fname):
-        p = fname.split('/')[-1].split('_')
-        q = [int(a.split('label')[1]) for a in p if 'label' in a]
-        return q[0]
+    # def __mf_getLabel(self, fname):
+    #     p = fname.split('/')[-1].split('_')
+    #     q = [int(a.split('label')[1]) for a in p if 'label' in a]
+    #     return q[0]
 
     def __feature_extraction(self, x_temp):
         # Calculate features per axis

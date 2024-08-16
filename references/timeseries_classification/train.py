@@ -71,8 +71,6 @@ import time
 import random
 import sys
 import pandas as pd
-import onnxruntime as ort
-import torcheval
 import numpy as np
 from tabulate import tabulate
 # Torch Modules
@@ -277,20 +275,22 @@ def generate_golden_vectors(output_dir, dataset):
             # Saving as .txt
             np.savetxt(half_path + f'_X_adc_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'uint16_t test_vector_class{label}_X_adc_{index}[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'_X_adc_{index}.txt')
-            np.savetxt(half_path + f'_X_features_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'int8_t test_vector_class{label}_X_features_{index}[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'_X_features_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'float test_vector_class{label}_X_features_{index}[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'_X_features_{index}.txt')
             np.savetxt(half_path + f'_Y_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'int8_t test_vector_class{label}_Y_{index}[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'_Y_{index}.txt')
 
     headerfile_info = '\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()])
     for file_path in vector_files:
-        file_name = os.path.splitext(os.path.basename(file_path))[0]
+        # file_name = os.path.splitext(os.path.basename(file_path))[0]
         with open(file_path) as fp:
             file_array = fp.read()
         headerfile_info += f'\n{file_array}\n'
 
-    global_var_h = os.path.join(golden_vectors_dir, 'global.h')
+    global_var_h = os.path.join(golden_vectors_dir, 'global.c')
     with open(global_var_h, 'w') as fp:
+        fp.write('#include "device.h"\n')
+        fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
         fp.write(headerfile_info)
     logger.info("Creating C header file for variables at: {}".format(global_var_h))
 

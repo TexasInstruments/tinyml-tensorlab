@@ -4,7 +4,7 @@ from setuptools import setup, Extension, find_packages
 
 
 def git_hash():
-    git_path = './' if os.path.exists('.git') else ('../' if os.path.exists('../.git') else None)
+    git_path = '.' if os.path.exists('.git') else ('..' if os.path.exists(os.path.join('..', '.git')) else None)
     if git_path:
         hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip()
         return hash[:7] if (hash is not None) else None
@@ -38,10 +38,10 @@ if __name__ == '__main__':
         author_email='thonse@ti.com',
         classifiers=[
             'Development Status :: 1 - Beta'
-            'Programming Language :: Python :: 3.10'
+            'Programming Language :: Python :: 3.12'
         ],
         keywords = 'artifical intelligence, deep learning, image classification, visual wake words, time series classsification, audio_classification keyword spotting',
-        python_requires='>=3.10',
+        python_requires='>=3.12',
         packages=find_packages(),
         include_package_data=True,
         install_requires=[],
