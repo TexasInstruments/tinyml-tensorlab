@@ -26,7 +26,7 @@ These functionalities that are supported are fully integrated and the user can c
 This repository can be used from native Ubuntu bash terminal directly or from within a docker environment.
 
 #### Step 1, Option 1: With native Ubuntu environment and pyenv (recommended)
-We have tested this tool in Ubuntu 22.04 and with Python 3.10
+We have tested this tool in Ubuntu 22.04 and with Python 3.12
 * If you rather want to try this offering out on a Windows PC, then a [user guide](./docs/Windows_Subsytem_for_Linux.md) to use this toolchain on Windows Subsystem for Linux has been provided.
 
 In this option, we describe using this repository with the pyenv environment manager. 
@@ -59,12 +59,12 @@ exec ${SHELL}
 Further details on pyenv installation are given here https://github.com/pyenv/pyenv and https://github.com/pyenv/pyenv-installer
 
 
-Step 1.4a: Install Python 3.10 in pyenv and create an environment
+Step 1.4a: Install Python 3.12 in pyenv and create an environment
 ```
-pyenv install 3.10
-pyenv virtualenv 3.10 py310
+pyenv install 3.12
+pyenv virtualenv 3.12 py312
 pyenv rehash
-pyenv activate py310
+pyenv activate py312
 pip install --upgrade pip setuptools
 ```
 

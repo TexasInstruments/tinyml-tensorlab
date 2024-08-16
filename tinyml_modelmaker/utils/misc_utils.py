@@ -29,6 +29,8 @@
 #################################################################################
 
 import os
+import platform
+import subprocess
 import sys
 import importlib
 import json
@@ -37,6 +39,7 @@ import tqdm
 import errno
 import re
 import shutil
+from logging import getLogger
 
 from . import config_dict
 
@@ -61,6 +64,8 @@ def remove_if_exists(path):
     try:
         if os.path.islink(path):
             os.unlink(path)
+        elif os.path.isjunction(path):
+            os.unlink(path)
         else:
             shutil.rmtree(path)
         #
@@ -81,10 +86,30 @@ def make_symlink(source, dest):
         cur_dir = os.getcwd()
         os.chdir(base_dir)
         os.symlink(os.path.basename(source), os.path.basename(dest))
+        create_link_or_shortcut(os.path.basename(source), os.path.basename(dest))
         os.chdir(cur_dir)
     else:
-        os.symlink(source, dest)
-    #
+        create_link_or_shortcut(source, dest)
+
+
+def create_link_or_shortcut(src, dst):
+    logger = getLogger("root.utils.misc.CLS")
+    try:
+        if os.path.isdir(src):
+            # Required to support Windows OS with developer mode enabled, target_is_directory is ignored on Linux
+            os.symlink(src, dst, target_is_directory=True)
+        else:
+            os.symlink(src, dst)
+    except OSError as e:
+        if platform.system() in ['Windows']:
+            logger.warning(f"Failed to create symbolic link due to {e}. Creating a junction instead")
+            try:
+                subprocess.check_call(['cmd', '/c', f'mklink /J "{dst}" "{src}"'])
+                logger.info("Junction created: {dst} -> {src}")
+            except subprocess.CalledProcessError as e:
+                logger.error(f"Failed to create junction: {e}")
+        else:
+            logger.error(f"Failed to create symbolic link due to {e}. Creating a junction instead")
 
 
 def import_file_or_folder(folder_or_file_name, package_name=None, force_import=False):

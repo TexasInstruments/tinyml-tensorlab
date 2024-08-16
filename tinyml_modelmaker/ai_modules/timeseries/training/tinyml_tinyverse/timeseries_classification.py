@@ -36,7 +36,7 @@ from ... import constants
 from ..... import utils
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
-repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '../../../../../../'))
+repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
 
 tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
 # edgeai_modelzoo_path = os.path.join(repo_parent_path, 'tinyverse-modelzoo')
@@ -1298,12 +1298,23 @@ class ModelTraining:
                  'regex': [{'op': 'search', 'pattern': r'test_data\s*:\s*Test Data Evaluation Accuracy:\s+(?<accuracy>[-+e\d+\.\d+]+)%',
                             'groupId': 'accuracy', 'scale_factor': 1}],
                  },
-                {'type': 'Confusion Matrix (Test Data)', 'name': 'Confusion Matrix (Test Data)',
+                {'type': 'Confusion Matrix (Test Data)', 'name': 'Confusion Matrix',
                  'description': 'Confusion Matrix (Test Data)', 'unit': 'Confusion Matrix', 'value': None,
                  'regex': [{'op': 'search',
                             'pattern': r'test_data\s*:\s*Confusion Matrix:\n(?<cm>[\w\s\:\=\+\-\|]+)\n^$',
                             'groupId': 'cm', 'scale_factor': 1}],
                  },
+                {'type': 'Matrix Label', 'name': 'Matrix Label', 'description': 'Matrix Label',
+                 'unit': 'Matrix Label', 'value': None,
+                    "regex": [{'op': 'search', 'pattern': 'Ground Truth:\s*(?<label>\w+)\s*\|\s*',
+                               'scale_factor': 1, 'groupId': 'label'}],
+                },
+                {'type': 'Matrix Cell', 'name': 'Matrix Cell', 'description': 'Matrix Cell',
+                 'unit': 'Matrix Cell', 'value': None,
+                 "regex": [{'op': 'search', 'pattern': '\|\s*(?<cell>\d+)',
+                            'scale_factor': 1, 'groupId': 'cell'}],
+                 },
+
             ]
         }
         # update params that are specific to this backend and model
@@ -1385,7 +1396,7 @@ class ModelTraining:
                 '--with-input-batchnorm', f'{self.params.training.with_input_batchnorm}',
                 '--lis', f'{self.params.training.log_file_path}',
                 # Do not add newer arguments after this line, it will change the behaviour of the code.
-                '--data-path', f'{self.params.dataset.dataset_path}/{self.params.dataset.data_dir}',
+                '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
                 '--store-feat-ext-data', f'{self.params.feature_extraction.store_feat_ext_data}',
                 '--epochs', f'{self.params.training.training_epochs}',
                 '--lr', f'{self.params.training.learning_rate}',
@@ -1447,7 +1458,7 @@ class ModelTraining:
             if self.params.testing.test_data and (os.path.exists(self.params.testing.test_data)):
                 data_path = self.params.testing.test_data
             else:
-                data_path = f'{self.params.dataset.dataset_path}/{self.params.dataset.data_dir}'
+                data_path = os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir)
 
             if self.params.testing.model_path and (os.path.exists(self.params.testing.model_path)):
                 model_path = self.params.testing.model_path

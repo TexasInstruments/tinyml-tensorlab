@@ -31,7 +31,7 @@
 
 import datetime
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
-
+import os
 from ... import utils
 from . import constants
 
@@ -51,7 +51,7 @@ def init_params(*args, **kwargs):
             # run_name can be any string, but there are some special cases:
             # {date-time} will be replaced with datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             # {model_name} will be replaced with the name of the model
-            run_name='{date-time}/{model_name}',
+            run_name=os.path.join('{date-time}, {model_name}'),
         ),
         download=None,
         dataset=dict(
