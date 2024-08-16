@@ -43,7 +43,7 @@ from tqdm import tqdm
 class SimpleTSDataset(Dataset):
     """Univariate & Multivariate Time Series Dataset."""
 
-    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], org_sr=313000,
+    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], sampling_rate=313000,
                  sequence_window=0.25, variables=1, **kwargs):
         """
         Parameters
@@ -51,7 +51,7 @@ class SimpleTSDataset(Dataset):
         subset
         dataset_dir
         transforms
-        org_sr
+        sampling_rate
         sequence_window
         variables
         kwargs: For MFCC/STFT
@@ -61,7 +61,7 @@ class SimpleTSDataset(Dataset):
         if len(transforms) and isinstance(transforms[0], list):  # When input is received from modelmaker, it becomes [['DownSample', 'SimpleWindow']]
             self.transforms = []
             [self.transforms.extend(x.split('_')) for x in transforms[0]]  # Accommodates both trannsforms like 'DownSample', 'SimpleWindow' as well as 'MotorFault_256IN_16FFTBIN_8FR_3CH_rmDC_1x384x1'
-        self.org_sr = org_sr
+        self.sampling_rate = sampling_rate
         self.sequence_window = sequence_window
         self.classes = list()
         self.label_map = dict()
@@ -71,7 +71,7 @@ class SimpleTSDataset(Dataset):
         self.logger.info("Data is being picked up from: {}".format(dataset_dir))
         self.logger.info("Inputs by user: ")
         self.logger.info("Number of Time Series Components/variables/channels: {}".format(self.variables))
-        self.logger.info("Original Sample rate: {}Hz".format(self.org_sr))
+        self.logger.info("Original Sample rate: {}Hz".format(self.sampling_rate))
         self.feature_extraction_params = dict()  # This is just useful for header file as a part of golden vectors
         self.preprocessing_flags = []
 
@@ -110,10 +110,10 @@ class SimpleTSDataset(Dataset):
 
         """
         Sanity checks:
-        org_sr : Original Sample Rate
+        sampling_rate : Original Sample Rate
         sequence_window: Each sequence duration
         """
-        self.new_sr = self.org_sr / self.resampling_factor  # Resampling_factor=1 by default
+        self.new_sr = self.sampling_rate / self.resampling_factor  # Resampling_factor=1 by default
         self.stride_window = self.sequence_window
 
         """
@@ -179,8 +179,8 @@ class SimpleTSDataset(Dataset):
         label = opb(opd(datafile))
         # self.classes.add(label)
         if 'Downsample' in self.transforms:
-            # Anyway the new_sr will be org_sr in case downsample is not given as a transform
-            x_temp = basic_transforms.Downsample(x_temp, self.org_sr, self.new_sr)
+            # Anyway the new_sr will be sampling_rate in case downsample is not given as a transform
+            x_temp = basic_transforms.Downsample(x_temp, self.sampling_rate, self.new_sr)
         if 'SimpleWindow' in self.transforms:
             # Sequences are just split as cuts (no windowing) in case stride window isn't given
             x_temp = np.array(basic_transforms.SimpleWindow(x_temp, window_size=self.samples_in_sequence,
@@ -290,9 +290,9 @@ class SimpleTSDataset(Dataset):
         return torch.from_numpy(self.X[index]), self.Y[index]
 
 class ArcFaultDataset(SimpleTSDataset):
-    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], org_sr=313000,
+    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], sampling_rate=313000,
                  sequence_window=0.25, variables=1, **kwargs):
-        super().__init__(subset=subset, dataset_dir=dataset_dir, transforms=transforms, org_sr=org_sr,
+        super().__init__(subset=subset, dataset_dir=dataset_dir, transforms=transforms, sampling_rate=sampling_rate,
                          sequence_window=sequence_window, variables=variables, **kwargs)
 
         self.frame_size = kwargs.get('frame_size', 1024)
@@ -376,9 +376,9 @@ class ArcFaultDataset(SimpleTSDataset):
 
 
 class MotorFaultDataset(SimpleTSDataset):
-    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], org_sr=313000,
+    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], sampling_rate=313000,
                  sequence_window=0.25, variables=1, **kwargs):
-        super().__init__(subset=subset, dataset_dir=dataset_dir, transforms=transforms, org_sr=org_sr,
+        super().__init__(subset=subset, dataset_dir=dataset_dir, transforms=transforms, sampling_rate=sampling_rate,
                          sequence_window=sequence_window, variables=variables, **kwargs)
 
         self.frame_size = kwargs.get('frame_size', 256)

@@ -78,7 +78,7 @@ def get_args_parser():
     # Simple TimeSeries Params
     parser.add_argument('--variables', help="1- if Univariate, 2/3/.. if multivariate", type=int, default=1)
     parser.add_argument('--resampling-factor', help="Resampling ratio")
-    parser.add_argument('--org-sr', help="Sampled frequency ", type=float, required=True)
+    parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
     parser.add_argument('--stride_window', help="Window length (s) to stride by", type=float)  # default=0.001)
     parser.add_argument('--sequence_window', help="Window length per sequence in sec", type=float, required=True)
@@ -90,7 +90,7 @@ def get_args_parser():
     parser.add_argument('--min-fft-bin', help="Remove DC Component from FFT", default=1, type=int)
     parser.add_argument('--fft-bin-size', help="FFT Bin Size", default=2, type=int)
     parser.add_argument('--dc-remove', help="Remove DC Component from FFT", default=True, type=bool)
-    parser.add_argument('--num-channel', help="Number of input channels (ex.axis, phase)", default=16, type=int)
+    # parser.add_argument('--num-channel', help="Number of input channels (ex.axis, phase)", default=16, type=int)
     parser.add_argument('--stacking', help="1D/2D1/None", default=None, type=str)
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap", default=0,
                         type=int)
