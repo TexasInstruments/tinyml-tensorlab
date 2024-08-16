@@ -322,62 +322,62 @@ FEATURE_EXTRACTION_DEFAULT = 'default'
 FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     # default=dict(),
     # FFT256=dict(feature_extraction=dict(transform='FFT', frame_size=256, frame_skip=1,),
-    #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=256)),
+    #             data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, stride_window=1, sequence_window=256)),
     # FFT512=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1,),
-    #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512)),
+    #             data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, stride_window=1, sequence_window=512)),
     FFT1024Input_256Feature_1Frame_Full_Bandwidth=dict(
         feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1,
                                 min_fft_bin=1, fft_bin_size=2, frame_skip=1, ),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_256Feature_1Frame_Half_Bandwidth=dict(
         feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1,
                                 min_fft_bin=122, fft_bin_size=2, frame_skip=1, ),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_64Feature_4Frame_Half_Bandwidth=dict(
         feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=64, num_frame_concat=4,
                                 min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(
         feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=32, num_frame_concat=8,
                                 min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     # ArcFault_512Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1, ),
-    #                             data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+    #                             data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
     #                             common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
 
     MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
         feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
                                 num_frame_concat=8,
-                                dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3, ),
+                                dc_remove=True, offset=0, scale=1, stacking='1D'),  # ch=1,
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3, ),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
                                 num_frame_concat=8,
-                                dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+                                dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     MotorFault_256Input_FFT_128Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_FFT', frame_size=256, feature_size_per_frame=128,
                                 num_frame_concat=1,
-                                dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+                                dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
     #     feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
     #                             num_frame_concat=1,
     #                             dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
-    #     data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+    #     data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
     #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_RAW', frame_size=128, feature_size_per_frame=128,
                                 num_frame_concat=1,
-                                dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+                                dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
 )
 
@@ -386,21 +386,21 @@ DATASET_EXAMPLES = dict(
     arc_fault_example_dsk=dict(
         dataset=dict(
             input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512),
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, stride_window=1, sequence_window=512),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024'),
                                 training=dict(dataset_loader='ArcFaultDataset'))
     ),
     arc_fault_example_dsi=dict(
         dataset=dict(
             input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip'),
-        data_processing=dict(transforms=['Downsample', 'SimpleWindow'], org_sr=313000, new_sr=3200, stride_window=0.001,
+        data_processing=dict(transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, new_sr=3200, stride_window=0.001,
                              sequence_window=0.16),
         feature_extraction=dict(feature_extraction_name=None),
     ),
     motor_fault_example_dsk=dict(
         dataset=dict(
             input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
-        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
+        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get(
             'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1')),
         training=dict(dataset_loader='MotorFaultDataset')

@@ -16,7 +16,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -108,6 +108,23 @@
         "with_input_batchnorm":false,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -124,116 +141,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-            "enum":[
-              {
-                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -249,7 +156,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -311,7 +218,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -408,6 +315,23 @@
         "with_input_batchnorm":true,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -424,116 +348,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-            "enum":[
-              {
-                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -549,7 +363,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -611,7 +425,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -703,6 +517,23 @@
         "with_input_batchnorm":false,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -719,116 +550,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-            "enum":[
-              {
-                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -844,7 +565,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -906,7 +627,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -1003,6 +724,23 @@
         "with_input_batchnorm":true,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -1019,116 +757,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-            "enum":[
-              {
-                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -1144,7 +772,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -1206,7 +834,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -1243,7 +871,7 @@
         "enable":true,
         "model_name":"ArcFault_model_700_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
+        "model_spec":"/opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
         "dataset_loader":"ArcFaultDataset",
         "model_training_id":"CNN_AF_3L_700",
         "training_backend":"tinyml_tinyverse",
@@ -1303,6 +931,23 @@
         "with_input_batchnorm":true,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -1319,101 +964,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-            "enum":[
-              {
-                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -1429,7 +979,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -1491,7 +1041,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -1528,7 +1078,7 @@
         "enable":true,
         "model_name":"ArcFault_model_300_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
+        "model_spec":"/opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
         "dataset_loader":"ArcFaultDataset",
         "model_training_id":"CNN_AF_3L_300",
         "training_backend":"tinyml_tinyverse",
@@ -1588,6 +1138,23 @@
         "with_input_batchnorm":true,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -1604,101 +1171,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-            "enum":[
-              {
-                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -1714,7 +1186,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -1776,7 +1248,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -1813,7 +1285,7 @@
         "enable":true,
         "model_name":"ArcFault_model_200_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
+        "model_spec":"/opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py",
         "dataset_loader":"ArcFaultDataset",
         "model_training_id":"CNN_AF_3L_200",
         "training_backend":"tinyml_tinyverse",
@@ -1873,6 +1345,23 @@
         "with_input_batchnorm":true,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -1889,101 +1378,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-            "enum":[
-              {
-                "value":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "label":"FFT1024Input_256Feature_1Frame_Full_Bandwidth",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -1999,7 +1393,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -2061,7 +1455,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -2098,7 +1492,7 @@
         "enable":true,
         "model_name":"MotorFault_model_1_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_1l.py",
+        "model_spec":"/opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_1l.py",
         "dataset_loader":"MotorFaultDataset",
         "model_training_id":"CNN_MF_1L",
         "training_backend":"tinyml_tinyverse",
@@ -2158,6 +1552,23 @@
         "with_input_batchnorm":true,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -2174,111 +1585,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-            "enum":[
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -2294,7 +1600,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,
@@ -2356,7 +1662,7 @@
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
-        "run_name":"{date-time}/{model_name}",
+        "run_name":"{date-time}, {model_name}",
         "target_module":"timeseries"
       },
       "download":{
@@ -2393,7 +1699,7 @@
         "enable":true,
         "model_name":"MotorFault_model_2_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_2l.py",
+        "model_spec":"/opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_2l.py",
         "dataset_loader":"MotorFaultDataset",
         "model_training_id":"CNN_MF_2L",
         "training_backend":"tinyml_tinyverse",
@@ -2453,6 +1759,23 @@
         "with_input_batchnorm":true,
         "properties":[
           {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
             "label":"Epochs",
             "name":"training_epochs",
             "type":"integer",
@@ -2469,111 +1792,6 @@
             "max":0.1,
             "decimal_places":3,
             "increment":0.001
-          },
-          {
-            "label":"Feature Extraction Name",
-            "name":"feature_extraction_name",
-            "type":"enum",
-            "default":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-            "enum":[
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              },
-              {
-                "value":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "label":"MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                "tooltip":"Windowing and FFT"
-              }
-            ]
-          },
-          {
-            "label":"Feature Size per frame",
-            "name":"feature_size_per_frame",
-            "type":"enum",
-            "default":256,
-            "enum":[
-              {
-                "value":16,
-                "label":"16 features extracted per frame",
-                "tooltip":"Extract 16 features per frame"
-              },
-              {
-                "value":32,
-                "label":"32 features extracted per frame",
-                "tooltip":"Extract 32 features per frame"
-              },
-              {
-                "value":64,
-                "label":"64 features extracted per frame",
-                "tooltip":"Extract 64 features per frame"
-              },
-              {
-                "value":128,
-                "label":"128 features extracted per frame",
-                "tooltip":"Extract 128 features per frame"
-              },
-              {
-                "value":256,
-                "label":"256 features extracted per frame",
-                "tooltip":"Extract 256 features per frame"
-              },
-              {
-                "value":512,
-                "label":"512 features extracted per frame",
-                "tooltip":"Extract 512 features per frame"
-              }
-            ]
-          },
-          {
-            "label":"Frames to Concatenate",
-            "name":"num_frame_concat",
-            "type":"enum",
-            "default":1,
-            "enum":[
-              {
-                "value":1,
-                "label":"1 frame",
-                "tooltip":"1 frame concatenated for feature extraction"
-              },
-              {
-                "value":4,
-                "label":"4 frames",
-                "tooltip":"4 frames concatenated for feature extraction"
-              },
-              {
-                "value":8,
-                "label":"8 frames",
-                "tooltip":"8 frames concatenated for feature extraction"
-              },
-              {
-                "value":16,
-                "label":"16 frames",
-                "tooltip":"16 frames concatenated for feature extraction"
-              }
-            ]
-          },
-          {
-            "label":"Minimum FFT Bin Number",
-            "name":"min_fft_bin",
-            "type":"integer",
-            "default":1,
-            "min":0,
-            "max":256
-          },
-          {
-            "label":"FFT Bins used per Feature",
-            "name":"fft_bin_size",
-            "type":"integer",
-            "default":1,
-            "min":1,
-            "max":8
           }
         ],
         "model_architecture":"backbone",
@@ -2589,7 +1807,7 @@
         "model_path":null
       },
       "data_processing":{
-        "org_sr":313000,
+        "sampling_rate":313000,
         "new_sr":3009,
         "stride_window":0.001,
         "sequence_window":0.25,

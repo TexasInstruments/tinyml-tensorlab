@@ -106,56 +106,60 @@ def init_params(*args, **kwargs):
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
             with_input_batchnorm=False,
             properties=[
-                # dict(type="group", dynamic=False, name="train", label="Train", default=["training_epochs", "learning_rate"]),
-                # dict(type="group", dynamic=True, name="preprocessing", label="Preprocessing",),
+                dict(type="group", dynamic=True, name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                dict(type="group", dynamic=False, name="train_group", label="Training Parameters", default=["training_epochs", "learning_rate"]),
+
+
                 dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=300),
                 dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1,
                      decimal_places=3, increment=0.001),
+                ]),
                 # dict(label="Resampling Factor", name="resampling_factor", type="integer", default=15, min=1, max=100),
 
-                dict(label="Feature Extraction Name", name="feature_extraction_name", type="enum",
-                     default='FFT1024Input_256Feature_1Frame_Full_Bandwidth', enum=[
-                        {"value": "FFT1024Input_256Feature_1Frame_Full_Bandwidth", "label": "FFT1024Input_256Feature_1Frame_Full_Bandwidth", "tooltip": "Windowing and FFT"},
-                        {"value": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                         "label": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
-                         "tooltip": "Windowing and FFT"},
-                        {"value": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                         "label": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
-                         "tooltip": "Windowing and FFT"},
-                        # {"value": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                        #  "label": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
-                        #  "tooltip": "Windowing and FFT"},
-                        {"value": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                         "label": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
-                         "tooltip": "Windowing and FFT"},
+        #         dict(label="Feature Extraction Name", name="feature_extraction_name", type="enum",
+        #              default='FFT1024Input_256Feature_1Frame_Full_Bandwidth', enum=[
+        #                 {"value": "FFT1024Input_256Feature_1Frame_Full_Bandwidth", "label": "FFT1024Input_256Feature_1Frame_Full_Bandwidth", "tooltip": "Windowing and FFT"},
+        #                 {"value": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+        #                  "label": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D",
+        #                  "tooltip": "Windowing and FFT"},
+        #                 {"value": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+        #                  "label": "MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1",
+        #                  "tooltip": "Windowing and FFT"},
+        #                 # {"value": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+        #                 #  "label": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D",
+        #                 #  "tooltip": "Windowing and FFT"},
+        #                 {"value": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+        #                  "label": "MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1",
+        #                  "tooltip": "Windowing and FFT"},
+        #
+        #             ]),
+        #
+        #         # dict(label="Number of Input Channels", name="variables", type="integer", default=1, min=1, max=100),
+        #
+        #         dict(label="Feature Size per frame", name="feature_size_per_frame", type="enum", default=256, enum=[
+        #             {"value": 16, "label": "16 features extracted per frame", "tooltip": "Extract 16 features per frame"},
+        #             {"value": 32, "label": "32 features extracted per frame", "tooltip": "Extract 32 features per frame"},
+        #             {"value": 64, "label": "64 features extracted per frame", "tooltip": "Extract 64 features per frame"},
+        #             {"value": 128, "label": "128 features extracted per frame", "tooltip": "Extract 128 features per frame"},
+        #             {"value": 256, "label": "256 features extracted per frame", "tooltip": "Extract 256 features per frame"},
+        #             {"value": 512, "label": "512 features extracted per frame", "tooltip": "Extract 512 features per frame"}]),
+        #
+        #         dict(label="Frames to Concatenate", name="num_frame_concat", type="enum", default=1,
+        #              enum=[{"value": 1, "label": "1 frame", "tooltip": "1 frame concatenated for feature extraction"},
+        #                    {"value": 4, "label": "4 frames", "tooltip": "4 frames concatenated for feature extraction"},
+        #                    {"value": 8, "label": "8 frames", "tooltip": "8 frames concatenated for feature extraction"},
+        #                    {"value": 16, "label": "16 frames",
+        #                     "tooltip": "16 frames concatenated for feature extraction"}, ]),
+        #
+        #         dict(label="Minimum FFT Bin Number", name="min_fft_bin", type="integer", default=1, min=0, max=256),
+        #         dict(label="FFT Bins used per Feature", name="fft_bin_size", type="integer", default=1, min=1, max=8),
+        #
+        #         # dict(label="Directly run Quantized Training", name="run_quant_train_only", type="enum", default='False',
+        #         #      enum=[{"value": "True", "label": "True", "tooltip": "Quant Training Only"},
+        #         #            {"value": "False", "label": "False", "tooltip": "Float + Quant Training"}]),
+        #     ]
+        # ),
 
-                    ]),
-
-                # dict(label="Number of Input Channels", name="variables", type="integer", default=1, min=1, max=100),
-
-                dict(label="Feature Size per frame", name="feature_size_per_frame", type="enum", default=256, enum=[
-                    {"value": 16, "label": "16 features extracted per frame", "tooltip": "Extract 16 features per frame"},
-                    {"value": 32, "label": "32 features extracted per frame", "tooltip": "Extract 32 features per frame"},
-                    {"value": 64, "label": "64 features extracted per frame", "tooltip": "Extract 64 features per frame"},
-                    {"value": 128, "label": "128 features extracted per frame", "tooltip": "Extract 128 features per frame"},
-                    {"value": 256, "label": "256 features extracted per frame", "tooltip": "Extract 256 features per frame"},
-                    {"value": 512, "label": "512 features extracted per frame", "tooltip": "Extract 512 features per frame"}]),
-
-                dict(label="Frames to Concatenate", name="num_frame_concat", type="enum", default=1,
-                     enum=[{"value": 1, "label": "1 frame", "tooltip": "1 frame concatenated for feature extraction"},
-                           {"value": 4, "label": "4 frames", "tooltip": "4 frames concatenated for feature extraction"},
-                           {"value": 8, "label": "8 frames", "tooltip": "8 frames concatenated for feature extraction"},
-                           {"value": 16, "label": "16 frames",
-                            "tooltip": "16 frames concatenated for feature extraction"}, ]),
-
-                dict(label="Minimum FFT Bin Number", name="min_fft_bin", type="integer", default=1, min=0, max=256),
-                dict(label="FFT Bins used per Feature", name="fft_bin_size", type="integer", default=1, min=1, max=8),
-
-                # dict(label="Directly run Quantized Training", name="run_quant_train_only", type="enum", default='False',
-                #      enum=[{"value": "True", "label": "True", "tooltip": "Quant Training Only"},
-                #            {"value": "False", "label": "False", "tooltip": "Float + Quant Training"}]),
-            ]
-        ),
         testing=dict(
             enable=True,
             skip_train=False,
@@ -165,7 +169,7 @@ def init_params(*args, **kwargs):
             model_path=None,
         ),
         data_processing=dict(
-            org_sr=313000,
+            sampling_rate=313000,
             new_sr=3009,
             stride_window=0.001,
             sequence_window=0.25,
