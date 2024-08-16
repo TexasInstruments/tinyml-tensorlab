@@ -35,4 +35,4 @@ pip3 install --no-input -r requirements.txt
 
 ######################################################################
 echo 'Installing as a local module using setup.py'
-python3 setup.py develop
+python3 -m pip install --editable .

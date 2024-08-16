@@ -36,7 +36,7 @@ from .... import utils
 from ...timeseries import constants
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
-repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '../../../../../'))
+repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..'))
 
 tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
 

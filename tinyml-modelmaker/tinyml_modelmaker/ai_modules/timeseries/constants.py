@@ -315,7 +315,6 @@ TASK_DESCRIPTIONS = {
     #     'stages': ['dataset', 'training', 'compilation'],
     # },
 }
-
 DATA_PREPROCESSING_DEFAULT = 'default'
 DATA_PREPROCESSING_PRESET_DESCRIPTIONS = dict(
     default=dict(downsampling_factor=1), )
@@ -326,35 +325,42 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=256)),
     # FFT512=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1,),
     #             data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512)),
-    FFT1024Input_256Feature_1Frame_Full_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_fft_bin=1, fft_bin_size=2, frame_skip=1, ),
-                                                    data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
-                                                    common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
-    FFT1024Input_256Feature_1Frame_Half_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_fft_bin=122, fft_bin_size=2, frame_skip=1, ),
-                                data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
-                                common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
-    FFT1024Input_64Feature_4Frame_Half_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=64, num_frame_concat=4, min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
-                                data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
-                                common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
-    FFT1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
-                                data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
-                                common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    FFT1024Input_256Feature_1Frame_Full_Bandwidth=dict(
+        feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1,
+                                min_fft_bin=1, fft_bin_size=2, frame_skip=1, ),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    FFT1024Input_256Feature_1Frame_Half_Bandwidth=dict(
+        feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1,
+                                min_fft_bin=122, fft_bin_size=2, frame_skip=1, ),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    FFT1024Input_64Feature_4Frame_Half_Bandwidth=dict(
+        feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=64, num_frame_concat=4,
+                                min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    FFT1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(
+        feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=32, num_frame_concat=8,
+                                min_fft_bin=1, fft_bin_size=4, frame_skip=1, ),
+        data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
+        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     # ArcFault_512Input_FFT=dict(feature_extraction=dict(transform='FFT', frame_size=512, frame_skip=1, ),
     #                             data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=1, ),
     #                             common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
-
 
     MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
         feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
                                 num_frame_concat=8,
                                 dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3, ),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_FFTBIN', frame_size=256, feature_size_per_frame=16,
                                 num_frame_concat=8,
                                 dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     MotorFault_256Input_FFT_128Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform='MotorFault_FFT', frame_size=256, feature_size_per_frame=128,
                                 num_frame_concat=1,
@@ -372,25 +378,28 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
                                 num_frame_concat=1,
                                 dc_remove=True, ch=3, offset=0, scale=1, stacking='2D1'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
 )
 
 DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
+        dataset=dict(
+            input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, stride_window=1, sequence_window=512),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024'),
-        training=dict(dataset_loader='ArcFaultDataset'))
+                                training=dict(dataset_loader='ArcFaultDataset'))
     ),
     arc_fault_example_dsi=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip'),
+        dataset=dict(
+            input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip'),
         data_processing=dict(transforms=['Downsample', 'SimpleWindow'], org_sr=313000, new_sr=3200, stride_window=0.001,
                              sequence_window=0.16),
         feature_extraction=dict(feature_extraction_name=None),
     ),
     motor_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
+        dataset=dict(
+            input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], org_sr=1, new_sr=1, variables=3),
         feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get(
             'MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1')),
@@ -405,29 +414,29 @@ DATASET_DEFAULT = 'default'
 COMPILATION_FORCED_SOFT_NPU = 'forced_soft_npu_preset'
 COMPILATION_DEFAULT = 'default_preset'
 
-HOME_DIR = os.getenv('HOME', '~')
-TOOLS_PATH = os.getenv('TOOLS_PATH', f'{HOME_DIR}/bin')
-CROSS_COMPILER_CL2000 = f"{TOOLS_PATH}/ti-cgt-c2000_22.6.0.LTS/bin/cl2000"
-CROSS_COMPILER_OPTIONS_C28 = ("--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections "
-                              "--float_support={FLOAT_SUPPORT} "
-                              "-I{TOOLS_PATH}/ti-cgt-c2000_22.6.0.LTS/include "
-                              "-I{TOOLS_PATH}/C2000Ware_5_02_00_00/driverlib/{DEVICE_NAME}/driverlib "
-                              "-I{TOOLS_PATH}/C2000Ware_5_02_00_00/device_support/{DEVICE_NAME}/common/include "
-                              "-I. -Iartifacts --obj_directory=.")
-'''
---float_support=${C2000_DEVICE_FPU} --gen_func_subsections -I${C2000_CGT_PATH}/include -I${C2000WARE_PATH}/driverlib/${C2000_DEVICE}/driverlib -I${C2000WARE_PATH}/device_support/${C2000_DEVICE}/common/include -I
-'''
-CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
+TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
+
+C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.0.LTS'
+C2000WARE_VERSION = 'C2000Ware_5_02_00_00'
+CROSS_COMPILER_CL2000 = os.path.join(TOOLS_PATH, C2000_CGT_VERSION, 'bin', 'cl2000')
+CGT_INCLUDE = os.path.join(TOOLS_PATH, C2000_CGT_VERSION, 'include')
+C2000WARE_INCLUDE = os.path.join(TOOLS_PATH, C2000WARE_VERSION, 'device_support', '{DEVICE_NAME}', 'common', 'include')
+DRIVERLIB_INCLUDE = os.path.join(TOOLS_PATH, C2000WARE_VERSION, 'driverlib', '{DEVICE_NAME}', 'driverlib')
+CROSS_COMPILER_OPTIONS_C28 = (
+    f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{CGT_INCLUDE} -I{DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=.")
+
+CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
                                                                    DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
                                                                  DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'xd')
-CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu64',
+CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu64',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(TOOLS_PATH=TOOLS_PATH, FLOAT_SUPPORT='fpu32',
+CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
                                                                   DEVICE_NAME=TARGET_DEVICE_F28P55.lower() + 'x')
 COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28',
                                   cross_compiler=CROSS_COMPILER_CL2000, )
@@ -457,7 +466,7 @@ PRESET_DESCRIPTIONS = {
     },
     TARGET_DEVICE_F280015: {
         TASK_TYPE_ARC_FAULT: {
-            
+
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),

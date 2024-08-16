@@ -215,4 +215,11 @@ sudo apt-get install build-essential
     * Multiple files contained by the folder src can be copied into the target folder using:
       * `docker cp src/. container_id:/target`
       * `docker cp container_id:/src/. target`
+
+## Enable USB port access: 
+* On a Windows Terminal in administrator mode, run the following to install usbipd-win:
+```commandline
+winget install --interactive --exact dorssel.usbipd-win
+```
+* Once this completes, restart the PowerShell, and you can follow the instructions as per here- [Attach a USB device](https://learn.microsoft.com/en-us/windows/wsl/connect-usb#attach-a-usb-device)
       

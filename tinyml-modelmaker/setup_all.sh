@@ -68,29 +68,29 @@ pip install --no-input --upgrade wheel # cython numpy==1.23.0
 #################################################################################
 # install code get tools
 # Note: this will need sudo access.
-./setup_cg_tools.sh
+setup_cg_tools.sh
 
 #################################################################################
 echo "preparing environment..."
-# for setup.py develop mode to work inside docker environment, this is required
+# for -m pip install --editable . mode to work inside docker environment, this is required
 git config --global --add safe.directory $(pwd)
 
 echo "installing repositories..."
 
 echo "installing: tinyml-modeloptimization"
 cd ${PARENT_DIR}/tinyml-modeloptimization/torchmodelopt
-./setup.sh
+setup.sh
 cd ..
 
 echo "installing: tinyml-tinyverse"
 cd ${PARENT_DIR}/tinyml-tinyverse
-./setup_cpu.sh
+setup_cpu.sh
 # Uncomment below line and comment the above line to install GPU version of torch
-# ./setup.sh
+# setup.sh
 
 echo "installing tinyml-modelmaker"
 cd ${PARENT_DIR}/tinyml-modelmaker
-./setup.sh
+setup.sh
 
 #################################################################################
 ls -d ${PARENT_DIR}/tinyml-*

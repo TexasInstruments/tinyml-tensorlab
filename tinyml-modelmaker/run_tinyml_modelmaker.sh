@@ -28,4 +28,4 @@ echo "Target device                     : ${TARGET_SOC}"
 echo "PYTHONPATH                        : ${PYTHONPATH}"
 
 #################################################################################
-python ./scripts/run_tinyml_modelmaker.py ${CONFIG_FILE} --target_device ${TARGET_SOC}
+python scripts/run_tinyml_modelmaker.py ${CONFIG_FILE} --target_device ${TARGET_SOC}

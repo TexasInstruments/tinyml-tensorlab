@@ -27,7 +27,7 @@ training:
     dataset_loader: MotorFaultDataset
     # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
-    model_name: 'MotorFault_model_2_t'
+    model_name: 'MotorFault_model_1_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
     batch_size: 256

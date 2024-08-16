@@ -147,7 +147,7 @@ def download_file(dataset_url, download_root, extract_root=None, save_filename=N
 
     is_linkfile = dataset_url.endswith('.link')
     is_url = dataset_url.startswith('http://') or dataset_url.startswith('https://')
-    download_root = os.path.abspath('./') if download_root is None else download_root
+    download_root = os.path.abspath('.') if download_root is None else download_root
 
     if not is_url:
         if os.path.exists(dataset_url):
