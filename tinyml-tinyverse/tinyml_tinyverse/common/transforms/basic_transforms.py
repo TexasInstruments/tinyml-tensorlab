@@ -45,14 +45,14 @@ def SimpleWindow(x, window_size=100, stride=50, keep_short_tails=False):
     return splits
 
 
-def Downsample(x, org_sr, new_sr):
+def Downsample(x, sampling_rate, new_sr):
     '''
     if x.ndim == 1:
-        return x[::int(org_sr // new_sr)] # Downsample the 1d array before windowing
+        return x[::int(sampling_rate // new_sr)] # Downsample the 1d array before windowing
     else:
-        return x[:, ::int(org_sr // new_sr)]  # Downsample along the time dimension after windowing
+        return x[:, ::int(sampling_rate // new_sr)]  # Downsample along the time dimension after windowing
     '''
-    return x[::int(org_sr // new_sr)]  # DownSampling is being done only before windowing so for now it doesn't matter
+    return x[::int(sampling_rate // new_sr)]  # DownSampling is being done only before windowing so for now it doesn't matter
 
 
 class Jittering(object):
