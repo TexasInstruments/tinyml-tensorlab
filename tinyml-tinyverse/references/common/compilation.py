@@ -195,16 +195,13 @@ def get_model_ip_op_details(model_path):
 def gen_wrapper_code(model_path, output_dir):
     logger = getLogger("root.gen_wrapper_code")
     input_data_type_dims, output_data_type_dims = get_model_ip_op_details(model_path)
-    environment = Environment(loader=FileSystemLoader(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                                                   "../../tinyml_tinyverse/common/compilation/templates")))
+    environment = Environment(loader=FileSystemLoader(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     '..', '..', 'tinyml_tinyverse', 'common', 'compilation', 'templates')))
     template = environment.get_template("c_wrapper_template.txt")
     # Output data is only required if we're matching against golden. For now just keep it
-    context = {}
-    context['input_related_data'] = []
-    context['output_related_data'] = []
-
-    context['inputs_base_addresses'] = []
-    context['outputs_base_addresses'] = []
+    context = {'input_related_data': [], 'output_related_data': [], 'inputs_base_addresses': [],
+               'outputs_base_addresses': []}
 
     for i, (ip_dtype, ip_dim) in enumerate(input_data_type_dims):
         # context[f'input_data_type{i}'] = ip_dtype

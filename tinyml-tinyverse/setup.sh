@@ -11,7 +11,7 @@ echo "installing pytorch - use the appropriate index-url from https://pytorch.or
 pip3 install --no-input torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 echo 'Installing python packages...'
-pip3 install --no-input cython wheel numpy==1.23.0
+pip3 install --no-input cython wheel numpy==2.0.1
 pip3 install --no-input torchinfo pycocotools opencv-python
 pip uninstall --yes pillow
 #pip uninstall --no-input pillow-simd
@@ -24,7 +24,7 @@ pip3 install --no-input -r requirements/requirements.txt
 #pip3 install --no-input protobuf==3.20.2 onnx==1.13.0
 
 ######################################################################
-python3 setup.py develop
+python3 -m pip install --editable .
 
 ######################################################################
 # setup the edgeai_xvision package, which is inside references/edgeailite
