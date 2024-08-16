@@ -34,7 +34,7 @@ from setuptools import setup, Extension, find_packages
 
 
 def git_hash():
-    git_path = './' if os.path.exists('.git') else ('../' if os.path.exists('../.git') else None)
+    git_path = '.' if os.path.exists('.git') else ('..' if os.path.exists(os.path.join('..', '.git')) else None)
     if git_path:
         hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip()
         return hash[:7] if (hash is not None) else None

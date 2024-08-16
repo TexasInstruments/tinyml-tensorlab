@@ -40,4 +40,4 @@ pip3 install --no-input -r ./requirements.txt
 #echo 'installing pytorch...'
 #pip3 install --no-input torch torchvision torchaudio
 echo 'installing the pytorch model optimization toolkit...'
-python3 ./setup.py develop
+python3 -m pip install --editable .

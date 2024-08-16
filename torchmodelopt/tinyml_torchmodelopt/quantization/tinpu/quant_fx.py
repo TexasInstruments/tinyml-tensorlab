@@ -29,7 +29,7 @@
 #
 #################################################################################
 
-import copy
+import platform
 import torch
 import edgeai_torchmodelopt
 from ..common import TinyMLQuantizationVersion, TinyMLModelQuantFormat, GenericTinyMLQATFxModuleBase
@@ -45,7 +45,7 @@ class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
             # another way is to use one of the predefined presets
             qconfig_type = edgeai_torchmodelopt.xmodelopt.quantization.v2.qconfig_types.QConfigType.WC8SYMP2_AT8SYMP2
         #
-        super().__init__(*args, qconfig_type=qconfig_type, **kwargs)
+        super().__init__(*args, qconfig_type=qconfig_type, backend='fbgemm' if platform.system() in ['Windows'] else 'qnnpack', **kwargs)
 
     def convert(self, *args, model_quant_format=TinyMLModelQuantFormat.TINPU_INT_MODEL, output_dequantize=False, **kwargs):
         # first convert the model to int
