@@ -70,7 +70,7 @@ pip install --upgrade pip setuptools
 
 Step 1.5a: **Activate the Python environment.** This activation step needs to be done everytime one starts a new terminal or shell. (Alternately, this also can be written to the .bashrc, so that this will be the default penv environment).
 ```
-pyenv activate py310
+pyenv activate py312
 ```
 
 #### Step 1, Option 2: With docker environment

@@ -69,7 +69,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -95,8 +95,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -161,13 +161,25 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_200_t
-      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_200
       num_gpus: 1
       num_last_epochs: 5
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -182,66 +194,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        enum:
-        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-          tooltip: Windowing and FFT
-          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 2
       run_quant_train_only: false
       target_devices:
@@ -288,7 +240,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -314,8 +266,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -380,13 +332,25 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_300_t
-      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_300
       num_gpus: 1
       num_last_epochs: 5
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -401,66 +365,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        enum:
-        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-          tooltip: Windowing and FFT
-          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 2
       run_quant_train_only: false
       target_devices:
@@ -507,7 +411,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -533,8 +437,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -599,13 +503,25 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_700_t
-      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_700
       num_gpus: 1
       num_last_epochs: 5
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -620,66 +536,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        enum:
-        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-          tooltip: Windowing and FFT
-          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 2
       run_quant_train_only: false
       target_devices:
@@ -726,7 +582,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -752,8 +608,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -818,13 +674,25 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_1_t
-      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_1l.py
+      model_spec: /opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_1l.py
       model_training_id: CNN_MF_1L
       num_gpus: 1
       num_last_epochs: 5
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -839,72 +707,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        enum:
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-        - label: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 2
       run_quant_train_only: false
       target_devices:
@@ -951,7 +753,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -977,8 +779,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -1043,13 +845,25 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_2_t
-      model_spec: /opt/tinyml/PycharmProjects/tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_2l.py
+      model_spec: /opt/tinyml/PycharmProjects/py312_tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_2l.py
       model_training_id: CNN_MF_2L
       num_gpus: 1
       num_last_epochs: 5
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -1064,72 +878,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        enum:
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-        - label: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 2
       run_quant_train_only: false
       target_devices:
@@ -1176,7 +924,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -1202,8 +950,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -1275,6 +1023,18 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -1289,75 +1049,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        enum:
-        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-          tooltip: Windowing and FFT
-          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-        - label: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 1
       run_quant_train_only: false
       target_devices:
@@ -1400,7 +1091,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -1426,8 +1117,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -1499,6 +1190,18 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -1513,75 +1216,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        enum:
-        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-          tooltip: Windowing and FFT
-          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-        - label: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 2
       run_quant_train_only: false
       target_devices:
@@ -1628,7 +1262,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -1654,8 +1288,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -1727,6 +1361,18 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -1741,75 +1387,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        enum:
-        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-          tooltip: Windowing and FFT
-          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-        - label: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 1
       run_quant_train_only: false
       target_devices:
@@ -1852,7 +1429,7 @@ model_descriptions:
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
-      run_name: '{date-time}/{model_name}'
+      run_name: '{date-time}, {model_name}'
       target_device: null
       target_machine: evm
       target_module: timeseries
@@ -1878,8 +1455,8 @@ model_descriptions:
         type: enum
     data_processing:
       new_sr: 3009
-      org_sr: 313000
       resampling_factor: 1
+      sampling_rate: 313000
       sequence_window: 0.25
       stride_window: 0.001
       transforms: []
@@ -1951,6 +1528,18 @@ model_descriptions:
       pretrained_checkpoint_path: null
       project_path: null
       properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
       - default: 50
         label: Epochs
         max: 300
@@ -1965,75 +1554,6 @@ model_descriptions:
         min: 0.001
         name: learning_rate
         type: float
-      - default: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        enum:
-        - label: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-          tooltip: Windowing and FFT
-          value: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_1D
-        - label: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
-        - label: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-          tooltip: Windowing and FFT
-          value: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-        label: Feature Extraction Name
-        name: feature_extraction_name
-        type: enum
-      - default: 256
-        enum:
-        - label: 16 features extracted per frame
-          tooltip: Extract 16 features per frame
-          value: 16
-        - label: 32 features extracted per frame
-          tooltip: Extract 32 features per frame
-          value: 32
-        - label: 64 features extracted per frame
-          tooltip: Extract 64 features per frame
-          value: 64
-        - label: 128 features extracted per frame
-          tooltip: Extract 128 features per frame
-          value: 128
-        - label: 256 features extracted per frame
-          tooltip: Extract 256 features per frame
-          value: 256
-        - label: 512 features extracted per frame
-          tooltip: Extract 512 features per frame
-          value: 512
-        label: Feature Size per frame
-        name: feature_size_per_frame
-        type: enum
-      - default: 1
-        enum:
-        - label: 1 frame
-          tooltip: 1 frame concatenated for feature extraction
-          value: 1
-        - label: 4 frames
-          tooltip: 4 frames concatenated for feature extraction
-          value: 4
-        - label: 8 frames
-          tooltip: 8 frames concatenated for feature extraction
-          value: 8
-        - label: 16 frames
-          tooltip: 16 frames concatenated for feature extraction
-          value: 16
-        label: Frames to Concatenate
-        name: num_frame_concat
-        type: enum
-      - default: 1
-        label: Minimum FFT Bin Number
-        max: 256
-        min: 0
-        name: min_fft_bin
-        type: integer
-      - default: 1
-        label: FFT Bins used per Feature
-        max: 8
-        min: 1
-        name: fft_bin_size
-        type: integer
       quantization: 2
       run_quant_train_only: false
       target_devices:
