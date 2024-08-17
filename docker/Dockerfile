@@ -83,8 +83,9 @@ RUN source ${HOME_DIR}/.bashrc && \
 
 # update pip setuptools
 RUN source ${HOME_DIR}/.bashrc && \
-    pip install --no-input --upgrade pip setuptools && \
-    pip install --no-input --upgrade wheel cython numpy
+    python -m ensurepip --upgrade && \
+    python -m pip install --no-input --upgrade pip setuptools && \
+    python -m pip install --no-input --upgrade wheel cython numpy
 
 #################################################################################
 # Note 1: this can be reversed later as a last step after all installations are done.

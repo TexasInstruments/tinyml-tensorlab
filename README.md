@@ -65,7 +65,8 @@ pyenv install 3.12
 pyenv virtualenv 3.12 py312
 pyenv rehash
 pyenv activate py312
-pip install --upgrade pip setuptools
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip setuptools
 ```
 
 Step 1.5a: **Activate the Python environment.** This activation step needs to be done everytime one starts a new terminal or shell. (Alternately, this also can be written to the .bashrc, so that this will be the default penv environment).
