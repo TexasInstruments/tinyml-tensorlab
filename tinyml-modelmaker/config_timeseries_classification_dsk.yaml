@@ -16,7 +16,7 @@ data_processing: # One or more can be cascaded in the list
     # transform: 'DownSample SimpleWindow'
     variables: 1
     transform: [ ]
-    org_sr: 1
+    sampling_rate: 1
     new_sr: 1
     stride_window: 1
     unit: 'time' # time or samples

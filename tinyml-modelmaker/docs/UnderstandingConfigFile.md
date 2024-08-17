@@ -27,7 +27,7 @@ dataset:                                    # Enable/disable dataset loading
 ```python
 data_processing:                            # One or more can be cascaded in the list
     transforms: [ Downsample, SimpleWindow ]# transforms: 'DownSample SimpleWindow'
-    org_sr: 1                               # Original Sample Rate [1]
+    sampling_rate: 1                               # Original Sample Rate [1]
     new_sr: 1                               # New Sample Rate, Either Resampling factor or New Sample Rate can be given [1]
     resampling_factor: 1                    # Either Resampling factor or New Sample Rate can be given [1]
     stride_window: 1                        # Stride window i.e move by 'n' samples for the next window [1]

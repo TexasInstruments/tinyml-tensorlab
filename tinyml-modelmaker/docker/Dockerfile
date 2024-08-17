@@ -75,10 +75,10 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 # create virtualenv
 RUN source ${HOME_DIR}/.bashrc && \
-    pyenv install 3.10 && \
-    pyenv virtualenv 3.10 py310 && \
+    pyenv install 3.12 && \
+    pyenv virtualenv 3.12 py312 && \
     pyenv rehash && \
-    echo 'pyenv activate py310' >> ${HOME_DIR}/.pyenvrc && \
+    echo 'pyenv activate py312' >> ${HOME_DIR}/.pyenvrc && \
     echo ' ' >> ${HOME_DIR}/.pyenvrc
 
 # update pip setuptools

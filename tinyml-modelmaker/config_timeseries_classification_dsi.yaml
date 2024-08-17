@@ -13,11 +13,11 @@ dataset:
 data_processing: # One or more can be cascaded in the list
     transforms: [ Downsample, SimpleWindow ]
     # transforms: 'DownSample SimpleWindow'
-    # org_sr: 313000
+    # sampling_rate: 313000
     # new_sr: 3009
     # stride_window: 0.001
     # sequence_window: 0.25
-    org_sr: 313000
+    sampling_rate: 313000
     new_sr: 3200
     stride_window: 0.001
     sequence_window: 0.16
