@@ -31,8 +31,8 @@
 #
 #################################################################################
 
-docker_image_name="tinyml-modelmaker:0.7.0"
-docker_container_name="cnt-tinyml-modelmaker:0.7.0"
+docker_image_name="tinyml-modelmaker:0.8.0"
+docker_container_name="cnt-tinyml-modelmaker:0.8.0"
 PARENT_DIR=$(realpath ..)
 
 # initialize http_proxy and https_proxy if they are not defined

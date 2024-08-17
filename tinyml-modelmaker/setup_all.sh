@@ -62,8 +62,9 @@ echo "cloning/updating done."
 
 #################################################################################
 # upgrade pip
-pip install --no-input --upgrade pip setuptools
-pip install --no-input --upgrade wheel # cython numpy==1.23.0
+python -m ensurepip --upgrade
+python -m pip install --no-input --upgrade pip setuptools
+python -m pip install --no-input --upgrade wheel # cython numpy==1.23.0
 
 #################################################################################
 # install code get tools

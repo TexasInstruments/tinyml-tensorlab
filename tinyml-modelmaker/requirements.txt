@@ -1,5 +1,5 @@
 defusedxml==0.7.1
-numpy==2.0.1
+numpy==1.26.4
 pandas==2.2.2
 pathlib2==2.3.7.post1
 PyYAML==6.0.2

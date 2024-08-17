@@ -2051,4 +2051,4 @@ training_module_descriptions:
 version_descriptions:
   sdk_release: '05_02_00'
   sdk_version: '5.2'
-  version: 0.7.0
+  version: 0.8.0
