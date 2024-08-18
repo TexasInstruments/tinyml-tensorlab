@@ -9,20 +9,21 @@ python -m ensurepip --upgrade
 python -m pip install --no-input --upgrade pip setuptools
 ######################################################################
 echo "installing pytorch - use the appropriate index-url from https://pytorch.org/get-started/locally/"
-python -m pip install --no-input torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+python -m pip install --no-input torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cu118
 
 echo 'Installing python packages...'
 python -m pip install --no-input cython wheel numpy==1.26.4
-python -m pip install --no-input torchinfo pycocotools opencv-python
+python -m pip install --no-input torchinfo==1.8.0 pycocotools opencv-python
 python -m pip uninstall --yes pillow
 #python -m pip uninstall --no-input pillow-simd
 
 echo "installing requirements"
 python -m pip install --no-input -r requirements/requirements.txt
+python -m pip install --no-input -r requirements/requirements_ti_packages.txt
 
 ######################################################################
 # can we move this inside the requirements file is used.
-#python -m pip install --no-input protobuf==3.20.2 onnx==1.13.0
+#python -m pip install --no-input protobuf onnx==1.13.0
 
 ######################################################################
 python -m pip install --editable .
