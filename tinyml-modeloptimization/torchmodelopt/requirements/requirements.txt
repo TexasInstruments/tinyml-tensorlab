@@ -3,7 +3,7 @@ Cython==3.0.11
 protobuf==5.27.3
 pillow==10.4.0
 onnxsim==0.4.36
-onnx==1.16.2
+onnx==1.16.1
 onnxsim==0.4.36
 onnxoptimizer==0.3.13
 onnxruntime==1.19.0
