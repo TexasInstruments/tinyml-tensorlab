@@ -24,3 +24,6 @@ The table below provides detailed explanation of each of the tools:
 - [2024-May] First release (version 0.5.0) of the software
 
 <hr>
+---
+## Contributor and Maintainer
+- [Adithya Thonse](https://github.com/Adithya-Thonse)
