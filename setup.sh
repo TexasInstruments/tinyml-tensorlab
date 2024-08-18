@@ -26,7 +26,7 @@ python -m pip install --no-input -r requirements/requirements_ti_packages.txt
 #python -m pip install --no-input protobuf onnx==1.13.0
 
 ######################################################################
-python -m pip install --editable .
+python -m pip install --editable . --use-pep517
 
 ######################################################################
 # setup the edgeai_xvision package, which is inside references/edgeailite
