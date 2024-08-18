@@ -1,14 +1,12 @@
-wheel==0.44.0
 numpy==1.26.4
 Cython==3.0.11
 protobuf==5.27.3
 pillow==10.4.0
 onnxsim==0.4.36
 onnx==1.16.2
+onnxsim==0.4.36
 onnxoptimizer==0.3.13
 onnxruntime==1.19.0
 progressbar==2.5
 protobuf==5.27.3
 rich==13.7.1
-# install edgeai-modeloptimization
-git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@main#subdirectory=torchmodelopt

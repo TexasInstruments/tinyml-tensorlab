@@ -1,0 +1,2 @@
+# install edgeai-modeloptimization
+git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@main#subdirectory=torchmodelopt

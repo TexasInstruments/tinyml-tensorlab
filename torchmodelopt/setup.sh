@@ -36,7 +36,8 @@ python -m ensurepip --upgrade
 python -m pip install --no-input --upgrade pip setuptools
 
 echo 'Installing python packages...'
-python -m pip install --no-input -r ./requirements.txt
+python -m pip install --no-input -r requirements/requirements.txt
+python -m pip install --no-input -r requirements/requirements_ti_packages.txt
 
 #echo 'installing pytorch...'
 #python -m pip install --no-input torch torchvision torchaudio
