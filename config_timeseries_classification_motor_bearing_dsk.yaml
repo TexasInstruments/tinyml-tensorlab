@@ -19,7 +19,7 @@ data_processing: # One or more can be cascaded in the list
     unit: 'samples' # time or samples
 
 feature_extraction:
-    feature_extraction_name: MotorFault_256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
 
 training:
     # enable/disable training
