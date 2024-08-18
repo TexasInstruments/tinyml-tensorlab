@@ -21,6 +21,6 @@ echo "installing requirements"
 python -m pip install --no-input -r requirements/requirements.txt
 python -m pip install --no-input -r requirements/requirements_ti_packages.txt
 ######################################################################
-python -m pip install --editable .
+python -m pip install --editable . --use-pep517
 
 
