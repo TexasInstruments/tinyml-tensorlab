@@ -109,9 +109,9 @@ def create_link_or_shortcut(src, dst):
             os.symlink(src, dst)
     except OSError as e:
         if platform.system() in ['Windows']:
-            logger.warning(f"Failed to create symbolic link due to {e}. Creating a junction instead")
+            logger.warning(f"Failed to create symbolic link. Creating a junction instead")
             try:
-                subprocess.check_call(['cmd', '/c', f'mklink /J "{dst}" "{src}"'])
+                subprocess.check_call(['cmd', '/c', 'mklink', '/J', dst, src])
                 logger.info("Junction created: {dst} -> {src}")
             except subprocess.CalledProcessError as e:
                 logger.error(f"Failed to create junction: {e}")
