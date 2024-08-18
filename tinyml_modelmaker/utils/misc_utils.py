@@ -60,11 +60,18 @@ def absolute_path(relpath):
         return _absolute_path(relpath)
 
 
+def is_junction(path: str) -> bool:
+    try:
+        return bool(os.readlink(path))
+    except OSError:
+        return False
+
+
 def remove_if_exists(path):
     try:
         if os.path.islink(path):
             os.unlink(path)
-        elif os.path.isjunction(path):
+        elif is_junction(path):
             os.unlink(path)
         else:
             shutil.rmtree(path)
