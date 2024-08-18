@@ -64,7 +64,7 @@ echo "cloning/updating done."
 # upgrade pip
 python -m ensurepip --upgrade
 python -m pip install --no-input --upgrade pip setuptools
-python -m pip install --no-input --upgrade wheel # cython numpy==1.23.0
+python -m pip install --no-input --upgrade wheel # cython numpy==1.26.4
 
 #################################################################################
 # install code get tools
@@ -73,7 +73,7 @@ setup_cg_tools.sh
 
 #################################################################################
 echo "preparing environment..."
-# for -m pip install --editable . mode to work inside docker environment, this is required
+# for -m pip install --editable . --use-pep517 mode to work inside docker environment, this is required
 git config --global --add safe.directory $(pwd)
 
 echo "installing repositories..."

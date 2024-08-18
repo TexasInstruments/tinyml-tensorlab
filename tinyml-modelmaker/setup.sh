@@ -35,4 +35,4 @@ python -m pip install --no-input -r requirements.txt
 
 ######################################################################
 echo 'Installing as a local module using setup.py'
-python -m pip install --editable .
+python -m pip install --editable . --use-pep517
