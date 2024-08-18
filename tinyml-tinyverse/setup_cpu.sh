@@ -9,7 +9,7 @@ python -m ensurepip --upgrade
 python -m pip install --no-input --upgrade pip setuptools
 ######################################################################
 echo "installing pytorch - use the appropriate index-url from https://pytorch.org/get-started/locally/"
-python -m pip install --no-input torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cpu
+python -m pip install --no-input torch==2.3.0 torchvision==0.18.0 torchaudio==2.3.0 --index-url https://download.pytorch.org/whl/cpu
 
 echo 'Installing python packages...'
 python -m pip install --no-input cython wheel numpy==1.26.4
