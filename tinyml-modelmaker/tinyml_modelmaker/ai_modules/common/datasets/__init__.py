@@ -122,11 +122,7 @@ class DatasetHandling:
 
                 # self.file_list = dataset_utils.create_filelist(self.params.dataset.dataset_path, self.params.common.project_run_path, ignore_str='_list.txt')
                 annotations_dir = os.path.join(self.params.dataset.dataset_path,  self.params.dataset.annotation_dir)
-                if os.path.exists(annotations_dir):
-                    if os.path.islink(annotations_dir):
-                        os.unlink(annotations_dir)
-                    else:
-                        shutil.rmtree(annotations_dir)
+                utils.misc_utils.remove_if_exists(annotations_dir)
                 os.makedirs(annotations_dir, exist_ok=True)
                 self.file_list = dataset_utils.create_filelist(os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir), annotations_dir, ignore_str_list=['_list.txt', '.md', 'LICENSE', '.DS_Store', '_background_noise_'])
                 print('File list is written to: {}'.format(self.file_list))
