@@ -124,7 +124,10 @@ def gen_artifacts(args):
     # logger.info("Copying other files from TVM library (like dlpack, c_backend_api.h and c_runtime_api.h)")
     # copytree(src=os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../tinyml_tinyverse/common/compilation/tvm_required_files/"), dst=artifacts_dir, dirs_exist_ok=True)
     # We also need to delete the devc.o file as it is not required
-    os.remove(os.path.join(artifacts_dir, 'devc.o'))
+    try:
+        os.remove(os.path.join(artifacts_dir, 'devc.o'))
+    except FileNotFoundError:
+        pass
     if not(args.keep_libc_files):
         libc_files = glob(os.path.join(artifacts_dir, 'lib*.c'))
         for filename in libc_files:
