@@ -42,4 +42,4 @@ python -m pip install --no-input -r requirements/requirements_ti_packages.txt
 #echo 'installing pytorch...'
 #python -m pip install --no-input torch torchvision torchaudio
 echo 'installing the pytorch model optimization toolkit...'
-python -m pip install --editable .
+python -m pip install --editable . --use-pep517
