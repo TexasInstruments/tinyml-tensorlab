@@ -39,6 +39,7 @@ import torch
 import onnxruntime as ort
 from tabulate import tabulate
 import torcheval
+import platform
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import utils, misc_utils
@@ -58,7 +59,7 @@ def get_args_parser():
     parser.add_argument('--output-dir', default=None, help='path where to save')
     parser.add_argument('--model-path', default=None, help='ONNX model Path')
     parser.add_argument('--gpus', default=1, type=int, help='number of gpus')
-    parser.add_argument('-j', '--workers', default=16, type=int, metavar='N',
+    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N',
                         help='number of data loading workers (default: 16)')
     parser.add_argument('--date', default=datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), help='current date')
     parser.add_argument('--seed', default=42, help="Seed for all randomness", type=int)
