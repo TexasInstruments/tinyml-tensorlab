@@ -38,10 +38,10 @@ if __name__ == '__main__':
         author_email='thonse@ti.com',
         classifiers=[
             'Development Status :: 1 - Beta'
-            'Programming Language :: Python :: 3.12'
+            'Programming Language :: Python :: 3.10'
         ],
         keywords = 'artifical intelligence, deep learning, image classification, visual wake words, time series classsification, audio_classification keyword spotting',
-        python_requires='>=3.12',
+        python_requires='>=3.10',
         packages=find_packages(),
         include_package_data=True,
         install_requires=[],

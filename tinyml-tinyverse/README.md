@@ -21,6 +21,7 @@
      * ####  [train.py](./references/timeseries_classification/train.py)
  * ###  [requirements](./requirements)
    *   [requirements.txt](./requirements/requirements.txt)
+   * [requirements_ti_packages.txt](./requirements/requirements_ti_packages.txt)
  * ###  [tinyml_tinyverse](./tinyml_tinyverse)
    * ####  [\_\_init__.py](./tinyml_tinyverse/\_\_init__.py)
    * ####  [common](./tinyml_tinyverse/common)
