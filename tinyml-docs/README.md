@@ -22,6 +22,9 @@ The table below provides detailed explanation of each of the tools:
 
 ## What is New
 - [2024-May] First release (version 0.5.0) of the software
+- [2024-June] Release version 0.6.0 of the software
+- [2024-July] Release version 0.7.0 of the software
+- [2024-August] Release version 0.8.0 of the software
 
 <hr>
 ---
