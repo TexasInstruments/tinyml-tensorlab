@@ -14,11 +14,11 @@
  # Project tree
  *   [README.md](./README.md)
  * ###  [datasets](./datasets) - Contains user dataset related info 
- * ###  [references](./references) - Contains training and compilation scripts for each \<modality>_\<task>
-   * ###  [common](./references/common)
-     * [compilation.py](./references/common/compilation.py)
-   * ###  [timeseries_classification](./references/timeseries_classification)
-     * ####  [train.py](./references/timeseries_classification/train.py)
+ * ###  [references](tinyml_tinyverse/references) - Contains training and compilation scripts for each \<modality>_\<task>
+   * ###  [common](tinyml_tinyverse/references/common)
+     * [compilation.py](tinyml_tinyverse/references/common/compilation.py)
+   * ###  [timeseries_classification](tinyml_tinyverse/references/timeseries_classification)
+     * ####  [train.py](tinyml_tinyverse/references/timeseries_classification/train.py)
  * ###  [requirements](./requirements)
    *   [requirements.txt](./requirements/requirements.txt)
    * [requirements_ti_packages.txt](./requirements/requirements_ti_packages.txt)
