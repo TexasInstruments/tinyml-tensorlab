@@ -320,6 +320,10 @@ DATA_PREPROCESSING_PRESET_DESCRIPTIONS = dict(
     default=dict(downsampling_factor=1), )
 FEATURE_EXTRACTION_DEFAULT = 'default'
 FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
+    Custom_MotorFault=dict(data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3, ),
+                           common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
+    Custom_ArcFault=dict(data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+                         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     # default=dict(),
     # FFT256=dict(feature_extraction=dict(transform='FFT', frame_size=256, frame_skip=1,),
     #             data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, stride_window=1, sequence_window=256)),
