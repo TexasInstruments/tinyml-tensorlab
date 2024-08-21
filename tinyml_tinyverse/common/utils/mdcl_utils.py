@@ -35,7 +35,7 @@ import atexit
 import getpass
 import logging
 import datetime
-import pathlib2
+import pathlib
 import platform
 import traceback
 from time import localtime, strftime
@@ -134,7 +134,7 @@ def add_log_file_handlers(logger, base_log_filename=None, extra_log_files=[]):
             else:
                 log_file = log_path
                 log_dir = os.path.realpath(os.path.dirname(log_path))
-                pathlib2.Path(log_dir).mkdir(parents=True, exist_ok=True)
+                pathlib.Path(log_dir).mkdir(parents=True, exist_ok=True)
             f2_handler = logging.FileHandler(log_file, mode="w")
             f2_handler.setFormatter(formatter)
             if log_level is not None:
@@ -160,7 +160,7 @@ def Logger(log_file=None, DEBUG=False, name="root", extra_log_files=[],
         logger.addHandler(c_handler)  # write to console
     if log_file:
         log_dir = os.path.realpath(os.path.dirname(log_file))
-        pathlib2.Path(log_dir).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(log_dir).mkdir(parents=True, exist_ok=True)
         if append_log:
             f_handler = logging.FileHandler(log_file)
         else:

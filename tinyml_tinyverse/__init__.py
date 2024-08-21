@@ -32,6 +32,7 @@ import os
 import sys
 
 from . import common
+from . import references
 
 # from . import audio_classification
 # from . import sensory
