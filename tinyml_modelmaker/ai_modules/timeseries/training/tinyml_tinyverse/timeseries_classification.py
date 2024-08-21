@@ -30,6 +30,7 @@
 
 import os
 import shutil
+from tinyml_tinyverse.references.timeseries_classification import train, test_onnx as test
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 
 from ... import constants
@@ -38,8 +39,7 @@ from ..... import utils
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
 
-tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
-# edgeai_modelzoo_path = os.path.join(repo_parent_path, 'tinyverse-modelzoo')
+# tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
 # www_modelzoo_path = 'https://software-dl.ti.com/jacinto7/esd/modelzoo/08_06_00_01'
 
 
@@ -1347,8 +1347,6 @@ class ModelTraining:
         os.makedirs(self.params.training.training_path, exist_ok=True)
 
         distributed = 1 if self.params.training.num_gpus > 1 else 0
-        # print(distributed)
-        # exit(1)
         device = 'cuda' if self.params.training.num_gpus > 0 else 'cpu'
         # training params
         argv = ['--model', f'{self.params.training.model_training_id}',
@@ -1402,17 +1400,13 @@ class ModelTraining:
                 '--lr', f'{self.params.training.learning_rate}',
                 '--output-dir', f'{self.params.training.training_path}',
                 ]
-        #input_size = self.params.training.input_cropsize if isinstance(self.params.training.input_cropsize, (list,tuple)) else \
-        #    (self.params.training.input_cropsize,self.params.training.input_cropsize)
-        #argv += ['--input-size', f'{input_size[0]}', f'{input_size[1]}']
+
         # import dynamically - force_import every time to avoid clashes with scripts in other repositories
-        train = utils.import_file_or_folder(
-            os.path.join(tinyml_tinyverse_path, 'references', 'timeseries_classification', 'train.py'),
-            __name__, force_import=True)
-        # print(argv)
+        # train = utils.import_file_or_folder(
+        #     os.path.join(tinyml_tinyverse_path, 'references', 'timeseries_classification', 'train.py'),
+        #     __name__, force_import=True)
         args = train.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event
-        # exit(1)
         if not (self.params.testing.skip_train in [True, 'True', 'true', 1, '1']):  # Is user wants to only test their model
             if self.params.training.run_quant_train_only in [True, 'True', 'true', 1, '1']:
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
@@ -1501,7 +1495,7 @@ class ModelTraining:
                 '--output-dir', f'{self.params.training.training_path_quantization}',
                 '--model-path', f'{model_path}'
                 ]
-            test = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'timeseries_classification', 'test_onnx.py'), __name__, force_import=True)
+            # test = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'timeseries_classification', 'test_onnx.py'), __name__, force_import=True)
 
             args = test.get_args_parser().parse_args(argv)
             args.quit_event = self.quit_event

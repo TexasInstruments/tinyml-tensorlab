@@ -31,14 +31,15 @@
 import os
 import shutil
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+from tinyml_tinyverse.references.common import compilation as compile_scr
 
 from .... import utils
 from ...timeseries import constants
 
-this_dir_path = os.path.dirname(os.path.abspath(__file__))
-repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..'))
+# this_dir_path = os.path.dirname(os.path.abspath(__file__))
+# repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..'))
 
-tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
+# tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
 
 class ModelCompilation():
     @classmethod
@@ -126,7 +127,7 @@ class ModelCompilation():
             '--keep_libc_files' if self.params.compilation.keep_libc_files else '--no-keep_libc_files',
             '--lis', f'{self.params.compilation.log_file_path}',
         ]
-        compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
+        # compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
         args = compile_scr.get_args_parser().parse_args(argv)
         compile_scr.run(args)
         args.quit_event = self.quit_event
