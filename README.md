@@ -16,7 +16,7 @@ Tasks and Models
 | --- |---------------------------|-------------------------------| --- | 
 | Classification | Timeseries (Univariate)   | Arc Detection, Fall Detection | 1 to n-class classification of timeseries data |
 | Classification | Timeseries (Multivariate) | Arc Detection, Gyroscope      | 1 to n-class classification of timeseries data |
-| Classification | Audio                     | Keyword Spotting              | 1 to n-class classification of audio data |
+
 
 
 These functionalities that are supported are fully integrated and the user can control it by setting  parameters in the config file.

@@ -317,8 +317,10 @@ data/projects/<dataset_name>/dataset
                              |     |-- class2
                              |
                              |--annotations
+                                   |--file_list.txt
                                    |--instances_train_list.txt
                                    |--instances_val_list.txt
+                                   |--instances_test_list.txt
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
