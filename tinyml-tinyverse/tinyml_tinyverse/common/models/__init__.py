@@ -35,6 +35,7 @@ from logging import getLogger
 from ..utils import misc_utils
 
 from .generic_models import *
+
 # from .kilby_models import *
 
 model_dict = {
@@ -58,11 +59,16 @@ def get_model(model_name: str, variables, num_classes: int, input_features: int,
         with open(model_config) as fp:
             model_config_dict = yaml.load(fp, Loader=yaml.CLoader)
     model_config_dict.update(dict(variables=variables, num_classes=num_classes, with_input_batchnorm=with_input_batchnorm, input_features=input_features))
-
-    if os.path.exists(model_spec) and (model_name not in model_dict.keys()):
-        logger.info(f"Parsing {model_spec} to get {model_name} definition.")
-        model_definition = misc_utils.import_file_or_folder(model_spec, __name__, force_import=True)
-        model_dict.update({model_name: model_definition.get_model(model_name)})
+    if model_name not in model_dict.keys():
+        try:
+            import tinyml_proprietary_models
+            model_dict.update({model_name: tinyml_proprietary_models.get_model(model_name)})
+        except ImportError:
+            logger.info("tinyml_proprietary_models does not exist. Importing locally")
+            if os.path.exists(model_spec):
+                logger.info(f"Parsing {model_spec} to get {model_name} definition.")
+                model_definition = misc_utils.import_file_or_folder(model_spec, __name__, force_import=True)
+                model_dict.update({model_name: model_definition.get_model(model_name)})
 
     try:
        return model_dict[model_name](config=model_config_dict)
