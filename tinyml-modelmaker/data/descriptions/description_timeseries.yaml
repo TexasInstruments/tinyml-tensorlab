@@ -163,7 +163,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_200_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_200
       num_gpus: 1
       num_last_epochs: 5
@@ -334,7 +334,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_300_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_300
       num_gpus: 1
       num_last_epochs: 5
@@ -505,7 +505,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_700_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_700
       num_gpus: 1
       num_last_epochs: 5
@@ -676,7 +676,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_1_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_1l.py
+      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py
       model_training_id: CNN_MF_1L
       num_gpus: 1
       num_last_epochs: 5
@@ -847,7 +847,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_2_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/proprietary_models/cnn_mf_2l.py
+      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py
       model_training_id: CNN_MF_2L
       num_gpus: 1
       num_last_epochs: 5
