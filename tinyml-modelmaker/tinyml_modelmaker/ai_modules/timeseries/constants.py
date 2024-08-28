@@ -419,14 +419,18 @@ COMPILATION_FORCED_SOFT_NPU = 'forced_soft_npu_preset'
 COMPILATION_DEFAULT = 'default_preset'
 
 HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
-TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
 
+TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
 C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.0.LTS'
 C2000WARE_VERSION = 'C2000Ware_5_02_00_00'
-CROSS_COMPILER_CL2000 = os.path.join(TOOLS_PATH, C2000_CGT_VERSION, 'bin', 'cl2000')
-CGT_INCLUDE = os.path.join(TOOLS_PATH, C2000_CGT_VERSION, 'include')
-C2000WARE_INCLUDE = os.path.join(TOOLS_PATH, C2000WARE_VERSION, 'device_support', '{DEVICE_NAME}', 'common', 'include')
-DRIVERLIB_INCLUDE = os.path.join(TOOLS_PATH, C2000WARE_VERSION, 'driverlib', '{DEVICE_NAME}', 'driverlib')
+
+C2000_CGT_PATH = os.path.abspath(os.getenv('C2000_CGT_PATH', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
+C2000WARE_PATH = os.path.abspath(os.getenv('C2000WARE_PATH', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
+
+CROSS_COMPILER_CL2000 = os.path.join(C2000_CGT_PATH, 'bin', 'cl2000')
+CGT_INCLUDE = os.path.join(C2000_CGT_PATH, 'include')
+C2000WARE_INCLUDE = os.path.join(C2000WARE_PATH, 'device_support', '{DEVICE_NAME}', 'common', 'include')
+DRIVERLIB_INCLUDE = os.path.join(C2000WARE_PATH, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 CROSS_COMPILER_OPTIONS_C28 = (
     f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{CGT_INCLUDE} -I{DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=.")
 

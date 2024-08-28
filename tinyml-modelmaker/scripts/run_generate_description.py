@@ -134,12 +134,12 @@ def main(args):
         df_yaml_txt = df_yaml_fh.readlines()
     with open(description_file, 'w') as df_yaml_fh:
         for line in df_yaml_txt:
-            df_yaml_fh.write(re.sub('/home/a0484689', '/opt/tinyml', line))
+            df_yaml_fh.write(re.sub(os.path.join('home', 'a0484689'), os.path.join('opt', 'tinyml'), line))
     with open(os.path.splitext(description_file)[0]+'.json') as df_json_fh:
         df_json_txt = df_json_fh.readlines()
     with open(os.path.splitext(description_file)[0]+'.json', 'w') as df_json_fh:
         for line in df_json_txt:
-            df_json_fh.write(re.sub('/home/a0484689', '/opt/tinyml', line))
+            df_json_fh.write(re.sub(os.path.join('home', 'a0484689'), os.path.join('opt', 'tinyml'), line))
 
 
     help_file = os.path.join(args.description_path, f'help_{args.target_module}' + '.md')
@@ -154,13 +154,13 @@ if __name__ == '__main__':
     print(f'argv: {sys.argv}')
     # the cwd must be the root of the repository
     if os.path.split(os.getcwd())[-1] == 'scripts':
-        os.chdir('../')
+        os.chdir('..')
     #
 
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
     parser.add_argument('--target_module', type=str, default='timeseries')
-    parser.add_argument('--download_path', type=str, default='./data/downloads')
-    parser.add_argument('--description_path', type=str, default='./data/descriptions')
+    parser.add_argument('--download_path', type=str, default=os.path.join('.', 'data', 'downloads'))
+    parser.add_argument('--description_path', type=str, default=os.path.join('.', 'data', 'descriptions'))
     args = parser.parse_args()
 
     main(args)
