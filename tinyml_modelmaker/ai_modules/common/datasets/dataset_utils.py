@@ -223,7 +223,7 @@ def adjust_categories(categories_list, category_names_new, missing_category_name
 
 
 def get_file_list(dataset_path):
-    file_list = glob.glob(f'{dataset_path}/*.*')
+    file_list = glob.glob(os.path.join(dataset_path, '*.*'))
     return file_list
 
 

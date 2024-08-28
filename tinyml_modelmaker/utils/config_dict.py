@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import copy
-
+import os
+import yaml
 
 class ConfigDict(dict):
     def __init__(self, input=None, *args, **kwargs):
@@ -63,7 +63,7 @@ class ConfigDict(dict):
         #
         for key, value in input_dict.items():
             if key == 'include_files' and input_dict['include_files'] is not None:
-                include_base_path = os.path.dirname(settings_file) if settings_file is not None else './'
+                include_base_path = os.path.dirname(settings_file) if settings_file is not None else '.'
                 idict = self._parse_include_files(value, include_base_path)
                 self.update(idict)
             else:
@@ -94,7 +94,7 @@ class ConfigDict(dict):
 
     def _parse_include_files(self, include_files, include_base_path):
         input_dict = {}
-        include_files = utils.as_list(include_files)
+        include_files = list(include_files)
         for include_file in include_files:
             append_base = not (include_file.startswith('/') and include_file.startswith('./'))
             include_file = os.path.join(include_base_path, include_file) if append_base else include_file

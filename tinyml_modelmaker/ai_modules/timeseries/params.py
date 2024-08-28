@@ -40,8 +40,8 @@ def init_params(*args, **kwargs):
     default_params = dict(
         common=dict(
             verbose_mode=True,
-            download_path='./data/downloads',
-            projects_path='./data/projects',
+            download_path=os.path.join('.', 'data', 'downloads'),
+            projects_path=os.path.join('.', 'data', 'projects'),
             project_path=None,
             project_run_path=None,
             task_type=None,
