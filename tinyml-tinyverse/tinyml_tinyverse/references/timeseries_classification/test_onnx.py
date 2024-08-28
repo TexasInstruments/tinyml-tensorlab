@@ -55,7 +55,7 @@ def get_args_parser():
     parser.add_argument('--dataset', default='folder', help='dataset')
     parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
-    parser.add_argument('--data-path', default='./data/datasets/', help='dataset')
+    parser.add_argument('--data-path', default=os.path.join('.', 'data', 'datasets'), help='dataset')
     parser.add_argument('--output-dir', default=None, help='path where to save')
     parser.add_argument('--model-path', default=None, help='ONNX model Path')
     parser.add_argument('--gpus', default=1, type=int, help='number of gpus')
@@ -104,7 +104,7 @@ def main(gpu, args):
     transform = None
     if not args.output_dir:
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
-        args.output_dir = os.path.join('./data/checkpoints/classification', output_folder, f'{args.model}', args.date)
+        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'classification', output_folder, args.model, args.date)
     utils.mkdir(args.output_dir)
     log_file = os.path.join(args.output_dir, f'run.log')
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)

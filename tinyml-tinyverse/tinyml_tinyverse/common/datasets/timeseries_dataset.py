@@ -65,7 +65,7 @@ class SimpleTSDataset(Dataset):
         self.sequence_window = sequence_window
         self.classes = list()
         self.label_map = dict()
-        self.variables = variables
+        self.variables = variables if variables else 1
         self.resampling_factor = int(kwargs.get('resampling_factor', 1))
         self.logger = getLogger("root.SimpleTSDataset")
         self.logger.info("Data is being picked up from: {}".format(dataset_dir))
@@ -140,9 +140,8 @@ class SimpleTSDataset(Dataset):
         self.samples_in_sequence = int(self.new_sr * self.sequence_window)
         self.samples_in_stride = int(self.new_sr * self.stride_window)
 
-        self.logger.info("Data samples in one frame: {}".format(self.sequence_window, self.samples_in_sequence))
-        self.logger.info("Stride of {} samples implies window is moved by {} samples".format(self.stride_window,
-                                                                                             self.samples_in_stride))
+        # self.logger.info("Data samples in one frame: {}".format(self.sequence_window, self.samples_in_sequence))
+        # self.logger.info("Stride of {} samples implies window is moved by {} samples".format(self.stride_window, self.samples_in_stride))
 
         self.X = np.array([]).reshape(0, self.variables, self.samples_in_sequence, )
         self.X_raw = np.array([]).reshape(0, self.variables, self.samples_in_sequence, )
@@ -161,19 +160,19 @@ class SimpleTSDataset(Dataset):
         elif file_extension == ".pkl":
             x_temp = pd.read_pickle(datafile)
             non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
-            x_temp = x_temp[non_time_columns]
-            if len(x_temp.columns) > 1:
-                x_temp = x_temp.iloc[:, 1:].values  # Remove the timestamp column if it exists
+            x_temp = x_temp[non_time_columns].values[:, :self.variables]  # values removes the auto indexed column, :self.variables gives the first n variables column
         elif file_extension == ".csv":
             x_temp = pd.read_csv(datafile)
             non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
-            x_temp = x_temp[non_time_columns]
-            if len(x_temp.columns) - self.variables:  # if len(x_temp.columns) > 1:
-                x_temp = x_temp.iloc[:, 1:].values  # Remove the first auto numbered column by pandas
+            x_temp = x_temp[non_time_columns].values[:, :self.variables]  # values removes the auto indexed column, :self.variables gives the first n variables column
         elif file_extension == ".txt":
-            x_temp = np.loadtxt(datafile)
-            if len(x_temp.shape) > 1:
-                x_temp = x_temp[:, 1:]  # Remove the first auto numbered column by pandas
+            x_temp = pd.read_csv(datafile)
+            non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
+            x_temp = x_temp[non_time_columns].values[:, :self.variables]  # values removes the auto indexed column, :self.variables gives the first n variables column
+
+            # x_temp = np.loadtxt(datafile)
+            # if len(x_temp.shape) > 1:
+            #     x_temp = x_temp[:, 1:]  # Remove the first auto numbered column by pandas
         else:
             raise Exception("Supports only .npy, .pkl, .txt and .csv file formats for now")
         label = opb(opd(datafile))
@@ -464,7 +463,7 @@ class MotorFaultDataset(SimpleTSDataset):
         vax_copy = [[] for a in range(self.variables)]
         for ax in range(self.variables):
             # The below code is for each axis.
-            vsel = x_temp.iloc[:, ax] / self.scale
+            vsel = x_temp[:, ax] / self.scale
             vsel = np.floor(vsel).astype(int)  # convert data to fixpoint
 
             # Calculate number of frames with or w/o sample overlap
@@ -521,7 +520,7 @@ class MotorFaultDataset(SimpleTSDataset):
                     # end method
                     vl.append(vs_m)  # save result
                     vl_copy.append(
-                        vs_copy.to_list())  # In case of RAW, it will have the same dimensions as vs_m. In case of FFTBIN, it will not have the same dimensions as vs_m
+                        vs_copy.tolist())  # In case of RAW, it will have the same dimensions as vs_m. In case of FFTBIN, it will not have the same dimensions as vs_m
 
                 if (self.num_frame_concat > 1):  # concatenate multiple frames
                     vl_mf = [sum(vl[o:o + self.num_frame_concat], []) for o in
