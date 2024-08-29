@@ -115,7 +115,7 @@ class ModelCompilation():
         if self.params.compilation.model_path and os.path.exists(self.params.compilation.model_path):
             model_file = self.params.compilation.model_path
         else:
-            model_file = self.params.training.model_export_path_quantization if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION else self.params.training.model_export_path
+            model_file = os.path.join(self.params.training.training_path_quantization, 'model.onnx') if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION else os.path.join(self.params.training.training_path, 'model.onnx')
         argv = [
             '--FILE', f'{model_file}',
             '--output_dir', f'{self.params.compilation.compilation_path}',
