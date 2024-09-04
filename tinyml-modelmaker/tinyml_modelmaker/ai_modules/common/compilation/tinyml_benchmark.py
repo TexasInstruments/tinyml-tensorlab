@@ -32,7 +32,7 @@ import os
 import shutil
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 from tinyml_tinyverse.references.common import compilation as compile_scr
-
+import tinyml_modelmaker
 from .... import utils
 from ...timeseries import constants
 
@@ -98,6 +98,7 @@ class ModelCompilation():
                 output_tensors_path=os.path.join(model_compiled_path, 'outputs'),
                 # model_packaged_path=model_packaged_path, # final compiled package
                 model_visualization_path=os.path.join(model_compiled_path, 'artifacts', 'tempDir', 'runtimes_visualization.svg'),
+                tspa_license_path=os.path.abspath(os.path.join(os.path.dirname(tinyml_modelmaker.ai_modules.common.compilation.__file__), 'LICENSE.txt'))
             )
         )
 

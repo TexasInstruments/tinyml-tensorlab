@@ -354,33 +354,23 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     #                             common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
 
     MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
-        feature_extraction=dict(transform='FFTBIN', frame_size=256, feature_size_per_frame=16,
-                                num_frame_concat=8,
-                                dc_remove=True, offset=0, scale=1, stacking='1D'),  # ch=1,
+        feature_extraction=dict(transform='FFTBIN', frame_size=256, feature_size_per_frame=16, num_frame_concat=8, dc_remove=True, offset=0, scale=1, stacking='1D'),  # ch=1,
         data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3, ),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
-        feature_extraction=dict(transform='FFTBIN', frame_size=256, feature_size_per_frame=16,
-                                num_frame_concat=8,
-                                dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
+        feature_extraction=dict(transform='FFTBIN', frame_size=256, feature_size_per_frame=16, num_frame_concat=8, dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
         data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     MotorFault_256Input_FFT_128Feature_8Frame_3InputChannel_removeDC_2D1=dict(
-        feature_extraction=dict(transform='FFT', frame_size=256, feature_size_per_frame=128,
-                                num_frame_concat=1,
-                                dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
+        feature_extraction=dict(transform='FFT', frame_size=256, feature_size_per_frame=128, num_frame_concat=1, dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
         data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
     # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
-    #     feature_extraction=dict(transform='RAW', frame_size=128, feature_size_per_frame=128,
-    #                             num_frame_concat=1,
-    #                             dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
+    #     feature_extraction=dict(transform='RAW', frame_size=128, feature_size_per_frame=128, num_frame_concat=1, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D'),
     #     data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
     #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
-        feature_extraction=dict(transform='RAW', frame_size=128, feature_size_per_frame=128,
-                                num_frame_concat=1,
-                                dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
+        feature_extraction=dict(transform='RAW', frame_size=128, feature_size_per_frame=128, num_frame_concat=1, dc_remove=True, offset=0, scale=1, stacking='2D1'),  # ch=3,
         data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3),
         common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
 )
