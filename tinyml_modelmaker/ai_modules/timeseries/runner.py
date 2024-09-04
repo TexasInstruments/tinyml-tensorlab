@@ -187,13 +187,17 @@ class ModelRunner():
                     self.params.training.model_export_path_quantization if os.path.exists(self.params.training.model_export_path_quantization) else self.params.training.model_export_path,
                     self.params.training.model_proto_path,
                     self.params.training.log_file_path,
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors')]
+                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
+                    self.params.training.tspa_license_path
+                ]
             else:
                 model_training_package_files = [
                     self.params.dataset.annotation_path_splits,
                     self.params.training.model_proto_path,
                     self.params.training.log_file_path,
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors')]
+                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
+                    self.params.training.tspa_license_path
+                ]
             self.package_trained_model(model_training_package_files, self.params.training.model_packaged_path)
             # we are done with training
             with open(self.params.training.log_file_path, 'a') as lfp:
@@ -210,7 +214,8 @@ class ModelRunner():
             with open(self.params.compilation.log_file_path, 'a') as lfp:
                 lfp.write('\nSUCCESS: ModelMaker - Compilation completed.')
             # print(self.params.compilation.log_file_path)
-            model_compilation_package_files = [os.path.join(self.params.compilation.compilation_path, 'artifacts')]
+            model_compilation_package_files = [os.path.join(self.params.compilation.compilation_path, 'artifacts'),
+                                               self.params.compilation.tspa_license_path]
             self.package_trained_model(model_compilation_package_files, self.params.compilation.model_packaged_path)
         #
         return self.params

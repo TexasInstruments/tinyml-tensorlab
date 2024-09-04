@@ -32,6 +32,7 @@ import os
 import shutil
 from tinyml_tinyverse.references.timeseries_classification import train, test_onnx as test
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+import tinyml_modelmaker
 
 from ... import constants
 from ..... import utils
@@ -1332,6 +1333,7 @@ class ModelTraining:
                 model_export_path_quantization=os.path.join(self.params.training.training_path_quantization,
                                                             'model.onnx'),
                 model_proto_path=None,
+                tspa_license_path=os.path.abspath(os.path.join(os.path.dirname(tinyml_modelmaker.ai_modules.timeseries.training.tinyml_tinyverse.__file__), 'LICENSE.txt'))
                 # num_classes=self.params.training.num_classes,  # len(self.object_categories)
             )
         )
