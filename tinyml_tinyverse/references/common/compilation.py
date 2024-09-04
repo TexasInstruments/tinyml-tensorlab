@@ -179,7 +179,7 @@ def get_model_ip_op_details(model_path):
     # The below dict is used to convert from numpy data types to float data types
     np2c_dtype_dict = {np.uint8: 'uint8_t', np.uint16: 'uint16_t', np.uint32: 'uint32_t',
                        np.int8: 'int8_t', np.int16: 'int16_t', np.int32: 'int32_t',
-                       np.float32: 'float', 'tensor(float)': 'float',}
+                       np.float32: 'float32_t', 'tensor(float)': 'float32_t',}
     logger.info("Loading model to infer data types and input/output shapes")
     onnx_session = onnxruntime.InferenceSession(model_path)
     input_details = onnx_session.get_inputs()

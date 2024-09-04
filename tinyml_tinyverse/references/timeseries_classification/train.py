@@ -252,7 +252,6 @@ def get_args_parser():
 def generate_golden_vectors(output_dir, dataset):
     logger = getLogger("root.generate_golden_vectors")
     import onnxruntime as ort
-    headerfile_info = {}
     vector_files = []
     ort_sess = ort.InferenceSession(os.path.join(output_dir, 'model.onnx'))
     input_name = ort_sess.get_inputs()[0].name
@@ -261,7 +260,7 @@ def generate_golden_vectors(output_dir, dataset):
     golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
     create_dir(golden_vectors_dir)
     logger.info(f"Creating Golden data for reference at {golden_vectors_dir}")
-    label_index_dict = {label: np.where(dataset.Y == label)[0] for label in np.unique(dataset.Y)}
+    label_index_dict = {dataset.inverse_label_map.get(label): np.where(dataset.Y == label)[0] for label in np.unique(dataset.Y)}
 
     for label, indices in label_index_dict.items():
         # For each label, 4 random golden test vectors will be selected and printed out
@@ -270,29 +269,34 @@ def generate_golden_vectors(output_dir, dataset):
             np_feat = dataset.X[index]
             pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
 
-            half_path = os.path.join(golden_vectors_dir, f'test_vector_class{label}')
+            half_path = os.path.join(golden_vectors_dir)
 
             # Saving as .txt
-            np.savetxt(half_path + f'_X_adc_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'uint16_t test_vector_class{label}_X_adc_{index}[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'_X_adc_{index}.txt')
-            np.savetxt(half_path + f'_X_features_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'float test_vector_class{label}_X_features_{index}[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'_X_features_{index}.txt')
-            np.savetxt(half_path + f'_Y_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'int8_t test_vector_class{label}_Y_{index}[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'_Y_{index}.txt')
+            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'int16_t adc_{label}_{index}[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'adc_{label}_{index}.txt')
+            np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'float32_t features_{label}_{index}[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'features_{label}_{index}.txt')
+            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'int8_t output_{label}_{index}[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'output_{label}_{index}.txt')
 
-    headerfile_info = '\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()])
+    headerfile_info = ''
     for file_path in vector_files:
         # file_name = os.path.splitext(os.path.basename(file_path))[0]
         with open(file_path) as fp:
             file_array = fp.read()
         headerfile_info += f'\n{file_array}\n'
+        os.remove(file_path)
 
-    global_var_h = os.path.join(golden_vectors_dir, 'global.c')
-    with open(global_var_h, 'w') as fp:
+    test_vectors_c = os.path.join(golden_vectors_dir, 'test_vectors.c')
+    with open(test_vectors_c, 'w') as fp:
         fp.write('#include "device.h"\n')
-        fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
         fp.write(headerfile_info)
-    logger.info("Creating C header file for variables at: {}".format(global_var_h))
+    user_input_config_h = os.path.join(golden_vectors_dir, 'user_input_config.h')
+    logger.info("Creating test_vectors.c at: {}".format(test_vectors_c))
+    with open(user_input_config_h, 'w') as fp:
+        fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
+        fp.write('\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()]))
+    logger.info("Creating user_input_config.h at: {}".format(user_input_config_h))
 
 
 def main(gpu, args):
