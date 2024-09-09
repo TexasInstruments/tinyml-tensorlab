@@ -253,6 +253,7 @@ class SimpleTSDataset(Dataset):
         if not len(self.Y):
             self.logger.error("No data could be loaded. Either file paths were erroneous or dimensions mismatched."
                               " Check prior logger messages/ data processing configurations")
+            raise Exception("No data could be loaded. Either file paths were erroneous or dimensions mismatched. Check prior logger messages/ data processing configurations")
 
         # self.X = torch.from_numpy(self.X)
         # self.Y = torch.from_numpy(self.Y)
@@ -267,6 +268,11 @@ class SimpleTSDataset(Dataset):
                 self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
+            except IndexError as i:
+                self.logger.error(f"Input arguments are incompatible with dataset Dimensions in: {datafile}. Error message: {i}")
+        if not self.X.shape[0]:
+            self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
+            raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
         self._process_targets()
         return self
 
@@ -367,9 +373,15 @@ class ArcFaultDataset(SimpleTSDataset):
                 self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
+            except IndexError as i:
+                self.logger.error(f"Unexpected dataset dimensions. Check input options or dataset content. \nFile: {datafile}. Error message: {i}")
 
         # ArcFault_base1 requires an additional dimension N,C, H(features), W(1)
+
         self.X = np.expand_dims(self.X, axis=-1)
+        if not self.X.shape[0]:
+            self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
+            raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
         self._process_targets()
         return self
 
@@ -579,5 +591,10 @@ class MotorFaultDataset(SimpleTSDataset):
                 self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
+            except IndexError as i:
+                self.logger.error(f"Input arguments are incompatible with dataset Dimensions in: {datafile}. Error message: {i}")
+        if not self.X.shape[0]:
+            self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
+            raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
         self._process_targets()
         return self
