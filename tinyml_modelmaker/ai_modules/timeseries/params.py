@@ -52,6 +52,7 @@ def init_params(*args, **kwargs):
             # {date-time} will be replaced with datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             # {model_name} will be replaced with the name of the model
             run_name=os.path.join('{date-time}, {model_name}'),
+            generic_model=False,
         ),
         download=None,
         dataset=dict(
@@ -71,7 +72,7 @@ def init_params(*args, **kwargs):
             annotation_prefix='instances',  # change this if your dataset has a different annotation prefix
             annotation_format='univ_ts_json',
             dataset_download=False,
-            dataset_reload=False
+            dataset_reload=False,
         ),
         training=dict(
             enable=True,
@@ -83,7 +84,6 @@ def init_params(*args, **kwargs):
             training_backend=None,
             pretrained_checkpoint_path=None,
             target_devices={},
-            generic_model=False,
             project_path=None,
             dataset_path=None,
             training_path=None,
