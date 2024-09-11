@@ -81,6 +81,8 @@ import numpy as np
 import random
 import pandas as pd
 from tabulate import tabulate
+from cryptography.fernet import Fernet
+import base64
 
 try:
     from apex import amp
@@ -816,7 +818,7 @@ def evaluate(model, criterion, data_loader, device, transform, log_suffix='', pr
     return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, confusion_matrix_total
 
 
-def export_model(model, input_shape, output_dir, opset_version=17, quantization=0, quantization_error_logging=False, example_input=None):
+def export_model(model, input_shape, output_dir, opset_version=17, quantization=0, quantization_error_logging=False, example_input=None, generic_model=False):
     logger = getLogger("root.export_model")
     device="cpu"  # torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # example_input[0].unsqueeze(0) will create a tensor with batch size 1: n,c,h,w -> 1,c,h,w
@@ -845,10 +847,53 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
         # export a torchscript model as well for visualization
         ts_model = torch.jit.trace(model_copy, dummy_input)
         torch.jit.save(ts_model, os.path.splitext(onnx_file)[0]+"_ts.pth")
+        if not generic_model:
+            encrypt(os.path.splitext(onnx_file)[0]+"_ts.pth", get_crypt_key())
     else:
         torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version)
 
     onnx.shape_inference.infer_shapes_path(onnx_file, onnx_file)
+    if not generic_model:
+        encrypt(onnx_file, get_crypt_key())
+
+
+def encrypt(filename, key):
+    if not key:
+        return
+    f = Fernet(key)
+    with open(filename, "rb") as file:
+        # read the encrypted data
+        file_data = file.read()
+    # encrypt data
+    encrypted_data = f.encrypt(file_data)
+    # write the encrypted file
+    with open(filename, "wb") as file:
+        file.write(encrypted_data)
+
+
+def get_crypt_key():
+    try:
+        from .crypt_key import password
+        my_password = password.encode()
+        key = hashlib.md5(my_password).hexdigest()
+        key_64 = base64.urlsafe_b64encode(key.encode("utf-8"))
+    except ImportError:
+        key_64 = ''
+
+    return key_64
+
+
+def decrypt(filename, key):
+    if not key:
+        return
+    f = Fernet(key)
+    with open(filename, "rb") as file:
+        # read the encrypted data
+        encrypted_data = file.read()
+    # decrypt data
+    decrypted_data = f.decrypt(encrypted_data)
+    with open(filename, "wb") as file:
+        file.write(decrypted_data)
 
 
 def reduce_across_processes(val):

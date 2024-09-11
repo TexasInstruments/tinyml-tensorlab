@@ -249,11 +249,15 @@ def get_args_parser():
     return parser
 
 
-def generate_golden_vectors(output_dir, dataset):
+def generate_golden_vectors(output_dir, dataset, generic_model=False):
     logger = getLogger("root.generate_golden_vectors")
     import onnxruntime as ort
     vector_files = []
+    if not generic_model:
+        utils.decrypt(os.path.join(output_dir, 'model.onnx'), utils.get_crypt_key())
     ort_sess = ort.InferenceSession(os.path.join(output_dir, 'model.onnx'))
+    if not generic_model:
+        utils.encrypt(os.path.join(output_dir, 'model.onnx'), utils.get_crypt_key())
     input_name = ort_sess.get_inputs()[0].name
     output_name = ort_sess.get_outputs()[0].name
 
@@ -389,7 +393,7 @@ def main(gpu, args):
 
     if args.export_only:
         if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
-            utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir, opset_version=args.opset_version, quantization=args.quantization)
+            utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir, opset_version=args.opset_version, quantization=args.quantization, generic_model=args.generic_model)
             return
 
     model.to(device)
@@ -512,13 +516,13 @@ def main(gpu, args):
     if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
         example_input = next(iter(data_loader_test))[0]
         utils.export_model(model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version, 
-                           quantization=args.quantization, quantization_error_logging=args.quantization_error_logging, example_input=example_input)
+                           quantization=args.quantization, quantization_error_logging=args.quantization_error_logging, example_input=example_input, generic_model=args.generic_model)
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
 
     if args.gen_golden_vectors:
-        generate_golden_vectors(args.output_dir, dataset)
+        generate_golden_vectors(args.output_dir, dataset, args.generic_model)
 
 
 def run(args):
