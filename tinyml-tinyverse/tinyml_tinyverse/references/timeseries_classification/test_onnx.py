@@ -96,6 +96,7 @@ def get_args_parser():
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap", default=0,
                         type=int)
     parser.add_argument('--scale', help="Scaling factor to input data", default=1, type=float)
+    parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
 
     return parser
 
@@ -139,7 +140,12 @@ def main(gpu, args):
         sampler=test_sampler, num_workers=args.workers, pin_memory=True,
         collate_fn=utils.collate_fn, )
     logger.info(f"Loading ONNX model: {args.model_path}")
+    if not args.generic_model:
+        utils.decrypt(args.model_path, utils.get_crypt_key())
     ort_sess = ort.InferenceSession(args.model_path)
+    if not args.generic_model:
+        utils.encrypt(args.model_path, utils.get_crypt_key())
+
     input_name = ort_sess.get_inputs()[0].name
     output_name = ort_sess.get_outputs()[0].name
     predicted = []

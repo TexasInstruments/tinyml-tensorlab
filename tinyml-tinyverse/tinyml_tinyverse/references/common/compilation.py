@@ -36,6 +36,7 @@ import numpy as np
 import os
 import onnxruntime
 from tinyml_tinyverse.common.compilation import default_tvm_args
+from tinyml_tinyverse.common.utils import utils, misc_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import command_display, Logger
 from tvm.driver.tvmc.compiler import drive_compile
 np.set_printoptions(threshold=np.inf)
@@ -94,6 +95,7 @@ def get_args_parser():
     parser.add_argument('--executor_aot_interface_api', help='', type=str, default='c', )
     parser.add_argument('--runtime', help="The runtime configuration.", type=str, default='crt', )
     parser.add_argument('--keep_libc_files', help='Keep lib0.c, lib1.c, lib2.c... files', action=BooleanOptionalAction)
+    parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
 
     return parser
 
@@ -285,7 +287,17 @@ def main(args):
     args.target_example_target_hook_target_device_type = None
     args.target_cmsis_nn_mcpu = None if args.target_cmsis_nn_mcpu=='None' else args.target_cmsis_nn_mcpu
     args.target_cmsis_nn_mattr = None if args.target_cmsis_nn_mattr == 'None' else args.target_cmsis_nn_mattr
-    gen_artifacts(args)
+    if not args.generic_model:
+        utils.decrypt(args.FILE, utils.get_crypt_key())
+    try:
+        gen_artifacts(args)
+    except Exception:
+        if not args.generic_model:
+            utils.encrypt(args.FILE, utils.get_crypt_key())
+        raise
+    if not args.generic_model:
+        utils.encrypt(args.FILE, utils.get_crypt_key())
+
     if not args.keep_intermittent_files:
         remove_intermittent_files(args.output_dir)
     # gen_wrapper_code(args.FILE, os.path.join(args.output_dir, 'artifacts'))  # TODO: Enable this once a better app.c can be done
