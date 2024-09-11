@@ -171,8 +171,6 @@ class ModelRunner():
 
     def run(self):
 
-        # --FILE / home / a0484689 / PycharmProjects / tinyml - tinyverse / references / timeseries_classification / model.onnx
-        #####################################################################
         # actual model training
         if self.params.training.enable:
             self.model_training.clear()
@@ -180,7 +178,7 @@ class ModelRunner():
             # remove special characters
             utils.cleanup_special_chars(self.params.training.log_file_path)
             # training frameworks don't create a compact package after training. do it here.
-            if self.params.training.generic_model in [True, 'True', 'true']:
+            if self.params.common.generic_model in [True, 'True', 'true']:
                 model_training_package_files = [
                     self.params.dataset.annotation_path_splits,
                     self.params.training.model_checkpoint_path_quantization if os.path.exists(self.params.training.model_checkpoint_path_quantization) else self.params.training.model_checkpoint_path,

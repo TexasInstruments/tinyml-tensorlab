@@ -127,6 +127,7 @@ class ModelCompilation():
             '--target_c_mcpu', f'{self.params.compilation.target_c_mcpu}',
             '--keep_libc_files' if self.params.compilation.keep_libc_files else '--no-keep_libc_files',
             '--lis', f'{self.params.compilation.log_file_path}',
+            '--generic-model', f'{self.params.common.generic_model}',
         ]
         # compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
         args = compile_scr.get_args_parser().parse_args(argv)

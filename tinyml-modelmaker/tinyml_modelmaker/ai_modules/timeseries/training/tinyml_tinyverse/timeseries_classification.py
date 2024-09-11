@@ -78,6 +78,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_ARC_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_AF_7k'],
         'training': dict(
@@ -88,7 +89,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_AF_7k',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -118,6 +118,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_ARC_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_AF_7k_t'],
         'training': dict(
@@ -128,7 +129,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_AF_7k_t',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -159,6 +159,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_MOTOR_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_MF_7k'],
         'training': dict(
@@ -169,7 +170,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_MF_7k',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -199,6 +199,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_MOTOR_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_MF_7k_t'],
         'training': dict(
@@ -209,7 +210,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_MF_7k_t',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -240,6 +240,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_ARC_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_AF_3k'],
         'training': dict(
@@ -250,7 +251,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_AF_3k',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -280,6 +280,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_ARC_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_AF_3k_t'],
         'training': dict(
@@ -290,7 +291,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_AF_3k_t',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -321,6 +321,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_MOTOR_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_MF_3k'],
         'training': dict(
@@ -331,7 +332,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_MF_3k',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -361,6 +361,7 @@ disbanded_model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_MOTOR_FAULT,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_MF_3k_t'],
         'training': dict(
@@ -371,7 +372,6 @@ disbanded_model_descriptions = {
             model_name='TimeSeries_Generic_MF_3k_t',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -763,6 +763,7 @@ _model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_7k'],
         'training': dict(
@@ -773,7 +774,6 @@ _model_descriptions = {
             model_name='TimeSeries_Generic_7k',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -803,6 +803,7 @@ _model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_7k_t'],
         'training': dict(
@@ -813,7 +814,6 @@ _model_descriptions = {
             model_name='TimeSeries_Generic_7k_t',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -844,6 +844,7 @@ _model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_3k'],
         'training': dict(
@@ -854,7 +855,6 @@ _model_descriptions = {
             model_name='TimeSeries_Generic_3k',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -884,6 +884,7 @@ _model_descriptions = {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
             task_type=constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            generic_model=True,
         ),
         'download': model_urls['TimeSeries_Generic_3k_t'],
         'training': dict(
@@ -894,7 +895,6 @@ _model_descriptions = {
             model_name='TimeSeries_Generic_3k_t',
             model_architecture='backbone',
             learning_rate=2e-3,
-            generic_model=True,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
@@ -1374,7 +1374,7 @@ class ModelTraining:
                 '--data-proc-transforms', self.params.data_processing.transforms,
                 '--feat-ext-transform', f'{self.params.feature_extraction.transform}',
 
-                '--generic-model', f'{self.params.training.generic_model}',
+                '--generic-model', f'{self.params.common.generic_model}',
 
                 '--feat-ext-store-dir', f'{self.params.feature_extraction.feat_ext_store_dir}',
                 '--dont-train-just-feat-ext', f'{self.params.feature_extraction.dont_train_just_feat_ext}',
@@ -1495,7 +1495,8 @@ class ModelTraining:
                 '--lis', f'{self.params.training.log_file_path}',
                 '--data-path', f'{data_path}',
                 '--output-dir', f'{self.params.training.training_path_quantization}',
-                '--model-path', f'{model_path}'
+                '--model-path', f'{model_path}',
+                '--generic-model', f'{self.params.common.generic_model}',
                 ]
             # test = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'timeseries_classification', 'test_onnx.py'), __name__, force_import=True)
 
