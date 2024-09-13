@@ -89,14 +89,14 @@ class SimpleTSDataset(Dataset):
 
         if subset in ["validation", "val"]:
             val = kwargs.get('validation_list') if kwargs.get('validation_list') else \
-            glob(os.path.join(self._path, '..', 'annotations', "*val*_list.txt"))[0]
+            glob(os.path.join(os.path.dirname(self._path), 'annotations', "*val*_list.txt"))[0]
             self.logger.info("Loading validation data from {}".format(val))
             self._walker = load_list(val)
         elif subset in ["testing", "test"]:
             try:
-                test_list = glob(os.path.join(self._path, '..', 'annotations', "*test*_list.txt"))[0]
+                test_list = glob(os.path.join(os.path.dirname(self._path), 'annotations', "*test*_list.txt"))[0]
             except IndexError:
-                test_list = glob(os.path.join(self._path, '..', 'annotations', "*file*_list.txt"))[0]
+                test_list = glob(os.path.join(os.path.dirname(self._path), 'annotations', "*file*_list.txt"))[0]
             test = kwargs.get('testing_list', test_list)
 
             self.logger.info("Loading testing data from {}".format(test))
@@ -104,7 +104,7 @@ class SimpleTSDataset(Dataset):
         elif subset in ["training", "train"]:
 
             train = kwargs.get('training_list') if kwargs.get('training_list') else \
-            glob(os.path.join(self._path, '..', 'annotations', "*train*_list.txt"))[0]
+            glob(os.path.join(os.path.dirname(self._path), 'annotations', "*train*_list.txt"))[0]
             self.logger.info("Loading training data from {}".format(train))
             self._walker = load_list(train)
 
