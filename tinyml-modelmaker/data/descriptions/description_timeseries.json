@@ -17,6 +17,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
         "target_module":"timeseries"
       },
       "download":{
@@ -85,7 +86,6 @@
             "model_selection_factor":0
           }
         },
-        "generic_model":true,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -219,6 +219,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
         "target_module":"timeseries"
       },
       "download":{
@@ -292,7 +293,6 @@
             "model_selection_factor":0
           }
         },
-        "generic_model":true,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -426,6 +426,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
         "target_module":"timeseries"
       },
       "download":{
@@ -494,7 +495,6 @@
             "model_selection_factor":2
           }
         },
-        "generic_model":true,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -628,6 +628,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
         "target_module":"timeseries"
       },
       "download":{
@@ -701,7 +702,6 @@
             "model_selection_factor":1
           }
         },
-        "generic_model":true,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -835,6 +835,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":false,
         "target_module":"timeseries"
       },
       "download":{
@@ -908,7 +909,6 @@
             "model_selection_factor":0
           }
         },
-        "generic_model":false,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -1042,6 +1042,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":false,
         "target_module":"timeseries"
       },
       "download":{
@@ -1115,7 +1116,6 @@
             "model_selection_factor":1
           }
         },
-        "generic_model":false,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -1249,6 +1249,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":false,
         "target_module":"timeseries"
       },
       "download":{
@@ -1322,7 +1323,6 @@
             "model_selection_factor":2
           }
         },
-        "generic_model":false,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -1456,6 +1456,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":false,
         "target_module":"timeseries"
       },
       "download":{
@@ -1529,7 +1530,6 @@
             "model_selection_factor":0
           }
         },
-        "generic_model":false,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
@@ -1663,6 +1663,7 @@
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
+        "generic_model":false,
         "target_module":"timeseries"
       },
       "download":{
@@ -1736,7 +1737,6 @@
             "model_selection_factor":1
           }
         },
-        "generic_model":false,
         "project_path":null,
         "dataset_path":null,
         "training_path":null,
