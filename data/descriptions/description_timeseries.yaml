@@ -68,6 +68,7 @@ model_descriptions:
   ArcFault_model_200_t:
     common:
       download_path: ./data/downloads
+      generic_model: false
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -156,7 +157,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: false
       learning_rate: 0.04
       log_file_path: null
       log_summary_regex: null
@@ -239,6 +239,7 @@ model_descriptions:
   ArcFault_model_300_t:
     common:
       download_path: ./data/downloads
+      generic_model: false
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -327,7 +328,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: false
       learning_rate: 0.04
       log_file_path: null
       log_summary_regex: null
@@ -410,6 +410,7 @@ model_descriptions:
   ArcFault_model_700_t:
     common:
       download_path: ./data/downloads
+      generic_model: false
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -498,7 +499,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: false
       learning_rate: 0.04
       log_file_path: null
       log_summary_regex: null
@@ -581,6 +581,7 @@ model_descriptions:
   MotorFault_model_1_t:
     common:
       download_path: ./data/downloads
+      generic_model: false
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -669,7 +670,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: false
       learning_rate: 0.01
       log_file_path: null
       log_summary_regex: null
@@ -752,6 +752,7 @@ model_descriptions:
   MotorFault_model_2_t:
     common:
       download_path: ./data/downloads
+      generic_model: false
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -840,7 +841,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: false
       learning_rate: 0.01
       log_file_path: null
       log_summary_regex: null
@@ -923,6 +923,7 @@ model_descriptions:
   TimeSeries_Generic_3k:
     common:
       download_path: ./data/downloads
+      generic_model: true
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1011,7 +1012,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: true
       learning_rate: 0.002
       log_file_path: null
       log_summary_regex: null
@@ -1090,6 +1090,7 @@ model_descriptions:
   TimeSeries_Generic_3k_t:
     common:
       download_path: ./data/downloads
+      generic_model: true
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1178,7 +1179,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: true
       learning_rate: 0.002
       log_file_path: null
       log_summary_regex: null
@@ -1261,6 +1261,7 @@ model_descriptions:
   TimeSeries_Generic_7k:
     common:
       download_path: ./data/downloads
+      generic_model: true
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1349,7 +1350,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: true
       learning_rate: 0.002
       log_file_path: null
       log_summary_regex: null
@@ -1428,6 +1428,7 @@ model_descriptions:
   TimeSeries_Generic_7k_t:
     common:
       download_path: ./data/downloads
+      generic_model: true
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1516,7 +1517,6 @@ model_descriptions:
       dataset_path: null
       distributed: true
       enable: true
-      generic_model: true
       learning_rate: 0.002
       log_file_path: null
       log_summary_regex: null
