@@ -109,8 +109,8 @@ def create_simple_split(file_list: str, split_list_files: tuple, split_factor: f
         lengths_to_split.extend(split_factor)
         remainder = 1 - sum(split_factor)
 
-    remainder_fraction = remainder / (number_of_splits - 1)
-    [lengths_to_split.append(remainder_fraction) for _ in range(number_of_splits - 1)]
+    remainder_fraction = remainder / (number_of_splits - len(split_factor))
+    [lengths_to_split.append(remainder_fraction) for _ in range(number_of_splits - len(split_factor))]
     # Normalise to split based on integer indices
     lengths_to_split = [int(x*len(list_of_files)) for x in lengths_to_split]
     out_splits = [list_of_files[x - y: x] for x, y in zip(accumulate(lengths_to_split), lengths_to_split)]

@@ -261,7 +261,7 @@ class ModelRunner():
                                 for file in files:
                                     tfp.write(
                                         os.path.join(root, file),
-                                        arcname=os.path.relpath(os.path.join(root, file), os.path.join(inpf_entry, '..')))
+                                        arcname=os.path.relpath(os.path.join(root, file), os.path.dirname(inpf_entry)))
                         else:
                             tfp.write(inpf_entry, arcname=os.path.basename(inpf_entry))
                 #
