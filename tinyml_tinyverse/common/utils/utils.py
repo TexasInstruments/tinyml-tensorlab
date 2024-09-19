@@ -706,7 +706,7 @@ def seed_everything(seed: int):
 
 
 def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, transform,
-                    apex=False, model_ema=None, print_freq=100, phase="", **kwargs):
+                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, **kwargs):
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
@@ -730,7 +730,11 @@ def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, tra
         # TODO: If transform is required
         if transform:
             data = transform(data)
-        output = model(data)  # (n,1,8000) -> (n,35)
+
+        if dual_op:
+            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
+        else:
+            output = model(data)  # (n,1,8000) -> (n,35)
 
         # negative log-likelihood for a tensor of size (batch x 1 x n_output)
         # loss = F.nll_loss(output.squeeze(), target)
@@ -774,7 +778,7 @@ def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, tra
         model_ema.update_parameters(model)
 
 
-def evaluate(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', **kwargs):
+def evaluate(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
@@ -788,7 +792,11 @@ def evaluate(model, criterion, data_loader, device, transform, log_suffix='', pr
             target = target.to(device, non_blocking=True).long()
             if transform:
                 data = transform(data)
-            output = model(data)
+
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
 
             loss = criterion(output.squeeze(), target)
             acc1 = accuracy(output.squeeze(), target, topk=(1,))
@@ -837,7 +845,10 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
             qdq_model_output = model_copy_for_log(example_input)
             model_copy_for_log = model_copy_for_log.convert(output_dequantize=quantization_error_logging)
             int_model_output = model_copy_for_log(example_input)
-            convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output, int_model_output)
+            try:
+                convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output, int_model_output)
+            except TypeError:
+                convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output[0], int_model_output[0])
             logger.info(f"Quantization Convert Diff: {convert_diff_stats}")
 
         # convert the model

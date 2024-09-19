@@ -164,19 +164,14 @@ def main(gpu, args):
     metric.update(torch.Tensor(predicted), ground_truth)
     logger = getLogger("root.main.test_data")
     logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
-
-    confusion_matrix = get_confusion_matrix(torch.Tensor(predicted).type(torch.int64), ground_truth.type(torch.int64),
-                                            num_classes).cpu().numpy()
-    #
-    # logger.info('\n' + '\n'.join(
-    #     [f"Ground Truth:(Class {dataset.inverse_label_map[i]}), Predicted:(Class {dataset.inverse_label_map[j]}): {int(confusion_matrix[i][j])}" for j in
-    #      range(num_classes) for i in range(num_classes)]))
-    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix,
-                                                                      columns=[f"Predicted as: {x}" for x in
-                                                                               dataset.inverse_label_map.values()],
-                                                                      index=[f"Ground Truth: {x}" for x in
-                                                                             dataset.inverse_label_map.values()]),
-                                                         headers="keys", tablefmt='grid')))
+    if len(np.unique(ground_truth)) == 1:
+        logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
+    else:
+        confusion_matrix = get_confusion_matrix(torch.Tensor(predicted).type(torch.int64), ground_truth.type(torch.int64),
+                                                num_classes).cpu().numpy()
+        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
+            confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+            index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
     return
 
 def run(args):
