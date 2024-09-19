@@ -131,7 +131,7 @@ def get_args_parser():
     parser.add_argument('--frame-skip', help="Skip frames while computing FFT", default=1, type=int)
     parser.add_argument('--min-fft-bin', help="Remove DC Component from FFT", default=1, type=int)
     parser.add_argument('--fft-bin-size', help="FFT Bin Size", default=2, type=int)
-    parser.add_argument('--dc-remove', help="Remove DC Component from FFT", default=True, type=bool )
+    parser.add_argument('--dc-remove', help="Remove DC Component from FFT", default=True, type=misc_utils.str_or_bool)
     # parser.add_argument('--num-channel', help="Number of input channels (ex.axis, phase)", default=16, type=int)
     parser.add_argument('--stacking', help="1D/2D1/None", default=None, type=str)
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap", default=0, type=int)
@@ -146,6 +146,7 @@ def get_args_parser():
     parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
     parser.add_argument('--model', default='ArcDet4x16', help='model')
+    parser.add_argument('--dual-op', default=False, help='True if you need model to have FC layer input as secondary output', type=misc_utils.str_or_bool)
     parser.add_argument('--model-config', default=None, help='yaml file indicating model configurations',)
     parser.add_argument('--model-spec', default=None, help='Model Specification. (Used for models not defined in repo)')
     parser.add_argument('--device', default='cuda', help='device')
@@ -239,8 +240,8 @@ def get_args_parser():
     
     parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int, choices=tinyml_torchmodelopt.quantization.TinyMLQuantizationVersion.get_choices(), help="Quantization Aware Training (QAT)")
     parser.add_argument("--quantization-type", default="DEFAULT", help="Actual Quantization Flavour - applies only if quantization is enabled") 
-    parser.add_argument("--quantization-error-logging", default=1, type=bool, help="log the quantization error")
-    
+    parser.add_argument("--quantization-error-logging", default=True, type=misc_utils.str_or_bool, help="log the quantization error")
+
     parser.add_argument("--with-input-batchnorm", default=True, help="onnx opset 18 doesn't export input batchnorm, use this if using TINPU style QAT only")
 
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
@@ -373,7 +374,8 @@ def main(gpu, args):
     # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
     model = models.get_model(
         args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
-        model_spec=args.model_spec, with_input_batchnorm=True if args.with_input_batchnorm in ['True', True] else False) # args.model is a string, how to make it a callable
+        model_spec=args.model_spec, with_input_batchnorm=True if args.with_input_batchnorm in ['True', True] else False,
+        dual_op=args.dual_op) # args.model is a string, how to make it a callable
     if args.generic_model:
         # logger.info("\nModel:\n{}\n".format(model))
         logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
@@ -469,12 +471,12 @@ def main(gpu, args):
         if args.distributed:
             train_sampler.set_epoch(epoch)
         utils.train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
-                              print_freq=args.print_freq, phase=phase, num_classes=num_classes)
+                              print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         lr_scheduler.step()
-        avg_accuracy, avg_f1, avg_conf_matrix = utils.evaluate(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes)
+        avg_accuracy, avg_f1, avg_conf_matrix = utils.evaluate(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         if model_ema:
             avg_accuracy, avg_f1, avg_conf_matrix = utils.evaluate(model_ema, criterion, data_loader_test, device=device, transform=transform,
-                                          log_suffix='EMA', print_freq=args.print_freq, phase=phase)
+                                          log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
         if args.output_dir:
             checkpoint = {
                 'model': model_without_ddp.state_dict(),

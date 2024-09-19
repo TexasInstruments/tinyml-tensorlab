@@ -14,7 +14,7 @@ def git_hash():
 
 def get_version():
     # from version import __version__
-    __version__ = '0.8.0'
+    __version__ = '0.9.0'
     hash = git_hash()
     version_str = __version__ + '+' + hash.strip().decode('ascii') if (hash is not None) else __version__
     return version_str

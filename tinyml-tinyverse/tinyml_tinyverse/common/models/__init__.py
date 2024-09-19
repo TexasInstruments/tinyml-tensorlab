@@ -51,14 +51,14 @@ model_dict = {
 }
 
 
-def get_model(model_name: str, variables, num_classes: int, input_features: int, model_config: str, model_spec: str, with_input_batchnorm: bool):
+def get_model(model_name: str, variables, num_classes: int, input_features: int, model_config: str, model_spec: str, with_input_batchnorm: bool, dual_op: bool):
     logger = getLogger("root.get_model")
     model_config_dict = {}
     if model_config and os.path.exists(model_config):
         logger.info(f"Parsing {model_config} to update {model_name} parameters")
         with open(model_config) as fp:
             model_config_dict = yaml.load(fp, Loader=yaml.CLoader)
-    model_config_dict.update(dict(variables=variables, num_classes=num_classes, with_input_batchnorm=with_input_batchnorm, input_features=input_features))
+    model_config_dict.update(dict(variables=variables, num_classes=num_classes, with_input_batchnorm=with_input_batchnorm, input_features=input_features, dual_op=dual_op))
     if model_name not in model_dict.keys():
         try:
             import tinyml_proprietary_models
