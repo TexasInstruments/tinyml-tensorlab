@@ -105,6 +105,7 @@ def init_params(*args, **kwargs):
             # out_dir=os.getcwd())
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
             with_input_batchnorm=False,
+            dual_op=False,
             properties=[
                 dict(type="group", dynamic=True, name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                 dict(type="group", dynamic=False, name="train_group", label="Training Parameters", default=["training_epochs", "learning_rate"]),

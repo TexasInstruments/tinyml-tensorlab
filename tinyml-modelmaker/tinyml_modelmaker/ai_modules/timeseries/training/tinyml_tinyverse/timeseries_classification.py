@@ -110,9 +110,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'TimeSeries_Generic_AF_7k_t': {
         'common': dict(
@@ -150,9 +148,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
 
     'TimeSeries_Generic_MF_7k': {
@@ -191,9 +187,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'TimeSeries_Generic_MF_7k_t': {
         'common': dict(
@@ -231,9 +225,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
 
     'TimeSeries_Generic_AF_3k': {
@@ -272,9 +264,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'TimeSeries_Generic_AF_3k_t': {
         'common': dict(
@@ -312,9 +302,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
 
     'TimeSeries_Generic_MF_3k': {
@@ -353,9 +341,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'TimeSeries_Generic_MF_3k_t': {
         'common': dict(
@@ -393,9 +379,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
 
     'ArcFault_model_1400': {
@@ -433,9 +417,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'ArcFault_model_1400_t': {
         'common': dict(
@@ -474,7 +456,7 @@ disbanded_model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='afd-b1-0002',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
 
@@ -513,9 +495,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'ArcFault_model_300': {
         'common': dict(
@@ -552,9 +532,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'ArcFault_model_700': {
         'common': dict(
@@ -591,9 +569,7 @@ disbanded_model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'MotorFault_model_1': {
         'common': dict(
@@ -632,7 +608,7 @@ disbanded_model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='mfd-b1-0001',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
     'MotorFault_model_2': {
@@ -672,7 +648,7 @@ disbanded_model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='mfd-b2-0003',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
     'MotorFault_model_3': {
@@ -712,47 +688,7 @@ disbanded_model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='mfd-b2-0003',
-            metric=dict(label_offset_pred=1)
-        )
-    },
-    'MotorFault_model_3_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-        ),
-        'download': model_urls['MotorFault_model_3_t'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_MF_3L',
-            model_name='MotorFault_model_3_t',
-            model_architecture='backbone',
-            learning_rate=0.01,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_3l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
-            target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', accuracy_factor='TBD',
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     accuracy_factor='TBD', model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     accuracy_factor='TBD', model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    accuracy_factor='TBD', model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     accuracy_factor='TBD', model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',
-                                                     accuracy_factor='TBD', model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict(
-            # model_compilation_id='mfd-b2-0004',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
 
@@ -795,9 +731,7 @@ _model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'TimeSeries_Generic_7k_t': {
         'common': dict(
@@ -835,9 +769,7 @@ _model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
 
     'TimeSeries_Generic_3k': {
@@ -876,9 +808,7 @@ _model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
     'TimeSeries_Generic_3k_t': {
         'common': dict(
@@ -916,9 +846,7 @@ _model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
     },
 
     'ArcFault_model_700_t': {
@@ -959,7 +887,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='afd-b1-0002',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
     'ArcFault_model_300_t': {
@@ -1000,7 +928,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='afd-b1-0002',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
     'ArcFault_model_200_t': {
@@ -1041,7 +969,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='afd-b1-0002',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
 
@@ -1083,7 +1011,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='mfd-b1-0002',
-            metric=dict(label_offset_pred=1)
+            
         )
     },
     'MotorFault_model_2_t': {
@@ -1122,10 +1050,44 @@ _model_descriptions = {
                 constants.TRAINING_DEVICE_CUDA: True,
             }
         ),
-        'compilation': dict(
-            # model_compilation_id='mfd-b2-0004',
-            metric=dict(label_offset_pred=1)
-        )
+        'compilation': dict()
+    },
+    'MotorFault_model_3_t': {
+        'common': dict(
+            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
+            task_type=constants.TASK_TYPE_MOTOR_FAULT,
+        ),
+        'download': model_urls['MotorFault_model_3_t'],
+        'training': dict(
+            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
+            with_input_batchnorm=True,
+            training_backend='tinyml_tinyverse',
+            model_training_id='CNN_MF_3L',
+            model_name='MotorFault_model_3_t',
+            model_architecture='backbone',
+            learning_rate=0.01,
+            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_3l.py'),
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
+            target_devices={
+                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', accuracy_factor='TBD',
+                                                      model_selection_factor=None, ),
+                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
+                                                     accuracy_factor='TBD', model_selection_factor=None, ),
+                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
+                                                     accuracy_factor='TBD', model_selection_factor=None, ),
+                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
+                                                    accuracy_factor='TBD', model_selection_factor=None, ),
+                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
+                                                     accuracy_factor='TBD', model_selection_factor=None, ),
+                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',
+                                                     accuracy_factor='TBD', model_selection_factor=None, ),
+            },
+            training_devices={
+                constants.TRAINING_DEVICE_CPU: True,
+                constants.TRAINING_DEVICE_CUDA: True,
+            }
+        ),
+        'compilation': dict()
     },
 }
 
@@ -1139,7 +1101,7 @@ enabled_models_list = [
     # 'ArcFault_model_200', 'ArcFault_model_300', 'ArcFault_model_700',
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t',
     # 'MotorFault_model_1', 'MotorFault_model_2', 'MotorFault_model_3',
-    'MotorFault_model_1_t', 'MotorFault_model_2_t',  # 'MotorFault_model_3_t',
+    'MotorFault_model_1_t', 'MotorFault_model_2_t',  'MotorFault_model_3_t',
 ]
 
 
@@ -1352,6 +1314,7 @@ class ModelTraining:
         device = 'cuda' if self.params.training.num_gpus > 0 else 'cpu'
         # training params
         argv = ['--model', f'{self.params.training.model_training_id}',
+                '--dual-op', f'{self.params.training.dual_op}',
                 '--model-config', f'{self.params.training.model_config}',
                 '--model-spec', f'{self.params.training.model_spec}',
                 # '--weights', f'{self.params.training.pretrained_checkpoint_path}',
