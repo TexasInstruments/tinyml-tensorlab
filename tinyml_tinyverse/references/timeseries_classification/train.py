@@ -67,7 +67,7 @@ import datetime
 import platform
 from logging import getLogger
 import os
-import time
+import timeit
 import random
 import sys
 import pandas as pd
@@ -464,7 +464,7 @@ def main(gpu, args):
     phase = 'QuantTrain' if args.quantization else 'FloatTrain'
 
     logger.info("Start training")
-    start_time = time.time()
+    start_time = timeit.default_timer()
     best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
 
     for epoch in range(args.start_epoch, args.epochs):
@@ -519,7 +519,7 @@ def main(gpu, args):
         example_input = next(iter(data_loader_test))[0]
         utils.export_model(model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version, 
                            quantization=args.quantization, quantization_error_logging=args.quantization_error_logging, example_input=example_input, generic_model=args.generic_model)
-    total_time = time.time() - start_time
+    total_time = timeit.default_timer() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
 
