@@ -70,7 +70,7 @@ import hashlib
 import numbers
 import onnx
 import shutil
-import time
+import timeit
 import torch
 import torch.distributed as dist
 from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score
@@ -153,7 +153,7 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
     logger.info("Loading data")
     dataset_loader = dataset_loader_dict.get(args.dataset_loader)
 
-    st = time.time()
+    st = timeit.default_timer()
     if test_only:
         # datadir is supposed to be test dir
         if args.dataset == 'modelmaker':
@@ -170,12 +170,12 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
             f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
         test_sampler = torch.utils.data.SequentialSampler(dataset_test)
-        logger.info("Took {0:.2f} seconds".format(time.time() - st))
+        logger.info("Took {0:.2f} seconds".format(timeit.default_timer() - st))
 
         return dataset_test, dataset_test, test_sampler, test_sampler
 
     logger.info("Loading training data")
-    st = time.time()
+    st = timeit.default_timer()
     cache_path = _get_cache_path(datadir)
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
@@ -196,10 +196,10 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             logger.info("Saving dataset_train to {}".format(cache_path))
             mkdir(os.path.dirname(cache_path))
             save_on_master((dataset, datadir), cache_path)
-    logger.info("Took {0:.2f} seconds".format(time.time() - st))
+    logger.info("Took {0:.2f} seconds".format(timeit.default_timer() - st))
 
     logger.info("Loading validation data")
-    st = time.time()
+    st = timeit.default_timer()
     cache_path = _get_cache_path(datadir)
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
@@ -221,7 +221,7 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
         #     logger.info("Saving dataset_test to {}".format(cache_path))
         #     utils.mkdir(os.path.dirname(cache_path))
         #     utils.save_on_master((dataset_test, datadir), cache_path)
-    logger.info("Took {:.2f} seconds".format(time.time() - st))
+    logger.info("Took {:.2f} seconds".format(timeit.default_timer() - st))
     logger.info("\nCreating data loaders")
     if args.distributed:
         train_sampler = torch.utils.data.distributed.DistributedSampler(dataset)
@@ -361,8 +361,8 @@ class MetricLogger(object):
         i = 0
         if not header:
             header = ""
-        start_time = time.time()
-        end = time.time()
+        start_time = timeit.default_timer()
+        end = timeit.default_timer()
         iter_time = SmoothedValue(fmt="{avg:.4f}")
         data_time = SmoothedValue(fmt="{avg:.4f}")
         space_fmt = ":" + str(len(str(len(iterable)))) + "d"
@@ -384,9 +384,9 @@ class MetricLogger(object):
             )
         MB = 1024.0 * 1024.0
         for obj in iterable:
-            data_time.update(time.time() - end)
+            data_time.update(timeit.default_timer() - end)
             yield obj
-            iter_time.update(time.time() - end)
+            iter_time.update(timeit.default_timer() - end)
             if print_freq is not None and i % print_freq == 0:
                 eta_seconds = iter_time.global_avg * (len(iterable) - i)
                 eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))
@@ -409,8 +409,8 @@ class MetricLogger(object):
                         )
                     )
             i += 1
-            end = time.time()
-        total_time = time.time() - start_time
+            end = timeit.default_timer()
+        total_time = timeit.default_timer() - start_time
         total_time_str = str(datetime.timedelta(seconds=int(total_time)))
         self.logger.info(f"{header} Total time: {total_time_str}")
 
@@ -722,7 +722,7 @@ def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, tra
     for data, target in metric_logger.log_every(data_loader, print_freq, header):
         # for batch_idx, (data, target) in enumerate(data_loader):
         # logger.info(batch_idx)
-        start_time = time.time()
+        start_time = timeit.default_timer()
         data = data.to(device).float()
         target = target.to(device).long()
 
@@ -763,7 +763,7 @@ def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, tra
         metric_logger.meters['f1'].update(f1_score, n=batch_size)
         # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
         # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
-        metric_logger.meters['samples/s'].update(batch_size / (time.time() - start_time))
+        metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
         '''
         # print training stats
         if batch_idx % log_interval == 0:
