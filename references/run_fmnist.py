@@ -3,10 +3,11 @@ Run inference on a FMNIST ONNX model specified as the argument
 Contributed by Ajay Jayaraj (ajayj@ti.com)
 """
 import sys
-import time
+import timeit
 import argparse
 import numpy as np
 import onnxruntime as ort
+
 
 def get_args():
     parser = argparse.ArgumentParser(description="Run inference with FMNIST ONNX model")
@@ -15,6 +16,7 @@ def get_args():
     args = parser.parse_args()
 
     return args
+
 
 model_name = get_args().model_name
 
@@ -33,15 +35,18 @@ classes = [
 
 INPUT_NAME = "input"
 
-# Use as decorator - @timeit
-def timeit(func):
+
+# Use as decorator - @timethis
+def timethis(func):
     def timed(*args, **kwargs):
-        start = time.time()
+        start = timeit.default_timer()
         result = func(*args, **kwargs)
-        end = time.time()
+        end = timeit.default_timer()
         print('Function', func.__name__, 'time:', round((end - start) * 1000, 4), 'ms')
         return result
+
     return timed
+
 
 #
 # Load the image (Ankle boot)
@@ -59,10 +64,12 @@ ort_session_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_EN
 
 ort_sess = ort.InferenceSession(model_name, ort_session_options)
 
-@timeit
+
+@timethis
 def run_onnxrt(ort_session):
     prediction = ort_session.run(None, {INPUT_NAME: input_image})
     return prediction
+
 
 outputs = run_onnxrt(ort_sess)
 

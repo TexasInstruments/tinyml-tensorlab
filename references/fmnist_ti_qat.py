@@ -11,7 +11,7 @@ Refer to readme.md for instruction to set up environment
 
 
 import os
-import time
+import timeit
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
@@ -139,16 +139,16 @@ def accuracy(output, target, topk=(1,)):
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
 
-def timeit(func):
+def timethis(func):
     def timed(*args, **kwargs):
-        start = time.time()
+        start = timeit.default_timer()
         result = func(*args, **kwargs)
-        end = time.time()
+        end = timeit.default_timer()
         print('Function', func.__name__, 'time:', round((end - start) * 1000, 1), 'ms')
         return result
     return timed
 
-@timeit
+@timethis
 def evaluate(model, criterion, data_loader, neval_batches):
     model.eval()
     top1 = AverageMeter('Acc@1', ':6.2f')
