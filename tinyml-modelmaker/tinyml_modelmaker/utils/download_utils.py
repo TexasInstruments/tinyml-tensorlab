@@ -28,15 +28,16 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
+import copy
+import gzip
 import os
 import shutil
-import urllib
-import gzip
 import tarfile
-import zipfile
-import requests
-import copy
+import urllib
 import warnings
+import zipfile
+
+import requests
 
 from . import misc_utils
 

@@ -28,19 +28,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import os
+import copy
 import datetime
+import os
+
 # import tarfile
 from zipfile import ZipFile
+
 import torch
-import copy
 import yaml
 
-from . import constants
 from ... import utils
-from . import compilation, datasets, training
+from . import compilation, constants, datasets, descriptions, training
 from .params import init_params
-from . import descriptions
 
 
 class ModelRunner():
@@ -111,7 +111,7 @@ class ModelRunner():
             print(f'Run Name: {self.params.common.run_name}')
             print(f'- Model: {self.params.training.model_name}')
             print(f'- TargetDevices & Estimated Inference Times (ms): {performance_infer_time_ms_list}')
-            print(f'- This model can be compiled for the above device(s).')
+            print('- This model can be compiled for the above device(s).')
             print('---------------------------------------------------------------------')
         #
 

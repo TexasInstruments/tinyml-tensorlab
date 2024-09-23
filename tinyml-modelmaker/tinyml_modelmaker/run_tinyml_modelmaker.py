@@ -28,12 +28,12 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import os
-import datetime
-import sys
 import argparse
-import yaml
 import json
+import os
+import sys
+
+import yaml
 
 
 def main(config):
@@ -98,7 +98,7 @@ def main(config):
 
     # finish up
     if model_runner.get_params().training.enable:
-        if not (model_runner.get_params().testing.skip_train in [True, 'True', 'true', 1, '1']):
+        if model_runner.get_params().testing.skip_train not in [True, 'True', 'true', 1, '1']:
             if model_runner.get_params().training.training_path_quantization:
                 print(f'Trained model is at: {model_runner.get_params().training.training_path_quantization}')
             else:

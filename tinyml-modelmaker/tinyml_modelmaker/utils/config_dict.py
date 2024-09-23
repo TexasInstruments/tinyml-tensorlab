@@ -29,7 +29,9 @@
 #################################################################################
 
 import os
+
 import yaml
+
 
 class ConfigDict(dict):
     def __init__(self, input=None, *args, **kwargs):

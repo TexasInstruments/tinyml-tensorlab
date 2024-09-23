@@ -30,12 +30,15 @@
 
 import os
 import shutil
-from tinyml_tinyverse.references.timeseries_classification import train, test_onnx as test
+
+from tinyml_tinyverse.references.timeseries_classification import test_onnx as test
+from tinyml_tinyverse.references.timeseries_classification import train
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+
 import tinyml_modelmaker
 
-from ... import constants
 from ..... import utils
+from ... import constants
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
@@ -1372,7 +1375,7 @@ class ModelTraining:
         #     __name__, force_import=True)
         args = train.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event
-        if not (self.params.testing.skip_train in [True, 'True', 'true', 1, '1']):  # Is user wants to only test their model
+        if self.params.testing.skip_train not in [True, 'True', 'true', 1, '1']:  # Is user wants to only test their model
             if self.params.training.run_quant_train_only in [True, 'True', 'true', 1, '1']:
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
                     argv = argv[:-2]  # Remove --output-dir <output-dir>
@@ -1429,7 +1432,7 @@ class ModelTraining:
                 '--annotation-prefix', f'{self.params.dataset.annotation_prefix}',
                 '--gpus', f'{self.params.training.num_gpus}',
                 '--batch-size', f'{self.params.training.batch_size}',
-                '--distributed', f'0',
+                '--distributed', '0',
                 '--device', f'{device}',
 
                 '--variables', f'{self.params.data_processing.variables}',

@@ -28,11 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import os
 import sys
-
 from . import timeseries
-# from . import audio
 
 
 def get_target_module(backend_name):

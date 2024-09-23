@@ -29,13 +29,11 @@
 #
 #################################################################################
 
-import os
-import sys
-import copy
 import argparse
+import copy
+import os
 import re
-import yaml
-import json
+import sys
 
 
 def run(config):

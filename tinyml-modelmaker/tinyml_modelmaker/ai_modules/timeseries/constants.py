@@ -105,7 +105,7 @@ TARGET_SDK_RELEASE = '05_02_00'
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
 # TODO: Once the links are up add this
-f'''* Tiny ML introduction: https://ti.com/tinyml
+'''* Tiny ML introduction: https://ti.com/tinyml
 * Tiny ML model development information: https://github.com/TexasInstruments/tinyml
 * Tiny ML tools introduction: https://dev.ti.com/tinyml/
 '''

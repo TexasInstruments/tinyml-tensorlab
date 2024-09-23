@@ -37,14 +37,10 @@ from .. import constants
 _model_descriptions = {}
 _training_module_descriptions = {}
 
-
-# edgeai-torchvision
 from .tinyml_tinyverse import timeseries_classification
 
 ## classification
 _model_descriptions.update(timeseries_classification.get_model_descriptions())
-# the detection models in edgeai-mmdetection are superior to edgeai-torchvision, so commenting out these for now.
-#_model_descriptions.update(edgeai_torchvision.detection.get_model_descriptions())
 _training_module_descriptions.update({'timeseries_classification':[constants.TASK_CATEGORY_TS_CLASSIFICATION]})
 
 

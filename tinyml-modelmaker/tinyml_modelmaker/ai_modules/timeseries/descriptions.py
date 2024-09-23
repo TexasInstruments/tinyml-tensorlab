@@ -29,9 +29,10 @@
 #################################################################################
 
 import numbers
-from . import training
-from . import constants
+
 from ... import utils, version
+from . import constants, training
+
 
 def _get_paretto_front_best(xy_list, x_index=0, y_index=1, inverse_relaionship=False):
     xy_list = sorted(xy_list, key=lambda x:x[x_index], reverse=inverse_relaionship)

@@ -29,9 +29,10 @@
 #
 #################################################################################
 
-import datetime
-from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 import os
+
+from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+
 from ... import utils
 from . import constants
 
