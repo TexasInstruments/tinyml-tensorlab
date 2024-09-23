@@ -29,10 +29,12 @@
 #################################################################################
 
 import os
-import shutil
-from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+
 from tinyml_tinyverse.references.common import compilation as compile_scr
+from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+
 import tinyml_modelmaker
+
 from .... import utils
 from ...timeseries import constants
 

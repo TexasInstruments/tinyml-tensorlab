@@ -28,18 +28,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import os
-import platform
-import subprocess
-import sys
+import errno
 import importlib
 import json
-import yaml
-import tqdm
-import errno
+import os
+import platform
 import re
 import shutil
+import subprocess
+import sys
 from logging import getLogger
+
+import tqdm
+import yaml
 
 from . import config_dict
 
@@ -109,7 +110,7 @@ def create_link_or_shortcut(src, dst):
             os.symlink(src, dst)
     except OSError as e:
         if platform.system() in ['Windows']:
-            logger.warning(f"Failed to create symbolic link. Creating a junction instead")
+            logger.warning("Failed to create symbolic link. Creating a junction instead")
             try:
                 subprocess.check_call(['cmd', '/c', 'mklink', '/J', dst, src])
                 logger.info("Junction created: {dst} -> {src}")

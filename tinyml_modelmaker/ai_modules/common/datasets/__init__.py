@@ -28,15 +28,15 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import json
 import os
+
+# import PIL
 import sys
 import warnings
-# import PIL
-import shutil
+from glob import glob
+
 from .... import utils
 from . import dataset_utils
-from glob import glob
 
 
 def get_datasets_list(task_type=None):
@@ -101,7 +101,6 @@ class DatasetHandling:
                     # Everything is as per expectations
                     split_list_file = os.path.join(self.params.dataset.input_data_path, split_name + '_list.txt')
                     # assert False, 'File needs to be present: {}'.format(split_list_file)
-                    pass
                 elif os.path.exists(os.path.join(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, split_name + '_list.txt')):
                     split_list_file = os.path.join(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, split_name + '_list.txt')
                 elif os.path.exists(os.path.join(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')):

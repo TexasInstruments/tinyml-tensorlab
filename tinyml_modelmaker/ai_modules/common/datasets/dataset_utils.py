@@ -28,23 +28,22 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import copy
-import os
-import random
-import glob
 import base64
 import collections
-import re
-
-import numpy as np
+import copy
+import glob
 import json
+import os
+import random
+import re
 from itertools import accumulate
-from random import shuffle, seed
-
+from random import seed, shuffle
 
 # import PIL
 # from PIL import ImageOps
 from xml.etree.ElementTree import Element as ET_Element
+
+import numpy as np
 
 try:
     from defusedxml.ElementTree import parse as ET_parse
@@ -54,6 +53,7 @@ except ImportError:
 from typing import Any, Dict
 
 from .... import utils
+
 
 def create_filelist(input_data_path: str, output_dir: str, ignore_str_list=None) -> str:
     '''
