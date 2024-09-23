@@ -26,11 +26,12 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import sys
-import os
 import importlib
+import os
 import subprocess
-from setuptools import setup, Extension, find_packages
+import sys
+
+from setuptools import find_packages, setup
 
 
 def git_hash():

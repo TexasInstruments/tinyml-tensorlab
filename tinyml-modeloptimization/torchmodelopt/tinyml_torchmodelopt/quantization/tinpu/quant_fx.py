@@ -30,9 +30,14 @@
 #################################################################################
 
 import platform
-import torch
+
 import edgeai_torchmodelopt
-from ..common import TinyMLQuantizationVersion, TinyMLModelQuantFormat, GenericTinyMLQATFxModuleBase
+import torch
+
+from ..common import (
+    GenericTinyMLQATFxModuleBase,
+    TinyMLModelQuantFormat,
+)
 from . import quant_utils
 
 
@@ -82,7 +87,6 @@ class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
 
     def _convert_replacement(self, module, pattern, *args, output_dequantize=False, **kwargs):
         named_modules = dict(module.named_modules())
-        modules_list = list(named_modules.values())
         first_module_with_params = None
         for name_entry, module_entry in named_modules.items():
             if len(list(module_entry.parameters(recurse=False))) > 0:

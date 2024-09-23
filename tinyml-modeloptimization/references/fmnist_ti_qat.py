@@ -12,13 +12,14 @@ Refer to readme.md for instruction to set up environment
 
 import os
 import timeit
+
+import onnx
+import tinyml_torchmodelopt.quantization as tinpu_quantization
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
-import tinyml_torchmodelopt.quantization as tinpu_quantization
-import onnx
 
 # Download training data from open datasets.
 training_data = datasets.FashionMNIST(

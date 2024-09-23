@@ -1,5 +1,3 @@
-import numpy as np
-import edgeai_torchmodelopt.xmodelopt.quantization.v2.quant_fx_base
 import torch
 
 

@@ -40,6 +40,6 @@ python -m pip install --no-input -r requirements/requirements.txt
 python -m pip install --no-input -r requirements/requirements_ti_packages.txt
 
 #echo 'installing pytorch...'
-#python -m pip install --no-input torch torchvision torchaudio
+#python -m pip install --no-input torch
 echo 'installing the pytorch model optimization toolkit...'
 python -m pip install --editable . --use-pep517

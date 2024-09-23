@@ -1,14 +1,8 @@
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Type, Callable
-
-import numpy as np
-import torch
-from torch.ao.quantization.fx.custom_config import (ConvertCustomConfig, PrepareCustomConfig,)
-
-import onnx
-from onnxsim import simplify
 
 import model_quant_utils
-
+import onnx
+import torch
+from onnxsim import simplify
 
 #######################################################################################
 opset_version = 17

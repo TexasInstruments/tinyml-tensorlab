@@ -10,7 +10,7 @@ source ./.venv/bin/activate
 ## Install standard modules
 
 ```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 pip install onnx onnxscript
 pip install tabulate
 ```

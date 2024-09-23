@@ -29,9 +29,8 @@
 #
 #################################################################################
 
-import torch
-from edgeai_torchmodelopt.xmodelopt.quantization.v2 import ModelQuantFormat
 import edgeai_torchmodelopt
+from edgeai_torchmodelopt.xmodelopt.quantization.v2 import ModelQuantFormat
 
 
 class TinyMLQuantizationVersion():
