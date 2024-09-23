@@ -61,28 +61,31 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import re
-from collections import defaultdict, deque, OrderedDict
+import base64
 import copy
 import datetime
-from glob import glob
+import errno
 import hashlib
 import numbers
-import onnx
-import shutil
+import os
+import random
+import re
 import timeit
+from collections import OrderedDict, defaultdict, deque
+from glob import glob
+from logging import getLogger
+
+import numpy as np
+import onnx
+import pandas as pd
 import torch
 import torch.distributed as dist
-from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score
-import errno
-import os
-from logging import getLogger
-import numpy as np
-import random
-import pandas as pd
-from tabulate import tabulate
 from cryptography.fernet import Fernet
-import base64
+from tabulate import tabulate
+from torcheval.metrics.functional import (
+    multiclass_confusion_matrix,
+    multiclass_f1_score,
+)
 
 try:
     from apex import amp
@@ -163,7 +166,6 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             test_list = test_anno[0] if len(test_anno) == 1 and os.path.exists(test_anno[0]) else None
             dataset_test = dataset_loader("test", dataset_dir=args.data_path, validation_list=test_list, **vars(args)).prepare(**vars(args))
         else:
-            # dataset_test = torchvision.datasets.ImageFolder(datadir, val_transform)
             dataset_test = dataset_loader("test", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
         logger.info("Loading Test/Evaluation data")
         logger.info('Test Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join([
@@ -182,9 +184,6 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
         logger.info("Loading dataset_train from {}".format(cache_path))
         dataset, _ = torch.load(cache_path)
     else:
-        auto_augment_policy = getattr(args, "auto_augment", None)
-        random_erase_prob = getattr(args, "random_erase", 0.0)
-
         if args.dataset == 'modelmaker':
             train_folders = os.path.normpath(datadir).split(os.sep)
             train_anno = glob(os.path.join(os.sep.join(train_folders[:-1]), 'annotations', f'{args.annotation_prefix}_train*_list.txt'))

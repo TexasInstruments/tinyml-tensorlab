@@ -1,6 +1,7 @@
 import os
 import subprocess
-from setuptools import setup, Extension, find_packages
+
+from setuptools import find_packages, setup
 
 
 def git_hash():

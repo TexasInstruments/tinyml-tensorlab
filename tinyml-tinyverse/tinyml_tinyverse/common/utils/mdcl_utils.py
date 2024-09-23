@@ -28,19 +28,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import os
-import sys
-import yaml
 import atexit
+import datetime
 import getpass
 import logging
-import datetime
+import os
 import pathlib
 import platform
+import sys
 import traceback
-from time import localtime, strftime
 from collections import defaultdict
+from time import localtime, strftime
 
+import yaml
 
 try:
     import textwrap

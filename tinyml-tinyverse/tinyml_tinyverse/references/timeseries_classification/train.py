@@ -62,31 +62,33 @@
 #################################################################################
 
 
-from argparse import ArgumentParser
 import datetime
-import platform
-from logging import getLogger
 import os
-import timeit
+import platform
 import random
 import sys
-import pandas as pd
+import timeit
+from argparse import ArgumentParser
+from logging import getLogger
+
 import numpy as np
-from tabulate import tabulate
+import pandas as pd
+import tinyml_torchmodelopt
+
 # Torch Modules
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset
 import torchinfo
-# Tiny ML TinyVerse Modules
-from tinyml_tinyverse.common.utils import utils, misc_utils
-from tinyml_tinyverse.common.utils.mdcl_utils import command_display, Logger, create_dir
-from tinyml_tinyverse.common.datasets import *
-from tinyml_tinyverse.common import models
 from edgeai_torchmodelopt.xnn.utils import is_url_or_file, load_weights
-import tinyml_torchmodelopt
+from tabulate import tabulate
 
-from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
+from tinyml_tinyverse.common import models
+from tinyml_tinyverse.common.datasets import *
+
+# Tiny ML TinyVerse Modules
+from tinyml_tinyverse.common.utils import misc_utils, utils
+from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
+
 dataset_loader_dict = {'SimpleTSDataset': SimpleTSDataset, 'ArcFaultDataset': ArcFaultDataset, 'MotorFaultDataset': MotorFaultDataset}
 
 
@@ -310,7 +312,7 @@ def main(gpu, args):
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
         args.output_dir = os.path.join('.', 'data', 'checkpoints', 'classification', output_folder, args.model, args.date)
     utils.mkdir(args.output_dir)
-    log_file = os.path.join(args.output_dir, f'run.log')
+    log_file = os.path.join(args.output_dir, 'run.log')
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True if args.quantization else False, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)

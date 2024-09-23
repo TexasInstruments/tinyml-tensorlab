@@ -28,10 +28,11 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import copy
 import collections
-import yaml
+import copy
+
 import torch.nn as nn
+import yaml
 
 from . import tinynn
 
