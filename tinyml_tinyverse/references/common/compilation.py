@@ -28,17 +28,20 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-from argparse import ArgumentParser, Namespace, BooleanOptionalAction
-from glob import glob
-from jinja2 import Environment, FileSystemLoader
-from logging import getLogger
-import numpy as np
 import os
+from argparse import ArgumentParser, BooleanOptionalAction, Namespace
+from glob import glob
+from logging import getLogger
+
+import numpy as np
 import onnxruntime
-from tinyml_tinyverse.common.compilation import default_tvm_args
-from tinyml_tinyverse.common.utils import utils, misc_utils
-from tinyml_tinyverse.common.utils.mdcl_utils import command_display, Logger
+from jinja2 import Environment, FileSystemLoader
 from tvm.driver.tvmc.compiler import drive_compile
+
+from tinyml_tinyverse.common.compilation import default_tvm_args
+from tinyml_tinyverse.common.utils import misc_utils, utils
+from tinyml_tinyverse.common.utils.mdcl_utils import Logger
+
 np.set_printoptions(threshold=np.inf)
 
 

@@ -33,7 +33,6 @@ import traceback
 from logging import getLogger
 
 from ..utils import misc_utils
-
 from .generic_models import *
 
 # from .kilby_models import *

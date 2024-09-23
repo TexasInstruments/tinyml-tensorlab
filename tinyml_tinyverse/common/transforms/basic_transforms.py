@@ -29,6 +29,7 @@
 #################################################################################
 import numpy as np
 
+
 def SimpleWindow(x, window_size=100, stride=50, keep_short_tails=False):
     # if keep_short_tails is set to True, the slices shorter than window_size at the end of the result will be kept
     # length = x.size(0)

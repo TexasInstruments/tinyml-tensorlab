@@ -29,8 +29,9 @@
 #################################################################################
 
 import yaml
-from .generic_model_spec import *
+
 from ..utils import py_utils
+from .generic_model_spec import *
 
 
 class CNN_TS_GEN_BASE_3K(GenericModelWithSpec):

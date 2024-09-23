@@ -29,23 +29,26 @@
 #################################################################################
 
 
-from argparse import ArgumentParser
 import datetime
-from logging import getLogger
-import numpy as np
 import os
+import platform
+from argparse import ArgumentParser
+from logging import getLogger
+
+import numpy as np
+import onnxruntime as ort
 import pandas as pd
 import torch
-import onnxruntime as ort
-from tabulate import tabulate
 import torcheval
-import platform
+from tabulate import tabulate
+
+from tinyml_tinyverse.common.datasets import *
 
 # Tiny ML TinyVerse Modules
-from tinyml_tinyverse.common.utils import utils, misc_utils
-from tinyml_tinyverse.common.utils.mdcl_utils import command_display, Logger, create_dir
-from tinyml_tinyverse.common.datasets import *
+from tinyml_tinyverse.common.utils import misc_utils, utils
+from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
+
 dataset_loader_dict = {'SimpleTSDataset': SimpleTSDataset, 'ArcFaultDataset': ArcFaultDataset, 'MotorFaultDataset': MotorFaultDataset}
 
 
@@ -107,7 +110,7 @@ def main(gpu, args):
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
         args.output_dir = os.path.join('.', 'data', 'checkpoints', 'classification', output_folder, args.model, args.date)
     utils.mkdir(args.output_dir)
-    log_file = os.path.join(args.output_dir, f'run.log')
+    log_file = os.path.join(args.output_dir, 'run.log')
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)

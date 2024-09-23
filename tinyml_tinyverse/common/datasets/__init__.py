@@ -1,1 +1,2 @@
-from .timeseries_dataset import SimpleTSDataset, ArcFaultDataset, MotorFaultDataset
+from .timeseries_dataset import ArcFaultDataset, MotorFaultDataset, SimpleTSDataset
+
