@@ -29,9 +29,8 @@
 #
 #################################################################################
 
+from . import generic, tinpu
 from .common import *
-from . import generic
-from . import tinpu
-
 from .generic import GenericTinyMLQATFxModule
 from .tinpu import TINPUTinyMLQATFxModule
+

@@ -1,12 +1,10 @@
 
+import edgeai_torchmodelopt
+import model_quant_utils
 import numpy as np
 import torch
 from torch.ao.quantization import QuantType
 from torch.ao.quantization.quantize_fx import ConvertCustomConfig
-
-import edgeai_torchmodelopt
-
-import model_quant_utils
 
 
 class CustomQuantizedBatchNorm2d(torch.nn.Module):

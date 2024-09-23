@@ -2,9 +2,10 @@
 Run inference on a FMNIST ONNX model specified as the argument
 Contributed by Ajay Jayaraj (ajayj@ti.com)
 """
+import argparse
 import sys
 import timeit
-import argparse
+
 import numpy as np
 import onnxruntime as ort
 

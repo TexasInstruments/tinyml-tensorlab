@@ -1,5 +1,5 @@
-import onnx
 import numpy as np
+import onnx
 
 
 def parse_tensor_shape(tensor_proto):
