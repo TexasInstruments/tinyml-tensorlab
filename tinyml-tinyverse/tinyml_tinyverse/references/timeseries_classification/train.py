@@ -403,8 +403,6 @@ def main(gpu, args):
     model.to(device)
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
     # criterion = nn.NLLLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.1)
     opt_name = args.opt.lower()
     if opt_name.startswith("sgd"):
         optimizer = torch.optim.SGD(
@@ -414,7 +412,9 @@ def main(gpu, args):
         optimizer = torch.optim.RMSprop(model.parameters(), lr=args.lr, momentum=args.momentum,
                                         weight_decay=args.weight_decay, eps=0.0316, alpha=0.9)
     else:
-        raise RuntimeError("Invalid optimizer {}. Only SGD and RMSprop are supported.".format(args.opt))
+        logger.warning("Invalid optimizer {}. Only SGD and RMSprop, Adam are supported. Defaulting to Adam".format(args.opt))
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+
 
     args.lr_scheduler = args.lr_scheduler.lower()
     if args.lr_scheduler == 'steplr':
