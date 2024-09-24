@@ -35,11 +35,11 @@ import os
 # import tarfile
 from zipfile import ZipFile
 
-import torch
+# import torch
 import yaml
 
 from ... import utils
-from . import compilation, constants, datasets, descriptions, training
+from . import constants, datasets, descriptions
 from .params import init_params
 
 
@@ -49,7 +49,7 @@ class ModelRunner():
         params = init_params(*args, **kwargs)
         # set the checkpoint download folder
         # (for the models that are downloaded using torch.hub eg. mmdetection uses that)
-        torch.hub.set_dir(os.path.join(params.common.download_path, 'pretrained', 'torch', 'hub'))
+        # torch.hub.set_dir(os.path.join(params.common.download_path, 'pretrained', 'torch', 'hub'))
         return params
 
     def __init__(self, *args, verbose=True, **kwargs):
@@ -153,6 +153,7 @@ class ModelRunner():
         #####################################################################
         # prepare model training
         if self.params.training.enable:
+            from . import training
             self.training_target_module = training.get_target_module(self.params.training.training_backend,
                                                                   self.params.common.task_category)
             self.model_training = self.training_target_module.ModelTraining(self.params)
@@ -162,8 +163,10 @@ class ModelRunner():
         # prepare for model compilation
         # TODO : Uncomment below lines after adding compilation/tinyml_benchmark.py
         # self.model_compilation = tinyml_modelmaker.ai_modules.common.compilation.tinyml_benchmark.ModelCompilation(self.params)
-        self.model_compilation = compilation.tinyml_benchmark.ModelCompilation(self.params)
-        self.params.update(self.model_compilation.get_params())
+        if self.params.compilation.enable:
+            from . import compilation
+            self.model_compilation = compilation.tinyml_benchmark.ModelCompilation(self.params)
+            self.params.update(self.model_compilation.get_params())
 
         # write out the description of the current run
         run_params_file = self.write_status_file()
