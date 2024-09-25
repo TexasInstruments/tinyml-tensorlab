@@ -85,9 +85,7 @@ def main(config):
     params = params.update(model_description).update(dataset_preset_description).update(feature_extraction_preset_description).update(compilation_preset_description).update(config)
 
     # create the runner
-    model_runner = ai_target_module.runner.ModelRunner(
-        params
-    )
+    model_runner = ai_target_module.runner.ModelRunner(params)
 
     # prepare
     run_params_file = model_runner.prepare()
@@ -95,16 +93,6 @@ def main(config):
 
     # run
     model_runner.run()
-
-    # finish up
-    if model_runner.get_params().training.enable:
-        if model_runner.get_params().testing.skip_train not in [True, 'True', 'true', 1, '1']:
-            if model_runner.get_params().training.training_path_quantization:
-                print(f'Trained model is at: {model_runner.get_params().training.training_path_quantization}')
-            else:
-                print(f'Trained model is at: {model_runner.get_params().training.training_path}')
-    if model_runner.get_params().compilation.enable:
-        print(f'Compiled model is at: {model_runner.get_params().compilation.compilation_path}')
     return True
 
 
