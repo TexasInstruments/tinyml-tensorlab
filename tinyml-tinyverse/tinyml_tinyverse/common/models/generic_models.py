@@ -31,7 +31,7 @@
 import yaml
 
 from ..utils import py_utils
-from .generic_model_spec import *
+from .generic_model_spec import GenericModelWithSpec
 
 
 class CNN_TS_GEN_BASE_3K(GenericModelWithSpec):

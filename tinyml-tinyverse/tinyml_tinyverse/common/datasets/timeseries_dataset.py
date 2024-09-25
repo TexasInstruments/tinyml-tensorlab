@@ -450,7 +450,7 @@ class MotorFaultDataset(SimpleTSDataset):
     def __fft_bin(self, s, fs, nbins, no_dc):
         f, fft1 = self.__fft_oneside(s, fs)
         n_fft = len(fft1)
-        if (no_dc == True):
+        if no_dc:
             fft1 = fft1[1:]  # skip the first DC bin
             f = f[1:]
             nSamples = (n_fft - 1) // nbins
@@ -506,7 +506,7 @@ class MotorFaultDataset(SimpleTSDataset):
                     vs_copy = vs.copy()
                     # Select pre-processing methods
                     if ('RAW' in self.transforms):
-                        if (self.dc_remove == True):
+                        if self.dc_remove:
                             vs = vs - np.sum(vs) // len(vs)  # -np.mean(vs)
                         vs_m = list(vs)
                     elif ('FFTBIN' in self.transforms):

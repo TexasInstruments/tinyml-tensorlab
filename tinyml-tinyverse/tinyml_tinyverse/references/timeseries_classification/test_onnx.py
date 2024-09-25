@@ -42,7 +42,7 @@ import torch
 import torcheval
 from tabulate import tabulate
 
-from tinyml_tinyverse.common.datasets import *
+from tinyml_tinyverse.common.datasets import SimpleTSDataset, ArcFaultDataset, MotorFaultDataset
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils
@@ -138,10 +138,10 @@ def main(gpu, args):
         dataset, batch_size=args.batch_size,
         sampler=train_sampler, num_workers=args.workers, pin_memory=True,
         collate_fn=utils.collate_fn)
-    data_loader_test = torch.utils.data.DataLoader(
-        dataset_test, batch_size=args.batch_size,
-        sampler=test_sampler, num_workers=args.workers, pin_memory=True,
-        collate_fn=utils.collate_fn, )
+    # data_loader_test = torch.utils.data.DataLoader(
+    #     dataset_test, batch_size=args.batch_size,
+    #     sampler=test_sampler, num_workers=args.workers, pin_memory=True,
+    #     collate_fn=utils.collate_fn, )
     logger.info(f"Loading ONNX model: {args.model_path}")
     if not args.generic_model:
         utils.decrypt(args.model_path, utils.get_crypt_key())

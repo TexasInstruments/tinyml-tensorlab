@@ -41,7 +41,7 @@ import torch.nn
 # from torch.nn import Flatten
 
 
-__all__ = ['IdentityLayer', 'ConvLayer', 'BatchNormLayer', 'ReLULayer', 'MaxPoolLayer',
+__all__ = ['IdentityLayer', 'ConvLayer', 'BatchNormLayer', 'ReLULayer', 'MaxPoolLayer', 'AvgPoolLayer',
            'AdaptiveAvgPoolLayer', 'LinearLayer', 'ConvBNReLULayer', 'ReshapeLayer']
 
 
@@ -121,6 +121,27 @@ def MaxPoolLayer(kernel_size, padding=None, stride=1, input_tensor_size=None, di
                                                  kernel_size=kernel_size, dilation=dilation,
                                                  padding=padding, stride=stride, **kwargs)
         return layer, output_tensor_size
+
+
+def AvgPoolLayer(kernel_size, padding=None, stride=1, input_tensor_size=None, dilation=1, **kwargs):
+    assert isinstance(kernel_size, tuple) and len(kernel_size) == 2, 'kernel_size must be a tuple of size 2'
+    if padding is None:
+        padding = tuple([k // 2 for k in kernel_size])
+    elif isinstance(padding, int):
+        padding = (padding, 0)
+    #
+    if isinstance(stride, int):
+        stride = (stride, 1)
+    #
+    if isinstance(dilation, int):
+        dilation = (dilation, 1)
+    #
+    layer = torch.nn.AvgPool2d(kernel_size=kernel_size, padding=padding, stride=stride, dilation=dilation, **kwargs)
+    output_tensor_size = compute_output_size(type='AvgPoolLayer', input_tensor_size=input_tensor_size,
+                                             kernel_size=kernel_size, dilation=dilation,
+                                             padding=padding, stride=stride, **kwargs)
+    return layer, output_tensor_size
+
 
 
 def ConvBNReLULayer(in_channels, out_channels, kernel_size, stride, padding=None, dilation=1, input_tensor_size=None, **kwargs):

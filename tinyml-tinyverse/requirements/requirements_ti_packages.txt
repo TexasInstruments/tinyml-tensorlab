@@ -1,3 +1,3 @@
 git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@main#subdirectory=torchmodelopt
-https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.2.0-cp310-cp310-linux_x86_64.whl
-# https://artifactory.itg.ti.com/artifactory/generic-epd-sdto-codegen-local/tvm/mcu/ti_mcu_nnc-1.3.0rc3-cp310-cp310-linux_x86_64.whl
+https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.3.0rc4-cp310-cp310-linux_x86_64.whl
+# https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.3.0rc4-cp310-cp310-win_amd64.whl # --> Use this for Windows
