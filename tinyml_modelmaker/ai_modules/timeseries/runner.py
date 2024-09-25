@@ -176,6 +176,9 @@ class ModelRunner():
 
         # actual model training
         if self.params.training.enable:
+            # from ...version import __version__
+            # with open(self.params.training.log_file_path, 'a') as lfp:
+            #     lfp.write(f'\nModelmaker version: {__version__}\n')
             self.model_training.clear()
             self.model_training.run()
             # remove special characters
@@ -200,6 +203,11 @@ class ModelRunner():
                     self.params.training.tspa_license_path
                 ]
             self.package_trained_model(model_training_package_files, self.params.training.model_packaged_path)
+            if self.params.testing.skip_train not in [True, 'True', 'true', 1, '1']:
+                if self.params.training.training_path_quantization:
+                    print(f'\nTrained model is at: {self.params.training.training_path_quantization}\n')
+                else:
+                    print(f'\nTrained model is at: {self.params.training.training_path}\n')
             # we are done with training
             with open(self.params.training.log_file_path, 'a') as lfp:
                 lfp.write('\nSUCCESS: ModelMaker - Training completed.')
@@ -209,16 +217,19 @@ class ModelRunner():
         #####################################################################
         # actual model compilation
         if self.params.compilation.enable:
+            # from ...version import __version__
+            # with open(self.params.compilation.log_file_path, 'a') as lfp:
+            #     lfp.write(f'\nModelmaker version: {__version__}\n')
             self.model_compilation.clear()
             self.model_compilation.run()
             os.makedirs(self.params.compilation.model_compiled_path, exist_ok=True)
-            with open(self.params.compilation.log_file_path, 'a') as lfp:
-                lfp.write('\nSUCCESS: ModelMaker - Compilation completed.')
-            # print(self.params.compilation.log_file_path)
             model_compilation_package_files = [os.path.join(self.params.compilation.compilation_path, 'artifacts'),
                                                self.params.compilation.tspa_license_path]
             self.package_trained_model(model_compilation_package_files, self.params.compilation.model_packaged_path)
-        #
+            print(f'Compiled model is at: {self.params.compilation.compilation_path}')
+            with open(self.params.compilation.log_file_path, 'a') as lfp:
+                lfp.write('\nSUCCESS: ModelMaker - Compilation completed.')
+
         return self.params
 
     def get_params(self):
