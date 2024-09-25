@@ -317,6 +317,8 @@ def main(gpu, args):
     # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)
     logger = getLogger("root.main")
+    from ..version import get_version_str
+    logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
     logger.info("Script: {}".format(os.path.relpath(__file__)))
 
     # if args.quantization and args.store_feat_ext_data:

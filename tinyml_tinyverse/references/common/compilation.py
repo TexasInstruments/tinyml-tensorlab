@@ -278,6 +278,8 @@ def main(args):
     # logger = command_display(args.lis or os.path.join(args.output_dir, 'compilation.lis'), args.DEBUG)
     logger = Logger(log_file=args.lis or os.path.join(args.output_dir, 'compilation.lis'),
                     DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)
+    from ..version import get_version_str
+    logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
     logger.info("Script: {}".format(os.path.relpath(__file__)))
     logger.info(args)
     args.model_format = None
