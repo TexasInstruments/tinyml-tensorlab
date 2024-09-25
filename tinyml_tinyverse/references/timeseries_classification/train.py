@@ -83,7 +83,7 @@ from edgeai_torchmodelopt.xnn.utils import is_url_or_file, load_weights
 from tabulate import tabulate
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import *
+from tinyml_tinyverse.common.datasets import SimpleTSDataset, ArcFaultDataset, MotorFaultDataset
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils

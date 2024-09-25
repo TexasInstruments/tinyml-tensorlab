@@ -38,7 +38,7 @@ import onnxruntime
 from jinja2 import Environment, FileSystemLoader
 from tvm.driver.tvmc.compiler import drive_compile
 
-from tinyml_tinyverse.common.compilation import default_tvm_args
+from tinyml_tinyverse.common.compilation.tvm_input_config import default_tvm_args
 from tinyml_tinyverse.common.utils import misc_utils, utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 
@@ -276,7 +276,8 @@ def main(args):
     # if ret_code:
     #     raise Exception(f"Process failed with return code {ret_code}")
     # logger = command_display(args.lis or os.path.join(args.output_dir, 'compilation.lis'), args.DEBUG)
-    logger = Logger(log_file=args.lis or os.path.join(args.output_dir, 'compilation.lis'), DEBUG=args.DEBUG, name="root", append_log=False, console_log=True)
+    logger = Logger(log_file=args.lis or os.path.join(args.output_dir, 'compilation.lis'),
+                    DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)
     logger.info("Script: {}".format(os.path.relpath(__file__)))
     logger.info(args)
     args.model_format = None

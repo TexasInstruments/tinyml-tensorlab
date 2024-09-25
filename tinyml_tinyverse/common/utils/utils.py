@@ -449,7 +449,7 @@ def accuracy(output, target, topk=(1,)):
             # this can crash if num classes is less than maxk.
             # so put in try except
             _, pred = output.topk(maxk, 1, True, True)
-        except:
+        except Exception:
             maxk = output.size()[-1]
             _, pred = output.topk(maxk, 1, True, True)
 
