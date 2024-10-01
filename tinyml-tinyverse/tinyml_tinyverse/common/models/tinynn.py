@@ -136,7 +136,7 @@ def AvgPoolLayer(kernel_size, padding=None, stride=1, input_tensor_size=None, di
     if isinstance(dilation, int):
         dilation = (dilation, 1)
     #
-    layer = torch.nn.AvgPool2d(kernel_size=kernel_size, padding=padding, stride=stride, dilation=dilation, **kwargs)
+    layer = torch.nn.AvgPool2d(kernel_size=kernel_size, padding=padding, stride=stride, **kwargs)
     output_tensor_size = compute_output_size(type='AvgPoolLayer', input_tensor_size=input_tensor_size,
                                              kernel_size=kernel_size, dilation=dilation,
                                              padding=padding, stride=stride, **kwargs)

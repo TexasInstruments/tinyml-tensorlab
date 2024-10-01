@@ -318,12 +318,14 @@ class ArcFaultDataset(SimpleTSDataset):
         self.sequence_window = self.feature_size
 
         self.feature_extraction_params['frame_size'] = self.frame_size
+        self.feature_extraction_params['fft_stages'] = int(np.log2(self.frame_size))
         self.feature_extraction_params['feature_size_per_frame'] = self.feature_size_per_frame
         self.feature_extraction_params['num_frame_concat'] = self.num_frame_concat
         self.feature_extraction_params['feature_size'] = self.feature_size
         self.feature_extraction_params['frame_skip'] = self.frame_skip
         self.feature_extraction_params['min_fft_bin'] = self.min_fft_bin
         self.feature_extraction_params['fft_bin_size'] = self.fft_bin_size
+        self.feature_extraction_params['nn_out_size'] = len(self.classes)
 
         for transform in self.transforms:
             if 'FFT' in transform:
@@ -416,15 +418,17 @@ class MotorFaultDataset(SimpleTSDataset):
         self.fs = kwargs.get('fs', 1)  # not used
 
         self.feature_extraction_params['frame_size'] = self.frame_size
+        self.feature_extraction_params['fft_stages'] = int(np.log2(self.frame_size))
         self.feature_extraction_params['feature_size_per_frame'] = self.feature_size_per_frame
         self.feature_extraction_params['num_frame_concat'] = self.num_frame_concat
         self.feature_extraction_params['dc_remove'] = int(self.dc_remove)
-        self.feature_extraction_params['ch'] = self.ch
-        self.feature_extraction_params['wl'] = self.wl
+        self.feature_extraction_params['stacking_channels'] = self.ch
+        self.feature_extraction_params['stacking_frame_width'] = self.wl
         self.feature_extraction_params['hl'] = self.hl
         self.feature_extraction_params['offset'] = self.offset
         self.feature_extraction_params['scale'] = self.scale
         self.feature_extraction_params['fs'] = self.fs
+        self.feature_extraction_params['nn_out_size'] = len(self.classes)
 
         for transform in self.transforms:
             if 'FFT' in transform:
