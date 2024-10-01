@@ -30,14 +30,11 @@
 #################################################################################
 
 import platform
-
-import edgeai_torchmodelopt
 import torch
 
-from ..common import (
-    GenericTinyMLQATFxModuleBase,
-    TinyMLModelQuantFormat,
-)
+import edgeai_torchmodelopt
+
+from ..common import TinyMLQConfigFormat, GenericTinyMLQATFxModuleBase
 from . import quant_utils
 
 
@@ -52,22 +49,22 @@ class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
         #
         super().__init__(*args, qconfig_type=qconfig_type, backend='fbgemm' if platform.system() in ['Windows'] else 'qnnpack', **kwargs)
 
-    def convert(self, *args, model_quant_format=TinyMLModelQuantFormat.TINPU_INT_MODEL, output_dequantize=False, **kwargs):
+    def convert(self, *args, model_qconfig_format=TinyMLQConfigFormat.TINPU_INT_MODEL, output_dequantize=False, **kwargs):
         # first convert the model to int
-        super().convert(*args, **kwargs)
+        super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
         _convert_replacement_func = lambda module, pattern, *largs, **lkwargs: \
             self._convert_replacement(module, pattern, *largs, output_dequantize=output_dequantize, **lkwargs)
 
         # then apply the transformation to required output format
-        if model_quant_format == TinyMLModelQuantFormat.TINPU_INT_MODEL:
+        if model_qconfig_format == TinyMLQConfigFormat.TINPU_INT_MODEL:
             self.module = edgeai_torchmodelopt.xmodelopt.surgery.v2.convert_to_lite_fx(self.module,
-                                    replacement_dict={'replace_types1': _convert_replacement_func})
+                                    replacement_dict={'tinyml_modelopt_quant_replace_types': {'quant_replace_types':_convert_replacement_func}})
         #
         return self
 
-    def export(self, *args, model_quant_format=TinyMLModelQuantFormat.TINPU_INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
+    def export(self, *args, model_qconfig_format=TinyMLQConfigFormat.TINPU_INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
         skipped_optimizers = skipped_optimizers or ['fuse_add_bias_into_conv', 'eliminate_nop_with_unit']
-        super().export(*args, model_quant_format=model_quant_format, simplify=simplify,
+        super().export(*args, model_qconfig_format=model_qconfig_format, simplify=simplify,
                        skipped_optimizers=skipped_optimizers, **kwargs)
 
     def measure_stats(self, float_output, quant_output):

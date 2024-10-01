@@ -29,8 +29,9 @@
 #
 #################################################################################
 
+
+from edgeai_torchmodelopt.xmodelopt.quantization.v2 import QConfigFormat
 import edgeai_torchmodelopt
-from edgeai_torchmodelopt.xmodelopt.quantization.v2 import ModelQuantFormat
 
 
 class TinyMLQuantizationVersion():
@@ -47,9 +48,9 @@ class TinyMLQuantizationVersion():
         return {v:k for k,v in cls.__dict__.items() if not k.startswith("__")}
 
 
-class TinyMLModelQuantFormat(ModelQuantFormat):
+class TinyMLQConfigFormat(QConfigFormat):
     TINPU_INT_MODEL = "TINPU_INT_MODEL"
-    _NUM_FORMATS_ = ModelQuantFormat._NUM_FORMATS_ + 1
+    _NUM_FORMATS_ = QConfigFormat._NUM_FORMATS_ + 1
 
 
 class GenericTinyMLQATFxModuleBase(edgeai_torchmodelopt.xmodelopt.quantization.v2.QATFxModule):
