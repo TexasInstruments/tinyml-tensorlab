@@ -30,8 +30,8 @@
 #################################################################################
 
 
-from ..common import GenericTinyMLQATFxModuleBase, TinyMLModelQuantFormat
-
+from ..common import TinyMLQConfigFormat, GenericTinyMLQATFxModuleBase
+    
 
 class GenericTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
     def __init__(self, model, *args, qconfig_type=None,  **kwargs):
@@ -40,8 +40,8 @@ class GenericTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
         # but activation qscheme=torch.per_tensor_symmetric stays as QDQ even when using onnxruntime optimization
         super().__init__(model, *args, qconfig_type=qconfig_type, **kwargs)
 
-    def convert(self, *args, model_quant_format=TinyMLModelQuantFormat.INT_MODEL, **kwargs):
-        return super().convert(*args, model_quant_format=model_quant_format, **kwargs)
+    def convert(self, *args, model_qconfig_format=TinyMLQConfigFormat.INT_MODEL, **kwargs):
+        return super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
 
-    def export(self, *args, model_quant_format=TinyMLModelQuantFormat.INT_MODEL, **kwargs):
-        super().export(*args, model_quant_format=model_quant_format, **kwargs)
+    def export(self, *args, model_qconfig_format=TinyMLQConfigFormat.INT_MODEL, **kwargs):
+        super().export(*args, model_qconfig_format=model_qconfig_format, **kwargs)
