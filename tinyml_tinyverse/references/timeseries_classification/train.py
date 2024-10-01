@@ -301,9 +301,18 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
     user_input_config_h = os.path.join(golden_vectors_dir, 'user_input_config.h')
     logger.info("Creating test_vectors.c at: {}".format(test_vectors_c))
     with open(user_input_config_h, 'w') as fp:
+        fp.write("#ifndef INPUT_CONFIG_H_\n")
+        fp.write("#define INPUT_CONFIG_H_\n")
         fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
         fp.write('\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()]))
+        fp.write("\n#endif /* INPUT_CONFIG_H_ */\n")
     logger.info("Creating user_input_config.h at: {}".format(user_input_config_h))
+
+    model_auh_h = os.path.join(golden_vectors_dir, 'model_aux.h')
+    class_list_ordered = ', '.join([f'"{dataset.inverse_label_map.get(label_index)}"' for label_index in sorted(dataset.inverse_label_map.keys())])
+    with open(model_auh_h, 'w') as fp:
+        fp.write(f'const NUMBER_OF_CLASSES = {len(dataset.classes)};\n')
+        fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
 
 
 def main(gpu, args):
