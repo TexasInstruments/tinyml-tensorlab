@@ -223,8 +223,10 @@ class ModelRunner():
             self.model_compilation.clear()
             self.model_compilation.run()
             os.makedirs(self.params.compilation.model_compiled_path, exist_ok=True)
-            model_compilation_package_files = [os.path.join(self.params.compilation.compilation_path, 'artifacts'),
-                                               self.params.compilation.tspa_license_path]
+            model_compilation_package_files = [
+                os.path.join(self.params.compilation.compilation_path, 'artifacts'),
+                self.params.compilation.tspa_license_path,
+                os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors', 'model_aux.h'),]
             self.package_trained_model(model_compilation_package_files, self.params.compilation.model_packaged_path)
             print(f'Compiled model is at: {self.params.compilation.compilation_path}')
             with open(self.params.compilation.log_file_path, 'a') as lfp:
