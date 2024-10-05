@@ -48,18 +48,18 @@ sudo apt install -y binutils:i386
 
 #################################################################################
 # c2000 cgtools
-C2000_CGT_INSTALLER=ti_cgt_c2000_22.6.0.LTS_linux-x64_installer.bin
+C2000_CGT_INSTALLER=ti_cgt_c2000_22.6.1.LTS_linux-x64_installer.bin
 C2000_CGT_INSTALLER_FILE=${INSTALLER_PATH}/${C2000_CGT_INSTALLER}
 rm -f ${C2000_CGT_INSTALLER_FILE}
-wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/22.6.0.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
+wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/22.6.1.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
 chmod +x ${C2000_CGT_INSTALLER_FILE}
 ${C2000_CGT_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
 
 # now install c2000ware
-C2000WARE_INSTALLER=C2000Ware_5_02_00_00_setup.run
+C2000WARE_INSTALLER=C2000Ware_5_03_00_00_setup.run
 C2000WARE_INSTALLER_FILE=${INSTALLER_PATH}/${C2000WARE_INSTALLER}
 # rm -f ${C2000WARE_INSTALLER_FILE}
-wget http://c2000-ubuntu-build-pc.dhcp.ti.com/c2000ware-builds/5.02.00.00/Release/${C2000WARE_INSTALLER} -O ${C2000WARE_INSTALLER_FILE}
+wget http://c2000-ubuntu-build-pc.dhcp.ti.com/c2000ware-builds/5.03.00.00/RC7/${C2000WARE_INSTALLER} -O ${C2000WARE_INSTALLER_FILE}
 if [ -e ${C2000WARE_INSTALLER_FILE} ]; then
     echo -e "\033[0;32mDownloaded ${C2000WARE_INSTALLER_FILE} from TI remote repository!\033[0m"
     chmod +x ${C2000WARE_INSTALLER_FILE}
