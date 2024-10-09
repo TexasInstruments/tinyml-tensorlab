@@ -35,9 +35,10 @@ from .generic_model_spec import GenericModelWithSpec
 
 
 class CNN_TS_GEN_BASE_3K(GenericModelWithSpec):
-    def __init__(self, config, input_features=512, variables=1, num_classes=2, feature_size=4, feature_channels=24, with_input_batchnorm=True):
-        super().__init__(config, input_features=input_features, variables=variables, feature_size=feature_size,
-                         with_input_batchnorm=with_input_batchnorm, feature_channels=feature_channels, num_classes=num_classes)
+    def __init__(self, config, input_features=512, variables=1, num_classes=2, feature_size=4, feature_channels=24, with_input_batchnorm=True, channel_scale_factor=1):
+        super().__init__(config, input_features=input_features, variables=variables, feature_size=feature_size*channel_scale_factor,
+                         with_input_batchnorm=with_input_batchnorm, feature_channels=feature_channels*channel_scale_factor, num_classes=num_classes)
+        self.channel_scale_factor = channel_scale_factor
         self.model_spec = self.gen_model_spec()
         self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
                                    input_features=self.input_features, num_classes=self.num_classes,
@@ -46,13 +47,14 @@ class CNN_TS_GEN_BASE_3K(GenericModelWithSpec):
     def gen_model_spec(self):
         layers = py_utils.DictPlus()
         layers += {'0':dict(type='BatchNormLayer', num_features=self.variables) if self.with_input_batchnorm else dict(type='IdentityLayer')}
-        layers += {'1':dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=4, kernel_size=(7,1), padding=0, stride=(2,1))}
+        layers += {'1':dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=4*self.channel_scale_factor, kernel_size=(7,1), padding=0, stride=(2,1))}
         layers += {'2':dict(type='MaxPoolLayer', kernel_size=(3,1), padding=0, stride=(2,1))}
-        layers += {'3':dict(type='ConvBNReLULayer', in_channels=4, out_channels=8, kernel_size=(3,1), padding=0, stride=(2,1))}
-        layers += {'4':dict(type='ConvBNReLULayer', in_channels=8, out_channels=8, kernel_size=(3,1), padding=0, stride=(1,1))}
-        layers += {'5':dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3,1), padding=0, stride=(2,1))}
-        layers += {'6':dict(type='ConvBNReLULayer', in_channels=16, out_channels=16, kernel_size=(3,1), padding=0, stride=(1,1))}
-        layers += {'7':dict(type='ConvBNReLULayer', in_channels=16, out_channels=self.feature_channels, kernel_size=(3,1), padding=0, stride=(2,1))}
+        layers += {'3':dict(type='ConvBNReLULayer', in_channels=4*self.channel_scale_factor, out_channels=8*self.channel_scale_factor, kernel_size=(3,1), padding=0, stride=(2,1))}
+        layers += {'4':dict(type='ConvBNReLULayer', in_channels=8*self.channel_scale_factor, out_channels=8*self.channel_scale_factor, kernel_size=(3,1), padding=0, stride=(1,1))}
+        layers += {'5':dict(type='ConvBNReLULayer', in_channels=8*self.channel_scale_factor, out_channels=16*self.channel_scale_factor, kernel_size=(3,1), padding=0, stride=(2,1))}
+        layers += {'6':dict(type='ConvBNReLULayer', in_channels=16*self.channel_scale_factor, out_channels=16*self.channel_scale_factor, kernel_size=(3,1), padding=0, stride=(1,1))}
+        layers += {'7':dict(type='ConvBNReLULayer', in_channels=16*self.channel_scale_factor, out_channels=self.feature_channels, kernel_size=(3,1), padding=0, stride=(2,1))}
+        # layers += {'7a':dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'8':dict(type='ReshapeLayer', ndim=2)}
         layers += {'9':dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
