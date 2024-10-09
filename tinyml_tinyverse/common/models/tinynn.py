@@ -76,13 +76,6 @@ def ReLULayer(input_tensor_size=None, **kwargs):
     return layer, output_tensor_size
 
 
-def AdaptiveAvgPoolLayer(input_tensor_size=None, **kwargs):
-    layer = torch.nn.AdaptiveAvgPool2d(**kwargs)
-    output_tensor_size = copy.deepcopy(input_tensor_size)
-    output_tensor_size[2] = 1
-    return layer, output_tensor_size
-
-
 def ConvLayer(kernel_size, padding=None, stride=1, input_tensor_size=None, dilation=1, **kwargs):
         assert isinstance(kernel_size, tuple) and len(kernel_size) == 2, 'kernel_size must be a tuple of size 2'
         if padding is None:
@@ -142,6 +135,14 @@ def AvgPoolLayer(kernel_size, padding=None, stride=1, input_tensor_size=None, di
                                              padding=padding, stride=stride, **kwargs)
     return layer, output_tensor_size
 
+
+def AdaptiveAvgPoolLayer(output_size, input_tensor_size=None, **kwargs):
+    assert isinstance(output_size, tuple) and len(output_size) == 2, 'output_size must be a tuple of size 2'
+    layer = torch.nn.AdaptiveAvgPool2d(output_size=output_size, **kwargs)
+    output_tensor_size = copy.deepcopy(input_tensor_size)
+    output_tensor_size[-2] = output_size[-2]
+    output_tensor_size[-1] = output_size[-1]
+    return layer, output_tensor_size
 
 
 def ConvBNReLULayer(in_channels, out_channels, kernel_size, stride, padding=None, dilation=1, input_tensor_size=None, **kwargs):
