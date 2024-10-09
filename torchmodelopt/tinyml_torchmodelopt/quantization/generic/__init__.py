@@ -29,7 +29,7 @@
 #
 #################################################################################
 
-
+import platform
 from ..common import TinyMLQConfigFormat, GenericTinyMLQATFxModuleBase
     
 
@@ -38,7 +38,7 @@ class GenericTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
         # qconfig_type = None is equivalent to WC8AT8 (or DEFAULT) which uses per_tensor_affine
         # Note: activation qscheme=torch.per_tensor_affine can be converted onnx model with QOperator using onnxruntime optimization
         # but activation qscheme=torch.per_tensor_symmetric stays as QDQ even when using onnxruntime optimization
-        super().__init__(model, *args, qconfig_type=qconfig_type, **kwargs)
+        super().__init__(model, *args, qconfig_type=qconfig_type, backend='fbgemm' if platform.system() in ['Windows'] else 'qnnpack', **kwargs)
 
     def convert(self, *args, model_qconfig_format=TinyMLQConfigFormat.INT_MODEL, **kwargs):
         return super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
