@@ -119,7 +119,7 @@ class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
             ([torch.nn.Sequential], quant_utils.TINPUQuantizedReplacement.from_child_module),
             ([torch.nn.Module], quant_utils.TINPUQuantizedReplacement.from_child_module),
             ([torch.nn.MaxPool2d], quant_utils.TINPUQuantizedReplacement.from_passthrough_module),
-            ([torch.nn.AvgPool2d], quant_utils.TINPUQuantizedReplacement.from_passthrough_module),
+            ([torch.nn.AvgPool2d], quant_utils.TINPUQuantizedReplacement.from_avgpool2d),
             ([torch.nn.AdaptiveAvgPool2d, 'dequantize'], quant_utils.TINPUQuantizedReplacement.from_module_with_dq),
             ([torch.nn.AdaptiveAvgPool2d], quant_utils.TINPUQuantizedReplacement.from_passthrough_module),
             ([torch.nn.Flatten], quant_utils.TINPUQuantizedReplacement.from_passthrough_module),
