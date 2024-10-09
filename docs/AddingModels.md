@@ -15,5 +15,5 @@
 
 - Head over to `<root>/tinyml-modelmaker/tinyml_modelmaker/ai_modules/common/training/tinyml_tinyverse/`
 - Note: In the above path `audio` needs to be replaced with the respective ai_module, i.e `timeseries` or `sensory` or `vision` etc
-- In case the added model is for a classification task, then go to `classification.py`
-- Add the model details under `model_urls` and `_model_descriptions` 
+- In case the added model is for a classification task, then go to the script: Eg.: `timeseries_classification.py` 
+- Add the model details under `model_urls`, `_model_descriptions` and `enabled_models_list`
