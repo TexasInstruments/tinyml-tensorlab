@@ -1104,7 +1104,7 @@ enabled_models_list = [
     # 'ArcFault_model_200', 'ArcFault_model_300', 'ArcFault_model_700',
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t',
     # 'MotorFault_model_1', 'MotorFault_model_2', 'MotorFault_model_3',
-    'MotorFault_model_1_t', 'MotorFault_model_2_t',  # 'MotorFault_model_3_t',
+    'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
 ]
 
 
