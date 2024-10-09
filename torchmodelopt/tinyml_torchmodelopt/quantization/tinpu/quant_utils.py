@@ -394,6 +394,7 @@ class TINPUQuantizedReplacement:
 
         oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(torch.tensor((total_kernel_area+1)//2), torch.tensor(1 / total_kernel_area), num_bits_scale=8)
         oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 255, ndim=2, dim=1)
+
         class RoundModule(torch.nn.Module):
             def forward(self, x):
                 return torch.round(x)
@@ -404,6 +405,34 @@ class TINPUQuantizedReplacement:
         output_module.zero_point = zero_point
         return output_module
 
+    @staticmethod
+    def from_adaptiveavgpool2d(model, start, end):
+        pool_module = dict(model.named_modules())[start.target]
+        scale, zero_point = __class__._get_scale_zero_point_from_previous(model, start)
+        if not isinstance(scale, torch.Tensor):
+            scale = torch.tensor(scale)
+            zero_point = torch.tensor(zero_point)
+
+        total_kernel_area = pool_module.output_size[0] * pool_module.output_size[1]
+        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(
+            torch.tensor((total_kernel_area+1)//2), torch.tensor(1 / total_kernel_area), num_bits_scale=8)
+        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 255, ndim=2, dim=1)
+
+        class ReduceSum(torch.nn.Module):
+            def forward(self, x):
+                return torch.sum(x, dim=(2, 3))
+
+        class RoundModule(torch.nn.Module):
+            def forward(self, x):
+                return torch.round(x)
+
+        reducesum_module = ReduceSum()
+        round_module = RoundModule()
+
+        output_module = torch.nn.Sequential(reducesum_module, round_module, oss_module)
+        output_module.scale = scale
+        output_module.zero_point = zero_point
+        return output_module
     # @staticmethod
     # def from_fq(model, start, end):
     #     fq_module1 = dict(model.named_modules())[start.target]
