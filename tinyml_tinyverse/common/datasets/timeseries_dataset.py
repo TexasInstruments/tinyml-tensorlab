@@ -78,6 +78,7 @@ class SimpleTSDataset(Dataset):
         self.logger.info("Original Sample rate: {}Hz".format(self.sampling_rate))
         self.feature_extraction_params = dict()  # This is just useful for header file as a part of golden vectors
         self.preprocessing_flags = []
+        # self.feature_extraction_category = 0
 
         # reorganize the list of data
         def load_list(filename):
@@ -154,6 +155,7 @@ class SimpleTSDataset(Dataset):
 
         ''' Process Data '''
         self.classes = sorted(set([opb(opd(datafile)) for datafile in self._walker]))
+        self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
 
     def _load_datafile(self, datafile, **kwargs):
         file_extension = ops(datafile)[-1]
@@ -317,19 +319,28 @@ class ArcFaultDataset(SimpleTSDataset):
 
         self.sequence_window = self.feature_size
 
-        self.feature_extraction_params['frame_size'] = self.frame_size
-        self.feature_extraction_params['fft_stages'] = int(np.log2(self.frame_size))
-        self.feature_extraction_params['feature_size_per_frame'] = self.feature_size_per_frame
-        self.feature_extraction_params['num_frame_concat'] = self.num_frame_concat
-        self.feature_extraction_params['feature_size'] = self.feature_size
-        self.feature_extraction_params['frame_skip'] = self.frame_skip
-        self.feature_extraction_params['min_fft_bin'] = self.min_fft_bin
-        self.feature_extraction_params['fft_bin_size'] = self.fft_bin_size
-        self.feature_extraction_params['nn_out_size'] = len(self.classes)
+        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
+        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
+        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat
+        self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
+        self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
+        self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_fft_bin
+        self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.fft_bin_size
+        # self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
+        self.feature_extraction_params['FE_LOG_BASE'] = 'exp(1.0)'
+        self.feature_extraction_params['FE_LOG_MUL'] = 10
 
+        self.preprocessing_flags.append('FE_WIN')
         for transform in self.transforms:
             if 'FFT' in transform:
-                self.preprocessing_flags.append('FFT')
+                self.preprocessing_flags.append('FE_FFT')
+        self.preprocessing_flags.append('FE_BIN')
+        # if {'WIN', 'FFT'}.issubset(set(self.preprocessing_flags)):
+        #     # FEATURE_EXTRACT_WIN_FFT = 4
+        #     self.feature_extraction_category = 4
+        # else:
+        #     self.feature_extraction_category = 0
 
     def __feature_extraction(self, x_temp):
         num_frame = len(x_temp) // self.frame_size
@@ -417,26 +428,40 @@ class MotorFaultDataset(SimpleTSDataset):
         self.scale = kwargs.get('scale', 1)
         self.fs = kwargs.get('fs', 1)  # not used
 
-        self.feature_extraction_params['frame_size'] = self.frame_size
-        self.feature_extraction_params['fft_stages'] = int(np.log2(self.frame_size))
-        self.feature_extraction_params['feature_size_per_frame'] = self.feature_size_per_frame
-        self.feature_extraction_params['num_frame_concat'] = self.num_frame_concat
-        self.feature_extraction_params['dc_remove'] = int(self.dc_remove)
-        self.feature_extraction_params['stacking_channels'] = self.ch
-        self.feature_extraction_params['stacking_frame_width'] = self.wl
-        self.feature_extraction_params['hl'] = self.hl
-        self.feature_extraction_params['offset'] = self.offset
-        self.feature_extraction_params['scale'] = self.scale
-        self.feature_extraction_params['fs'] = self.fs
-        self.feature_extraction_params['nn_out_size'] = len(self.classes)
+        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
+        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat
+        self.feature_extraction_params['FE_DC_REMOVE'] = int(self.dc_remove)
+        self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
+        self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
+        self.feature_extraction_params['FE_HL'] = self.hl
+        self.feature_extraction_params['FE_OFFSET'] = self.offset
+        self.feature_extraction_params['FE_SCALE'] = self.scale
+        self.feature_extraction_params['FE_FS'] = self.fs
+        # self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
+        self.feature_extraction_params['FE_LOG_BASE'] = 10
+        self.feature_extraction_params['FE_LOG_MUL'] = 20
 
         for transform in self.transforms:
             if 'FFT' in transform:
-                self.preprocessing_flags.append('FFT')
+                self.preprocessing_flags.append('FE_FFT')
+                self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
             if 'BIN' in transform:
-                self.preprocessing_flags.append('BIN')
+                self.preprocessing_flags.append('FE_BIN')
             if 'RAW' in transform:
-                self.preprocessing_flags.append('RAW')
+                self.preprocessing_flags.append('FE_RAW')
+        # if {'FFT', 'BIN'}.issubset(set(self.preprocessing_flags)):
+        #     # FEATURE_EXTRACT_FFT_BIN = 3
+        #     self.feature_extraction_category = 3
+        # elif {'FFT'}.issubset(set(self.preprocessing_flags)):
+        #     # FEATURE_EXTRACT_FFT = 2
+        #     self.feature_extraction_category = 2
+        # elif {'RAW'}.issubset(set(self.preprocessing_flags)):
+        #     # FEATURE_EXTRACT_RAW = 1
+        #     self.feature_extraction_category = 1
+        # else:
+        #     # FEATURE_EXTRACT_UNDEFINED = 0
+        #     self.feature_extraction_category = 0
 
         ## Computes one side FFT ##
     def __fft_oneside(self, y, fs):
