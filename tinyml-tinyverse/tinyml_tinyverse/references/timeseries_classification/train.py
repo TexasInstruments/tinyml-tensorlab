@@ -279,33 +279,51 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
             half_path = os.path.join(golden_vectors_dir)
 
             # Saving as .txt
-            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'int16_t adc_{label}_{index}[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'adc_{label}_{index}.txt')
-            np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'float32_t features_{label}_{index}[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'features_{label}_{index}.txt')
-            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'int8_t output_{label}_{index}[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'output_{label}_{index}.txt')
 
-    headerfile_info = ''
-    for file_path in vector_files:
-        # file_name = os.path.splitext(os.path.basename(file_path))[0]
+    headerfile_info = """#include "device.h"
+// //////////////////////////////////////////////////////////////////////////////////////////////////////
+// 1. Please uncomment one (and only one) of the below sets at a time. (Remove /* and */ only)
+// 2. Do not uncomment random lines from random sets. It will not serve your purpose
+// //////////////////////////////////////////////////////////////////////////////////////////////////////"""
+    vector_files
+    for i, file_path in enumerate(vector_files):
+        if i % 3 == 0:
+            headerfile_info += f'\n/*\n// SET {i // 3}'
         with open(file_path) as fp:
             file_array = fp.read()
-        headerfile_info += f'\n{file_array}\n'
+            headerfile_info += f'\n{file_array};\n'
+        if i % 3 == 2:
+            headerfile_info += '*/\n'
         os.remove(file_path)
 
     test_vectors_c = os.path.join(golden_vectors_dir, 'test_vectors.c')
     with open(test_vectors_c, 'w') as fp:
-        fp.write('#include "device.h"\n')
         fp.write(headerfile_info)
     user_input_config_h = os.path.join(golden_vectors_dir, 'user_input_config.h')
     logger.info("Creating test_vectors.c at: {}".format(test_vectors_c))
+#     feature_extraction_info_str = """/*typedef enum {
+#     FEATURE_EXTRACT_UNDEFINED=0,
+#     FEATURE_EXTRACT_RAW=1,
+#     FEATURE_EXTRACT_FFT=2,
+#     FEATURE_EXTRACT_FFT_BIN=3,
+#     FEATURE_EXTRACT_WIN_FFT_BIN=4
+# } Feature_Extract_Type;*/
+# """
     with open(user_input_config_h, 'w') as fp:
         fp.write("#ifndef INPUT_CONFIG_H_\n")
-        fp.write("#define INPUT_CONFIG_H_\n")
+        fp.write("#define INPUT_CONFIG_H_\n\n")
+        # fp.write(feature_extraction_info_str)
+        # fp.write(f"#define FEATURE_EXTRACT_TYPE ({dataset.feature_extraction_category})\n\n")
+        # if not dataset.feature_extraction_category:
         fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
         fp.write('\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()]))
-        fp.write("\n#endif /* INPUT_CONFIG_H_ */\n")
+        fp.write("\n\n#endif /* INPUT_CONFIG_H_ */\n")
     logger.info("Creating user_input_config.h at: {}".format(user_input_config_h))
 
     model_auh_h = os.path.join(golden_vectors_dir, 'model_aux.h')
@@ -333,11 +351,6 @@ def main(gpu, args):
     # if args.quantization and args.store_feat_ext_data:
     #     logger.info("Avoiding storage of feature extracted data again during QAT")
     #     args.store_feat_ext_data = False
-    if args.store_feat_ext_data:
-        if args.feat_ext_store_dir in [None, 'None']:
-            args.feat_ext_store_dir = os.path.join(args.output_dir, 'feat_ext_data')
-            logger.info(f"feat_ext_store_dir has been defaulted to: {args.feat_ext_store_dir}")
-        create_dir(args.feat_ext_store_dir)
 
     if args.weights:
         (args.weights_url, args.weights_enum) = split_weights(args.weights)
@@ -361,10 +374,44 @@ def main(gpu, args):
             args.transforms = [args.data_proc_transforms[0] + [args.feat_ext_transform]]  # args.data_proc_transforms is a list of lists
         else:
             args.transforms = [args.data_proc_transforms + [args.feat_ext_transform]]
+    if args.store_feat_ext_data:
+        if args.feat_ext_store_dir in [None, 'None']:
+            args.feat_ext_store_dir = os.path.join(args.output_dir, 'feat_ext_data')
+            logger.info(f"feat_ext_store_dir has been defaulted to: {args.feat_ext_store_dir}")
+        create_dir(args.feat_ext_store_dir)
     dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict)  # (126073, 1, 152), 126073
-    if args.store_feat_ext_data and args.dont_train_just_feat_ext:
-        logger.info("Exiting execution without training")
-        sys.exit(0)
+    # if args.store_feat_ext_data:
+    #     # if True:
+    #     from sklearn.decomposition import PCA
+    #     import matplotlib.pyplot as plt
+    #
+    #     pca = PCA(n_components=3)
+    #     time_series_pca = pca.fit_transform(dataset.X.squeeze())
+    #     n_clusters = len(dataset.classes)
+    #     fig = plt.figure(figsize=(10, 7))
+    #     ax = plt.axes(projection='3d')
+    #     for i in range(n_clusters):
+    #         xdata = time_series_pca[np.where(np.array(dataset.Y)==i)][:, 0]
+    #         ydata = time_series_pca[np.where(np.array(dataset.Y)==i)][:, 1]
+    #         zdata = time_series_pca[np.where(np.array(dataset.Y)==i)][:, 2]
+    #         # plt.scatter(xdata, ydata, zdata, c='aquamarine', label=f'Cluster {i}')
+    #         ax.scatter3D(xdata, ydata, zdata)  # c=zdata, cmap='viridis'
+    #     plt.title("PCA Visualization of Feature Extracted Clusters")
+    #     ax.set_xlabel('Principal Component 1', rotation=150)
+    #     ax.set_ylabel('Principal Component 2')
+    #     ax.set_zlabel('Principal Component 3', rotation=60)
+    #     # plt.xlabel('')
+    #     # plt.ylabel('')
+    #     # plt.ylabel('')
+    #     plt.legend()
+    #     plt.savefig(os.path.join(args.feat_ext_store_dir, 'pca_on_feature_extracted_data.png'))
+    #     # plt.close(fig)
+    #     # plt.show()
+    #     # sys.exit(0)
+    #     if args.dont_train_just_feat_ext:
+    #         logger.info("Exiting execution without training")
+    #         sys.exit(0)
+
 
 
     # collate_fn = None
@@ -422,6 +469,8 @@ def main(gpu, args):
     elif opt_name == 'rmsprop':
         optimizer = torch.optim.RMSprop(model.parameters(), lr=args.lr, momentum=args.momentum,
                                         weight_decay=args.weight_decay, eps=0.0316, alpha=0.9)
+    elif opt_name == 'adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     else:
         logger.warning("Invalid optimizer {}. Only SGD and RMSprop, Adam are supported. Defaulting to Adam".format(args.opt))
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -479,7 +528,6 @@ def main(gpu, args):
     logger.info("Start training")
     start_time = timeit.default_timer()
     best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
-
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
