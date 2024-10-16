@@ -407,13 +407,22 @@ class TINPUQuantizedReplacement:
 
     @staticmethod
     def from_adaptiveavgpool2d(model, start, end):
+        '''
+        The below function offloads to NPU, but only works for output size->1,1
+        Otherwise we will use a generic implementation, as AdaptiveAvgPooling will be used mostly only at the model end
+         and is not compute intensive
+        '''
         pool_module = dict(model.named_modules())[start.target]
+        total_kernel_area = pool_module.output_size[0] * pool_module.output_size[1]
+        if total_kernel_area != 1:
+            return __class__.from_passthrough_module(model, start, end)
+
         scale, zero_point = __class__._get_scale_zero_point_from_previous(model, start)
         if not isinstance(scale, torch.Tensor):
             scale = torch.tensor(scale)
             zero_point = torch.tensor(zero_point)
 
-        total_kernel_area = pool_module.output_size[0] * pool_module.output_size[1]
+
         oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(
             torch.tensor((total_kernel_area+1)//2), torch.tensor(1 / total_kernel_area), num_bits_scale=8)
         oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 255, ndim=2, dim=1)
