@@ -96,7 +96,9 @@ def init_params(*args, **kwargs):
             num_last_epochs=5,
             batch_size=8,
             learning_rate=2e-3,
+            optimizer='sgd',
             weight_decay=1e-4,
+            lr_scheduler='cosineannealinglr',
             training_device='cuda',  # 'cpu', 'cuda'
             num_gpus=1,  # 0,1
             distributed=True,
