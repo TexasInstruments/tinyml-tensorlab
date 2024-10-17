@@ -78,6 +78,8 @@ def create_filelist(input_data_path: str, output_dir: str, ignore_str_list=None)
 
 def create_simple_split(file_list: str, split_list_files: tuple, split_factor: float or list, shuffle_items=True, random_seed=42):
     '''
+    Creates a simple split according to split factor for each of the classes
+
     :param file_list: file_list.txt file that contains all the links to the files for dataset
     # :param output_dir: The directory to dump out the splits
     # :param split_names: 'train' or 'val' or 'test' or a tuple of one or more of these
@@ -85,45 +87,51 @@ def create_simple_split(file_list: str, split_list_files: tuple, split_factor: f
     :param split_factor: can be a float number or a list of splits e.g [0.2, 0.3]
     :return: out_files: List containing the paths of files that contain the dataset of the corresponding splits
     '''
-    # out_files = []
-
-    with open(file_list) as fp:
-        list_of_files = [x.strip() for x in fp.readlines()]  # Contains the list of files
-    if shuffle_items:
-        seed(random_seed)
-        shuffle(list_of_files)
-
     assert isinstance(split_list_files, (list, tuple)), "split_list_files should be passed as a tuple or list"
     number_of_splits = len(split_list_files)
-    lengths_to_split = []
+    split_factors = []
     if type(split_factor) == float:
         assert split_factor < 1.0, "split_factor should be less than 1"
         # The default split factor is the fraction for training set.
-        lengths_to_split.append(split_factor)
+        split_factors.append(split_factor)
         # The remainder of the set will be equally split between val or val/test
         remainder = 1 - split_factor
 
     elif isinstance(split_factor, (list, tuple)):
         assert sum(split_factor) <= 1, "The Sum of split factors should be <=1"
         assert len(split_factor) <= len(split_list_files), "The number of elements in split factors should be less than/equal to number of split names"
-        lengths_to_split.extend(split_factor)
+        split_factors.extend(split_factor)
         remainder = 1 - sum(split_factor)
 
     if number_of_splits > len(split_factor):
         remainder_fraction = remainder / (number_of_splits - len(split_factor))
-        [lengths_to_split.append(remainder_fraction) for _ in range(number_of_splits - len(split_factor))]
-    # Normalise to split based on integer indices
-    lengths_to_split = [int(x*len(list_of_files)) for x in lengths_to_split]
-    out_splits = [list_of_files[x - y: x] for x, y in zip(accumulate(lengths_to_split), lengths_to_split)]
+        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factor))]
+    assert len(split_factor) == len(split_list_files), f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factor)}"
 
-    # os.makedirs(output_dir, exist_ok=True)
-    for split_name, splits in zip(split_list_files, out_splits):
-        # out_file = os.path.join(output_dir, "{}_list.txt".format(split_name))
-        with open(split_name, 'w') as of_fh:
+    with open(file_list) as fp:
+        list_of_files = [x.strip() for x in fp.readlines()]  # Contains the list of files
+    files_of_a_class = collections.defaultdict(list)  # Empty dict with values as list
+    # Eg: file_path: class3_bearingFlaking/vibData_1.csv
+    [files_of_a_class[os.path.dirname(file_path)].append(file_path) for file_path in list_of_files]
+
+    if shuffle_items:
+        seed(random_seed)
+        shuffle(list_of_files)
+
+    out_splits = collections.defaultdict(list)
+    for class_name, class_files in files_of_a_class.items():
+        # Normalise to split based on integer indices
+        split_lengths = [int(split_factor * len(class_files)) for split_factor in split_factors]
+        # To add the unused file to test data
+        split_lengths[-1] = len(class_files) - sum(split_lengths[:-1])  # adjust the last split so that no element is left behind
+        # To add the unused file to train data
+        # split_lengths[0] = len(class_files) - sum(split_lengths[1:])  # adjust the last split so that no element is left behind
+        split_file_list_for_class = [class_files[x - y: x] for x, y in zip(accumulate(split_lengths), split_lengths)]
+        [out_splits[split_file].extend(split_file_list_for_class[i]) for i, split_file in enumerate(split_list_files)]
+
+    for split_file, splits in out_splits.items():
+        with open(split_file, 'w') as of_fh:
             of_fh.write('\n'.join(splits))
-        # out_files.append(out_file)
-
-    # return out_files
 
 
 def parse_voc_xml_file(annotation_file_name: str) -> Dict[str, Any]:
