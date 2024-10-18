@@ -23,11 +23,15 @@ data_processing: # One or more can be cascaded in the list
 
 feature_extraction:
     feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
+#    feature_extraction_name: FFT1024Input_256Feature_1Frame_Half_Bandwidth
+#    feature_extraction_name: FFT1024Input_64Feature_4Frame_Half_Bandwidth
+#    feature_extraction_name: FFT1024Input_32Feature_8Frame_Quarter_Bandwidth
 #    feature_size_per_frame: 512
 #    num_frame_concat: 8
 #    min_fft_bin: 1
 #    fft_bin_size: 1
 #    frame_skip: 3
+#    store_feat_ext_data: True
 
 training:
     # enable/disable training

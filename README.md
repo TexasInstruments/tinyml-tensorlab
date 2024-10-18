@@ -12,10 +12,10 @@ The following are the key functionality supported by this tool:
 
 Tasks and Models
 
-| Task | Modality                  | Example Application           | Description |
-| --- |---------------------------|-------------------------------| --- | 
-| Classification | Timeseries (Univariate)   | Arc Detection, Fall Detection | 1 to n-class classification of timeseries data |
-| Classification | Timeseries (Multivariate) | Arc Detection, Gyroscope      | 1 to n-class classification of timeseries data |
+| Task | Modality                  | Example Application                                     | Description |
+| --- |---------------------------|---------------------------------------------------------| --- | 
+| Classification | Timeseries (Univariate)   | Arc Detection, Fall Detection                           | 1 to n-class classification of timeseries data |
+| Classification | Timeseries (Multivariate) | Arc Detection, Motor Bearing Fault Detection, Gyroscope | 1 to n-class classification of timeseries data |
 
 
 
@@ -108,6 +108,10 @@ cd /opt/code/tinyml-modelmaker
 Firstly, clone this repo into your PC.
 This tool depends on several repositories that we have published at https://github.com/TexasInstruments
 The following setup script can take care of cloning the required repositories and running their setup scripts.
+
+**NOTE: Please download and install [C2000Ware](https://www.ti.com/tool/C2000WARE)**
+* Please set the installed path in your terminal: `export C2000WARE_PATH="/path/to/C2000Ware_5_03_00_00"`
+
 ```
 ./setup_all.sh 
 ```
