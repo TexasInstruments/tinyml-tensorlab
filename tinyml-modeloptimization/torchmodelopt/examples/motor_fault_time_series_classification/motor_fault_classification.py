@@ -43,7 +43,7 @@ class MotorFaultDataset(Dataset):
         return window_samples_x, window_samples_y
 
     def __len__(self):
-        return (self.len-self.window_offset)//self.window_offset
+        return (self.len-self.window_length)//self.window_offset
 
 
 def get_dataset_from_csv(csv_file, normalize_dataset=False):
@@ -82,7 +82,7 @@ def train(dataloader, model, loss_fn, optimizer):
     return avg_loss, model, loss_fn, optimizer
 
 
-def get_nn_model(in_channels, hidden_channels, out_channels, feature_size=(1,1), normalize_input=True):
+def get_nn_model(in_channels, hidden_channels, feature_size, out_channels, normalize_input=True):
     def get_conv_bn_relu(in_channels, out_channels, kernel_size, padding=None, stride=1):
         padding = padding or (kernel_size[0]//2, kernel_size[1]//2)
         layers = []
@@ -105,17 +105,17 @@ def get_nn_model(in_channels, hidden_channels, out_channels, feature_size=(1,1),
                 layers = [nn.BatchNorm2d(num_features=in_channels)]
             in_ch = in_channels
             for h_ch in hidden_channels:
-                layers += get_conv_bn_relu(in_ch, h_ch,
-                                           kernel_size=(5, 1), padding=None, stride=(2, 1))
+                layers += get_conv_bn_relu(in_ch, h_ch, kernel_size=(5, 1), padding=None, stride=(2, 1))
                 in_ch = h_ch
             layers += [nn.AdaptiveAvgPool2d(output_size=feature_size)]
             layers += [ReshapeLayer()]
             in_fc_ch = (in_ch*feature_size[0]*feature_size[1])
             layers += [nn.Linear(in_fc_ch, out_features=out_channels)]
-            self.layers = nn.Sequential(*layers)
+            self.layers = nn.ModuleList(layers)
 
         def forward(self, x):
-            x = self.layers(x)
+            for layer in self.layers:
+                x = layer(x)
             return x
 
     nn_model = NeuralNetwork().to(DEVICE)
@@ -242,7 +242,7 @@ if __name__ == '__main__':
     CSV_FILE = "motor_fault_dataset.csv"
     NUM_EPOCHS = 50
     WINDOW_LENGTH = 1024
-    WINDOW_OFFSET = WINDOW_LENGTH//2
+    WINDOW_OFFSET = WINDOW_LENGTH//4 #WINDOW_LENGTH//2
     BATCH_SIZE = 128
     LEARNING_RATE = 0.01
     ENABLE_QAT = True  # False
@@ -261,8 +261,7 @@ if __name__ == '__main__':
     example_input, example_target = next(iter(train_loader))
     example_input = example_input[:1]
 
-    nn_model = get_nn_model(in_channels, 
-            hidden_channels=[8, 16, 32, 64], out_channels=num_categories)
+    nn_model = get_nn_model(in_channels, hidden_channels=[8, 16, 24, 32], feature_size=(4,1), out_channels=num_categories)
     torchinfo.summary(nn_model, input_data=example_input)
 
     nn_model = train_model(nn_model, train_loader, NUM_EPOCHS, LEARNING_RATE)
