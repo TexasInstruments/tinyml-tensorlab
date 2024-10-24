@@ -8,17 +8,17 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   These are the devices that are supported currently. As additional devices are supported,\
   \ this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_03_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
+  * SDK release: 05_04_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_03_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n\
+  * SDK release: 05_04_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_03_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n\
+  * SDK release: 05_04_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_03_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
+  * SDK release: 05_04_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_03_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
+  * SDK release: 05_04_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_03_00\n\n## Additional information\n\n\n\n## Dataset format\n\
+  * SDK release: 05_04_00\n\n## Additional information\n\n\n\n## Dataset format\n\
   - The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
   \ dataset, but there are some changes as explained below.\n\n\n####  Dataset format\n\
   The dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n\
@@ -1820,8 +1820,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f280015x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1831,8 +1831,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f280015x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1842,8 +1842,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f280015x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1854,8 +1854,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28003x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1865,8 +1865,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28003x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1876,8 +1876,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28003x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1888,8 +1888,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28004x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1899,8 +1899,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28004x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1910,8 +1910,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28004x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1922,8 +1922,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f2837xd/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1933,8 +1933,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f2837xd/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1944,8 +1944,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f2837xd/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1956,8 +1956,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1966,8 +1966,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1977,8 +1977,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1987,8 +1987,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -1998,8 +1998,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2008,8 +2008,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2020,8 +2020,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p65x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2031,8 +2031,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p65x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2042,8 +2042,8 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p65x/common/include
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib
+            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2084,78 +2084,78 @@ target_device_descriptions:
       \ control and security\n* More details : https://www.ti.com/product/AM2634\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n\
       * Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n\
-      * SDK release: 05_03_00\n\nAdditional information:\n\n"
+      * SDK release: 05_04_00\n\nAdditional information:\n\n"
     device_name: AM263
     device_selection_factor: 6
     device_type: MCU
-    sdk_release: '05_03_00'
-    sdk_version: '5.3'
+    sdk_release: '05_04_00'
+    sdk_version: '5.4'
   F280015:
     device_details: "C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA,\
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_03_00\n\nAdditional information:\n\n"
+      * SDK release: 05_04_00\n\nAdditional information:\n\n"
     device_name: F280015
     device_selection_factor: 0
     device_type: MCU
-    sdk_release: '05_03_00'
-    sdk_version: '5.3'
+    sdk_release: '05_04_00'
+    sdk_version: '5.4'
   F28003:
     device_details: "C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA,\
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_03_00\n\nAdditional information:\n\n"
+      * SDK release: 05_04_00\n\nAdditional information:\n\n"
     device_name: F28003
     device_selection_factor: 1
     device_type: MCU
-    sdk_release: '05_03_00'
-    sdk_version: '5.3'
+    sdk_release: '05_04_00'
+    sdk_version: '5.4'
   F28004:
     device_details: "C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA,\
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_03_00\n\nAdditional information:\n\n"
+      * SDK release: 05_04_00\n\nAdditional information:\n\n"
     device_name: F28004
     device_selection_factor: 2
     device_type: MCU
-    sdk_release: '05_03_00'
-    sdk_version: '5.3'
+    sdk_release: '05_04_00'
+    sdk_version: '5.4'
   F2837:
     device_details: "C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU,\
       \ 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_03_00\n\nAdditional information:\n\n"
+      * SDK release: 05_04_00\n\nAdditional information:\n\n"
     device_name: F2837
     device_selection_factor: 3
     device_type: MCU
-    sdk_release: '05_03_00'
-    sdk_version: '5.3'
+    sdk_release: '05_04_00'
+    sdk_version: '5.4'
   F28P55:
     device_details: "C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash,\
       \ 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_03_00\n\nAdditional information:\n\n"
+      * SDK release: 05_04_00\n\nAdditional information:\n\n"
     device_name: F28P55
     device_selection_factor: 5
     device_type: MCU
-    sdk_release: '05_03_00'
-    sdk_version: '5.3'
+    sdk_release: '05_04_00'
+    sdk_version: '5.4'
   F28P65:
     device_details: "C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash,\
       \ 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_03_00\n\nAdditional information:\n\n"
+      * SDK release: 05_04_00\n\nAdditional information:\n\n"
     device_name: F28P65
     device_selection_factor: 4
     device_type: MCU
-    sdk_release: '05_03_00'
-    sdk_version: '5.3'
+    sdk_release: '05_04_00'
+    sdk_version: '5.4'
 task_descriptions:
   arc_fault:
     stages:
@@ -2242,6 +2242,6 @@ training_module_descriptions:
   timeseries_classification:
   - timeseries_classification
 version_descriptions:
-  sdk_release: '05_03_00'
-  sdk_version: '5.3'
+  sdk_release: '05_04_00'
+  sdk_version: '5.4'
   version: 0.9.0

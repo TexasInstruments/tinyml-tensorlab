@@ -100,8 +100,8 @@ TRAINING_BATCH_SIZE_DEFAULT = {
     TASK_TYPE_GENERIC_TS_CLASSIFICATION: 64,
 }
 
-TARGET_SDK_VERSION = '5.3'
-TARGET_SDK_RELEASE = '05_03_00'
+TARGET_SDK_VERSION = '5.4'
+TARGET_SDK_RELEASE = '05_04_00'
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
 # TODO: Once the links are up add this
@@ -412,7 +412,7 @@ HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
 TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
 C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
-C2000WARE_VERSION = 'C2000Ware_5_03_00_00'
+C2000WARE_VERSION = 'C2000Ware_5_04_00_00'
 
 C2000_CGT_PATH = os.path.abspath(os.getenv('C2000_CGT_PATH', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 C2000WARE_PATH = os.path.abspath(os.getenv('C2000WARE_PATH', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))

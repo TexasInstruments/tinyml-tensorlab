@@ -2116,7 +2116,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2126,7 +2126,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2136,7 +2136,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2148,7 +2148,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2158,7 +2158,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2168,7 +2168,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2180,7 +2180,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2190,7 +2190,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2200,7 +2200,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2212,7 +2212,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2222,7 +2222,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2232,7 +2232,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2244,7 +2244,7 @@
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "forced_soft_npu_preset":{
@@ -2252,7 +2252,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2262,7 +2262,7 @@
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "forced_soft_npu_preset":{
@@ -2270,7 +2270,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2280,7 +2280,7 @@
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
         },
         "forced_soft_npu_preset":{
@@ -2288,7 +2288,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2300,7 +2300,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2310,7 +2310,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2320,7 +2320,7 @@
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_03_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_03_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2331,57 +2331,57 @@
       "device_name":"F280015",
       "device_type":"MCU",
       "device_selection_factor":0,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.3",
-      "sdk_release":"05_03_00"
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.4",
+      "sdk_release":"05_04_00"
     },
     "F28003":{
       "device_name":"F28003",
       "device_type":"MCU",
       "device_selection_factor":1,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.3",
-      "sdk_release":"05_03_00"
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.4",
+      "sdk_release":"05_04_00"
     },
     "F28004":{
       "device_name":"F28004",
       "device_type":"MCU",
       "device_selection_factor":2,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.3",
-      "sdk_release":"05_03_00"
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.4",
+      "sdk_release":"05_04_00"
     },
     "F2837":{
       "device_name":"F2837",
       "device_type":"MCU",
       "device_selection_factor":3,
-      "device_details":"C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.3",
-      "sdk_release":"05_03_00"
+      "device_details":"C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.4",
+      "sdk_release":"05_04_00"
     },
     "F28P65":{
       "device_name":"F28P65",
       "device_type":"MCU",
       "device_selection_factor":4,
-      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.3",
-      "sdk_release":"05_03_00"
+      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.4",
+      "sdk_release":"05_04_00"
     },
     "F28P55":{
       "device_name":"F28P55",
       "device_type":"MCU",
       "device_selection_factor":5,
-      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.3",
-      "sdk_release":"05_03_00"
+      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.4",
+      "sdk_release":"05_04_00"
     },
     "AM263":{
       "device_name":"AM263",
       "device_type":"MCU",
       "device_selection_factor":6,
-      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 05_03_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.3",
-      "sdk_release":"05_03_00"
+      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
+      "sdk_version":"5.4",
+      "sdk_release":"05_04_00"
     }
   },
   "task_descriptions":{
@@ -2483,8 +2483,8 @@
   },
   "version_descriptions":{
     "version":"0.9.0",
-    "sdk_version":"5.3",
-    "sdk_release":"05_03_00"
+    "sdk_version":"5.4",
+    "sdk_release":"05_04_00"
   },
   "tooltip_descriptions":{
     "common":{},
@@ -2528,5 +2528,5 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n* Generic Time Series Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_03_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n* Generic Time Series Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
 }
