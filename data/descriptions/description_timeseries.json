@@ -884,27 +884,27 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":1.299,
+            "performance_infer_time_ms":0.982,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28003":{
-            "performance_infer_time_ms":1.299,
+            "performance_infer_time_ms":0.982,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28004":{
-            "performance_infer_time_ms":1.559,
+            "performance_infer_time_ms":1.179,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F2837":{
-            "performance_infer_time_ms":1.299,
+            "performance_infer_time_ms":0.982,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28P65":{
-            "performance_infer_time_ms":0.779,
+            "performance_infer_time_ms":0.589,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
@@ -1092,27 +1092,27 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.973,
+            "performance_infer_time_ms":0.836,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28003":{
-            "performance_infer_time_ms":0.973,
+            "performance_infer_time_ms":0.836,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28004":{
-            "performance_infer_time_ms":1.167,
+            "performance_infer_time_ms":1.003,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F2837":{
-            "performance_infer_time_ms":0.973,
+            "performance_infer_time_ms":0.836,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28P65":{
-            "performance_infer_time_ms":0.584,
+            "performance_infer_time_ms":0.502,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
@@ -1300,27 +1300,27 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.529,
+            "performance_infer_time_ms":0.432,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28003":{
-            "performance_infer_time_ms":0.529,
+            "performance_infer_time_ms":0.432,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28004":{
-            "performance_infer_time_ms":0.635,
+            "performance_infer_time_ms":0.518,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F2837":{
-            "performance_infer_time_ms":0.529,
+            "performance_infer_time_ms":0.432,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28P65":{
-            "performance_infer_time_ms":0.318,
+            "performance_infer_time_ms":0.259,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
@@ -1508,32 +1508,32 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.629,
+            "performance_infer_time_ms":0.555,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28003":{
-            "performance_infer_time_ms":0.629,
+            "performance_infer_time_ms":0.555,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28004":{
-            "performance_infer_time_ms":0.754,
+            "performance_infer_time_ms":0.666,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F2837":{
-            "performance_infer_time_ms":0.629,
+            "performance_infer_time_ms":0.555,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28P65":{
-            "performance_infer_time_ms":0.377,
+            "performance_infer_time_ms":0.333,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28P55":{
-            "performance_infer_time_ms":0.197,
+            "performance_infer_time_ms":0.173,
             "accuracy_factor":"TBD",
             "model_selection_factor":0
           }
@@ -1716,32 +1716,32 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":18.79,
+            "performance_infer_time_ms":17.743,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28003":{
-            "performance_infer_time_ms":18.79,
+            "performance_infer_time_ms":17.743,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28004":{
-            "performance_infer_time_ms":22.548,
+            "performance_infer_time_ms":21.292,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F2837":{
-            "performance_infer_time_ms":18.79,
+            "performance_infer_time_ms":17.743,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28P65":{
-            "performance_infer_time_ms":11.274,
+            "performance_infer_time_ms":10.646,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28P55":{
-            "performance_infer_time_ms":2.208,
+            "performance_infer_time_ms":1.686,
             "accuracy_factor":"TBD",
             "model_selection_factor":1
           }
@@ -1924,32 +1924,32 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":18.79,
+            "performance_infer_time_ms":0.865,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28003":{
-            "performance_infer_time_ms":18.79,
+            "performance_infer_time_ms":0.865,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28004":{
-            "performance_infer_time_ms":22.548,
+            "performance_infer_time_ms":1.037,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F2837":{
-            "performance_infer_time_ms":18.79,
+            "performance_infer_time_ms":0.865,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28P65":{
-            "performance_infer_time_ms":11.274,
+            "performance_infer_time_ms":0.519,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28P55":{
-            "performance_infer_time_ms":2.208,
+            "performance_infer_time_ms":0.253,
             "accuracy_factor":"TBD",
             "model_selection_factor":2
           }
