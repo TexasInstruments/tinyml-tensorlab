@@ -210,27 +210,27 @@ class SimpleTSDataset(Dataset):
                 self.X_raw = np.concatenate((self.X_raw, x_temp_raw_out))  # n, 1, 752
             # self.Y.extend(y_temp)
             self.Y = np.concatenate((self.Y, y_temp))  # n
-            if kwargs.get('store_feat_ext_data'):
-                if kwargs.get('feat_ext_store_dir'):
-                    x_raw_out_file_path = os.path.join(
-                        kwargs.get('feat_ext_store_dir'),
-                        os.path.splitext(os.path.basename(datafile))[0] + '__' + 'raw' + '_X.npy')
-                    np.save(x_raw_out_file_path, x_temp_raw_out)
-                    self.logger.debug(f"Stored raw data in {x_raw_out_file_path}")
-
-                    transforms_chosen = '_'.join(self.transforms)
-                    out_file_name = os.path.splitext(os.path.basename(datafile))[0] + '__' + transforms_chosen
-
-                    x_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_X.npy')
-                    np.save(x_out_file_path, x_temp)
-                    self.logger.debug(f"Stored intermediate data in {x_out_file_path}")
-
-                    y_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_Y.npy')
-                    np.save(y_out_file_path, y_temp)
-                    self.logger.debug(f"Stored intermediate targets in {y_out_file_path}")
-                else:
-                    self.logger.warning(
-                        "'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")
+            # if kwargs.get('store_feat_ext_data'):
+            #     if kwargs.get('feat_ext_store_dir'):
+            #         x_raw_out_file_path = os.path.join(
+            #             kwargs.get('feat_ext_store_dir'),
+            #             os.path.splitext(os.path.basename(datafile))[0] + '__' + 'raw' + '_X.npy')
+            #         np.save(x_raw_out_file_path, x_temp_raw_out)
+            #         self.logger.debug(f"Stored raw data in {x_raw_out_file_path}")
+            #
+            #         transforms_chosen = '_'.join(self.transforms)
+            #         out_file_name = os.path.splitext(os.path.basename(datafile))[0] + '__' + transforms_chosen
+            #
+            #         x_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_X.npy')
+            #         np.save(x_out_file_path, x_temp)
+            #         self.logger.debug(f"Stored intermediate data in {x_out_file_path}")
+            #
+            #         y_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_Y.npy')
+            #         np.save(y_out_file_path, y_temp)
+            #         self.logger.debug(f"Stored intermediate targets in {y_out_file_path}")
+            #     else:
+            #         self.logger.warning(
+            #             "'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")
 
         except ValueError as e:
             self.logger.warning('Skipping {} as Error encountered: {}'.format(datafile, e))

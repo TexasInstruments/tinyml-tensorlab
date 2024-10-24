@@ -1,3 +1,3 @@
 git+https://github.com/TexasInstruments/edgeai-tensorlab.git@r10.0#subdirectory=edgeai-modeloptimization/torchmodelopt
-https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.3.0rc4-cp310-cp310-linux_x86_64.whl
-# https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.3.0rc4-cp310-cp310-win_amd64.whl # --> Use this for Windows
+https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.3.0rc5-cp310-cp310-linux_x86_64.whl
+# https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.3.0rc5-cp310-cp310-win_amd64.whl  # --> Use this for Windows
