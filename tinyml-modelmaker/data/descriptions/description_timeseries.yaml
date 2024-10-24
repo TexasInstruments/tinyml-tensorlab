@@ -204,19 +204,19 @@ model_descriptions:
         F280015:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 0.529
+          performance_infer_time_ms: 0.432
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 0.529
+          performance_infer_time_ms: 0.432
         F28004:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 0.635
+          performance_infer_time_ms: 0.518
         F2837:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 0.529
+          performance_infer_time_ms: 0.432
         F28P55:
           accuracy_factor: TBD
           model_selection_factor: 2
@@ -224,7 +224,7 @@ model_descriptions:
         F28P65:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 0.318
+          performance_infer_time_ms: 0.259
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -377,19 +377,19 @@ model_descriptions:
         F280015:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 0.973
+          performance_infer_time_ms: 0.836
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 0.973
+          performance_infer_time_ms: 0.836
         F28004:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 1.167
+          performance_infer_time_ms: 1.003
         F2837:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 0.973
+          performance_infer_time_ms: 0.836
         F28P55:
           accuracy_factor: TBD
           model_selection_factor: 1
@@ -397,7 +397,7 @@ model_descriptions:
         F28P65:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 0.584
+          performance_infer_time_ms: 0.502
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -550,19 +550,19 @@ model_descriptions:
         F280015:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 1.299
+          performance_infer_time_ms: 0.982
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 1.299
+          performance_infer_time_ms: 0.982
         F28004:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 1.559
+          performance_infer_time_ms: 1.179
         F2837:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 1.299
+          performance_infer_time_ms: 0.982
         F28P55:
           accuracy_factor: TBD
           model_selection_factor: 0
@@ -570,7 +570,7 @@ model_descriptions:
         F28P65:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 0.779
+          performance_infer_time_ms: 0.589
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -723,27 +723,27 @@ model_descriptions:
         F280015:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 0.629
+          performance_infer_time_ms: 0.555
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 0.629
+          performance_infer_time_ms: 0.555
         F28004:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 0.754
+          performance_infer_time_ms: 0.666
         F2837:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 0.629
+          performance_infer_time_ms: 0.555
         F28P55:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 0.197
+          performance_infer_time_ms: 0.173
         F28P65:
           accuracy_factor: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: 0.377
+          performance_infer_time_ms: 0.333
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -896,27 +896,27 @@ model_descriptions:
         F280015:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 18.79
+          performance_infer_time_ms: 17.743
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 18.79
+          performance_infer_time_ms: 17.743
         F28004:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 22.548
+          performance_infer_time_ms: 21.292
         F2837:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 18.79
+          performance_infer_time_ms: 17.743
         F28P55:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 2.208
+          performance_infer_time_ms: 1.686
         F28P65:
           accuracy_factor: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: 11.274
+          performance_infer_time_ms: 10.646
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1069,27 +1069,27 @@ model_descriptions:
         F280015:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 18.79
+          performance_infer_time_ms: 0.865
         F28003:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 18.79
+          performance_infer_time_ms: 0.865
         F28004:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 22.548
+          performance_infer_time_ms: 1.037
         F2837:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 18.79
+          performance_infer_time_ms: 0.865
         F28P55:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 2.208
+          performance_infer_time_ms: 0.253
         F28P65:
           accuracy_factor: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: 11.274
+          performance_infer_time_ms: 0.519
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
