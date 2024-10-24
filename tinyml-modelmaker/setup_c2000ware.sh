@@ -49,10 +49,10 @@ sudo apt install -y binutils:i386
 #################################################################################
 
 # now install c2000ware
-C2000WARE_INSTALLER=C2000Ware_5_03_00_00_setup.run
+C2000WARE_INSTALLER=C2000Ware_5_04_00_00_setup.run
 C2000WARE_INSTALLER_FILE=${INSTALLER_PATH}/${C2000WARE_INSTALLER}
 # rm -f ${C2000WARE_INSTALLER_FILE}
-wget http://c2000-ubuntu-build-pc.dhcp.ti.com/c2000ware-builds/5.03.00.00/RC7/${C2000WARE_INSTALLER} -O ${C2000WARE_INSTALLER_FILE}
+wget http://c2000-ubuntu-build-pc.dhcp.ti.com/c2000ware-builds/5.04.00.00/RC1/${C2000WARE_INSTALLER} -O ${C2000WARE_INSTALLER_FILE}
 if [ -e ${C2000WARE_INSTALLER_FILE} ]; then
     echo -e "\033[0;32mDownloaded ${C2000WARE_INSTALLER_FILE} from TI remote repository!\033[0m"
     chmod +x ${C2000WARE_INSTALLER_FILE}
