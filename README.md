@@ -55,6 +55,13 @@ pyenv activate py310
 2. `cd tinyml-tensorlab/tinyml-modelmaker`
 3. Execute (Requires sudo permissions): ``` ./setup_all.sh ```
 
+#### Step 1.6: Keeping up to date
+
+Since these repositories are undergoing a massive feature addition stage, it is recommended to keep your codes up to date by running the following command:
+```commandline
+git_pull_all.sh
+```
+
 
 <hr>
 
