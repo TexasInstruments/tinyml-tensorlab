@@ -8,7 +8,6 @@ Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with y
 ## Tasks supported
 * ARC Fault
 * Motor Fault
-* Generic Time Series Classification
 
 ## Supported target devices
 These are the devices that are supported currently. As additional devices are supported, this section will be updated.

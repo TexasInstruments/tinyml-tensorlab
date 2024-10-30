@@ -102,7 +102,8 @@ def set_model_selection_factor(model_descriptions):
             model_desc_list = [m for m in model_desc_list if target_device in list(m.training.target_devices.keys())]
             performance_infer_time_ms = [m.training.target_devices[target_device].performance_infer_time_ms for m in
                                          model_desc_list]
-            accuracy_factor = [m.training.target_devices[target_device].accuracy_factor for m in model_desc_list]
+            # accuracy_factor = [m.training.target_devices[target_device].accuracy_factor for m in model_desc_list]
+            accuracy_factor = ['TBD' for _ in model_desc_list]
             xy_list = [(performance_infer_time_ms[i], accuracy_factor[i], i) for i in
                        range(len(performance_infer_time_ms))]
             xy_list_shortlisted = [(xy[0], xy[1], xy[2]) for xy in xy_list if
@@ -272,6 +273,8 @@ def get_help_descriptions(params):
         #
     #
 
+    # removed_from_help_string_under_tasks_supported  "* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION]['task_name']}"
+
     help_string = f'''
 ## Overview
 This is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.
@@ -282,7 +285,6 @@ Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with y
 ## Tasks supported
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_ARC_FAULT]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_MOTOR_FAULT]['task_name']}
-* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION]['task_name']}
 
 ## Supported target devices
 These are the devices that are supported currently. As additional devices are supported, this section will be updated.

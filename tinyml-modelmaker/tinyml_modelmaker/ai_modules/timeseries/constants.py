@@ -106,7 +106,7 @@ TARGET_SDK_RELEASE = '05_04_00'
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
 # TODO: Once the links are up add this
 '''* Tiny ML introduction: https://ti.com/tinyml
-* Tiny ML model development information: https://github.com/TexasInstruments/tinyml
+* Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab
 * Tiny ML tools introduction: https://dev.ti.com/tinyml/
 '''
 
@@ -302,12 +302,12 @@ TASK_DESCRIPTIONS = {
         'target_devices': TARGET_DEVICES,
         'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
     },
-    TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-        'task_name': 'Generic Time Series Classification',
-        'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
-        'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
-    },
+    # TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
+    #     'task_name': 'Generic Time Series Classification',
+    #     'target_module': 'timeseries',
+    #     'target_devices': TARGET_DEVICES,
+    #     'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
+    # },
     # TASK_TYPE_AUDIO_CLASSIFICATION: {
     #     'task_name': 'Image Classification',
     #     'target_module': 'vision',
