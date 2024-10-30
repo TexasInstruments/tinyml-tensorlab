@@ -34,8 +34,6 @@ from glob import glob
 from logging import getLogger
 
 import numpy as np
-import onnxruntime
-from jinja2 import Environment, FileSystemLoader
 from tvm.driver.tvmc.compiler import drive_compile
 
 from tinyml_tinyverse.common.compilation.tvm_input_config import default_tvm_args
@@ -125,9 +123,6 @@ def gen_artifacts(args):
         raise
     logger.info("Changing directory back to: {}".format(curr_dir))
     os.chdir(curr_dir)
-    # We need to copy a few tvm files (like dlpack, c_backend_api.h and c_runtime_api.h)
-    # logger.info("Copying other files from TVM library (like dlpack, c_backend_api.h and c_runtime_api.h)")
-    # copytree(src=os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../tinyml_tinyverse/common/compilation/tvm_required_files/"), dst=artifacts_dir, dirs_exist_ok=True)
     # We also need to delete the devc.o file as it is not required
     try:
         os.remove(os.path.join(artifacts_dir, 'devc.o'))
@@ -139,32 +134,6 @@ def gen_artifacts(args):
             logger.debug("Removing {}".format(filename))
             os.remove(filename)
     return
-
-
-"""
-def get_model_ip_op_details(model_path):
-    logger = getLogger("root.get_model_ip_op_details")
-    np2c_dtype_dict = {np.uint8: 'uint8_t', np.uint16: 'uint16_t', np.uint32: 'uint32_t',
-                       np.int8: 'int8_t', np.int16: 'int16_t', np.int32: 'int32_t',
-                       np.float32: 'float', }
-    # The above dict is used to convert from numpy data types to float data types
-    logger.info("Loading model to infer data types and input/output shapes")
-    model = onnx.load(model_path)
-    # Now we shall get the shape of the inputs and outputs
-    ip_dim, op_dim = [], []
-    for inp in model.graph.input:
-        shape = str(inp.type.tensor_type.shape.dim)
-        ip_dim = [int(s) for s in shape.split() if s.isdigit()]
-    for outp in model.graph.output:
-        shape = str(outp.type.tensor_type.shape.dim)
-        op_dim = [int(s) for s in shape.split() if s.isdigit()]
-    # For TFLite and ONNX models separate statements
-    # TODO: Get input_data_type and output_data_type
-    input_data_type = np.float32
-    output_data_type = np.uint8
-    # Assuming only 1 input, 1 output for now
-    return np2c_dtype_dict[input_data_type], np2c_dtype_dict[output_data_type], ip_dim, op_dim
-"""
 
 
 def remove_intermittent_files(dir):
@@ -179,103 +148,7 @@ def remove_intermittent_files(dir):
     return
 
 
-def get_model_ip_op_details(model_path):
-    logger = getLogger("root.get_model_ip_op_details")
-    # The below dict is used to convert from numpy data types to float data types
-    np2c_dtype_dict = {np.uint8: 'uint8_t', np.uint16: 'uint16_t', np.uint32: 'uint32_t',
-                       np.int8: 'int8_t', np.int16: 'int16_t', np.int32: 'int32_t',
-                       np.float32: 'float32_t', 'tensor(float)': 'float32_t',}
-    logger.info("Loading model to infer data types and input/output shapes")
-    onnx_session = onnxruntime.InferenceSession(model_path)
-    input_details = onnx_session.get_inputs()
-    output_details = onnx_session.get_outputs()
-    # Now we shall get the shape of the inputs and outputs
-    # TODO: Assuming only 1 input, 1 output for now, require support for multiple datatypes
-    # ip_dim = input_details[0].shape
-    # ip_dtype = input_details[0].type
-    # op_dim = output_details[0].shape
-    # op_dtype = output_details[0].type
-    # For TFLite and ONNX models separate statements
-    return [(np2c_dtype_dict[ip.type], ip.shape) for ip in input_details], [(np2c_dtype_dict[op.type], op.shape) for op in output_details]
-    # return np2c_dtype_dict[ip_dtype], np2c_dtype_dict[op_dtype], ip_dim, op_dim
-
-
-def gen_wrapper_code(model_path, output_dir):
-    logger = getLogger("root.gen_wrapper_code")
-    input_data_type_dims, output_data_type_dims = get_model_ip_op_details(model_path)
-    environment = Environment(loader=FileSystemLoader(
-        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tinyml_tinyverse', 'common', 'compilation', 'templates')))
-    template = environment.get_template("c_wrapper_template.txt")
-    # Output data is only required if we're matching against golden. For now just keep it
-    context = {'input_related_data': [], 'output_related_data': [], 'inputs_base_addresses': [],
-               'outputs_base_addresses': []}
-
-    for i, (ip_dtype, ip_dim) in enumerate(input_data_type_dims):
-        # context[f'input_data_type{i}'] = ip_dtype
-        # context[f'ip_dim_str{i}'] = ''.join(["[{}]".format(x) for x in ip_dim])  # Formatting from (1,752,1)-> [1][752][1]
-        # context[f'input_data{i}'] = np.array2string(np.random.randint(0, 255, size=np.prod(ip_dim)), separator=', ')[1:-1]
-        # context[f'dim_str_ip_base{i}'] = ''.join(["[0]" for _ in ip_dim])  # Formatting from  [1][752][1] -> [0][0][0]
-        '''
-        The following string format: 
-        {{input_data_type}} input_1{{ip_dim_str}} = { {{input_data1}} }; 
-        '''
-        context['input_related_data'].append('{input_data_type} input_{i}{ip_dim_str} = {{{input_data}}};'.format(
-            input_data_type = ip_dtype, i=i+1,
-            ip_dim_str= ''.join(["[{}]".format(x) for x in ip_dim]),  # Formatting from (1,752,1)-> [1][752][1]
-            input_data=np.array2string(np.random.randint(0, 255, size=np.prod(ip_dim)), separator=', ')[1:-1],
-            # ''.join(["[0]" for _ in ip_dim])
-        ))
-        '''
-        The following string format:
-        struct tvmgen_default_inputs  inputs = {&input_1{{dim_str_ip_base}}};
-        '''
-        context['inputs_base_addresses'].append('&input_{i}{dim_str_ip_base}'.format(
-            i=i+1, dim_str_ip_base=''.join(["[0]" for _ in ip_dim]),
-        ))
-
-    for i, (op_dtype, op_dim) in enumerate(output_data_type_dims):
-        # context[f'output_data_type{i}'] = op_dtype
-        # context[f'op_dim_str{i}'] = ''.join(["[{}]".format(x) for x in op_dim])  # Formatting from (1)-> [1]
-        # context[f'output_data{i}'] = np.array2string(np.random.randint(0, 255, size=np.prod(op_dim)), separator=', ')[1:-1],
-        # context[f'dim_str_op_base{i}'] = ''.join(["[0]" for _ in op_dim]),
-        '''
-        The following string format:
-        {{output_data_type}} output_1{{op_dim_str}} = { {{output_data1}} }; 
-        '''
-        context['output_related_data'].append('{output_data_type} output_{i}{op_dim_str} = {{{output_data}}};'.format(
-            output_data_type=op_dtype, i=i+1,
-            op_dim_str=''.join(["[{}]".format(x) for x in op_dim]),  # Formatting from (1,752,1)-> [1][752][1]
-            output_data=np.array2string(np.random.randint(0, 255, size=np.prod(op_dim)), separator=', ')[1:-1],
-            # ''.join(["[0]" for _ in op_dim])
-        ))
-        '''
-        The following string format:
-        struct tvmgen_default_outputs outputs = {&output_1{{dim_str_op_base}}};
-        '''
-        context['outputs_base_addresses'].append(
-            '&output_{i}{dim_str_op_base}'.format(
-                i=i+1, dim_str_op_base=''.join(["[0]" for _ in op_dim]),
-            ))
-
-    context['input_related_data'] = '\n'.join(context['input_related_data'])
-    context['output_related_data'] = '\n'.join(context['output_related_data'])
-
-    context['inputs_base_addresses'] = ', '.join(context['inputs_base_addresses'])
-    context['outputs_base_addresses'] = ', '.join(context['outputs_base_addresses'])
-
-    wrapper_filename = os.path.join(output_dir, "app.c")
-    with open(wrapper_filename, mode="w", encoding="utf-8") as fh:
-        fh.write(template.render(context))
-    logger.info("Creating wrapper script using template at: {}".format(wrapper_filename))
-
-    return
-
-
 def main(args):
-    # ret_code = gen_artifacts(args)
-    # if ret_code:
-    #     raise Exception(f"Process failed with return code {ret_code}")
-    # logger = command_display(args.lis or os.path.join(args.output_dir, 'compilation.lis'), args.DEBUG)
     logger = Logger(log_file=args.lis or os.path.join(args.output_dir, 'compilation.lis'),
                     DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)
     from ..version import get_version_str
@@ -293,7 +166,10 @@ def main(args):
     args.target_cmsis_nn_mcpu = None if args.target_cmsis_nn_mcpu=='None' else args.target_cmsis_nn_mcpu
     args.target_cmsis_nn_mattr = None if args.target_cmsis_nn_mattr == 'None' else args.target_cmsis_nn_mattr
     if not args.generic_model:
-        utils.decrypt(args.FILE, utils.get_crypt_key())
+        try:
+            utils.decrypt(args.FILE, utils.get_crypt_key())
+        except Exception:
+            pass
     try:
         gen_artifacts(args)
     except Exception:
@@ -305,10 +181,10 @@ def main(args):
 
     if not args.keep_intermittent_files:
         remove_intermittent_files(args.output_dir)
-    # gen_wrapper_code(args.FILE, os.path.join(args.output_dir, 'artifacts'))  # TODO: Enable this once a better app.c can be done
 
 
 def run(args):
+    # This code was majorly cleaned up in TINYML_ALGO-212
     main(args)
 
 

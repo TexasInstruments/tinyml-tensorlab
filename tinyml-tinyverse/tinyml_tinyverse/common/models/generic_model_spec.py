@@ -63,8 +63,8 @@ class GenericModelWithSpec(nn.Module):
         if len(kwargs) > 0:
             config = config or self.config or dict()
             for key, value in kwargs.items():
-                value_wtih_default = config.get(key, value)
-                setattr(self, key, value_wtih_default)
+                value_with_default = config.get(key, value)
+                setattr(self, key, value_with_default)
 
     def _init_model_from_spec(self, model_spec=None, variables=None, input_features=None,
                               num_classes=None, with_input_batchnorm=None):
