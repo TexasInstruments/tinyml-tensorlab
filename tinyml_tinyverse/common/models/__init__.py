@@ -34,13 +34,13 @@ from logging import getLogger
 import yaml
 
 from ..utils import misc_utils
-from .generic_models import CNN_TS_GEN_BASE_3K, CNN_TS_GEN_BASE_7K
-
-# from .kilby_models import *
+from .generic_models import *
 
 model_dict = {
-    'CNN_TS_GEN_BASE_3K': CNN_TS_GEN_BASE_3K,
-    'CNN_TS_GEN_BASE_7K': CNN_TS_GEN_BASE_7K,
+    'CNN_TS_GEN_BASE_1K': CNN_TS_GEN_BASE_1K,
+    'CNN_TS_GEN_BASE_4K': CNN_TS_GEN_BASE_4K,
+    'CNN_TS_GEN_BASE_6K': CNN_TS_GEN_BASE_6K,
+    'CNN_TS_GEN_BASE_13K': CNN_TS_GEN_BASE_13K,
     # 'CNN_AF_3L_200': CNN_AF_3L_200,
     # 'CNN_AF_3L_300': CNN_AF_3L_300,
     # 'CNN_AF_3L_700': CNN_AF_3L_700,
