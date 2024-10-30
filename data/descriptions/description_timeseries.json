@@ -5,7 +5,7 @@
     ]
   },
   "model_descriptions":{
-    "TimeSeries_Generic_7k":{
+    "TimeSeries_Generic_13k":{
       "common":{
         "verbose_mode":true,
         "download_path":"./data/downloads",
@@ -53,37 +53,32 @@
       },
       "training":{
         "enable":true,
-        "model_name":"TimeSeries_Generic_7k",
+        "model_name":"TimeSeries_Generic_13k",
         "model_config":null,
         "model_spec":null,
         "dataset_loader":"SimpleTSDataset",
-        "model_training_id":"CNN_TS_GEN_BASE_7K",
+        "model_training_id":"CNN_TS_GEN_BASE_13K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28003":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":0
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":0
           }
         },
@@ -208,7 +203,7 @@
         ]
       }
     },
-    "TimeSeries_Generic_7k_t":{
+    "TimeSeries_Generic_13k_t":{
       "common":{
         "verbose_mode":true,
         "download_path":"./data/downloads",
@@ -256,42 +251,36 @@
       },
       "training":{
         "enable":true,
-        "model_name":"TimeSeries_Generic_7k_t",
+        "model_name":"TimeSeries_Generic_13k_t",
         "model_config":null,
         "model_spec":null,
         "dataset_loader":"SimpleTSDataset",
-        "model_training_id":"CNN_TS_GEN_BASE_7K",
+        "model_training_id":"CNN_TS_GEN_BASE_13K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28003":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":1
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":0
           }
         },
@@ -416,7 +405,7 @@
         ]
       }
     },
-    "TimeSeries_Generic_3k":{
+    "TimeSeries_Generic_6k":{
       "common":{
         "verbose_mode":true,
         "download_path":"./data/downloads",
@@ -464,37 +453,32 @@
       },
       "training":{
         "enable":true,
-        "model_name":"TimeSeries_Generic_3k",
+        "model_name":"TimeSeries_Generic_6k",
         "model_config":null,
         "model_spec":null,
         "dataset_loader":"SimpleTSDataset",
-        "model_training_id":"CNN_TS_GEN_BASE_3K",
+        "model_training_id":"CNN_TS_GEN_BASE_6K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28003":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":2
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":2
           }
         },
@@ -619,7 +603,7 @@
         ]
       }
     },
-    "TimeSeries_Generic_3k_t":{
+    "TimeSeries_Generic_6k_t":{
       "common":{
         "verbose_mode":true,
         "download_path":"./data/downloads",
@@ -667,43 +651,837 @@
       },
       "training":{
         "enable":true,
-        "model_name":"TimeSeries_Generic_3k_t",
+        "model_name":"TimeSeries_Generic_6k_t",
         "model_config":null,
         "model_spec":null,
         "dataset_loader":"SimpleTSDataset",
-        "model_training_id":"CNN_TS_GEN_BASE_3K",
+        "model_training_id":"CNN_TS_GEN_BASE_6K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":3
           },
           "F28003":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":3
           },
           "F28004":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":3
           },
           "F2837":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":3
           },
           "F28P65":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":3
           },
           "F28P55":{
             "performance_infer_time_ms":"TBD",
-            "accuracy_factor":"TBD",
             "model_selection_factor":1
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "TimeSeries_Generic_4k":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_4k",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_4K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":4
+          },
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":4
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":4
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":4
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":4
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":1,
+        "with_input_batchnorm":false,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "TimeSeries_Generic_4k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_4k_t",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_4K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":5
+          },
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":5
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":5
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":5
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":5
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":2
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "TimeSeries_Generic_1k":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_1k",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_1K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":6
+          },
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":6
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":6
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":6
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":6
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":1,
+        "with_input_batchnorm":false,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "stride_window":0.001,
+        "sequence_window":0.25,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":"",
+        "frame_size":1024,
+        "feature_size_per_frame":512,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_fft_bin":1,
+        "fft_bin_size":2,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "stacking":null,
+        "offset":0,
+        "scale":1
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "TimeSeries_Generic_1k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_1k_t",
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"SimpleTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_1K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":7
+          },
+          "F28003":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":7
+          },
+          "F28004":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":7
+          },
+          "F2837":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":7
+          },
+          "F28P65":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":7
+          },
+          "F28P55":{
+            "performance_infer_time_ms":"TBD",
+            "model_selection_factor":3
           }
         },
         "project_path":null,
@@ -885,32 +1663,32 @@
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":0.982,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":0
           },
           "F28003":{
             "performance_infer_time_ms":0.982,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":0
           },
           "F28004":{
             "performance_infer_time_ms":1.179,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":0
           },
           "F2837":{
             "performance_infer_time_ms":0.982,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":0
           },
           "F28P65":{
             "performance_infer_time_ms":0.589,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":0
           },
           "F28P55":{
             "performance_infer_time_ms":0.307,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":0
           }
         },
@@ -1093,32 +1871,32 @@
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":0.836,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":1
           },
           "F28003":{
             "performance_infer_time_ms":0.836,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":1
           },
           "F28004":{
             "performance_infer_time_ms":1.003,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":1
           },
           "F2837":{
             "performance_infer_time_ms":0.836,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":1
           },
           "F28P65":{
             "performance_infer_time_ms":0.502,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":1
           },
           "F28P55":{
             "performance_infer_time_ms":0.254,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":1
           }
         },
@@ -1301,32 +2079,32 @@
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":0.432,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":2
           },
           "F28003":{
             "performance_infer_time_ms":0.432,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":2
           },
           "F28004":{
             "performance_infer_time_ms":0.518,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":2
           },
           "F2837":{
             "performance_infer_time_ms":0.432,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":2
           },
           "F28P65":{
             "performance_infer_time_ms":0.259,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":2
           },
           "F28P55":{
             "performance_infer_time_ms":0.193,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
             "model_selection_factor":2
           }
         },
@@ -1509,32 +2287,32 @@
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":0.555,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":0
           },
           "F28003":{
             "performance_infer_time_ms":0.555,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":0
           },
           "F28004":{
             "performance_infer_time_ms":0.666,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":0
           },
           "F2837":{
             "performance_infer_time_ms":0.555,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":0
           },
           "F28P65":{
             "performance_infer_time_ms":0.333,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":0
           },
           "F28P55":{
             "performance_infer_time_ms":0.173,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":0
           }
         },
@@ -1717,32 +2495,32 @@
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":17.743,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":1
           },
           "F28003":{
             "performance_infer_time_ms":17.743,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":1
           },
           "F28004":{
             "performance_infer_time_ms":21.292,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":1
           },
           "F2837":{
             "performance_infer_time_ms":17.743,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":1
           },
           "F28P65":{
             "performance_infer_time_ms":10.646,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":1
           },
           "F28P55":{
             "performance_infer_time_ms":1.686,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":1
           }
         },
@@ -1925,32 +2703,32 @@
         "target_devices":{
           "F280015":{
             "performance_infer_time_ms":0.865,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":2
           },
           "F28003":{
             "performance_infer_time_ms":0.865,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":2
           },
           "F28004":{
             "performance_infer_time_ms":1.037,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":2
           },
           "F2837":{
             "performance_infer_time_ms":0.865,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":2
           },
           "F28P65":{
             "performance_infer_time_ms":0.519,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":2
           },
           "F28P55":{
             "performance_infer_time_ms":0.253,
-            "accuracy_factor":"TBD",
+            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
             "model_selection_factor":2
           }
         },
@@ -2422,25 +3200,6 @@
         "training",
         "compilation"
       ]
-    },
-    "generic_timeseries_classification":{
-      "task_name":"Generic Time Series Classification",
-      "target_module":"timeseries",
-      "target_devices":[
-        "F280015",
-        "F28003",
-        "F28004",
-        "F2837",
-        "F28P55",
-        "F28P65"
-      ],
-      "stages":[
-        "dataset",
-        "data_processing",
-        "feature_extraction",
-        "training",
-        "compilation"
-      ]
     }
   },
   "sample_dataset_descriptions":{
@@ -2528,5 +3287,5 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n* Generic Time Series Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n* Motor Fault\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
 }

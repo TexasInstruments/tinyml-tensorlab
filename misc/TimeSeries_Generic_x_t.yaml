@@ -1,0 +1,4 @@
+input_features: 512
+variables: 1
+num_classes: 2
+with_input_batchnorm: True
