@@ -25,18 +25,17 @@ feature_extraction:
     feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
 #    store_feat_ext_data: True
 
-
 training:
     # enable/disable training
     enable: True #False
     dataset_loader: MotorFaultDataset
-    # F28x generic timeseries model names: TimeSeries_Generic_3k_t, TimeSeries_Generic_7k_t
+    # F28x generic timeseries model names: TimeSeries_Generic_4k_t, TimeSeries_Generic_13k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
-    model_name: 'MotorFault_model_2_t'
+    model_name: 'TimeSeries_Generic_6k_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
     batch_size: 256
-    training_epochs: 30
+    training_epochs: 5
     num_gpus: 0  # 1
     learning_rate: 0.04
 
