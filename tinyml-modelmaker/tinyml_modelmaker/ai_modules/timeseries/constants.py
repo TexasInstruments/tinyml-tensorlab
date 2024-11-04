@@ -336,7 +336,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_256Feature_1Frame_Half_Bandwidth=dict(
         feature_extraction=dict(transform='FFT', frame_size=1024, feature_size_per_frame=256, num_frame_concat=1,
-                                min_fft_bin=122, fft_bin_size=2, frame_skip=1, ),
+                                min_fft_bin=122, fft_bin_size=1, frame_skip=1, ),
         data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_64Feature_4Frame_Half_Bandwidth=dict(
