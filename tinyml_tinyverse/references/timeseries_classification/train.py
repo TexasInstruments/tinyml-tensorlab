@@ -293,20 +293,30 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
 // //////////////////////////////////////////////////////////////////////////////////////////////////////"""
     vector_files
     for i, file_path in enumerate(vector_files):
+        # There are 3 vector files for each set. So First (index 0) and Third (index 2) need to have the /* and */ respectively
+
         if i % 3 == 0:
-            headerfile_info += f'\n/*\n// SET {i // 3}'
+            if i // 3 == 0:
+                # Set0 will not be commented so that the generated code can run automatically without build errors
+                headerfile_info += f'\n\n// SET {i // 3}'
+            else:
+                headerfile_info += f'\n/*\n// SET {i // 3}'
         with open(file_path) as fp:
             file_array = fp.read()
             headerfile_info += f'\n{file_array};\n'
         if i % 3 == 2:
-            headerfile_info += '*/\n'
+            if i // 3 == 0:
+                # Set0 will not be commented so that the generated code can run automatically without build errors
+                headerfile_info += '\n'
+            else:
+                headerfile_info += '*/\n'
         os.remove(file_path)
 
-    test_vectors_c = os.path.join(golden_vectors_dir, 'test_vectors.c')
+    test_vectors_c = os.path.join(golden_vectors_dir, 'test_vector.c')
     with open(test_vectors_c, 'w') as fp:
         fp.write(headerfile_info)
     user_input_config_h = os.path.join(golden_vectors_dir, 'user_input_config.h')
-    logger.info("Creating test_vectors.c at: {}".format(test_vectors_c))
+    logger.info("Creating test_vector.c at: {}".format(test_vectors_c))
 #     feature_extraction_info_str = """/*typedef enum {
 #     FEATURE_EXTRACT_UNDEFINED=0,
 #     FEATURE_EXTRACT_RAW=1,
