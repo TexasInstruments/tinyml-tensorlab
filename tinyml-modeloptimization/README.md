@@ -1,13 +1,7 @@
 # Tiny ML Torch Model Optimization Repository
 
-This repository helps you to quantize (QAT) your floating point ONNX model to a model that can run optimally with TI's MCUs
 
-An example on using this repository is present at [references](./references/)
-You can follow the instructions in [readme](./references/fmnist_ti_qat_readme.md) 
-
-
----
-## Contributor and Maintainer
-- [Adithya Thonse](https://github.com/Adithya-Thonse)
-- [Manu Mathew](https://github.com/mathmanu)
-- [Ajay Jayaraj](ajayj@ti.com)
+## Tiny ML TorchModelOpt
+* [Tiny ML TorchModelOpt Documentation](./torchmodelopt/) - Tools and utilities to help the development of embedded friendly DNN(Deep Neural Network) Models in [Pytorch](https://pytorch.org) - we call these **model optimization tools**.
+* This repository helps you to quantize (with Quantization Aware Training - QAT) your model to formats that can run optimally on TI's MCUs
+* Examples for using this repository is present at [examples](./torchmodelopt/examples/)
