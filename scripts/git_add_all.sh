@@ -29,10 +29,10 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-git subtree pull --prefix tinyml-tinyverse ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-tinyverse.git r0.9 --squash
-git subtree pull --prefix tinyml-docs ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git r0.9 --squash
-git subtree pull --prefix tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git r0.9 --squash
-git subtree pull --prefix tinyml-modelmaker ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git r0.9 --squash
-git subtree pull --prefix tinyml-modelzoo ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git r0.9 --squash
+git subtree add --prefix tinyml-tinyverse ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-tinyverse.git r0.9
+git subtree add --prefix tinyml-docs ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git r0.9
+git subtree add --prefix tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git r0.9
+git subtree add --prefix tinyml-modelmaker ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git r0.9
+git subtree add --prefix tinyml-modelzoo ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git r0.9
 
-git submodule update --remote
+
