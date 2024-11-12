@@ -42,6 +42,8 @@ from torch.utils.data import Dataset
 from tqdm import tqdm
 
 from ..transforms import basic_transforms
+from ..transforms.haar import haar_forward
+from ..transforms.hadamard import hadamard_forward_vectorized
 
 
 class SimpleTSDataset(Dataset):
@@ -264,6 +266,25 @@ class SimpleTSDataset(Dataset):
         # self.X = torch.from_numpy(self.X)
         # self.Y = torch.from_numpy(self.Y)
 
+    def __feature_extraction(self, x_temp):
+        if 'HAAR' in self.transforms:
+            # x_temp = np.apply_along_axis(haar_forward, 1, x_temp)
+            x_temp = np.apply_along_axis(haar_forward, 1, x_temp)
+            x_temp[x_temp<1e-8] = 1e-8
+            x_temp = 20*np.log10(x_temp)
+        if 'HADAMARD' in self.transforms:
+            x_temp = np.apply_along_axis(hadamard_forward_vectorized, 1, x_temp)
+        if 'BIN' in self.transforms:
+
+            x_temp = basic_transforms.binning(x_temp, 4)
+        if 'ABS' in self.transforms:
+            x_temp = np.abs(x_temp)
+        if 'LOG' in self.transforms:
+            x_temp[x_temp<1e-8] = 1e-8
+            x_temp = 20*np.log10(x_temp)
+        # x_temp = np.apply_along_axis(lambda x: x - np.mean(x), 1, x_temp)
+        return x_temp
+
     def prepare(self, **kwargs):
         # Space for Dataset specific initialisations
         self._prepare_empty_variables(**kwargs)
@@ -271,6 +292,7 @@ class SimpleTSDataset(Dataset):
             try:
                 x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
                 # Space for Dataset specific initialisations
+                x_temp = self.__feature_extraction(x_temp.copy())
                 self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")

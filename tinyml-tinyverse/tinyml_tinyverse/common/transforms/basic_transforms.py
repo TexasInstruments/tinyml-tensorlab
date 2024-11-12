@@ -56,6 +56,18 @@ def Downsample(x, sampling_rate, new_sr):
     return x[::int(sampling_rate // new_sr)]  # DownSampling is being done only before windowing so for now it doesn't matter
 
 
+def binning(x, bin_size):
+    """
+    Expects a 3d array and performs binning on the second dimension
+    x(562,256,3)--> binning(x, 2) --> (562,128,3)
+    """
+    binned_result = []
+    for i in range(0, x.shape[1], bin_size):
+        bin_values = x[:, i:i+bin_size, :]
+        binned_result.append(np.mean(bin_values, axis=1))
+    return np.stack(binned_result, axis=1)
+
+
 class Jittering(object):
     def __init__(self, sigma):
         assert isinstance(sigma, (float, tuple))
