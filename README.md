@@ -7,7 +7,7 @@ This repository stitches individual core scripts and utilities present in Tiny M
 The following are the key functionality supported by this tool:
 - Dataset handling: This dataset formats supported by this tool is described in a section below. This can convert dataset formats and can automatically split the given dataset into train and validation sets (if it is not already split).
 - Model training: Model training repositories such as [tinyml-tinyverse](https://github.com/TexasInstruments/tinyml-tinyverse) built using [PyTorch](https://pytorch.org/) and [torchaudio](https://pytorch.org/audio/stable/index.html) are integrated. Several models with pretrained checkpoints are incorporated for each of these repositories. 
-- Model compilation: Model compilation tools TI's [neo-tvm](https://bitbucket.itg.ti.com/projects/MCTOOLS/repos/neo-tvm/) for TI's microcontrollers have been integrated.
+- Model compilation: Model compilation tools [TI’s Neural Network Compiler](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/) for TI's microcontrollers have been integrated.
 
 
 Tasks and Models
