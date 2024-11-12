@@ -3,7 +3,7 @@
 <hr>
 The Tiny ML Tensorlab repository is meant to be as a starting point to install and explore TI's AI offering for MCUs.
 It helps to install all the required repositories to get started.
-Currently, it can handle Time series Classification tasks. A lot more READMEs are present under the Tiny ML Modelmaker Repo
+Currently, it can handle Time series Classification tasks. A lot more [READMEs](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelmaker/docs) are present under the Tiny ML Modelmaker Repo
 
 There are a few productized applications:
 
@@ -13,11 +13,11 @@ There are a few productized applications:
 | Industrial                                                   | Time series | Motor Bearing Fault Detection | Motor bearing faults are often seen in HVAC systems with rotating parts. Itoccurs due to the wear and tear of moving parts, lack of lubrication, and due to overloading of equipment. It adversely affects the motor lifespan and increases energy consumption, potentially even can cause a failure of the system.<br><br>By using AI, these faults can be detected early by monitoring signs such as subtle changes in vibration patterns. Processing such data locally at the HVAC system can provide real time fault detection and immediate response, which is crucial for preventing damage and ensuring continuous operation.<br><br>TI provides handcrafted AI models which have impeccable accuracy and ultra low latency. | TI's AI solution addresses these by montoring the vibration and temperature of the motor through sensors and provides a reliable solution by combining the strengths of advanced analytics and real-time processing, leading to more reliable, efficient, and cost-effective maintenance and operation.<br><br>Put together with an NPU for advanced AI performance capabilities, this prevents unexpected failures as the algorithms can detect early signs of faults that might not be noticeable through manual inspections | To empower your solution with TI’s AI, you can use the Model Composer GUI to quickly train an AI model or use the Tiny ML Modelmaker for an advanced set of capabilities. To customers who rely on their own AI training framework, TI’s Neural Network Compiler can help you get your AI model compatible with MCUs (P55x,P66x or any other F28 device). For a full-fledged reference solution, find the comprehensive project here. |
 
 
-* To empower your solution with TI’s AI, you can use the **Tiny ML Modelmaker** for an advanced set of capabilities.
+* To empower your solution with TI’s AI, you can use the **[Tiny ML Modelmaker](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelmaker)** for an advanced set of capabilities.
   * Supports any Time series Classification tasks (including Arc Fault and Motor Bearing Fault Classification)
 * You can also use the [Edge AI Studio Model Composer GUI](https://dev.ti.com/modelcomposer/) to quickly train an AI model (No Code Platform)
   * This supports only Arc Fault and Motor Bearing Fault Classification applications currently.
-* To customers who rely on their own AI training framework, TI’s Neural Network Compiler can help you get your AI model compatible with MCUs (P55x,P66x or any other F28 device).
+* To customers who rely on their own AI training framework, [TI’s Neural Network Compiler](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/) can help you get your AI model compatible with MCUs (P55x,P66x or any other F28 device).
 * For a full-fledged reference solution on Arc Fault and Motor Bearing Fault, find the comprehensive project in [Digital Power SDK](https://www.ti.com/tool/C2000WARE-DIGITALPOWER-SDK) and [Motor Control SDK](https://www.ti.com/tool/C2000WARE-MOTORCONTROL-SDK).
 
 
