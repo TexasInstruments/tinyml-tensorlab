@@ -1478,7 +1478,7 @@ class ModelTraining:
                            :-8]  # remove --store-feat-ext-data <True/False> --epochs <epochs> --lr <lr> --output-dir <output-dir>
                     argv.extend([
                         '--output-dir', f'{self.params.training.training_path_quantization}',
-                        '--epochs', f'{max(5, self.params.training.training_epochs // 10)}',
+                        '--epochs', f'{max(10, self.params.training.training_epochs // 5)}',
                         '--lr', f'{self.params.training.learning_rate / 100}',
                         '--weights', f'{self.params.training.model_checkpoint_path}',
                         '--quantization', f'{self.params.training.quantization}',
