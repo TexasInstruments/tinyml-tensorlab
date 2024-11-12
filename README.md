@@ -2,8 +2,9 @@
 
 <hr>
 The Tiny ML Tensorlab repository is meant to be as a starting point to install and explore TI's AI offering for MCUs.
-It helps to install all the required repositories to get started.
-Currently, it can handle Time series Classification tasks. A lot more [READMEs](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelmaker/docs) are present under the Tiny ML Modelmaker Repo
+It helps to install all the required repositories to get started. Currently, it can handle Time series Classification tasks. 
+
+A lot more [READMEs](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelmaker/docs) are present under the Tiny ML Modelmaker Repo
 
 There are a few productized applications:
 
