@@ -24,3 +24,15 @@
 * Product information: https://www.ti.com/product/TMS320F280039C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
+
+<hr>
+
+# Application Specific SDKs
+
+## C2000 Motor Control SDK
+* https://www.ti.com/tool/C2000WARE-MOTORCONTROL-SDK
+
+## C2000 Digital Power SDK
+* https://www.ti.com/tool/C2000WARE-DIGITALPOWER-SDK
+
+<hr>
