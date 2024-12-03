@@ -56,30 +56,46 @@
         "model_name":"TimeSeries_Generic_13k",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_13K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P55":{
+            "model_selection_factor":0,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -157,28 +173,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -254,34 +274,46 @@
         "model_name":"TimeSeries_Generic_13k_t",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_13K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P55":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":0
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -359,28 +391,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -456,30 +492,46 @@
         "model_name":"TimeSeries_Generic_6k",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_6K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P55":{
+            "model_selection_factor":2,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -557,28 +609,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -654,34 +710,46 @@
         "model_name":"TimeSeries_Generic_6k_t",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_6K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":3,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":3,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":3,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":3,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":3,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P55":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":1
+            "model_selection_factor":3,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -759,28 +827,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -856,30 +928,46 @@
         "model_name":"TimeSeries_Generic_4k",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_4K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":4
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P55":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -957,28 +1045,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -1054,34 +1146,46 @@
         "model_name":"TimeSeries_Generic_4k_t",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_4K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":5,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":5,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":5,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":5,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":5
+            "model_selection_factor":5,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P55":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":2
+            "model_selection_factor":5,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -1159,28 +1263,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -1256,30 +1364,46 @@
         "model_name":"TimeSeries_Generic_1k",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_1K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":6,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":6,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":6,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":6,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":6
+            "model_selection_factor":6,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P55":{
+            "model_selection_factor":6,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -1357,28 +1481,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -1454,34 +1582,46 @@
         "model_name":"TimeSeries_Generic_1k_t",
         "model_config":null,
         "model_spec":null,
-        "dataset_loader":"SimpleTSDataset",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_TS_GEN_BASE_1K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":7,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28003":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":7,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28004":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":7,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F2837":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":7,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P65":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":7
+            "model_selection_factor":7,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           },
           "F28P55":{
-            "performance_infer_time_ms":"TBD",
-            "model_selection_factor":3
+            "model_selection_factor":7,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -1559,28 +1699,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -1655,41 +1799,47 @@
         "enable":true,
         "model_name":"ArcFault_model_700_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py",
-        "dataset_loader":"ArcFaultDataset",
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_AF_3L_700",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.982,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1865,
+            "inference_time_us":628,
+            "sram":1542
           },
           "F28003":{
-            "performance_infer_time_ms":0.982,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1865,
+            "inference_time_us":628,
+            "sram":1542
           },
           "F28004":{
-            "performance_infer_time_ms":1.179,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1865,
+            "inference_time_us":523,
+            "sram":1542
           },
           "F2837":{
-            "performance_infer_time_ms":0.982,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1865,
+            "inference_time_us":628,
+            "sram":1542
           },
           "F28P65":{
-            "performance_infer_time_ms":0.589,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1865,
+            "inference_time_us":1046,
+            "sram":1542
           },
           "F28P55":{
-            "performance_infer_time_ms":0.307,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":2490,
+            "inference_time_us":306,
+            "sram":1578
           }
         },
         "project_path":null,
@@ -1767,28 +1917,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -1863,41 +2017,47 @@
         "enable":true,
         "model_name":"ArcFault_model_300_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py",
-        "dataset_loader":"ArcFaultDataset",
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_AF_3L_300",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.836,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":1796,
+            "inference_time_us":534,
+            "sram":1542
           },
           "F28003":{
-            "performance_infer_time_ms":0.836,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":1796,
+            "inference_time_us":534,
+            "sram":1542
           },
           "F28004":{
-            "performance_infer_time_ms":1.003,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":1796,
+            "inference_time_us":445,
+            "sram":1542
           },
           "F2837":{
-            "performance_infer_time_ms":0.836,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":1796,
+            "inference_time_us":534,
+            "sram":1542
           },
           "F28P65":{
-            "performance_infer_time_ms":0.502,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":1796,
+            "inference_time_us":890,
+            "sram":1542
           },
           "F28P55":{
-            "performance_infer_time_ms":0.254,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":2152,
+            "inference_time_us":254,
+            "sram":1578
           }
         },
         "project_path":null,
@@ -1975,28 +2135,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -2071,41 +2235,47 @@
         "enable":true,
         "model_name":"ArcFault_model_200_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py",
-        "dataset_loader":"ArcFaultDataset",
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_AF_3L_200",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.432,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":1618,
+            "inference_time_us":276,
+            "sram":1030
           },
           "F28003":{
-            "performance_infer_time_ms":0.432,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":1618,
+            "inference_time_us":276,
+            "sram":1030
           },
           "F28004":{
-            "performance_infer_time_ms":0.518,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":1618,
+            "inference_time_us":230,
+            "sram":1030
           },
           "F2837":{
-            "performance_infer_time_ms":0.432,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":1618,
+            "inference_time_us":276,
+            "sram":1030
           },
           "F28P65":{
-            "performance_infer_time_ms":0.259,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":1618,
+            "inference_time_us":460,
+            "sram":1030
           },
           "F28P55":{
-            "performance_infer_time_ms":0.193,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 256)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":2048,
+            "inference_time_us":193,
+            "sram":830
           }
         },
         "project_path":null,
@@ -2183,28 +2353,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -2279,41 +2453,47 @@
         "enable":true,
         "model_name":"MotorFault_model_1_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py",
-        "dataset_loader":"MotorFaultDataset",
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_MF_1L",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.555,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1429,
+            "inference_time_us":355,
+            "sram":1324
           },
           "F28003":{
-            "performance_infer_time_ms":0.555,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1429,
+            "inference_time_us":355,
+            "sram":1324
           },
           "F28004":{
-            "performance_infer_time_ms":0.666,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1429,
+            "inference_time_us":296,
+            "sram":1324
           },
           "F2837":{
-            "performance_infer_time_ms":0.555,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1429,
+            "inference_time_us":355,
+            "sram":1324
           },
           "F28P65":{
-            "performance_infer_time_ms":0.333,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1429,
+            "inference_time_us":592,
+            "sram":1324
           },
           "F28P55":{
-            "performance_infer_time_ms":0.173,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":0
+            "model_selection_factor":0,
+            "flash":1988,
+            "inference_time_us":173,
+            "sram":1204
           }
         },
         "project_path":null,
@@ -2391,28 +2571,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -2487,41 +2671,47 @@
         "enable":true,
         "model_name":"MotorFault_model_2_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py",
-        "dataset_loader":"MotorFaultDataset",
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_MF_2L",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":17.743,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":4789,
+            "inference_time_us":11355,
+            "sram":16956
           },
           "F28003":{
-            "performance_infer_time_ms":17.743,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":4789,
+            "inference_time_us":11355,
+            "sram":16956
           },
           "F28004":{
-            "performance_infer_time_ms":21.292,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":4789,
+            "inference_time_us":9462,
+            "sram":16956
           },
           "F2837":{
-            "performance_infer_time_ms":17.743,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":4789,
+            "inference_time_us":11355,
+            "sram":16956
           },
           "F28P65":{
-            "performance_infer_time_ms":10.646,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":4789,
+            "inference_time_us":18925,
+            "sram":16956
           },
           "F28P55":{
-            "performance_infer_time_ms":1.686,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":1
+            "model_selection_factor":1,
+            "flash":4073,
+            "inference_time_us":1686,
+            "sram":12880
           }
         },
         "project_path":null,
@@ -2599,28 +2789,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -2695,41 +2889,47 @@
         "enable":true,
         "model_name":"MotorFault_model_3_t",
         "model_config":null,
-        "model_spec":"/opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_3l.py",
-        "dataset_loader":"SimpleTSDataset",
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_3l.py",
+        "dataset_loader":"GenericTSDataset",
         "model_training_id":"CNN_MF_3L",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "performance_infer_time_ms":0.865,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":2552,
+            "inference_time_us":552,
+            "sram":1158
           },
           "F28003":{
-            "performance_infer_time_ms":0.865,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":2552,
+            "inference_time_us":552,
+            "sram":1158
           },
           "F28004":{
-            "performance_infer_time_ms":1.037,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":2552,
+            "inference_time_us":460,
+            "sram":1158
           },
           "F2837":{
-            "performance_infer_time_ms":0.865,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":2552,
+            "inference_time_us":552,
+            "sram":1158
           },
           "F28P65":{
-            "performance_infer_time_ms":0.519,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":2552,
+            "inference_time_us":921,
+            "sram":1158
           },
           "F28P55":{
-            "performance_infer_time_ms":0.253,
-            "model_info":"Inference time numbers are for comparison purposes only. (Input Size: 384)",
-            "model_selection_factor":2
+            "model_selection_factor":2,
+            "flash":2714,
+            "inference_time_us":253,
+            "sram":1216
           }
         },
         "project_path":null,
@@ -2807,28 +3007,32 @@
       "data_processing":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "stride_window":0.001,
-        "sequence_window":0.25,
+        "sequence_window":3009,
+        "stride_size":0.01,
         "transforms":[],
         "variables":1,
         "resampling_factor":1
       },
       "feature_extraction":{
         "feature_extraction_name":null,
-        "transform":"",
-        "frame_size":1024,
-        "feature_size_per_frame":512,
-        "num_frame_concat":1,
-        "frame_skip":1,
-        "min_fft_bin":1,
-        "fft_bin_size":2,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
         "store_feat_ext_data":false,
         "feat_ext_store_dir":null,
         "dont_train_just_feat_ext":false,
         "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
         "stacking":null,
-        "offset":0,
-        "scale":1
+        "offset":null,
+        "scale":null
       },
       "compilation":{
         "enable":true,
@@ -2893,8 +3097,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2903,8 +3107,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2913,8 +3117,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2925,8 +3129,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2935,8 +3139,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2945,8 +3149,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2957,8 +3161,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2967,8 +3171,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2977,8 +3181,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -2989,8 +3193,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -2999,8 +3203,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -3009,8 +3213,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -3021,16 +3225,16 @@
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         },
         "forced_soft_npu_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -3039,16 +3243,16 @@
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         },
         "forced_soft_npu_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -3057,16 +3261,16 @@
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         },
         "forced_soft_npu_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       }
@@ -3077,8 +3281,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -3087,8 +3291,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       },
@@ -3097,8 +3301,8 @@
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include -I. -Iartifacts --obj_directory=."
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         }
       }

@@ -106,11 +106,15 @@ class ModelRunner():
                                                                         self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
 
         if self.params.common.target_device in self.params.training.target_devices:
-            performance_infer_time_ms_list = {k:v['performance_infer_time_ms'] for k,v in self.params.training.target_devices.items()}
+            inference_time_us_list = {k:v['inference_time_us'] for k,v in self.params.training.target_devices.items()}
+            sram_usage_list = {k: v['sram'] for k, v in self.params.training.target_devices.items()}
+            flash_usage_list = {k: v['flash'] for k, v in self.params.training.target_devices.items()}
             print('---------------------------------------------------------------------')
             print(f'Run Name: {self.params.common.run_name}')
             print(f'- Model: {self.params.training.model_name}')
-            print(f'- TargetDevices & Estimated Inference Times (ms): {performance_infer_time_ms_list}')
+            print(f'- TargetDevices & Estimated Inference Times (us): {inference_time_us_list}')
+            print(f'- TargetDevices & Estimated SRAM Usage (bytes): {sram_usage_list}')
+            print(f'- TargetDevices & Estimated Flash Usage (bytes): {flash_usage_list}')
             print('- This model can be compiled for the above device(s).')
             print('---------------------------------------------------------------------')
         #
@@ -184,7 +188,7 @@ class ModelRunner():
             # remove special characters
             utils.cleanup_special_chars(self.params.training.log_file_path)
             # training frameworks don't create a compact package after training. do it here.
-            if self.params.common.generic_model in [True, 'True', 'true']:
+            if utils.misc_utils.str2bool(self.params.common.generic_model):
                 model_training_package_files = [
                     self.params.dataset.annotation_path_splits,
                     self.params.training.model_checkpoint_path_quantization if os.path.exists(self.params.training.model_checkpoint_path_quantization) else self.params.training.model_checkpoint_path,
@@ -205,7 +209,7 @@ class ModelRunner():
                     self.params.training.tspa_license_path
                 ]
             self.package_trained_model(model_training_package_files, self.params.training.model_packaged_path)
-            if self.params.testing.skip_train not in [True, 'True', 'true', 1, '1']:
+            if not utils.misc_utils.str2bool(self.params.testing.skip_train):
                 if self.params.training.training_path_quantization:
                     print(f'\nTrained model is at: {self.params.training.training_path_quantization}\n')
                 else:

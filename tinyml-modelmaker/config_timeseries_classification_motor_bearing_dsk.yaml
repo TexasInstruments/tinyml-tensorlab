@@ -10,26 +10,41 @@ dataset:
     dataset_name: motor_fault_example_dsk
 
 data_processing: # One or more can be cascaded in the list
-    transform: [ ]
-    sampling_rate: 1
-    new_sr: 1
-    stride_window: 1
+    # transforms: 'DownSample SimpleWindow'
+    transforms: []
+    # Downsample
+    sampling_rate: 313000
+    new_sr: 3130
+    # SimpleWindow
     sequence_window: 256
+    stride_size: 0.01
     variables: 3
-    unit: 'samples' # time or samples
 
 feature_extraction:
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
-    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-#    store_feat_ext_data: True
+   feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+#    feature_extraction_name: Custom_MotorFault
+#    transform: []
+#    frame_size: 512
+#    feature_size_per_frame: 64
+#    num_frame_concat: 2
+#    normalize_bin: 1
+#    stacking: 2D1
+#    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+#    offset: 0
+#    scale: 1
+#    frame_skip: 1
+#    log_mul: 20
+#    log_base: 10
+#    log_threshold: 1e-100
+   store_feat_ext_data: False
 
 training:
     # enable/disable training
     enable: True #False
-    dataset_loader: MotorFaultDataset
-    # F28x generic timeseries model names: TimeSeries_Generic_4k_t, TimeSeries_Generic_13k_t
+    # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
     model_name: 'TimeSeries_Generic_6k_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'

@@ -49,6 +49,7 @@ def main(config):
 
     model_name = config['training']['model_name']
     model_description = ai_target_module.runner.ModelRunner.get_model_description(model_name)
+    # model_description = ai_target_module.runner.ModelRunner.get_model_descriptions(params).get(model_name) --> Another way to do the above line
     if config['training']['enable']:
         if model_description is None:
             print(f"please check if the given model_name is a supported one: {model_name}")
@@ -90,7 +91,7 @@ def main(config):
     # prepare
     run_params_file = model_runner.prepare()
     print(f'Run params is at: {run_params_file}')
-
+    
     # run
     model_runner.run()
     return True

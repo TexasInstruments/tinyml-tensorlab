@@ -12,43 +12,46 @@ dataset:
 #    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/arc_fault_classification_dsk.zip'
 
 data_processing: # One or more can be cascaded in the list
-    # transform: [ DownSample, SimpleWindow ]
-    # transform: 'DownSample SimpleWindow'
+    # transforms: 'DownSample SimpleWindow'
+    transforms: []
+    # Downsample
+    sampling_rate: 313000
+    new_sr: 3130
+    # SimpleWindow
+    sequence_window: 256
+    stride_size: 0.01
     variables: 1
-    transform: [ ]
-    sampling_rate: 1
-    new_sr: 1
-    stride_window: 1
-    unit: 'time' # time or samples
 
 feature_extraction:
-    feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
+   feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
 #    feature_extraction_name: FFT1024Input_256Feature_1Frame_Half_Bandwidth
 #    feature_extraction_name: FFT1024Input_64Feature_4Frame_Half_Bandwidth
 #    feature_extraction_name: FFT1024Input_32Feature_8Frame_Quarter_Bandwidth
-#    feature_size_per_frame: 512
-#    num_frame_concat: 8
-#    min_fft_bin: 1
-#    fft_bin_size: 1
-#    frame_skip: 3
-#    store_feat_ext_data: True
+#    feature_extraction_name: Custom_ArcFault
+#    transform: []
+#    frame_size: 1024
+#    feature_size_per_frame: 128
+#    num_frame_concat: 1
+#    min_bin: 4
+#    analysis_bandwidth: 1
+#    frame_skip: 1
+   store_feat_ext_data: False
 
 training:
     # enable/disable training
     enable: True #False
-    # F28x generic timeseries model names: TimeSeries_Generic_4k_t, TimeSeries_Generic_13k_t
+    # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
     model_name: 'TimeSeries_Generic_1k_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
     model_config: ''
-    dataset_loader: ArcFaultDataset
     batch_size: 64
     training_epochs: 10
     num_gpus: 0
 
 testing:
     enable: True
-    skip_train: False  # True if only the model needs to be tested. model_path below needs to be given
+    skip_train: False  # True if only the model needs to be tested (BYOM for testing). model_path below needs to be given
 #    model_path: Onnx/tflite Model Path for BYOM for compilation only
 #    test_data: ./data/projects/arc_fault_example_dsk/dataset/classes  #  if dataset is being provided here then- dataset-> enable: False
 

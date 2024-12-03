@@ -39,13 +39,14 @@ import tinyml_modelmaker
 
 from ..... import utils
 from ... import constants
+from .device_run_info import DEVICE_RUN_INFO
+# Let the default model device run info dict be blank
+MOD_DEV_RUN = dict(inference_time_us='TBD', flash='TBD', sram='TBD')
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
 
 # tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
-# www_modelzoo_path = 'https://software-dl.ti.com/jacinto7/esd/modelzoo/08_06_00_01'
-
 
 model_urls = {
     'TimeSeries_Generic_1k': {'download_url': '', 'download_path': '', },
@@ -53,25 +54,9 @@ model_urls = {
     'TimeSeries_Generic_6k': {'download_url': '', 'download_path': '', },
     'TimeSeries_Generic_6k_t': {'download_url': '', 'download_path': '', },
     'TimeSeries_Generic_13k': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_AF_7k': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_MF_7k': {'download_url': '', 'download_path': '', },
     'TimeSeries_Generic_4k': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_AF_3k': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_MF_3k': {'download_url': '', 'download_path': '', },
-    'ArcFault_model_1400': {'download_url': '', 'download_path': '', },
-    'ArcFault_model_200': {'download_url': '', 'download_path': '', },
-    'ArcFault_model_300': {'download_url': '', 'download_path': '', },
-    'ArcFault_model_700': {'download_url': '', 'download_path': '', },
-    'MotorFault_model_1': {'download_url': '', 'download_path': '', },
-    'MotorFault_model_2': {'download_url': '', 'download_path': '', },
-    'MotorFault_model_3': {'download_url': '', 'download_path': '', },
     'TimeSeries_Generic_13k_t': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_AF_7k_t': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_MF_7k_t': {'download_url': '', 'download_path': '', },
     'TimeSeries_Generic_4k_t': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_AF_3k_t': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_MF_3k_t': {'download_url': '', 'download_path': '', },
-    'ArcFault_model_1400_t': {'download_url': '', 'download_path': '', },
     'ArcFault_model_200_t': {'download_url': '', 'download_path': '', },
     'ArcFault_model_300_t': {'download_url': '', 'download_path': '', },
     'ArcFault_model_700_t': {'download_url': '', 'download_path': '', },
@@ -80,626 +65,6 @@ model_urls = {
     'MotorFault_model_3_t': {'download_url': '', 'download_path': '', },
 }
 
-disbanded_model_descriptions = {
-    'TimeSeries_Generic_AF_7k': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_AF_7k'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_13K',
-            model_name='TimeSeries_Generic_AF_7k',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'TimeSeries_Generic_AF_7k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_AF_7k_t'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_13K',
-            model_name='TimeSeries_Generic_AF_7k_t',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD',
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-
-    'TimeSeries_Generic_MF_7k': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_MF_7k'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_13K',
-            model_name='TimeSeries_Generic_MF_7k',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'TimeSeries_Generic_MF_7k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_MF_7k_t'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_13K',
-            model_name='TimeSeries_Generic_MF_7k_t',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-
-    'TimeSeries_Generic_AF_3k': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_AF_3k'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_4K',
-            model_name='TimeSeries_Generic_AF_3k',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'TimeSeries_Generic_AF_3k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_AF_3k_t'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_4K',
-            model_name='TimeSeries_Generic_AF_3k_t',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-
-    'TimeSeries_Generic_MF_3k': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_MF_3k'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_4K',
-            model_name='TimeSeries_Generic_MF_3k',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'TimeSeries_Generic_MF_3k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_MF_3k_t'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_TS_GEN_BASE_4K',
-            model_name='TimeSeries_Generic_MF_3k_t',
-            model_architecture='backbone',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
-            target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-
-    'ArcFault_model_1400': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-        ),
-        'download': model_urls['ArcFault_model_1400'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_AF_3L_1400',
-            model_name='ArcFault_model_1400',
-            model_architecture='backbone',
-            learning_rate=0.04,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'ArcFault_model_1400_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-        ),
-        'download': model_urls['ArcFault_model_1400_t'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_AF_3L_1400',
-            model_name='ArcFault_model_1400_t',
-            model_architecture='backbone',
-            learning_rate=0.04,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
-            target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict(
-            # model_compilation_id='afd-b1-0002',
-            
-        )
-    },
-
-    'ArcFault_model_200': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-        ),
-        'download': model_urls['ArcFault_model_200'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_AF_3L_200',
-            model_name='ArcFault_model_200',
-            model_architecture='backbone',
-            learning_rate=0.04,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'ArcFault_model_300': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-        ),
-        'download': model_urls['ArcFault_model_300'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_AF_3L_300',
-            model_name='ArcFault_model_300',
-            model_architecture='backbone',
-            learning_rate=0.04,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'ArcFault_model_700': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_ARC_FAULT,
-        ),
-        'download': model_urls['ArcFault_model_700'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_AF_3L_700',
-            model_name='ArcFault_model_700',
-            model_architecture='backbone',
-            learning_rate=0.04,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict()
-    },
-    'MotorFault_model_1': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-        ),
-        'download': model_urls['MotorFault_model_1'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_MF_1L',
-            model_name='MotorFault_model_1',
-            model_architecture='backbone',
-            learning_rate=0.01,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_1l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict(
-            # model_compilation_id='mfd-b1-0001',
-            
-        )
-    },
-    'MotorFault_model_2': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-        ),
-        'download': model_urls['MotorFault_model_2'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_MF_2L',
-            model_name='MotorFault_model_2',
-            model_architecture='backbone',
-            learning_rate=0.01,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_2l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict(
-            # model_compilation_id='mfd-b2-0003',
-            
-        )
-    },
-    'MotorFault_model_3': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
-        ),
-        'download': model_urls['MotorFault_model_3'],
-        'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
-            with_input_batchnorm=False,
-            training_backend='tinyml_tinyverse',
-            model_training_id='CNN_MF_3L',
-            model_name='MotorFault_model_3',
-            model_architecture='backbone',
-            learning_rate=0.01,
-            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_3l.py'),
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
-            target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', 
-                                                      model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',
-                                                    model_selection_factor=None, ),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',
-                                                     model_selection_factor=None, ),
-            },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-            }
-        ),
-        'compilation': dict(
-            # model_compilation_id='mfd-b2-0003',
-            
-        )
-    },
-
-}
 
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
 _model_descriptions = {
@@ -721,13 +86,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -754,12 +118,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD',),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD',),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -787,13 +151,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -820,12 +183,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -853,13 +216,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -886,12 +248,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -919,13 +281,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                # constants.TARGET_DEVICE_AM263: dict(performance_infer_time_ms='TBD',
-                #                                     ),
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -952,12 +313,12 @@ _model_descriptions = {
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms='TBD', model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -980,17 +341,16 @@ _model_descriptions = {
             model_training_id='CNN_AF_3L_700',
             model_name='ArcFault_model_700_t',
             model_architecture='backbone',
-            dataset_loader='ArcFaultDataset',
             learning_rate=0.04,
             model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms=0.982, model_info=model_info_str.format(256), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms=0.982, model_info=model_info_str.format(256), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms=1.179, model_info=model_info_str.format(256), model_selection_factor=1),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms=0.982, model_info=model_info_str.format(256), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms=0.589, model_info=model_info_str.format(256), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms=0.307, model_info=model_info_str.format(256), model_selection_factor=1),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -999,7 +359,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='afd-b1-0002',
-            
+
         )
     },
     'ArcFault_model_300_t': {
@@ -1015,17 +375,16 @@ _model_descriptions = {
             model_training_id='CNN_AF_3L_300',
             model_name='ArcFault_model_300_t',
             model_architecture='backbone',
-            dataset_loader='ArcFaultDataset',
             learning_rate=0.04,
             model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms=0.836,  model_info=model_info_str.format(256), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms=0.836,  model_info=model_info_str.format(256), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms=1.003, model_info=model_info_str.format(256), model_selection_factor=2),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms=0.836, model_info=model_info_str.format(256), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms=0.502, model_info=model_info_str.format(256), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms=0.254, model_info=model_info_str.format(256), model_selection_factor=2),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -1034,7 +393,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='afd-b1-0002',
-            
+
         )
     },
     'ArcFault_model_200_t': {
@@ -1050,17 +409,16 @@ _model_descriptions = {
             model_training_id='CNN_AF_3L_200',
             model_name='ArcFault_model_200_t',
             model_architecture='backbone',
-            dataset_loader='ArcFaultDataset',
             learning_rate=0.04,
             model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms=0.432, model_info=model_info_str.format(256), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms=0.432, model_info=model_info_str.format(256), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms=0.518, model_info=model_info_str.format(256), model_selection_factor=3),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms=0.432, model_info=model_info_str.format(256), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms=0.259, model_info=model_info_str.format(256), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms=0.193, model_info=model_info_str.format(256), model_selection_factor=3),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -1069,7 +427,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='afd-b1-0002',
-            
+
         )
     },
 
@@ -1086,17 +444,16 @@ _model_descriptions = {
             model_training_id='CNN_MF_1L',
             model_name='MotorFault_model_1_t',
             model_architecture='backbone',
-            dataset_loader='MotorFaultDataset',
             learning_rate=0.01,
             model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_1l.py'),
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms=0.555, model_info=model_info_str.format(384), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms=0.555, model_info=model_info_str.format(384), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms=0.666, model_info=model_info_str.format(384), model_selection_factor=3),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms=0.555, model_info=model_info_str.format(384), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms=0.333, model_info=model_info_str.format(384), model_selection_factor=3),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms=0.173, model_info=model_info_str.format(384), model_selection_factor=3),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -1105,7 +462,7 @@ _model_descriptions = {
         ),
         'compilation': dict(
             # model_compilation_id='mfd-b1-0002',
-            
+
         )
     },
     'MotorFault_model_2_t': {
@@ -1121,17 +478,16 @@ _model_descriptions = {
             model_training_id='CNN_MF_2L',
             model_name='MotorFault_model_2_t',
             model_architecture='backbone',
-            dataset_loader='MotorFaultDataset',
             learning_rate=0.01,
             model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_2l.py'),
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms=17.743, model_info=model_info_str.format(384), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms=17.743, model_info=model_info_str.format(384), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms=21.292, model_info=model_info_str.format(384), model_selection_factor=1),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms=17.743, model_info=model_info_str.format(384), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms=10.646, model_info=model_info_str.format(384), model_selection_factor=1),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms=1.686, model_info=model_info_str.format(384), model_selection_factor=1),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -1157,12 +513,12 @@ _model_descriptions = {
             model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_3l.py'),
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_MOTOR_FAULT],
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(performance_infer_time_ms=0.865, model_info=model_info_str.format(384), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28003: dict(performance_infer_time_ms=0.865, model_info=model_info_str.format(384), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28004: dict(performance_infer_time_ms=1.037, model_info=model_info_str.format(384), model_selection_factor=2),
-                constants.TARGET_DEVICE_F2837: dict(performance_infer_time_ms=0.865, model_info=model_info_str.format(384), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28P65: dict(performance_infer_time_ms=0.519, model_info=model_info_str.format(384), model_selection_factor=2),
-                constants.TARGET_DEVICE_F28P55: dict(performance_infer_time_ms=0.253, model_info=model_info_str.format(384), model_selection_factor=2),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F28P55]),
             },
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
@@ -1410,10 +766,10 @@ class ModelTraining:
                 '--sampling-rate', f'{self.params.data_processing.sampling_rate}',
                 '--resampling-factor', f'{self.params.data_processing.resampling_factor}',
                 '--new-sr', f'{self.params.data_processing.new_sr}',
-                '--stride_window', f'{self.params.data_processing.stride_window}',
-                '--sequence_window', f'{self.params.data_processing.sequence_window}',
+                '--sequence-window', f'{self.params.data_processing.sequence_window}',
+                '--stride-size', f'{self.params.data_processing.stride_size}',
                 '--data-proc-transforms', self.params.data_processing.transforms,
-                '--feat-ext-transform', f'{self.params.feature_extraction.transform}',
+                '--feat-ext-transform', self.params.feature_extraction.transform,
 
                 '--generic-model', f'{self.params.common.generic_model}',
 
@@ -1424,10 +780,14 @@ class ModelTraining:
                 '--feature-size-per-frame', f'{self.params.feature_extraction.feature_size_per_frame}',
                 '--num-frame-concat', f'{self.params.feature_extraction.num_frame_concat}',
                 '--frame-skip', f'{self.params.feature_extraction.frame_skip}',
-                '--min-fft-bin', f'{self.params.feature_extraction.min_fft_bin}',
-                '--fft-bin-size', f'{self.params.feature_extraction.fft_bin_size}',
+                '--min-bin', f'{self.params.feature_extraction.min_bin}',
+                '--normalize-bin', f'{self.params.feature_extraction.normalize_bin}',
                 '--dc-remove', f'{self.params.feature_extraction.dc_remove}',
+                '--analysis-bandwidth', f'{self.params.feature_extraction.analysis_bandwidth}',
                 # '--num-channel', f'{self.params.feature_extraction.num_channel}',
+                '--log-base', f'{self.params.feature_extraction.log_base}',
+                '--log-mul', f'{self.params.feature_extraction.log_mul}',
+                '--log-threshold', f'{self.params.feature_extraction.log_threshold}',
                 '--stacking', f'{self.params.feature_extraction.stacking}',
                 '--offset', f'{self.params.feature_extraction.offset}',
                 '--scale', f'{self.params.feature_extraction.scale}',
@@ -1450,8 +810,8 @@ class ModelTraining:
         #     __name__, force_import=True)
         args = train.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event
-        if self.params.testing.skip_train not in [True, 'True', 'true', 1, '1']:  # Is user wants to only test their model
-            if self.params.training.run_quant_train_only in [True, 'True', 'true', 1, '1']:
+        if not utils.misc_utils.str2bool(self.params.testing.skip_train):  # Is user wants to only test their model
+            if utils.misc_utils.str2bool(self.params.training.run_quant_train_only):
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
                     argv = argv[:-2]  # Remove --output-dir <output-dir>
                     argv.extend([
@@ -1468,14 +828,12 @@ class ModelTraining:
             else:
                 train.run(args)
 
-                if (self.params.feature_extraction.store_feat_ext_data in [True, 'True', 'true', 1, '1']
-                        and
-                        self.params.feature_extraction.dont_train_just_feat_ext in [True, 'True', 'true', 1, '1']):
+                if utils.misc_utils.str2bool(self.params.feature_extraction.store_feat_ext_data) and utils.misc_utils.str2bool(self.params.feature_extraction.dont_train_just_feat_ext):
                     return self.params
 
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
-                    argv = argv[
-                           :-8]  # remove --store-feat-ext-data <True/False> --epochs <epochs> --lr <lr> --output-dir <output-dir>
+                    argv = argv[:-8]
+                    # remove --store-feat-ext-data <True/False> --epochs <epochs> --lr <lr> --output-dir <output-dir>
                     argv.extend([
                         '--output-dir', f'{self.params.training.training_path_quantization}',
                         '--epochs', f'{max(10, self.params.training.training_epochs // 5)}',
@@ -1491,7 +849,7 @@ class ModelTraining:
                     # TODO: originally train.main(args)
                     train.run(args)
 
-        if self.params.testing.enable in [True, 'true', 1, '1']:
+        if utils.misc_utils.str2bool(self.params.testing.enable):
             if self.params.testing.test_data and (os.path.exists(self.params.testing.test_data)):
                 data_path = self.params.testing.test_data
             else:
@@ -1514,20 +872,24 @@ class ModelTraining:
                 '--sampling-rate', f'{self.params.data_processing.sampling_rate}',
                 '--resampling-factor', f'{self.params.data_processing.resampling_factor}',
                 '--new-sr', f'{self.params.data_processing.new_sr}',
-                '--stride_window', f'{self.params.data_processing.stride_window}',
-                '--sequence_window', f'{self.params.data_processing.sequence_window}',
+                '--sequence-window', f'{self.params.data_processing.sequence_window}',
+                '--stride-size', f'{self.params.data_processing.stride_size}',
 
                 '--data-proc-transforms', self.params.data_processing.transforms,
-                '--feat-ext-transform', f'{self.params.feature_extraction.transform}',
+                '--feat-ext-transform', self.params.feature_extraction.transform,
                 # Arc Fault and Motor Fault Related Params
                 '--frame-size', f'{self.params.feature_extraction.frame_size}',
                 '--feature-size-per-frame', f'{self.params.feature_extraction.feature_size_per_frame}',
                 '--num-frame-concat', f'{self.params.feature_extraction.num_frame_concat}',
                 '--frame-skip', f'{self.params.feature_extraction.frame_skip}',
-                '--min-fft-bin', f'{self.params.feature_extraction.min_fft_bin}',
-                '--fft-bin-size', f'{self.params.feature_extraction.fft_bin_size}',
+                '--min-bin', f'{self.params.feature_extraction.min_bin}',
+                '--normalize-bin', f'{self.params.feature_extraction.normalize_bin}',
                 '--dc-remove', f'{self.params.feature_extraction.dc_remove}',
+                '--analysis-bandwidth', f'{self.params.feature_extraction.analysis_bandwidth}',
                 # '--num-channel', f'{self.params.feature_extraction.num_channel}',
+                '--log-base', f'{self.params.feature_extraction.log_base}',
+                '--log-mul', f'{self.params.feature_extraction.log_mul}',
+                '--log-threshold', f'{self.params.feature_extraction.log_threshold}',
                 '--stacking', f'{self.params.feature_extraction.stacking}',
                 '--offset', f'{self.params.feature_extraction.offset}',
                 '--scale', f'{self.params.feature_extraction.scale}',

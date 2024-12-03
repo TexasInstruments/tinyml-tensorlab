@@ -31,6 +31,7 @@
 
 import argparse
 import copy
+import getpass
 import os
 import re
 import sys
@@ -132,12 +133,12 @@ def main(args):
         df_yaml_txt = df_yaml_fh.readlines()
     with open(description_file, 'w') as df_yaml_fh:
         for line in df_yaml_txt:
-            df_yaml_fh.write(re.sub(os.path.join('home', 'a0484689'), os.path.join('opt', 'tinyml'), line))
+            df_yaml_fh.write(re.sub(os.path.join('home', getpass.getuser(), '.*/'), os.path.join('opt', 'tinyml', 'code', 'tinyml-mlbackend', 'tinyml_proprietary_models', ''), line))
     with open(os.path.splitext(description_file)[0]+'.json') as df_json_fh:
         df_json_txt = df_json_fh.readlines()
     with open(os.path.splitext(description_file)[0]+'.json', 'w') as df_json_fh:
         for line in df_json_txt:
-            df_json_fh.write(re.sub(os.path.join('home', 'a0484689'), os.path.join('opt', 'tinyml'), line))
+            df_json_fh.write(re.sub(os.path.join('home', getpass.getuser(), '.*/'), os.path.join('opt', 'tinyml', 'tinyml-mlbackend', 'tinyml_proprietary_models', ''), line))
 
 
     help_file = os.path.join(args.description_path, f'help_{args.target_module}' + '.md')
