@@ -83,13 +83,13 @@ from edgeai_torchmodelopt.xnn.utils import is_url_or_file, load_weights
 from tabulate import tabulate
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import SimpleTSDataset, ArcFaultDataset, MotorFaultDataset
+from tinyml_tinyverse.common.datasets import GenericTSDataset
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
-dataset_loader_dict = {'SimpleTSDataset': SimpleTSDataset, 'ArcFaultDataset': ArcFaultDataset, 'MotorFaultDataset': MotorFaultDataset}
+dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset}
 
 
 def split_weights(weights_name):
@@ -102,8 +102,6 @@ def split_weights(weights_name):
             weights_urls.append(w)
         else:
             weights_enums.append(w)
-        #
-    #
     return ((weights_urls[0] if len(weights_urls)>0 else None), (weights_enums[0] if len(weights_enums)>0 else None))
 
 
@@ -117,31 +115,34 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--stride_window', help="Window length (s) to stride by", type=float)  # default=0.001)
-    parser.add_argument('--sequence_window', help="Window length per sequence in sec", type=float, required=True)
-    parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[],
-                        nargs='+')  # default=['DownSample', 'SimpleWindow'])
-    parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
+    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
+    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
 
-    parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default='', )
-    parser.add_argument('--store-feat-ext-data', help='Store Data post Feature extractions', type=misc_utils.str_or_bool, default=False)
-    parser.add_argument('--feat-ext-store-dir', help='Store Data post Feature extractions in this directory', type=str)
-    parser.add_argument('--dont-train-just-feat-ext', help='Quit after Feature Extraction without Training. Does not have any effect if --store-feat-ext-data is not used', type=misc_utils.str_or_bool, default=False)
-    parser.add_argument('--frame-size', help="Frame Size", default=1024, type=int)
-    parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame", default=512,  type=int)
-    parser.add_argument('--num-frame-concat', help="Number of FFT frames to concat", default=1, type=int)
-    parser.add_argument('--frame-skip', help="Skip frames while computing FFT", default=1, type=int)
-    parser.add_argument('--min-fft-bin', help="Remove DC Component from FFT", default=1, type=int)
-    parser.add_argument('--fft-bin-size', help="FFT Bin Size", default=2, type=int)
-    parser.add_argument('--dc-remove', help="Remove DC Component from FFT", default=True, type=misc_utils.str_or_bool)
+    parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
+    parser.add_argument('--store-feat-ext-data', help='Store Data post Feature extractions')
+    parser.add_argument('--feat-ext-store-dir', help='Store Data post Feature extractions in this directory')
+    parser.add_argument('--dont-train-just-feat-ext', help='Quit after Feature Extraction without Training. Does not have any effect if --store-feat-ext-data is not used')
+    parser.add_argument('--frame-size', help="Frame Size")
+    parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
+    parser.add_argument('--num-frame-concat', help="Number of FFT frames to concat")
+    parser.add_argument('--frame-skip', help="Skip frames while computing FFT")
+    parser.add_argument('--min-bin', help="Remove DC Component from FFT")
+    parser.add_argument('--normalize-bin', help="Normalize FFT Binning")
+    parser.add_argument('--dc-remove', help="Remove DC Component from FFT")
+    parser.add_argument('--analysis-bandwidth', help="Spectrum of FFT used for binning")
     # parser.add_argument('--num-channel', help="Number of input channels (ex.axis, phase)", default=16, type=int)
-    parser.add_argument('--stacking', help="1D/2D1/None", default=None, type=str)
-    parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap", default=0, type=int)
-    parser.add_argument('--scale', help="Scaling factor to input data", default=1, type=float)
+    parser.add_argument('--log-base', help="base value for logarithm")
+    parser.add_argument('--log-mul', help="multiplier for logarithm")
+    parser.add_argument('--log-threshold', help="offset added to values for logarithmic calculation")
+    parser.add_argument('--stacking', help="1D/2D1/None")
+    parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
+    parser.add_argument('--scale', help="Scaling factor to input data")
+    parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
 
     parser.add_argument('--gen_golden_vectors', help="Generate golden vectors to feed into the model", type=misc_utils.str_or_bool, default=True)
 
-    parser.add_argument('--variables', help="1- if Univariate, 2/3/.. if multivariate", type=int, default=1)
+    parser.add_argument('--variables', help="1- if Univariate, 2/3/.. if multivariate")
 
     parser.add_argument('--data-path', default=os.path.join('.', 'data', 'datasets'), help='dataset')
     parser.add_argument('--dataset', default='folder', help='dataset')
@@ -154,84 +155,43 @@ def get_args_parser():
     parser.add_argument('--device', default='cuda', help='device')
     parser.add_argument('--gpus', default=1, type=int, help='number of gpus')
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
-    parser.add_argument('--epochs', default=90, type=int, metavar='N',
-                        help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N',
-                        help='number of data loading workers (default: 16)')
+    parser.add_argument('--epochs', default=90, type=int, metavar='N', help='number of total epochs to run')
+    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N', help='number of data loading workers (default: 16)')
     parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
     parser.add_argument('--lr', default=0.1, type=float, help='initial learning rate')
-    parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
-                        help='momentum')
-    parser.add_argument('--wd', '--weight-decay', default=4e-5, type=float,
-                        metavar='W', help='weight decay (default: 1e-4)',
-                        dest='weight_decay')
-    parser.add_argument('--label-smoothing', default=0.0, type=float,
-                        help='label smoothing (default: 0.0)',
-                        dest='label_smoothing')
+    parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
+    parser.add_argument('--wd', '--weight-decay', default=4e-5, type=float, metavar='W', help='weight decay (default: 1e-4)', dest='weight_decay')
+    parser.add_argument('--label-smoothing', default=0.0, type=float, help='label smoothing (default: 0.0)', dest='label_smoothing')
     parser.add_argument('--mixup-alpha', default=0.0, type=float, help='mixup alpha (default: 0.0)')
     parser.add_argument('--cutmix-alpha', default=0.0, type=float, help='cutmix alpha (default: 0.0)')
     parser.add_argument('--lr-scheduler', default="cosineannealinglr", help='the lr scheduler (default: cosineannealinglr)')
     parser.add_argument('--lr-warmup-epochs', default=5, type=int, help='the number of epochs to warmup (default: 5)')
-    parser.add_argument('--lr-warmup-method', default="constant", type=str,
-                        help='the warmup method (default: constant)')
+    parser.add_argument('--lr-warmup-method', default="constant", type=str, help='the warmup method (default: constant)')
     parser.add_argument('--lr-warmup-decay', default=0.01, type=float, help='the decay for lr')
     parser.add_argument('--lr-step-size', default=30, type=int, help='decrease lr every step-size epochs')
     parser.add_argument('--lr-gamma', default=0.1, type=float, help='decrease lr by a factor of lr-gamma')
     parser.add_argument('--print-freq', default=10, type=int, help='print frequency')
     parser.add_argument('--output-dir', default=None, help='path where to save')
     parser.add_argument('--resume', default='', help='resume from checkpoint')
-    parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
-                        help='start epoch')
-    parser.add_argument(
-        "--cache-dataset",
-        dest="cache_dataset",
-        help="Cache the datasets for quicker initialization. It also serializes the transforms",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--sync-bn",
-        dest="sync_bn",
-        help="Use sync batch norm",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--pretrained",
-        dest="pretrained",
-        help="Use pre-trained models from the modelzoo",
-        default=None,
-        type=misc_utils.str_or_bool,
-    )
-    parser.add_argument(
-        "--export-only",
-        dest="export_only",
-        help="Export onnx",
-        action="store_true",
-    )
+    parser.add_argument('--start-epoch', default=0, type=int, metavar='N', help='start epoch')
+    parser.add_argument("--cache-dataset", dest="cache_dataset", help="Cache the datasets for quicker initialization. It also serializes the transforms", action="store_true",)
+    parser.add_argument("--sync-bn", dest="sync_bn", help="Use sync batch norm", action="store_true",)
+    parser.add_argument("--pretrained", dest="pretrained", help="Use pre-trained models from the modelzoo", default=None, type=misc_utils.str_or_bool,)
+    parser.add_argument("--export-only", dest="export_only", help="Export onnx", action="store_true",)
     parser.add_argument('--auto-augment', default=None, help='auto augment policy (default: None)')
     parser.add_argument('--random-erase', default=0.0, type=float, help='random erasing probability (default: 0.0)')
 
     # Mixed precision training parameters
-    parser.add_argument('--apex', action='store_true',
-                        help='Use apex for mixed precision training')
-    parser.add_argument('--apex-opt-level', default='O1', type=str,
-                        help='For apex mixed precision training'
-                             'O0 for FP32 training, O1 for mixed precision training.'
-                             'For further detail, see https://github.com/NVIDIA/apex/tree/master/examples/imagenet'
-                        )
+    parser.add_argument('--apex', action='store_true', help='Use apex for mixed precision training')
+    parser.add_argument('--apex-opt-level', default='O1', type=str, help='For apex mixed precision training O0 for FP32 training, O1 for mixed precision training.For further detail, see https://github.com/NVIDIA/apex/tree/master/examples/imagenet')
 
     # distributed training parameters
-    parser.add_argument('--world-size', default=1, type=int,
-                        help='number of distributed processes')
+    parser.add_argument('--world-size', default=1, type=int, help='number of distributed processes')
     parser.add_argument('--dist-url', default='env://', help='url used to set up distributed training')
-    parser.add_argument("--distributed", default=None, type=misc_utils.str2bool_or_none,
-                        help="use dstributed training even if this script is not launched using torch.disctibuted.launch or run")
+    parser.add_argument("--distributed", default=None, type=misc_utils.str2bool_or_none, help="use dstributed training even if this script is not launched using torch.disctibuted.launch or run")
 
-    parser.add_argument(
-        '--model-ema', action='store_true',
-        help='enable tracking Exponential Moving Average of model parameters')
-    parser.add_argument(
-        '--model-ema-decay', type=float, default=0.9,
-        help='decay factor for Exponential Moving Average of model parameters(default: 0.9)')
+    parser.add_argument('--model-ema', action='store_true', help='enable tracking Exponential Moving Average of model parameters')
+    parser.add_argument('--model-ema-decay', type=float, default=0.9, help='decay factor for Exponential Moving Average of model parameters(default: 0.9)')
     parser.add_argument('--date', default=datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), help='current date')
     parser.add_argument('--seed', default=42, help="Seed for all randomness", type=int)
     parser.add_argument('--lis', help='Log File', type=str,)# default=ops(opb(__file__))[0] + ".lis")
@@ -251,6 +211,43 @@ def get_args_parser():
     
     return parser
 
+def generate_golden_vector_dir(output_dir):
+    golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
+    create_dir(golden_vectors_dir)
+    return
+
+def generate_user_input_config(output_dir, dataset):
+    logger = getLogger("root.generate_user_input_config")
+    golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
+    user_input_config_h = os.path.join(golden_vectors_dir, 'user_input_config.h')
+    logger.info("Creating user_input_config.h at: {}".format(user_input_config_h))
+
+    with open(user_input_config_h, 'w') as fp:
+        fp.write("#ifndef INPUT_CONFIG_H_\n")
+        fp.write("#define INPUT_CONFIG_H_\n\n")
+        fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
+        fp.write('\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()]))
+        fp.write("\n\n#endif /* INPUT_CONFIG_H_ */\n")
+    return
+
+def generate_test_vector(output_dir, test_vector_data):
+    logger = getLogger("root.generate_test_vector")
+    golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
+    test_vector_c = os.path.join(golden_vectors_dir, 'test_vector.c')
+    logger.info("Creating test_vector.c at: {}".format(test_vector_c))
+    with open(test_vector_c, 'w') as fp:
+        fp.write(test_vector_data)
+    return
+
+def generate_model_aux(output_dir, dataset):
+    logger = getLogger("root.generate_model_aux")
+    model_aux_h = os.path.join(output_dir, 'model_aux.h')
+    class_list_ordered = ', '.join([f'"{dataset.inverse_label_map.get(label_index)}"' for label_index in sorted(dataset.inverse_label_map.keys())])
+    logger.info("Creating model_aux.h at: {}".format(model_aux_h))
+    with open(model_aux_h, 'w') as fp:
+        fp.write(f'const NUMBER_OF_CLASSES = {len(dataset.classes)};\n')
+        fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
+    return
 
 def generate_golden_vectors(output_dir, dataset, generic_model=False):
     logger = getLogger("root.generate_golden_vectors")
@@ -265,7 +262,7 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
     output_name = ort_sess.get_outputs()[0].name
 
     golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
-    create_dir(golden_vectors_dir)
+    
     logger.info(f"Creating Golden data for reference at {golden_vectors_dir}")
     label_index_dict = {dataset.inverse_label_map.get(label): np.where(dataset.Y == label)[0] for label in np.unique(dataset.Y)}
 
@@ -286,61 +283,33 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
             np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'output_{label}_{index}.txt')
 
-    headerfile_info = """#include "device.h"
+    header_file_info = """#include "device.h"
 // //////////////////////////////////////////////////////////////////////////////////////////////////////
 // 1. Please uncomment one (and only one) of the below sets at a time. (Remove /* and */ only)
 // 2. Do not uncomment random lines from random sets. It will not serve your purpose
 // //////////////////////////////////////////////////////////////////////////////////////////////////////"""
-    vector_files
+    
     for i, file_path in enumerate(vector_files):
         # There are 3 vector files for each set. So First (index 0) and Third (index 2) need to have the /* and */ respectively
-
         if i % 3 == 0:
             if i // 3 == 0:
                 # Set0 will not be commented so that the generated code can run automatically without build errors
-                headerfile_info += f'\n\n// SET {i // 3}'
+                header_file_info += f'\n\n// SET {i // 3}'
             else:
-                headerfile_info += f'\n/*\n// SET {i // 3}'
+                header_file_info += f'\n/*\n// SET {i // 3}'
         with open(file_path) as fp:
             file_array = fp.read()
-            headerfile_info += f'\n{file_array};\n'
+            header_file_info += f'\n{file_array};\n'
         if i % 3 == 2:
             if i // 3 == 0:
                 # Set0 will not be commented so that the generated code can run automatically without build errors
-                headerfile_info += '\n'
+                header_file_info += '\n'
             else:
-                headerfile_info += '*/\n'
+                header_file_info += '*/\n'
         os.remove(file_path)
-
-    test_vectors_c = os.path.join(golden_vectors_dir, 'test_vector.c')
-    with open(test_vectors_c, 'w') as fp:
-        fp.write(headerfile_info)
-    user_input_config_h = os.path.join(golden_vectors_dir, 'user_input_config.h')
-    logger.info("Creating test_vector.c at: {}".format(test_vectors_c))
-#     feature_extraction_info_str = """/*typedef enum {
-#     FEATURE_EXTRACT_UNDEFINED=0,
-#     FEATURE_EXTRACT_RAW=1,
-#     FEATURE_EXTRACT_FFT=2,
-#     FEATURE_EXTRACT_FFT_BIN=3,
-#     FEATURE_EXTRACT_WIN_FFT_BIN=4
-# } Feature_Extract_Type;*/
-# """
-    with open(user_input_config_h, 'w') as fp:
-        fp.write("#ifndef INPUT_CONFIG_H_\n")
-        fp.write("#define INPUT_CONFIG_H_\n\n")
-        # fp.write(feature_extraction_info_str)
-        # fp.write(f"#define FEATURE_EXTRACT_TYPE ({dataset.feature_extraction_category})\n\n")
-        # if not dataset.feature_extraction_category:
-        fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
-        fp.write('\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()]))
-        fp.write("\n\n#endif /* INPUT_CONFIG_H_ */\n")
-    logger.info("Creating user_input_config.h at: {}".format(user_input_config_h))
-
-    model_aux_h = os.path.join(output_dir, 'model_aux.h')
-    class_list_ordered = ', '.join([f'"{dataset.inverse_label_map.get(label_index)}"' for label_index in sorted(dataset.inverse_label_map.keys())])
-    with open(model_aux_h, 'w') as fp:
-        fp.write(f'const NUMBER_OF_CLASSES = {len(dataset.classes)};\n')
-        fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
+    generate_test_vector(output_dir, header_file_info)
+    generate_model_aux(output_dir, dataset)
+    return
 
 
 def main(gpu, args):
@@ -381,9 +350,9 @@ def main(gpu, args):
     # torch.backends.cudnn.benchmark = True
     if isinstance(args.data_proc_transforms, list):
         if len(args.data_proc_transforms) and isinstance(args.data_proc_transforms[0], list):
-            args.transforms = [args.data_proc_transforms[0] + [args.feat_ext_transform]]  # args.data_proc_transforms is a list of lists
+            args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
         else:
-            args.transforms = [args.data_proc_transforms + [args.feat_ext_transform]]
+            args.transforms = args.data_proc_transforms + args.feat_ext_transform
     if args.store_feat_ext_data:
         if args.feat_ext_store_dir in [None, 'None']:
             args.feat_ext_store_dir = os.path.join(args.output_dir, 'feat_ext_data')
@@ -421,8 +390,12 @@ def main(gpu, args):
     #     if args.dont_train_just_feat_ext:
     #         logger.info("Exiting execution without training")
     #         sys.exit(0)
-
-
+    generate_golden_vector_dir(args.output_dir)
+    if args.gen_golden_vectors:
+        generate_user_input_config(args.output_dir, dataset)
+        if args.dont_train_just_feat_ext == 'True':
+            logger.info('ModelMaker completed for test bench. Exiting.')
+            sys.exit()
 
     # collate_fn = None
     num_classes = len(dataset.classes)
@@ -596,6 +569,8 @@ def main(gpu, args):
 
     if args.gen_golden_vectors:
         generate_golden_vectors(args.output_dir, dataset, args.generic_model)
+        
+    return
 
 
 def run(args):
@@ -610,6 +585,7 @@ def run(args):
         torch.multiprocessing.spawn(main, nprocs=args.gpus, args=(args,))
     else:
         main(0, args)
+    return
 
 
 if __name__ == "__main__":

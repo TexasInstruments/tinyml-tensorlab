@@ -33,17 +33,22 @@ import numpy as np
 def SimpleWindow(x, window_size=100, stride=50, keep_short_tails=False):
     # if keep_short_tails is set to True, the slices shorter than window_size at the end of the result will be kept
     # length = x.size(0)
-    length = x.shape[0]
-    splits = []
-    if keep_short_tails:
-        for slice_start in range(0, length, stride):
+    length, channels = x.shape
+    range_end = length
+    if not keep_short_tails:
+        range_end = length - window_size + 1
+    splits = np.zeros((channels, (range_end+stride-1)//stride, window_size))
+    x = x.T
+    
+    for ax in range(channels):
+        idx = 0
+        for slice_start in range(0, range_end, stride):
             slice_end = min(length, slice_start + window_size)
-            splits.append(x[slice_start:slice_end])
-    else:
-        for slice_start in range(0, length - window_size + 1, stride):
-            slice_end = slice_start + window_size
-            splits.append(x[slice_start:slice_end])
-    return splits
+            length_of_window = slice_end-slice_start
+            splits[ax][idx][:length_of_window] = x[ax][slice_start:slice_end]
+            idx += 1
+    x = splits.transpose(1,2,0)
+    return x
 
 
 def Downsample(x, sampling_rate, new_sr):
@@ -53,20 +58,13 @@ def Downsample(x, sampling_rate, new_sr):
     else:
         return x[:, ::int(sampling_rate // new_sr)]  # Downsample along the time dimension after windowing
     '''
-    return x[::int(sampling_rate // new_sr)]  # DownSampling is being done only before windowing so for now it doesn't matter
-
-
-def binning(x, bin_size):
-    """
-    Expects a 3d array and performs binning on the second dimension
-    x(562,256,3)--> binning(x, 2) --> (562,128,3)
-    """
-    binned_result = []
-    for i in range(0, x.shape[1], bin_size):
-        bin_values = x[:, i:i+bin_size, :]
-        binned_result.append(np.mean(bin_values, axis=1))
-    return np.stack(binned_result, axis=1)
-
+    channels = x.shape[1]
+    x = x.T
+    x_scratch = []
+    for ax in range(channels):
+        x_scratch.append(x[ax][::int(sampling_rate//new_sr)])
+    x = np.array(x_scratch).T
+    return x # DownSampling is being done only before windowing so for now it doesn't matter
 
 class Jittering(object):
     def __init__(self, sigma):
