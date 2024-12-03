@@ -44,612 +44,443 @@ from tqdm import tqdm
 from ..transforms import basic_transforms
 from ..transforms.haar import haar_forward
 from ..transforms.hadamard import hadamard_forward_vectorized
+from ..utils.misc_utils import str2int_or_float
 
+class GenericTSDataset(Dataset):
+    def __init__(self, subset: str = None, dataset_dir: str = None, **kwargs):
 
-class SimpleTSDataset(Dataset):
-    """Univariate & Multivariate Time Series Dataset."""
-
-    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], sampling_rate=313000,
-                 sequence_window=0.25, variables=1, **kwargs):
-        """
-        Parameters
-        ----------
-        subset
-        dataset_dir
-        transforms
-        sampling_rate
-        sequence_window
-        variables
-        kwargs: For MFCC/STFT
-        """
+        self.logger = getLogger("root.GenericTSDataset") 
         self._path = dataset_dir
-        self.transforms = transforms
-        if len(transforms) and isinstance(transforms[0], list):  # When input is received from modelmaker, it becomes [['DownSample', 'SimpleWindow']]
-            self.transforms = []
-            [self.transforms.extend(x.split('_')) for x in transforms[0]]  # Accommodates both trannsforms like 'DownSample', 'SimpleWindow' as well as 'MotorFault_256IN_16FFTBIN_8FR_3CH_rmDC_1x384x1'
-        self.sampling_rate = sampling_rate
-        self.sequence_window = sequence_window
         self.classes = list()
         self.label_map = dict()
-        self.variables = variables if variables else 1
-        self.resampling_factor = int(kwargs.get('resampling_factor', 1))
-        self.logger = getLogger("root.SimpleTSDataset")
-        self.logger.info("Data is being picked up from: {}".format(dataset_dir))
-        self.logger.info("Inputs by user: ")
-        self.logger.info("Number of Time Series Components/variables/channels: {}".format(self.variables))
-        self.logger.info("Original Sample rate: {}Hz".format(self.sampling_rate))
-        self.feature_extraction_params = dict()  # This is just useful for header file as a part of golden vectors
+        self.feature_extraction_params = dict()
         self.preprocessing_flags = []
-        # self.feature_extraction_category = 0
+        self.X = []
+        self.Y = []
 
-        # reorganize the list of data
-        def load_list(filename):
+        # store all the kwargs in self
+        for key, value in kwargs.items():
+            value = str2int_or_float(value)
+            setattr(self, key, value)
+            
+        # The self.transforms will contain str only
+        # This is just an efficient to flatten the multidimensional list
+        # TODO: Change the below line
+        self.transforms = np.array(self.transforms).flatten().tolist()
+        
+        # Stores the path of data_files to be used
+        def load_list(kwargs_list, file_name):
+            joined_path = os.path.join(os.path.dirname(self._path), 'annotations', file_name)
+            list_to_load = glob(joined_path)[0]
+            if kwargs.get(kwargs_list):
+                list_to_load = kwargs.get(kwargs_list)
             loadList = []
-            # filepath = os.path.join(self._path, filename)
-            with open(filename) as fileobj:
-                for line in fileobj:  # line denotes each line from the list of data set aside for valiation or testing (e.g., 'right/a69b9b3e_nohash_0.wav' in 'validation_list.txt')
+            with open(list_to_load) as fileobj:
+                for line in fileobj:
                     line = line.strip()
                     if line:
-                        line = os.path.join(self._path, line)
-                        loadList.append(line)
+                        loadList.append(os.path.join(self._path, line))
             return loadList
-
-        if subset in ["validation", "val"]:
-            val = kwargs.get('validation_list') if kwargs.get('validation_list') else \
-            glob(os.path.join(os.path.dirname(self._path), 'annotations', "*val*_list.txt"))[0]
-            self.logger.info("Loading validation data from {}".format(val))
-            self._walker = load_list(val)
+        
+        # Files storing the datafile names
+        if subset in ["training", "train"]:
+            kwargs_list_key = 'training_list'
+            list_filename = '*train*_list.txt'
         elif subset in ["testing", "test"]:
+            kwargs_list_key = 'testing_list'
             try:
-                test_list = glob(os.path.join(os.path.dirname(self._path), 'annotations', "*test*_list.txt"))[0]
+                list_filename = '*test*_list.txt'
+                self._walker = load_list(kwargs_list_key, list_filename)
             except IndexError:
-                test_list = glob(os.path.join(os.path.dirname(self._path), 'annotations', "*file*_list.txt"))[0]
-            test = kwargs.get('testing_list', test_list)
-
-            self.logger.info("Loading testing data from {}".format(test))
-            self._walker = load_list(test)
-        elif subset in ["training", "train"]:
-
-            train = kwargs.get('training_list') if kwargs.get('training_list') else \
-            glob(os.path.join(os.path.dirname(self._path), 'annotations', "*train*_list.txt"))[0]
-            self.logger.info("Loading training data from {}".format(train))
-            self._walker = load_list(train)
-
-        """
-        Sanity checks:
-        sampling_rate : Original Sample Rate
-        sequence_window: Each sequence duration
-        """
-        self.new_sr = self.sampling_rate / self.resampling_factor  # Resampling_factor=1 by default
-        self.stride_window = self.sequence_window
-
-        """
-        Transforms:
-
-        """
-        if 'Downsample' in self.transforms:
-            if 'new_sr' in kwargs.keys() and kwargs.get('new_sr') not in [None, 'None']:
-                self.logger.info("resampling_factor ignored as New Sampling rate (new_sr) has been provided")
-                self.new_sr = int(kwargs.get("new_sr"))
-            self.logger.info("Data to be down/re-sampled to: {}Hz".format(self.new_sr))
-            # else:
-            #     raise AttributeError("Downasampled Sample rate: 'new_sr' required for 'DownSample' transform")
-
-        if ('SimpleWindow' in self.transforms):
-            if ('stride_window' in kwargs.keys()):
-                self.stride_window = kwargs.get('stride_window')
-            else:
-                self.logger.warning("Stride window not provided. It will be same as sequence window, i.e. ZERO OVERLAP")
-                # raise AttributeError("Stride(ms): 'stride_window' required for 'SimpleWindow' transform")
-
-
-    def _prepare_empty_variables(self, **kwargs):
-        self.samples_in_sequence = int(self.new_sr * self.sequence_window)
-        self.samples_in_stride = int(self.new_sr * self.stride_window)
-
-        # self.logger.info("Data samples in one frame: {}".format(self.sequence_window, self.samples_in_sequence))
-        # self.logger.info("Stride of {} samples implies window is moved by {} samples".format(self.stride_window, self.samples_in_stride))
-
-        self.X = np.array([]).reshape(0, self.variables, self.samples_in_sequence, )
-        self.X_raw = np.array([]).reshape(0, self.variables, self.samples_in_sequence, )
-
-        self.Y = []  # np.array([], dtype=np.uint8).reshape(0, num_classes)
-
-        ''' Process Data '''
+                list_filename = '*file*_list.txt'
+                self._walker = load_list(kwargs_list_key, list_filename)
+        elif subset in ["validation", "val"]:
+            kwargs_list_key = 'validation_list'
+            list_filename = '*val*_list.txt'
+            
+        self._walker = load_list(kwargs_list_key, list_filename)
         self.classes = sorted(set([opb(opd(datafile)) for datafile in self._walker]))
-        self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
-
-    def _load_datafile(self, datafile, **kwargs):
+        return None
+    
+    # Downsample the dataset by a factor (sampling_rate/new_sr)
+    def __transform_downsample(self, x_temp):
+        x_temp = basic_transforms.Downsample(x_temp, self.sampling_rate, self.new_sr)
+        return x_temp
+    
+    # Form windows of size sequence_window from the dataset
+    def __transform_simple_window(self, x_temp):
+        stride_window = int(self.sequence_window * self.stride_size)
+        if stride_window == 0:
+            self.logger.warning("Stride Window size calculated is 0. Defaulting the value to Sample Window i.e. no overlap.")
+            stride_window = self.sequence_window
+        if not hasattr(self, 'keep_short_tails'):
+            self.keep_short_tails = False
+        x_temp = np.array(basic_transforms.SimpleWindow(x_temp, self.sequence_window, stride_window, self.keep_short_tails))
+        if len(self.feat_ext_transform) > 0:
+            x_temp = x_temp.reshape(-1, self.variables)
+        return x_temp
+    
+    # Stores the data in x_temp from the datafile
+    def _load_datafile(self, datafile):
         file_extension = ops(datafile)[-1]
         if file_extension == ".npy":
             x_temp = np.load(datafile)
             if len(x_temp.shape) > 1:
-                x_temp = x_temp[:, 1:]  # Remove the timestamp column if it exists # [..., np.newaxis]
-        elif file_extension == ".pkl":
-            x_temp = pd.read_pickle(datafile)
+                x_temp = x_temp[:, 1:]
+        elif file_extension in [".pkl", ".csv", ".txt"]:
+            x_temp = pd.read_pickle(datafile) if file_extension == '.pkl' else pd.read_csv(datafile)
             non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
-            x_temp = x_temp[non_time_columns].values[:, :self.variables]  # values removes the auto indexed column, :self.variables gives the first n variables column
-        elif file_extension == ".csv":
-            x_temp = pd.read_csv(datafile)
-            non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
-            x_temp = x_temp[non_time_columns].values[:, :self.variables]  # values removes the auto indexed column, :self.variables gives the first n variables column
-        elif file_extension == ".txt":
-            x_temp = pd.read_csv(datafile)
-            non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
-            x_temp = x_temp[non_time_columns].values[:, :self.variables]  # values removes the auto indexed column, :self.variables gives the first n variables column
-
-            # x_temp = np.loadtxt(datafile)
-            # if len(x_temp.shape) > 1:
-            #     x_temp = x_temp[:, 1:]  # Remove the first auto numbered column by pandas
+            x_temp = x_temp[non_time_columns].values[:, :self.variables]
         else:
             raise Exception("Supports only .npy, .pkl, .txt and .csv file formats for now")
         label = opb(opd(datafile))
-        # self.classes.add(label)
+        
+        # Perform the data processing transformations
         if 'Downsample' in self.transforms:
-            # Anyway the new_sr will be sampling_rate in case downsample is not given as a transform
-            x_temp = basic_transforms.Downsample(x_temp, self.sampling_rate, self.new_sr)
+            x_temp = self.__transform_downsample(x_temp)
         if 'SimpleWindow' in self.transforms:
-            # Sequences are just split as cuts (no windowing) in case stride window isn't given
-            x_temp = np.array(basic_transforms.SimpleWindow(x_temp, window_size=self.samples_in_sequence,
-                                                            stride=self.samples_in_stride,
-                                                            keep_short_tails=kwargs.get('keep_short_tails')))
-        x_temp_raw_out = x_temp.copy()  # x_temp_raw_out is used to compare with stored feature extracted data
+            x_temp = self.__transform_simple_window(x_temp)
+                
+        x_temp_raw_out = x_temp.copy()
         return x_temp, label, x_temp_raw_out
+    
+    # Stores the (x_temp, x_temp_raw_out, y_temp) after applying all the feat-ext-transform
+    def _store_feat_ext(self, datafile, x_temp, x_temp_raw_out, label):
+        y_temp = np.array([label for i in range(x_temp.shape[0])])
+        if hasattr(self, 'store_feat_ext_data'):
+            if hasattr(self, 'feat_ext_store_dir'):
+                x_raw_out_file_path = os.path.join(
+                    self.feat_ext_store_dir,
+                    os.path.splitext(os.path.basename(datafile))[0] + '__' + 'raw' + '_X.npy')
+                np.save(x_raw_out_file_path, x_temp_raw_out)
+                self.logger.debug(f"Stored raw data in {x_raw_out_file_path}")
 
+                transforms_chosen = '_'.join(self.transforms)
+                out_file_name = os.path.splitext(os.path.basename(datafile))[0] + '__' + transforms_chosen
+
+                x_out_file_path = os.path.join(self.feat_ext_store_dir, out_file_name + '_X.npy')
+                np.save(x_out_file_path, x_temp)
+                self.logger.debug(f"Stored intermediate data in {x_out_file_path}")
+
+                y_out_file_path = os.path.join(self.feat_ext_store_dir, out_file_name + '_Y.npy')
+                np.save(y_out_file_path, y_temp)
+                self.logger.debug(f"Stored intermediate targets in {y_out_file_path}")
+            else:
+                self.logger.warning(
+                    "'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")                
+        return
+
+    # Rearranges the dimensions of x_temp to generalize for different channels
     def _rearrange_dims(self, datafile, x_temp, label, x_temp_raw_out, **kwargs):
         y_temp = np.array([label for i in range(x_temp.shape[0])])
         try:
             if x_temp.ndim == 2:
-                x_temp = np.expand_dims(x_temp, axis=1)
-            elif x_temp.ndim == 3:
-                x_temp = x_temp.transpose(0, 2, 1)  # Interchange N,H,C to N,C,H
-
-            if self.X.size == 0:
+                self.logger.warning("Not enough dimensions present. Extract more features")
+                raise Exception("Not enough dimensions present. Extract more features")
+            if x_temp.ndim == 3:
+                x_temp = x_temp.transpose(0, 2, 1)
+                x_temp = np.expand_dims(x_temp, axis=3)
+            if len(self.X) == 0:
                 self.X = x_temp
                 self.X_raw = x_temp_raw_out
             else:
-                self.X = np.concatenate((self.X, x_temp))  # n, 1, 752
-                self.X_raw = np.concatenate((self.X_raw, x_temp_raw_out))  # n, 1, 752
-            # self.Y.extend(y_temp)
-            self.Y = np.concatenate((self.Y, y_temp))  # n
-            if kwargs.get('store_feat_ext_data'):
-                if kwargs.get('feat_ext_store_dir'):
-                    x_raw_out_file_path = os.path.join(
-                        kwargs.get('feat_ext_store_dir'),
-                        os.path.splitext(os.path.basename(datafile))[0] + '__' + 'raw' + '_X.npy')
-                    np.save(x_raw_out_file_path, x_temp_raw_out)
-                    self.logger.debug(f"Stored raw data in {x_raw_out_file_path}")
-
-                    transforms_chosen = '_'.join(self.transforms)
-                    out_file_name = os.path.splitext(os.path.basename(datafile))[0] + '__' + transforms_chosen
-
-                    x_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_X.npy')
-                    np.save(x_out_file_path, x_temp)
-                    self.logger.debug(f"Stored intermediate data in {x_out_file_path}")
-
-                    y_out_file_path = os.path.join(kwargs.get('feat_ext_store_dir'), out_file_name + '_Y.npy')
-                    np.save(y_out_file_path, y_temp)
-                    self.logger.debug(f"Stored intermediate targets in {y_out_file_path}")
-                else:
-                    self.logger.warning(
-                        "'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")
-
+                self.X = np.concatenate((self.X, x_temp))
+                self.X_raw = np.concatenate((self.X_raw, x_temp_raw_out))
+            self.Y = np.concatenate((self.Y, y_temp))
         except ValueError as e:
             self.logger.warning('Skipping {} as Error encountered: {}'.format(datafile, e))
-
-    def _process_targets(self):
-        self.label_map = {k: v for v, k in enumerate(self.classes)}  # E.g: {'arc': 0, 'non_arc': 1}
-        self.inverse_label_map = {k: v for v, k in self.label_map.items()}  # E.g: {'arc': 0, 'non_arc': 1}
-        if self.X.ndim == 3:
-            # This was added because all the models during APL require N,C, H(features), W(1)
-            self.X = np.expand_dims(self.X, axis=-1)
-
-        ''' Process Targets '''
-        # targets are processed separately as we need to develop indices for the same
-        # if 'FFT' in self.transforms:
-        #     # In FFT case, this is already done
-        #     pass
-        # else:
-        #     self.Y = [self.label_map[i] for i in self.Y]
-        self.Y = [self.label_map[i] for i in self.Y]
-
-        # if self.variables == 1:
-        #     self.X = np.float32(self.X[:, None, :])  # Adding a dummy dimension
-        self.logger.info("Dataset Label Map: {}".format(self.label_map))
-        self.logger.info("Data Dimensions (N,C,H,(W?)): {}".format(self.X.shape))
-        self.logger.info("Target Length: {}".format(len(self.Y)))
-        if not len(self.Y):
-            self.logger.error("No data could be loaded. Either file paths were erroneous or dimensions mismatched."
-                              " Check prior logger messages/ data processing configurations")
-            raise Exception("No data could be loaded. Either file paths were erroneous or dimensions mismatched. Check prior logger messages/ data processing configurations")
-
-        # self.X = torch.from_numpy(self.X)
-        # self.Y = torch.from_numpy(self.Y)
-
-    def __feature_extraction(self, x_temp):
-        if 'HAAR' in self.transforms:
-            # x_temp = np.apply_along_axis(haar_forward, 1, x_temp)
-            x_temp = np.apply_along_axis(haar_forward, 1, x_temp)
-            x_temp[x_temp<1e-8] = 1e-8
-            x_temp = 20*np.log10(x_temp)
-        if 'HADAMARD' in self.transforms:
-            x_temp = np.apply_along_axis(hadamard_forward_vectorized, 1, x_temp)
-        if 'BIN' in self.transforms:
-
-            x_temp = basic_transforms.binning(x_temp, 4)
-        if 'ABS' in self.transforms:
-            x_temp = np.abs(x_temp)
-        if 'LOG' in self.transforms:
-            x_temp[x_temp<1e-8] = 1e-8
-            x_temp = 20*np.log10(x_temp)
-        # x_temp = np.apply_along_axis(lambda x: x - np.mean(x), 1, x_temp)
-        return x_temp
-
-    def prepare(self, **kwargs):
-        # Space for Dataset specific initialisations
-        self._prepare_empty_variables(**kwargs)
-        for datafile in tqdm(self._walker):
-            try:
-                x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
-                # Space for Dataset specific initialisations
-                x_temp = self.__feature_extraction(x_temp.copy())
-                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
-            except ValueError as v:
-                self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
-            except IndexError as i:
-                self.logger.error(f"Input arguments are incompatible with dataset Dimensions in: {datafile}. Error message: {i}")
-        if not self.X.shape[0]:
-            self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
-            raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
-        self._process_targets()
-        return self
+        return
 
     def __len__(self):
         return len(self.X)
 
     def __getitem__(self, index):
-        # if 'MFCC' in self.transforms:
-        #     mfcc_layer = MFCC(sample_rate=sample_rate, n_mfcc=self.mfcc_bins, log_mels=self.log_mels)
-        #     # 1, 16000
-        #     mel_spectogram = mfcc_layer(waveform)  # 1, 64, 81
-        #     mel_spectogram = padding(mel_spectogram, seq_len=2*self.mfcc_bins)  # 1, 64, 128
-        #     waveform = mel_spectogram# .unsqueeze(0)
-        #
-        # if 'STFT' in self.transforms:
-        #     stft_layer = STFT(self.filter_length, self.hop_length)
-        #     real, imag = stft_layer(waveform)
-        #     spectrogram = torch.sqrt(real ** 2 + imag ** 2)  # 1,129,63
-        #     waveform = spectrogram#.squeeze(1)
         return torch.from_numpy(self.X[index]), self.Y[index]
 
-class ArcFaultDataset(SimpleTSDataset):
-    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], sampling_rate=313000,
-                 sequence_window=0.25, variables=1, **kwargs):
-        super().__init__(subset=subset, dataset_dir=dataset_dir, transforms=transforms, sampling_rate=sampling_rate,
-                         sequence_window=sequence_window, variables=variables, **kwargs)
+    def _process_targets(self):
+        self.label_map = {k: v for v, k in enumerate(self.classes)}         # {'class_0': 0, 'class_1': 1}
+        self.inverse_label_map = {k: v for v, k in self.label_map.items()}  # {0 :'class_0', 1: 'class_1'}
+        if self.X.ndim == 3:
+            self.X = np.expand_dims(self.X, axis=-1)
+        self.Y = [self.label_map[i] for i in self.Y]
 
-        self.frame_size = kwargs.get('frame_size', 1024)
+        if not len(self.Y):
+            self.logger.error("No data could be loaded. Either file paths were erroneous or dimensions mismatched. Check prior logger messages/ data processing configurations")
+            raise Exception("No data could be loaded. Either file paths were erroneous or dimensions mismatched. Check prior logger messages/ data processing configurations")
+        return
+    
+    def __transform_raw(self, wave_frame):
+        self.logger.debug(f"Transform: RAW shape: {wave_frame.shape}")
+        result_wave = wave_frame
+        mean_of_wave = np.sum(result_wave) // len(result_wave)
+        if self.dc_remove:
+            result_wave = result_wave - mean_of_wave
+        return wave_frame, result_wave
+    
+    def __transform_windowing(self, wave_frame):
+        self.logger.debug(f"Transform: Windowing shape: {wave_frame.shape}")
+        result_wave = wave_frame * np.hanning(self.frame_size)
+        return wave_frame, result_wave
 
-        self.feature_size_per_frame = kwargs.get('feature_size_per_frame', 256)
-        self.num_frame_concat = kwargs.get('num_frame_concat', 1)  # feature concatenation
-        # self.feature_size_per_frame = round(self.feature_size / self.num_frame_concat)
-        self.feature_size = self.feature_size_per_frame * self.num_frame_concat
+    def __transform_fft(self, wave_frame):
+        self.logger.debug(f"Transform: FFT shape: {wave_frame.shape}")
+        result_wave = np.fft.fft(wave_frame)
+        return wave_frame, result_wave
 
-        self.frame_skip = kwargs.get('frame_skip', 1)  # skipped frames during feature concatenation
-        self.min_fft_bin = kwargs.get('min_fft_bin', 1)  # 1: remove dc 0: keep dc
-        self.fft_bin_size = kwargs.get('fft_bin_size', 2)
+    def __transform_binning(self, wave_frame):
+        self.logger.debug(f"Transform: Binning input shape: {wave_frame.shape}")
+        result_wave = np.empty((self.feature_size_per_frame))
+        bin_size = self.bin_size
+        bin_offset = self.min_bin if self.min_bin else 0
 
-        self.sequence_window = self.feature_size
+        for idx in range(self.feature_size_per_frame):
+            idx1 = bin_offset + (idx)*bin_size
+            sum_of_bin = sum(wave_frame[idx1:idx1+bin_size])
+            result_wave[idx] = sum_of_bin 
+            result_wave[idx] /= bin_size if self.normalize_bin else 1
+        self.logger.debug(f"Transform: Binning output shape: {result_wave.shape}")
+        return wave_frame, result_wave
 
-        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
-        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
-        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
-        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat
-        self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
-        self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
-        self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_fft_bin
-        self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.fft_bin_size
-        # self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
-        self.feature_extraction_params['FE_LOG_BASE'] = 'exp(1.0)'
-        self.feature_extraction_params['FE_LOG_MUL'] = 10
+    def __transform_concatenation(self, features_of_frame_per_ax, index_frame):
+        self.logger.debug(f"Transform: Concatenation input shape: {np.array(features_of_frame_per_ax).shape}")
+        result_wave = np.array([x for item in features_of_frame_per_ax[index_frame - self.num_frame_concat + 1:index_frame + 1] for x in item])
+        self.logger.debug(f"Transform: Concatenation output shape: {result_wave.shape}")
+        return features_of_frame_per_ax, result_wave
+    
+    def __transform_pos_half_fft(self, wave_frame):
+        self.logger.debug(f"Transform: Pos Half FFT input shape: {wave_frame.shape}")
+        # takes the DC + min_bin samples of the fft
+        idx = self.frame_size//2
+        idx += self.min_bin if self.min_bin else 1
+        result_wave = wave_frame[:idx]
+        self.logger.debug(f"Transform: Pos Half FFT output shape: {result_wave.shape}")
+        return wave_frame, result_wave
 
-        self.preprocessing_flags.append('FE_WIN')
-        for transform in self.transforms:
-            if 'FFT' in transform:
-                self.preprocessing_flags.append('FE_FFT')
-        self.preprocessing_flags.append('FE_BIN')
-        # if {'WIN', 'FFT'}.issubset(set(self.preprocessing_flags)):
-        #     # FEATURE_EXTRACT_WIN_FFT = 4
-        #     self.feature_extraction_category = 4
-        # else:
-        #     self.feature_extraction_category = 0
+    def __transform_absolute(self, wave_frame):
+        self.logger.debug(f"Transform: Absolute shape: {wave_frame.shape}")
+        # Converts the complex value to real values
+        result_wave = abs(wave_frame)
+        return wave_frame, result_wave
+    
+    def __transform_haar(self, wave_frame):
+        self.logger.debug(f"Transform: HAAR shape: {wave_frame.shape}")
+        result_wave = haar_forward(wave_frame)
+        return wave_frame, result_wave
+    
+    def __transform_hadamard(self, wave_frame):
+        self.logger.debug(f"Transform: Hadamard output shape: {wave_frame.shape}")
+        result_wave = hadamard_forward_vectorized(wave_frame)
+        self.logger.debug(f"Transform: Hadamard output shape: {result_wave.shape}")
+        return wave_frame, result_wave
 
-    def __feature_extraction(self, x_temp):
-        num_frame = len(x_temp) // self.frame_size
-        feature_framecase = []
-        raw_framecase = []
-        feature_frame = []
-        raw_frame = []
-        for index_frame in range(0, num_frame):
-            # Get one frame and run FFT
-            wave_frame = x_temp.squeeze()[index_frame * self.frame_size:(index_frame + 1) * self.frame_size]  # Take one batch of (self.frame_size,) -> (1024,)
-            raw_frame.append(wave_frame)
-            wave_frame_win = wave_frame * np.hanning(self.frame_size)
-            fft_out = np.fft.fft(wave_frame_win) / self.frame_size  # compute fft and normalize.  (1024,)
-            mag = abs(fft_out[0:(int(self.frame_size / 2) + self.min_fft_bin)])  # (513,)
-            fft_bin_out = np.zeros((self.feature_size_per_frame,))
-            for index_feature in range(0, self.feature_size_per_frame):
-                for index_bin in range(0, self.fft_bin_size):
-                    fft_bin_out[index_feature] = fft_bin_out[index_feature] + mag[
-                        self.min_fft_bin + index_feature * self.fft_bin_size + index_bin]
-            magdB = 10 * np.log(1e-12 + fft_bin_out)
-            # feature_frame contains all feature in this file
-            feature_frame.append(
-                magdB)  # [[ ]] -> 'num_frames' number of lists of 'self.feature_size_per_frame' elements each
-            # concatenate multiple previous frames if needed
-            # store feature2 with proper concatenation into feature_framecase
-            if (index_frame >= self.num_frame_concat - 1) and (index_frame % self.frame_skip == 0):
-                temp = np.array(
-                    [x for item in feature_frame[index_frame - self.num_frame_concat + 1:index_frame + 1] for x in
-                     item])  # self.num_frame_concat*(self.feature_size_per_frame,)
-                feature_framecase.append(temp)
+    def __transform_normalize(self, wave_frame):
+        result_wave = wave_frame / self.frame_size
+        return wave_frame, result_wave
+    
+    def __transform_log(self, wave_frame):
+        result_wave = wave_frame
+        if self.log_base == 'e':
+            result_wave = self.log_mul*np.log(self.log_threshold + wave_frame)
+        elif self.log_base == 10:
+            result_wave = self.log_mul*np.log10(self.log_threshold + wave_frame)
+        else:
+            self.logger.warning("log_base value not defined, defaulting base of log to np.log10")
+            result_wave = self.log_mul*np.log10(self.log_threshold + wave_frame)
+        return wave_frame, result_wave
 
-                # temp = np.array([x for item in raw_frame[index_frame - self.num_frame_concat + 1:index_frame + 1] for x in item])
-                temp = np.array(np.array(raw_frame[index_frame - self.num_frame_concat + 1:index_frame + 1][-1]))
-                raw_framecase.append(temp)
-        x_temp = np.array(feature_framecase)
-        x_temp_raw_out = np.array(raw_framecase)
+    # Rearrange the shape from (C,N,W) to (N,C,W,H)
+    def __transform_shape(self, concatenated_features, raw_frames):
+        self.logger.debug(f"Transform: Shape input shape: {concatenated_features.shape}")
+        number_of_samples = concatenated_features.shape[1]
+        x_temp_scratch = np.empty((number_of_samples, self.ch*self.wl))
+        x_temp_raw_out = raw_frames.transpose(1, 0, 2)
+        
+        for idx in range(number_of_samples):
+            # Concatenate features of each channel in single array x_temp_scratch[idx]
+            x_temp_scratch[idx] = np.array([concatenated_features[ax][idx] for ax in range(self.variables)]).flatten()
+
+        # Split the features into respective channels
+        x_temp = x_temp_scratch.reshape(number_of_samples, self.ch, self.wl, self.hl)
+        self.logger.debug(f"Transform: Shape output shape: {x_temp.shape}")
         return x_temp, x_temp_raw_out
 
-    def prepare(self, **kwargs):
-        # Space for Dataset specific initialisations
-        self._prepare_empty_variables(**kwargs)
-        for datafile in tqdm(self._walker):
-            try:
-                x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
-                # Space for Dataset specific feature_extractions
-                x_temp, x_temp_raw_out = self.__feature_extraction(x_temp)
-                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
-            except ValueError as v:
-                self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
-            except IndexError as i:
-                self.logger.error(f"Unexpected dataset dimensions. Check input options or dataset content. \nFile: {datafile}. Error message: {i}")
+    def __prepare_feature_extraction_variables(self):
 
-        # ArcFault_base1 requires an additional dimension N,C, H(features), W(1)
-
-        self.X = np.expand_dims(self.X, axis=-1)
-        if not self.X.shape[0]:
-            self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
-            raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
-        self._process_targets()
-        return self
-
-
-class MotorFaultDataset(SimpleTSDataset):
-    def __init__(self, subset: str = None, dataset_dir: str = None, transforms: list = [], sampling_rate=313000,
-                 sequence_window=0.25, variables=1, **kwargs):
-        super().__init__(subset=subset, dataset_dir=dataset_dir, transforms=transforms, sampling_rate=sampling_rate,
-                         sequence_window=sequence_window, variables=variables, **kwargs)
-
-        self.frame_size = kwargs.get('frame_size', 256)
-        self.feature_size_per_frame = kwargs.get('feature_size_per_frame', 16)
-        self.num_frame_concat = kwargs.get('num_frame_concat', 8)
-        # self.num_channel = kwargs.get('num_channel', 3)
-        self.dc_remove = kwargs.get('dc_remove', True)
-        self.stacking = kwargs.get('stacking', '1D')
+        self.feature_size = self.feature_size_per_frame * self.num_frame_concat
+        self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+        self.ch = self.variables
+        self.hl = 1
+        self.wl = self.feature_size_per_frame * self.num_frame_concat
 
         if self.stacking == '1D':
+            self.wl *= self.variables
             self.ch = 1
-            self.wl = self.feature_size_per_frame * self.variables * self.num_frame_concat
-            self.hl = 1
-        elif self.stacking == '2D1':
-            self.ch = self.variables
-            self.wl = self.feature_size_per_frame * self.num_frame_concat
-            self.hl = 1
-        self.offset = kwargs.get('offset', 0)
-        self.scale = kwargs.get('scale', 1)
-        self.fs = kwargs.get('fs', 1)  # not used
 
+        # Store the feature extraction parameters
         self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
-        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
-        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat
-        self.feature_extraction_params['FE_DC_REMOVE'] = int(self.dc_remove)
         self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
         self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
         self.feature_extraction_params['FE_HL'] = self.hl
         self.feature_extraction_params['FE_OFFSET'] = self.offset
         self.feature_extraction_params['FE_SCALE'] = self.scale
-        self.feature_extraction_params['FE_FS'] = self.fs
-        # self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
-        self.feature_extraction_params['FE_LOG_BASE'] = 10
-        self.feature_extraction_params['FE_LOG_MUL'] = 20
+        self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
+        self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
+        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
+        self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
+        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
+        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
 
-        for transform in self.transforms:
-            if 'FFT' in transform:
-                self.preprocessing_flags.append('FE_FFT')
-                self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
-            if 'BIN' in transform:
-                self.preprocessing_flags.append('FE_BIN')
-            if 'RAW' in transform:
-                self.preprocessing_flags.append('FE_RAW')
-        # if {'FFT', 'BIN'}.issubset(set(self.preprocessing_flags)):
-        #     # FEATURE_EXTRACT_FFT_BIN = 3
-        #     self.feature_extraction_category = 3
-        # elif {'FFT'}.issubset(set(self.preprocessing_flags)):
-        #     # FEATURE_EXTRACT_FFT = 2
-        #     self.feature_extraction_category = 2
-        # elif {'RAW'}.issubset(set(self.preprocessing_flags)):
-        #     # FEATURE_EXTRACT_RAW = 1
-        #     self.feature_extraction_category = 1
-        # else:
-        #     # FEATURE_EXTRACT_UNDEFINED = 0
-        #     self.feature_extraction_category = 0
+        # Store the feature extraction parameters specifically related to FFT used for AI Library
+        if 'RAW_FE' not in self.transforms:
+            self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
+            self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
+            self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
+            self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
+            self.log_threshold = eval(self.log_threshold)
+            
+        # Store the preprocessing flags used for AI Library
+        if 'WINDOWING' in self.transforms:
+            self.preprocessing_flags.append('FE_WIN')
+        if 'FFT_FE' in self.transforms:
+            self.preprocessing_flags.append('FE_FFT')
+        if 'BINNING' in self.transforms:
+            self.preprocessing_flags.append('FE_BIN')
+        if 'RAW_FE' in self.transforms:
+            self.preprocessing_flags.append('FE_RAW')
+        
+        return
 
-        ## Computes one side FFT ##
-    def __fft_oneside(self, y, fs):
-        n = len(y)  # Length of signal
-        k = np.arange(n)
-        T = n / fs
-        frq = k / T  # two sides frequency range, center at Fs/2
-        # Y = np.fft.fft(y)/n  # compute fft and normalize.
-        Y = np.fft.fft(y)  # compute fft; no normalize; this is to match C2000 RFFT_f32_mag_TMU0() implementation
-        frq = frq[0:(int(n / 2) + 1)]  # returns DC + n/2 samples; for visualization only
-        Y = abs(Y[0:(int(n / 2) + 1)])
-        return frq, Y
+    def __feature_extraction(self, x_temp, datafile):
 
-    ## Computes FFT and binning (mimic c implementation) ##
-    def __fft_bin(self, s, fs, nbins, no_dc):
-        f, fft1 = self.__fft_oneside(s, fs)
-        n_fft = len(fft1)
-        if no_dc:
-            fft1 = fft1[1:]  # skip the first DC bin
-            f = f[1:]
-            nSamples = (n_fft - 1) // nbins
-        else:
-            nSamples = n_fft // nbins
-        fbins = []
-        mbins = []
-        for i in range(0, nbins):
-            tmp = 0
-            i1 = int(i * nSamples)
-            i2 = i1 + nSamples
-            for m in range(i1, i2):
-                tmp = tmp + fft1[m]
-            mbins.append(tmp / nSamples)
-            fbins.append(f[i2 - 1])  # for visualization only; not needed in training
-        return fbins, mbins
+        number_of_frames = x_temp.shape[1] // self.frame_size
 
-    # def __mf_getLabel(self, fname):
-    #     p = fname.split('/')[-1].split('_')
-    #     q = [int(a.split('label')[1]) for a in p if 'label' in a]
-    #     return q[0]
-
-    def __feature_extraction(self, x_temp):
-        # Calculate features per axis
-        vax = [[] for a in range(self.variables)]
-        vax_copy = [[] for a in range(self.variables)]
+        concatenated_features = []
+        concatenated_raw_frames = []
+        
+        # Iterate the number of variables in dataset
         for ax in range(self.variables):
-            # The below code is for each axis.
-            vsel = x_temp[:, ax] / self.scale
-            vsel = np.floor(vsel).astype(int)  # convert data to fixpoint
+            x_temp_per_ax = x_temp[ax]
+            if self.scale:
+                x_temp_per_ax = x_temp[ax] / self.scale
+            
+            number_of_steps = 1
+            # Stores the features and raw frames for all steps of single variable
+            raw_frame_per_ax = []
+            features_of_frame_per_ax = []
+            concatenated_raw_frames_per_ax = []
+            concatenated_features_per_ax = []
 
-            # Calculate number of frames with or w/o sample overlap
-            if (self.offset != 0):
-                Nos_steps = len(vsel) // self.offset  # Number of segments with overlap
-                Nlast = len(vsel[int((
-                                                 Nos_steps - 1) * self.offset):]) // self.frame_size  # Make sure the last segment has at least Ns samples
-                if (Nlast == 0):
-                    Nos_steps -= 1  # skip last one
-            else:
-                Nos_steps = 1  # non-overlap mode; start with sample at 0 index
+            if self.offset:
+                number_of_steps = x_temp_per_ax.shape[0] // self.offset
+                last_n = (x_temp_per_ax.shape[0] - (number_of_steps-1)*self.offset) // self.frame_size      # elements left // self.frame_size
+                if last_n==0:
+                    number_of_steps -= 1    # don't include the leftover elements
+            
+            # If no offset: number_of_steps = 1, number_of_frames formed with frame_size
+            # else: calculate the number_of_frames formed by adding 1/n offsets for each frame
+            for n in range(number_of_steps):
+                # Store the features and raw frames of single step of single variable
+                concatenated_features_per_step = []
+                concatenated_raw_frames_per_step = []
+                number_of_frames = (x_temp_per_ax.shape[0]) // self.frame_size
+                if self.offset:
+                    number_of_frames = (x_temp_per_ax.shape[0] - (n * self.offset)) // self.frame_size
+                
+                # Apply transformations on the frames
+                for index_frame in range(number_of_frames):
+                    start_idx = index_frame * self.frame_size
+                    if self.offset:
+                        start_idx = index_frame * self.frame_size + n * self.offset
+                    end_idx = start_idx + self.frame_size
+                    wave_frame = x_temp_per_ax[start_idx: end_idx]
+                    raw_wave = wave_frame
+                    # Contains the frame on which transforms will be applied
+                    raw_frame_per_ax.append(raw_wave)
 
-            # Prepare features per frame
-            vl = []
-            vl_copy = []  # To store adc values
-            vl_mf = []
-            vl_mf_copy = []  # To store adc values
-            for n in range(0, Nos_steps):
-                Nsteps = len(vsel[int(n * self.offset):]) // self.frame_size
-                for m in range(0, Nsteps):
-                    m1 = int(m * self.frame_size + n * self.offset)
-                    m2 = m1 + int(self.frame_size)
-                    vs = vsel[m1:m2]  # segmented data
-                    vs_copy = vs.copy()
-                    # Select pre-processing methods
-                    if ('RAW' in self.transforms):
-                        if self.dc_remove:
-                            vs = vs - np.sum(vs) // len(vs)  # -np.mean(vs)
-                        vs_m = list(vs)
-                    elif ('FFTBIN' in self.transforms):
-                        vs_f, vs_m = self.__fft_bin(vs, self.fs, self.feature_size_per_frame, self.dc_remove)
-                        vs_m = 20 * np.log10(vs_m)  # dB
-                        vs_m = list(vs_m)
-                    elif ('FFT' in self.transforms):
-                        # vs = vs*np.hamming(len(vs)) # windowing
-                        vs_f, vs_m = self.__fft_oneside(vs, self.fs)
-                        for a, b in enumerate(vs_m):
-                            if (b < 1e-100):  # avoid log very small value
-                                vs_m[a] = 1e-100
-                        vs_m = 20 * np.log10(vs_m[self.dc_remove:])  # dB
-                        vs_m = list(vs_m)
-                        vs_f = vs_f[self.dc_remove:]
-                    # elif ("PSD_BIN" in self.transforms):
-                    #     vs_f, vs_m = psd_bin(vs, self.fs, nbins=16, no_dc=self.dc_remove)
-                    #     vs_m = 10 * np.log10(vs_m)  # dB
-                    #     vs_m = list(vs_m)
-                    # elif ("LOG_MEL" in self.transforms):
-                    #     freq, mag = self.__fft_oneside(vs, self.fs)
-                    #     if (self.dc_remove == 1):
-                    #         mag[0] = 0
-                    #     vs_m, vs_f, fbank = log_mel_conv(mag[0:Ns // 2], Ns, self.fs, nfilt=16, b_dB=1)
-                    else:
-                        raise 'Unsupported transform for MotorFault!!'
-                    # end method
-                    vl.append(vs_m)  # save result
-                    vl_copy.append(
-                        vs_copy.tolist())  # In case of RAW, it will have the same dimensions as vs_m. In case of FFTBIN, it will not have the same dimensions as vs_m
+                    if 'WINDOWING' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_windowing(wave_frame)
+                    if 'RAW_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_raw(wave_frame)
+                    if 'FFT_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_fft(wave_frame)
+                    if 'NORMALIZE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_normalize(wave_frame)
+                    if 'FFT_POS_HALF' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_pos_half_fft(wave_frame)
+                    if 'ABS' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_absolute(wave_frame)
+                    if 'DC_REMOVE' in self.transforms:
+                        wave_frame = wave_frame[1:]
+                    # if 'HAAR' in self.transforms:
+                    #     raw_wave, wave_frame = self.__transform_haar(wave_frame)
+                    # if 'HADAMARD' in self.transforms:
+                    #     raw_wave, wave_frame = self.__transform_hadamard(wave_frame)
+                    # if 'BIN' in self.transforms:
+                    #     raw_wave, wave_frame = self.__transform_basic_binning(wave_frame)
+                    if 'BINNING' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_binning(wave_frame)
+                    if 'LOG_DB' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_log(wave_frame)
+                    
+                    # Contains the frame after all transformations are applied except concatenation
+                    features_of_frame_per_ax.append(wave_frame)
 
-                if (self.num_frame_concat > 1):  # concatenate multiple frames
-                    vl_mf = [sum(vl[o:o + self.num_frame_concat], []) for o in
-                             range(Nsteps - self.num_frame_concat + 1)]
-                    # vl_mf_copy = [sum(vl_copy[o:o + self.num_frame_concat], []) for o in range(Nsteps - self.num_frame_concat + 1)]
-                    # Use the above line instead of the below line if all frames are required instead of just the last frame
-                    vl_mf_copy = [vl_copy[o + self.num_frame_concat - 1] for o in
-                                  range(Nsteps - self.num_frame_concat + 1)]
+                for index_frame in range(self.num_frame_concat-1, number_of_frames):
+                    if (index_frame % self.frame_skip == 0):
+                        if 'CONCAT' in self.transforms:
+                            frames_to_concat = self.num_frame_concat
+                            _, result_wave = self.__transform_concatenation(features_of_frame_per_ax, index_frame)
+                            concatenated_features_per_step.append(result_wave)
+                            concatenated_raw_frames_per_step = [raw_frame_per_ax[idx + self.num_frame_concat - 1] for idx in range(number_of_frames - self.num_frame_concat + 1)]
+                
+                # Store the features and raw frames with concatenation
+                concatenated_features_per_ax = concatenated_features_per_step      
+                concatenated_raw_frames_per_ax = concatenated_raw_frames_per_step  
 
-            vax[ax] = vl_mf if (
-                        self.num_frame_concat > 1) else vl  # save result per axis; select from single and multi-frame
-            vax_copy[ax] = vl_mf_copy if (
-                        self.num_frame_concat > 1) else vl_copy  # save result per axis; select from single and multi-frame
-            # vax_copy[ax] = vl_copy  # TODO: Enable above line if more than first frame raw data is required
-        # Complete feature pre-processing
+                # Store the features and raw frames w/o concatenating
+                if self.num_frame_concat < 2:
+                    concatenated_features_per_ax = features_of_frame_per_ax
+                    concatenated_raw_frames_per_ax = raw_frame_per_ax
 
-        # Pack data in 1d format: samples x features; features; for example, xaxis[0:128]-yaxis[128:256]-zaxis[256:384]
-        # This entire below loop just converts an array of length (n,3) to (3n,1) or (n,3) based on self.variables
-        # TODO: Can replace the confusing loop with a single line using numpy arrays instead of lists
-        dd = []
-        for a in range(len(vax[0])):  # loop through each measurement samples
-            cc = []
-            for c in range(self.variables):  # concatenate x+y+z data
-                cc = cc + vax[c][a]
-            dd.append(cc)
-        # vs_data[icond] = vs_data[icond] + dd
-        x_temp = np.array(dd)  # format: samples x features
-        # Reshape data to ch,wl,hl per measurement; final format: N,C,W,H; For example, 1500,3,128,1; dataloader random pick from N
-        N = x_temp.shape[0]
-        data_packed = np.zeros(
-            (N, self.ch, self.wl, self.hl))  # sample x channel x feature_length x height_length
-        for n in range(0, N):
-            for i in range(0, self.ch):
-                nc = x_temp[n].shape[0] // self.ch  # length per channel
-                o1 = i * nc
-                o2 = o1 + nc
-                tmp2 = x_temp[n][o1:o2]
-                nh = nc // self.hl  # length per height (break sequential data into multi-segments; 2d)
-                for m in range(0, self.hl):
-                    s1 = m * nh
-                    s2 = s1 + nh
-                    data_packed[n, i, :, m] = tmp2[s1:s2]
-        x_temp = data_packed
-        x_temp_raw_out = np.array(vax_copy).transpose(1, 0, 2)  # Convert 3,n,256 to n,3,256 (256 is frame size)
+            concatenated_features.append(concatenated_features_per_ax)
+            concatenated_raw_frames.append(concatenated_raw_frames_per_ax)
+        
+        concatenated_features = np.array(concatenated_features)
+        concatenated_raw_frames = np.array(concatenated_raw_frames)
+        
+        if hasattr(self, 'dont_train_just_feat_ext') and self.dont_train_just_feat_ext:
+            x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + 'features.npy')
+            np.save(x_raw_out_file_path, concatenated_features.transpose(1,0,2))
+
+        x_temp, x_temp_raw_out = self.__transform_shape(concatenated_features, concatenated_raw_frames)
 
         return x_temp, x_temp_raw_out
-
+    
     def prepare(self, **kwargs):
-        # Space for Dataset specific initialisations
-        self._prepare_empty_variables(**kwargs)
+        if len(self.feat_ext_transform) > 0:
+            self.__prepare_feature_extraction_variables()
         for datafile in tqdm(self._walker):
             try:
-                x_temp, label, x_temp_raw_out = self._load_datafile(datafile, **kwargs)
-                # Space for Dataset specific feature_extractions
-                x_temp, x_temp_raw_out = self.__feature_extraction(x_temp)
-                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out, **kwargs)
+                x_temp, label, x_temp_raw_out = self._load_datafile(datafile)   # Loads the dataset and applied data processing transforms
+                if hasattr(self, 'dont_train_just_feat_ext') and self.dont_train_just_feat_ext:
+                    x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + 'raw.npy')
+                    np.save(x_raw_out_file_path, x_temp.flatten())
+                if len(self.feat_ext_transform) > 0:
+                    x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T, datafile)   # Applies feature extraction transforms
+                    if hasattr(self, 'store_feat_ext_data') and self.store_feat_ext_data:
+                        self._store_feat_ext(datafile, x_temp, x_temp_raw_out, label)
+                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out)      # 
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
             except IndexError as i:
-                self.logger.error(f"Input arguments are incompatible with dataset Dimensions in: {datafile}. Error message: {i}")
+                exit()
+                self.logger.error(f"Unexpected dataset dimensions. Check input options or dataset content. \nFile: {datafile}. Error message: {i}")
+            except KeyboardInterrupt as ki:
+                exit()
+
         if not self.X.shape[0]:
             self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
             raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
+
         self._process_targets()
         return self

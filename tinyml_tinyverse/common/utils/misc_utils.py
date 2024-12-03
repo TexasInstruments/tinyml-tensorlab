@@ -27,6 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
+from curses.ascii import isdigit
 import importlib
 import os
 import sys
@@ -69,6 +70,22 @@ def str2bool(v):
     #
     return bool(v)
 
+def str2int_or_float(v):
+    if isinstance(v, str):
+        if v == 'None':
+            return None
+        elif v == 'False':
+            return False
+        elif v == 'True':
+            return True
+        elif not v.isdigit():
+            return str(v)
+        elif '.' in v:
+            return float(v)
+        else:
+            return int(v)
+    else:
+        return v
 
 def import_file_or_folder(folder_or_file_name, package_name=None, force_import=False):
     if folder_or_file_name.endswith(os.sep):

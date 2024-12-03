@@ -42,14 +42,14 @@ import torch
 import torcheval
 from tabulate import tabulate
 
-from tinyml_tinyverse.common.datasets import SimpleTSDataset, ArcFaultDataset, MotorFaultDataset
+from tinyml_tinyverse.common.datasets import GenericTSDataset
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
 
-dataset_loader_dict = {'SimpleTSDataset': SimpleTSDataset, 'ArcFaultDataset': ArcFaultDataset, 'MotorFaultDataset': MotorFaultDataset}
+dataset_loader_dict = {'GenericTSDataset': GenericTSDataset}
 
 
 def get_args_parser():
@@ -75,30 +75,32 @@ def get_args_parser():
     parser.add_argument('--device', default='cuda', help='device')
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
     # Feature Extraction Params
-    parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[],
-                        nargs='+')  # default=['DownSample', 'SimpleWindow'])
-    parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default='', )
+    parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
+    parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
 
     # Simple TimeSeries Params
-    parser.add_argument('--variables', help="1- if Univariate, 2/3/.. if multivariate", type=int, default=1)
+    parser.add_argument('--variables', help="1- if Univariate, 2/3/.. if multivariate")
     parser.add_argument('--resampling-factor', help="Resampling ratio")
-    parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
+    parser.add_argument('--sampling-rate', help="Sampled frequency ")
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--stride_window', help="Window length (s) to stride by", type=float)  # default=0.001)
-    parser.add_argument('--sequence_window', help="Window length per sequence in sec", type=float, required=True)
+    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
+    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
     # Arc Fault and Motor Fault Related Params
-    parser.add_argument('--frame-size', help="Frame Size", default=1024, type=int)
-    parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame", default=512, type=int)
-    parser.add_argument('--num-frame-concat', help="Number of FFT frames to concat", default=1, type=int)
-    parser.add_argument('--frame-skip', help="Skip frames while computing FFT", default=1, type=int)
-    parser.add_argument('--min-fft-bin', help="Remove DC Component from FFT", default=1, type=int)
-    parser.add_argument('--fft-bin-size', help="FFT Bin Size", default=2, type=int)
-    parser.add_argument('--dc-remove', help="Remove DC Component from FFT", default=True, type=bool)
+    parser.add_argument('--frame-size', help="Frame Size")
+    parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
+    parser.add_argument('--num-frame-concat', help="Number of FFT frames to concat")
+    parser.add_argument('--frame-skip', help="Skip frames while computing FFT")
+    parser.add_argument('--min-bin', help="Remove DC Component from FFT")
+    parser.add_argument('--normalize-bin', help="Normalize Binning")
+    parser.add_argument('--dc-remove', help="Remove DC Component from FFT")
+    parser.add_argument('--analysis-bandwidth', help="Spectrum of FFT used for binning")
     # parser.add_argument('--num-channel', help="Number of input channels (ex.axis, phase)", default=16, type=int)
-    parser.add_argument('--stacking', help="1D/2D1/None", default=None, type=str)
-    parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap", default=0,
-                        type=int)
-    parser.add_argument('--scale', help="Scaling factor to input data", default=1, type=float)
+    parser.add_argument('--log-base', help="base value for logarithm")
+    parser.add_argument('--log-mul', help="multiplier for logarithm")
+    parser.add_argument('--log-threshold', help="offset added to values for logarithmic calculation")
+    parser.add_argument('--stacking', help="1D/2D1/None")
+    parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
+    parser.add_argument('--scale', help="Scaling factor to input data")
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
 
     return parser
@@ -127,10 +129,9 @@ def main(gpu, args):
     # torch.backends.cudnn.benchmark = True
     if isinstance(args.data_proc_transforms, list):
         if len(args.data_proc_transforms) and isinstance(args.data_proc_transforms[0], list):
-            args.transforms = [args.data_proc_transforms[0] + [
-                args.feat_ext_transform]]  # args.data_proc_transforms is a list of lists
+            args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
         else:
-            args.transforms = [args.data_proc_transforms + [args.feat_ext_transform]]
+            args.transforms = args.data_proc_transforms + args.feat_ext_transform
     dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict, test_only=True)  # (126073, 1, 152), 126073
 
     num_classes = len(dataset.classes)
