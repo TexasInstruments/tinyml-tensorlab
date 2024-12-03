@@ -98,8 +98,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -130,21 +130,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -152,7 +156,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 32
-      dataset_loader: ArcFaultDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -164,7 +168,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_200_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_200
       num_gpus: 1
       num_last_epochs: 5
@@ -202,35 +206,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1618
+          inference_time_us: 276
           model_selection_factor: 2
-          performance_infer_time_ms: 0.432
+          sram: 1030
         F28003:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1618
+          inference_time_us: 276
           model_selection_factor: 2
-          performance_infer_time_ms: 0.432
+          sram: 1030
         F28004:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1618
+          inference_time_us: 230
           model_selection_factor: 2
-          performance_infer_time_ms: 0.518
+          sram: 1030
         F2837:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1618
+          inference_time_us: 276
           model_selection_factor: 2
-          performance_infer_time_ms: 0.432
+          sram: 1030
         F28P55:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 2048
+          inference_time_us: 193
           model_selection_factor: 2
-          performance_infer_time_ms: 0.193
+          sram: 830
         F28P65:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1618
+          inference_time_us: 460
           model_selection_factor: 2
-          performance_infer_time_ms: 0.259
+          sram: 1030
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -277,8 +281,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -309,21 +313,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -331,7 +339,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 32
-      dataset_loader: ArcFaultDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -343,7 +351,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_300_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_300
       num_gpus: 1
       num_last_epochs: 5
@@ -381,35 +389,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1796
+          inference_time_us: 534
           model_selection_factor: 1
-          performance_infer_time_ms: 0.836
+          sram: 1542
         F28003:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1796
+          inference_time_us: 534
           model_selection_factor: 1
-          performance_infer_time_ms: 0.836
+          sram: 1542
         F28004:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1796
+          inference_time_us: 445
           model_selection_factor: 1
-          performance_infer_time_ms: 1.003
+          sram: 1542
         F2837:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1796
+          inference_time_us: 534
           model_selection_factor: 1
-          performance_infer_time_ms: 0.836
+          sram: 1542
         F28P55:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 2152
+          inference_time_us: 254
           model_selection_factor: 1
-          performance_infer_time_ms: 0.254
+          sram: 1578
         F28P65:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1796
+          inference_time_us: 890
           model_selection_factor: 1
-          performance_infer_time_ms: 0.502
+          sram: 1542
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -456,8 +464,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -488,21 +496,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -510,7 +522,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 32
-      dataset_loader: ArcFaultDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -522,7 +534,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: ArcFault_model_700_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_700
       num_gpus: 1
       num_last_epochs: 5
@@ -560,35 +572,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1865
+          inference_time_us: 628
           model_selection_factor: 0
-          performance_infer_time_ms: 0.982
+          sram: 1542
         F28003:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1865
+          inference_time_us: 628
           model_selection_factor: 0
-          performance_infer_time_ms: 0.982
+          sram: 1542
         F28004:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1865
+          inference_time_us: 523
           model_selection_factor: 0
-          performance_infer_time_ms: 1.179
+          sram: 1542
         F2837:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1865
+          inference_time_us: 628
           model_selection_factor: 0
-          performance_infer_time_ms: 0.982
+          sram: 1542
         F28P55:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 2490
+          inference_time_us: 306
           model_selection_factor: 0
-          performance_infer_time_ms: 0.307
+          sram: 1578
         F28P65:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 256)'
+          flash: 1865
+          inference_time_us: 1046
           model_selection_factor: 0
-          performance_infer_time_ms: 0.589
+          sram: 1542
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -635,8 +647,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -667,21 +679,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -689,7 +705,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 256
-      dataset_loader: MotorFaultDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -701,7 +717,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_1_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py
       model_training_id: CNN_MF_1L
       num_gpus: 1
       num_last_epochs: 5
@@ -739,35 +755,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 1429
+          inference_time_us: 355
           model_selection_factor: 0
-          performance_infer_time_ms: 0.555
+          sram: 1324
         F28003:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 1429
+          inference_time_us: 355
           model_selection_factor: 0
-          performance_infer_time_ms: 0.555
+          sram: 1324
         F28004:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 1429
+          inference_time_us: 296
           model_selection_factor: 0
-          performance_infer_time_ms: 0.666
+          sram: 1324
         F2837:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 1429
+          inference_time_us: 355
           model_selection_factor: 0
-          performance_infer_time_ms: 0.555
+          sram: 1324
         F28P55:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 1988
+          inference_time_us: 173
           model_selection_factor: 0
-          performance_infer_time_ms: 0.173
+          sram: 1204
         F28P65:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 1429
+          inference_time_us: 592
           model_selection_factor: 0
-          performance_infer_time_ms: 0.333
+          sram: 1324
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -814,8 +830,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -846,21 +862,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -868,7 +888,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 256
-      dataset_loader: MotorFaultDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -880,7 +900,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_2_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py
       model_training_id: CNN_MF_2L
       num_gpus: 1
       num_last_epochs: 5
@@ -918,35 +938,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 4789
+          inference_time_us: 11355
           model_selection_factor: 1
-          performance_infer_time_ms: 17.743
+          sram: 16956
         F28003:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 4789
+          inference_time_us: 11355
           model_selection_factor: 1
-          performance_infer_time_ms: 17.743
+          sram: 16956
         F28004:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 4789
+          inference_time_us: 9462
           model_selection_factor: 1
-          performance_infer_time_ms: 21.292
+          sram: 16956
         F2837:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 4789
+          inference_time_us: 11355
           model_selection_factor: 1
-          performance_infer_time_ms: 17.743
+          sram: 16956
         F28P55:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 4073
+          inference_time_us: 1686
           model_selection_factor: 1
-          performance_infer_time_ms: 1.686
+          sram: 12880
         F28P65:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 4789
+          inference_time_us: 18925
           model_selection_factor: 1
-          performance_infer_time_ms: 10.646
+          sram: 16956
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -993,8 +1013,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -1025,21 +1045,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -1047,7 +1071,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 256
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -1059,7 +1083,7 @@ model_descriptions:
       model_architecture: backbone
       model_config: null
       model_name: MotorFault_model_3_t
-      model_spec: /opt/tinyml/PycharmProjects/py310_tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_3l.py
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_3l.py
       model_training_id: CNN_MF_3L
       num_gpus: 1
       num_last_epochs: 5
@@ -1097,35 +1121,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 2552
+          inference_time_us: 552
           model_selection_factor: 2
-          performance_infer_time_ms: 0.865
+          sram: 1158
         F28003:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 2552
+          inference_time_us: 552
           model_selection_factor: 2
-          performance_infer_time_ms: 0.865
+          sram: 1158
         F28004:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 2552
+          inference_time_us: 460
           model_selection_factor: 2
-          performance_infer_time_ms: 1.037
+          sram: 1158
         F2837:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 2552
+          inference_time_us: 552
           model_selection_factor: 2
-          performance_infer_time_ms: 0.865
+          sram: 1158
         F28P55:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 2714
+          inference_time_us: 253
           model_selection_factor: 2
-          performance_infer_time_ms: 0.253
+          sram: 1216
         F28P65:
-          model_info: 'Inference time numbers are for comparison purposes only. (Input
-            Size: 384)'
+          flash: 2552
+          inference_time_us: 921
           model_selection_factor: 2
-          performance_infer_time_ms: 0.519
+          sram: 1158
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1172,8 +1196,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -1204,21 +1228,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -1226,7 +1254,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -1276,20 +1304,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
         F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 0
-          performance_infer_time_ms: TBD
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1336,8 +1379,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -1368,21 +1411,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -1390,7 +1437,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -1440,23 +1487,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28P55:
-          model_selection_factor: 0
-          performance_infer_time_ms: TBD
-        F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 1
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1503,8 +1562,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -1535,21 +1594,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -1557,7 +1620,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -1607,20 +1670,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 6
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 6
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 6
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 6
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 6
+          sram: TBD
         F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 6
-          performance_infer_time_ms: TBD
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1667,8 +1745,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -1699,21 +1777,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -1721,7 +1803,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -1771,23 +1853,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 7
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 7
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 7
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 7
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28P55:
-          model_selection_factor: 3
-          performance_infer_time_ms: TBD
-        F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 7
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1834,8 +1928,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -1866,21 +1960,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -1888,7 +1986,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -1938,20 +2036,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 4
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 4
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 4
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 4
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
         F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 4
-          performance_infer_time_ms: TBD
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1998,8 +2111,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -2030,21 +2143,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -2052,7 +2169,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -2102,23 +2219,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 5
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 5
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 5
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 5
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28P55:
-          model_selection_factor: 2
-          performance_infer_time_ms: TBD
-        F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 5
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 5
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2165,8 +2294,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -2197,21 +2326,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -2219,7 +2352,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -2269,20 +2402,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 2
+          sram: TBD
         F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 2
-          performance_infer_time_ms: TBD
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2329,8 +2477,8 @@ model_descriptions:
       new_sr: 3009
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 0.25
-      stride_window: 0.001
+      sequence_window: 3009
+      stride_size: 0.01
       transforms: []
       variables: 1
     dataset:
@@ -2361,21 +2509,25 @@ model_descriptions:
       download_path: ''
       download_url: ''
     feature_extraction:
+      analysis_bandwidth: 1
       dc_remove: true
       dont_train_just_feat_ext: false
       feat_ext_store_dir: null
       feature_extraction_name: null
-      feature_size_per_frame: 512
-      fft_bin_size: 2
-      frame_size: 1024
-      frame_skip: 1
-      min_fft_bin: 1
-      num_frame_concat: 1
-      offset: 0
-      scale: 1
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
       stacking: null
       store_feat_ext_data: false
-      transform: ''
+      transform: []
     testing:
       enable: true
       model_path: null
@@ -2383,7 +2535,7 @@ model_descriptions:
       test_data: null
     training:
       batch_size: 64
-      dataset_loader: SimpleTSDataset
+      dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
       dual_op: false
@@ -2433,23 +2585,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 3
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28003:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 3
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28004:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 3
-          performance_infer_time_ms: TBD
+          sram: TBD
         F2837:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 3
-          performance_infer_time_ms: TBD
+          sram: TBD
         F28P55:
-          model_selection_factor: 1
-          performance_infer_time_ms: TBD
-        F28P65:
+          flash: TBD
+          inference_time_us: TBD
           model_selection_factor: 3
-          performance_infer_time_ms: TBD
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 3
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2493,33 +2657,33 @@ preset_descriptions:
     arc_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f280015x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f280015x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2527,33 +2691,33 @@ preset_descriptions:
     arc_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28003x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28003x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2561,33 +2725,33 @@ preset_descriptions:
     arc_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28004x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28004x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2595,33 +2759,33 @@ preset_descriptions:
     arc_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f2837xd/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2629,63 +2793,63 @@ preset_descriptions:
     arc_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
       forced_soft_npu_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
       forced_soft_npu_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: c28
       forced_soft_npu_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p55x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p55x/common/include
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
@@ -2693,33 +2857,33 @@ preset_descriptions:
     arc_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include
+            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include
+            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
-          cross_compiler: /opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/bin/cl2000
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/bin/ti-cgt-c2000_22.6.1.LTS/include
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/driverlib/f28p65x/driverlib
-            -I/opt/tinyml/bin/C2000Ware_5_04_00_00/device_support/f28p65x/common/include
+            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28

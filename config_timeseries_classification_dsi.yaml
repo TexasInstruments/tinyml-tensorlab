@@ -11,26 +11,23 @@ dataset:
 #    split_names: [training, validation]
 
 data_processing: # One or more can be cascaded in the list
-    transforms: [ Downsample, SimpleWindow ]
     # transforms: 'DownSample SimpleWindow'
-    # sampling_rate: 313000
-    # new_sr: 3009
-    # stride_window: 0.001
-    # sequence_window: 0.25
+    transforms: [ Downsample, SimpleWindow ]
+    # Downsample
     sampling_rate: 313000
-    new_sr: 3200
-    stride_window: 0.001
-    sequence_window: 0.16
-    unit: 'time' # time or samples
+    new_sr: 3130
+    # SimpleWindow
+    sequence_window: 256
+    stride_size: 0.01
     variables: 1
 
 feature_extraction:
-    transform: None
+    transform: []
 
 training:
     # enable/disable training
     enable: True #False
-    # F28x generic timeseries model names: TimeSeries_Generic_4k_t, TimeSeries_Generic_13k_t
+    # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
     model_name: 'TimeSeries_Generic_13k_t'
     # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'

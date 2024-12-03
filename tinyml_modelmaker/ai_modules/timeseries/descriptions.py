@@ -86,12 +86,31 @@ def get_paretto_front_combined(xy_list, x_index=0, y_index=1, inverse_relaionshi
     return paretto_front
 
 
+def set_default_inference_time_us(model_descriptions):
+    for m in model_descriptions.values():
+        for target_device in m.training.target_devices.keys():
+            if not m.training.target_devices[target_device].get('inference_time_us'):
+                m.training.target_devices[target_device].inference_time_us = None
+
+
+def set_default_sram(model_descriptions):
+    for m in model_descriptions.values():
+        for target_device in m.training.target_devices.keys():
+            if not m.training.target_devices[target_device].get('sram'):
+                m.training.target_devices[target_device].sram = None
+
+
+def set_default_flash(model_descriptions):
+    for m in model_descriptions.values():
+        for target_device in m.training.target_devices.keys():
+            if not m.training.target_devices[target_device].get('flash'):
+                m.training.target_devices[target_device].flash = None
+
+
 def set_model_selection_factor(model_descriptions):
     for m in model_descriptions.values():
         for target_device in m.training.target_devices.keys():
             m.training.target_devices[target_device].model_selection_factor = None
-        #
-    #
 
     task_types = set([m.common.task_type for m in model_descriptions.values()])
     target_devices = [list(m.training.target_devices.keys()) for m in model_descriptions.values()]
@@ -100,12 +119,12 @@ def set_model_selection_factor(model_descriptions):
         for task_type in task_types:
             model_desc_list = [m for m in model_descriptions.values() if m.common.task_type == task_type]
             model_desc_list = [m for m in model_desc_list if target_device in list(m.training.target_devices.keys())]
-            performance_infer_time_ms = [m.training.target_devices[target_device].performance_infer_time_ms for m in
+            inference_time_us = [m.training.target_devices[target_device].inference_time_us for m in
                                          model_desc_list]
             # accuracy_factor = [m.training.target_devices[target_device].accuracy_factor for m in model_desc_list]
             accuracy_factor = ['TBD' for _ in model_desc_list]
-            xy_list = [(performance_infer_time_ms[i], accuracy_factor[i], i) for i in
-                       range(len(performance_infer_time_ms))]
+            xy_list = [(inference_time_us[i], accuracy_factor[i], i) for i in
+                       range(len(inference_time_us))]
             xy_list_shortlisted = [(xy[0], xy[1], xy[2]) for xy in xy_list if
                                    isinstance(xy[0], numbers.Real) and isinstance(xy[1], numbers.Real)]
             # if no models have performance data for this device, then use some dummy data
@@ -143,7 +162,11 @@ def get_model_descriptions(params):
 
     #
     model_descriptions = utils.ConfigDict(model_descriptions)
+    set_default_inference_time_us(model_descriptions)
+    set_default_sram(model_descriptions)
+    set_default_flash(model_descriptions)
     set_model_selection_factor(model_descriptions)
+
     return model_descriptions
 
 

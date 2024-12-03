@@ -174,14 +174,14 @@ def write_dict(dict_obj, filename, write_json=True, write_yaml=True):
 
 def cleanup_special_chars(file_name):
     if os.path.exists(file_name):
-        with open(file_name) as rfp:
+        with open(file_name, encoding="utf-8") as rfp:
             new_lines = []
             log_lines = rfp.readlines()
             for log_line in log_lines:
                 log_line = re.sub(r'(\x9B|\x1B[\[\(\=])[0-?]*[ -\/]*([@-~]|$)', '', log_line)
                 new_lines.append(log_line)
             #
-            with open(file_name, 'w') as wfp:
+            with open(file_name, 'w', encoding="utf-8") as wfp:
                 wfp.writelines(new_lines)
             #
         #
@@ -330,3 +330,17 @@ class ProgressBar():
 
     def update(self, cur_size):
         self.__call__(cur_size)
+
+
+def str2bool(v):
+    '''a utility function used for argument parsing'''
+    if v is None:
+        return False
+    elif isinstance(v, str):
+        if v.lower() in ('', 'none', 'false', 'no', '0'):
+            return False
+        elif v.lower() in ('true', 'yes', '1'):
+            return True
+        #
+    #
+    return bool(v)
