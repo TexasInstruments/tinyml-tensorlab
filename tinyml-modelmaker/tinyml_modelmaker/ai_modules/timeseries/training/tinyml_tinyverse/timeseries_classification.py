@@ -748,6 +748,7 @@ class ModelTraining:
         argv = ['--model', f'{self.params.training.model_training_id}',
                 '--dual-op', f'{self.params.training.dual_op}',
                 '--model-config', f'{self.params.training.model_config}',
+                '--augment-config', f'{self.params.training.augment_config}',
                 '--model-spec', f'{self.params.training.model_spec}',
                 # '--weights', f'{self.params.training.pretrained_checkpoint_path}',
                 '--dataset', 'modelmaker',

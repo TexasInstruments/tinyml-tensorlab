@@ -78,6 +78,7 @@ def init_params(*args, **kwargs):
         training=dict(
             enable=True,
             model_name=None,
+            augment_config=None,
             model_config=None,
             model_spec=None,
             dataset_loader='GenericTSDataset',
