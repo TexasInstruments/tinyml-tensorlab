@@ -150,6 +150,7 @@ def get_args_parser():
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
     parser.add_argument('--model', default='ArcDet4x16', help='model')
     parser.add_argument('--dual-op', default=False, help='True if you need model to have FC layer input as secondary output', type=misc_utils.str_or_bool)
+    parser.add_argument('--augment-config', default=None, help='yaml file indicating augment configurations',)
     parser.add_argument('--model-config', default=None, help='yaml file indicating model configurations',)
     parser.add_argument('--model-spec', default=None, help='Model Specification. (Used for models not defined in repo)')
     parser.add_argument('--device', default='cuda', help='device')
@@ -353,47 +354,23 @@ def main(gpu, args):
             args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
         else:
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
-    if args.store_feat_ext_data:
-        if args.feat_ext_store_dir in [None, 'None']:
-            args.feat_ext_store_dir = os.path.join(args.output_dir, 'feat_ext_data')
-            logger.info(f"feat_ext_store_dir has been defaulted to: {args.feat_ext_store_dir}")
-        create_dir(args.feat_ext_store_dir)
+    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
     dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict)  # (126073, 1, 152), 126073
-    # if args.store_feat_ext_data:
-    #     # if True:
-    #     from sklearn.decomposition import PCA
-    #     import matplotlib.pyplot as plt
-    #
-    #     pca = PCA(n_components=3)
-    #     time_series_pca = pca.fit_transform(dataset.X.squeeze())
-    #     n_clusters = len(dataset.classes)
-    #     fig = plt.figure(figsize=(10, 7))
-    #     ax = plt.axes(projection='3d')
-    #     for i in range(n_clusters):
-    #         xdata = time_series_pca[np.where(np.array(dataset.Y)==i)][:, 0]
-    #         ydata = time_series_pca[np.where(np.array(dataset.Y)==i)][:, 1]
-    #         zdata = time_series_pca[np.where(np.array(dataset.Y)==i)][:, 2]
-    #         # plt.scatter(xdata, ydata, zdata, c='aquamarine', label=f'Cluster {i}')
-    #         ax.scatter3D(xdata, ydata, zdata)  # c=zdata, cmap='viridis'
-    #     plt.title("PCA Visualization of Feature Extracted Clusters")
-    #     ax.set_xlabel('Principal Component 1', rotation=150)
-    #     ax.set_ylabel('Principal Component 2')
-    #     ax.set_zlabel('Principal Component 3', rotation=60)
-    #     # plt.xlabel('')
-    #     # plt.ylabel('')
-    #     # plt.ylabel('')
-    #     plt.legend()
-    #     plt.savefig(os.path.join(args.feat_ext_store_dir, 'pca_on_feature_extracted_data.png'))
-    #     # plt.close(fig)
-    #     # plt.show()
-    #     # sys.exit(0)
-    #     if args.dont_train_just_feat_ext:
-    #         logger.info("Exiting execution without training")
-    #         sys.exit(0)
+
+    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
+    utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
+    utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
+    # The below two lines work fine, but slows down a lot
+    # plot_graph(dataset, graph_type='tsne', instance_type='train')
+    # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
+    if misc_utils.str2bool(args.dont_train_just_feat_ext):
+        logger.info("Exiting execution without training")
+        sys.exit(0)
+
     generate_golden_vector_dir(args.output_dir)
-    if args.gen_golden_vectors:
+    if misc_utils.str2bool(args.gen_golden_vectors):
         generate_user_input_config(args.output_dir, dataset)
-        if args.dont_train_just_feat_ext == 'True':
+        if misc_utils.str2bool(args.dont_train_just_feat_ext):
             logger.info('ModelMaker completed for test bench. Exiting.')
             sys.exit()
 
@@ -417,8 +394,8 @@ def main(gpu, args):
     # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
     model = models.get_model(
         args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
-        model_spec=args.model_spec, with_input_batchnorm=True if args.with_input_batchnorm in ['True', True] else False,
-        dual_op=args.dual_op) # args.model is a string, how to make it a callable
+        model_spec=args.model_spec, with_input_batchnorm=misc_utils.str2bool(args.with_input_batchnorm),
+        dual_op=args.dual_op)
     if args.generic_model:
         # logger.info("\nModel:\n{}\n".format(model))
         logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
@@ -517,9 +494,9 @@ def main(gpu, args):
         utils.train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
                               print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         lr_scheduler.step()
-        avg_accuracy, avg_f1, avg_conf_matrix = utils.evaluate(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
+        avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         if model_ema:
-            avg_accuracy, avg_f1, avg_conf_matrix = utils.evaluate(model_ema, criterion, data_loader_test, device=device, transform=transform,
+            avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate(model_ema, criterion, data_loader_test, device=device, transform=transform,
                                           log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
         if args.output_dir:
             checkpoint = {
@@ -537,6 +514,7 @@ def main(gpu, args):
                 logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) > {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
                 best['accuracy'] = avg_accuracy
                 best['f1'] = avg_f1
+                best['auc'] = auc
                 best['conf_matrix'] = avg_conf_matrix
                 best['epoch'] = epoch
                 utils.save_on_master(
@@ -549,6 +527,8 @@ def main(gpu, args):
     logger.info(f"Best Epoch: {best['epoch']}")
     logger.info(f"Acc@1 {best['accuracy']:.3f}")
     logger.info(f"F1-Score {best['f1']:.3f}")
+    logger.info(f"AUC ROC Score {best['f1']:.3f}")
+    logger.info("")
     # logger.info(f"Confusion Matrix:\n" + '\n'.join(
     #     [f"Ground Truth:(Class {dataset.inverse_label_map[i]}), Predicted:(Class {dataset.inverse_label_map[j]}): {int(best['conf_matrix'][i][j])}" for j in
     #      range(num_classes) for i in range(num_classes)]))

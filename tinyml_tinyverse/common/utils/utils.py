@@ -71,9 +71,16 @@ import os
 import random
 import re
 import timeit
+from itertools import combinations
 from collections import OrderedDict, defaultdict, deque
 from glob import glob
 from logging import getLogger
+
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc
+from sklearn.preprocessing import label_binarize
+from sklearn.decomposition import PCA, KernelPCA
+from sklearn.manifold import TSNE
 
 import numpy as np
 import onnx
@@ -82,10 +89,7 @@ import torch
 import torch.distributed as dist
 from cryptography.fernet import Fernet
 from tabulate import tabulate
-from torcheval.metrics.functional import (
-    multiclass_confusion_matrix,
-    multiclass_f1_score,
-)
+from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc
 
 try:
     from apex import amp
@@ -244,6 +248,160 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
 
     return dataset, dataset_test, train_sampler, test_sampler
 
+
+def plot_feature_components_graph(dataset_instance, graph_type, instance_type, output_dir):
+    logger = getLogger("root.utils.plot_feature_components_graph")
+    graph_fn_dict = {'pca': PCA, 'tsne': TSNE}
+    time_series_data = graph_fn_dict.get(graph_type)(n_components=3).fit_transform(
+        dataset_instance.X.reshape([dataset_instance.X.shape[0], -1]))
+
+    n_clusters = len(dataset_instance.classes)
+    fig = plt.figure(figsize=(10, 7))
+    ax = plt.axes(projection='3d')
+    colors = plt.cm.get_cmap("tab10", n_clusters)
+    for i in range(n_clusters):
+        xdata = time_series_data[np.where(np.array(dataset_instance.Y) == i)][:, 0]
+        ydata = time_series_data[np.where(np.array(dataset_instance.Y) == i)][:, 1]
+        zdata = time_series_data[np.where(np.array(dataset_instance.Y) == i)][:, 2]
+        # plt.scatter(xdata, ydata, zdata, c='aquamarine', label=f'Cluster {i}')
+        ax.scatter3D(xdata, ydata, zdata, label=f'{dataset_instance.inverse_label_map[i]}', color=colors(i))  # c=zdata, cmap='viridis'
+
+    plt.title(f"{graph_type.upper()} Visualization of Feature Extracted Clusters")
+    plt.legend(loc="lower right")
+    ax.set_xlabel('Principal Component 1', rotation=150)
+    ax.set_ylabel('Principal Component 2')
+    ax.set_zlabel('Principal Component 3', rotation=60)
+    logger.info(f"Feature Components Graph is at: {os.path.join(output_dir, f'{graph_type}_on_feature_extracted_{instance_type}_data.png')}")
+    plt.savefig(os.path.join(output_dir, f'{graph_type}_on_feature_extracted_{instance_type}_data.png'))
+
+
+
+def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, phase=''):
+    """
+    Plots an OvR (One-vs-Rest) Multiclass ROC Curve.
+
+    Parameters:
+        ground_truth (1D array): Ground truth labels (n_samples,).
+        predicted (2D array): Predicted probabilities (n_samples, num_classes).
+        output_dir (str): Output directory.
+    """
+    logger = getLogger("root.plot_multiclass_roc")
+    num_classes = predicted.size(dim=-1)
+    if num_classes == 2:
+        ground_truth_binarized = ground_truth
+    else:
+        # Binarize the ground truth labels
+        ground_truth_binarized = label_binarize(ground_truth, classes=np.arange(num_classes))
+
+    # Initialize plot
+    fig = plt.figure(figsize=(10, 8))
+
+    # Colors for each class
+    colors = plt.cm.get_cmap("tab10", num_classes)
+
+    # Loop through each class
+    fpr_list = []
+    tpr_list = []
+    thresholds_list = []
+    for i in range(num_classes):
+        # Compute ROC curve and AUC for the current class
+        try:
+            fpr, tpr, thresholds = roc_curve(ground_truth_binarized[:, i], predicted[:, i])
+        except IndexError:
+            # 2 class classification
+            fpr, tpr, thresholds = roc_curve(ground_truth_binarized, predicted[:, 1])
+
+        fpr_list.extend(fpr)
+        tpr_list.extend(tpr)
+        thresholds_list.extend(thresholds)
+        roc_auc = auc(fpr, tpr)
+
+        # Plot the ROC curve for the class
+        plt.plot(fpr, tpr, color=colors(i), label=f"{label_map[i]} (AUC = {roc_auc:.2f})")
+
+        # Annotate thresholds
+        for j in range(len(thresholds)//3, len(thresholds)*2//3, max(len(thresholds) // 5, 1)):
+            # Offset for threshold labels to avoid overlap
+            x_offset = 0.02 if j % 2 == 0 else -0.02
+            y_offset = 0.02 if j % 2 == 0 else -0.02
+
+            # Markers
+            plt.scatter(fpr[j], tpr[j], color=colors(i), s=40, edgecolor='black', alpha=0.8)
+            # Threshold text
+            plt.text(fpr[j] + x_offset, tpr[j] + y_offset, f"{thresholds[j]:.0f}", fontsize=8, color=colors(i), alpha=1)
+
+    pd.DataFrame(list(zip(fpr_list, tpr_list, thresholds_list)), columns=['fpr', 'tpr', 'thresholds']).to_csv(
+        os.path.join(output_dir, 'fpr_trp_thresholds.csv'))
+    # Plot diagonal line for random guessing
+    plt.plot([0, 1], [0, 1], color="gray", linestyle="--", label="Random Guess")
+
+    # Customize plot
+    plt.title("One v/s Rest Multi-class ROC Curve (with thresholds)")
+    plt.xlabel("False Positive Rate (FPR)")
+    plt.ylabel("True Positive Rate (TPR)")
+    plt.legend(loc="lower right")
+    plt.grid(alpha=0.3)
+
+    logger.info(f"Plot is at: {os.path.join(output_dir, f'One_vs_Rest_MultiClass_ROC_{phase}.png')}")
+    plt.savefig(os.path.join(output_dir, f'One_vs_Rest_MultiClass_ROC_{phase}.png'))
+
+
+def plot_pairwise_differenced_class_scores(ground_truth, predicted, output_dir, label_map=None, phase=''):
+    """
+      Plots histograms of pairwise differences between class scores for each class combination.
+
+      Parameters:
+      - scores (torch.Tensor): Array of shape (n, num_classes) where `n` is the number of sequences,
+                                and `num_classes` is the number of classes.
+
+      Returns:
+      - None
+      """
+    logger = getLogger("root.utils.plot_pairwise_differenced_class_scores")
+    n, num_classes = predicted.size()
+
+    # Generate all pairs of class combinations
+    class_pairs = list(combinations(range(num_classes), 2))
+
+    # Set up the figure for subplots
+    num_subplots = len(class_pairs)
+    ncols = 3  # Number of columns in the subplot grid
+    nrows = (num_subplots + ncols - 1) // ncols  # Compute required rows
+    fig, axes = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows))
+    axes = np.ravel(axes)  # Flatten axes for easy iteration
+
+    for idx, (i, j) in enumerate(class_pairs):
+        # Compute differences
+        indices = np.where((ground_truth == i) | (ground_truth == j))[0]
+        class_scores = predicted[indices, :]
+        differences = class_scores[:, i] - class_scores[:, j]
+        positive_differences = differences[differences >= 0]
+        negative_differences = differences[differences < 0]
+
+        # Create histogram bins
+        bins = np.linspace(differences.min(), differences.max(), 50)
+
+        # Plot histograms
+        axes[idx].hist(positive_differences, bins=bins, color='blue', alpha=0.7, label=f'{label_map[i]} >= {label_map[j]}')
+        axes[idx].hist(negative_differences, bins=bins, color='orange', alpha=0.7, label=f'{label_map[i]} < {label_map[j]}')
+
+        # Add titles and labels
+        axes[idx].set_title(f'Pair: Class{i} v/s Class{j}', fontsize=14)
+        axes[idx].set_xlabel(f'Difference: x{i} - x{j})', fontsize=12)
+        axes[idx].set_ylabel('Frequency', fontsize=12)
+        axes[idx].legend()
+        axes[idx].grid(alpha=0.3)
+
+    # Hide unused subplots if the grid is larger than required
+    for ax in axes[num_subplots:]:
+        ax.set_visible(False)
+
+    # Adjust layout
+    plt.tight_layout()
+    # plt.legend(loc="lower right")
+
+    logger.info(f"Plot is at: {os.path.join(output_dir, f'Histogram_Class_Score_differences_{phase}.png')}")
+    plt.savefig(os.path.join(output_dir, f'Histogram_Class_Score_differences_{phase}.png'))
 
 class SmoothedValue:
     """Track a series of values and provide access to smoothed values over a
@@ -473,6 +631,10 @@ def get_confusion_matrix(output, target, classes):
 
 def get_f1_score(output, target, classes):
     return multiclass_f1_score(output, target, num_classes=classes)
+
+
+def get_au_roc(output, target, classes):
+    return multiclass_auroc(output, target, num_classes=classes, average='macro')
 
 
 def number_of_correct(pred, target):
@@ -736,10 +898,7 @@ def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, tra
             output = model(data)  # (n,1,8000) -> (n,35)
 
         # negative log-likelihood for a tensor of size (batch x 1 x n_output)
-        # loss = F.nll_loss(output.squeeze(), target)
-        # loss = nn.CrossEntropyLoss(label_smoothing=0.0)(output.squeeze(), target)
         loss = criterion(output, target)
-        # loss = criterion(output.squeeze().argmax(1).to(torch.float32), target.to(torch.float32))
 
         optimizer.zero_grad()
         if apex:
@@ -747,32 +906,15 @@ def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, tra
                 scaled_loss.backward()
         else:
             loss.backward()
-        # loss.backward()
         optimizer.step()
 
-        # acc1, acc5 = utils.accuracy(output, target, topk=(1, 5))
-        # acc1 = utils.accuracy(output.squeeze().argmax(1), target, topk=(1,))
         acc1 = accuracy(output, target, topk=(1,))
-        # confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes'))
-        f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
+        # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
         batch_size = output.shape[0]
         metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
-        # metric_logger.meters['acc1'].update(acc1, n=batch_size)
         metric_logger.meters['acc1'].update(acc1[0], n=batch_size)
-        metric_logger.meters['f1'].update(f1_score, n=batch_size)
-        # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
-        # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
         metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
-        '''
-        # print training stats
-        if batch_idx % log_interval == 0:
-            logger.info(f"Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}")
 
-        # update progress bar
-        pbar.update(pbar_update)
-        # record loss
-        losses.append(loss.item())
-        '''
     if model_ema:
         model_ema.update_parameters(model)
 
@@ -784,6 +926,10 @@ def evaluate(model, criterion, data_loader, device, transform, log_suffix='', pr
     print_freq = min(print_freq, len(data_loader))
     header = f'Test: {log_suffix}'
     confusion_matrix_total = np.zeros((kwargs.get('num_classes'), kwargs.get('num_classes')))
+
+    target_array = torch.Tensor([]).to(device, non_blocking=True)
+    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
+
     with torch.no_grad():
         for data, target in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
@@ -797,6 +943,9 @@ def evaluate(model, criterion, data_loader, device, transform, log_suffix='', pr
             else:
                 output = model(data)
 
+            target_array = torch.cat((target_array, target))
+            predictions_array = torch.cat((predictions_array, output))
+
             loss = criterion(output.squeeze(), target)
             acc1 = accuracy(output.squeeze(), target, topk=(1,))
 
@@ -804,11 +953,15 @@ def evaluate(model, criterion, data_loader, device, transform, log_suffix='', pr
             confusion_matrix_total += confusion_matrix
 
             f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
+
+            # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
+            # au_roc_total += au_roc
             # FIXME need to take into account that the datasets could have been padded in distributed setup
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
             metric_logger.meters['acc1'].update(acc1[0], n=batch_size)
             metric_logger.meters['f1'].update(f1_score, n=batch_size)
+            # metric_logger.meters['auroc'].update(au_roc, n=batch_size)
             # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
             # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
     # gather the stats from all processes
@@ -817,12 +970,25 @@ def evaluate(model, criterion, data_loader, device, transform, log_suffix='', pr
     # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
     logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f}')
     logger.info(f'{header} F1-Score {metric_logger.f1.global_avg:.3f}')
+    # auc = get_au_roc_from_conf_matrix(confusion_matrix_total)
+    # logger.info('AU-ROC Score: {:.3f}'.format(auc))
+    auc = get_au_roc(predictions_array, target_array, kwargs.get('num_classes'))
+    logger.info("AU-ROC Score: {:.3f}".format(auc))
+    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(get_confusion_matrix(
+        predictions_array.cpu(), target_array.type(dtype=torch.int64).cpu(), kwargs.get('num_classes')),
+        columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
+        index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]), headers="keys", tablefmt='grid')))
+
+    # logger.info(f'{header} AUROC {metric_logger.auroc.global_avg:.3f}')
     # logger.info('\n' + '\n'.join([f"Ground Truth:(Class {i}), Predicted:(Class {j}): {int(confusion_matrix_total[i][j])}" for j in range(kwargs.get('num_classes')) for i in range(kwargs.get('num_classes'))]))
-    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
-                  columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
-                  index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]),
-                                                         headers="keys", tablefmt='grid')))
-    return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, confusion_matrix_total
+
+    # logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
+    #               columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
+    #               index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]),
+    #                                                      headers="keys", tablefmt='grid')))
+
+    # logger.info(f'AU-ROC: {au_roc_total}')
+    return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, auc, confusion_matrix_total
 
 
 def export_model(model, input_shape, output_dir, opset_version=17, quantization=0, quantization_error_logging=False, example_input=None, generic_model=False):

@@ -45,7 +45,7 @@ from tabulate import tabulate
 from tinyml_tinyverse.common.datasets import GenericTSDataset
 
 # Tiny ML TinyVerse Modules
-from tinyml_tinyverse.common.utils import misc_utils, utils
+from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
 
@@ -154,26 +154,34 @@ def main(gpu, args):
 
     input_name = ort_sess.get_inputs()[0].name
     output_name = ort_sess.get_outputs()[0].name
-    predicted = []
-    ground_truth = torch.tensor([])
+    predicted = torch.tensor([]).to(device, non_blocking=True)
+    ground_truth = torch.tensor([]).to(device, non_blocking=True)
     for batched_data, batched_target in data_loader:
         batched_data = batched_data.to(device, non_blocking=True).float()
         batched_target = batched_target.to(device, non_blocking=True).long()
         if transform:
             batched_data = transform(batched_data)
         for data in batched_data:
-            predicted.append(
-                np.argmax(ort_sess.run([output_name], {input_name: np.array(data.unsqueeze(0)).astype(np.float32)})[0]))
+            predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
+    mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
+    logger.info("Plotting OvR Multiclass ROC score")
+    utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
+                              label_map=dataset.inverse_label_map, phase='test')
+    logger.info("Plotting Class difference scores")
+    utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
+                              label_map=dataset.inverse_label_map, phase='test')
     metric = torcheval.metrics.MulticlassAccuracy()
-    metric.update(torch.Tensor(predicted), ground_truth)
+    metric.update(torch.argmax(predicted, dim=1), ground_truth)
     logger = getLogger("root.main.test_data")
     logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
-    if len(np.unique(ground_truth)) == 1:
+    logger.info(
+        f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted.type(torch.int64), ground_truth, num_classes):.3f}")
+    if len(torch.unique(ground_truth)) == 1:
         logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
     else:
-        confusion_matrix = get_confusion_matrix(torch.Tensor(predicted).type(torch.int64), ground_truth.type(torch.int64),
+        confusion_matrix = get_confusion_matrix(predicted.type(torch.int64), ground_truth.type(torch.int64),
                                                 num_classes).cpu().numpy()
         logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
             confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
