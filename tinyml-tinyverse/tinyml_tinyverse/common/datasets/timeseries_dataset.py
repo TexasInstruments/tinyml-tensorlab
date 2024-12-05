@@ -40,11 +40,31 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
+import yaml
 
+from ..augmenters import AddNoise, Convolve, Crop, Drift, Dropout, Pool, Quantize, Resize, Reverse, TimeWarp
 from ..transforms import basic_transforms
 from ..transforms.haar import haar_forward
 from ..transforms.hadamard import hadamard_forward_vectorized
-from ..utils.misc_utils import str2int_or_float
+from ..utils.misc_utils import str2int_or_float, str2bool, str2bool_or_none
+from ..utils.mdcl_utils import create_dir
+
+# Define a function to create augmenters
+def create_augmenter(name, args):
+    logger = getLogger("root.timeseries_dataset.create_augmenter")
+    augmenters = dict(AddNoise=AddNoise, Convolve=Convolve, Crop=Crop, Drift=Drift, Dropout=Dropout,
+                      Pool=Pool, Quantize=Quantize, Resize=Resize, Reverse=Reverse, TimeWarp=TimeWarp)
+    if name not in augmenters:
+        logger.warning(f"Skipping unknown augmenter: {name}")
+    return augmenters[name](**args)
+
+
+def apply_augmenters(data, augmenter_pipeline):
+    augmented_data = data
+    for augmenter in augmenter_pipeline:
+        augmented_data = augmenter.augment(augmented_data)
+    return augmented_data
+
 
 class GenericTSDataset(Dataset):
     def __init__(self, subset: str = None, dataset_dir: str = None, **kwargs):
@@ -62,7 +82,19 @@ class GenericTSDataset(Dataset):
         for key, value in kwargs.items():
             value = str2int_or_float(value)
             setattr(self, key, value)
-            
+
+        self.augment_pipeline = []
+        if hasattr(self, 'augment_config'):
+            if str2int_or_float(self.augment_config) and os.path.exists(self.augment_config):
+                self.logger.info(f"Parsing {self.augment_config} to form Augmentation Pipeline")
+                try:
+                    with open(self.augment_config) as fp:
+                        augment_config = yaml.load(fp, Loader=yaml.CLoader)
+                except yaml.YAMLError as exc:
+                    self.logger.critical(f"{exc} error parsing {self.augment_config}")
+                # Create a pipeline of augmenters
+                self.augment_pipeline = [create_augmenter(name, params) for name, params in augment_config.items()]
+
         # The self.transforms will contain str only
         # This is just an efficient to flatten the multidimensional list
         # TODO: Change the below line
@@ -140,6 +172,8 @@ class GenericTSDataset(Dataset):
             x_temp = self.__transform_downsample(x_temp)
         if 'SimpleWindow' in self.transforms:
             x_temp = self.__transform_simple_window(x_temp)
+        # Apply augmenters
+        x_temp = apply_augmenters(x_temp, self.augment_pipeline)  # https://tsaug.readthedocs.io/en/stable/quickstart.html
                 
         x_temp_raw_out = x_temp.copy()
         return x_temp, label, x_temp_raw_out
@@ -200,8 +234,6 @@ class GenericTSDataset(Dataset):
     def _process_targets(self):
         self.label_map = {k: v for v, k in enumerate(self.classes)}         # {'class_0': 0, 'class_1': 1}
         self.inverse_label_map = {k: v for v, k in self.label_map.items()}  # {0 :'class_0', 1: 'class_1'}
-        if self.X.ndim == 3:
-            self.X = np.expand_dims(self.X, axis=-1)
         self.Y = [self.label_map[i] for i in self.Y]
 
         if not len(self.Y):
@@ -448,8 +480,8 @@ class GenericTSDataset(Dataset):
         concatenated_features = np.array(concatenated_features)
         concatenated_raw_frames = np.array(concatenated_raw_frames)
         
-        if hasattr(self, 'dont_train_just_feat_ext') and self.dont_train_just_feat_ext:
-            x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + 'features.npy')
+        if hasattr(self, 'dont_train_just_feat_ext') and  str2bool(self.dont_train_just_feat_ext):
+            x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + '_features.npy')
             np.save(x_raw_out_file_path, concatenated_features.transpose(1,0,2))
 
         x_temp, x_temp_raw_out = self.__transform_shape(concatenated_features, concatenated_raw_frames)
@@ -459,11 +491,16 @@ class GenericTSDataset(Dataset):
     def prepare(self, **kwargs):
         if len(self.feat_ext_transform) > 0:
             self.__prepare_feature_extraction_variables()
+        if hasattr(self, 'store_feat_ext_data'):
+            if not str2bool_or_none(self.feat_ext_store_dir):
+                self.feat_ext_store_dir = os.path.join(self.output_dir, 'feat_ext_data')
+                self.logger.info(f"feat_ext_store_dir has been defaulted to: {self.feat_ext_store_dir}")
+            create_dir(self.feat_ext_store_dir)
         for datafile in tqdm(self._walker):
             try:
                 x_temp, label, x_temp_raw_out = self._load_datafile(datafile)   # Loads the dataset and applied data processing transforms
                 if hasattr(self, 'dont_train_just_feat_ext') and self.dont_train_just_feat_ext:
-                    x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + 'raw.npy')
+                    x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + '_raw.npy')
                     np.save(x_raw_out_file_path, x_temp.flatten())
                 if len(self.feat_ext_transform) > 0:
                     x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T, datafile)   # Applies feature extraction transforms
@@ -473,14 +510,15 @@ class GenericTSDataset(Dataset):
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
             except IndexError as i:
-                exit()
                 self.logger.error(f"Unexpected dataset dimensions. Check input options or dataset content. \nFile: {datafile}. Error message: {i}")
+                exit()
             except KeyboardInterrupt as ki:
                 exit()
 
         if not self.X.shape[0]:
             self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
             raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
-
+        if self.X.ndim == 3:
+            self.X = np.expand_dims(self.X, axis=-1)
         self._process_targets()
         return self

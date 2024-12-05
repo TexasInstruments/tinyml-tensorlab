@@ -3,13 +3,6 @@
 - This repository is a collection of all the base level scripts that are meant to be stitched together and run by the Tiny ML-Modelmaker
 - Although the scripts itself can run standalone, it is not recommended to play with it unless you're a developer who understands what is going in here.
 
-## Capabilities Supported
-
-| Modality    | Task           | Models Supported                                                                        |
-|-------------|----------------|-----------------------------------------------------------------------------------------|
-| Time Series | Classification | ArcDet4x16, ArcDet6x16                                                                  |
-| Audio       | Classification | - MatchboxNet - with MFCC <br/>- TCResNet - with STFT/MFCC <br/>- M5 - no preprocessing |
-
 
  # Project tree
  *   [README.md](./README.md)
