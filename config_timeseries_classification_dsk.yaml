@@ -48,6 +48,7 @@ training:
     batch_size: 64
     training_epochs: 10
     num_gpus: 0
+#    augment_config: '/home/a0484689/PycharmProjects/py310_tinyml/tinyml-modelmaker/misc/augmenter_config.yaml'
 
 testing:
     enable: True

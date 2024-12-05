@@ -22,9 +22,9 @@ data_processing: # One or more can be cascaded in the list
 
 feature_extraction:
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
-#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
-   feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+#   feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: Custom_MotorFault
 #    transform: []
 #    frame_size: 512
@@ -39,7 +39,7 @@ feature_extraction:
 #    log_mul: 20
 #    log_base: 10
 #    log_threshold: 1e-100
-   store_feat_ext_data: False
+    store_feat_ext_data: False
 
 training:
     # enable/disable training

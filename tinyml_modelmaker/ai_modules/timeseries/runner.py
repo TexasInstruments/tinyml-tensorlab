@@ -196,6 +196,7 @@ class ModelRunner():
                     self.params.training.model_proto_path,
                     self.params.training.log_file_path,
                     os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
+                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path,'post_training_analysis'),
                     os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'model_aux.h'),
                     self.params.training.tspa_license_path
                 ]
@@ -205,6 +206,7 @@ class ModelRunner():
                     self.params.training.model_proto_path,
                     self.params.training.log_file_path,
                     os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
+                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'post_training_analysis'),
                     os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'model_aux.h'),
                     self.params.training.tspa_license_path
                 ]
@@ -232,12 +234,9 @@ class ModelRunner():
             model_compilation_package_files = [
                 os.path.join(self.params.compilation.compilation_path, 'artifacts'),
                 self.params.compilation.tspa_license_path,
-                os.path.join(self.params.training.training_path_quantization if os.path.exists(
-                    self.params.training.training_path_quantization) else self.params.training.training_path,
-                             'golden_vectors'),
-                os.path.join(self.params.training.training_path_quantization if os.path.exists(
-                    self.params.training.training_path_quantization) else self.params.training.training_path,
-                             'model_aux.h'),
+                os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
+                os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'post_training_analysis'),
+                os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'model_aux.h'),
             ]
 
             self.package_trained_model(model_compilation_package_files, self.params.compilation.model_packaged_path)

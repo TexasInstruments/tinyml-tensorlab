@@ -1,0 +1,20 @@
+# Please check tinyml-tinyverse/tinyml_tinyverse/common/augmenters for more details on what augmenters can be used with corresponding arguments
+AddNoise:
+    scale: 0.1
+    distr: "gaussian"
+    kind: "additive"
+    per_channel: True
+    normalize: True
+    repeats: 1
+    prob: 0.9
+#  TimeWarp:
+#    n_speed_change: 5  # random time warping 5 times in parallel
+#  Crop:
+#    size: 300  # random crop subsequences with length 300
+#  Quantize:
+#    n_levels: [10, 20, 30]  # random quantize to 10-, 20-, or 30- level sets
+#  Drift:
+#    max_drift: 0.1
+#    prob: 0.8  # with 80% probability, random drift the signal up to 10%
+#  Reverse:
+#    prob: 0.5  # with 50% probability, reverse the sequence
