@@ -596,7 +596,7 @@ model_descriptions:
           sram: 1542
         F28P55:
           flash: 2490
-          inference_time_us: 306
+          inference_time_us: 308
           model_selection_factor: 0
           sram: 1578
         F28P65:
@@ -759,35 +759,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          flash: 1429
-          inference_time_us: 355
+          flash: 1213
+          inference_time_us: 270
           model_selection_factor: 0
-          sram: 1324
+          sram: 1020
         F28003:
-          flash: 1429
-          inference_time_us: 355
+          flash: 1213
+          inference_time_us: 270
           model_selection_factor: 0
-          sram: 1324
+          sram: 1020
         F28004:
-          flash: 1429
-          inference_time_us: 296
+          flash: 1213
+          inference_time_us: 225
           model_selection_factor: 0
-          sram: 1324
+          sram: 1020
         F2837:
-          flash: 1429
-          inference_time_us: 355
+          flash: 1213
+          inference_time_us: 270
           model_selection_factor: 0
-          sram: 1324
+          sram: 1020
         F28P55:
-          flash: 1988
-          inference_time_us: 173
+          flash: 1836
+          inference_time_us: 169
           model_selection_factor: 0
-          sram: 1204
+          sram: 1084
         F28P65:
-          flash: 1429
-          inference_time_us: 592
+          flash: 1213
+          inference_time_us: 450
           model_selection_factor: 0
-          sram: 1324
+          sram: 1020
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -943,35 +943,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          flash: 4789
-          inference_time_us: 11355
+          flash: 5261
+          inference_time_us: 7337
           model_selection_factor: 1
-          sram: 16956
+          sram: 10876
         F28003:
-          flash: 4789
-          inference_time_us: 11355
+          flash: 5261
+          inference_time_us: 7337
           model_selection_factor: 1
-          sram: 16956
+          sram: 10876
         F28004:
-          flash: 4789
-          inference_time_us: 9462
+          flash: 5261
+          inference_time_us: 6114
           model_selection_factor: 1
-          sram: 16956
+          sram: 10876
         F2837:
-          flash: 4789
-          inference_time_us: 11355
+          flash: 5261
+          inference_time_us: 7337
           model_selection_factor: 1
-          sram: 16956
+          sram: 10876
         F28P55:
-          flash: 4073
-          inference_time_us: 1686
+          flash: 4260
+          inference_time_us: 1190
           model_selection_factor: 1
-          sram: 12880
+          sram: 3170
         F28P65:
-          flash: 4789
-          inference_time_us: 18925
+          flash: 5261
+          inference_time_us: 12229
           model_selection_factor: 1
-          sram: 16956
+          sram: 10876
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1127,35 +1127,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          flash: 2552
-          inference_time_us: 552
+          flash: 3068
+          inference_time_us: 400
           model_selection_factor: 2
-          sram: 1158
+          sram: 660
         F28003:
-          flash: 2552
-          inference_time_us: 552
+          flash: 3068
+          inference_time_us: 400
           model_selection_factor: 2
-          sram: 1158
+          sram: 660
         F28004:
-          flash: 2552
-          inference_time_us: 460
+          flash: 3068
+          inference_time_us: 334
           model_selection_factor: 2
-          sram: 1158
+          sram: 660
         F2837:
-          flash: 2552
-          inference_time_us: 552
+          flash: 3068
+          inference_time_us: 400
           model_selection_factor: 2
-          sram: 1158
+          sram: 660
         F28P55:
-          flash: 2714
-          inference_time_us: 253
+          flash: 2641
+          inference_time_us: 263
           model_selection_factor: 2
-          sram: 1216
+          sram: 1088
         F28P65:
-          flash: 2552
-          inference_time_us: 921
+          flash: 3068
+          inference_time_us: 668
           model_selection_factor: 2
-          sram: 1158
+          sram: 660
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1495,35 +1495,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 17343
+          inference_time_us: 15184
           model_selection_factor: 1
-          sram: TBD
+          sram: 4164
         F28003:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 17343
+          inference_time_us: 15184
           model_selection_factor: 1
-          sram: TBD
+          sram: 4164
         F28004:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 17343
+          inference_time_us: 12654
           model_selection_factor: 1
-          sram: TBD
+          sram: 4164
         F2837:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 17343
+          inference_time_us: 15184
           model_selection_factor: 1
-          sram: TBD
+          sram: 4164
         F28P55:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 11002
+          inference_time_us: 2252
           model_selection_factor: 1
-          sram: TBD
+          sram: 3192
         F28P65:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 17343
+          inference_time_us: 25308
           model_selection_factor: 1
-          sram: TBD
+          sram: 4164
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1863,35 +1863,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 3242
+          inference_time_us: 9200
           model_selection_factor: 7
-          sram: TBD
+          sram: 12324
         F28003:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 3242
+          inference_time_us: 9200
           model_selection_factor: 7
-          sram: TBD
+          sram: 12324
         F28004:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 3242
+          inference_time_us: 7667
           model_selection_factor: 7
-          sram: TBD
+          sram: 12324
         F2837:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 3242
+          inference_time_us: 9200
           model_selection_factor: 7
-          sram: TBD
+          sram: 12324
         F28P55:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 3367
+          inference_time_us: 1311
           model_selection_factor: 7
-          sram: TBD
+          sram: 6224
         F28P65:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 3242
+          inference_time_us: 15334
           model_selection_factor: 7
-          sram: TBD
+          sram: 12324
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2231,35 +2231,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 6433
+          inference_time_us: 4012
           model_selection_factor: 5
-          sram: TBD
+          sram: 1940
         F28003:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 6433
+          inference_time_us: 4012
           model_selection_factor: 5
-          sram: TBD
+          sram: 1940
         F28004:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 6433
+          inference_time_us: 3343
           model_selection_factor: 5
-          sram: TBD
+          sram: 1940
         F2837:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 6433
+          inference_time_us: 4012
           model_selection_factor: 5
-          sram: TBD
+          sram: 1940
         F28P55:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 5426
+          inference_time_us: 797
           model_selection_factor: 5
-          sram: TBD
+          sram: 1664
         F28P65:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 6433
+          inference_time_us: 6686
           model_selection_factor: 5
-          sram: TBD
+          sram: 1940
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2599,35 +2599,35 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280015:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 8302
+          inference_time_us: 20417
           model_selection_factor: 3
-          sram: TBD
+          sram: 16420
         F28003:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 8302
+          inference_time_us: 20417
           model_selection_factor: 3
-          sram: TBD
+          sram: 16420
         F28004:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 8302
+          inference_time_us: 17014
           model_selection_factor: 3
-          sram: TBD
+          sram: 16420
         F2837:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 8302
+          inference_time_us: 20417
           model_selection_factor: 3
-          sram: TBD
+          sram: 16420
         F28P55:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 6618
+          inference_time_us: 2344
           model_selection_factor: 3
-          sram: TBD
+          sram: 8338
         F28P65:
-          flash: TBD
-          inference_time_us: TBD
+          flash: 8302
+          inference_time_us: 34029
           model_selection_factor: 3
-          sram: TBD
+          sram: 16420
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
