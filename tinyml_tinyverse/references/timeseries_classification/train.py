@@ -358,8 +358,11 @@ def main(gpu, args):
     dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict)  # (126073, 1, 152), 126073
 
     # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
-    utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
+    try:
+        utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
+        utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
+    except Exception as e:
+        logger.warning(f"Feature Extraction plots will not be generated because: {e}")
     # The below two lines work fine, but slows down a lot
     # plot_graph(dataset, graph_type='tsne', instance_type='train')
     # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
