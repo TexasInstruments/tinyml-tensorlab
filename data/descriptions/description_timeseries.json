@@ -283,39 +283,39 @@
         "target_devices":{
           "F280015":{
             "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":17343,
+            "inference_time_us":15184,
+            "sram":4164
           },
           "F28003":{
             "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":17343,
+            "inference_time_us":15184,
+            "sram":4164
           },
           "F28004":{
             "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":17343,
+            "inference_time_us":12654,
+            "sram":4164
           },
           "F2837":{
             "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":17343,
+            "inference_time_us":15184,
+            "sram":4164
           },
           "F28P65":{
             "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":17343,
+            "inference_time_us":25308,
+            "sram":4164
           },
           "F28P55":{
             "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":11002,
+            "inference_time_us":2252,
+            "sram":3192
           }
         },
         "project_path":null,
@@ -721,39 +721,39 @@
         "target_devices":{
           "F280015":{
             "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":8302,
+            "inference_time_us":20417,
+            "sram":16420
           },
           "F28003":{
             "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":8302,
+            "inference_time_us":20417,
+            "sram":16420
           },
           "F28004":{
             "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":8302,
+            "inference_time_us":17014,
+            "sram":16420
           },
           "F2837":{
             "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":8302,
+            "inference_time_us":20417,
+            "sram":16420
           },
           "F28P65":{
             "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":8302,
+            "inference_time_us":34029,
+            "sram":16420
           },
           "F28P55":{
             "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":6618,
+            "inference_time_us":2344,
+            "sram":8338
           }
         },
         "project_path":null,
@@ -1159,39 +1159,39 @@
         "target_devices":{
           "F280015":{
             "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":6433,
+            "inference_time_us":4012,
+            "sram":1940
           },
           "F28003":{
             "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":6433,
+            "inference_time_us":4012,
+            "sram":1940
           },
           "F28004":{
             "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":6433,
+            "inference_time_us":3343,
+            "sram":1940
           },
           "F2837":{
             "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":6433,
+            "inference_time_us":4012,
+            "sram":1940
           },
           "F28P65":{
             "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":6433,
+            "inference_time_us":6686,
+            "sram":1940
           },
           "F28P55":{
             "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":5426,
+            "inference_time_us":797,
+            "sram":1664
           }
         },
         "project_path":null,
@@ -1597,39 +1597,39 @@
         "target_devices":{
           "F280015":{
             "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":3242,
+            "inference_time_us":9200,
+            "sram":12324
           },
           "F28003":{
             "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":3242,
+            "inference_time_us":9200,
+            "sram":12324
           },
           "F28004":{
             "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":3242,
+            "inference_time_us":7667,
+            "sram":12324
           },
           "F2837":{
             "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":3242,
+            "inference_time_us":9200,
+            "sram":12324
           },
           "F28P65":{
             "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":3242,
+            "inference_time_us":15334,
+            "sram":12324
           },
           "F28P55":{
             "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "flash":3367,
+            "inference_time_us":1311,
+            "sram":6224
           }
         },
         "project_path":null,
@@ -1847,7 +1847,7 @@
           "F28P55":{
             "model_selection_factor":0,
             "flash":2490,
-            "inference_time_us":306,
+            "inference_time_us":308,
             "sram":1578
           }
         },
@@ -2473,39 +2473,39 @@
         "target_devices":{
           "F280015":{
             "model_selection_factor":0,
-            "flash":1429,
-            "inference_time_us":355,
-            "sram":1324
+            "flash":1213,
+            "inference_time_us":270,
+            "sram":1020
           },
           "F28003":{
             "model_selection_factor":0,
-            "flash":1429,
-            "inference_time_us":355,
-            "sram":1324
+            "flash":1213,
+            "inference_time_us":270,
+            "sram":1020
           },
           "F28004":{
             "model_selection_factor":0,
-            "flash":1429,
-            "inference_time_us":296,
-            "sram":1324
+            "flash":1213,
+            "inference_time_us":225,
+            "sram":1020
           },
           "F2837":{
             "model_selection_factor":0,
-            "flash":1429,
-            "inference_time_us":355,
-            "sram":1324
+            "flash":1213,
+            "inference_time_us":270,
+            "sram":1020
           },
           "F28P65":{
             "model_selection_factor":0,
-            "flash":1429,
-            "inference_time_us":592,
-            "sram":1324
+            "flash":1213,
+            "inference_time_us":450,
+            "sram":1020
           },
           "F28P55":{
             "model_selection_factor":0,
-            "flash":1988,
-            "inference_time_us":173,
-            "sram":1204
+            "flash":1836,
+            "inference_time_us":169,
+            "sram":1084
           }
         },
         "project_path":null,
@@ -2692,39 +2692,39 @@
         "target_devices":{
           "F280015":{
             "model_selection_factor":1,
-            "flash":4789,
-            "inference_time_us":11355,
-            "sram":16956
+            "flash":5261,
+            "inference_time_us":7337,
+            "sram":10876
           },
           "F28003":{
             "model_selection_factor":1,
-            "flash":4789,
-            "inference_time_us":11355,
-            "sram":16956
+            "flash":5261,
+            "inference_time_us":7337,
+            "sram":10876
           },
           "F28004":{
             "model_selection_factor":1,
-            "flash":4789,
-            "inference_time_us":9462,
-            "sram":16956
+            "flash":5261,
+            "inference_time_us":6114,
+            "sram":10876
           },
           "F2837":{
             "model_selection_factor":1,
-            "flash":4789,
-            "inference_time_us":11355,
-            "sram":16956
+            "flash":5261,
+            "inference_time_us":7337,
+            "sram":10876
           },
           "F28P65":{
             "model_selection_factor":1,
-            "flash":4789,
-            "inference_time_us":18925,
-            "sram":16956
+            "flash":5261,
+            "inference_time_us":12229,
+            "sram":10876
           },
           "F28P55":{
             "model_selection_factor":1,
-            "flash":4073,
-            "inference_time_us":1686,
-            "sram":12880
+            "flash":4260,
+            "inference_time_us":1190,
+            "sram":3170
           }
         },
         "project_path":null,
@@ -2911,39 +2911,39 @@
         "target_devices":{
           "F280015":{
             "model_selection_factor":2,
-            "flash":2552,
-            "inference_time_us":552,
-            "sram":1158
+            "flash":3068,
+            "inference_time_us":400,
+            "sram":660
           },
           "F28003":{
             "model_selection_factor":2,
-            "flash":2552,
-            "inference_time_us":552,
-            "sram":1158
+            "flash":3068,
+            "inference_time_us":400,
+            "sram":660
           },
           "F28004":{
             "model_selection_factor":2,
-            "flash":2552,
-            "inference_time_us":460,
-            "sram":1158
+            "flash":3068,
+            "inference_time_us":334,
+            "sram":660
           },
           "F2837":{
             "model_selection_factor":2,
-            "flash":2552,
-            "inference_time_us":552,
-            "sram":1158
+            "flash":3068,
+            "inference_time_us":400,
+            "sram":660
           },
           "F28P65":{
             "model_selection_factor":2,
-            "flash":2552,
-            "inference_time_us":921,
-            "sram":1158
+            "flash":3068,
+            "inference_time_us":668,
+            "sram":660
           },
           "F28P55":{
             "model_selection_factor":2,
-            "flash":2714,
-            "inference_time_us":253,
-            "sram":1216
+            "flash":2641,
+            "inference_time_us":263,
+            "sram":1088
           }
         },
         "project_path":null,

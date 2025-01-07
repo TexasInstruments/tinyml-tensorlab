@@ -2,7 +2,10 @@ import pandas as pd
 from pprint import PrettyPrinter
 from tinyml_modelmaker.ai_modules.timeseries import constants
 
-valid_model_list = ['motor_fault_1_t', 'motor_fault_2_t', 'motor_fault_3_t', 'arc_fault_200_t', 'arc_fault_300_t', 'arc_fault_700_t']
+valid_model_list = ['MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
+                    'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t',
+                    'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t',
+                    'TimeSeries_Generic_13k_t', ]
 soft_tinie_targets = ['c28_soft_int_in_int_out']
 hard_tinie_targets = ['c28_hard_int_in_int_out']
 valid_tinie_targets = soft_tinie_targets + hard_tinie_targets
