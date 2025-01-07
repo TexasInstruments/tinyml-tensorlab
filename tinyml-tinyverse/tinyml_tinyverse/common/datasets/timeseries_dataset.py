@@ -200,8 +200,7 @@ class GenericTSDataset(Dataset):
                 np.save(y_out_file_path, y_temp)
                 self.logger.debug(f"Stored intermediate targets in {y_out_file_path}")
             else:
-                self.logger.warning(
-                    "'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")                
+                self.logger.warning("'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")                
         return
 
     # Rearranges the dimensions of x_temp to generalize for different channels
@@ -242,7 +241,7 @@ class GenericTSDataset(Dataset):
         return
     
     def __transform_raw(self, wave_frame):
-        self.logger.debug(f"Transform: RAW shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: RAW shape: {wave_frame.shape}")
         result_wave = wave_frame
         mean_of_wave = np.sum(result_wave) // len(result_wave)
         if self.dc_remove:
@@ -250,59 +249,59 @@ class GenericTSDataset(Dataset):
         return wave_frame, result_wave
     
     def __transform_windowing(self, wave_frame):
-        self.logger.debug(f"Transform: Windowing shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: Windowing shape: {wave_frame.shape}")
         result_wave = wave_frame * np.hanning(self.frame_size)
         return wave_frame, result_wave
 
     def __transform_fft(self, wave_frame):
-        self.logger.debug(f"Transform: FFT shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: FFT shape: {wave_frame.shape}")
         result_wave = np.fft.fft(wave_frame)
         return wave_frame, result_wave
 
     def __transform_binning(self, wave_frame):
-        self.logger.debug(f"Transform: Binning input shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: Binning input shape: {wave_frame.shape}")
         result_wave = np.empty((self.feature_size_per_frame))
         bin_size = self.bin_size
         bin_offset = self.min_bin if self.min_bin else 0
 
         for idx in range(self.feature_size_per_frame):
             idx1 = bin_offset + (idx)*bin_size
-            sum_of_bin = sum(wave_frame[idx1:idx1+bin_size])
+            sum_of_bin = np.sum(wave_frame[idx1:idx1+bin_size])
             result_wave[idx] = sum_of_bin 
             result_wave[idx] /= bin_size if self.normalize_bin else 1
-        self.logger.debug(f"Transform: Binning output shape: {result_wave.shape}")
+        # self.logger.debug(f"Transform: Binning output shape: {result_wave.shape}")
         return wave_frame, result_wave
 
     def __transform_concatenation(self, features_of_frame_per_ax, index_frame):
-        self.logger.debug(f"Transform: Concatenation input shape: {np.array(features_of_frame_per_ax).shape}")
-        result_wave = np.array([x for item in features_of_frame_per_ax[index_frame - self.num_frame_concat + 1:index_frame + 1] for x in item])
-        self.logger.debug(f"Transform: Concatenation output shape: {result_wave.shape}")
+        # self.logger.debug(f"Transform: Concatenation input shape: {np.array(features_of_frame_per_ax).shape}")
+        result_wave = np.array(features_of_frame_per_ax[index_frame - self.num_frame_concat + 1: index_frame + 1]).flatten()
+        # self.logger.debug(f"Transform: Concatenation output shape: {result_wave.shape}")
         return features_of_frame_per_ax, result_wave
     
     def __transform_pos_half_fft(self, wave_frame):
-        self.logger.debug(f"Transform: Pos Half FFT input shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: Pos Half FFT input shape: {wave_frame.shape}")
         # takes the DC + min_bin samples of the fft
         idx = self.frame_size//2
         idx += self.min_bin if self.min_bin else 1
         result_wave = wave_frame[:idx]
-        self.logger.debug(f"Transform: Pos Half FFT output shape: {result_wave.shape}")
+        # self.logger.debug(f"Transform: Pos Half FFT output shape: {result_wave.shape}")
         return wave_frame, result_wave
 
     def __transform_absolute(self, wave_frame):
-        self.logger.debug(f"Transform: Absolute shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: Absolute shape: {wave_frame.shape}")
         # Converts the complex value to real values
         result_wave = abs(wave_frame)
         return wave_frame, result_wave
     
     def __transform_haar(self, wave_frame):
-        self.logger.debug(f"Transform: HAAR shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: HAAR shape: {wave_frame.shape}")
         result_wave = haar_forward(wave_frame)
         return wave_frame, result_wave
     
     def __transform_hadamard(self, wave_frame):
-        self.logger.debug(f"Transform: Hadamard output shape: {wave_frame.shape}")
+        # self.logger.debug(f"Transform: Hadamard output shape: {wave_frame.shape}")
         result_wave = hadamard_forward_vectorized(wave_frame)
-        self.logger.debug(f"Transform: Hadamard output shape: {result_wave.shape}")
+        # self.logger.debug(f"Transform: Hadamard output shape: {result_wave.shape}")
         return wave_frame, result_wave
 
     def __transform_normalize(self, wave_frame):
@@ -322,18 +321,11 @@ class GenericTSDataset(Dataset):
 
     # Rearrange the shape from (C,N,W) to (N,C,W,H)
     def __transform_shape(self, concatenated_features, raw_frames):
-        self.logger.debug(f"Transform: Shape input shape: {concatenated_features.shape}")
-        number_of_samples = concatenated_features.shape[1]
-        x_temp_scratch = np.empty((number_of_samples, self.ch*self.wl))
+        # self.logger.debug(f"Transform: Shape input shape: {concatenated_features.shape}")
+        x_temp = concatenated_features.transpose(1, 0, 2)
+        x_temp = np.expand_dims(x_temp, -1)
         x_temp_raw_out = raw_frames.transpose(1, 0, 2)
-        
-        for idx in range(number_of_samples):
-            # Concatenate features of each channel in single array x_temp_scratch[idx]
-            x_temp_scratch[idx] = np.array([concatenated_features[ax][idx] for ax in range(self.variables)]).flatten()
-
-        # Split the features into respective channels
-        x_temp = x_temp_scratch.reshape(number_of_samples, self.ch, self.wl, self.hl)
-        self.logger.debug(f"Transform: Shape output shape: {x_temp.shape}")
+        # self.logger.debug(f"Transform: Shape output shape: {x_temp.shape}")
         return x_temp, x_temp_raw_out
 
     def __prepare_feature_extraction_variables(self):
@@ -366,9 +358,19 @@ class GenericTSDataset(Dataset):
         if 'RAW_FE' not in self.transforms:
             self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
             self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
+            if not self.log_mul:
+                self.log_mul = 20
+                self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
             self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
+            if not self.log_base:
+                self.log_base = 10
+                self.logger.warning(f"Defaulting log base to: {self.log_base}.")
             self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
-            self.log_threshold = eval(self.log_threshold)
+            try:
+                self.log_threshold = eval(self.log_threshold)
+            except Exception as e:
+                self.log_threshold = 1e-100
+                self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
             
         # Store the preprocessing flags used for AI Library
         if 'WINDOWING' in self.transforms:
@@ -460,10 +462,9 @@ class GenericTSDataset(Dataset):
                 for index_frame in range(self.num_frame_concat-1, number_of_frames):
                     if (index_frame % self.frame_skip == 0):
                         if 'CONCAT' in self.transforms:
-                            frames_to_concat = self.num_frame_concat
                             _, result_wave = self.__transform_concatenation(features_of_frame_per_ax, index_frame)
                             concatenated_features_per_step.append(result_wave)
-                            concatenated_raw_frames_per_step = [raw_frame_per_ax[idx + self.num_frame_concat - 1] for idx in range(number_of_frames - self.num_frame_concat + 1)]
+                            concatenated_raw_frames_per_step = raw_frame_per_ax[self.num_frame_concat - 1: number_of_frames]
                 
                 # Store the features and raw frames with concatenation
                 concatenated_features_per_ax = concatenated_features_per_step      
@@ -506,7 +507,7 @@ class GenericTSDataset(Dataset):
                     x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T, datafile)   # Applies feature extraction transforms
                     if hasattr(self, 'store_feat_ext_data') and self.store_feat_ext_data:
                         self._store_feat_ext(datafile, x_temp, x_temp_raw_out, label)
-                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out)      # 
+                self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out)
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
             except IndexError as i:
