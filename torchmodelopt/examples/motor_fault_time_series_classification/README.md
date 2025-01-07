@@ -1,4 +1,4 @@
-# Instructions to run motor_fault_ti_qat.py
+# Instructions to run motor_fault_classification.py
 
 ## Install standard modules
 
