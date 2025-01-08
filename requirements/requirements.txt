@@ -2,7 +2,6 @@ numpy==1.26.4
 onnx==1.16.1
 onnxruntime==1.19.0
 protobuf==5.27.3
-onnxruntime==1.19.0
 pandas==2.2.2
 pathlib2==2.3.7.post1
 PyYAML==6.0.2

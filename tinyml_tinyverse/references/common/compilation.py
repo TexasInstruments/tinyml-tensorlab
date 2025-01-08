@@ -116,7 +116,6 @@ def gen_artifacts(args):
     logger.info("Changing directory to: {}".format(args.output_dir))
     os.chdir(args.output_dir)
     try:
-
         logger.info("Calling TVM to generate artifacts: ")
         drive_compile(Namespace(**input_args))
     except Exception:
@@ -154,7 +153,22 @@ def main(args):
     from ..version import get_version_str
     logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
     logger.info("Script: {}".format(os.path.relpath(__file__)))
-    logger.info(args)
+    logger.debug(args)
+    # Often we hear of compilation breaking as the compiler/sdk paths provided are invalid
+    exit_flag = 0
+    if not os.path.exists(args.cross_compiler):
+        logger.error(f'Cross Compiler path is invalid: {args.cross_compiler}')
+        exit_flag = 1
+    for arg in args.cross_compiler_options.split():
+        if arg.startswith('-I') and (arg not in ['-I.', '-Iartifacts']):
+            if not os.path.exists(arg[2:]):  # [2:] to remove '-I'
+                logger.error(f"Compilation will fail as path is invalid: {arg[2:]}")
+                exit_flag = 1
+    if exit_flag:
+        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_PATH or CGT_PATH")
+        logger.error("Exiting due to previous errors. Compiled model directory will be empty.")
+        return
+
     args.model_format = None
     args.input_shapes = None
     args.dump_code = None
