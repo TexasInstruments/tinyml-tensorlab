@@ -9,3 +9,4 @@ data/downloads
 *.egg-info/
 .pkl_memoize_py3
 __pycache__/
+build/

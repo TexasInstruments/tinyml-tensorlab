@@ -29,6 +29,7 @@
 #################################################################################
 
 from . import ai_modules
+from .run_tinyml_modelmaker import main as get_set_go
 
 
 def get_task_category_type_from_task_type(task_type):
