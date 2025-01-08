@@ -24,6 +24,34 @@ There are a few productized applications:
 
 <hr>
 
+To begin with, you can use the repo as a `developer` or `user`. 
+* As a `user` - The installation and usage is very simple. It is just a `pip install`. But beware that you will not be able to modify any of the features or customize AI models/transforms for your use case
+* As a `developer` - The installation will use your brain power (although a tiny bit), but allows you to customize with unimaginable power!
+<hr>
+
+# I'm a user
+Install this repository as a Python package:
+```
+pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@main#subdirectory=tinyml_modelmaker
+```
+It is as simple as:
+```python
+import tinyml_modelmaker
+tinyml_modelmaker.get_set_go(config)
+```
+### Note
+* Several examples of configs are present (Check *.yaml files at `tinyml-modelmaker` repository)
+* You can load one like this:
+* ```python
+  import yaml  
+  with open('config_timeseries_classification_dsk.yaml') as fp:
+      config = yaml.safe_load(fp)
+    ```
+
+<hr>
+
+# I'm a developer
+
 ## 1. Set up TI tinyml-tensorlab
 
 ### Prequisite:
