@@ -3088,4 +3088,4 @@ training_module_descriptions:
 version_descriptions:
   sdk_release: '05_04_00'
   sdk_version: '5.4'
-  version: 0.9.0
+  version: 1.0.0
