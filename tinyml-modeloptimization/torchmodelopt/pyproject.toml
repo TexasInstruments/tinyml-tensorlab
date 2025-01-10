@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_torchmodelopt"
-version = "0.9.0"
+version = "1.0.0"
 description = "Tiny ML Model Optimization ToolKit For Torch"
 authors = [
     { name = "Adithya Thonse", email = "thonse@ti.com" }
