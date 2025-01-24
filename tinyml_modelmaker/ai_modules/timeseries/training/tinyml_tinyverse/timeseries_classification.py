@@ -859,7 +859,10 @@ class ModelTraining:
             if self.params.testing.model_path and (os.path.exists(self.params.testing.model_path)):
                 model_path = self.params.testing.model_path
             else:
-                model_path = os.path.join(self.params.training.training_path_quantization, 'model.onnx')
+                if self.params.training.quantization == TinyMLQuantizationVersion.NO_QUANTIZATION:
+                    model_path = os.path.join(self.params.training.training_path, 'model.onnx')
+                else:
+                    model_path = os.path.join(self.params.training.training_path_quantization, 'model.onnx')
             argv = [
                 '--dataset', 'modelmaker',
                 '--dataset-loader', f'{self.params.training.dataset_loader}',
