@@ -90,6 +90,7 @@ import torch.distributed as dist
 from cryptography.fernet import Fernet
 from tabulate import tabulate
 from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc
+from torcheval.metrics.functional import r2_score, mean_squared_error
 
 try:
     from apex import amp
@@ -172,9 +173,10 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
         else:
             dataset_test = dataset_loader("test", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
         logger.info("Loading Test/Evaluation data")
-        logger.info('Test Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join([
-            f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
-            f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
+        if args.loader_type in ['classification']:
+            logger.info('Test Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join([
+                f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
+                f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
         test_sampler = torch.utils.data.SequentialSampler(dataset_test)
         logger.info("Took {0:.2f} seconds".format(timeit.default_timer() - st))
 
@@ -230,20 +232,22 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
         train_sampler = torch.utils.data.distributed.DistributedSampler(dataset)
         test_sampler = torch.utils.data.distributed.DistributedSampler(dataset_test)
     else:
-        logger.info('Train Data: target count: {} : Split Up: {}'.format(len(dataset.Y), ';\t'.join(
-            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset.label_map.items() if label_index == i][0]}:"
-             f" {len(np.where(dataset.Y == i)[0])} " for i in np.unique(dataset.Y)])))
-        logger.info('Val Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join(
-            [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
-             f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
-        # logger.critical('target train 0/1: {}/{} {}'.format(len(np.where(dataset.Y == np.unique(dataset.Y)[0])[0]), len(np.where(dataset.Y == np.unique(dataset.Y)[1])[0]), len(dataset.Y)))
-        class_sample_count = np.array([len(np.where(dataset.Y == t)[0]) for t in np.unique(dataset.Y)])
-        weight = 1. / class_sample_count
-        samples_weight = np.array([weight[t] for t in np.array(dataset.Y).astype(int)])
-        samples_weight = torch.from_numpy(samples_weight)
-        # samples_weight = samples_weight.double()
-        train_sampler = torch.utils.data.WeightedRandomSampler(samples_weight, len(samples_weight))
-        # train_sampler = torch.utils.data.RandomSampler(dataset)
+        if args.loader_type in ['classification']:
+            logger.info('Train Data: target count: {} : Split Up: {}'.format(len(dataset.Y), ';\t'.join(
+                [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset.label_map.items() if label_index == i][0]}:"
+                 f" {len(np.where(dataset.Y == i)[0])} " for i in np.unique(dataset.Y)])))
+            logger.info('Val Data: target count: {} : Split Up: {}'.format(len(dataset_test.Y), ';\t'.join(
+                [f"{[f'{label_name}({label_index})' for label_name, label_index in dataset_test.label_map.items() if label_index == i][0]}:"
+                 f" {len(np.where(dataset_test.Y == i)[0])} " for i in np.unique(dataset_test.Y)])))
+            # logger.critical('target train 0/1: {}/{} {}'.format(len(np.where(dataset.Y == np.unique(dataset.Y)[0])[0]), len(np.where(dataset.Y == np.unique(dataset.Y)[1])[0]), len(dataset.Y)))
+            class_sample_count = np.array([len(np.where(dataset.Y == t)[0]) for t in np.unique(dataset.Y)])
+            weight = 1. / class_sample_count
+            samples_weight = np.array([weight[t] for t in np.array(dataset.Y).astype(int)])
+            samples_weight = torch.from_numpy(samples_weight)
+            # samples_weight = samples_weight.double()
+            train_sampler = torch.utils.data.WeightedRandomSampler(samples_weight, len(samples_weight))
+        else:
+            train_sampler = torch.utils.data.RandomSampler(dataset)
         test_sampler = torch.utils.data.SequentialSampler(dataset_test)
 
     return dataset, dataset_test, train_sampler, test_sampler
@@ -637,6 +641,14 @@ def get_au_roc(output, target, classes):
     return multiclass_auroc(output, target, num_classes=classes, average='macro')
 
 
+def get_r2_score(output, target):
+    return r2_score(output, target, multioutput='uniform_average')  # variance_weighted, raw_values
+
+
+def get_mse(output, target):
+    return mean_squared_error(output, target, multioutput='uniform_average')  # raw_values
+
+
 def number_of_correct(pred, target):
     # count number of correct predictions
     return pred.squeeze().eq(target).sum().item()
@@ -866,7 +878,115 @@ def seed_everything(seed: int):
         torch.cuda.manual_seed(seed)
 
 
-def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, transform,
+def train_one_epoch_regression(model, criterion, optimizer, data_loader, device, epoch, transform,
+                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, **kwargs):
+    model.train()
+    metric_logger = MetricLogger(delimiter="  ", phase=phase)
+    metric_logger.add_meter("lr", window_size=1, fmt="{value}")
+    metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
+    #
+    # new_sample_rate = 8000
+    # transform = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=new_sample_rate)
+
+    header = f"Epoch: [{epoch}]"
+    # TODO: If transform is required
+    if transform:
+        transform = transform.to(device)
+    for data, target in metric_logger.log_every(data_loader, print_freq, header):
+        # for batch_idx, (data, target) in enumerate(data_loader):
+        # logger.info(batch_idx)
+        start_time = timeit.default_timer()
+        data = data.to(device).float()
+        target = target.to(device).float()
+
+        # apply transform and model on whole batch directly on device
+        # TODO: If transform is required
+        if transform:
+            data = transform(data)
+
+        if dual_op:
+            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
+        else:
+            output = model(data)  # (n,1,8000) -> (n,35)
+
+        # negative log-likelihood for a tensor of size (batch x 1 x n_output)
+        loss = criterion(output, target)
+
+        optimizer.zero_grad()
+        if apex:
+            with amp.scale_loss(loss, optimizer) as scaled_loss:
+                scaled_loss.backward()
+        else:
+            loss.backward()
+        optimizer.step()
+
+        # acc1 = accuracy(output, target, topk=(1,))
+        # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
+        mse = get_mse(output, target)  # .squeeze()
+        batch_size = output.shape[0]
+        metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
+        metric_logger.meters['mse'].update(mse, n=batch_size)
+        metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
+
+    if model_ema:
+        model_ema.update_parameters(model)
+
+
+def evaluate_regression(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+    logger = getLogger(f"root.train_utils.evaluate.{phase}")
+    model.eval()
+    metric_logger = MetricLogger(delimiter="  ", phase=phase)
+    print_freq = min(print_freq, len(data_loader))
+    header = f'Test: {log_suffix}'
+
+    target_array = torch.Tensor([]).to(device, non_blocking=True)
+    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
+
+    with torch.no_grad():
+        for data, target in metric_logger.log_every(data_loader, print_freq, header):
+            # for data, target in data_loader:
+            data = data.to(device, non_blocking=True).float()
+            target = target.to(device, non_blocking=True).long()
+            if transform:
+                data = transform(data)
+
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+
+            target_array = torch.cat((target_array, target))
+            predictions_array = torch.cat((predictions_array, output))
+
+            loss = criterion(output, target)  # .squeeze()
+            mse = get_mse(output, target)  # .squeeze()
+            r2 = get_r2_score(output, target)  # .squeeze()
+
+            # confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
+            # confusion_matrix_total += confusion_matrix
+            #
+            # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
+
+            # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
+            # au_roc_total += au_roc
+            # FIXME need to take into account that the datasets could have been padded in distributed setup
+            batch_size = data.shape[0]
+            metric_logger.update(loss=loss.item())
+            metric_logger.meters['mse'].update(mse, n=batch_size)
+            metric_logger.meters['r2'].update(r2, n=batch_size)
+            # metric_logger.meters['auroc'].update(au_roc, n=batch_size)
+            # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
+            # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
+    # gather the stats from all processes
+    metric_logger.synchronize_between_processes()
+
+    # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
+    logger.info(f'{header} MSE {metric_logger.mse.global_avg:.3f}')
+    logger.info(f'{header} R2-Score {metric_logger.r2.global_avg:.3f}')
+    return metric_logger.mse.global_avg, metric_logger.r2.global_avg
+
+
+def train_one_epoch_classification(model, criterion, optimizer, data_loader, device, epoch, transform,
                     apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, **kwargs):
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
@@ -919,7 +1039,7 @@ def train_one_epoch(model, criterion, optimizer, data_loader, device, epoch, tra
         model_ema.update_parameters(model)
 
 
-def evaluate(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+def evaluate_classification(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)

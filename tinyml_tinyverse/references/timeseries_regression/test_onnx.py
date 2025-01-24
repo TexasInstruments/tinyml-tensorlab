@@ -42,14 +42,14 @@ import torch
 import torcheval
 from tabulate import tabulate
 
-from tinyml_tinyverse.common.datasets import GenericTSDataset
+from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
 
-dataset_loader_dict = {'GenericTSDataset': GenericTSDataset}
+dataset_loader_dict = {'GenericTSDataset': GenericTSDataset, 'GenericTSDatasetReg': GenericTSDatasetReg}
 
 
 def get_args_parser():
@@ -166,27 +166,17 @@ def main(gpu, args):
             predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
-    mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-    logger.info("Plotting OvR Multiclass ROC score")
-    utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                              label_map=dataset.inverse_label_map, phase='test')
-    logger.info("Plotting Class difference scores")
-    utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                              label_map=dataset.inverse_label_map, phase='test')
-    metric = torcheval.metrics.MulticlassAccuracy()
-    metric.update(torch.argmax(predicted, dim=1), ground_truth)
+    # mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
+    # logger.info("Plotting OvR Multiclass ROC score")
+    # utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
+    #                           label_map=dataset.inverse_label_map, phase='test')
+    # logger.info("Plotting Class difference scores")
+    # utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
+    #                           label_map=dataset.inverse_label_map, phase='test')
+    metric = torcheval.metrics.MeanSquaredError()
+    metric.update(predicted.to('cpu'), ground_truth.to('cpu'))
     logger = getLogger("root.main.test_data")
-    logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
-    logger.info(
-        f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted.type(torch.int64), ground_truth, num_classes):.3f}")
-    if len(torch.unique(ground_truth)) == 1:
-        logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
-    else:
-        confusion_matrix = get_confusion_matrix(predicted.type(torch.int64), ground_truth.type(torch.int64),
-                                                num_classes).cpu().numpy()
-        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
-            confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-            index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
+    logger.info(f"Test Data Evaluation RMSE: {metric.compute():.2f}%")
     return
 
 def run(args):
