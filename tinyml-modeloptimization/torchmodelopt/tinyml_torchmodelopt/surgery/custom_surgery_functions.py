@@ -29,30 +29,51 @@
 #
 #################################################################################
 
+import numbers
+from torch import nn,Tensor
+from torch.fx import symbolic_trace, Node
+import inspect,torch, operator
+from copy import deepcopy
+from . import replacer
 
-class TinyMLQuantizationVersion():
-    NO_QUANTIZATION = 0
-    QUANTIZATION_GENERIC = 1
-    QUANTIZATION_TINPU = 2
+from . import custom_modules
+from typing import Iterable
 
-    @classmethod
-    def get_dict(cls):
-        return {k:v for k,v in cls.__dict__.items() if not k.startswith("__")}
-
-    @classmethod
-    def get_choices(cls):
-        return {v:k for k,v in cls.__dict__.items() if not k.startswith("__")}
+custom_symbolic_trace = symbolic_trace
 
 
-class TinyMLQConfigFormat:
-    FLOAT_MODEL = "FLOAT_MODEL"    # original float model format
-    FAKEQ_MODEL = "FAKEQ_MODEL"    # trained FakeQ model before conversion
-    QDQ_MODEL = "QDQ_MODEL"        # converted QDQ model
-    INT_MODEL = "INT_MODEL"        # integer model
-    TINPU_INT_MODEL = "TINPU_INT_MODEL"
-    _NUM_FORMATS_ = 5
 
-    @classmethod
-    def choices(cls):
-        return [value for value in dir(cls) if not value.startswith('__') and value != 'choices']
+def remove_identiy(model:nn.Module, verbose_mode=False, **kwargs):
+    # removed due to RuntimeError
+    # RuntimeError: Only Tensors created explicitly by the user (graph leaves) support the deepcopy protocol at the moment.
+    # model=deepcopy(model)
 
+    traced_model=custom_symbolic_trace(model) if not isinstance(model, torch.fx.GraphModule) else model
+    modules= dict(traced_model.named_modules())
+    n=0
+    nodes=[]
+    for node in traced_model.graph.nodes:
+        if (node.op == 'call_module') and isinstance(modules[node.target],nn.Identity):
+                nodes.append(node)
+    for node in nodes:
+        try:
+            node.replace_all_uses_with(node.args[0])
+            copy_found=False
+            for node_1 in nodes:
+                if node!=node_1 and node.target==node_1.target:
+                    copy_found=True
+                    break
+            if not copy_found:
+                parent_name,name=replacer._get_parent_name(node.target)           
+                modules[parent_name].__delattr__(name)
+                modules.pop(node.target)
+            traced_model.graph.erase_node(node)
+            n+=1
+        except Exception as e:
+            if verbose_mode:
+                print(n,e)
+    traced_model.graph.lint()
+    traced_model.recompile()
+    if verbose_mode:
+        print('Identity removed',n)
+    return traced_model

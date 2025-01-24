@@ -8,7 +8,7 @@ from torch.utils.data import Dataset, DataLoader, random_split
 import torchinfo
 
 # ti, onnx imports
-from tinyml_torchmodelopt.quantization import TINPUTinyMLQATFxModule  # type: ignore
+from tinyml_torchmodelopt.quantization import TINPUTinyMLQATFxModule, TINPUTinyMLPTQFxModule
 import onnx
 import onnxruntime as ort
 
@@ -102,16 +102,39 @@ def train(dataloader: DataLoader, model: nn.Module, loss_fn, optimizer):
         # make predictions for the current batch
         pred = model(X)
         pred = pred.flatten(start_dim=1)
-        # compute the loss and its gradients
+        # compute the loss
         loss = loss_fn(pred, y)
+        # do backpropagation
         loss.backward()
         # adjust the learning weights
         optimizer.step()
         # zero the gradients for every batch
         optimizer.zero_grad()
+
         avg_loss += loss.item()
     avg_loss = avg_loss/len(dataloader)
     return avg_loss, model, loss_fn, optimizer
+
+
+def calibrate(dataloader: DataLoader, model: nn.Module, loss_fn):
+    """
+    Calibrate the model (torch model or qat wrapped torch model).
+    no back propagation or optimization step is in calibrate.
+    loss_fn is used here only for the purpose of information - to know how good is the calibration.
+    Returns the avg loss
+    """
+    avg_loss = 0
+    model.train()
+    for batch, (X, y) in enumerate(dataloader):
+        X, y = X.to(DEVICE), y.to(DEVICE)
+        # make predictions for the current batch
+        pred = model(X)
+        pred = pred.flatten(start_dim=1)
+        # compute the loss
+        loss = loss_fn(pred, y)
+        avg_loss += loss.item()
+    avg_loss = avg_loss/len(dataloader)
+    return avg_loss, model, loss_fn, None
 
 
 def get_nn_model(in_channels: int, hidden_channels: List[int], feature_size: Tuple[int], out_channels: int, normalize_input: bool = True) -> nn.Module:
@@ -171,19 +194,87 @@ def get_nn_model(in_channels: int, hidden_channels: List[int], feature_size: Tup
     return nn_model
 
 
-def get_qat_model(nn_model: nn.Module, example_input: torch.Tensor, total_epochs: int) -> nn.Module:
+def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epochs: int, weight_bitwidth: int, quantization_method: str) -> nn.Module:
     """
     Convert the torch model to qat wrapped torch model. The function requires 
     an example input to convert the model.
     """
-    # Wrap the NN Model inside the QAT Wrapper
-    import simple_qconfig
-    qconfig_type = simple_qconfig.get_default_qconfig()
-    qconfig_mapping = simple_qconfig.get_default_qconfig_mapping(qconfig_type)
-    
-    # QAT_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
-    QAT_model = TINPUTinyMLQATFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs)
-    return QAT_model
+
+    '''
+    The QAT wrapper module does the preparation like in:
+    qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
+    It also uses an appropriate qconfig that imposes the constraints of the hardware.
+
+    The api being called doesn't actually pass qconfig_type - so it will be defined inside. 
+    But if you need to pass, it can be defined.
+    '''
+    if weight_bitwidth == 8:
+        '''
+        # 8bit weight / activation is default - no need to specify inside.
+        qconfig_type = {
+            'weight': {
+                'bitwidth': 8,
+                'qscheme': torch.per_channel_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            },
+            'activation': {
+                'bitwidth': 8,
+                'qscheme': torch.per_tensor_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            }
+        }
+        '''
+        qconfig_type = None
+    elif weight_bitwidth == 4:
+        qconfig_type = {
+            'weight': {
+                'bitwidth': weight_bitwidth,
+                'qscheme': torch.per_channel_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            },
+            'activation': {
+                'bitwidth': 8,
+                'qscheme': torch.per_tensor_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            }
+        }
+    elif weight_bitwidth == 2:
+        qconfig_type = {
+            'weight': {
+                'bitwidth': weight_bitwidth,
+                'qscheme': torch.per_channel_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False,
+                'quant_min': -1,
+                'quant_max': 1,
+            },
+            'activation': {
+                'bitwidth': 8,
+                'qscheme': torch.per_tensor_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            }
+        }
+    else:
+        raise RuntimeError("unsupported quantization parameters")
+    #
+    if quantization_method == 'QAT':
+        quant_model = TINPUTinyMLQATFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs)
+    elif quantization_method == 'PTQ':
+        quant_model = TINPUTinyMLPTQFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs)
+    else:
+        raise RuntimeError(f"Unknown Quantization method: {quantization_method}")
+    return quant_model
 
 
 def train_model(model: nn.Module, dataloader: DataLoader, total_epochs: int, learning_rate: float) -> nn.Module:
@@ -208,6 +299,25 @@ def train_model(model: nn.Module, dataloader: DataLoader, total_epochs: int, lea
         print(f"Epoch: {epoch+1}\t LR: {round(last_lr,5)}\t Loss: {round(loss, 5)}")
 
     return model
+
+
+def calibrate_model(model: nn.Module, dataloader: DataLoader, total_epochs: int) -> nn.Module:
+    """
+    Calibrate the model for PTQ - (torch model or qat wrapped torch model) with the given train dataloader,
+    learning_rate and loss are not needed for PTQ / calibration as backward / back propagation is not performed.
+    loss_fn is used here only for the purpose of information - to know how good is the calibration.
+    """
+    # loss_fn for multi class classification
+    loss_fn = torch.nn.CrossEntropyLoss()
+
+    for epoch in range(total_epochs):
+        # train the model for an epoch
+        loss, model, loss_fn, opti = calibrate(dataloader, model, loss_fn)
+        last_lr = 0
+        print(f"Epoch: {epoch+1}\t LR: {round(last_lr,5)}\t Loss: {round(loss, 5)}")
+
+    return model
+
 
 def rename_input_node_for_onnx_model(onnx_model, input_node_name: str):
     """Rename the node of an ONNX model"""
@@ -320,7 +430,8 @@ if __name__ == '__main__':
     WINDOW_OFFSET = WINDOW_LENGTH//4  # WINDOW_LENGTH//2
     BATCH_SIZE = 64
     LEARNING_RATE = 0.1
-    ENABLE_QAT = True  # False
+    QUANTIZATION_METHOD = 'QAT' #'PTQ' #'QAT' #None
+    WEIGHT_BITWIDTH = 8 #2 #4 #8
 
     X, Y = get_dataset_from_csv(CSV_FILE)
 
@@ -346,18 +457,24 @@ if __name__ == '__main__':
     export_model(nn_model, example_input, MODEL_NAME)
     print(f"Trained Model Accuracy: {round(accuracy, 5)}\n")
 
-    if ENABLE_QAT:
-        MODEL_NAME = 'qat_' + MODEL_NAME
+    if QUANTIZATION_METHOD in ('QAT', 'PTQ'):
+        MODEL_NAME = 'quant_' + MODEL_NAME
         qat_epochs = max(NUM_EPOCHS//2, 5)
-        qat_model = get_qat_model(nn_model, example_input=example_input, total_epochs=qat_epochs)
-        
-        qat_learning_rate = LEARNING_RATE/10
-        qat_model = train_model(qat_model, train_loader, qat_epochs, qat_learning_rate)
+        quant_model = get_quant_model(nn_model, example_input=example_input, total_epochs=qat_epochs, weight_bitwidth=WEIGHT_BITWIDTH, quantization_method=QUANTIZATION_METHOD)
 
-        accuracy = validate_model(qat_model, test_loader, NUM_CATEGORIES, CATEGORIES_NAME)
+        if QUANTIZATION_METHOD == 'QAT':
+            qat_learning_rate = LEARNING_RATE / 10
+            quant_model = train_model(quant_model, train_loader, qat_epochs, qat_learning_rate)
+        elif QUANTIZATION_METHOD == 'PTQ':
+            quant_model = calibrate_model(quant_model, train_loader, qat_epochs)
+        #
+
+        accuracy = validate_model(quant_model, test_loader, NUM_CATEGORIES, CATEGORIES_NAME)
         print(f"QAT Model Accuracy: {round(accuracy, 5)}\n")
 
-        qat_model = export_model(qat_model, example_input, MODEL_NAME, with_qat=True)
+        quant_model = export_model(quant_model, example_input, MODEL_NAME, with_qat=True)
+    else:
+        print("No Quantization method is specified. Will not do quantization.")
 
     accuracy = validate_saved_model(MODEL_NAME, test_loader)
-    print(f"Export ONNX QAT Model Accuracy: {round(accuracy, 5)}")
+    print(f"Exported ONNX Quant Model Accuracy: {round(accuracy, 5)}")

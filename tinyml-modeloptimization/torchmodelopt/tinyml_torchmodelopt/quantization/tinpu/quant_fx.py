@@ -36,19 +36,42 @@ from torch.fx import GraphModule
 import platform
 from typing import List, Tuple
 
-import edgeai_torchmodelopt
 
-from ..common import TinyMLQConfigFormat, GenericTinyMLQATFxModuleBase
+from ..common import *
+from ..base.fx import TinyMLQuantFxBaseModule
+
 from .quant_utils import TINPUQuantizedReplacementUtils
+from ... import surgery
 
-class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
+
+class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
     def __init__(self, *args, qconfig_type=None, **kwargs) -> None:
-        if qconfig_type is None:
-            # there are multiple ways to specify qconfig_type - one is to use a dictionary like this.
-            # qconfig_type = qconfig_type or dict(weight=dict(bitwidth=8, qscheme=torch.per_channel_symmetric, power2_scale=True),
-            #   activation=dict(bitwidth=8, qscheme=torch.per_tensor_symmetric, power2_scale=True, range_max=None, fixed_range=False))
-            # another way is to use one of the predefined presets
-            qconfig_type = edgeai_torchmodelopt.xmodelopt.quantization.v2.qconfig_types.QConfigType.WC8SYMP2_AT8SYMP2
+        '''
+        The QAT wrapper module does the preparation like in:
+        qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
+        It also uses an appropriate qconfig that imposes the constraints of the hardware.
+
+        The api being called doesn't actually pass qconfig_type - so it will be defined inside.
+        But if you need to pass, it can be defined this way.
+        # qconfig_type supported for TINPU in F28 devices
+        qconfig_type = {
+            'weight': {
+                'bitwidth': 8,
+                'qscheme': torch.per_channel_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            },
+            'activation': {
+                'bitwidth': 8,
+                'qscheme': torch.per_tensor_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            }
+        }
+        '''
+
         backend = 'fbgemm' if platform.system() in ['Windows'] else 'qnnpack'
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
 
@@ -58,7 +81,7 @@ class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
         _convert_replacement_func = lambda module, pattern, *largs, **lkwargs: self._convert_replacement(module, pattern, *largs, output_dequantize=output_dequantize, **lkwargs)
         # then apply the transformation to required output format
         if model_qconfig_format == TinyMLQConfigFormat.TINPU_INT_MODEL:
-            self.module = edgeai_torchmodelopt.xmodelopt.surgery.v2.convert_to_lite_fx(self.module, replacement_dict={'tinyml_modelopt_quant_replace_types': {'quant_replace_types': _convert_replacement_func}})
+            self.module = surgery.replace_unsupported_layers(self.module, replacement_dict={'tinyml_modelopt_quant_replace_types': {'quant_replace_types': _convert_replacement_func}})
         return self
 
     def export(self, *args, model_qconfig_format=TinyMLQConfigFormat.TINPU_INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
@@ -98,20 +121,24 @@ class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
             replacement_rules = [([torch.quantize_per_tensor, torch.ao.nn.intrinsic.quantized.modules.conv_relu.ConvReLU2d], replacement_utils.from_q_id),]
         # General Modules
         replacement_rules = replacement_rules + [
+            ([torch.ao.nn.quantized.modules.batchnorm.BatchNorm2d], replacement_utils.from_qbn),
             # Pooling Modules
             ([torch.nn.AvgPool2d], replacement_utils.from_avg_pool2d),                              # OSS required
             ([torch.nn.AdaptiveAvgPool2d], replacement_utils.from_adaptive_avg_pool2d),             # OSS required
             ([torch.nn.MaxPool2d], replacement_utils.from_max_pool2d),                              # OSS not required
             # Flatten Modules
             (['dequantize', torch.nn.Flatten], replacement_utils.from_dq_flatten),                  # Removes dequantization
-            ([torch.quantize_per_tensor, torch.nn.Module], replacement_utils.from_q_module),        # Removes quantization
-            # ([torch.ops.quantized.add], replacement_utils.from_add),
+            ([torch.quantize_per_tensor, torch.nn.Flatten], replacement_utils.from_q_module),        # Removes quantization
+            # Torch Functions
+            ([torch.ops.quantized.add_relu], replacement_utils.from_add_relu),
+            ([torch.ops.quantized.add], replacement_utils.from_add),
             # ConvRelu2D Module
             ([torch.ao.nn.intrinsic.quantized.modules.conv_relu.ConvReLU2d], replacement_utils.from_qconv_relu),
+            ([torch.ao.nn.quantized.modules.conv.Conv2d], replacement_utils.from_qconv),
             # LinearRelu Module
             ([torch.ao.nn.intrinsic.quantized.modules.linear_relu.LinearReLU], replacement_utils.from_qlinear_relu),
-            # Linear Module
             ([torch.ao.nn.quantized.modules.linear.Linear], replacement_utils.from_qlinear),
+            # Leftover Modules
             ([torch.quantize_per_tensor], replacement_utils.from_q),
         ]
         # Dequantization Module
@@ -139,3 +166,21 @@ class TINPUTinyMLQATFxModule(GenericTinyMLQATFxModuleBase):
                 replacement_function(start, end)
         replacement_utils.update_module(module)
         return module
+
+
+class TINPUTinyMLQATFxModule(TINPUTinyMLQuantFxModule):
+    '''
+    The QAT base class.
+    Any additional enhancements that we do specifically only QAT later can be added in this class.
+    '''
+    pass
+
+
+class TINPUTinyMLPTQFxModule(TINPUTinyMLQuantFxModule):
+    '''
+    The PTQ base class.
+    Any additional enhancements that we do specifically only PTQ later can be added in this class.
+    '''
+
+    def __init__(self, *args, is_qat=False, **kwargs):
+        super().__init__(*args, is_qat=is_qat, **kwargs)
