@@ -2641,6 +2641,190 @@ model_descriptions:
       warmup_epochs: 1
       weight_decay: 0.0001
       with_input_batchnorm: true
+  TimeSeries_Generic_Regr_13k_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_regression
+      task_type: generic_timeseries_regression
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing:
+      new_sr: 3009
+      resampling_factor: 1
+      sampling_rate: 313000
+      sequence_window: 3009
+      stride_size: 0.01
+      transforms: []
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+    download:
+      download_path: ''
+      download_url: ''
+    feature_extraction:
+      analysis_bandwidth: 1
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: null
+      frame_skip: null
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
+      transform: []
+    testing:
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDatasetReg
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      learning_rate: 0.002
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_architecture: backbone
+      model_config: null
+      model_name: TimeSeries_Generic_Regr_13k_t
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_13K_REG
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 300
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      run_quant_train_only: false
+      target_devices:
+        F280015:
+          flash: 17343
+          inference_time_us: 15184
+          model_selection_factor: 0
+          sram: 4164
+        F28003:
+          flash: 17343
+          inference_time_us: 15184
+          model_selection_factor: 0
+          sram: 4164
+        F28004:
+          flash: 17343
+          inference_time_us: 12654
+          model_selection_factor: 0
+          sram: 4164
+        F2837:
+          flash: 17343
+          inference_time_us: 15184
+          model_selection_factor: 0
+          sram: 4164
+        F28P55:
+          flash: 11002
+          inference_time_us: 2252
+          model_selection_factor: 0
+          sram: 3192
+        F28P65:
+          flash: 17343
+          inference_time_us: 25308
+          model_selection_factor: 0
+          sram: 4164
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
 preset_descriptions:
   AM263:
     arc_fault:
@@ -2667,6 +2851,14 @@ preset_descriptions:
             -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
           target: c
           target_c_mcpu: cortex_r5
+    timeseries_regression:
+      default_preset:
+        compilation:
+          cross_compiler: tiarmclang
+          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
+            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
+          target: c
+          target_c_mcpu: cortex_r5
   F280015:
     arc_fault:
       default_preset:
@@ -2680,6 +2872,17 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    generic_timeseries_regression:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -2724,6 +2927,17 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
+    generic_timeseries_regression:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
@@ -2758,6 +2972,17 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
+    generic_timeseries_regression:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
@@ -2782,6 +3007,17 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    generic_timeseries_regression:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -2846,6 +3082,27 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
+    generic_timeseries_regression:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      forced_soft_npu_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     motor_fault:
       default_preset:
         compilation:
@@ -2880,6 +3137,17 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    generic_timeseries_regression:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -3085,6 +3353,8 @@ tooltip_descriptions:
 training_module_descriptions:
   timeseries_classification:
   - timeseries_classification
+  timeseries_regression:
+  - timeseries_regression
 version_descriptions:
   sdk_release: '05_04_00'
   sdk_version: '5.4'

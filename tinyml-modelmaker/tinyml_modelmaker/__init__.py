@@ -37,5 +37,6 @@ def get_task_category_type_from_task_type(task_type):
         ai_modules.timeseries.constants.TASK_TYPE_ARC_FAULT: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,
         ai_modules.timeseries.constants.TASK_TYPE_MOTOR_FAULT: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,
         ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,
+        ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_REGRESSION: ai_modules.timeseries.constants.TASK_CATEGORY_TS_REGRESSION,
     }
     return task_type_to_task_category_type_map.get(task_type)

@@ -37,12 +37,14 @@ from .. import constants
 _model_descriptions = {}
 _training_module_descriptions = {}
 
-from .tinyml_tinyverse import timeseries_classification
+from .tinyml_tinyverse import timeseries_classification, timeseries_regression
 
 ## classification
 _model_descriptions.update(timeseries_classification.get_model_descriptions())
 _training_module_descriptions.update({'timeseries_classification':[constants.TASK_CATEGORY_TS_CLASSIFICATION]})
-
+## regression
+_model_descriptions.update(timeseries_regression.get_model_descriptions())
+_training_module_descriptions.update({'timeseries_regression':[constants.TASK_CATEGORY_TS_REGRESSION]})
 
 def get_training_module_descriptions(target_device=None, training_device=None):
     return _training_module_descriptions

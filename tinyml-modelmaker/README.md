@@ -234,6 +234,3 @@ Once CUDA is installed, you will be able to model training much faster.
 - [Adding Models](./docs/AddingModels.md)
 - [Adding Modalities](./docs/AddingModalities.md)
 
----
-## Contributor and Maintainer
-- [Adithya Thonse](https://github.com/Adithya-Thonse)
