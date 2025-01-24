@@ -83,13 +83,13 @@ from edgeai_torchmodelopt.xnn.utils import is_url_or_file, load_weights
 from tabulate import tabulate
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GenericTSDataset
+from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
-dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset}
+dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset, 'GenericTSDatasetReg' : GenericTSDatasetReg}
 
 
 def split_weights(weights_name):
@@ -147,7 +147,7 @@ def get_args_parser():
     parser.add_argument('--data-path', default=os.path.join('.', 'data', 'datasets'), help='dataset')
     parser.add_argument('--dataset', default='folder', help='dataset')
     parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
-    parser.add_argument("--loader-type", default="classification", type=str,
+    parser.add_argument("--loader-type", default="regression", type=str,
                         help="Dataset Loader Type: classification/regression")
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
     parser.add_argument('--model', default='ArcDet4x16', help='model')
@@ -325,7 +325,6 @@ def main(gpu, args):
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True if args.quantization else False, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)
-    logger = getLogger("root.main")
     from ..version import get_version_str
     logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
     logger.info("Script: {}".format(os.path.relpath(__file__)))
@@ -368,13 +367,16 @@ def main(gpu, args):
     # The below two lines work fine, but slows down a lot
     # plot_graph(dataset, graph_type='tsne', instance_type='train')
     # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
+    if misc_utils.str2bool(args.dont_train_just_feat_ext):
+        logger.info("Exiting execution without training")
+        sys.exit(0)
 
+    generate_golden_vector_dir(args.output_dir)
     if misc_utils.str2bool(args.gen_golden_vectors):
-        generate_golden_vector_dir(args.output_dir)
         generate_user_input_config(args.output_dir, dataset)
         if misc_utils.str2bool(args.dont_train_just_feat_ext):
-            logger.info('Exiting execution without training')
-            sys.exit(0)
+            logger.info('ModelMaker completed for test bench. Exiting.')
+            sys.exit()
 
     # collate_fn = None
     num_classes = len(dataset.classes)
@@ -421,8 +423,7 @@ def main(gpu, args):
             return
 
     model.to(device)
-    criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
-    # criterion = nn.NLLLoss()
+    criterion = nn.HuberLoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
     opt_name = args.opt.lower()
     if opt_name.startswith("sgd"):
         optimizer = torch.optim.SGD(
@@ -489,18 +490,19 @@ def main(gpu, args):
 
     logger.info("Start training")
     start_time = timeit.default_timer()
-    best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
+    best = dict(mse=np.inf, r2=0, epoch=None)
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
-        utils.train_one_epoch_classification(
+        utils.train_one_epoch_regression(
             model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
             print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         lr_scheduler.step()
-        avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
+        avg_mse, avg_r2_score = utils.evaluate_regression(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         if model_ema:
-            avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model_ema, criterion, data_loader_test, device=device, transform=transform,
-                                          log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
+            avg_mse, avg_r2_score = utils.evaluate_regression(
+                model_ema, criterion, data_loader_test, device=device, transform=transform,
+                log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
         if args.output_dir:
             checkpoint = {
                 'model': model_without_ddp.state_dict(),
@@ -513,32 +515,20 @@ def main(gpu, args):
             # utils.save_on_master(
             #     checkpoint,
             #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
-            if avg_accuracy > best['accuracy']:
-                logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) > {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
-                best['accuracy'] = avg_accuracy
-                best['f1'] = avg_f1
-                best['auc'] = auc
-                best['conf_matrix'] = avg_conf_matrix
+            if avg_mse < best['mse']:
+                logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) < {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
+                best['mse'] = avg_mse
+                best['r2'] = avg_r2_score
                 best['epoch'] = epoch
-                utils.save_on_master(
-                    checkpoint,
-                    os.path.join(args.output_dir, 'checkpoint.pth'))
+                utils.save_on_master(checkpoint,os.path.join(args.output_dir, 'checkpoint.pth'))
 
     logger = getLogger(f"root.main.{phase}.BestEpoch")
     logger.info("")
     logger.info("Printing statistics of best epoch:")
     logger.info(f"Best Epoch: {best['epoch']}")
-    logger.info(f"Acc@1 {best['accuracy']:.3f}")
-    logger.info(f"F1-Score {best['f1']:.3f}")
-    logger.info(f"AUC ROC Score {best['f1']:.3f}")
+    logger.info(f"MSE {best['mse']:.3f}")
+    logger.info(f"R2-Score {best['r2']:.3f}")
     logger.info("")
-    # logger.info(f"Confusion Matrix:\n" + '\n'.join(
-    #     [f"Ground Truth:(Class {dataset.inverse_label_map[i]}), Predicted:(Class {dataset.inverse_label_map[j]}): {int(best['conf_matrix'][i][j])}" for j in
-    #      range(num_classes) for i in range(num_classes)]))
-    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
-                  columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-                  index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
-                                                         headers="keys", tablefmt='grid')))
 
     logger.info('Exporting model after training.')
     if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
@@ -550,7 +540,9 @@ def main(gpu, args):
     logger.info('Training time {}'.format(total_time_str))
 
     if args.gen_golden_vectors:
-        generate_golden_vectors(args.output_dir, dataset, args.generic_model)
+        # generate_golden_vectors(args.output_dir, dataset, args.generic_model)
+        # TODO: Enable the above line once we know what is required
+        pass
         
     return
 
