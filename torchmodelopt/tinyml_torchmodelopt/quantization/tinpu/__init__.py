@@ -29,5 +29,4 @@
 #
 #################################################################################
 
-from .quant_fx import TINPUTinyMLQATFxModule
-
+from .quant_fx import TINPUTinyMLQATFxModule, TINPUTinyMLPTQFxModule

@@ -260,28 +260,13 @@ x.numpy().tofile('input.dat')
 # Quantize model
 epochs=10
 
-# Specify the quantization scheme for TI NPU.
-qconfig_type = {
-    'weight': {
-        'bitwidth': 8,
-        'qscheme': torch.per_channel_symmetric,
-        'power2_scale': True
-    },
-    'activation': {
-        'bitwidth': 8,
-        'qscheme': torch.per_tensor_symmetric,
-        'power2_scale': True,
-        'range_max': None,
-        'fixed_range': False
-    }
-}
 
 '''
 #####################################################
 Wrap the model in the TI quantization module for NPU.
 #####################################################
 '''
-ti_model = tinpu_quantization.TINPUTinyMLQATFxModule(model, qconfig_type, total_epochs=epochs)
+ti_model = tinpu_quantization.TINPUTinyMLQATFxModule(model, total_epochs=epochs)
 print(ti_model)
 
 # Perform Quantization Aware Training.
