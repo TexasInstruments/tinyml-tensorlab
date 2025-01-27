@@ -104,6 +104,14 @@ pyenv activate py310
 1. Clone this repository
 2. `cd tinyml-tensorlab/tinyml-modelmaker`
 3. Execute (Requires sudo permissions): ``` ./setup_all.sh ```
+4. Run the following: 
+```bash
+cd ../tinyml-tinyverse
+pip install -e .
+cd ../tinyml-modelmaker
+# Now you're ready to go!
+run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_dsk.yaml
+```
 
 #### Step 1.6: Keeping up to date
 
