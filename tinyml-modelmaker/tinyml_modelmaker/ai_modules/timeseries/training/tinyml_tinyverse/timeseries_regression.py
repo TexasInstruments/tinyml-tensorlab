@@ -31,6 +31,8 @@
 import os
 import shutil
 
+import torch.backends.mps
+
 from tinyml_tinyverse.references.timeseries_regression import test_onnx as test
 from tinyml_tinyverse.references.timeseries_regression import train
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
@@ -50,6 +52,7 @@ repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..',
 
 model_urls = {
     'TimeSeries_Generic_Regr_13k_t': {'download_url': '', 'download_path': '', },
+    'TimeSeries_Generic_Regr_3k_t': {'download_url': '', 'download_path': '', },
 }
 
 
@@ -85,6 +88,41 @@ _model_descriptions = {
             training_devices={
                 constants.TRAINING_DEVICE_CPU: True,
                 constants.TRAINING_DEVICE_CUDA: True,
+				constants.TRAINING_DEVICE_MPS: True,
+            }
+        ),
+        'compilation': dict()
+    },
+    'TimeSeries_Generic_Regr_3k_t': {
+        'common': dict(
+            task_category=constants.TASK_CATEGORY_TS_REGRESSION,
+            task_type=constants.TASK_TYPE_GENERIC_TS_REGRESSION,
+            generic_model=True,
+        ),
+        'download': model_urls['TimeSeries_Generic_Regr_3k_t'],
+        'training': dict(
+            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
+            with_input_batchnorm=True,
+            dataset_loader='GenericTSDatasetReg',
+            training_backend='tinyml_tinyverse',
+            model_training_id='REG_TS_GEN_BASE_3K',
+            model_name='TimeSeries_Generic_Regr_3k_t',
+            model_architecture='backbone',
+            learning_rate=2e-3,
+            model_spec=None,
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_REGRESSION],
+            target_devices={
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+            training_devices={
+                constants.TRAINING_DEVICE_CPU: True,
+                constants.TRAINING_DEVICE_CUDA: True,
+				constants.TRAINING_DEVICE_MPS: True,
             }
         ),
         'compilation': dict()
@@ -94,6 +132,7 @@ _model_descriptions = {
 enabled_models_list = [
     # Regression Models
     'TimeSeries_Generic_Regr_13k_t',
+    'TimeSeries_Generic_Regr_3k_t',
 ]
 
 
@@ -281,16 +320,21 @@ class ModelTraining:
                 log_summary_regex=log_summary_regex,
                 summary_file_path=os.path.join(self.params.training.training_path, 'summary.yaml'),
                 model_checkpoint_path=os.path.join(self.params.training.training_path, 'checkpoint.pth'),
-                model_checkpoint_path_quantization=os.path.join(self.params.training.training_path_quantization,
-                                                                'checkpoint.pth'),
                 model_export_path=os.path.join(self.params.training.training_path, 'model.onnx'),
-                model_export_path_quantization=os.path.join(self.params.training.training_path_quantization,
-                                                            'model.onnx'),
                 model_proto_path=None,
                 tspa_license_path=os.path.abspath(os.path.join(os.path.dirname(tinyml_modelmaker.ai_modules.timeseries.training.tinyml_tinyverse.__file__), 'LICENSE.txt'))
                 # num_classes=self.params.training.num_classes,  # len(self.object_categories)
             )
         )
+        if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+            self.params.update(
+                training=utils.ConfigDict(
+                    model_checkpoint_path_quantization=os.path.join(self.params.training.training_path_quantization,
+                                                                    'checkpoint.pth'),
+                    model_export_path_quantization=os.path.join(self.params.training.training_path_quantization,
+                                                                'model.onnx'),
+                )
+            )
 
     def clear(self):
         # clear the training folder
@@ -303,7 +347,12 @@ class ModelTraining:
         os.makedirs(self.params.training.training_path, exist_ok=True)
 
         distributed = 1 if self.params.training.num_gpus > 1 else 0
-        device = 'cuda' if self.params.training.num_gpus > 0 else 'cpu'
+        device = 'cpu'
+        if self.params.training.num_gpus > 0:
+            if torch.backends.mps.is_available():
+                device = 'mps'
+            else:
+                device = 'cuda'
         # training params
         argv = ['--model', f'{self.params.training.model_training_id}',
                 '--dual-op', f'{self.params.training.dual_op}',
@@ -352,12 +401,13 @@ class ModelTraining:
                 '--stacking', f'{self.params.feature_extraction.stacking}',
                 '--offset', f'{self.params.feature_extraction.offset}',
                 '--scale', f'{self.params.feature_extraction.scale}',
+                '--nn-for-feature-extraction', f'{self.params.feature_extraction.nn_for_feature_extraction}',
 
                 #'--tensorboard-logger', 'True',
                 '--variables', f'{self.params.data_processing.variables}',
                 '--with-input-batchnorm', f'{self.params.training.with_input_batchnorm}',
                 '--lis', f'{self.params.training.log_file_path}',
-                # Do not add newer arguments after this line, it will change the behaviour of the code.
+                # Do not add newer arguments after this line, it will change the behavior of the code.
                 '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
                 '--store-feat-ext-data', f'{self.params.feature_extraction.store_feat_ext_data}',
                 '--epochs', f'{self.params.training.training_epochs}',
@@ -377,7 +427,11 @@ class ModelTraining:
                     argv = argv[:-2]  # Remove --output-dir <output-dir>
                     argv.extend([
                         '--output-dir', f'{self.params.training.training_path_quantization}',
-                        '--quantization', f'{self.params.training.quantization}', ]),
+                        '--quantization', f'{self.params.training.quantization}',
+                        '--quantization-method', f'{self.params.training.quantization_method}',
+                        '--weight-bitwidth', f'{self.params.training.quantization_weight_bitwidth}',
+                        '--activation-bitwidth', f'{self.params.training.quantization_activation_bitwidth}',
+                    ]),
 
                     args = train.get_args_parser().parse_args(argv)
                     args.quit_event = self.quit_event
@@ -397,10 +451,13 @@ class ModelTraining:
                     # remove --store-feat-ext-data <True/False> --epochs <epochs> --lr <lr> --output-dir <output-dir>
                     argv.extend([
                         '--output-dir', f'{self.params.training.training_path_quantization}',
-                        '--epochs', f'{max(10, self.params.training.training_epochs // 5)}',
+                        '--epochs', f'{max(50, self.params.training.training_epochs // 5)}',
                         '--lr', f'{self.params.training.learning_rate / 100}',
                         '--weights', f'{self.params.training.model_checkpoint_path}',
                         '--quantization', f'{self.params.training.quantization}',
+                        '--quantization-method', f'{self.params.training.quantization_method}',
+                        '--weight-bitwidth', f'{self.params.training.quantization_weight_bitwidth}',
+                        '--activation-bitwidth', f'{self.params.training.quantization_activation_bitwidth}',
                         '--lr-warmup-epochs', '0',
                         '--store-feat-ext-data', 'False']),
 
@@ -421,8 +478,10 @@ class ModelTraining:
             else:
                 if self.params.training.quantization == TinyMLQuantizationVersion.NO_QUANTIZATION:
                     model_path = os.path.join(self.params.training.training_path, 'model.onnx')
+                    output_dir = self.params.training.training_path
                 else:
                     model_path = os.path.join(self.params.training.training_path_quantization, 'model.onnx')
+                    output_dir = self.params.training.training_path_quantization
             argv = [
                 '--dataset', 'modelmaker',
                 '--dataset-loader', f'{self.params.training.dataset_loader}',
@@ -457,11 +516,12 @@ class ModelTraining:
                 '--stacking', f'{self.params.feature_extraction.stacking}',
                 '--offset', f'{self.params.feature_extraction.offset}',
                 '--scale', f'{self.params.feature_extraction.scale}',
+                '--nn-for-feature-extraction', f'{self.params.feature_extraction.nn_for_feature_extraction}',
 
                 # '--tensorboard-logger', 'True',
                 '--lis', f'{self.params.training.log_file_path}',
                 '--data-path', f'{data_path}',
-                '--output-dir', f'{self.params.training.training_path_quantization}',
+                '--output-dir', output_dir,
                 '--model-path', f'{model_path}',
                 '--generic-model', f'{self.params.common.generic_model}',
                 ]

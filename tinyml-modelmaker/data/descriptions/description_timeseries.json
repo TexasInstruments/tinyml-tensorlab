@@ -8,7 +8,7 @@
     ]
   },
   "model_descriptions":{
-    "TimeSeries_Generic_13k":{
+    "Res_TimeSeries_Generic_3k_t":{
       "common":{
         "verbose_mode":true,
         "download_path":"./data/downloads",
@@ -56,12 +56,12 @@
       },
       "training":{
         "enable":true,
-        "model_name":"TimeSeries_Generic_13k",
+        "model_name":"Res_TimeSeries_Generic_3k_t",
         "augment_config":null,
         "model_config":null,
         "model_spec":null,
         "dataset_loader":"GenericTSDataset",
-        "model_training_id":"CNN_TS_GEN_BASE_13K",
+        "model_training_id":"RES_CNN_TS_GEN_BASE_3K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
@@ -122,7 +122,233 @@
         "training_master_port":29500,
         "train_output_path":null,
         "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "sequence_window":3009,
+        "stride_size":0.01,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":null,
+        "offset":null,
+        "scale":null
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "TimeSeries_Generic_13k":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_13k",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_13K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28003":{
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28004":{
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F2837":{
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P65":{
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P55":{
+            "model_selection_factor":1,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
         "quantization":1,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":false,
         "dual_op":false,
         "properties":[
@@ -165,7 +391,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -285,37 +512,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":15184,
             "sram":4164
           },
           "F28003":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":15184,
             "sram":4164
           },
           "F28004":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":12654,
             "sram":4164
           },
           "F2837":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":15184,
             "sram":4164
           },
           "F28P65":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":25308,
             "sram":4164
           },
           "F28P55":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":11002,
             "inference_time_us":2252,
             "sram":3192
@@ -342,6 +569,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -384,7 +614,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -504,37 +735,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28003":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28004":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F2837":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28P65":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28P55":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -561,6 +792,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":1,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":false,
         "dual_op":false,
         "properties":[
@@ -603,7 +837,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -723,37 +958,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":8302,
             "inference_time_us":20417,
             "sram":16420
           },
           "F28003":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":8302,
             "inference_time_us":20417,
             "sram":16420
           },
           "F28004":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":8302,
             "inference_time_us":17014,
             "sram":16420
           },
           "F2837":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":8302,
             "inference_time_us":20417,
             "sram":16420
           },
           "F28P65":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":8302,
             "inference_time_us":34029,
             "sram":16420
           },
           "F28P55":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":6618,
             "inference_time_us":2344,
             "sram":8338
@@ -780,6 +1015,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -822,7 +1060,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -942,37 +1181,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":4,
+            "model_selection_factor":5,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28003":{
-            "model_selection_factor":4,
+            "model_selection_factor":5,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28004":{
-            "model_selection_factor":4,
+            "model_selection_factor":5,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F2837":{
-            "model_selection_factor":4,
+            "model_selection_factor":5,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28P65":{
-            "model_selection_factor":4,
+            "model_selection_factor":5,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28P55":{
-            "model_selection_factor":4,
+            "model_selection_factor":5,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -999,6 +1238,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":1,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":false,
         "dual_op":false,
         "properties":[
@@ -1041,7 +1283,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -1161,37 +1404,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":5,
+            "model_selection_factor":6,
             "flash":6433,
             "inference_time_us":4012,
             "sram":1940
           },
           "F28003":{
-            "model_selection_factor":5,
+            "model_selection_factor":6,
             "flash":6433,
             "inference_time_us":4012,
             "sram":1940
           },
           "F28004":{
-            "model_selection_factor":5,
+            "model_selection_factor":6,
             "flash":6433,
             "inference_time_us":3343,
             "sram":1940
           },
           "F2837":{
-            "model_selection_factor":5,
+            "model_selection_factor":6,
             "flash":6433,
             "inference_time_us":4012,
             "sram":1940
           },
           "F28P65":{
-            "model_selection_factor":5,
+            "model_selection_factor":6,
             "flash":6433,
             "inference_time_us":6686,
             "sram":1940
           },
           "F28P55":{
-            "model_selection_factor":5,
+            "model_selection_factor":6,
             "flash":5426,
             "inference_time_us":797,
             "sram":1664
@@ -1218,6 +1461,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -1260,7 +1506,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -1380,37 +1627,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":6,
+            "model_selection_factor":7,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28003":{
-            "model_selection_factor":6,
+            "model_selection_factor":7,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28004":{
-            "model_selection_factor":6,
+            "model_selection_factor":7,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F2837":{
-            "model_selection_factor":6,
+            "model_selection_factor":7,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28P65":{
-            "model_selection_factor":6,
+            "model_selection_factor":7,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "F28P55":{
-            "model_selection_factor":6,
+            "model_selection_factor":7,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -1437,6 +1684,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":1,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":false,
         "dual_op":false,
         "properties":[
@@ -1479,7 +1729,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -1599,37 +1850,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":7,
+            "model_selection_factor":8,
             "flash":3242,
             "inference_time_us":9200,
             "sram":12324
           },
           "F28003":{
-            "model_selection_factor":7,
+            "model_selection_factor":8,
             "flash":3242,
             "inference_time_us":9200,
             "sram":12324
           },
           "F28004":{
-            "model_selection_factor":7,
+            "model_selection_factor":8,
             "flash":3242,
             "inference_time_us":7667,
             "sram":12324
           },
           "F2837":{
-            "model_selection_factor":7,
+            "model_selection_factor":8,
             "flash":3242,
             "inference_time_us":9200,
             "sram":12324
           },
           "F28P65":{
-            "model_selection_factor":7,
+            "model_selection_factor":8,
             "flash":3242,
             "inference_time_us":15334,
             "sram":12324
           },
           "F28P55":{
-            "model_selection_factor":7,
+            "model_selection_factor":8,
             "flash":3367,
             "inference_time_us":1311,
             "sram":6224
@@ -1656,6 +1907,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -1698,7 +1952,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -1875,6 +2130,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -1917,7 +2175,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -2094,6 +2353,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -2136,7 +2398,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -2313,6 +2576,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -2355,7 +2621,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -2532,6 +2799,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -2574,7 +2844,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -2751,6 +3022,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -2793,7 +3067,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -2970,6 +3245,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -3012,7 +3290,8 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{
@@ -3127,7 +3406,7 @@
         "model_config":null,
         "model_spec":null,
         "dataset_loader":"GenericTSDatasetReg",
-        "model_training_id":"CNN_TS_GEN_BASE_13K_REG",
+        "model_training_id":"CNN_TS_GEN_BASE_13K",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
@@ -3189,6 +3468,9 @@
         "train_output_path":null,
         "run_quant_train_only":false,
         "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
         "with_input_batchnorm":true,
         "dual_op":false,
         "properties":[
@@ -3231,7 +3513,231 @@
         "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
-          "cuda":true
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "sequence_window":3009,
+        "stride_size":0.01,
+        "transforms":[],
+        "variables":1,
+        "resampling_factor":1
+      },
+      "feature_extraction":{
+        "feature_extraction_name":null,
+        "transform":[],
+        "frame_size":null,
+        "feature_size_per_frame":null,
+        "num_frame_concat":null,
+        "frame_skip":null,
+        "min_bin":null,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":null,
+        "offset":null,
+        "scale":null
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "TimeSeries_Generic_Regr_3k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_regression",
+        "task_category":"timeseries_regression",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_Regr_3k_t",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericTSDatasetReg",
+        "model_training_id":"REG_TS_GEN_BASE_3K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280015":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":15184,
+            "sram":4164
+          },
+          "F28003":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":15184,
+            "sram":4164
+          },
+          "F28004":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":12654,
+            "sram":4164
+          },
+          "F2837":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":15184,
+            "sram":4164
+          },
+          "F28P65":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":25308,
+            "sram":4164
+          },
+          "F28P55":{
+            "model_selection_factor":1,
+            "flash":11002,
+            "inference_time_us":2252,
+            "sram":3192
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "model_architecture":"backbone",
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
         }
       },
       "testing":{

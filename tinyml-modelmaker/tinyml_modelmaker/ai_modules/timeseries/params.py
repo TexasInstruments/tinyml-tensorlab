@@ -31,7 +31,7 @@
 
 import os
 
-from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQuantizationMethod
 
 from ... import utils
 from . import constants
@@ -108,6 +108,9 @@ def init_params(*args, **kwargs):
             run_quant_train_only=False,
             # out_dir=os.getcwd())
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
+            quantization_method=TinyMLQuantizationMethod.QAT,
+            quantization_weight_bitwidth=8,
+            quantization_activation_bitwidth=8,
             with_input_batchnorm=False,
             dual_op=False,
             properties=[
@@ -155,6 +158,7 @@ def init_params(*args, **kwargs):
             stacking=None,
             offset=None,
             scale=None,
+            nn_for_feature_extraction=False,
         ),
         compilation=dict(
             enable=True,
