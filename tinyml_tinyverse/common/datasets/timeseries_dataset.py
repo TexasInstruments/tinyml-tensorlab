@@ -229,7 +229,7 @@ class GenericTSDataset(Dataset):
         return len(self.X)
 
     def __getitem__(self, index):
-        return torch.from_numpy(self.X[index]), self.Y[index]
+        return torch.from_numpy(self.X_raw[index]), torch.from_numpy(self.X[index]), self.Y[index]
 
     def _process_targets(self):
         self.label_map = {k: v for v, k in enumerate(self.classes)}         # {'class_0': 0, 'class_1': 1}
@@ -323,8 +323,8 @@ class GenericTSDataset(Dataset):
     # Rearrange the shape from (C,N,W) to (N,C,W,H)
     def __transform_shape(self, concatenated_features, raw_frames):
         # self.logger.debug(f"Transform: Shape input shape: {concatenated_features.shape}")
-        x_temp = concatenated_features.transpose(1, 0, 2)
-        x_temp = np.expand_dims(x_temp, -1)
+        N = concatenated_features.shape[1]
+        x_temp = concatenated_features.transpose(1, 0, 2).reshape(N, self.ch, self.wl, self.hl)
         x_temp_raw_out = raw_frames.transpose(1, 0, 2)
         # self.logger.debug(f"Transform: Shape output shape: {x_temp.shape}")
         return x_temp, x_temp_raw_out
@@ -627,9 +627,9 @@ class GenericTSDatasetReg(Dataset):
 
         elif file_extension in [".pkl", ".csv", ".txt"]:
             data = pd.read_pickle(datafile) if file_extension == '.pkl' else pd.read_csv(datafile)
-            non_time_columns = [col for col in data.columns if 'time' not in col.lower()]
-            x_temp = data[non_time_columns].values[:, :self.variables]
-            y_temp = data[non_time_columns].values[:, self.variables:]
+            usable_columns = [col for col in data.columns if col.lower() not in ['time']]
+            x_temp = data[usable_columns].values[:, :self.variables]
+            y_temp = data[usable_columns].values[:, self.variables:]
         else:
             raise Exception("Supports only .npy, .pkl, .txt and .csv file formats for now")
 
@@ -698,6 +698,7 @@ class GenericTSDatasetReg(Dataset):
         return torch.from_numpy(self.X[index]), self.Y[index]
 
     def _process_targets(self):
+        self.Y = self.Y.reshape(-1, 1)
         # self.label_map = {k: v for v, k in enumerate(self.classes)}  # {'class_0': 0, 'class_1': 1}
         # self.inverse_label_map = {k: v for v, k in self.label_map.items()}  # {0 :'class_0', 1: 'class_1'}
         # self.Y = [self.label_map[i] for i in self.Y]
@@ -936,8 +937,7 @@ class GenericTSDatasetReg(Dataset):
                         if 'CONCAT' in self.transforms:
                             _, result_wave = self.__transform_concatenation(features_of_frame_per_ax, index_frame)
                             concatenated_features_per_step.append(result_wave)
-                            concatenated_raw_frames_per_step = raw_frame_per_ax[
-                                                               self.num_frame_concat - 1: number_of_frames]
+                            concatenated_raw_frames_per_step = raw_frame_per_ax[self.num_frame_concat - 1: number_of_frames]
 
                 # Store the features and raw frames with concatenation
                 concatenated_features_per_ax = concatenated_features_per_step
@@ -976,12 +976,10 @@ class GenericTSDatasetReg(Dataset):
                 x_temp, y_temp, x_temp_raw_out = self._load_datafile(
                     datafile)  # Loads the dataset and applied data processing transforms
                 if hasattr(self, 'dont_train_just_feat_ext') and self.dont_train_just_feat_ext:
-                    x_raw_out_file_path = os.path.join(self.feat_ext_store_dir,
-                                                       os.path.splitext(os.path.basename(datafile))[0] + '_raw.npy')
+                    x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + '_raw.npy')
                     np.save(x_raw_out_file_path, x_temp.flatten())
                 if len(self.feat_ext_transform) > 0:
-                    x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T,
-                                                                       datafile)  # Applies feature extraction transforms
+                    x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T, datafile)  # Applies feature extraction transforms
                     if hasattr(self, 'store_feat_ext_data') and self.store_feat_ext_data:
                         self._store_feat_ext(datafile, x_temp, x_temp_raw_out, y_temp)
                 self._rearrange_dims(datafile, x_temp, y_temp, x_temp_raw_out)

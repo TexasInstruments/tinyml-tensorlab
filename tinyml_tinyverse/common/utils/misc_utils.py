@@ -27,10 +27,19 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
-from curses.ascii import isdigit
 import importlib
 import os
 import sys
+
+def is_url(v):
+    is_url = isinstance(v, str) and (v.startswith('http://') or v.startswith('https://'))
+    return is_url
+
+
+def is_url_or_file(v):
+    is_url_ = is_url(v)
+    is_file_ = isinstance(v, str) and (v.startswith("/") or v.startswith("."))
+    return is_url_ or is_file_
 
 
 def str_or_bool(v):

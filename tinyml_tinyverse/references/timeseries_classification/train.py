@@ -73,20 +73,21 @@ from logging import getLogger
 
 import numpy as np
 import pandas as pd
-import tinyml_torchmodelopt
+
+from tinyml_tinyverse.common.models import NeuralNetworkWithPreprocess
+from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQuantizationMethod
 
 # Torch Modules
 import torch
 import torch.nn as nn
 import torchinfo
-from edgeai_torchmodelopt.xnn.utils import is_url_or_file, load_weights
 from tabulate import tabulate
 
 from tinyml_tinyverse.common import models
 from tinyml_tinyverse.common.datasets import GenericTSDataset
 
 # Tiny ML TinyVerse Modules
-from tinyml_tinyverse.common.utils import misc_utils, utils
+from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
 dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset}
@@ -98,7 +99,7 @@ def split_weights(weights_name):
     weights_enums = []
     for w in weights_list:
         w = w.lstrip()
-        if is_url_or_file(w):
+        if misc_utils.is_url_or_file(w):
             weights_urls.append(w)
         else:
             weights_enums.append(w)
@@ -203,15 +204,20 @@ def get_args_parser():
     parser.add_argument("--compile-model", default=0, type=int, help="Compile the model using PyTorch2.0 functionality")
     parser.add_argument("--opset-version", default=17, type=int, help="ONNX Opset version")
     
-    parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int, choices=tinyml_torchmodelopt.quantization.TinyMLQuantizationVersion.get_choices(), help="Quantization Aware Training (QAT)")
-    parser.add_argument("--quantization-type", default="DEFAULT", help="Actual Quantization Flavour - applies only if quantization is enabled") 
+    parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int, choices=TinyMLQuantizationVersion.get_choices(), help="Quantization Aware Training (QAT)")
+    # parser.add_argument("--quantization-type", default="DEFAULT", help="Actual Quantization Flavour - applies only if quantization is enabled")
+    parser.add_argument("--quantization-method", default="QAT", choices=["PTQ", "QAT"], help="Actual Quantization Flavour - applies only if quantization is enabled")
+    parser.add_argument("--weight-bitwidth", default=8, type=int, choices=[8, 4, 2], help="Weight Bitwidth - applies only if quantization is enabled")
+    parser.add_argument("--activation-bitwidth", default=8, type=int, help="Activation Bitwidth- applies only if quantization is enabled")
+
     parser.add_argument("--quantization-error-logging", default=True, type=misc_utils.str_or_bool, help="log the quantization error")
 
     parser.add_argument("--with-input-batchnorm", default=True, help="onnx opset 18 doesn't export input batchnorm, use this if using TINPU style QAT only")
 
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
-    
+    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
+
     return parser
 
 def generate_golden_vector_dir(output_dir):
@@ -252,7 +258,7 @@ def generate_model_aux(output_dir, dataset):
         fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
     return
 
-def generate_golden_vectors(output_dir, dataset, generic_model=False):
+def generate_golden_vectors(output_dir, dataset, generic_model=False, nn_for_feature_extraction=False):
     logger = getLogger("root.generate_golden_vectors")
     import onnxruntime as ort
     vector_files = []
@@ -273,16 +279,21 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
         # For each label, 4 random golden test vectors will be selected and printed out
         for index in random.sample(list(indices), k=2):  # Originally k=4
             np_raw = dataset.X_raw[index]
-            np_feat = dataset.X[index]
-            pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
+            if nn_for_feature_extraction:
+                np_feat = np_raw
+                pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_raw, 0).astype(np.float32)})[0]
+            else:
+                np_feat = dataset.X[index]
+                pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
 
             half_path = os.path.join(golden_vectors_dir)
 
             # Saving as .txt
             np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'adc_{label}_{index}.txt')
-            np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'features_{label}_{index}.txt')
+            if not nn_for_feature_extraction:
+                np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+                vector_files.append(half_path + f'features_{label}_{index}.txt')
             np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'output_{label}_{index}.txt')
 
@@ -310,6 +321,7 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
             else:
                 header_file_info += '*/\n'
         os.remove(file_path)
+    generate_user_input_config(output_dir, dataset)
     generate_test_vector(output_dir, header_file_info)
     generate_model_aux(output_dir, dataset)
     return
@@ -363,18 +375,15 @@ def main(gpu, args):
     try:
         utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
         utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
+        # The below two lines work fine, but slows down a lot
+        # plot_graph(dataset, graph_type='tsne', instance_type='train')
+        # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
     except Exception as e:
         logger.warning(f"Feature Extraction plots will not be generated because: {e}")
-    # The below two lines work fine, but slows down a lot
-    # plot_graph(dataset, graph_type='tsne', instance_type='train')
-    # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
 
-    if misc_utils.str2bool(args.gen_golden_vectors):
-        generate_golden_vector_dir(args.output_dir)
-        generate_user_input_config(args.output_dir, dataset)
-        if misc_utils.str2bool(args.dont_train_just_feat_ext):
-            logger.info('Exiting execution without training')
-            sys.exit(0)
+    if misc_utils.str2bool(args.dont_train_just_feat_ext):
+        logger.info('Exiting execution without training')
+        sys.exit(0)
 
     # collate_fn = None
     num_classes = len(dataset.classes)
@@ -396,7 +405,7 @@ def main(gpu, args):
     # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
     model = models.get_model(
         args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
-        model_spec=args.model_spec, with_input_batchnorm=misc_utils.str2bool(args.with_input_batchnorm),
+        model_spec=args.model_spec, with_input_batchnorm=False if args.nn_for_feature_extraction else misc_utils.str2bool(args.with_input_batchnorm),
         dual_op=args.dual_op)
     if args.generic_model:
         # logger.info("\nModel:\n{}\n".format(model))
@@ -405,12 +414,7 @@ def main(gpu, args):
     if args.weights:
         if args.weights_url:
             logger.info(f"loading pretrained checkpoint for training: {args.weights_url}")
-            model = load_weights(model, args.weights_url, state_dict_name=args.weights_state_dict_name)
-
-    if args.quantization == tinyml_torchmodelopt.quantization.TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
-        model = tinyml_torchmodelopt.quantization.GenericTinyMLQATFxModule(model, total_epochs=args.epochs)
-    elif args.quantization == tinyml_torchmodelopt.quantization.TinyMLQuantizationVersion.QUANTIZATION_TINPU:
-        model = tinyml_torchmodelopt.quantization.TINPUTinyMLQATFxModule(model, total_epochs=args.epochs)
+            model = load_weights.load_weights(model, args.weights_url, state_dict_name=args.weights_state_dict_name)
 
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -422,51 +426,6 @@ def main(gpu, args):
 
     model.to(device)
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
-    # criterion = nn.NLLLoss()
-    opt_name = args.opt.lower()
-    if opt_name.startswith("sgd"):
-        optimizer = torch.optim.SGD(
-            model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay,
-            nesterov="nesterov" in opt_name)
-    elif opt_name == 'rmsprop':
-        optimizer = torch.optim.RMSprop(model.parameters(), lr=args.lr, momentum=args.momentum,
-                                        weight_decay=args.weight_decay, eps=0.0316, alpha=0.9)
-    elif opt_name == 'adam':
-        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    else:
-        logger.warning("Invalid optimizer {}. Only SGD and RMSprop, Adam are supported. Defaulting to Adam".format(args.opt))
-        optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-
-
-    args.lr_scheduler = args.lr_scheduler.lower()
-    if args.lr_scheduler == 'steplr':
-        main_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
-    elif args.lr_scheduler == 'cosineannealinglr':
-        main_lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,
-                                                                       T_max=args.epochs - args.lr_warmup_epochs)
-    elif args.lr_scheduler == 'exponentiallr':
-        main_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=args.lr_gamma)
-    else:
-        raise RuntimeError("Invalid lr scheduler '{}'. Only StepLR, CosineAnnealingLR and ExponentialLR "
-                           "are supported.".format(args.lr_scheduler))
-
-    if args.lr_warmup_epochs > 0:
-        if args.lr_warmup_method == 'linear':
-            warmup_lr_scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=args.lr_warmup_decay,
-                                                                    total_iters=args.lr_warmup_epochs)
-        elif args.lr_warmup_method == 'constant':
-            warmup_lr_scheduler = torch.optim.lr_scheduler.ConstantLR(optimizer, factor=args.lr_warmup_decay,
-                                                                      total_iters=args.lr_warmup_epochs)
-        else:
-            raise RuntimeError(f"Invalid warmup lr method '{args.lr_warmup_method}'. Only linear and constant "
-                               "are supported.")
-        lr_scheduler = torch.optim.lr_scheduler.SequentialLR(
-            optimizer,
-            schedulers=[warmup_lr_scheduler, main_lr_scheduler],
-            milestones=[args.lr_warmup_epochs]
-        )
-    else:
-        lr_scheduler = main_lr_scheduler
 
     model_without_ddp = model
     if args.distributed:
@@ -490,17 +449,47 @@ def main(gpu, args):
     logger.info("Start training")
     start_time = timeit.default_timer()
     best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
+
+    # model = NeuralNetworkWithPreprocess
+    if args.nn_for_feature_extraction:
+        fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2], with_input_batchnorm=False if args.quantization==TinyMLQuantizationVersion.QUANTIZATION_GENERIC else True).to(device)  # dataset.X_raw.shape[2],
+        fe_model = NeuralNetworkWithPreprocess(fe_model, None)
+        # Feature Extraction Model
+        optimizer = utils.init_optimizer(fe_model, args.opt, args.lr, args.momentum, args.weight_decay)
+        lr_scheduler = utils.init_lr_scheduler(
+            args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
+            args.lr_warmup_method, args.lr_warmup_decay)
+        fe_model = utils.get_trained_feature_extraction_model(
+            fe_model, args, data_loader, data_loader_test, device, lr_scheduler, optimizer)
+
+        # Train this model
+        model = NeuralNetworkWithPreprocess(fe_model, model)
+    else:
+        model = NeuralNetworkWithPreprocess(None, model)
+    # Does nothing in Floating Point Training
+    model = utils.quantization_wrapped_model(
+        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+        args.epochs)
+    
+    optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
+    lr_scheduler = utils.init_lr_scheduler(
+        args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
+        args.lr_warmup_method, args.lr_warmup_decay)
+
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
         utils.train_one_epoch_classification(
             model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
-            print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
-        lr_scheduler.step()
-        avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
+            print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
+            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False,
+            nn_for_feature_extraction=args.nn_for_feature_extraction)
+        if not (args.quantization_method in ['PTQ'] and args.quantization):
+            lr_scheduler.step()
+        avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
         if model_ema:
             avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model_ema, criterion, data_loader_test, device=device, transform=transform,
-                                          log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
+                                          log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
         if args.output_dir:
             checkpoint = {
                 'model': model_without_ddp.state_dict(),
@@ -539,18 +528,29 @@ def main(gpu, args):
                   columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
                   index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
                                                          headers="keys", tablefmt='grid')))
-
+    # if args.nn_for_feature_extraction:
+    #     logger.info("Feature extraction AI model is being combined with AI model")
+    #     model = models.CombinedModel(fe_model, model)
     logger.info('Exporting model after training.')
-    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
-        example_input = next(iter(data_loader_test))[0]
-        utils.export_model(model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version, 
-                           quantization=args.quantization, quantization_error_logging=args.quantization_error_logging, example_input=example_input, generic_model=args.generic_model)
+    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
+        if args.nn_for_feature_extraction:
+            example_input = next(iter(data_loader_test))[0]
+            input_shape = (1,) + dataset.X_raw.shape[1:]
+        else:
+            example_input = next(iter(data_loader_test))[1]
+            input_shape = (1,) + dataset.X.shape[1:]
+        utils.export_model(
+            model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
+            quantization=args.quantization, quantization_error_logging=args.quantization_error_logging,
+            example_input=example_input, generic_model=args.generic_model,
+            remove_hooks_for_jit= True if (args.quantization_method==TinyMLQuantizationMethod.PTQ and args.quantization) else False)
     total_time = timeit.default_timer() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
 
     if args.gen_golden_vectors:
-        generate_golden_vectors(args.output_dir, dataset, args.generic_model)
+        generate_golden_vector_dir(args.output_dir)
+        generate_golden_vectors(args.output_dir, dataset, args.generic_model, args.nn_for_feature_extraction)
         
     return
 

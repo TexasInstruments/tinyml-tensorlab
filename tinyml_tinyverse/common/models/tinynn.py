@@ -197,3 +197,8 @@ def LinearLayer(input_tensor_size=None, out_features=None, **kwargs):
     output_tensor_size = copy.deepcopy(input_tensor_size)
     output_tensor_size[-1] = out_features
     return layer, output_tensor_size
+
+def ReluLayer(input_tensor_size=None):
+    layer = torch.nn.ReLU()
+    output_tensor_size = copy.deepcopy(input_tensor_size)
+    return layer, output_tensor_size
