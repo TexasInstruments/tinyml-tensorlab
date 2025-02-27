@@ -46,6 +46,21 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
     def __init__(self, model, qconfig_type=None, example_inputs=None, is_qat=True, backend="qnnpack",
                  total_epochs=0, num_batch_norm_update_epochs=None, num_observer_update_epochs=None, prepare_qdq=True):
         '''
+        Parameters:
+            model: input model to be quantized
+            qconfig_type: a dictionary, QConfigType or QConfigMode
+            example_inputs: example input tensor
+            is_qat: indicates QAT or PTQ
+            total_epochs: number of epochs of training
+            num_batch_norm_update_epochs:
+                False: do not freeze batch norm
+                None: freeze batch norm at half the epochs
+                Otherwise (a number): frweze batch norm at the specified number of epochs
+            num_observer_update_epochs:
+                False: do not freeze observers
+                None: freeze observers at half the epochs
+                Otherwise (a number): freeze observers at the specified number of epochs
+
         The QAT wrapper module does the preparation like in:
         qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
 
@@ -131,10 +146,12 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         # also freeze the params if required
         if mode is True:
             # set the default epoch at which freeze occurs during training (if missing)
+            enable_freeze_bn = (self.num_batch_norm_update_epochs is not False)
+            enable_freeze_observer = (self.num_observer_update_epochs is not False)
             num_batch_norm_update_epochs = self.num_batch_norm_update_epochs or ((self.total_epochs//2)-1)
             num_observer_update_epochs = self.num_observer_update_epochs or ((self.total_epochs//2)+1)
-            freeze_bn = (not self.is_qat) or (self.num_epochs_tracked >= num_batch_norm_update_epochs)
-            freeze_observers = (self.num_epochs_tracked >= num_observer_update_epochs)
+            freeze_bn = enable_freeze_bn and ((not self.is_qat) or (self.num_epochs_tracked >= num_batch_norm_update_epochs))
+            freeze_observers = enable_freeze_observer and ((self.num_epochs_tracked >= num_observer_update_epochs))
             self.freeze(freeze_bn=freeze_bn, freeze_observers=freeze_observers)
             self.num_epochs_tracked += 1
         else:
@@ -166,13 +183,13 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
 
     def convert(self, model_qconfig_format=None, inplace=False, device='cpu'):
         self.freeze()
-        # make a copy inorder not to alter the original
+        # make a copy in order not to alter the original
         model = self.module if inplace else copy.deepcopy(self.module)
         # convert requires cpu model
         model = model.to(torch.device(device))
         # now do the actual conversion
         self.module = quantize_fx.convert_fx(model)
-        return model
+        return self
 
     def _is_observed_module(self) -> bool:
         # from: torch/ao/quantization/fx/graph_module.py
@@ -189,7 +206,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             model = self.module
             warnings.warn("model has already been converted before calling export. make sure it is done correctly.")
 
-        if model_qconfig_format == common.TinyMLQConfigFormat.INT_MODEL:
+        if model_qconfig_format == common.TinyMLModelQConfigFormat.INT_MODEL:
             # # Convert QDQ format to Int8 format
             import onnxruntime as ort
             qdq_filename = os.path.splitext(filename)[0] + '_qdq.onnx'
@@ -215,7 +232,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                 onnx_model, check = simplify(onnx_model, skipped_optimizers=skipped_optimizers)
                 onnx.save(onnx_model, filename)
             except:
-                print("Something went wrong in simplification - maybe due to multi processes, skippping this step")
+                print("Something went wrong in simplification - maybe due to multi processes, skipping this step")
         #
 
     def disable_backward_for_ptq(self):

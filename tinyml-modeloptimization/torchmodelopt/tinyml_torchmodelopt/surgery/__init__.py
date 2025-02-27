@@ -31,21 +31,20 @@
 
 import torch
 from torch import nn
+
 from copy import deepcopy
 from types import FunctionType
 from typing import Union, Dict, Any
 import warnings
 from .surgery import _replace_unsupported_layers
 
-
-
-def convert_to_lite_fx(model:torch.nn.Module, replacement_dict:Dict[Any,Union[torch.nn.Module,callable]]=None, example_inputs:list=None, example_kwargs:dict=None, verbose_mode:bool=False, **kwargs):
+def convert_to_lite_fx(model: torch.nn.Module, replacement_dict: Dict[Any, Union[torch.nn.Module, callable]] = None, example_inputs: list = None, example_kwargs: dict = None, verbose_mode: bool = False, **kwargs):
     '''
     converts model into lite model using replacement dict
     if no replacement dict is provided it does the default replacement
     '''
     # "example_inputs optional and used only in models using LayerNorm. Using a default value since it was not provided.
-    example_inputs = example_inputs if example_inputs is not None else  torch.rand(1,3,224,224) # Default input shape
+    example_inputs = example_inputs if example_inputs is not None else torch.rand(1, 3, 224, 224)  # Default input shape
     example_kwargs = example_kwargs or {}
     return replace_unsupported_layers(model, example_inputs=example_inputs, example_kwargs=example_kwargs, replacement_dict=replacement_dict, verbose_mode=verbose_mode, **kwargs)
 
@@ -126,15 +125,15 @@ def get_replacement_dict(
 
 
 def replace_unsupported_layers(model: nn.Module, example_inputs: list = None, example_kwargs: dict = None,
-                               replacement_dict: Dict[Any, Union[nn.Module, callable]] = None,
+                               replacement_dict: Dict[Any,
+                                                      Union[nn.Module, callable]] = None,
                                copy_args: list = [], can_retrain=True, verbose_mode: bool = False, **kwargs):
-    # TODO write appropiate documentation for this function
-
+    # TODO write appropriate documentation for this function
     '''
     wrapper to the function that does the surgery
 
-    it does default surgery if no replacement dictionry is given
-    replacement dictionry must contains flag name as keys and True/False or a replacement dictionary corresponding to flag as value
+    it does default surgery if no replacement dictionary is given
+    replacement dictionary must contains flag name as keys and True/False or a replacement dictionary corresponding to flag as value
 
     behavior for each value:
     value               behavior
@@ -144,32 +143,32 @@ def replace_unsupported_layers(model: nn.Module, example_inputs: list = None, ex
 
     values for replacement dict
     keys                value
-    callable        ->  callable            : any call function to call_function if they take same argument partial agument may be used
-    callable        ->  nn.Module           : any call function to call_function if they take same argument partial agument may be used
+    callable        ->  callable            : any call function to call_function if they take same argument partial argument may be used
+    callable        ->  nn.Module           : any call function to call_function if they take same argument partial argument may be used
     Any             ->  Callable            : any self-made surgery function
     nn.Module       ->  nn.Module/type      : any nn.Module pattern to replace with another nn.Module
-    type            ->  type/nn.Module      : replaces sub-module of same type as patttern using traditional python approach
+    type            ->  type/nn.Module      : replaces sub-module of same type as pattern using traditional python approach
     '''
     example_inputs = example_inputs if example_inputs is not None else []
     example_kwargs = example_kwargs or {}
     # TODO Check for functions
     if model.training:
-        RuntimeWarning("The model is in train mode, converting to eval mode. This might change the network behaviour.")
+        RuntimeWarning(
+            "The model is in train mode, converting to eval mode. This might change the network behavior.")
         model.eval()
         is_train_mode = True
     else:
         is_train_mode = False
 
-    replacement_dict = get_replacement_dict(replacement_dict, can_retrain=can_retrain)
+    replacement_dict = get_replacement_dict(
+        replacement_dict, can_retrain=can_retrain)
 
     model = deepcopy(model)
 
     final_model = surgery._replace_unsupported_layers(model, example_inputs, example_kwargs, replacement_dict, copy_args,
-                                              verbose_mode, **kwargs)
+                                                      verbose_mode, **kwargs)
 
     if is_train_mode:
         final_model.train()
 
     return final_model
-
-

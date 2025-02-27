@@ -63,12 +63,12 @@ def ceil2_tensor(x):
     y = _ceil2_tensor(x)
     return _propagate_quant_ste(x, y)
 
-def _adjust_qparams_power2_scale(min_val, max_val, quant_min, quant_max, scale, zero_point, eps):
+def _adjust_qparams_power2_scale(symmetric, min_val, max_val, quant_min, quant_max, scale, zero_point, eps):
     r"""Calculates the quantization parameters."""
     # make scale a power of 2 value
     scale = ceil2_tensor(scale)
     scale = torch.max(scale, eps)
-    if len(torch.unique(zero_point))>1 or torch.unique(zero_point) not in (0,127):
+    if not symmetric:
         # adjust the zero_point based on new scale
         min_val_neg = torch.min(min_val, torch.zeros_like(min_val))
         zero_point = quant_min - torch.round(min_val_neg / scale).to(torch.int)
@@ -82,6 +82,7 @@ class SimplePerChannelWeightObserver(torch.ao.quantization.PerChannelMinMaxObser
         self.power2_scale = power2_scale
         self.range_max = range_max
         self.fixed_range = fixed_range
+        self.symmetric = (qscheme in (torch.per_channel_symmetric, torch.per_tensor_symmetric))
 
     @torch.jit.export
     def _calculate_qparams(self, min_val, max_val):
@@ -89,7 +90,7 @@ class SimplePerChannelWeightObserver(torch.ao.quantization.PerChannelMinMaxObser
         # weights qparams are always symmetric and this is ensured inside the super class, no need to handle it here.
         scale, zero_point = super()._calculate_qparams(min_val, max_val)
         if self.power2_scale:
-            scale, zero_point = _adjust_qparams_power2_scale(
+            scale, zero_point = _adjust_qparams_power2_scale(self.symmetric,
                 min_val, max_val, self.quant_min, self.quant_max, scale, zero_point, self.eps)
         return scale, zero_point
 
@@ -124,15 +125,28 @@ class SimpleActivationObserver(torch.ao.quantization.MovingAverageMinMaxObserver
     def _calculate_qparams(self, min_val, max_val):
         r"""Calculates the quantization parameters."""
         if self.symmetric:
-            signed_range = torch.min(min_val.detach()).item() < 0.0
+            unsigned_range = torch.min(min_val.detach()).item() >= 0.0
             max_abs = torch.max(torch.abs(min_val), torch.abs(max_val))
-            min_val = -max_abs if signed_range else max_abs * 0.0
+            min_val = (max_abs * 0.0) if unsigned_range else (-max_abs)
             max_val = max_abs
-
-        scale, zero_point = super()._calculate_qparams(min_val, max_val)
+            if unsigned_range:
+                # in unsigned case, we can use a better scale than what pytorch uses (use the full range)
+                # backup qscheme and set it to torch.per_tensor_affine,
+                # so that the whole unsigned range will be used for scale computation
+                # this is a hack to reuse super()._calculate_qparams() for this case
+                qscheme_backup = self.qscheme
+                self.qscheme = torch.per_tensor_affine
+            #
+            scale, zero_point = super()._calculate_qparams(min_val, max_val)
+            if unsigned_range:
+                # restore qscheme
+                self.qscheme = qscheme_backup
+            #
+        else:
+            scale, zero_point = super()._calculate_qparams(min_val, max_val)
 
         if self.power2_scale:
-            scale, zero_point = _adjust_qparams_power2_scale(
+            scale, zero_point = _adjust_qparams_power2_scale(self.symmetric,
                 min_val, max_val, self.quant_min, self.quant_max, scale, zero_point, self.eps)
         return scale, zero_point
 

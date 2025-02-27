@@ -31,26 +31,28 @@
 
 import torch
 from torch import nn
-from typing import Union, Dict, Any
 from torch.fx import GraphModule
+
+from typing import Union, Dict, Any
 from inspect import isfunction, ismethod
 
 from . import custom_modules, custom_surgery_functions
-from .replacer import graph_pattern_replacer,replace_module_nodes,replace_function_nodes
+from .replacer import graph_pattern_replacer, replace_module_nodes, replace_function_nodes
 
-def _replace_unsupported_layers(model:nn.Module, example_inputs:list=None, example_kwargs:dict=None, replacement_dict:Dict[Any, Union[nn.Module, callable]]=None, 
-                                copy_args:list=[], verbose_mode:bool=False, **kwargs) -> GraphModule | nn.Module:
+
+def _replace_unsupported_layers(model: nn.Module, example_inputs: list = None, example_kwargs: dict = None, replacement_dict: Dict[Any, Union[nn.Module, callable]] = None,
+                                copy_args: list = [], verbose_mode: bool = False, **kwargs) -> GraphModule | nn.Module:
     '''
     main function that does the surgery
 
-    it does default surgery if no replacement dictionry is given
+    it does default surgery if no replacement dictionary is given
     replacement dictionary may contain
     keys                value
-    callable        ->  callable            : any call function to call_function if they take same argument partial agument may -                                         be used 
-    callable        ->  nn.Module           : any call function to call_function if they take same argument partial agument may -                                         be used 
+    callable        ->  callable            : any call function to call_function if they take same argument partial argument may -                                         be used 
+    callable        ->  nn.Module           : any call function to call_function if they take same argument partial argument may -                                         be used 
     Any             ->  Callable            : any self-made surgery function 
     nn.Module       ->  nn.Module           : any nn.Module pattern to replace with another nn.Module
-    type            ->  type/nn.Module      : replaces sub-module of same type as patttern using traditional python approach 
+    type            ->  type/nn.Module      : replaces sub-module of same type as pattern using traditional python approach 
     '''
 
     example_inputs = example_inputs if example_inputs is not None else []
@@ -59,7 +61,7 @@ def _replace_unsupported_layers(model:nn.Module, example_inputs:list=None, examp
         if pattern is None:
             continue
 
-        if isfunction(pattern) or type(pattern).__name__ in ('builtin_function_or_method','function'):
+        if isfunction(pattern) or type(pattern).__name__ in ('builtin_function_or_method', 'function'):
             # replacement must be partially defined function or work with same args and kwargs
             if isinstance(replacement, (list, tuple)):
                 kwargs = replacement[1] if len(replacement) > 1 else None
@@ -68,8 +70,8 @@ def _replace_unsupported_layers(model:nn.Module, example_inputs:list=None, examp
                 kwargs = dict()
             model = replace_function_nodes(model, pattern, replacement, verbose_mode=verbose_mode, **kwargs)
         elif isfunction(replacement) or ismethod(replacement):
-            # for self-made surgery function 
-            model = replacement(model, pattern = pattern, example_inputs = example_inputs, verbose_mode=verbose_mode)
+            # for self-made surgery function
+            model = replacement(model, pattern=pattern, example_inputs=example_inputs, verbose_mode=verbose_mode)
         else:
             # class of MOdule of
             if isinstance(pattern, type):
@@ -78,19 +80,15 @@ def _replace_unsupported_layers(model:nn.Module, example_inputs:list=None, examp
                 # for nn.Module
                 if pattern.__class__.__name__ in dir(torch.nn):
                     # if the pattern is present in nn directory,
-                    # a wrapper module is required, for successful 
+                    # a wrapper module is required, for successful
                     # surgery on that module
                     model = graph_pattern_replacer(model, pattern, replacement, verbose_mode=verbose_mode)
                     pattern = custom_modules.InstaModule(pattern)
 
                 # calls the main surgery function
-                model = graph_pattern_replacer(model, pattern, replacement, verbose_mode=verbose_mode)
-    model = custom_surgery_functions.remove_identiy(model)
+                model = graph_pattern_replacer(
+                    model, pattern, replacement, verbose_mode=verbose_mode)
+    model = custom_surgery_functions.remove_identity(model)
     model.delete_all_unused_submodules()
-    
+
     return model
-
-
-
-
-

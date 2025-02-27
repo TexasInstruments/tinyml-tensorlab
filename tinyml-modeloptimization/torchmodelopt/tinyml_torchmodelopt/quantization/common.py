@@ -28,6 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 #################################################################################
+import torch
+from logging import getLogger
 
 
 class TinyMLQuantizationVersion():
@@ -44,7 +46,7 @@ class TinyMLQuantizationVersion():
         return {v:k for k,v in cls.__dict__.items() if not k.startswith("__")}
 
 
-class TinyMLQConfigFormat:
+class TinyMLModelQConfigFormat:
     FLOAT_MODEL = "FLOAT_MODEL"    # original float model format
     FAKEQ_MODEL = "FAKEQ_MODEL"    # trained FakeQ model before conversion
     QDQ_MODEL = "QDQ_MODEL"        # converted QDQ model
@@ -55,4 +57,100 @@ class TinyMLQConfigFormat:
     @classmethod
     def choices(cls):
         return [value for value in dir(cls) if not value.startswith('__') and value != 'choices']
+
+
+class TinyMLQuantizationMethod():
+    PTQ = 'PTQ'
+    QAT = 'QAT'
+
+    @classmethod
+    def get_dict(cls):
+        return {k: v for k, v in cls.__dict__.items() if not k.startswith("__")}
+
+    @classmethod
+    def get_choices(cls):
+        return {v: k for k, v in cls.__dict__.items() if not k.startswith("__")}
+
+
+class TinyMLQConfigType:
+    def __init__(self, weight_bitwidth: int=8, activation_bitwidth: int=8):
+        self.logger = getLogger("root.main.TinyMLQConfigType")
+        self.logger.info(f"Quantization Bitwidths: Weight-{weight_bitwidth} Activation- {activation_bitwidth}")
+        self.qconfig_type = None
+        if weight_bitwidth is None or activation_bitwidth is None:
+            '''
+            # 8bit weight / activation is default - no need to specify inside.
+            qconfig_type = {
+                'weight': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_channel_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                },
+                'activation': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_tensor_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                }
+            }
+            '''
+            self.qconfig_type = None
+        elif weight_bitwidth == 8:
+            self.qconfig_type = {
+                'weight': {
+                    'bitwidth': weight_bitwidth,
+                    'qscheme': torch.per_channel_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                },
+                'activation': {
+                    'bitwidth': activation_bitwidth,
+                    'qscheme': torch.per_tensor_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                }
+            }
+        elif weight_bitwidth == 4:
+            self.qconfig_type = {
+                'weight': {
+                    'bitwidth': weight_bitwidth,
+                    'qscheme': torch.per_channel_symmetric,
+                    'power2_scale': False,
+                    'range_max': None,
+                    'fixed_range': False
+                },
+                'activation': {
+                    'bitwidth': activation_bitwidth,
+                    'qscheme': torch.per_tensor_symmetric,
+                    'power2_scale': False,
+                    'range_max': None,
+                    'fixed_range': False
+                }
+            }
+        elif weight_bitwidth == 2:
+            self.qconfig_type = {
+                'weight': {
+                    'bitwidth': weight_bitwidth,
+                    'qscheme': torch.per_channel_symmetric,
+                    'power2_scale': False,
+                    'range_max': None,
+                    'fixed_range': False,
+                    'quant_min': -1,
+                    'quant_max': 1,
+                },
+                'activation': {
+                    'bitwidth': activation_bitwidth,
+                    'qscheme': torch.per_tensor_symmetric,
+                    'power2_scale': False,
+                    'range_max': None,
+                    'fixed_range': False
+                }
+            }
+        else:
+            raise RuntimeError("unsupported quantization parameters")
 
