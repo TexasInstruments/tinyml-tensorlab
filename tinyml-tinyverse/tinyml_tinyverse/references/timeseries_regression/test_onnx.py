@@ -104,6 +104,7 @@ def get_args_parser():
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
     parser.add_argument('--scale', help="Scaling factor to input data")
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
+    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
 
     return parser
 
@@ -157,7 +158,7 @@ def main(gpu, args):
     output_name = ort_sess.get_outputs()[0].name
     predicted = torch.tensor([]).to(device, non_blocking=True)
     ground_truth = torch.tensor([]).to(device, non_blocking=True)
-    for batched_data, batched_target in data_loader:
+    for _, batched_data, batched_target in data_loader:
         batched_data = batched_data.to(device, non_blocking=True).float()
         batched_target = batched_target.to(device, non_blocking=True).long()
         if transform:
@@ -166,17 +167,18 @@ def main(gpu, args):
             predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
-    # mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-    # logger.info("Plotting OvR Multiclass ROC score")
-    # utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-    #                           label_map=dataset.inverse_label_map, phase='test')
+    mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
+    logger.info("Plotting Regressions on dataset")
+    utils.plot_regression(ground_truth.to('cpu'), predicted.to('cpu'), os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
     # logger.info("Plotting Class difference scores")
     # utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
     #                           label_map=dataset.inverse_label_map, phase='test')
     metric = torcheval.metrics.MeanSquaredError()
+    # np.save(os.path.join(args.output_dir, 'predicted.npy'), predicted.to('cpu').numpy())
+    # np.save(os.path.join(args.output_dir, 'ground_truth.npy'), ground_truth.to('cpu').numpy())
     metric.update(predicted.to('cpu'), ground_truth.to('cpu'))
     logger = getLogger("root.main.test_data")
-    logger.info(f"Test Data Evaluation RMSE: {metric.compute():.2f}%")
+    logger.info(f"Test Data Evaluation RMSE: {metric.compute():.2f}")
     return
 
 def run(args):

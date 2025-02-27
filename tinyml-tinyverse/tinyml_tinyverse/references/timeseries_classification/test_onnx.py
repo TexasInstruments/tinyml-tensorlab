@@ -41,6 +41,7 @@ import pandas as pd
 import torch
 import torcheval
 from tabulate import tabulate
+from tvm.script.ir_builder.tir import float32
 
 from tinyml_tinyverse.common.datasets import GenericTSDataset
 
@@ -104,6 +105,7 @@ def get_args_parser():
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
     parser.add_argument('--scale', help="Scaling factor to input data")
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
+    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
 
     return parser
 
@@ -157,13 +159,18 @@ def main(gpu, args):
     output_name = ort_sess.get_outputs()[0].name
     predicted = torch.tensor([]).to(device, non_blocking=True)
     ground_truth = torch.tensor([]).to(device, non_blocking=True)
-    for batched_data, batched_target in data_loader:
+    for batched_raw_data, batched_data, batched_target in data_loader:
+        batched_raw_data = batched_raw_data.to(device, non_blocking=True).long()
         batched_data = batched_data.to(device, non_blocking=True).float()
         batched_target = batched_target.to(device, non_blocking=True).long()
         if transform:
             batched_data = transform(batched_data)
-        for data in batched_data:
-            predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
+        if args.nn_for_feature_extraction:
+            for data in batched_raw_data:
+                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy().astype(np.float32)})[0]).to(device)))
+        else:
+            for data in batched_data:
+                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
     mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))

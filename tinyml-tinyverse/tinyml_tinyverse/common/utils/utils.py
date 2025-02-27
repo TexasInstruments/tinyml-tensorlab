@@ -79,7 +79,7 @@ from logging import getLogger
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
-from sklearn.decomposition import PCA, KernelPCA
+from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
 import numpy as np
@@ -91,6 +91,11 @@ from cryptography.fernet import Fernet
 from tabulate import tabulate
 from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc
 from torcheval.metrics.functional import r2_score, mean_squared_error
+
+from ..models.generic_models import FEModel  # , FEModel2
+from tinyml_torchmodelopt.quantization import (
+    TinyMLQuantizationVersion, TinyMLQuantizationMethod, TinyMLQConfigType,
+    GenericTinyMLQATFxModule, TINPUTinyMLQATFxModule, GenericTinyMLPTQFxModule, TINPUTinyMLPTQFxModule)
 
 try:
     from apex import amp
@@ -132,10 +137,11 @@ def pad_sequence(batch):
 def collate_fn(batch):
     # A data tuple has the form:
     # waveform, sample_rate, label, speaker_id, utterance_number
-    tensors, targets = [], []
+    raw_tensors, tensors, targets = [], [], []
     # Gather in lists, and encode labels as indices
     # for waveform, _, label, *_ in batch:
-    for sequence, label in batch:
+    for raw_sequence, sequence, label in batch:
+        raw_tensors += [raw_sequence]
         tensors += [sequence]
         targets += [torch.tensor(label)]
     # Group the list of tensors into a batched tensor
@@ -143,8 +149,12 @@ def collate_fn(batch):
         tensors = torch.stack(tensors)  # TODO: Is this correct
     else:
         tensors = pad_sequence(tensors)
+    if all_tensors_have_same_dimensions(raw_tensors):
+        raw_tensors = torch.stack(raw_tensors)  # TODO: Is this correct
+    else:
+        raw_tensors = pad_sequence(raw_tensors)
     targets = torch.stack(targets)
-    return tensors, targets
+    return raw_tensors, tensors, targets
 
 
 def _get_cache_path(filepath):
@@ -310,10 +320,10 @@ def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, pha
     for i in range(num_classes):
         # Compute ROC curve and AUC for the current class
         try:
-            fpr, tpr, thresholds = roc_curve(ground_truth_binarized[:, i], predicted[:, i])
+            fpr, tpr, thresholds = roc_curve(ground_truth_binarized[:, i].cpu().numpy(), predicted[:, i].cpu().numpy())
         except IndexError:
             # 2 class classification
-            fpr, tpr, thresholds = roc_curve(ground_truth_binarized, predicted[:, 1])
+            fpr, tpr, thresholds = roc_curve(ground_truth_binarized.cpu().numpy(), predicted[:, 1].cpu().numpy())
 
         fpr_list.extend(fpr)
         tpr_list.extend(tpr)
@@ -376,18 +386,18 @@ def plot_pairwise_differenced_class_scores(ground_truth, predicted, output_dir, 
 
     for idx, (i, j) in enumerate(class_pairs):
         # Compute differences
-        indices = np.where((ground_truth == i) | (ground_truth == j))[0]
+        indices = torch.where((ground_truth == i) | (ground_truth == j))[0]
         class_scores = predicted[indices, :]
         differences = class_scores[:, i] - class_scores[:, j]
         positive_differences = differences[differences >= 0]
         negative_differences = differences[differences < 0]
 
         # Create histogram bins
-        bins = np.linspace(differences.min(), differences.max(), 50)
+        bins = torch.linspace(differences.min(), differences.max(), 50)
 
         # Plot histograms
-        axes[idx].hist(positive_differences, bins=bins, color='blue', alpha=0.7, label=f'{label_map[i]} >= {label_map[j]}')
-        axes[idx].hist(negative_differences, bins=bins, color='orange', alpha=0.7, label=f'{label_map[i]} < {label_map[j]}')
+        axes[idx].hist(positive_differences.cpu().numpy(), bins=bins, color='blue', alpha=0.7, label=f'{label_map[i]} >= {label_map[j]}')
+        axes[idx].hist(negative_differences.cpu().numpy(), bins=bins, color='orange', alpha=0.7, label=f'{label_map[i]} < {label_map[j]}')
 
         # Add titles and labels
         axes[idx].set_title(f'Pair: Class{i} v/s Class{j}', fontsize=14)
@@ -406,6 +416,60 @@ def plot_pairwise_differenced_class_scores(ground_truth, predicted, output_dir, 
 
     logger.info(f"Plot is at: {os.path.join(output_dir, f'Histogram_Class_Score_differences_{phase}.png')}")
     plt.savefig(os.path.join(output_dir, f'Histogram_Class_Score_differences_{phase}.png'))
+
+
+def plot_regression(ground_truth, predictions, output_dir, phase=''):
+    """
+    Plots scatter plots of predictions and ground_truth with lines connecting corresponding indices
+    for each axis (if the arrays have multiple axes).
+
+    Parameters:
+    - predictions (numpy.ndarray): Array of predicted values. Can be 1D or 2D.
+    - ground_truth (numpy.ndarray): Array of ground truth values. Must match predictions in shape.
+
+    Returns:
+    - None
+    """
+    logger = getLogger("root.utils.plot_regression")
+    if predictions.shape != ground_truth.shape:
+        raise ValueError("predictions and ground_truth must have the same shape.")
+
+    # Handle 1D arrays as 2D for uniformity
+    if predictions.ndim == 1:
+        predictions = predictions[:, np.newaxis]
+        ground_truth = ground_truth[:, np.newaxis]
+
+    num_axes = predictions.shape[1]  # Number of axes to plot
+    indices = np.arange(predictions.shape[0])  # Indices along the first axis
+
+    # Set up the figure for subplots
+    fig, axes = plt.subplots(num_axes, 1, figsize=(10, 5 * num_axes), squeeze=False)
+
+    for axis in range(num_axes):
+        ax = axes[axis, 0]
+
+        # Scatter plots for ground truth and predictions
+        ax.scatter(indices, ground_truth[:, axis], color='green', label=f'Ground Truth (Axis {axis})', s=50, alpha=0.8)
+        ax.scatter(indices, predictions[:, axis], color='blue', label=f'Predictions (Axis {axis})', s=50, alpha=0.8)
+
+        # Draw lines connecting corresponding points
+        for i in range(len(indices)):
+            ax.plot([indices[i], indices[i]],
+                    [ground_truth[i, axis], predictions[i, axis]],
+                    color='gray', alpha=0.5, linestyle='--')
+
+        # Add labels, title, and legend
+        ax.set_xlabel('Index', fontsize=12)
+        ax.set_ylabel('Target', fontsize=12)
+        ax.set_title(f'Regression Scatter Plot', fontsize=14)
+        ax.legend()
+        ax.grid(alpha=0.3)
+
+    # Adjust layout
+    plt.tight_layout()
+    logger.info(f"Plot is at: {os.path.join(output_dir, f'Regression_plot_{phase}.png')}")
+    plt.savefig(os.path.join(output_dir, f'Regression_plot_{phase}.png'))
+
 
 class SmoothedValue:
     """Track a series of values and provide access to smoothed values over a
@@ -445,7 +509,7 @@ class SmoothedValue:
             d = torch.tensor(list(self.deque))
             return d.median().item()
         else:
-            return latest  # TODO: This isnt a median, it is a placeholder
+            return latest  # TODO: This isn't a median, it is a placeholder
 
     @property
     def avg(self):
@@ -876,25 +940,23 @@ def seed_everything(seed: int):
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
+    if torch.backends.mps.is_available():
+        torch.mps.manual_seed(seed)
 
 
 def train_one_epoch_regression(model, criterion, optimizer, data_loader, device, epoch, transform,
-                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, **kwargs):
+                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False, **kwargs):
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
-    #
-    # new_sample_rate = 8000
-    # transform = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=new_sample_rate)
 
     header = f"Epoch: [{epoch}]"
     # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    for data, target in metric_logger.log_every(data_loader, print_freq, header):
+    for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         # for batch_idx, (data, target) in enumerate(data_loader):
-        # logger.info(batch_idx)
         start_time = timeit.default_timer()
         data = data.to(device).float()
         target = target.to(device).float()
@@ -912,13 +974,14 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
         # negative log-likelihood for a tensor of size (batch x 1 x n_output)
         loss = criterion(output, target)
 
-        optimizer.zero_grad()
-        if apex:
-            with amp.scale_loss(loss, optimizer) as scaled_loss:
-                scaled_loss.backward()
-        else:
-            loss.backward()
-        optimizer.step()
+        if not is_ptq:
+            optimizer.zero_grad()
+            if apex:
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+            else:
+                loss.backward()
+            optimizer.step()
 
         # acc1 = accuracy(output, target, topk=(1,))
         # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
@@ -943,7 +1006,7 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     predictions_array = torch.Tensor([]).to(device, non_blocking=True)
 
     with torch.no_grad():
-        for data, target in metric_logger.log_every(data_loader, print_freq, header):
+        for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
             data = data.to(device, non_blocking=True).float()
             target = target.to(device, non_blocking=True).long()
@@ -986,8 +1049,10 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     return metric_logger.mse.global_avg, metric_logger.r2.global_avg
 
 
-def train_one_epoch_classification(model, criterion, optimizer, data_loader, device, epoch, transform,
-                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, **kwargs):
+def train_one_epoch_classification(
+        model, criterion, optimizer, data_loader, device, epoch, transform,
+        apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False,
+        nn_for_feature_extraction=False, **kwargs):
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
@@ -1000,11 +1065,15 @@ def train_one_epoch_classification(model, criterion, optimizer, data_loader, dev
     # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    for data, target in metric_logger.log_every(data_loader, print_freq, header):
+    # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+    for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
         # for batch_idx, (data, target) in enumerate(data_loader):
         # logger.info(batch_idx)
         start_time = timeit.default_timer()
-        data = data.to(device).float()
+        if nn_for_feature_extraction:
+            data = data_raw.to(device).float()
+        else:
+            data = data_feat_ext.to(device).float()
         target = target.to(device).long()
 
         # apply transform and model on whole batch directly on device
@@ -1020,13 +1089,14 @@ def train_one_epoch_classification(model, criterion, optimizer, data_loader, dev
         # negative log-likelihood for a tensor of size (batch x 1 x n_output)
         loss = criterion(output, target)
 
-        optimizer.zero_grad()
-        if apex:
-            with amp.scale_loss(loss, optimizer) as scaled_loss:
-                scaled_loss.backward()
-        else:
-            loss.backward()
-        optimizer.step()
+        if not is_ptq:
+            optimizer.zero_grad()
+            if apex:
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+            else:
+                loss.backward()
+            optimizer.step()
 
         acc1 = accuracy(output, target, topk=(1,))
         # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
@@ -1039,7 +1109,7 @@ def train_one_epoch_classification(model, criterion, optimizer, data_loader, dev
         model_ema.update_parameters(model)
 
 
-def evaluate_classification(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+def evaluate_classification(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, nn_for_feature_extraction=False, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
@@ -1051,9 +1121,14 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     predictions_array = torch.Tensor([]).to(device, non_blocking=True)
 
     with torch.no_grad():
-        for data, target in metric_logger.log_every(data_loader, print_freq, header):
+        # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+        for data_raw, data_feat_ext, target  in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
-            data = data.to(device, non_blocking=True).float()
+            if nn_for_feature_extraction:
+                data = data_raw.to(device, non_blocking=True).float()
+            else:
+                data = data_feat_ext.to(device).float()
+
             target = target.to(device, non_blocking=True).long()
             if transform:
                 data = transform(data)
@@ -1111,7 +1186,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, auc, confusion_matrix_total
 
 
-def export_model(model, input_shape, output_dir, opset_version=17, quantization=0, quantization_error_logging=False, example_input=None, generic_model=False):
+def export_model(model, input_shape, output_dir, opset_version=17, quantization=0, quantization_error_logging=False,
+                 example_input=None, generic_model=False, remove_hooks_for_jit=False):
     logger = getLogger("root.export_model")
     device="cpu"  # torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # example_input[0].unsqueeze(0) will create a tensor with batch size 1: n,c,h,w -> 1,c,h,w
@@ -1140,7 +1216,10 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
         model_copy = model_copy.convert()
         # export converted onnx model
         model_copy.export(dummy_input, onnx_file, opset_version=opset_version)
+
         # export a torchscript model as well for visualization
+        if remove_hooks_for_jit:
+            remove_hooks(model_copy)
         ts_model = torch.jit.trace(model_copy, dummy_input)
         torch.jit.save(ts_model, os.path.splitext(onnx_file)[0]+"_ts.pth")
         if not generic_model:
@@ -1151,6 +1230,14 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
     onnx.shape_inference.infer_shapes_path(onnx_file, onnx_file)
     if not generic_model:
         encrypt(onnx_file, get_crypt_key())
+
+
+def remove_hooks(model):
+    model._backward_hooks = OrderedDict()
+    model._forward_hooks = OrderedDict()
+    model._forward_pre_hooks = OrderedDict()
+    for child in model.children():
+        remove_hooks(child)
 
 
 def encrypt(filename, key):
@@ -1200,7 +1287,140 @@ def reduce_across_processes(val):
         except ValueError:
             return val
 
-    t = torch.tensor(val, device="cuda")
+    t = torch.tensor(val, device="cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     dist.barrier()
     dist.all_reduce(t)
     return t
+
+
+def init_optimizer(model, opt_name="sgd", lr=0.1, momentum=0.9, weight_decay=4e-5):
+    logger = getLogger('root.utils.init_optimizer')
+    opt_name = opt_name.lower()
+    if opt_name.startswith("sgd"):
+        optimizer = torch.optim.SGD(
+            model.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay,
+            nesterov="nesterov" in opt_name)
+    elif opt_name == 'rmsprop':
+        optimizer = torch.optim.RMSprop(model.parameters(), lr=lr, momentum=momentum,
+                                        weight_decay=weight_decay, eps=0.0316, alpha=0.9)
+    elif opt_name == 'adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    else:
+        logger.warning("Invalid optimizer {}. Only SGD and RMSprop, Adam are supported. Defaulting to Adam".format(opt_name))
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    return optimizer
+
+
+def init_lr_scheduler(
+        lr_scheduler="cosineannealinglr", optimizer="sgd", epochs=90, lr_warmup_epochs=5, lr_step_size=30, lr_gamma=0.1,
+        lr_warmup_method="constant", lr_warmup_decay=0.01):
+    lr_scheduler = lr_scheduler.lower()
+    if lr_scheduler == 'steplr':
+        main_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=lr_step_size, gamma=lr_gamma)
+    elif lr_scheduler == 'cosineannealinglr':
+        main_lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,
+                                                                       T_max=epochs - lr_warmup_epochs)
+    elif lr_scheduler == 'exponentiallr':
+        main_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=lr_gamma)
+    else:
+        raise RuntimeError("Invalid lr scheduler '{}'. Only StepLR, CosineAnnealingLR and ExponentialLR "
+                           "are supported.".format(lr_scheduler))
+
+    if lr_warmup_epochs > 0:
+        if lr_warmup_method == 'linear':
+            warmup_lr_scheduler = torch.optim.lr_scheduler.LinearLR(optimizer, start_factor=lr_warmup_decay,
+                                                                    total_iters=lr_warmup_epochs)
+        elif lr_warmup_method == 'constant':
+            warmup_lr_scheduler = torch.optim.lr_scheduler.ConstantLR(optimizer, factor=lr_warmup_decay,
+                                                                      total_iters=lr_warmup_epochs)
+        else:
+            raise RuntimeError(f"Invalid warmup lr method '{lr_warmup_method}'. Only linear and constant "
+                               "are supported.")
+        lr_scheduler = torch.optim.lr_scheduler.SequentialLR(
+            optimizer,
+            schedulers=[warmup_lr_scheduler, main_lr_scheduler],
+            milestones=[lr_warmup_epochs]
+        )
+    else:
+        lr_scheduler = main_lr_scheduler
+    return lr_scheduler
+
+
+def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10):
+    logger = getLogger('root.utils.quantization_wrapped_model')
+    if quantization == TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
+        if quantization_method == TinyMLQuantizationMethod.QAT:
+            model = GenericTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+        if quantization_method == TinyMLQuantizationMethod.PTQ:
+            model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+    elif quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU:
+        if quantization_method == TinyMLQuantizationMethod.QAT:
+            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+        if quantization_method == TinyMLQuantizationMethod.PTQ:
+            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+    if quantization:
+        logger.info(f"Proceeding with {quantization_method} quantization")
+    return model
+
+
+def get_trained_feature_extraction_model(model, args, data_loader, data_loader_test, device, lr_scheduler, optimizer, is_ptq=False):
+    logger = getLogger('root.get_trained_feature_extraction_model')
+    criterion = torch.nn.MSELoss()
+
+    is_ptq = True if (args.quantization_method in ['PTQ'] and args.quantization) else False
+    # model = quantization_wrapped_model(
+    #     model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth, args.epochs)
+    for epoch in range(args.start_epoch, args.epochs ): # args.epochs
+        model.train()
+
+        header = f"Epoch: [{epoch}]"
+        for data_raw, data_fe, _ in data_loader:
+            start_time = timeit.default_timer()
+
+            data_raw = data_raw.to(device).float()
+            data_fe = data_fe.to(device).float()
+
+            output = model(data_raw)  # (n,1,8000) -> (n,35)
+
+            # negative log-likelihood for a tensor of size (batch x 1 x n_output)
+            loss = criterion(output, data_fe)
+
+            if not is_ptq:
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+        if not is_ptq:
+            lr_scheduler.step()
+
+        # Set the model to evaluation mode
+        model.eval()
+
+        # Initialize metrics
+        mse = 0
+        mae = 0
+        total_samples = 0
+
+        # Evaluate the model
+        with torch.no_grad():
+            for data_raw, data_fe, _ in data_loader_test:
+                # Assuming the dataset returns (data, target)
+                data_raw = data_raw.to(device).float()
+                data_fe = data_fe.to(device).float()
+                outputs = model(data_raw)
+
+                # Calculate loss
+                loss = criterion(outputs, data_fe)
+
+                # Update metrics
+                mse += loss.item() * data_fe.numel()
+                mae += torch.sum(torch.abs(outputs - data_fe)).item()
+                total_samples += data_fe.numel()
+
+        # Calculate average metrics
+        mse /= total_samples
+        rmse = mse ** 0.5
+        mae /= total_samples
+
+        # Print evaluation results
+        logger.info(f'{header}: MSE: {mse:.2f}, RMSE: {rmse:.2f}, MAE: {mae:.2f} lr: {optimizer.param_groups[0]["lr"]}')
+    return model
