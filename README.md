@@ -176,7 +176,7 @@ git_pull_all.sh
 
 
 ## What is New
-- [2025-January] Major feature updates (version 1.0.0) of the software
+- [2025-March] Major feature updates (version 1.0.0) of the software
   - General:
     - Tiny ML Modelmaker is now a pip installable package!
     - Existing models can be modified on the fly through a config file (check Tiny ML Modelmaker docs)
