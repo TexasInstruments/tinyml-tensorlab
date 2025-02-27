@@ -29,6 +29,7 @@
 #
 #################################################################################
 
+import warnings
 import torch
 import torch.ao.quantization
 from torch.fx import GraphModule
@@ -71,20 +72,31 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
             }
         }
         '''
+        self.weight_bw = qconfig_type['weight']['bitwidth'] if qconfig_type else 8
+        self.activation_bw = qconfig_type['activation']['bitwidth'] if qconfig_type else 8
+        self.power2_scale = qconfig_type['weight']['power2_scale'] if qconfig_type else True
+
+        if self.weight_bw >= 8:
+            assert self.power2_scale is True, 'for 8bit quantization, power2_scale must be set to True'
+        else:
+            if self.power2_scale:
+                warnings.warn('for bit_widths < 8, it power2_scale=False is supported and can be used for better accuracy.')
+            #
+        #
 
         backend = 'fbgemm' if platform.system() in ['Windows'] else 'qnnpack'
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
 
-    def convert(self, *args, model_qconfig_format=TinyMLQConfigFormat.TINPU_INT_MODEL, output_dequantize=False, **kwargs):
+    def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, output_dequantize=False, **kwargs):
         # first convert the model to int
         super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
         _convert_replacement_func = lambda module, pattern, *largs, **lkwargs: self._convert_replacement(module, pattern, *largs, output_dequantize=output_dequantize, **lkwargs)
         # then apply the transformation to required output format
-        if model_qconfig_format == TinyMLQConfigFormat.TINPU_INT_MODEL:
+        if model_qconfig_format == TinyMLModelQConfigFormat.TINPU_INT_MODEL:
             self.module = surgery.replace_unsupported_layers(self.module, replacement_dict={'tinyml_modelopt_quant_replace_types': {'quant_replace_types': _convert_replacement_func}})
         return self
 
-    def export(self, *args, model_qconfig_format=TinyMLQConfigFormat.TINPU_INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
+    def export(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
         skipped_optimizers = skipped_optimizers or ['fuse_add_bias_into_conv', 'eliminate_nop_with_unit']
         super().export(*args, model_qconfig_format=model_qconfig_format, simplify=simplify, skipped_optimizers=skipped_optimizers, **kwargs)
 
@@ -113,14 +125,7 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
 
     def replacement_rules(self, replacement_utils: TINPUQuantizedReplacementUtils, is_batch_normalized: bool, output_dequantize: bool) -> List[Tuple]:
         # List to store the pattern and corresponding replacement function
-        replacement_rules = []
-        # Batch Normalization Modules
-        if is_batch_normalized:
-            replacement_rules = [([torch.quantize_per_tensor, torch.ao.nn.quantized.modules.batchnorm.BatchNorm2d], replacement_utils.from_q_qbn)]
-        else:
-            replacement_rules = [([torch.quantize_per_tensor, torch.ao.nn.intrinsic.quantized.modules.conv_relu.ConvReLU2d], replacement_utils.from_q_id),]
-        # General Modules
-        replacement_rules = replacement_rules + [
+        replacement_rules = [
             ([torch.ao.nn.quantized.modules.batchnorm.BatchNorm2d], replacement_utils.from_qbn),
             # Pooling Modules
             ([torch.nn.AvgPool2d], replacement_utils.from_avg_pool2d),                              # OSS required
@@ -157,7 +162,7 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         # Convert the module using symbolic trace
         module = torch.fx.symbolic_trace(module) if not isinstance(module, torch.fx.GraphModule) else module
         # Get the replacement rules to change the pattern
-        replacement_utils = TINPUQuantizedReplacementUtils(module)
+        replacement_utils = TINPUQuantizedReplacementUtils(module, self.weight_bw, self.activation_bw, self.power2_scale)
         replacement_rules = self.replacement_rules(replacement_utils, is_batch_normalized, output_dequantize)
         # Replace the patterns using the replacement function
         for replacement_pattern, replacement_function in replacement_rules:

@@ -68,10 +68,10 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         # but activation qscheme=torch.per_tensor_symmetric stays as QDQ even when using onnxruntime optimization
         super().__init__(model, *args, qconfig_type=qconfig_type, backend='fbgemm' if platform.system() in ['Windows'] else 'qnnpack', **kwargs)
 
-    def convert(self, *args, model_qconfig_format=TinyMLQConfigFormat.INT_MODEL, **kwargs):
+    def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.INT_MODEL, **kwargs):
         return super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
 
-    def export(self, *args, model_qconfig_format=TinyMLQConfigFormat.INT_MODEL, **kwargs):
+    def export(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.INT_MODEL, **kwargs):
         super().export(*args, model_qconfig_format=model_qconfig_format, **kwargs)
 
 

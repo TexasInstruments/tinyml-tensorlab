@@ -30,14 +30,12 @@
 #################################################################################
 
 import torch
-from torch import nn , Tensor   
-
 
 # Wrapper module for modules in nn package
-class InstaModule(nn.Module):
-    def __init__(self,preDefinedLayer:nn.Module) -> None:
+class InstaModule(torch.nn.Module):
+    def __init__(self, preDefinedLayer: torch.nn.Module) -> None:
         super().__init__()
-        self.model=preDefinedLayer
+        self.model = preDefinedLayer
 
-    def forward(self,x):
+    def forward(self, x):
         return self.model(x)
