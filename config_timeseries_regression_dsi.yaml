@@ -9,22 +9,34 @@ dataset:
     enable: True
     data_dir: 'files'
     dataset_name: battery_dataset
-    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/battery_dataset.zip'
+    input_data_path: '/home/tushxr16/work/tinyml-modelmaker/data/projects/battery_dataset.zip'
 #    split_names: [training, validation]
 
 data_processing: # One or more can be cascaded in the list
     # transforms: 'DownSample SimpleWindow'
-    transforms: [SimpleWindow ]
+    transforms: []
+    # transforms: [SimpleWindow]
     # Downsample
     sampling_rate: 1
     new_sr: 1
     # SimpleWindow
     sequence_window: 16
-    stride_size: 16
-    variables: 7
+    stride_size: 1
+    variables: 5
 
 feature_extraction:
-    transform: []
+    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+    frame_size: 16
+    feature_size_per_frame: 4
+    num_frame_concat: 4
+    normalize_bin: 1
+    stacking: 1D
+    offset: 0
+    scale: 1
+    frame_skip: 1
+    log_mul: 20
+    log_base: 10
+    log_threshold: 1e-100
 
 training:
     # enable/disable training
@@ -32,13 +44,13 @@ training:
 #    optimizer: 'adam'
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
-    model_name: 'TimeSeries_Generic_Regr_13k_t'
+    model_name: 'TimeSeries_Generic_Regr_3k_t'
     # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
     model_config: ''
     batch_size: 256
-    training_epochs: 100
-    num_gpus: 1
-    quantization: 0
+    training_epochs: 50
+    num_gpus: 0
+    quantization: 2
 
 testing:
     enable: True

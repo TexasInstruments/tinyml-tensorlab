@@ -40,6 +40,7 @@ feature_extraction:
 #    log_base: 10
 #    log_threshold: 1e-100
     store_feat_ext_data: False
+    nn_for_feature_extraction: True
 
 training:
     # enable/disable training
@@ -50,9 +51,9 @@ training:
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
     batch_size: 256
-    training_epochs: 5
+    training_epochs: 20
     num_gpus: 0  # 1
-    learning_rate: 0.04
+    learning_rate: 0.001
 
 testing:
     enable: True

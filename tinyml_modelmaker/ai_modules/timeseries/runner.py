@@ -41,6 +41,8 @@ import yaml
 from ... import utils
 from . import constants, datasets, descriptions
 from .params import init_params
+from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+
 
 
 class ModelRunner():
@@ -74,7 +76,8 @@ class ModelRunner():
             self.params.dataset.dataset_path = os.path.join(self.params.common.project_path, 'dataset')
             self.params.common.project_run_path = self.params.common.projects_path
             self.params.training.training_path = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_base'))
-            self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_quantization'))
+            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+                self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_quantization'))
             self.params.training.model_packaged_path = os.path.join(self.params.training.train_output_path,
                                     '_'.join(os.path.split(self.params.common.run_name))+'.zip')
         else:
@@ -83,7 +86,8 @@ class ModelRunner():
             self.params.common.project_run_path = os.path.join(self.params.common.project_path, 'run', self.params.common.run_name)
             self.params.dataset.dataset_path = os.path.join(self.params.common.project_path, 'dataset')
             self.params.training.training_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'base'))
-            self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'quantization'))
+            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+                self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'quantization'))
             self.params.training.model_packaged_path = os.path.join(self.params.training.training_path,
                                     '_'.join(os.path.split(self.params.common.run_name))+'.zip')
 
@@ -188,28 +192,35 @@ class ModelRunner():
             # remove special characters
             utils.cleanup_special_chars(self.params.training.log_file_path)
             # training frameworks don't create a compact package after training. do it here.
-            if utils.misc_utils.str2bool(self.params.common.generic_model):
-                model_training_package_files = [
-                    self.params.dataset.annotation_path_splits,
-                    self.params.training.model_checkpoint_path_quantization if os.path.exists(self.params.training.model_checkpoint_path_quantization) else self.params.training.model_checkpoint_path,
-                    self.params.training.model_export_path_quantization if os.path.exists(self.params.training.model_export_path_quantization) else self.params.training.model_export_path,
-                    self.params.training.model_proto_path,
-                    self.params.training.log_file_path,
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path,'post_training_analysis'),
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'model_aux.h'),
-                    self.params.training.tspa_license_path
-                ]
+            model_training_package_files = [
+                self.params.dataset.annotation_path_splits,
+                self.params.training.model_proto_path,
+                self.params.training.log_file_path,
+                self.params.training.tspa_license_path
+            ]
+
+            if self.params.training.quantization == TinyMLQuantizationVersion.NO_QUANTIZATION:
+                model_training_package_files.extend([
+                    os.path.join(self.params.training.training_path, 'golden_vectors'),
+                    os.path.join(self.params.training.training_path, 'post_training_analysis'),
+                    os.path.join(self.params.training.training_path, 'model_aux.h'),]
+                )
+                if utils.misc_utils.str2bool(self.params.common.generic_model):
+                    model_training_package_files.extend([self.params.training.model_checkpoint_path,
+                                                         self.params.training.model_export_path,])
             else:
-                model_training_package_files = [
-                    self.params.dataset.annotation_path_splits,
-                    self.params.training.model_proto_path,
-                    self.params.training.log_file_path,
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'post_training_analysis'),
-                    os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'model_aux.h'),
-                    self.params.training.tspa_license_path
-                ]
+                model_training_package_files.extend([
+                    os.path.join(self.params.training.training_path_quantization, 'golden_vectors'),
+                    os.path.join(self.params.training.training_path_quantization, 'post_training_analysis'),
+                    os.path.join(self.params.training.training_path_quantization, 'model_aux.h'),]
+
+                )
+                if utils.misc_utils.str2bool(self.params.common.generic_model):
+                    model_training_package_files.extend([
+                        self.params.training.model_checkpoint_path_quantization,
+                        self.params.training.model_export_path_quantization, ])
+
+
             self.package_trained_model(model_training_package_files, self.params.training.model_packaged_path)
             if not utils.misc_utils.str2bool(self.params.testing.skip_train):
                 if self.params.training.training_path_quantization:
@@ -234,10 +245,20 @@ class ModelRunner():
             model_compilation_package_files = [
                 os.path.join(self.params.compilation.compilation_path, 'artifacts'),
                 self.params.compilation.tspa_license_path,
-                os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'golden_vectors'),
-                os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'post_training_analysis'),
-                os.path.join(self.params.training.training_path_quantization if os.path.exists(self.params.training.training_path_quantization) else self.params.training.training_path, 'model_aux.h'),
             ]
+            if self.params.training.quantization == TinyMLQuantizationVersion.NO_QUANTIZATION:
+                model_compilation_package_files.extend([
+                    os.path.join(self.params.training.training_path, 'golden_vectors'),
+                    os.path.join(self.params.training.training_path, 'post_training_analysis'),
+                    os.path.join(self.params.training.training_path, 'model_aux.h'),
+                ])
+            else:
+                model_compilation_package_files.extend([
+                    os.path.join(self.params.training.training_path_quantization, 'golden_vectors'),
+                    os.path.join(self.params.training.training_path_quantization, 'post_training_analysis'),
+                    os.path.join(self.params.training.training_path_quantization, 'model_aux.h'),
+                ])
+
 
             self.package_trained_model(model_compilation_package_files, self.params.compilation.model_packaged_path)
             print(f'Compiled model is at: {self.params.compilation.compilation_path}')
