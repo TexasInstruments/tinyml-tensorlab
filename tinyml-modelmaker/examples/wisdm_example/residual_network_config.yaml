@@ -1,0 +1,4 @@
+features1: 8
+features2: 16
+features3: 32
+with_input_batchnorm: True

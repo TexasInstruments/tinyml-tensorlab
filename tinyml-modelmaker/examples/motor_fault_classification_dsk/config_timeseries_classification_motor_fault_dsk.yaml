@@ -1,0 +1,64 @@
+common:
+    target_module: 'timeseries'
+    task_type: 'generic_timeseries_classification'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+
+dataset:
+    # enable/disable dataset loading
+    enable: True
+    dataset_name: motor_fault_classification_dsk
+    input_data_path: 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'
+    gof_test: True #GoF test: parameters-> frame_size,frame_skip
+
+
+data_processing: # One or more can be cascaded in the list
+    # transforms: 'DownSample SimpleWindow'
+    transforms: []
+    # Downsample
+    sampling_rate: 313000
+    new_sr: 3130
+    # SimpleWindow
+    sequence_window: 256
+    stride_size: 0.01
+    variables: 3
+
+feature_extraction:
+#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
+#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+#    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
+#    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: Custom_MotorFault
+    transform: []
+    frame_size: 256 #512
+    frame_skip: 10
+    feature_size_per_frame: 64
+    num_frame_concat: 2
+    normalize_bin: 1
+    stacking: 2D1
+    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+    offset: 0
+    scale: 1
+    log_mul: 20
+    log_base: 10
+    log_threshold: 1e-100
+    nn_for_feature_extraction: False
+    store_feat_ext_data: False
+
+training:
+    # enable/disable training
+    enable: True
+    model_name: 'TimeSeries_Generic_6k_t'
+    model_config: ''
+    batch_size: 256
+    training_epochs: 5
+    num_gpus: 0
+    learning_rate: 0.04
+
+testing:
+    enable: False
+
+compilation:
+    # enable/disable compilation
+    enable: False #True
+    # No preset is required for devices other than F28P55

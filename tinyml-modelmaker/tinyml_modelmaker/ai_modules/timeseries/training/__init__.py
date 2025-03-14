@@ -37,7 +37,7 @@ from .. import constants
 _model_descriptions = {}
 _training_module_descriptions = {}
 
-from .tinyml_tinyverse import timeseries_classification, timeseries_regression
+from .tinyml_tinyverse import timeseries_classification, timeseries_regression, timeseries_anomalydetection
 
 ## classification
 _model_descriptions.update(timeseries_classification.get_model_descriptions())
@@ -45,6 +45,9 @@ _training_module_descriptions.update({'timeseries_classification':[constants.TAS
 ## regression
 _model_descriptions.update(timeseries_regression.get_model_descriptions())
 _training_module_descriptions.update({'timeseries_regression':[constants.TASK_CATEGORY_TS_REGRESSION]})
+## anomalydetection
+_model_descriptions.update(timeseries_anomalydetection.get_model_descriptions())
+_training_module_descriptions.update({'timeseries_anomalydetection':[constants.TASK_CATEGORY_TS_ANOMALYDETECTION]})
 
 def get_training_module_descriptions(target_device=None, training_device=None):
     return _training_module_descriptions
@@ -81,7 +84,7 @@ def get_target_module(backend_name, task_category):
     try:
         target_module = getattr(backend_package, task_category)
     except Exception as e:
-        print(f"get_target_module(): The task_type {task_category} could not be found in the module {backend_name}. {str(e)}")
+        print(f"get_target_module(): The task_category {task_category} could not be found in the module {backend_name}. {str(e)}")
         return None
     #
     return target_module

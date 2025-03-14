@@ -1,0 +1,48 @@
+
+common:
+    target_module: 'timeseries'
+    task_type: 'generic_timeseries_anomalydetection'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+dataset:
+    # enable/disable dataset loading
+    enable: True
+    dataset_name: ecg_ad
+    input_data_path: /home/a0484689/PycharmProjects/tinyml_docker_images/ecg_dataset_ad/
+#    split_names: [training, validation]
+
+data_processing: # One or more can be cascaded in the list
+    # transforms: 'DownSample SimpleWindow'
+    transforms: [ Downsample, SimpleWindow ]
+    # Downsample
+    sampling_rate: 1
+    new_sr: 1
+    # SimpleWindow
+    sequence_window: 128
+    stride_size: 1
+    variables: 1
+
+feature_extraction:
+    transform: []
+
+training:
+    # enable/disable training
+    enable: True #False
+    # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
+    # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
+    model_name: 'TimeSeries_Generic_AD_1k_t'
+    # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
+    model_config: ''
+    batch_size: 256
+    training_epochs: 10
+    num_gpus: 1
+    optimizer: Adam
+    learning_rate: 0.001
+
+testing:
+    enable: True
+
+compilation:
+    # enable/disable compilation
+    enable: True #False
+#    compile_preset_name: default_preset/forced_soft_npu_preset

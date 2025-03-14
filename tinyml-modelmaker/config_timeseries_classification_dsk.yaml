@@ -10,6 +10,7 @@ dataset:
     enable: True #False
     dataset_name: arc_fault_example_dsk
 #    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/arc_fault_classification_dsk.zip'
+#    split_type: within_files
 
 data_processing: # One or more can be cascaded in the list
     # transforms: 'DownSample SimpleWindow'
@@ -42,8 +43,8 @@ training:
     # enable/disable training
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
-    # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
-    model_name: 'TimeSeries_Generic_1k_t'
+    # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t, ArcFault_model_1400_t
+    model_name: 'TimeSeries_Generic_4k_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
     model_config: ''
     batch_size: 32

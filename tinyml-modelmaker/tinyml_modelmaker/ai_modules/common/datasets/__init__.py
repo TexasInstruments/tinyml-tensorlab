@@ -29,11 +29,13 @@
 #################################################################################
 
 import os
-
+from os.path import join as opj
+import logging
 # import PIL
 import sys
 import warnings
 from glob import glob
+import shutil
 
 from .... import utils
 from . import dataset_utils
@@ -69,10 +71,11 @@ class DatasetHandling:
         self.quit_event = quit_event
         self.params.dataset.data_path_splits = []
         self.params.dataset.annotation_path_splits = []
+        self.logger = logging.getLogger("root.DatasetHandling")
         '''
         for split_idx, split_name in enumerate(self.params.dataset.split_names):
-            self.params.dataset.data_path_splits.append(os.path.join(self.params.dataset.dataset_path, split_name))
-            self.params.dataset.annotation_path_splits.append(os.path.join(self.params.dataset.dataset_path, self.params.dataset.annotation_dir,
+            self.params.dataset.data_path_splits.append(opj(self.params.dataset.dataset_path, split_name))
+            self.params.dataset.annotation_path_splits.append(opj(self.params.dataset.dataset_path, self.params.dataset.annotation_dir,
                              f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt'))
         '''
         #
@@ -94,40 +97,51 @@ class DatasetHandling:
                 self.params.dataset.input_data_path = os.path.dirname(self.params.dataset.input_data_path)
 
             for split_name in self.params.dataset.split_names:
-                self.params.dataset.data_path_splits.append(os.path.join(self.params.dataset.dataset_path, split_name))
+                self.params.dataset.data_path_splits.append(opj(self.params.dataset.dataset_path, split_name))
                 # If training_list.txt and validation_list.txt files are already present, then
 
-                if os.path.exists(os.path.join(self.params.dataset.input_data_path, split_name + '_list.txt')):
+                if os.path.exists(opj(self.params.dataset.input_data_path, split_name + '_list.txt')):
                     # Everything is as per expectations
-                    split_list_file = os.path.join(self.params.dataset.input_data_path, split_name + '_list.txt')
+                    split_list_file = opj(self.params.dataset.input_data_path, split_name + '_list.txt')
                     # assert False, 'File needs to be present: {}'.format(split_list_file)
-                elif os.path.exists(os.path.join(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, split_name + '_list.txt')):
-                    split_list_file = os.path.join(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, split_name + '_list.txt')
-                elif os.path.exists(os.path.join(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')):
-                    split_list_file = os.path.join(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')
+                elif os.path.exists(opj(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, split_name + '_list.txt')):
+                    split_list_file = opj(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, split_name + '_list.txt')
+                elif os.path.exists(opj(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')):
+                    split_list_file = opj(self.params.dataset.input_data_path, self.params.dataset.annotation_dir, f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')
                 else:
                     need_to_create_splits = True
-                    print(f'Fresh splits will be created as {split_name} split list file is not present')
+                    self.logger.info(f'Fresh splits will be created as {split_name} split list file is not present')
 
             os.makedirs(self.params.dataset.dataset_path, exist_ok=True)
-            for directory in glob(os.path.join(self.params.dataset.input_data_path, '*')):
-                utils.misc_utils.make_symlink(os.path.abspath(directory), os.path.join(self.params.dataset.dataset_path, os.path.basename(directory)))  # self.params.dataset.data_dir
+            for directory in glob(opj(self.params.dataset.input_data_path, '*')):
+                utils.misc_utils.make_symlink(os.path.abspath(directory), opj(self.params.dataset.dataset_path, os.path.basename(directory)))  # self.params.dataset.data_dir
             if need_to_create_splits:
-                for split_name in self.params.dataset.split_names:
-                    split_list_file = os.path.join(self.params.dataset.dataset_path, self.params.dataset.annotation_dir, f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')
-                    self.params.dataset.annotation_path_splits.append(split_list_file)
-                    # self.out_files.append(split_list_file)
-
-
                 # self.file_list = dataset_utils.create_filelist(self.params.dataset.dataset_path, self.params.common.project_run_path, ignore_str='_list.txt')
-                annotations_dir = os.path.join(self.params.dataset.dataset_path,  self.params.dataset.annotation_dir)
+                annotations_dir = opj(self.params.dataset.dataset_path,  self.params.dataset.annotation_dir)
                 utils.misc_utils.remove_if_exists(annotations_dir)
                 os.makedirs(annotations_dir, exist_ok=True)
-                self.file_list = dataset_utils.create_filelist(os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir), annotations_dir, ignore_str_list=['_list.txt', '.md', 'LICENSE', '.DS_Store', '_background_noise_'])
-                print('File list is written to: {}'.format(self.file_list))
-                dataset_utils.create_simple_split(self.file_list, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
-                # self.out_files = dataset_utils.create_simple_split(self.file_list, self.params.common.project_run_path + '/dataset', self.params.dataset.split_names, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
-                print('Splits of the dataset can be found at: {}'.format(self.params.dataset.annotation_path_splits))
+
+                for split_name in self.params.dataset.split_names:
+                    split_list_file = opj(self.params.dataset.dataset_path, self.params.dataset.annotation_dir,
+                                                   f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')
+                    self.params.dataset.annotation_path_splits.append(split_list_file)
+
+                self.file_list = dataset_utils.create_filelist(
+                    opj(self.params.dataset.dataset_path, self.params.dataset.data_dir), annotations_dir,
+                    ignore_str_list=['_list.txt', '.md', 'LICENSE', '.DS_Store', '_background_noise_'])
+                self.logger.info(f'File list is written to: {self.file_list}')
+                if self.params.dataset.split_type == 'amongst_files':
+                    dataset_utils.create_inter_file_split(self.file_list, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
+                elif self.params.dataset.split_type == 'within_files':
+                    out_dir = opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_edited')
+                    os.makedirs(out_dir, exist_ok=True)
+                    dataset_utils.create_intra_file_split(self.file_list, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor,
+                                                          self.params.dataset.data_dir, out_dir, self.params.dataset.split_names, shuffle_items=True, random_seed=42)
+                    shutil.move(opj(self.params.dataset.dataset_path, self.params.dataset.data_dir), opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_original'))
+                    shutil.move(out_dir, opj(self.params.dataset.dataset_path, self.params.dataset.data_dir))
+
+                    # self.out_files = dataset_utils.create_simple_split(self.file_list, self.params.common.project_run_path + '/dataset', self.params.dataset.split_names, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
+                self.logger.info('Splits of the dataset can be found at: {}'.format(self.params.dataset.annotation_path_splits))
         else:
             assert False, f'invalid dataset provided at {self.params.dataset.input_data_path}'
 
