@@ -34,7 +34,11 @@ from logging import getLogger
 import yaml
 
 from ..utils import misc_utils
-from .generic_models import *
+from .generic_classification_models import *
+from .generic_regression_models import *
+from .generic_feature_extraction_models import *
+from .generic_autoencoder_models import *
+
 
 model_dict = {
     'CNN_TS_GEN_BASE_1K': CNN_TS_GEN_BASE_1K,
@@ -42,7 +46,11 @@ model_dict = {
     'CNN_TS_GEN_BASE_6K': CNN_TS_GEN_BASE_6K,
     'CNN_TS_GEN_BASE_13K': CNN_TS_GEN_BASE_13K,
     'RES_CNN_TS_GEN_BASE_3K': RES_CNN_TS_GEN_BASE_3K,
+    'RES_SLICE_CNN_TS_GEN_BASE_3K': RES_SLICE_CNN_TS_GEN_BASE_3K,
     'REG_TS_GEN_BASE_3K': REG_TS_GEN_BASE_3K,
+    'AE_CNN_TS_GEN_BASE_1K': AE_CNN_TS_GEN_BASE_1K,
+    'AE_CNN_TS_GEN_BASE_4K': AE_CNN_TS_GEN_BASE_4K,
+    'AE_CNN_TS_GEN_BASE_16K': AE_CNN_TS_GEN_BASE_16K,
     # 'CNN_AF_3L_200': CNN_AF_3L_200,
     # 'CNN_AF_3L_300': CNN_AF_3L_300,
     # 'CNN_AF_3L_700': CNN_AF_3L_700,

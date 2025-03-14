@@ -143,7 +143,10 @@ def collate_fn(batch):
     for raw_sequence, sequence, label in batch:
         raw_tensors += [raw_sequence]
         tensors += [sequence]
-        targets += [torch.tensor(label)]
+        if isinstance(label, int):
+            targets += [torch.tensor(label)]
+        else:
+            targets += [label]
     # Group the list of tensors into a batched tensor
     if all_tensors_have_same_dimensions(tensors):
         tensors = torch.stack(tensors)  # TODO: Is this correct
@@ -319,11 +322,15 @@ def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, pha
     thresholds_list = []
     for i in range(num_classes):
         # Compute ROC curve and AUC for the current class
+        if not isinstance(predicted, np.ndarray):
+            predicted = predicted.cpu().numpy()
+        if not isinstance(ground_truth_binarized, np.ndarray):
+            ground_truth_binarized = ground_truth_binarized.cpu().numpy()
         try:
-            fpr, tpr, thresholds = roc_curve(ground_truth_binarized[:, i].cpu().numpy(), predicted[:, i].cpu().numpy())
+            fpr, tpr, thresholds = roc_curve(ground_truth_binarized[:, i], predicted[:, i])
         except IndexError:
             # 2 class classification
-            fpr, tpr, thresholds = roc_curve(ground_truth_binarized.cpu().numpy(), predicted[:, 1].cpu().numpy())
+            fpr, tpr, thresholds = roc_curve(ground_truth_binarized, predicted[:, 1])
 
         fpr_list.extend(fpr)
         tpr_list.extend(tpr)
@@ -345,7 +352,7 @@ def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, pha
             plt.text(fpr[j] + x_offset, tpr[j] + y_offset, f"{thresholds[j]:.0f}", fontsize=8, color=colors(i), alpha=1)
 
     pd.DataFrame(list(zip(fpr_list, tpr_list, thresholds_list)), columns=['fpr', 'tpr', 'thresholds']).to_csv(
-        os.path.join(output_dir, 'fpr_trp_thresholds.csv'))
+        os.path.join(output_dir, 'fpr_tpr_thresholds.csv'))
     # Plot diagonal line for random guessing
     plt.plot([0, 1], [0, 1], color="gray", linestyle="--", label="Random Guess")
 
@@ -382,6 +389,7 @@ def plot_pairwise_differenced_class_scores(ground_truth, predicted, output_dir, 
     ncols = 3  # Number of columns in the subplot grid
     nrows = (num_subplots + ncols - 1) // ncols  # Compute required rows
     fig, axes = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows))
+    fig.suptitle("Pairwise class prediction difference ")
     axes = np.ravel(axes)  # Flatten axes for easy iteration
 
     for idx, (i, j) in enumerate(class_pairs):
@@ -401,7 +409,7 @@ def plot_pairwise_differenced_class_scores(ground_truth, predicted, output_dir, 
 
         # Add titles and labels
         axes[idx].set_title(f'Pair: Class{i} v/s Class{j}', fontsize=14)
-        axes[idx].set_xlabel(f'Difference: x{i} - x{j})', fontsize=12)
+        axes[idx].set_xlabel(f'Difference: (x{i} - x{j})', fontsize=12)
         axes[idx].set_ylabel('Frequency', fontsize=12)
         axes[idx].legend()
         axes[idx].grid(alpha=0.3)
@@ -1047,6 +1055,116 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     logger.info(f'{header} MSE {metric_logger.mse.global_avg:.3f}')
     logger.info(f'{header} R2-Score {metric_logger.r2.global_avg:.3f}')
     return metric_logger.mse.global_avg, metric_logger.r2.global_avg
+
+
+def train_one_epoch_anomalydetection(
+        model, criterion, optimizer, data_loader, device, epoch, transform,
+        apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False, **kwargs):
+    # train_one_epoch_regression(
+    #     model, criterion, optimizer, data_loader, device, epoch, transform,
+    #     apex=apex, model_ema=model_ema, print_freq=print_freq, phase=phase, dual_op=dual_op, is_ptq=is_ptq, **kwargs)
+    model.train()
+    metric_logger = MetricLogger(delimiter="  ", phase=phase)
+    metric_logger.add_meter("lr", window_size=1, fmt="{value}")
+    metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
+
+    header = f"Epoch: [{epoch}]"
+    # TODO: If transform is required
+    if transform:
+        transform = transform.to(device)
+    for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+        # for batch_idx, (data, target) in enumerate(data_loader):
+        start_time = timeit.default_timer()
+        data = data.to(device).float()
+        target = target.to(device).float()
+
+        # apply transform and model on whole batch directly on device
+        # TODO: If transform is required
+        if transform:
+            data = transform(data)
+
+        if dual_op:
+            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
+        else:
+            output = model(data)  # (n,1,8000) -> (n,35)
+
+        # negative log-likelihood for a tensor of size (batch x 1 x n_output)
+        loss = criterion(output, target)
+
+        if not is_ptq:
+            optimizer.zero_grad()
+            if apex:
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+            else:
+                loss.backward()
+            optimizer.step()
+
+        # acc1 = accuracy(output, target, topk=(1,))
+        # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
+        # mse = get_mse(output, target)  # .squeeze()
+        batch_size = output.shape[0]
+        metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
+        # metric_logger.meters['mse'].update(mse, n=batch_size)
+        metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
+
+    if model_ema:
+        model_ema.update_parameters(model)
+
+
+def evaluate_anomalydetection(
+        model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+    logger = getLogger(f"root.train_utils.evaluate.{phase}")
+    model.eval()
+    metric_logger = MetricLogger(delimiter="  ", phase=phase)
+    print_freq = min(print_freq, len(data_loader))
+    header = f'Test: {log_suffix}'
+
+    target_array = torch.Tensor([]).to(device, non_blocking=True)
+    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
+
+    with torch.no_grad():
+        for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+            # for data, target in data_loader:
+            data = data.to(device, non_blocking=True).float()
+            target = target.to(device, non_blocking=True).long()
+            if transform:
+                data = transform(data)
+
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+
+            target_array = torch.cat((target_array, target))
+            predictions_array = torch.cat((predictions_array, output))
+
+            loss = criterion(output, target)  # .squeeze()
+            # mse = get_mse(output, target)  # .squeeze()
+            # r2 = get_r2_score(output, target)  # .squeeze()
+
+            # confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
+            # confusion_matrix_total += confusion_matrix
+            #
+            # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
+
+            # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
+            # au_roc_total += au_roc
+            # FIXME need to take into account that the datasets could have been padded in distributed setup
+            batch_size = data.shape[0]
+            metric_logger.update(loss=loss.item())
+            # metric_logger.meters['mse'].update(mse, n=batch_size)
+            # metric_logger.meters['r2'].update(r2, n=batch_size)
+            # metric_logger.meters['auroc'].update(au_roc, n=batch_size)
+            # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
+            # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
+    # gather the stats from all processes
+    metric_logger.synchronize_between_processes()
+
+    # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
+    # logger.info(f'{header} MSE {metric_logger.mse.global_avg:.3f}')
+    # logger.info(f'{header} R2-Score {metric_logger.r2.global_avg:.3f}')
+    return metric_logger.loss.global_avg, metric_logger.loss.global_avg
 
 
 def train_one_epoch_classification(

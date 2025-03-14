@@ -12,3 +12,4 @@ torchinfo==1.8.0
 cryptography==43.0.1
 matplotlib==3.9.2
 scikit-learn==1.5.2
+pywavelets==1.8.0
