@@ -40,7 +40,7 @@ feature_extraction:
 #    log_base: 10
 #    log_threshold: 1e-100
     store_feat_ext_data: False
-    nn_for_feature_extraction: True
+    nn_for_feature_extraction: False
 
 training:
     # enable/disable training
@@ -53,7 +53,7 @@ training:
     batch_size: 256
     training_epochs: 20
     num_gpus: 0  # 1
-    learning_rate: 0.001
+#    learning_rate: 0.001
 
 testing:
     enable: True

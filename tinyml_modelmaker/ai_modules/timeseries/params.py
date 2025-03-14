@@ -74,6 +74,8 @@ def init_params(*args, **kwargs):
             annotation_format='univ_ts_json',
             dataset_download=False,
             dataset_reload=False,
+            split_type='amongst_files',
+            gof_test=False,
         ),
         training=dict(
             enable=True,

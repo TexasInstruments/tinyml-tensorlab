@@ -60,9 +60,11 @@ model_urls = {
     'TimeSeries_Generic_13k': {'download_url': '', 'download_path': '', },
     'TimeSeries_Generic_13k_t': {'download_url': '', 'download_path': '', },
     'Res_TimeSeries_Generic_3k_t': {'download_url': '', 'download_path': '', },
+    'Res_Slice_TimeSeries_Generic_3k_t': {'download_url': '', 'download_path': '', },
     'ArcFault_model_200_t': {'download_url': '', 'download_path': '', },
     'ArcFault_model_300_t': {'download_url': '', 'download_path': '', },
     'ArcFault_model_700_t': {'download_url': '', 'download_path': '', },
+    'ArcFault_model_1400_t': {'download_url': '', 'download_path': '', },
     'MotorFault_model_1_t': {'download_url': '', 'download_path': '', },
     'MotorFault_model_2_t': {'download_url': '', 'download_path': '', },
     'MotorFault_model_3_t': {'download_url': '', 'download_path': '', },
@@ -71,6 +73,39 @@ model_urls = {
 
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
 _model_descriptions = {
+    'Res_Slice_TimeSeries_Generic_3k_t': {
+        'common': dict(
+            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
+            task_type=constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            generic_model=True,
+        ),
+        'download': model_urls['Res_Slice_TimeSeries_Generic_3k_t'],
+        'training': dict(
+            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
+            with_input_batchnorm=True,
+            training_backend='tinyml_tinyverse',
+            model_training_id='RES_SLICE_CNN_TS_GEN_BASE_3K',
+            model_name='Res_Slice_TimeSeries_Generic_3k_t',
+            model_architecture='backbone',
+            learning_rate=2e-3,
+            model_spec=None,
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION],
+            target_devices={
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k'][constants.TARGET_DEVICE_F28P55]),
+            },
+            training_devices={
+                constants.TRAINING_DEVICE_CPU: True,
+                constants.TRAINING_DEVICE_CUDA: True,
+				constants.TRAINING_DEVICE_MPS: True,
+            }
+        ),
+        'compilation': dict()
+    },
     'Res_TimeSeries_Generic_3k_t': {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
@@ -372,6 +407,41 @@ _model_descriptions = {
         'compilation': dict()
     },
 
+    'ArcFault_model_1400_t': {
+        'common': dict(
+            task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
+            task_type=constants.TASK_TYPE_ARC_FAULT,
+        ),
+        'download': model_urls['ArcFault_model_1400_t'],
+        'training': dict(
+            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
+            with_input_batchnorm=True,
+            training_backend='tinyml_tinyverse',
+            model_training_id='CNN_AF_3L_1400',
+            model_name='ArcFault_model_1400_t',
+            model_architecture='backbone',
+            learning_rate=0.04,
+            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_af_3l.py'),
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_ARC_FAULT],
+            target_devices={
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+            training_devices={
+                constants.TRAINING_DEVICE_CPU: True,
+                constants.TRAINING_DEVICE_CUDA: True,
+				constants.TRAINING_DEVICE_MPS: True,
+            }
+        ),
+        'compilation': dict(
+            # model_compilation_id='afd-b1-0002',
+
+        )
+    },
     'ArcFault_model_700_t': {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
@@ -582,8 +652,8 @@ _model_descriptions = {
 enabled_models_list = [
     'TimeSeries_Generic_1k', 'TimeSeries_Generic_4k', 'TimeSeries_Generic_6k', 'TimeSeries_Generic_13k',
     'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t', 'TimeSeries_Generic_13k_t',
-    'Res_TimeSeries_Generic_3k_t',
-    'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t',
+    'Res_TimeSeries_Generic_3k_t', 'Res_Slice_TimeSeries_Generic_3k_t',
+    'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
     'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
 ]
 
@@ -816,6 +886,7 @@ class ModelTraining:
                 '--dataset', 'modelmaker',
                 '--dataset-loader', f'{self.params.training.dataset_loader}',
                 '--annotation-prefix', f'{self.params.dataset.annotation_prefix}',
+                '--gof-test', f'{self.params.dataset.gof_test}',
                 #'--num-classes', f'{self.params.training.num_classes}',
                 '--gpus', f'{self.params.training.num_gpus}',
                 '--batch-size', f'{self.params.training.batch_size}',
