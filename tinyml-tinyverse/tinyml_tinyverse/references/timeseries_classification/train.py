@@ -87,7 +87,7 @@ from tinyml_tinyverse.common import models
 from tinyml_tinyverse.common.datasets import GenericTSDataset
 
 # Tiny ML TinyVerse Modules
-from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
+from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights,gof_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
 dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset}
@@ -147,6 +147,7 @@ def get_args_parser():
 
     parser.add_argument('--data-path', default=os.path.join('.', 'data', 'datasets'), help='dataset')
     parser.add_argument('--dataset', default='folder', help='dataset')
+    parser.add_argument('--gof-test', type=misc_utils.str2bool, default=False, help='Enable goodness-of-fit test') 
     parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
     parser.add_argument("--loader-type", default="classification", type=str,
                         help="Dataset Loader Type: classification/regression")
@@ -378,6 +379,15 @@ def main(gpu, args):
         # The below two lines work fine, but slows down a lot
         # plot_graph(dataset, graph_type='tsne', instance_type='train')
         # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
+        if args.gof_test:
+            if args.frame_size !='None':
+                gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), frame_skip=int(args.frame_skip), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
+            elif args.sequence_window!='None':
+                logger.info(f"frame_size wasn't specified in the YAML file, so proceeding with the sequence_window value instead.")
+                gof_utils.goodness_of_fit_test(frame_size=int(args.sequence_window), frame_skip=int(args.frame_skip), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
+            else:
+                logger.warning(f"Goodness of Fit plots will not be generated because neither the frame_size nor the sequence_window were given in the YAML file.")
+    
     except Exception as e:
         logger.warning(f"Feature Extraction plots will not be generated because: {e}")
 

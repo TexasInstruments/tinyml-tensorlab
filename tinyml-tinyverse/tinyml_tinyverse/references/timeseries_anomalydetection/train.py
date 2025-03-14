@@ -80,13 +80,14 @@ import torch.nn as nn
 import torchinfo
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg
+from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg, GenericTSDatasetAD
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
-dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset, 'GenericTSDatasetReg' : GenericTSDatasetReg}
+dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset, 'GenericTSDatasetReg' : GenericTSDatasetReg,
+                       'GenericTSDatasetAD' : GenericTSDatasetAD,}
 
 
 def split_weights(weights_name):
@@ -157,8 +158,8 @@ def get_args_parser():
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
     parser.add_argument('--epochs', default=90, type=int, metavar='N', help='number of total epochs to run')
     parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N', help='number of data loading workers (default: 16)')
-    parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
-    parser.add_argument('--lr', default=0.1, type=float, help='initial learning rate')
+    parser.add_argument('--opt', default='Adam', type=str, help='optimizer')
+    parser.add_argument('--lr', default=0.001, type=float, help='initial learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
     parser.add_argument('--wd', '--weight-decay', default=4e-5, type=float, metavar='W', help='weight decay (default: 1e-4)', dest='weight_decay')
     parser.add_argument('--label-smoothing', default=0.0, type=float, help='label smoothing (default: 0.0)', dest='label_smoothing')
@@ -212,8 +213,7 @@ def get_args_parser():
 
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
-    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
-
+    
     return parser
 
 def generate_golden_vector_dir(output_dir):
@@ -321,10 +321,12 @@ def main(gpu, args):
     transform = None
     if not args.output_dir:
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
-        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'classification', output_folder, args.model, args.date)
+        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'anomalydetection', output_folder, args.model,
+                                       args.date)
     utils.mkdir(args.output_dir)
     log_file = os.path.join(args.output_dir, 'run.log')
-    logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True if args.quantization else False, console_log=True)
+    logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root",
+                    append_log=True if args.quantization else False, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)
     from ..version import get_version_str
@@ -339,7 +341,7 @@ def main(gpu, args):
         (args.weights_url, args.weights_enum) = split_weights(args.weights)
 
     if args.device != 'cpu' and args.distributed is True:
-        os.environ['RANK'] = str(int(os.environ['RANK'])*args.gpus + gpu) if 'RANK' in os.environ else str(gpu)
+        os.environ['RANK'] = str(int(os.environ['RANK']) * args.gpus + gpu) if 'RANK' in os.environ else str(gpu)
         os.environ['LOCAL_RANK'] = str(gpu)
 
     if args.lr_warmup_epochs > 0 and args.epochs <= args.lr_warmup_epochs:
@@ -354,31 +356,35 @@ def main(gpu, args):
     # torch.backends.cudnn.benchmark = True
     if isinstance(args.data_proc_transforms, list):
         if len(args.data_proc_transforms) and isinstance(args.data_proc_transforms[0], list):
-            args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
+            args.transforms = args.data_proc_transforms[
+                                  0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
         else:
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
     # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict)  # (126073, 1, 152), 126073
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args,
+                                                                         dataset_loader_dict)  # (126073, 1, 152), 126073
 
     # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
     try:
-        utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
-        utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
+        utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train',
+                                            output_dir=args.output_dir)
+        utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation',
+                                            output_dir=args.output_dir)
     except Exception as e:
         logger.warning(f"Feature Extraction plots will not be generated because: {e}")
     # The below two lines work fine, but slows down a lot
     # plot_graph(dataset, graph_type='tsne', instance_type='train')
     # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
-    if misc_utils.str2bool(args.dont_train_just_feat_ext):
-        logger.info("Exiting execution without training")
-        sys.exit(0)
+    # if misc_utils.str2bool(args.dont_train_just_feat_ext):
+    #     logger.info("Exiting execution without training")
+    #     sys.exit(0)
 
-    generate_golden_vector_dir(args.output_dir)
-    if misc_utils.str2bool(args.gen_golden_vectors):
-        generate_user_input_config(args.output_dir, dataset)
-        if misc_utils.str2bool(args.dont_train_just_feat_ext):
-            logger.info('ModelMaker completed for test bench. Exiting.')
-            sys.exit()
+    # generate_golden_vector_dir(args.output_dir)
+    # if misc_utils.str2bool(args.gen_golden_vectors):
+    #     generate_user_input_config(args.output_dir, dataset)
+    #     if misc_utils.str2bool(args.dont_train_just_feat_ext):
+    #         logger.info('ModelMaker completed for test bench. Exiting.')
+    #         sys.exit()
 
     # collate_fn = None
     num_classes = len(dataset.classes)
@@ -397,9 +403,10 @@ def main(gpu, args):
     # Model Creation
     variables = dataset.X.shape[1]  # n,c,h,w --> c is 1 (args.variables. However, after motor fault was supported, it concatenates 3x128 to 1x384 hence channels have been changed
     input_features = dataset.X.shape[2]
+    logger.info(f"Variables: {variables}, Input_features: {input_features}")
     # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
     model = models.get_model(
-        args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
+        args.model, variables, num_classes=input_features, input_features=input_features, model_config=args.model_config,
         model_spec=args.model_spec, with_input_batchnorm=misc_utils.str2bool(args.with_input_batchnorm),
         dual_op=args.dual_op)
     if args.generic_model:
@@ -420,11 +427,13 @@ def main(gpu, args):
 
     if args.export_only:
         if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
-            utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir, opset_version=args.opset_version, quantization=args.quantization, generic_model=args.generic_model)
+            utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir,
+                               opset_version=args.opset_version, quantization=args.quantization,
+                               generic_model=args.generic_model)
             return
 
     model.to(device)
-    criterion = nn.HuberLoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
+    criterion = nn.MSELoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
     optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
     lr_scheduler = utils.init_lr_scheduler(
         args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
@@ -451,19 +460,21 @@ def main(gpu, args):
 
     logger.info("Start training")
     start_time = timeit.default_timer()
-    best = dict(mse=np.inf, r2=0, epoch=None)
+    best = dict(mse=np.inf, epoch=None)
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
-        utils.train_one_epoch_regression(
+        utils.train_one_epoch_anomalydetection(
             model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
             print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
             is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        avg_mse, avg_r2_score = utils.evaluate_regression(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
+        avg_mse, _ = utils.evaluate_anomalydetection(model, criterion, data_loader_test, device=device,
+                                                     transform=transform, phase=phase, num_classes=num_classes,
+                                                     dual_op=args.dual_op)
         if model_ema:
-            avg_mse, avg_r2_score = utils.evaluate_regression(
+            avg_mse, _ = utils.evaluate_anomalydetection(
                 model_ema, criterion, data_loader_test, device=device, transform=transform,
                 log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
         if args.output_dir:
@@ -479,28 +490,29 @@ def main(gpu, args):
             #     checkpoint,
             #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
             if avg_mse < best['mse']:
-                logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) < {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
+                logger.info(
+                    f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) < {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
                 best['mse'] = avg_mse
-                best['r2'] = avg_r2_score
                 best['epoch'] = epoch
-                utils.save_on_master(checkpoint,os.path.join(args.output_dir, 'checkpoint.pth'))
+                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
     logger = getLogger(f"root.main.{phase}.BestEpoch")
     logger.info("")
     logger.info("Printing statistics of best epoch:")
     logger.info(f"Best Epoch: {best['epoch']}")
     logger.info(f"MSE {best['mse']:.3f}")
-    logger.info(f"R2-Score {best['r2']:.3f}")
+    # logger.info(f"R2-Score {best['r2']:.3f}")
     logger.info("")
 
     logger.info('Exporting model after training.')
-    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
-        example_input = next(iter(data_loader_test))[0]
+    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
+        # example_input = next(iter(data_loader_test))[0]
         utils.export_model(
             model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
             quantization=args.quantization, quantization_error_logging=args.quantization_error_logging,
-            example_input=example_input, generic_model=args.generic_model,
-            remove_hooks_for_jit= True if (args.quantization_method==TinyMLQuantizationMethod.PTQ and args.quantization) else False)
+            example_input=None, generic_model=args.generic_model,
+            remove_hooks_for_jit=True if (
+                        args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
     total_time = timeit.default_timer() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
@@ -509,7 +521,7 @@ def main(gpu, args):
         # generate_golden_vectors(args.output_dir, dataset, args.generic_model)
         # TODO: Enable the above line once we know what is required
         pass
-        
+
     return
 
 

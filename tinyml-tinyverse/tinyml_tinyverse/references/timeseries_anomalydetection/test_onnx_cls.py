@@ -56,7 +56,7 @@ def get_args_parser():
     DESCRIPTION = "This script loads time series dataset and tests it against a onnx model using ONNX RT"
     parser = ArgumentParser(description=DESCRIPTION)
     parser.add_argument('--dataset', default='folder', help='dataset')
-    parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
+    parser.add_argument('--dataset-loader', default='GenericTSDataset', help='dataset loader')
     parser.add_argument("--loader-type", default="regression", type=str,
                         help="Dataset Loader Type: classification/regression")
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
@@ -173,22 +173,22 @@ def main(gpu, args):
         ground_truth = torch.cat((ground_truth, batched_target))
 
     mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-    logger.info("Plotting OvR Multiclass ROC score")
-    utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                              label_map=dataset.inverse_label_map, phase='test')
-    logger.info("Plotting Class difference scores")
-    utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                              label_map=dataset.inverse_label_map, phase='test')
+    # logger.info("Plotting OvR Multiclass ROC score")
+    # utils.plot_multiclass_roc(ground_truth.cpu().numpy(), predicted.cpu().numpy(), os.path.join(args.output_dir, 'post_training_analysis'),
+    #                           label_map=dataset.inverse_label_map, phase='test')
+    # logger.info("Plotting Class difference scores")
+    # utils.plot_pairwise_differenced_class_scores(ground_truth.cpu().numpy(), predicted.cpu().numpy(), os.path.join(args.output_dir, 'post_training_analysis'),
+    #                           label_map=dataset.inverse_label_map, phase='test')
     metric = torcheval.metrics.MulticlassAccuracy()
-    metric.update(torch.argmax(predicted, dim=1), ground_truth)
+    metric.update(torch.argmax(predicted.squeeze(), dim=1), ground_truth.squeeze())
     logger = getLogger("root.main.test_data")
     logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
-    logger.info(
-        f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted.type(torch.int64), ground_truth, num_classes):.3f}")
+    # logger.info(
+    #     f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted.type(torch.int64), ground_truth, num_classes):.3f}")
     if len(torch.unique(ground_truth)) == 1:
         logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
     else:
-        confusion_matrix = get_confusion_matrix(predicted.type(torch.int64), ground_truth.type(torch.int64),
+        confusion_matrix = get_confusion_matrix(predicted.squeeze().type(torch.int64), ground_truth.squeeze().type(torch.int64),
                                                 num_classes).cpu().numpy()
         logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
             confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
