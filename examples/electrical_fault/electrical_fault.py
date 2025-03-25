@@ -7,7 +7,7 @@ import pandas as pd
 DATASET_NAME = "electrical_fault"
 
 # Dataset definition
-DATASET_URL = "https://github.com/tushxr16/ftp_github/raw/refs/heads/main/archive.zip"
+DATASET_URL = "http://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/electrical_fault.zip"
 DATASET_FILE_NAME = "detect_dataset.csv"
 independent_variables = ["Ia", "Ib", "Ic", "Va", "Vb", "Vc"]
 dependent_variables = ["Output (S)"]
