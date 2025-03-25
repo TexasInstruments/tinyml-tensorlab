@@ -65,6 +65,9 @@ class GenericModelWithSpec(nn.Module):
             for key, value in kwargs.items():
                 value_with_default = config.get(key, value)
                 setattr(self, key, value_with_default)
+            for key, value in config.items():
+                if key not in kwargs:
+                    setattr(self, key, value)
 
     def _init_model_from_spec(self, model_spec=None, variables=None, input_features=None,
                               num_classes=None, with_input_batchnorm=None):
