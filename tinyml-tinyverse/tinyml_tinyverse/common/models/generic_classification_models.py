@@ -137,34 +137,33 @@ class RES_CNN_TS_GEN_BASE_3K(GenericModelWithSpec):
         super().__init__(config, input_features=input_features, variables=variables,
                          with_input_batchnorm=with_input_batchnorm, num_classes=num_classes)
 
-        features = 8
-        top_layer = torch.nn.BatchNorm2d(num_features=variables) if with_input_batchnorm else torch.nn.Identity()
+        top_layer = torch.nn.BatchNorm2d(num_features=self.variables) if self.with_input_batchnorm else torch.nn.Identity()
         self.top_layer = top_layer
 
         layer1 = []
-        layer1 += [torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1))]
-        layer1 += [torch.nn.BatchNorm2d(features)]
+        layer1 += [torch.nn.Conv2d(in_channels=self.variables, out_channels=self.out_channel_layer1, kernel_size=(3, 1), stride=(2, 1))]
+        layer1 += [torch.nn.BatchNorm2d(self.out_channel_layer1)]
         layer1 += [torch.nn.ReLU()]
 
-        layer1 += [torch.nn.Conv2d(in_channels=features, out_channels=features*2, kernel_size=(3, 1), stride=(2, 1))]
-        layer1 += [torch.nn.BatchNorm2d(features*2)]
+        layer1 += [torch.nn.Conv2d(in_channels=self.out_channel_layer1, out_channels=self.out_channel_layer2, kernel_size=(3, 1), stride=(2, 1))]
+        layer1 += [torch.nn.BatchNorm2d(self.out_channel_layer2)]
         layer1 += [torch.nn.ReLU()]
 
-        layer1 += [torch.nn.Conv2d(in_channels=features*2, out_channels=features*4, kernel_size=(3, 1), stride=(2, 1))]
-        layer1 += [torch.nn.BatchNorm2d(features*4)]
+        layer1 += [torch.nn.Conv2d(in_channels=self.out_channel_layer2, out_channels=self.out_channel_layer3, kernel_size=(3, 1), stride=(2, 1))]
+        layer1 += [torch.nn.BatchNorm2d(self.out_channel_layer3)]
         layer1 += [torch.nn.ReLU()]
         self.layer1 = torch.nn.Sequential(*layer1)
 
         layer2 = []
-        layer2 += [torch.nn.Conv2d(in_channels=variables, out_channels=features*4, kernel_size=(3, 1), stride=(2, 1))]
-        layer2 += [torch.nn.BatchNorm2d(features*4)]
+        layer2 += [torch.nn.Conv2d(in_channels=self.variables, out_channels=self.out_channel_layer3, kernel_size=(3, 1), stride=(2, 1))]
+        layer2 += [torch.nn.BatchNorm2d(self.out_channel_layer3)]
         layer2 += [torch.nn.ReLU()]
         self.layer2 = torch.nn.Sequential(*layer2)
 
         bottom_layers = []
         bottom_layers += [torch.nn.AdaptiveAvgPool2d((3, 1))]
         bottom_layers += [torch.nn.Flatten()]
-        bottom_layers += [torch.nn.Linear(in_features=32*3, out_features=num_classes)]
+        bottom_layers += [torch.nn.Linear(in_features=self.out_channel_layer3*3, out_features=self.num_classes)]
         self.bottom_layers = torch.nn.Sequential(*bottom_layers)
 
     def forward(self, x):
