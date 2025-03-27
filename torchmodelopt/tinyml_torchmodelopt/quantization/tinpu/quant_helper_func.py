@@ -1,6 +1,7 @@
 import torch
 from torch.fx import GraphModule, Node, symbolic_trace
 
+import operator
 from typing import Dict, List
 
 def are_both_function_equal(first_function, second_function) -> bool:
@@ -329,3 +330,50 @@ def add_node_after_node(module: GraphModule, start: Node, end: Node):
     # Lint and recompile the graph and module
     lint_and_recompile(module)
     return None
+
+def add_activation_to_node(model: GraphModule, node: Node, range_max: int) -> None:
+    f = getattr(model, str(node))
+    if hasattr(f, "activation_post_process"):
+        # Enforce the same quantization scale for all residual inputs
+        f.activation_post_process.range_max = range_max
+        f.activation_post_process.fixed_range = True
+        setattr(model, str(node), f)
+    return None
+
+def set_quant_range(model: GraphModule, node: Node, target_name: str, quant_min: int, quant_max: int) -> None:
+    modules_in_main_graph = dict(model.named_modules())
+    f = getattr(model, str(node))
+    # Check if the residual input is a ConvBn2d module
+    condition_to_check = node.args[0].target in modules_in_main_graph
+    condition_to_check = condition_to_check and target_name == operator.add 
+    condition_to_check = condition_to_check and isinstance(modules_in_main_graph[node.args[0].target], torch.ao.nn.intrinsic.qat.modules.conv_fused.ConvBn2d)
+    if condition_to_check:
+        # Set the quant_min and quant_max to a 10-bit signed range to prevent precision
+        # loss with addition of 8-bit (signed or unsigned) residual data.
+        if hasattr(f, "quant_min") and hasattr(f, "quant_max"):
+            f.quant_min = quant_min
+            f.quant_max = quant_max
+            f.dtype = torch.qint32
+            setattr(model, str(node), f)
+    return None
+
+def adjust_residual_inputs_qconfig(model : GraphModule, range_max: int=0, quant_min: int=torch.inf, quant_max: int=torch.inf) -> GraphModule:
+    """
+    Modify the QConfig inputs of add and concat operators to enforce the same quantization scale
+    factors.
+    model: the QAT prepared input model
+    returns: the model with adjusted QConfigs
+    """
+    residual_operators = set([operator.add, torch.add, "add", torch.cat, torch.stack])
+    # TODO: Try using a reference assignment for add.
+    for node in model.graph.nodes:
+        for n_child in node.users:
+            target_name = n_child.target
+            if target_name in residual_operators:
+                if range_max != 0:
+                    add_activation_to_node(model, node, range_max)
+                if quant_min != torch.inf and quant_max != torch.inf:
+                    set_quant_range(model, node, target_name, quant_min, quant_max)
+    model.graph.lint()
+    model.recompile()
+    return model
