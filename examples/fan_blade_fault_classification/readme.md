@@ -3,6 +3,13 @@
 
 ## From collecting a dataset to deploying the model on a C2000 device
 ### -Adithya Thonse, Shamik Basak, Tushar Sharma, Fasna Sharaf
+
+<hr>
+
+Example showcasing 4 different Fan Blade faults (Blade Damage, Blade Imbalance, Blade Obstruction, Normal)
+
+Involves using TI toolchains to collect the data and train the model and preview it live.
+
 <hr>
 
 This application example showcases the following story:
@@ -19,8 +26,10 @@ This application example showcases the following story:
 ## Capturing Data
 * This example showcases connecting the F28P55x launchpad with ADXL355-PMDZ Accelerometer
   * 7 connections need to happen from the sensor to the launchpad
-  * Accelerometer Pinout ![adxl355_pmdz_pinout.png](assets/adxl355_pmdz_pinout.png)
-  * F28P55 LaunchPad Pinout ![F28P55 LaunchPad Pinout](assets/f28p55_launchpad_pinout.jpg)
+  * Accelerometer Pinout 
+  * <img src="assets/adxl355_pmdz_pinout.png" alt="adxl355_pmdz_pinout.png" width="400"/>
+  * F28P55 LaunchPad Pinout 
+  * <img src="assets/f28p55_launchpad_pinout.jpg" alt="F28P55 LaunchPad Pinout" width="800"/>
   * Connections: 
 
 | Accelerometer Sensor | F28P55 Launchpad |
@@ -46,14 +55,15 @@ This application example showcases the following story:
     * ![live_capture.png](assets/live_capture.png)
   
 * In this manner, you can collect data for all your cases.
-* This example has 4 classes
-  * Normal ![Normal.jpg](assets/Normal.jpg)
-  * Blade Damage ![Blade Damage.jpg](assets/Blade%20Damage.jpg)
-  * Blade Imbalance ![Blade Imbalance.jpg](assets/Blade%20Imbalance.jpg)
-  * Blade Obstruction ![Blade Obstruction.jpg](assets/Blade%20Obstruction.jpg)
+* This example has 4 classes: Normal, Blade Damage, Blade Imbalance, Blade Obstruction
+
+  <img src="assets/Normal.jpg" alt="Normal.jpg" width="400"/>
+  <img src="assets/Blade%20Damage.jpg" alt="Blade Damage.jpg" width="400"/>
+  <img src="assets/Blade%20Imbalance.jpg" alt="Blade Imbalance.jpg" width="400"/>
+  <img src="assets/Blade%20Obstruction.jpg" alt="Blade Obstruction.jpg" width="400"/>
     
 * The entire demo setup looks somewhat like this:
-* ![Demo Setup.jpg](assets/Demo%20Setup.jpg)
+* <img src="assets/Demo%20Setup.jpg" alt="Demo Setup.jpg" width="800">
 
 ## Dataset
 
@@ -91,4 +101,4 @@ This application example showcases the following story:
   * ![Histogram_Class_Score_differences_test.png](assets/Histogram_Class_Score_differences_test.png)
 
 ### Release History: 
-* Compatible with v1.0 of TinyML Modelmaker
+[26-Mar-2025]: Compatible with v1.0 of TinyML Modelmaker
