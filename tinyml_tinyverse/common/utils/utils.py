@@ -304,6 +304,11 @@ def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, pha
     """
     logger = getLogger("root.plot_multiclass_roc")
     num_classes = predicted.size(dim=-1)
+    if not isinstance(predicted, np.ndarray):
+        predicted = predicted.cpu().numpy()
+    if not isinstance(ground_truth, np.ndarray):
+        ground_truth = ground_truth.cpu().numpy()
+
     if num_classes == 2:
         ground_truth_binarized = ground_truth
     else:
@@ -322,10 +327,6 @@ def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, pha
     thresholds_list = []
     for i in range(num_classes):
         # Compute ROC curve and AUC for the current class
-        if not isinstance(predicted, np.ndarray):
-            predicted = predicted.cpu().numpy()
-        if not isinstance(ground_truth_binarized, np.ndarray):
-            ground_truth_binarized = ground_truth_binarized.cpu().numpy()
         try:
             fpr, tpr, thresholds = roc_curve(ground_truth_binarized[:, i], predicted[:, i])
         except IndexError:
