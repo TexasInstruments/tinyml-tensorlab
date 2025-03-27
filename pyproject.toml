@@ -54,7 +54,7 @@ dependencies = [
     "onnxoptimizer==0.3.13",
     "progressbar==2.5",
     "rich==13.7.1",
-    "edgeai_torchmodelopt @ git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@r10.0#subdirectory=torchmodelopt",
+#    "edgeai_torchmodelopt @ git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@r10.0#subdirectory=torchmodelopt",
 
 ]
 
