@@ -60,6 +60,31 @@ class AddReLUBlock(torch.nn.Module):
             y = self.clip(y)
         return y
 
+class AddReLUWithBias(torch.nn.Module):
+    def __init__(self, bias, min_relu_clip, max_relu_clip, scale, zero_point, with_relu, num_bits_scale=1):
+        super().__init__()
+        self.with_relu = with_relu
+        self.bias = bias
+        if with_relu:
+            quant_min, quant_max = -max_relu_clip, max_relu_clip
+        else:
+            quant_min, quant_max = -128, 127
+        #
+        self.num_bits_scale = num_bits_scale
+
+        offset, mult, shift_mult = compute_offset_scale_shift(zero_point, scale, num_bits_scale=num_bits_scale)
+        self.oss = TINPUOffsetScaleShift(offset, mult, shift_mult, quant_min, quant_max, ndim=2, dim=1)
+        self.relu = torch.nn.ReLU()
+        self.clip = torch.nn.Hardtanh(min_relu_clip, max_relu_clip)
+
+    def forward(self, y):
+        y = self.bias + y
+        # y = self.oss(out)
+        if self.with_relu:
+            y = self.relu(y)
+            y = self.clip(y)
+        return y
+    
 class TINPUOffsetScaleShift(torch.nn.Module):
     def __init__(self, offset, mult, shift_mult, quant_min, quant_max, quantize_per_channel=False, use_floor=True, ndim=4, dim=1):
         super().__init__()
