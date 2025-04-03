@@ -105,6 +105,7 @@ def compute_offset_scale_shift(offset, weight, num_bits_shift=5, num_bits_scale=
     # Max right shift operation supported
     shift_max = 2**num_bits_shift - 1
     # Separate the value and sign of weights
+    weight = weight.clip(-scale_max, scale_max)
     weight_abs = weight.abs()
     weight_sign = weight.sign()
     # Scale the weights
