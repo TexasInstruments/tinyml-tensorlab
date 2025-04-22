@@ -86,9 +86,9 @@ cd ..
 
 echo "installing: tinyml-tinyverse"
 cd ${PARENT_DIR}/tinyml-tinyverse
-setup_cpu.sh
+# setup_cpu.sh
 # Uncomment below line and comment the above line to install GPU version of torch
-# setup.sh
+setup.sh
 
 echo "installing tinyml-modelmaker"
 cd ${PARENT_DIR}/tinyml-modelmaker
