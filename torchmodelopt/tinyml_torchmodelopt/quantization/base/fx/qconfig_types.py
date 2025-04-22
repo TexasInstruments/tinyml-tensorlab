@@ -31,7 +31,6 @@
 
 # Imports Torch
 import torch
-import torch.ao.quantization
 from torch.ao.quantization import QConfig, QConfigMapping
 
 from .observer_types import *
