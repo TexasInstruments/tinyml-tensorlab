@@ -75,7 +75,7 @@ def simple_chain_searcher(main_module: GraphModule, pattern_type: List) -> List[
 
     return matched_patterns
 
-def compute_offset_scale_shift(offset, weight, num_bits_shift=5, num_bits_scale=1, print_mse=False):
+def compute_offset_scale_shift(offset, weight, num_bits_shift=5, num_bits_scale=1, print_mse=False, clip_weights=False):
     """
     The functions takes quantization parameters (zero point, scale) to calculate the Offset, Scale, Shift required to quantize/dequantize the inputs. The range
     of weight must be less than equal to (2**num_bits_scale - 1). The tuple[torch.Tensor] output can be used to produce AMM (Offset, Scale, Right Shift) block
@@ -105,7 +105,12 @@ def compute_offset_scale_shift(offset, weight, num_bits_shift=5, num_bits_scale=
     # Max right shift operation supported
     shift_max = 2**num_bits_shift - 1
     # Separate the value and sign of weights
-    weight = weight.clip(-scale_max, scale_max)
+    if clip_weights:
+        if max(weight.aminmax()) > scale_max:
+            print("WARNING: compute_offset_scale_shift() - scaling out of range - will be clipped")
+        #
+        weight = weight.clip(-scale_max, scale_max)
+
     weight_abs = weight.abs()
     weight_sign = weight.sign()
     # Scale the weights

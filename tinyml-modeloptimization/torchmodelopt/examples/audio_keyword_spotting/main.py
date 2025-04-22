@@ -927,7 +927,7 @@ def export_model(quant_model, example_input: torch.Tensor, model_name: str, with
     else:
         torch.onnx.export(quant_model, example_input, model_name, input_names=['input'])
 
-    print(" Model exported successfully")
+    print("Model exported successfully")
     return quant_model
 
 
@@ -1033,7 +1033,7 @@ if __name__ == '__main__':
     NORMALIZE_INPUT = False #True, #False
     NUM_CATEGORIES = 12  
     BATCH_SIZE = 489
-    SEED =42
+    SEED = 42
     assert QUANTIZATION_DEVICE_TYPE != 'GENERIC' or (not NORMALIZE_INPUT), \
         'normalizing input with BatchNorm is not supported for the export format used for Generic Quantization. Please set NORMALIZE_INPUT to False.'
     
@@ -1089,10 +1089,10 @@ if __name__ == '__main__':
             quant_model = train_model(quant_model, train_loader, quant_epochs, quant_learning_rate)
        
         elif QUANTIZATION_METHOD == 'PTQ':
-            quant_model = calibrate_model(quant_model, calibration_loader, 2)
+            quant_model = calibrate_model(quant_model, calibration_loader, quant_epochs)
         
         accuracy = validate_model(quant_model, test_loader, NUM_CATEGORIES, CATEGORIES_NAME)
-        print(f"QAT Model Accuracy: {round(accuracy, 5)}\n")
+        print(f"{QUANTIZATION_METHOD} Model Accuracy: {round(accuracy, 5)}\n")
 
         quant_model = export_model(quant_model, example_input, MODEL_NAME, with_quant=True)
 

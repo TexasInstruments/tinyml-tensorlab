@@ -34,7 +34,7 @@ import warnings
 import copy
 import torch
 from torch.ao.quantization import quantize_fx
-from torch.ao.quantization import QConfig, QConfigMapping
+from torch.ao.quantization import QConfigMapping
 
 
 from ... import common
@@ -44,7 +44,7 @@ from . import quant_utils
 
 class TinyMLQuantFxBaseModule(torch.nn.Module):
     def __init__(self, model, qconfig_type=None, example_inputs=None, is_qat=True, backend="qnnpack",
-                 total_epochs=0, num_batch_norm_update_epochs=None, num_observer_update_epochs=None, prepare_qdq=True):
+                 total_epochs=0, num_batch_norm_update_epochs=None, num_observer_update_epochs=None, prepare_qdq=True, verbose=True):
         '''
         Parameters:
             model: input model to be quantized
@@ -124,6 +124,9 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         if not self.is_qat:
             self.disable_backward_for_ptq()
         #
+        if not verbose:
+            quant_utils.print_once_dict = {'Freezing BN for subsequent epochs': None,
+                                           'Freezing ranges for subsequent epochs': None}
 
     def set_quant_backend(self, backend=None):
         if backend not in torch.backends.quantized.supported_engines:
@@ -197,14 +200,15 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
 
     def export(self, example_inputs, filename='model.onnx', opset_version=17, model_qconfig_format=None,
                preserve_qdq_model=True, simplify=True, skipped_optimizers=None, device='cpu', make_copy=True,
-               is_converted=True, **export_kwargs):
+               is_converted=True, verbose=False, **export_kwargs):
         if self._is_observed_module():
             model = self.convert(self, device=device, model_qconfig_format=model_qconfig_format, make_copy=make_copy)
         elif not is_converted:
             model = self.convert(self, device=device, model_qconfig_format=model_qconfig_format, make_copy=make_copy)
         else:
             model = self.module
-            warnings.warn("model has already been converted before calling export. make sure it is done correctly.")
+            if verbose:
+                warnings.warn("model has already been converted before calling export. make sure it is done correctly.")
 
         if model_qconfig_format == common.TinyMLModelQConfigFormat.INT_MODEL:
             # # Convert QDQ format to Int8 format
@@ -241,6 +245,5 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         '''
         def backward_hook_with_error(m, g_in, g_out):
             raise RuntimeError("backward need not be called for PTQ - aborting")
-            return m
         #
         self.register_full_backward_hook(backward_hook_with_error)
