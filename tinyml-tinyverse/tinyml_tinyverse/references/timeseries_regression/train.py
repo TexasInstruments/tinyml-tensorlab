@@ -495,7 +495,7 @@ def main(gpu, args):
 
     logger.info('Exporting model after training.')
     if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
-        example_input = next(iter(data_loader_test))[0]
+        example_input = None  # next(iter(data_loader_test))[0]
         utils.export_model(
             model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
             quantization=args.quantization, quantization_error_logging=args.quantization_error_logging,
