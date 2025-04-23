@@ -695,7 +695,7 @@ class GenericTSDatasetReg(Dataset):
         return len(self.X)
 
     def __getitem__(self, index):
-        return torch.from_numpy(self.X[index]), self.Y[index]
+        return torch.from_numpy(self.X_raw[index]), torch.from_numpy(self.X[index]), torch.from_numpy(self.Y[index])
 
     def _process_targets(self):
         self.Y = self.Y.reshape(-1, 1)
