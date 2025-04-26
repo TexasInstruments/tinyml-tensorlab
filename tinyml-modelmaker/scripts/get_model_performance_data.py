@@ -3,7 +3,7 @@ from pprint import PrettyPrinter
 from tinyml_modelmaker.ai_modules.timeseries import constants
 
 valid_model_list = ['MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
-                    'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t',
+                    'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
                     'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t',
                     'TimeSeries_Generic_13k_t', ]
 soft_tinie_targets = ['c28_soft_int_in_int_out']
