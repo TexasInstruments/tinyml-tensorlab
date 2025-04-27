@@ -37,6 +37,7 @@ PLUGINS_ENABLE_EXTRA = False
 # task_type
 TASK_TYPE_MOTOR_FAULT = 'motor_fault'
 TASK_TYPE_ARC_FAULT = 'arc_fault'
+TASK_TYPE_BLOWER_IMBALANCE = 'blower_imbalance'
 TASK_TYPE_GENERIC_TS_CLASSIFICATION = 'generic_timeseries_classification'
 TASK_TYPE_GENERIC_TS_REGRESSION = 'generic_timeseries_regression'
 TASK_TYPE_GENERIC_TS_ANOMALYDETECTION = 'generic_timeseries_anomalydetection'
@@ -44,6 +45,7 @@ TASK_TYPE_GENERIC_TS_ANOMALYDETECTION = 'generic_timeseries_anomalydetection'
 TASK_TYPES = [
     TASK_TYPE_ARC_FAULT,
     TASK_TYPE_MOTOR_FAULT,
+    TASK_TYPE_BLOWER_IMBALANCE,
     TASK_TYPE_GENERIC_TS_CLASSIFICATION,
     TASK_TYPE_GENERIC_TS_REGRESSION,
     TASK_TYPE_GENERIC_TS_ANOMALYDETECTION
@@ -105,6 +107,7 @@ TRAINING_DEVICES = [
 TRAINING_BATCH_SIZE_DEFAULT = {
     TASK_TYPE_ARC_FAULT: 32,
     TASK_TYPE_MOTOR_FAULT: 256,
+    TASK_TYPE_BLOWER_IMBALANCE: 256,
     TASK_TYPE_GENERIC_TS_CLASSIFICATION: 64,
     TASK_TYPE_GENERIC_TS_REGRESSION: 64,
     TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: 64,
@@ -312,6 +315,12 @@ TASK_DESCRIPTIONS = {
         'target_devices': TARGET_DEVICES,
         'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
     },
+    TASK_TYPE_BLOWER_IMBALANCE: {
+        'task_name': 'Fan Blower Imbalance Fault',
+        'target_module': 'timeseries',
+        'target_devices': TARGET_DEVICES,
+        'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
+    },
     # TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
     #     'task_name': 'Generic Time Series Classification',
     #     'target_module': 'timeseries',
@@ -338,7 +347,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     Custom_MotorFault=dict(
         feature_extraction=dict(transform=[], normalize_bin=True, frame_skip=1),
         data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3, ),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     Custom_Default=dict(
         feature_extraction=dict(transform=[], normalize_bin=True, frame_skip=1),
         data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
@@ -368,15 +377,15 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
         feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),  # ch=1,
         data_processing=dict(transforms=[], sampling_rate=1, variables=3, ),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),  # ch=3,
         data_processing=dict(transforms=[], sampling_rate=1, variables=3),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),  # ch=3,
         data_processing=dict(transforms=[], sampling_rate=1, variables=3),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
     #     feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),
     #     data_processing=dict(transforms=[], sampling_rate=1, variables=3),
@@ -384,7 +393,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1),  # ch=3,
         data_processing=dict(transforms=[], sampling_rate=1, variables=3),
-        common=dict(task_type=TASK_TYPE_MOTOR_FAULT), ),
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
 )
 
 DATASET_EXAMPLES = dict(
@@ -397,12 +406,17 @@ DATASET_EXAMPLES = dict(
     arc_fault_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], sampling_rate=1),
-        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024')),
+        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth')),
     ),
     motor_fault_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
         data_processing=dict(transforms=[], sampling_rate=1, variables=3),
-        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('256Input_FFT_16Feature_8Frame_3InputChannel_removeDC_2D1')),
+        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1')),
+    ),
+    fan_blower_imbalance_dsh=dict(
+        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip'),
+        data_processing=dict(transforms=[], sampling_rate=1, variables=3),
+        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1')),
     ),
 )
 DATASET_DEFAULT = 'default'
@@ -460,6 +474,12 @@ PRESET_DESCRIPTIONS = {
                                  cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
             ),
         },
+        TASK_TYPE_BLOWER_IMBALANCE: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+        },
         TASK_CATEGORY_TS_CLASSIFICATION: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
@@ -491,6 +511,11 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),
         },
+        TASK_TYPE_BLOWER_IMBALANCE: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+        },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
@@ -514,6 +539,11 @@ PRESET_DESCRIPTIONS = {
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
+            ),
+        },
+        TASK_TYPE_BLOWER_IMBALANCE: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
@@ -545,6 +575,11 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
+        TASK_TYPE_BLOWER_IMBALANCE: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
+            ),
+        },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
@@ -568,6 +603,11 @@ PRESET_DESCRIPTIONS = {
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
+            ),
+        },
+        TASK_TYPE_BLOWER_IMBALANCE: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
@@ -598,6 +638,14 @@ PRESET_DESCRIPTIONS = {
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+            COMPILATION_FORCED_SOFT_NPU: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+        },
+        TASK_TYPE_BLOWER_IMBALANCE: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
@@ -637,6 +685,11 @@ PRESET_DESCRIPTIONS = {
             ),
         },
         TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
+            ),
+        },
+        TASK_TYPE_BLOWER_IMBALANCE: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
             ),
@@ -709,6 +762,24 @@ SAMPLE_DATASET_DESCRIPTIONS = {
             'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Motor Bearing Fault Classification Example',
             'dataset_description': 'Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'blower_imbalance_example_dsh': {
+        'common': {
+            'task_type': TASK_TYPE_BLOWER_IMBALANCE,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'blower_imbalance_example_dsh',
+            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip',
+            'dataset_detailed_name': 'Blower Imbalance Classification Example',
+            'dataset_description': 'Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
             'dataset_license': 'TI Internal License'

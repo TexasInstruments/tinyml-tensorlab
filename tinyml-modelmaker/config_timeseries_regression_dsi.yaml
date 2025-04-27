@@ -9,7 +9,7 @@ dataset:
     enable: True
     data_dir: 'files'
     dataset_name: battery_dataset
-    input_data_path: '/home/tushxr16/work/tinyml-modelmaker/data/projects/battery_dataset.zip'
+    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/battery_dataset/'
 #    split_names: [training, validation]
 
 data_processing: # One or more can be cascaded in the list

@@ -551,7 +551,7 @@ _model_descriptions = {
     'MotorFault_model_1_t': {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
+            task_type=[constants.TASK_TYPE_MOTOR_FAULT, constants.TASK_TYPE_BLOWER_IMBALANCE],
         ),
         'download': model_urls['MotorFault_model_1_t'],
         'training': dict(
@@ -586,7 +586,7 @@ _model_descriptions = {
     'MotorFault_model_2_t': {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
+            task_type=[constants.TASK_TYPE_MOTOR_FAULT, constants.TASK_TYPE_BLOWER_IMBALANCE],
         ),
         'download': model_urls['MotorFault_model_2_t'],
         'training': dict(
@@ -618,7 +618,7 @@ _model_descriptions = {
     'MotorFault_model_3_t': {
         'common': dict(
             task_category=constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            task_type=constants.TASK_TYPE_MOTOR_FAULT,
+            task_type=[constants.TASK_TYPE_MOTOR_FAULT, constants.TASK_TYPE_BLOWER_IMBALANCE],
         ),
         'download': model_urls['MotorFault_model_3_t'],
         'training': dict(

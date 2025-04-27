@@ -7,8 +7,7 @@ common:
 dataset:
     # enable/disable dataset loading
     enable: True #False
-    dataset_name: fan_blade_imbalance
-    input_data_path: /home/a0484689/PycharmProjects/tinyml_docker_images/fan_blower_imbalance_dsd.zip
+    dataset_name: fan_blower_imbalance_dsh
 
 data_processing: # One or more can be cascaded in the list
     transforms: []
@@ -16,32 +15,32 @@ data_processing: # One or more can be cascaded in the list
 
 feature_extraction:
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
-#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
 #   feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: Custom_MotorFault
 #    transform: []
-    frame_size: 256
-    feature_size_per_frame: 128
-    num_frame_concat: 8
-    normalize_bin: 1
-    stacking: 2D1
-    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
-    offset: 0
-    scale: 1
-    frame_skip: 1
-    log_mul: 20
-    log_base: 10
-    log_threshold: 1e-100
-    store_feat_ext_data: False
-    nn_for_feature_extraction: False
+#    frame_size: 256
+#    feature_size_per_frame: 128
+#    num_frame_concat: 8
+#    normalize_bin: 1
+#    stacking: 2D1
+#    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
+#    offset: 0
+#    scale: 1
+#    frame_skip: 1
+#    log_mul: 20
+#    log_base: 10
+#    log_threshold: 1e-100
+#    store_feat_ext_data: False
+#    nn_for_feature_extraction: False
 
 training:
     # enable/disable training
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
-    model_name: 'MotorFault_model_1_t'
+    model_name: 'MotorFault_model_2_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
     batch_size: 256
