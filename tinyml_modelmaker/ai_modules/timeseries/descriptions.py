@@ -111,8 +111,12 @@ def set_model_selection_factor(model_descriptions):
     for m in model_descriptions.values():
         for target_device in m.training.target_devices.keys():
             m.training.target_devices[target_device].model_selection_factor = None
-
-    task_types = set([m.common.task_type for m in model_descriptions.values()])
+    task_types = set()
+    for m in model_descriptions.values():
+        if isinstance(m.common.task_type, list):
+            task_types.update(m.common.task_type)
+        else:
+            task_types.add(m.common.task_type)
     target_devices = [list(m.training.target_devices.keys()) for m in model_descriptions.values()]
     target_devices = set([t for t_list in target_devices for t in t_list])
     for target_device in target_devices:

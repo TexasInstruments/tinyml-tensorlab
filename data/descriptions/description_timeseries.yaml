@@ -841,7 +841,9 @@ model_descriptions:
       target_machine: evm
       target_module: timeseries
       task_category: timeseries_classification
-      task_type: motor_fault
+      task_type:
+      - motor_fault
+      - blower_imbalance
       verbose_mode: true
     compilation:
       compile_output_path: null
@@ -979,32 +981,32 @@ model_descriptions:
         F280015:
           flash: 1213
           inference_time_us: 270
-          model_selection_factor: 0
+          model_selection_factor: null
           sram: 1020
         F28003:
           flash: 1213
           inference_time_us: 270
-          model_selection_factor: 0
+          model_selection_factor: null
           sram: 1020
         F28004:
           flash: 1213
           inference_time_us: 225
-          model_selection_factor: 0
+          model_selection_factor: null
           sram: 1020
         F2837:
           flash: 1213
           inference_time_us: 270
-          model_selection_factor: 0
+          model_selection_factor: null
           sram: 1020
         F28P55:
           flash: 1836
           inference_time_us: 169
-          model_selection_factor: 0
+          model_selection_factor: null
           sram: 1084
         F28P65:
           flash: 1213
           inference_time_us: 450
-          model_selection_factor: 0
+          model_selection_factor: null
           sram: 1020
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -1032,7 +1034,9 @@ model_descriptions:
       target_machine: evm
       target_module: timeseries
       task_category: timeseries_classification
-      task_type: motor_fault
+      task_type:
+      - motor_fault
+      - blower_imbalance
       verbose_mode: true
     compilation:
       compile_output_path: null
@@ -1170,32 +1174,32 @@ model_descriptions:
         F280015:
           flash: 5261
           inference_time_us: 7337
-          model_selection_factor: 1
+          model_selection_factor: null
           sram: 10876
         F28003:
           flash: 5261
           inference_time_us: 7337
-          model_selection_factor: 1
+          model_selection_factor: null
           sram: 10876
         F28004:
           flash: 5261
           inference_time_us: 6114
-          model_selection_factor: 1
+          model_selection_factor: null
           sram: 10876
         F2837:
           flash: 5261
           inference_time_us: 7337
-          model_selection_factor: 1
+          model_selection_factor: null
           sram: 10876
         F28P55:
           flash: 4260
           inference_time_us: 1190
-          model_selection_factor: 1
+          model_selection_factor: null
           sram: 3170
         F28P65:
           flash: 5261
           inference_time_us: 12229
-          model_selection_factor: 1
+          model_selection_factor: null
           sram: 10876
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -1223,7 +1227,9 @@ model_descriptions:
       target_machine: evm
       target_module: timeseries
       task_category: timeseries_classification
-      task_type: motor_fault
+      task_type:
+      - motor_fault
+      - blower_imbalance
       verbose_mode: true
     compilation:
       compile_output_path: null
@@ -1361,32 +1367,32 @@ model_descriptions:
         F280015:
           flash: 3068
           inference_time_us: 400
-          model_selection_factor: 2
+          model_selection_factor: null
           sram: 660
         F28003:
           flash: 3068
           inference_time_us: 400
-          model_selection_factor: 2
+          model_selection_factor: null
           sram: 660
         F28004:
           flash: 3068
           inference_time_us: 334
-          model_selection_factor: 2
+          model_selection_factor: null
           sram: 660
         F2837:
           flash: 3068
           inference_time_us: 400
-          model_selection_factor: 2
+          model_selection_factor: null
           sram: 660
         F28P55:
           flash: 2641
           inference_time_us: 263
-          model_selection_factor: 2
+          model_selection_factor: null
           sram: 1088
         F28P65:
           flash: 3068
           inference_time_us: 668
-          model_selection_factor: 2
+          model_selection_factor: null
           sram: 660
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -4277,6 +4283,14 @@ preset_descriptions:
             -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
           target: c
           target_c_mcpu: cortex_r5
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: tiarmclang
+          cross_compiler_options: -O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard
+            -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
+          target: c
+          target_c_mcpu: cortex_r5
     motor_fault:
       default_preset:
         compilation:
@@ -4311,6 +4325,17 @@ preset_descriptions:
           target_c_mcpu: cortex_r5
   F280015:
     arc_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    blower_imbalance:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -4377,6 +4402,17 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     generic_timeseries_anomalydetection:
       default_preset:
         compilation:
@@ -4423,6 +4459,17 @@ preset_descriptions:
           target_c_mcpu: c28
   F28004:
     arc_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    blower_imbalance:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -4489,6 +4536,17 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     generic_timeseries_anomalydetection:
       default_preset:
         compilation:
@@ -4535,6 +4593,27 @@ preset_descriptions:
           target_c_mcpu: c28
   F28P55:
     arc_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true
+          target_c_mcpu: c28
+      forced_soft_npu_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    blower_imbalance:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -4651,6 +4730,17 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
     generic_timeseries_anomalydetection:
       default_preset:
         compilation:
@@ -4711,6 +4801,21 @@ sample_dataset_descriptions:
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
       dataset_url: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip
+  blower_imbalance_example_dsh:
+    common:
+      task_category: timeseries_classification
+      task_type: blower_imbalance
+    dataset:
+      dataset_name: blower_imbalance_example_dsh
+      input_data_path: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip
+    info:
+      dataset_description: Example blower imbalance timeseries classification dataset
+        with 2 categories - 0 Clips, 1 Clip
+      dataset_detailed_name: Blower Imbalance Classification Example
+      dataset_license: TI Internal License
+      dataset_size: null
+      dataset_source: Generated by Texas Instruments at a specialised test bed
+      dataset_url: https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip
   motor_fault_example_dsk:
     common:
       task_category: timeseries_classification
@@ -4821,6 +4926,16 @@ task_descriptions:
     - F28P65
     target_module: timeseries
     task_name: ARC Fault
+  blower_imbalance:
+    stages:
+    - dataset
+    - data_processing
+    - feature_extraction
+    - training
+    - compilation
+    target_devices: *id001
+    target_module: timeseries
+    task_name: Fan Blower Imbalance Fault
   motor_fault:
     stages:
     - dataset

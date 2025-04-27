@@ -3182,7 +3182,10 @@
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":"motor_fault",
+        "task_type":[
+          "motor_fault",
+          "blower_imbalance"
+        ],
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -3235,37 +3238,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":0,
+            "model_selection_factor":null,
             "flash":1213,
             "inference_time_us":270,
             "sram":1020
           },
           "F28003":{
-            "model_selection_factor":0,
+            "model_selection_factor":null,
             "flash":1213,
             "inference_time_us":270,
             "sram":1020
           },
           "F28004":{
-            "model_selection_factor":0,
+            "model_selection_factor":null,
             "flash":1213,
             "inference_time_us":225,
             "sram":1020
           },
           "F2837":{
-            "model_selection_factor":0,
+            "model_selection_factor":null,
             "flash":1213,
             "inference_time_us":270,
             "sram":1020
           },
           "F28P65":{
-            "model_selection_factor":0,
+            "model_selection_factor":null,
             "flash":1213,
             "inference_time_us":450,
             "sram":1020
           },
           "F28P55":{
-            "model_selection_factor":0,
+            "model_selection_factor":null,
             "flash":1836,
             "inference_time_us":169,
             "sram":1084
@@ -3408,7 +3411,10 @@
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":"motor_fault",
+        "task_type":[
+          "motor_fault",
+          "blower_imbalance"
+        ],
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -3461,37 +3467,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":1,
+            "model_selection_factor":null,
             "flash":5261,
             "inference_time_us":7337,
             "sram":10876
           },
           "F28003":{
-            "model_selection_factor":1,
+            "model_selection_factor":null,
             "flash":5261,
             "inference_time_us":7337,
             "sram":10876
           },
           "F28004":{
-            "model_selection_factor":1,
+            "model_selection_factor":null,
             "flash":5261,
             "inference_time_us":6114,
             "sram":10876
           },
           "F2837":{
-            "model_selection_factor":1,
+            "model_selection_factor":null,
             "flash":5261,
             "inference_time_us":7337,
             "sram":10876
           },
           "F28P65":{
-            "model_selection_factor":1,
+            "model_selection_factor":null,
             "flash":5261,
             "inference_time_us":12229,
             "sram":10876
           },
           "F28P55":{
-            "model_selection_factor":1,
+            "model_selection_factor":null,
             "flash":4260,
             "inference_time_us":1190,
             "sram":3170
@@ -3634,7 +3640,10 @@
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":"motor_fault",
+        "task_type":[
+          "motor_fault",
+          "blower_imbalance"
+        ],
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -3687,37 +3696,37 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280015":{
-            "model_selection_factor":2,
+            "model_selection_factor":null,
             "flash":3068,
             "inference_time_us":400,
             "sram":660
           },
           "F28003":{
-            "model_selection_factor":2,
+            "model_selection_factor":null,
             "flash":3068,
             "inference_time_us":400,
             "sram":660
           },
           "F28004":{
-            "model_selection_factor":2,
+            "model_selection_factor":null,
             "flash":3068,
             "inference_time_us":334,
             "sram":660
           },
           "F2837":{
-            "model_selection_factor":2,
+            "model_selection_factor":null,
             "flash":3068,
             "inference_time_us":400,
             "sram":660
           },
           "F28P65":{
-            "model_selection_factor":2,
+            "model_selection_factor":null,
             "flash":3068,
             "inference_time_us":668,
             "sram":660
           },
           "F28P55":{
-            "model_selection_factor":2,
+            "model_selection_factor":null,
             "flash":2641,
             "inference_time_us":263,
             "sram":1088
@@ -5006,6 +5015,16 @@
           }
         }
       },
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c",
+            "target_c_mcpu":"cortex_r5",
+            "cross_compiler":"tiarmclang",
+            "cross_compiler_options":"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
+          }
+        }
+      },
       "timeseries_classification":{
         "default_preset":{
           "compilation":{
@@ -5049,6 +5068,16 @@
         }
       },
       "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -5110,6 +5139,16 @@
           }
         }
       },
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
       "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
@@ -5153,6 +5192,16 @@
         }
       },
       "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -5214,6 +5263,16 @@
           }
         }
       },
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
       "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
@@ -5265,6 +5324,24 @@
         }
       },
       "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -5349,6 +5426,16 @@
         }
       },
       "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -5486,6 +5573,25 @@
         "training",
         "compilation"
       ]
+    },
+    "blower_imbalance":{
+      "task_name":"Fan Blower Imbalance Fault",
+      "target_module":"timeseries",
+      "target_devices":[
+        "F280015",
+        "F28003",
+        "F28004",
+        "F2837",
+        "F28P55",
+        "F28P65"
+      ],
+      "stages":[
+        "dataset",
+        "data_processing",
+        "feature_extraction",
+        "training",
+        "compilation"
+      ]
     }
   },
   "sample_dataset_descriptions":{
@@ -5520,6 +5626,24 @@
         "dataset_url":"https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip",
         "dataset_detailed_name":"Motor Bearing Fault Classification Example",
         "dataset_description":"Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking",
+        "dataset_size":null,
+        "dataset_source":"Generated by Texas Instruments at a specialised test bed",
+        "dataset_license":"TI Internal License"
+      }
+    },
+    "blower_imbalance_example_dsh":{
+      "common":{
+        "task_type":"blower_imbalance",
+        "task_category":"timeseries_classification"
+      },
+      "dataset":{
+        "dataset_name":"blower_imbalance_example_dsh",
+        "input_data_path":"https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip"
+      },
+      "info":{
+        "dataset_url":"https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip",
+        "dataset_detailed_name":"Blower Imbalance Classification Example",
+        "dataset_description":"Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip",
         "dataset_size":null,
         "dataset_source":"Generated by Texas Instruments at a specialised test bed",
         "dataset_license":"TI Internal License"
