@@ -156,7 +156,7 @@ def main(args):
     logger.debug(args)
     # Often we hear of compilation breaking as the compiler/sdk paths provided are invalid
     exit_flag = 0
-    if not os.path.exists(args.cross_compiler):
+    if not (os.path.exists(args.cross_compiler) or os.path.exists(args.cross_compiler + ".exe")):
         logger.error(f'Cross Compiler path is invalid: {args.cross_compiler}')
         exit_flag = 1
     for arg in args.cross_compiler_options.split():
