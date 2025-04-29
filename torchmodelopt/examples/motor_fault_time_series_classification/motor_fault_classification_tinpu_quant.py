@@ -1,9 +1,7 @@
 # torch imports
 import torch
 from torch.ao.quantization import quantize_fx
-import torch.utils
 import torch.nn as nn
-import torch.utils.data
 from torch.utils.data import Dataset, DataLoader, random_split
 import torchinfo
 

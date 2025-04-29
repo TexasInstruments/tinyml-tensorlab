@@ -239,7 +239,7 @@ class AudioPreprocessor(object):
         return mfccs
     
     def compute_torchMFCC(self, audio_tensor):
-        __MFCC = T.MFCC(
+        __MFCC = T.MFCC( # type: ignore
             sample_rate=self.sr,
             n_mfcc=self.n_mfcc,
             melkwargs={
@@ -400,7 +400,7 @@ def prepare_dataset(root=".", force=False, seed=1, audio_features="tfMFCC"):
     print(f"Val dataset samples = {val_samples}")
 
     shutil.rmtree(test_dir)
-    os.environ["http_proxy"] = "http://wwwinproxy.itg.ti.com:80" #for donwloading dataset over our Internal TI Network, customer can comment this 
+    os.environ["http_proxy"] = "http://wwwinproxy.itg.ti.com:80" #for downloading dataset over our Internal TI Network, customer can comment this 
     balanced_mlperf_test_url= "http://download.tensorflow.org/data/speech_commands_test_set_v0.02.tar.gz"
 
     download_path=os.path.join(root,"SpeechCommands","Google_vcdataset.tar.gz")
@@ -536,33 +536,41 @@ class DSCNN(nn.Module):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu1(x)
+
         x = self.dropout1(x)
 
         # Depthwise separable convolutions
         x = self.depthwise2(x)
         x = self.bn21(x)
         x = self.relu21(x)
+
         x = self.pointwise2(x)
         x = self.bn22(x)
         x = self.relu22(x)
 
+        # Depthwise separable convolutions
         x = self.depthwise3(x)
         x = self.bn31(x)
         x = self.relu31(x)
+
         x = self.pointwise3(x)
         x = self.bn32(x)
         x = self.relu32(x)
 
+        # Depthwise separable convolutions
         x = self.depthwise4(x)
         x = self.bn41(x)
         x = self.relu41(x)
+
         x = self.pointwise4(x)
         x = self.bn42(x)
         x = self.relu42(x)
 
+        # Depthwise separable convolutions
         x = self.depthwise5(x)
         x = self.bn51(x)
         x = self.relu51(x)
+        
         x = self.pointwise5(x)
         x = self.bn52(x)
         x = self.relu52(x)
@@ -760,7 +768,7 @@ def calibrate(dataloader: DataLoader, model: nn.Module, loss_fn):
     return avg_loss, model, loss_fn, None
 
 def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epochs: int, weight_bitwidth: int,
-        activation_bitwidth: int, quantization_method: str, quantization_device_type: str) -> nn.Module:
+        activation_bitwidth: int, quantization_method: str, quantization_device_type: str, bias_calibration_factor: int = 0) -> nn.Module:
     """
     Convert the torch model to quant wrapped torch model. The function requires
     an example input to convert the model.
@@ -774,6 +782,8 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
     The api being called doesn't actually pass qconfig_type - so it will be defined inside. 
     But if you need to pass, it can be defined.
     '''
+    is_qat = (quantization_method == 'QAT')
+
     if weight_bitwidth is None or activation_bitwidth is None:
         '''
         # 8bit weight / activation is default - no need to specify inside.
@@ -809,25 +819,31 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
                 'qscheme': torch.per_tensor_symmetric,
                 'power2_scale': True,
                 'range_max': None,
-                'fixed_range': False
-            }
+                'fixed_range': False,
+                'histogram_range': 1
+            },
         }
     elif weight_bitwidth == 4:
+        mixed_precision = None if is_qat else \
+                    { 8: ['pointwise2', 'bn22', 'relu22', 'pointwise3', 'bn32', 'relu32', 
+                          'depthwise2', 'bn21', 'relu21', 'depthwise3', 'bn31', 'relu31']}
         qconfig_type = {
             'weight': {
                 'bitwidth': weight_bitwidth,
                 'qscheme': torch.per_channel_symmetric,
-                'power2_scale': False,
+                'power2_scale': True if mixed_precision else False,
                 'range_max': None,
-                'fixed_range': False
+                'fixed_range': False,
+                'mixed_precision': mixed_precision
             },
             'activation': {
                 'bitwidth': activation_bitwidth,
                 'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': False,
+                'power2_scale': True if mixed_precision else False,
                 'range_max': None,
-                'fixed_range': False
-            }
+                'fixed_range': False,
+                'histogram_range': 1
+            },
         }
     elif weight_bitwidth == 2:
         qconfig_type = {
@@ -845,7 +861,8 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
                 'qscheme': torch.per_tensor_symmetric,
                 'power2_scale': False,
                 'range_max': None,
-                'fixed_range': False
+                'fixed_range': False,
+                'histogram_range': 1
             }
         }
     else:
@@ -855,7 +872,7 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
         if quantization_method == 'QAT':
             quant_model = TINPUTinyMLQATFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs)
         elif quantization_method == 'PTQ':
-            quant_model = TINPUTinyMLPTQFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs)
+            quant_model = TINPUTinyMLPTQFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs, bias_calibration_factor=bias_calibration_factor)
         else:
             raise RuntimeError(f"Unknown Quantization method: {quantization_method}")
         #
@@ -912,13 +929,11 @@ def export_model(quant_model, example_input: torch.Tensor, model_name: str, with
     # Convert model using FX Graph-based quantization if needed
     if with_quant:
         if hasattr(quant_model, "convert"):
-         
-         print(" Running `convert()` on quant_model...")
-         quant_model = quant_model.convert()
+            print(" Running `convert()` on quant_model...")
+            quant_model = quant_model.convert()
 
         else:
-         
-         quant_model = quantize_fx.convert_fx(quant_model.module)
+            quant_model = quantize_fx.convert_fx(quant_model.module)
    
     #  Export to ONNX
     if hasattr(quant_model, "export"):
@@ -1024,16 +1039,22 @@ if __name__ == '__main__':
 
     MODEL_NAME = "kws.onnx"
     CATEGORIES_NAME = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-    NUM_EPOCHS = 36
+    NUM_EPOCHS = 2.5
     LEARNING_RATE = 0.5
-    QUANTIZATION_METHOD = 'QAT' #'PTQ' #'QAT' #None
-    WEIGHT_BITWIDTH = 8 #2 #4 #8
+    QUANTIZATION_METHOD = 'PTQ' #'PTQ' #'QAT' #None
+    WEIGHT_BITWIDTH = 4 #2 #4 #8
     ACTIVATION_BITWIDTH = 8 #8 #4 #2
     QUANTIZATION_DEVICE_TYPE = 'TINPU' #'TINPU', 'GENERIC'
     NORMALIZE_INPUT = False #True, #False
     NUM_CATEGORIES = 12  
-    BATCH_SIZE = 489
+    BATCH_SIZE = 10
     SEED = 42
+    MODEL_TRAINING = False
+    LOAD_MODEL_FROM_FILE = False
+    LOAD_CHECKPOINT_FROM_FILE = True
+
+    assert not (LOAD_MODEL_FROM_FILE and LOAD_CHECKPOINT_FROM_FILE), 'only one of LOAD_MODEL_FROM_FILE and LOAD_CHECKPOINT_FROM_FILE'
+
     assert QUANTIZATION_DEVICE_TYPE != 'GENERIC' or (not NORMALIZE_INPUT), \
         'normalizing input with BatchNorm is not supported for the export format used for Generic Quantization. Please set NORMALIZE_INPUT to False.'
     
@@ -1055,7 +1076,7 @@ if __name__ == '__main__':
     
     calibration_indices_file = r"quant_cal_indices_mlperf.txt"  # Path to calibration indices
 
-   # Load calibration indices
+    # Load calibration indices
     calibration_indices = load_calibration_indices(calibration_indices_file) 
     print(f"Loaded {len(calibration_indices)} indices for calibration.")
     validation_dataset = SavedTensorDataset(dataset_dir = os.path.join(save_dir,"val"))
@@ -1064,36 +1085,49 @@ if __name__ == '__main__':
     
     example_batch = next(iter(test_loader))
     example_input = example_batch["audio"].float().to(DEVICE)  # Add channel dimension
- 
+    nn_model = None
+    
     #Import model structure
-    nn_model = DSCNN()
-    # nn_model = torch.load(os.path.join('trained_models', 'pb2pth_model.pth'))
-  
+    if LOAD_MODEL_FROM_FILE:
+        nn_model = torch.load(os.path.join('trained_models', 'kws_dscnn_pb2pth_model.pth'))
+    else:
+        nn_model = DSCNN().eval()
+
+    if LOAD_CHECKPOINT_FROM_FILE:
+        checkpoint = torch.load(os.path.join('trained_models', 'kws_dscnn_pb2pth_checkpoint.pth'))
+        nn_model.load_state_dict(checkpoint)
+
     nn_model = nn_model.to(DEVICE)
-    
+
     #Train and Validate fp32 model
-    nn_model = train_model(nn_model, train_loader, NUM_EPOCHS, LEARNING_RATE)
+    if MODEL_TRAINING:
+        nn_model = train_model(nn_model, train_loader, NUM_EPOCHS, LEARNING_RATE)
+
     accuracy = validate_model(nn_model, test_loader, NUM_CATEGORIES , CATEGORIES_NAME)
+    # export_model(nn_model, example_input, MODEL_NAME, with_quant=False)
     print("OG model accuracy is", accuracy)
-    
-  
+
     if QUANTIZATION_METHOD in ('QAT', 'PTQ'):
 
         MODEL_NAME = 'quant_' + MODEL_NAME
-        quant_epochs = (NUM_EPOCHS*10) if ((WEIGHT_BITWIDTH<8) or (ACTIVATION_BITWIDTH<8)) else max(NUM_EPOCHS//2, 5)
-        quant_model = get_quant_model(nn_model, example_input=example_input, total_epochs=quant_epochs, weight_bitwidth=WEIGHT_BITWIDTH, activation_bitwidth=ACTIVATION_BITWIDTH, quantization_method=QUANTIZATION_METHOD,quantization_device_type=QUANTIZATION_DEVICE_TYPE)
-      
+        quant_epochs = int(NUM_EPOCHS*2) if ((WEIGHT_BITWIDTH<8) or (ACTIVATION_BITWIDTH<8)) else max(NUM_EPOCHS//2, 5)
+        quant_model = get_quant_model(nn_model, example_input=example_input, total_epochs=quant_epochs, 
+                                      weight_bitwidth=WEIGHT_BITWIDTH, activation_bitwidth=ACTIVATION_BITWIDTH, 
+                                      quantization_method=QUANTIZATION_METHOD, quantization_device_type=QUANTIZATION_DEVICE_TYPE,
+                                      bias_calibration_factor=0.0)
+    
         if QUANTIZATION_METHOD == 'QAT':
             quant_learning_rate = (LEARNING_RATE/100) #if ((WEIGHT_BITWIDTH<8) or (ACTIVATION_BITWIDTH<8)) else (LEARNING_RATE/10)
-         
+        
             quant_model = train_model(quant_model, train_loader, quant_epochs, quant_learning_rate)
-       
+    
         elif QUANTIZATION_METHOD == 'PTQ':
             quant_model = calibrate_model(quant_model, calibration_loader, quant_epochs)
         
         accuracy = validate_model(quant_model, test_loader, NUM_CATEGORIES, CATEGORIES_NAME)
         print(f"{QUANTIZATION_METHOD} Model Accuracy: {round(accuracy, 5)}\n")
-
+        if WEIGHT_BITWIDTH == 8 and False:
+            export_model(quant_model.module, example_input, 'qdq_' + MODEL_NAME, with_quant=False)
         quant_model = export_model(quant_model, example_input, MODEL_NAME, with_quant=True)
 
         
@@ -1105,7 +1139,7 @@ if __name__ == '__main__':
 
     random_indices = random.sample(range(len(ds_test)), 1000)
     ds_test_subset = Subset(ds_test, random_indices)
-    ds_test_loader = DataLoader(dataset=ds_test_subset, batch_size=100, shuffle=False, drop_last=False)
+    ds_test_loader = DataLoader(dataset=ds_test_subset, batch_size=BATCH_SIZE, shuffle=False, drop_last=True)
     accuracy = validate_saved_model(MODEL_NAME, ds_test_loader)
     print(f"Exported ONNX Quant Model Accuracy on 1000 samples: {accuracy}")
-  
+    #
