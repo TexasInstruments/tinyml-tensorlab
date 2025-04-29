@@ -1,0 +1,22 @@
+{
+    "initializers.onnx_initializer_2":"fc6.weight",
+    "initializers.onnx_initializer_3":"fc6.bias",
+    "StatefulPartitionedCall/functional_1/conv2d/BiasAdd.1.weight":"conv1.weight",
+    "StatefulPartitionedCall/functional_1/conv2d/BiasAdd.1.bias":"conv1.bias",
+    "Conv__95.weight":"depthwise2.weight",
+    "Conv__95.bias":"depthwise2.bias",
+    "StatefulPartitionedCall/functional_1/conv2d_1/BiasAdd.weight":"pointwise2.weight",
+    "StatefulPartitionedCall/functional_1/conv2d_1/BiasAdd.bias":"pointwise2.bias",
+    "Conv__97.weight":"depthwise3.weight",
+    "Conv__97.bias":"depthwise3.bias",
+    "StatefulPartitionedCall/functional_1/conv2d_2/BiasAdd.weight":"pointwise3.weight",
+    "StatefulPartitionedCall/functional_1/conv2d_2/BiasAdd.bias":"pointwise3.bias",
+    "Conv__99.weight":"depthwise4.weight",
+    "Conv__99.bias":"depthwise4.bias",
+    "StatefulPartitionedCall/functional_1/conv2d_3/BiasAdd.weight":"pointwise4.weight",
+    "StatefulPartitionedCall/functional_1/conv2d_3/BiasAdd.bias":"pointwise4.bias",
+    "Conv__101.weight":"depthwise5.weight",
+    "Conv__101.bias":"depthwise5.bias",
+    "StatefulPartitionedCall/functional_1/conv2d_4/BiasAdd.weight":"pointwise5.weight",
+    "StatefulPartitionedCall/functional_1/conv2d_4/BiasAdd.bias":"pointwise5.bias"
+}

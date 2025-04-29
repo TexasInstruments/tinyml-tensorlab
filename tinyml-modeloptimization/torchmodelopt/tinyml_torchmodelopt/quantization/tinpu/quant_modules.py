@@ -9,6 +9,13 @@ class RoundModule(torch.nn.Module):
     def forward(self, x):
         return torch.round(x)
             
+class AddModule(torch.nn.Module):
+    def __init__(self, value):
+        super().__init__()
+        self.value = value
+    def forward(self, x):
+        return x + self.value
+                
 class MultiplyModule(torch.nn.Module):
     def __init__(self, value):
         super().__init__()
@@ -61,7 +68,7 @@ class AddReLUBlock(torch.nn.Module):
         return y
 
 class AddReLUWithBias(torch.nn.Module):
-    def __init__(self, bias, min_relu_clip, max_relu_clip, scale, zero_point, with_relu, num_bits_scale=1):
+    def __init__(self, bias, min_relu_clip: int, max_relu_clip: int, scale: torch.Tensor, zero_point: torch.Tensor, with_relu: bool = False, num_bits_scale: int = 1):
         super().__init__()
         self.with_relu = with_relu
         self.bias = bias
@@ -78,8 +85,7 @@ class AddReLUWithBias(torch.nn.Module):
         self.clip = torch.nn.Hardtanh(min_relu_clip, max_relu_clip)
 
     def forward(self, y):
-        y = self.bias + y
-        # y = self.oss(out)
+        y = self.oss(y)
         if self.with_relu:
             y = self.relu(y)
             y = self.clip(y)
