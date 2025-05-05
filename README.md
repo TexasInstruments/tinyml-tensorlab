@@ -57,7 +57,7 @@ To begin with, you can use the repo as a `developer` or `user`.
 
     Install this repository as a Python package:
     ```
-    pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@main#subdirectory=tinyml_modelmaker
+    pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@main#subdirectory=tinyml-modelmaker
     ```
     It is as simple as:
     ```python
