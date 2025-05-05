@@ -51,6 +51,72 @@ The other repositories are here for a purpose:
 # Using this repository
 
 To begin with, you can use the repo as a `developer` or `user`.
+
+  ### Prequisite:
+* **Note**: Irrespective of being a `Linux` or a `Windows` user, it is ideal to use virtual environments on Python rather than operating without one. 
+* For `Linux` we are using `Pyenv`, and for `Windows` we are using Python's native `venv`
+
+
+* <details> 
+  <summary> Linux OS </summary>
+  
+  #### Step 1.1: Make sure that you are using bash shell. If it is not bash shell, change it to bash. Verify it by typing:
+  ```
+  echo ${SHELL}
+  ```
+
+  #### Step 1.2: Install system dependencies
+  ```
+  sudo apt update
+  sudo apt install build-essential curl libbz2-dev libffi-dev liblzma-dev libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev libxmlsec1-dev llvm make tk-dev xz-utils wget curl
+  sudo apt install -y libffi-dev libjpeg-dev zlib1g-dev graphviz graphviz-dev protobuf-compiler
+  ```
+  #### Step 1.3: Install pyenv using the following commands
+  ```
+  curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+
+  echo '# pyenv settings ' >> ${HOME}/.bashrc
+  echo 'command -v pyenv >/dev/null || export PATH=":${HOME}/.pyenv/bin:$PATH"' >> ${HOME}/.bashrc
+  echo 'eval "$(pyenv init -)"' >> ${HOME}/.bashrc
+  echo 'eval "$(pyenv virtualenv-init -)"' >> ${HOME}/.bashrc
+  echo '' >> ${HOME}/.bashrc
+
+  exec ${SHELL}
+  ```
+
+  Further details on pyenv installation are given here https://github.com/pyenv/pyenv and https://github.com/pyenv/pyenv-installer
+
+  #### Step 1.4: Install Python 3.10 in pyenv and create an environment
+
+  ```
+  pyenv install 3.10
+  pyenv virtualenv 3.10 py310
+  pyenv rehash
+  pyenv activate py310
+  python -m ensurepip --upgrade
+  python -m pip install --upgrade pip setuptools
+  ```
+
+  Note: This activation step needs to be done everytime one starts a new terminal or shell. (Alternately, this also can be written to the .bashrc, so that this will be the default penv environment).
+  ```
+  pyenv activate py310
+  ```
+  </details>
+
+* <details> 
+  <summary> Windows OS </summary>
+  
+    * Install Python3.10 from https://www.python.org/downloads/
+  
+  ```commandline
+  python -m venv py310
+  .\py310\Scripts\activate
+  ```
+
+</details>
+
+
+
 * ## I'm a User:
   * As a `user` - The installation and usage is very simple. It is just a `pip install`. But beware that you will not be able to modify any of the features or customize AI models/transforms for your use case
   * <details>
@@ -81,51 +147,7 @@ To begin with, you can use the repo as a `developer` or `user`.
       <summary> Linux OS</summary>
 
       ### 1. Set up TI tinyml-tensorlab
-
-      ### Prequisite:
-      #### Step 1.1: Make sure that you are using bash shell. If it is not bash shell, change it to bash. Verify it by typing:
-      ```
-      echo ${SHELL}
-      ```
-
-      #### Step 1.2: Install system dependencies
-      ```
-      sudo apt update
-      sudo apt install build-essential curl libbz2-dev libffi-dev liblzma-dev libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev libxmlsec1-dev llvm make tk-dev xz-utils wget curl
-      sudo apt install -y libffi-dev libjpeg-dev zlib1g-dev graphviz graphviz-dev protobuf-compiler
-      ```
-      #### Step 1.3: Install pyenv using the following commands
-      ```
-      curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-    
-      echo '# pyenv settings ' >> ${HOME}/.bashrc
-      echo 'command -v pyenv >/dev/null || export PATH=":${HOME}/.pyenv/bin:$PATH"' >> ${HOME}/.bashrc
-      echo 'eval "$(pyenv init -)"' >> ${HOME}/.bashrc
-      echo 'eval "$(pyenv virtualenv-init -)"' >> ${HOME}/.bashrc
-      echo '' >> ${HOME}/.bashrc
-
-      exec ${SHELL}
-      ```
-    
-      Further details on pyenv installation are given here https://github.com/pyenv/pyenv and https://github.com/pyenv/pyenv-installer
-
-      #### Step 1.4: Install Python 3.10 in pyenv and create an environment
-
-      ```
-      pyenv install 3.10
-      pyenv virtualenv 3.10 py310
-      pyenv rehash
-      pyenv activate py310
-      python -m ensurepip --upgrade
-      python -m pip install --upgrade pip setuptools
-      ```
-
-      Note: This activation step needs to be done everytime one starts a new terminal or shell. (Alternately, this also can be written to the .bashrc, so that this will be the default penv environment).
-      ```
-      pyenv activate py310
-      ```
-
-      #### Step 1.5: Set up the repositories
+      #### Steps to set up the repositories
 
       0. **NOTE: Please download and install [C2000Ware](https://www.ti.com/tool/C2000WARE)**
          * Please set the installed path in your terminal: `export C2000WARE_PATH="/path/to/C2000Ware_5_04_00_00"`
