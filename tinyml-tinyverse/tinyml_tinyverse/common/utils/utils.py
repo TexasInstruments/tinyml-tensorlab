@@ -1305,7 +1305,7 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, auc, confusion_matrix_total
 
 
-def export_model(model, input_shape, output_dir, opset_version=17, quantization=0, quantization_error_logging=False,
+def export_model(model, input_shape, output_dir, opset_version=17, quantization=0,
                  example_input=None, generic_model=False, remove_hooks_for_jit=False):
     logger = getLogger("root.export_model")
     device="cpu"  # torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -1319,11 +1319,11 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
     model_copy = copy.deepcopy(model)
     model_copy = model_copy.to(device)
     if quantization:
-        if quantization_error_logging and example_input is not None and hasattr(model_copy, 'measure_stats'):
+        if example_input is not None and hasattr(model_copy, 'measure_stats'):
             example_input = example_input.to(dtype=torch.float, device=device)
             model_copy_for_log = copy.deepcopy(model_copy)         
             qdq_model_output = model_copy_for_log(example_input)
-            model_copy_for_log = model_copy_for_log.convert(output_dequantize=quantization_error_logging)
+            model_copy_for_log = model_copy_for_log.convert()
             int_model_output = model_copy_for_log(example_input)
             try:
                 convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output, int_model_output)
@@ -1465,7 +1465,7 @@ def init_lr_scheduler(
     return lr_scheduler
 
 
-def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10):
+def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, quantization_error_logging=False):
     logger = getLogger('root.utils.quantization_wrapped_model')
     if quantization == TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
         if quantization_method == TinyMLQuantizationMethod.QAT:
@@ -1474,9 +1474,9 @@ def quantization_wrapped_model(model, quantization=0, quantization_method='QAT',
             model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
     elif quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=quantization_error_logging)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=quantization_error_logging)
     if quantization:
         logger.info(f"Proceeding with {quantization_method} quantization")
     return model

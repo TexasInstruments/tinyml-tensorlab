@@ -10,6 +10,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from logging import getLogger
 import textwrap
+import math
 
 # Function that computes Fourier transform + Absolute value of positive frequencies + Logarithmic scaling
 def compute_fourier_abs_log(frame_size, classes_dir, frame_skip,class_names): 
@@ -42,7 +43,7 @@ def compute_fourier_abs_log(frame_size, classes_dir, frame_skip,class_names):
                 first_value = first_line[0].strip()
 
             # Case when header is not present
-            if first_value.replace('.','',1).isnumeric():  # If the first value is a int or float, assume no header
+            if first_value.replace('.','',1).isnumeric():  # If the first value is an int or float, assume no header
                 logger.warning(f"File '{file_path}' starts with a number. Assuming no header.")
                 df = pd.read_csv(file_path, header=None).to_numpy()  # Read without a header
                 
@@ -90,7 +91,7 @@ def compute_fourier_abs_log(frame_size, classes_dir, frame_skip,class_names):
 def compute_wavelet(frame_size, classes_dir, frame_skip,class_names):
     logger = getLogger("root.utils.compute_wavelet")
     logger.info("Starting Wavelet Transform computation...")
-    fft_features = []
+    wavelet_features = []
     frame_labels = []
     wavelet = 'db4' #Using Daubechies Wavelet which has 4 coefficients
 
@@ -157,11 +158,11 @@ def compute_wavelet(frame_size, classes_dir, frame_skip,class_names):
                             np.sum(np.abs(coeff))  # Energy
                         ])
 
-                fft_features.append(np.array(features, dtype=np.float32)) 
+                wavelet_features.append(np.array(features, dtype=np.float32)) 
     logger.info("Wavelet Transform computation completed.")
-    fft_features = np.array(fft_features, dtype=np.float32) 
+    wavelet_features = np.array(wavelet_features, dtype=np.float32) 
     title = "WT"
-    return fft_features, frame_labels, title, class_names
+    return wavelet_features, frame_labels, title, class_names
 
 # Scales the features to a range of [0, 1] using MinMax scaling
 def scale_minmax(features, title):
@@ -219,11 +220,26 @@ def plot_gof_graph(current_plot, row_num, col_num, reduced_features, frame_label
     logger.info("3D graph plotting completed.")
 
 # Perform Goodness of Fit Test
-def goodness_of_fit_test(frame_size, frame_skip, classes_dir, output_dir,class_names):
+def goodness_of_fit_test(frame_size, classes_dir, output_dir,class_names):
 
     logger = getLogger("root.utils.goodness_of_fit_test")
     logger.info("Starting Goodness of Fit test...")
    
+    num_of_frames = 0
+    for class_name in class_names:
+        class_dir = os.path.join(classes_dir, class_name)
+        csv_files = [f for f in os.listdir(class_dir) if f.endswith('.csv')]  # Filter for CSV files
+       
+        for csv_file in csv_files:
+            csv_path = os.path.join(class_dir, csv_file)
+            with open(csv_path, 'r') as file:
+                num_of_rows = sum(1 for row in file) #- 1  # Subtract 1 for the header row (if any)
+                num_of_frames += num_of_rows // frame_size
+    
+    frame_skip=math.ceil(num_of_frames/3000)
+    logger.info(f"Total number of frames: {num_of_frames}")
+    logger.info(f"Frame skip: {frame_skip}")
+    logger.info(f"Total number of frames after frame skip: {num_of_frames//frame_skip}")
     # List of transformation, scaling, and dimensionality reduction functions
     transforms = [compute_fourier_abs_log,compute_wavelet]
     scalers = [scale_std,scale_minmax]
@@ -335,8 +351,8 @@ def goodness_of_fit_test(frame_size, frame_skip, classes_dir, output_dir,class_n
                 current_plot += 1 
 
     # Save the figure to the output directory
-    plt.savefig(os.path.join(output_dir, f'GoF_frame_size_{frame_size}_frame_skip_{frame_skip}.png'))
-    logger.info(f"Goodness of Fit graph is at: {os.path.join(output_dir, f'GoF_frame_size_{frame_size}_frame_skip_{frame_skip}.png')}")
+    plt.savefig(os.path.join(output_dir, f'GoF_frame_size_{frame_size}.png'))
+    logger.info(f"Goodness of Fit graph is at: {os.path.join(output_dir, f'GoF_frame_size_{frame_size}.png')}")
     logger.info("Goodness of Fit test completed.")
-    plt.show()
+    # plt.show()
 

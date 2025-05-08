@@ -116,7 +116,7 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
+    #parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
     parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
 
@@ -381,12 +381,9 @@ def main(gpu, args):
         # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
         if args.gof_test:
             if args.frame_size !='None':
-                gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), frame_skip=int(args.frame_skip), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
-            elif args.sequence_window!='None':
-                logger.info(f"frame_size wasn't specified in the YAML file, so proceeding with the sequence_window value instead.")
-                gof_utils.goodness_of_fit_test(frame_size=int(args.sequence_window), frame_skip=int(args.frame_skip), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
+                gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
             else:
-                logger.warning(f"Goodness of Fit plots will not be generated because neither the frame_size nor the sequence_window were given in the YAML file.")
+                logger.warning(f"Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
     
     except Exception as e:
         logger.warning(f"Feature Extraction plots will not be generated because: {e}")
@@ -479,7 +476,7 @@ def main(gpu, args):
     # Does nothing in Floating Point Training
     model = utils.quantization_wrapped_model(
         model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs)
+        args.epochs, args.quantization_error_logging)
     
     optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
     lr_scheduler = utils.init_lr_scheduler(
@@ -551,8 +548,7 @@ def main(gpu, args):
             input_shape = (1,) + dataset.X.shape[1:]
         utils.export_model(
             model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, quantization_error_logging=args.quantization_error_logging,
-            example_input=example_input, generic_model=args.generic_model,
+            quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
             remove_hooks_for_jit= True if (args.quantization_method==TinyMLQuantizationMethod.PTQ and args.quantization) else False)
     total_time = timeit.default_timer() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
