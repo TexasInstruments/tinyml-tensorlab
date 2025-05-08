@@ -47,36 +47,45 @@ from ... import surgery
 
 
 class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
-    def __init__(self, *args, qconfig_type=None, **kwargs) -> None:
+    def __init__(self, *args, qconfig_type: dict=None, output_dequantize: bool=False, **kwargs) -> None:
         '''
         The QAT wrapper module does the preparation like in:
         qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
         It also uses an appropriate qconfig that imposes the constraints of the hardware.
 
-        The api being called doesn't actually pass qconfig_type - so it will be defined inside.
-        But if you need to pass, it can be defined this way.
-        # qconfig_type supported for TINPU in F28 devices
-        qconfig_type = {
-            'weight': {
-                'bitwidth': 8,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False
-            },
-            'activation': {
-                'bitwidth': 8,
-                'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False
+        The API being called doesn't actually pass qconfig_type - so it will be defined inside.
+        But if you need to pass, it can be defined the way in Args.
+
+        Args:
+            qconfig_type: Similar representation of QConfig dict that defines the \
+                quantization configuration for the model.
+
+            >>> # qconfig_type supported for TINPU in F28 devices 
+        >>> qconfig_type = {
+                'weight': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_channel_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                },
+                'activation': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_tensor_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                }
             }
-        }
+
+            output_dequantize: The ONNX model output by default is Quantized. \
+                If False, the output of model will be quantized, if True, the output of model will be quantized
         '''
         self.weight_bw = qconfig_type['weight']['bitwidth'] if qconfig_type else 8
         self.activation_bw = qconfig_type['activation']['bitwidth'] if qconfig_type else 8
         self.power2_scale = qconfig_type['weight']['power2_scale'] if qconfig_type else True
-
+        self.output_dequantize = output_dequantize
+        
         if self.weight_bw >= 8:
             assert self.power2_scale is True, 'for 8bit quantization, power2_scale must be set to True'
         else:
@@ -89,10 +98,20 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
         self.module = adjust_residual_inputs_qconfig(self.module)
 
-    def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, output_dequantize=False, **kwargs):
+    def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
+        '''
+        The convert function is used to convert the model to TINPU supported ONNX model. 
+        Args:
+            model_qconfig_format: The model format to be converted to. Supports the following 
+                - TinyMLModelQConfigFormat.FLOAT_MODEL
+                - TinyMLModelQConfigFormat.FAKEQ_MODEL
+                - TinyMLModelQConfigFormat.QDQ_MODEL
+                - TinyMLModelQConfigFormat.INT_MODEL
+                - TinyMLModelQConfigFormat.TINPU_INT_MODEL (default)
+        '''
         # first convert the model to int
         super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
-        _convert_replacement_func = lambda module, pattern, *largs, **lkwargs: self._convert_replacement(module, pattern, *largs, output_dequantize=output_dequantize, **lkwargs)
+        _convert_replacement_func = lambda module, pattern, *largs, **lkwargs: self._convert_replacement(module, pattern, *largs, output_dequantize=self.output_dequantize, **lkwargs)
         # then apply the transformation to required output format
         if model_qconfig_format == TinyMLModelQConfigFormat.TINPU_INT_MODEL:
             self.module = surgery.replace_unsupported_layers(self.module, replacement_dict={'tinyml_modelopt_quant_replace_types': {'quant_replace_types': _convert_replacement_func}})
