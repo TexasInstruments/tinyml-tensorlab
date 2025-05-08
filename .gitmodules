@@ -1,3 +1,0 @@
-[submodule "tinyml-mlbackend"]
-	path = tinyml-mlbackend
-	url = ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-mlbackend.git
