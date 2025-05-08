@@ -64,8 +64,8 @@ def main(config):
 
     feature_extraction_preset_descriptions = ai_target_module.runner.ModelRunner.get_feature_extraction_preset_descriptions(params)
     feature_extraction_preset_name = ai_target_module.constants.FEATURE_EXTRACTION_DEFAULT
-    if 'feature_extraction_name' in config['feature_extraction']:
-        feature_extraction_preset_name = config['feature_extraction']['feature_extraction_name']
+    if 'feature_extraction_name' in config['data_processing_feature_extraction']:
+        feature_extraction_preset_name = config['data_processing_feature_extraction']['feature_extraction_name']
     feature_extraction_preset_description = feature_extraction_preset_descriptions.get(feature_extraction_preset_name) or dict()
 
     # get the presets for this device and task

@@ -9,34 +9,31 @@ dataset:
     enable: True
     dataset_name: motor_fault_classification_dsk
     input_data_path: 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'
-    gof_test: True #GoF test: parameters-> frame_size,frame_skip
 
+data_processing_feature_extraction: 
 
-data_processing: # One or more can be cascaded in the list
-    # transforms: 'DownSample SimpleWindow'
-    transforms: []
+    # Available data processing transforms: ['DownSample', 'SimpleWindow']
+    data_proc_transforms: []
     # Downsample
     sampling_rate: 313000
     new_sr: 3130
     # SimpleWindow
-    sequence_window: 256
+    frame_size: 256
     stride_size: 0.01
-    variables: 3
 
-feature_extraction:
+    #Available feature extraction presets
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+
     feature_extraction_name: Custom_MotorFault
-    transform: []
-    frame_size: 256 #512
     frame_skip: 10
     feature_size_per_frame: 64
     num_frame_concat: 2
     normalize_bin: 1
     stacking: 2D1
-    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
     offset: 0
     scale: 1
     log_mul: 20
@@ -44,6 +41,8 @@ feature_extraction:
     log_threshold: 1e-100
     nn_for_feature_extraction: False
     store_feat_ext_data: False
+
+    variables: 3
 
 training:
     # enable/disable training

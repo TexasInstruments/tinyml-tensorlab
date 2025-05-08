@@ -75,7 +75,6 @@ def init_params(*args, **kwargs):
             dataset_download=False,
             dataset_reload=False,
             split_type='amongst_files',
-            gof_test=False,
         ),
         training=dict(
             enable=True,
@@ -131,19 +130,17 @@ def init_params(*args, **kwargs):
             test_data=None,
             model_path=None,
         ),
-        data_processing=dict(
+        data_processing_feature_extraction=dict(
             sampling_rate=313000,
             new_sr=3009,
-            sequence_window=3009,
+            #sequence_window=3009,
+            frame_size=3009,
             stride_size=0.01,
-            transforms=[],  # 'DownSample SimpleWindow',
             variables=1,
             resampling_factor=1,
-        ),
-        feature_extraction=dict(
             feature_extraction_name=None,
-            transform=[],  # 'FFT512 FFT256',
-            frame_size=None,
+            feat_ext_transform=[],  # FFT512 FFT256'
+            data_proc_transforms=[], #'DownSample, SimpleWindow
             feature_size_per_frame=None,
             num_frame_concat=None,
             frame_skip=None,
@@ -161,6 +158,7 @@ def init_params(*args, **kwargs):
             offset=None,
             scale=None,
             nn_for_feature_extraction=False,
+            gof_test=False,
         ),
         compilation=dict(
             enable=True,

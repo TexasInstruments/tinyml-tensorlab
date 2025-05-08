@@ -12,24 +12,23 @@ dataset:
 #    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/arc_fault_classification_dsk.zip'
 #    split_type: within_files
 
-data_processing: # One or more can be cascaded in the list
+data_processing_feature_extraction:
+    # One or more can be cascaded in the list
     # transforms: 'DownSample SimpleWindow'
-    transforms: []
+    data_proc_transforms: []
     # Downsample
-    sampling_rate: 313000
-    new_sr: 3130
+    #sampling_rate: 313000
+    #new_sr: 3130
     # SimpleWindow
-    sequence_window: 256
-    stride_size: 0.01
-    variables: 1
+    #frame_size: 256
+    #stride_size: 0.01
 
-feature_extraction:
-   feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
+    feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
 #   feature_extraction_name: FFT1024Input_256Feature_1Frame_Half_Bandwidth
 #   feature_extraction_name: FFT1024Input_64Feature_4Frame_Half_Bandwidth
 #   feature_extraction_name: FFT1024Input_32Feature_8Frame_Quarter_Bandwidth
 #   feature_extraction_name: Custom_ArcFault
-#   transform: []
+#   feat_ext_transform: []
 #   frame_size: 1024
 #   feature_size_per_frame: 128
 #   num_frame_concat: 1
@@ -38,13 +37,15 @@ feature_extraction:
 #   frame_skip: 1
 #   store_feat_ext_data: False
 #   nn_for_feature_extraction: True
+    variables: 1
 
 training:
     # enable/disable training
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t, ArcFault_model_1400_t
-    model_name: 'TimeSeries_Generic_4k_t'
+    model_name: 'TimeSeries_Generic_1k_t'
+#    with_input_batchnorm: False
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
     model_config: ''
     batch_size: 32

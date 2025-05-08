@@ -9,20 +9,19 @@ dataset:
     enable: True
     dataset_name: arc_fault_example_dsi
 #    split_names: [training, validation]
-
-data_processing: # One or more can be cascaded in the list
-    # transforms: 'DownSample SimpleWindow'
-    transforms: [ Downsample, SimpleWindow ]
+    
+data_processing_feature_extraction:
+    data_proc_transforms: [Downsample, SimpleWindow]
     # Downsample
     sampling_rate: 313000
     new_sr: 3130
     # SimpleWindow
-    sequence_window: 256
+    #sequence_window: 256
+    frame_size: 256
     stride_size: 0.01
-    variables: 1
 
-feature_extraction:
-    transform: []
+    variables: 1
+    gof_test: False
 
 training:
     # enable/disable training

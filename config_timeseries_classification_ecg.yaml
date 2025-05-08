@@ -11,19 +11,19 @@ dataset:
     input_data_path: /home/a0484689/PycharmProjects/tinyml_docker_images/ecg_dataset/
 #    split_names: [training, validation]
 
-data_processing: # One or more can be cascaded in the list
+data_processing_feature_extraction:
+    # One or more can be cascaded in the list
     # transforms: 'DownSample SimpleWindow'
-    transforms: [ Downsample, SimpleWindow ]
+    data_proc_transforms: [ Downsample, SimpleWindow ]
     # Downsample
     sampling_rate: 1
     new_sr: 1
     # SimpleWindow
-    sequence_window: 128
+    frame_size: 128
     stride_size: 1
+    
+    feat_ext_transform: []
     variables: 1
-
-feature_extraction:
-    transform: []
 
 training:
     # enable/disable training

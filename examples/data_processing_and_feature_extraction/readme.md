@@ -19,28 +19,27 @@ This dataset is already formatted according to TinyML Modelmaker needs. The link
 
 ## Usage in TinyML ModelMaker
 
-This dataset is designed to work with TinyML ModelMaker, an end-to-end model development tool that provides dataset handling, module training, and compilation.
+This dataset is designed to work with TinyML ModelMaker, an end-to-end model development tool that provides dataset handling, model training, and compilation.
 
 ```bash
-run_tinyml_modelmaker.sh F28P55 examples/motor_fault_classification_dsk/config_timeseries_classification_motor_fault_dsk.yaml
+./run_tinyml_modelmaker.sh F28P55 examples/data_processing_and_feature_extraction/config_timeseries_classification_motor_fault_dsk.yaml
 ```
 
-Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing, feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
+Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
 
 ## Understanding the YAML Configuration File
 The YAML configuration file sets up the model training process in TinyML ModelMaker. It has several sections:
 
 - **Common Section**: Defines general settings like the module type, task type, target device, and run name.
 - **Dataset Section**: Provides details about the dataset, including whether to load it, the dataset name, and the path to the data file.
-- **Data Processing Section**: Specifies how to process the data, such as downsampling and windowing.
-- **Feature Extraction Section**: Describes the techniques to extract features from the data, like using FFT (Fast Fourier Transform).
+- **Data Processing and Feature Extraction Section**: Involves preparing data for the model by applying techniques such as downsampling, windowing, and feature extraction methods like FFT (Fast Fourier Transform).
 - **Training Section**: Configures the model training parameters, including the model name, batch size, epochs, and learning rate.
 - **Testing Section**: Indicates if testing should be enabled.
 - **Compilation Section**: Sets options for compiling the trained model.
 
 <hr>
 
-## In this example, we'll dive deeper into the **Data Processing** and **Feature Extraction** sections to explain the specifics.
+## In this example, we'll dive deeper into the **Data Processing and Feature Extraction** section to explain the specifics.
 <hr>
 
 ## Data Processing
@@ -49,27 +48,26 @@ In this section, we'll cover how to configure data processing transforms availab
 
 **Available Transforms:**
 
-Whatever transform you want to use, cascade it in the `transforms` list and set the parameters for that transform. Here are the available transforms:-
+Whatever transform you want to use, cascade it in the `data_proc_transforms` list and set the parameters for that transform. Here are the available transforms:-
 
 1. **Simple Window**: Creates windows of specified size from the dataset.
 2. **Downsample**: Reduces the sampling rate of the dataset.
  
-
-If you don't want to use any data processing transforms, you can leave the transforms list empty and only set the `variables` parameter. The `variables` parameter specify the number of input channels (or variables) in the dataset.
+The `variables` parameter specify the number of input channels (or variables) in the dataset.
 
 ### Using Simple Window alone
 
-To use the Simple Window transform, you'll need to understand two key parameters: **sequence_window** and **stride_size**.
+To use the Simple Window transform, you'll need to understand two key parameters: **frame_size** and **stride_size**.
 
-- **sequence_window**: This parameter defines the size of each window. It determines the number of data points included in each segment of the dataset.
+- **frame_size**: This parameter defines the size of each window/frame. It determines the number of data points included in each segment of the dataset.
 - **stride_size**: This parameter defines the amount of overlap between consecutive windows. It is calculated as a fraction of the sequence window size.
 
 Here is an example of how to use this:-
 
 ```yaml
-data_processing:
-    transforms: ['SimpleWindow']
-    sequence_window: 256
+data_processing_feature_extraction:
+    data_proc_transforms: ['SimpleWindow']
+    frame_size: 256
     stride_size: 0.01
     variables: 3
 ```
@@ -84,8 +82,8 @@ The Downsample transform reduces the sampling rate of the dataset. Here are the 
 Here is an example of how to use this:-
 
 ```yaml
-data_processing:
-    transforms: ['DownSample']
+data_processing_feature_extraction:
+    data_proc_transforms: ['DownSample']
     sampling_rate: 313000
     new_sr: 3130
     variables: 3
@@ -97,13 +95,13 @@ data_processing:
 Here is an example of how to use this:-
 
 ```yaml
-data_processing:
-    transforms: ['DownSample', 'SimpleWindow']
+data_processing_feature_extraction:
+    data_proc_transforms: ['DownSample', 'SimpleWindow']
     # Downsample
     sampling_rate: 313000
     new_sr: 3130
     # SimpleWindow
-    sequence_window: 256
+    frame_size: 256
     stride_size: 0.01
     variables: 3
 ```
@@ -138,7 +136,7 @@ In this section, we'll focus on the feature extraction configurations available 
 
 11. **log_threshold**: Threshold for log scaling to prevent negative infinity values (Default value: None).
 
-12. **transform**: List of transformations to apply to the data (Default value: []).
+12. **feat_ext_transform**: List of transformations to apply to the data (Default value: []).
       
       Available transforms are:-
 
@@ -195,20 +193,22 @@ In this section, we'll focus on the feature extraction configurations available 
 
 19. **scale**: Adjusts the amplitude of the extracted features to a specific range (Default value: None).
 
+20. **variables**: Specify the number of input channels (or variables) in the dataset.
+
 <br>
 Here is an example of how to custom specify the parameters for feature extraction:
 
 <br>
 
 ```yaml
-feature_extraction:
+data_processing_feature_extraction:
    feature_extraction_name: Custom_MotorFault
    frame_size: 512
    feature_size_per_frame: 64
    num_frame_concat: 2
    normalize_bin: 1
    stacking: 2D1
-   transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+   feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
    offset: 0
    scale: 1
    frame_skip: 1
@@ -216,6 +216,35 @@ feature_extraction:
    log_base: 10
    log_threshold: 1e-100
    store_feat_ext_data: False
+   variables: 3
+```
+
+<br>
+
+Here is an example of how to apply both data processing and feature extraction:-
+
+```yaml
+data_processing_feature_extraction:
+
+   # Data processing
+   data_proc_transforms: ['SimpleWindow']
+   frame_size: 512
+   stride_size: 0.01
+   # Feature extraction
+   feature_extraction_name: Custom_MotorFault
+   feature_size_per_frame: 64
+   num_frame_concat: 2
+   normalize_bin: 1
+   stacking: 2D1
+   feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+   offset: 0
+   scale: 1
+   frame_skip: 1
+   log_mul: 20
+   log_base: 10
+   log_threshold: 1e-100
+   store_feat_ext_data: False
+   variables: 3
 ```
 
 ## Predefined Feature Extraction Presets:
@@ -226,23 +255,27 @@ Instead of custom specifying these parameters above, you can select from one of 
 
     Definition for this preset:-
 
-   - **Transforms**: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
-   - **Frame Size**: 256
-   - **Feature Size per Frame**: 16
-   - **Number of Frames to Concatenate**: 8
-   - **Stacking**: 1D
-   - **Normalize Bin**: True
-   - **Remove DC Component**: True
-   - **Offset**: 0
-   - **Scale**: 1
-   - **Logarithmic Multiplicator**: 20
-   - **Logarithmic Base**: 10
-   - **Logarithmic Threshold**: 1e-100
+    - **data_proc_transforms**: []
+    - **feat_ext_transform**: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB','CONCAT']
+    - **frame_size**: 256
+    - **feature_size_per_frame**: 16
+    - **num_frame_concat**: 8
+    - **normalize_bin**: True
+    - **dc_remove**: True
+    - **offset**: 0
+    - **scale**: 1
+    - **stacking**: '1D'
+    - **frame_skip**: 1
+    - **log_mul**: 20
+    - **log_base**: 10
+    - **log_threshold**: 1e-100
+    - **sampling_rate**: 1
+    - **variables**: 3
 
    Usage:-
 
    ```yaml
-   feature_extraction:
+   data_processing_feature_extraction:
     feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
     store_feat_ext_data: False
    ```
@@ -264,23 +297,27 @@ Instead of custom specifying these parameters above, you can select from one of 
 
    Definition for this preset:-
 
-   - **Transforms**: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
-   - **Frame Size**: 256
-   - **Feature Size per Frame**: 16
-   - **Number of Frames to Concatenate**: 8
-   - **Stacking**: 2D1
-   - **Normalize Bin**: True
-   - **Remove DC Component**: True
-   - **Offset**: 0
-   - **Scale**: 1
-   - **Logarithmic Multiplicator**: 20
-   - **Logarithmic Base**: 10
-   - **Logarithmic Threshold**: 1e-100
+    - **data_proc_transforms**: []
+    - **feat_ext_transform**: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+    - **frame_size**: 256
+    - **feature_size_per_frame**: 16
+    - **num_frame_concat**: 8
+    - **normalize_bin**: True
+    - **dc_remove**: True
+    - **offset**: 0
+    - **scale**: 1
+    - **stacking**: '2D1'
+    - **frame_skip**: 1
+    - **log_mul**: 20
+    - **log_base**: 10
+    - **log_threshold**: 1e-100
+    - **sampling_rate**: 1
+    - **variables**: 3
 
    Usage:-
 
    ```yaml
-   feature_extraction:
+   data_processing_feature_extraction:
     feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
     store_feat_ext_data: False
    ```
@@ -297,25 +334,29 @@ Instead of custom specifying these parameters above, you can select from one of 
 
 3. **MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1**:
 
-    Definition for this preset:-
+   Definition for this preset:-
 
-   - **Transforms**: ['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT']
-   - **Frame Size**: 256
-   - **Feature Size per Frame**: 128
-   - **Number of Frames to Concatenate**: 1
-   - **Stacking**: 2D1
-   - **Normalize Bin**: True
-   - **Remove DC Component**: True
-   - **Offset**: 0
-   - **Scale**: 1
-   - **Logarithmic Multiplicator**: 20
-   - **Logarithmic Base**: 10
-   - **Logarithmic Threshold**: 1e-100
+    - **data_proc_transforms**: []
+    - **feat_ext_transform**: ['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT']
+    - **frame_size**: 256
+    - **feature_size_per_frame**: 128
+    - **num_frame_concat**: 1
+    - **normalize_bin**: True
+    - **dc_remove**: True
+    - **offset**: 0
+    - **scale**: 1
+    - **stacking**: '2D1'
+    - **frame_skip**: 1
+    - **log_mul**: 20
+    - **log_base**: 10
+    - **log_threshold**: 1e-100
+    - **sampling_rate**: 1
+    - **variables**: 3
 
    Usage:-
 
    ```yaml
-   feature_extraction:
+   data_processing_feature_extraction:
     feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
     store_feat_ext_data: False
    ```
@@ -332,25 +373,26 @@ Instead of custom specifying these parameters above, you can select from one of 
 
 4. **MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1**:
 
-    Definition for this preset:-
+   Definition for this preset:-
 
-   - **Transforms**: ['RAW_FE', 'CONCAT']
-   - **Frame Size**: 128
-   - **Feature Size per Frame**: 128
-   - **Number of Frames to Concatenate**: 1
-   - **Stacking**: 2D1
-   - **Normalize Bin**: True
-   - **Remove DC Component**: True
-   - **Offset**: 0
-   - **Scale**: 1
-   - **Logarithmic Multiplicator**: 20
-   - **Logarithmic Base**: 10
-   - **Logarithmic Threshold**: 1e-100
+    - **data_proc_transforms**: []
+    - **feat_ext_transform**: ['RAW_FE', 'CONCAT']
+    - **frame_size**: 128
+    - **feature_size_per_frame**: 128
+    - **num_frame_concat**: 1
+    - **normalize_bin**: True
+    - **dc_remove**: True
+    - **offset**: 0
+    - **scale**: 1
+    - **stacking**: '2D1'
+    - **frame_skip**: 1
+    - **sampling_rate**: 1
+    - **variables**: 3
 
    Usage:-
 
    ```yaml
-   feature_extraction:
+   data_processing_feature_extraction:
     feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
     store_feat_ext_data: False
    ```

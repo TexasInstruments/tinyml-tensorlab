@@ -94,13 +94,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -115,7 +135,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -131,27 +150,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -285,13 +283,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -306,7 +324,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -322,27 +339,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -476,13 +472,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -497,7 +513,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -513,27 +528,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -667,13 +661,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -688,7 +702,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -704,27 +717,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -860,13 +852,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -881,7 +893,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -897,27 +908,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -1053,13 +1043,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -1074,7 +1084,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -1090,27 +1099,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -1246,13 +1234,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -1267,7 +1275,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -1283,27 +1290,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -1437,13 +1423,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -1458,7 +1464,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -1474,27 +1479,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -1628,13 +1612,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -1649,7 +1653,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -1665,27 +1668,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -1819,13 +1801,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -1840,7 +1842,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -1856,27 +1857,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -2010,13 +1990,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -2031,7 +2031,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -2047,27 +2046,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -2201,13 +2179,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -2222,7 +2220,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -2238,27 +2235,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -2392,13 +2368,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -2413,7 +2409,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -2429,27 +2424,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -2583,13 +2557,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -2604,7 +2598,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -2620,27 +2613,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -2774,13 +2746,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -2795,7 +2787,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -2811,27 +2802,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -2965,13 +2935,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -2986,7 +2976,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -3002,27 +2991,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -3156,13 +3124,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -3177,7 +3165,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -3193,27 +3180,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -3347,13 +3313,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -3368,7 +3354,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -3384,27 +3369,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -3538,13 +3502,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -3559,7 +3543,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -3575,27 +3558,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -3729,13 +3691,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -3750,7 +3732,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -3766,27 +3747,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -3920,13 +3880,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -3941,7 +3921,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -3957,27 +3936,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -4111,13 +4069,33 @@ model_descriptions:
         label: Compilation Preset
         name: compile_preset_name
         type: enum
-    data_processing:
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: null
       new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: null
+      offset: null
       resampling_factor: 1
       sampling_rate: 313000
-      sequence_window: 3009
+      scale: null
+      stacking: null
+      store_feat_ext_data: false
       stride_size: 0.01
-      transforms: []
       variables: 1
     dataset:
       annotation_dir: annotations
@@ -4132,7 +4110,6 @@ model_descriptions:
       dataset_reload: false
       enable: true
       extract_path: null
-      gof_test: false
       input_annotation_path: null
       input_data_path: null
       max_num_files: 10000
@@ -4148,27 +4125,6 @@ model_descriptions:
     download:
       download_path: ''
       download_url: ''
-    feature_extraction:
-      analysis_bandwidth: 1
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: null
-      frame_skip: null
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: null
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: null
-      offset: null
-      scale: null
-      stacking: null
-      store_feat_ext_data: false
-      transform: []
     testing:
       enable: true
       model_path: null
@@ -4913,8 +4869,7 @@ task_descriptions:
   arc_fault:
     stages:
     - dataset
-    - data_processing
-    - feature_extraction
+    - data_processing_feature_extraction
     - training
     - compilation
     target_devices: &id001
@@ -4929,8 +4884,7 @@ task_descriptions:
   blower_imbalance:
     stages:
     - dataset
-    - data_processing
-    - feature_extraction
+    - data_processing_feature_extraction
     - training
     - compilation
     target_devices: *id001
@@ -4939,8 +4893,7 @@ task_descriptions:
   motor_fault:
     stages:
     - dataset
-    - data_processing
-    - feature_extraction
+    - data_processing_feature_extraction
     - training
     - compilation
     target_devices: *id001
