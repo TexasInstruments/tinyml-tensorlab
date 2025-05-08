@@ -3,14 +3,18 @@ common:  # The common section can be plainly copied as it is
     task_type: 'generic_timeseries_classification'
     target_device: 'F28P55'
     run_name: '{date-time}/{model_name}'
+
 dataset:
     enable: False  # Please note the 'False'. This is important to disable data loading which is not important
     dataset_name: abc  # Can be anything, used for directory name
-feature_extraction:  # Retain this information
+
+data_processing_feature_extraction:  # Retain this information
     feature_extraction_name: None
+
 training:
     enable: False # Please note the 'False'. This is important to disable data loading which is not important
     model_name: 'a'   # Can be anything, used for directory name
+    
 compilation:
     enable: True
     model_path: "/x/y/z/model.onnx"  # Most important: Path of the model to be compiled

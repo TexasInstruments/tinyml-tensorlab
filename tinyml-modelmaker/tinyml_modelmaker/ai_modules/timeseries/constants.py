@@ -307,25 +307,25 @@ TASK_DESCRIPTIONS = {
         'task_name': 'ARC Fault',
         'target_module': 'timeseries',
         'target_devices': TARGET_DEVICES,
-        'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
     TASK_TYPE_MOTOR_FAULT: {
         'task_name': 'Motor Fault',
         'target_module': 'timeseries',
         'target_devices': TARGET_DEVICES,
-        'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
     TASK_TYPE_BLOWER_IMBALANCE: {
         'task_name': 'Fan Blower Imbalance Fault',
         'target_module': 'timeseries',
         'target_devices': TARGET_DEVICES,
-        'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
     # TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
     #     'task_name': 'Generic Time Series Classification',
     #     'target_module': 'timeseries',
     #     'target_devices': TARGET_DEVICES,
-    #     'stages': ['dataset', 'data_processing', 'feature_extraction', 'training', 'compilation'],
+    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     # },
     # TASK_TYPE_AUDIO_CLASSIFICATION: {
     #     'task_name': 'Image Classification',
@@ -341,33 +341,26 @@ DATA_PREPROCESSING_PRESET_DESCRIPTIONS = dict(
 FEATURE_EXTRACTION_DEFAULT = 'default'
 FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     Custom_ArcFault=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12),
-        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     Custom_MotorFault=dict(
-        feature_extraction=dict(transform=[], normalize_bin=True, frame_skip=1),
-        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=3, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=[], normalize_bin=True, frame_skip=1, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=3, ),
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     Custom_Default=dict(
-        feature_extraction=dict(transform=[], normalize_bin=True, frame_skip=1),
-        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=[], normalize_bin=True, frame_skip=1, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
 
     FFT1024Input_256Feature_1Frame_Full_Bandwidth=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12),
-        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_256Feature_1Frame_Half_Bandwidth=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=122, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12),
-        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=122, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_64Feature_4Frame_Half_Bandwidth=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=64, num_frame_concat=4, min_bin=1, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12),
-        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=64, num_frame_concat=4, min_bin=1, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     FFT1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_bin=1, analysis_bandwidth=4, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12),
-        data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_bin=1, analysis_bandwidth=4, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     # ArcFault_512Input_FFT=dict(
     #     feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=512, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12),
@@ -375,24 +368,20 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     #     common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
 
     MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),  # ch=1,
-        data_processing=dict(transforms=[], sampling_rate=1, variables=3, ),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3,),  # ch=1,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),  # ch=3,
-        data_processing=dict(transforms=[], sampling_rate=1, variables=3),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
-        feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),  # ch=3,
-        data_processing=dict(transforms=[], sampling_rate=1, variables=3),
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
     #     feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),
     #     data_processing=dict(transforms=[], sampling_rate=1, variables=3),
     #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
-        feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1),  # ch=3,
-        data_processing=dict(transforms=[], sampling_rate=1, variables=3),
+        data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
 )
 
@@ -400,23 +389,19 @@ DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsi=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip'),
-        data_processing=dict(transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, sequence_window=3130, stride_size=0.01),
-        feature_extraction=dict(feature_extraction_name=None),
+        data_processing_feature_extraction=dict(feature_extraction_name=None, data_proc_transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, frame_size=3130, stride_size=0.01),
     ),
     arc_fault_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
-        data_processing=dict(transforms=[], sampling_rate=1),
-        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth')),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     motor_fault_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
-        data_processing=dict(transforms=[], sampling_rate=1, variables=3),
-        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1')),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsh=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip'),
-        data_processing=dict(transforms=[], sampling_rate=1, variables=3),
-        feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1')),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
 )
 DATASET_DEFAULT = 'default'

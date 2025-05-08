@@ -56,8 +56,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -183,19 +182,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -212,7 +208,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -282,8 +279,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -409,19 +405,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -438,7 +431,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -508,8 +502,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -635,19 +628,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -664,7 +654,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -734,8 +725,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -861,19 +851,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -890,7 +877,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -960,8 +948,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -1087,19 +1074,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -1116,7 +1100,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -1186,8 +1171,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -1313,19 +1297,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -1342,7 +1323,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -1412,8 +1394,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -1539,19 +1520,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -1568,7 +1546,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -1638,8 +1617,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -1765,19 +1743,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -1794,7 +1769,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -1864,8 +1840,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -1991,19 +1966,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -2020,7 +1992,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -2090,8 +2063,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -2217,19 +2189,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -2246,7 +2215,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -2316,8 +2286,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -2443,19 +2412,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -2472,7 +2438,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -2542,8 +2509,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -2669,19 +2635,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -2698,7 +2661,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -2768,8 +2732,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -2895,19 +2858,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -2924,7 +2884,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -2994,8 +2955,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -3121,19 +3081,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -3150,7 +3107,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -3223,8 +3181,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -3350,19 +3307,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -3379,7 +3333,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -3452,8 +3407,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -3579,19 +3533,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -3608,7 +3559,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -3681,8 +3633,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -3808,19 +3759,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -3837,7 +3785,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -3907,8 +3856,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -4034,19 +3982,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -4063,7 +4008,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -4133,8 +4079,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -4260,19 +4205,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -4289,7 +4231,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -4359,8 +4302,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -4486,19 +4428,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -4515,7 +4454,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -4585,8 +4525,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -4712,19 +4651,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -4741,7 +4677,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -4811,8 +4748,7 @@
         "annotation_format":"univ_ts_json",
         "dataset_download":false,
         "dataset_reload":false,
-        "split_type":"amongst_files",
-        "gof_test":false
+        "split_type":"amongst_files"
       },
       "training":{
         "enable":true,
@@ -4938,19 +4874,16 @@
         "test_data":null,
         "model_path":null
       },
-      "data_processing":{
+      "data_processing_feature_extraction":{
         "sampling_rate":313000,
         "new_sr":3009,
-        "sequence_window":3009,
+        "frame_size":3009,
         "stride_size":0.01,
-        "transforms":[],
         "variables":1,
-        "resampling_factor":1
-      },
-      "feature_extraction":{
+        "resampling_factor":1,
         "feature_extraction_name":null,
-        "transform":[],
-        "frame_size":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
         "feature_size_per_frame":null,
         "num_frame_concat":null,
         "frame_skip":null,
@@ -4967,7 +4900,8 @@
         "stacking":null,
         "offset":null,
         "scale":null,
-        "nn_for_feature_extraction":false
+        "nn_for_feature_extraction":false,
+        "gof_test":false
       },
       "compilation":{
         "enable":true,
@@ -5549,8 +5483,7 @@
       ],
       "stages":[
         "dataset",
-        "data_processing",
-        "feature_extraction",
+        "data_processing_feature_extraction",
         "training",
         "compilation"
       ]
@@ -5568,8 +5501,7 @@
       ],
       "stages":[
         "dataset",
-        "data_processing",
-        "feature_extraction",
+        "data_processing_feature_extraction",
         "training",
         "compilation"
       ]
@@ -5587,8 +5519,7 @@
       ],
       "stages":[
         "dataset",
-        "data_processing",
-        "feature_extraction",
+        "data_processing_feature_extraction",
         "training",
         "compilation"
       ]

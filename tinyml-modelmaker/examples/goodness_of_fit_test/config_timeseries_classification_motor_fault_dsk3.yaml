@@ -1,0 +1,34 @@
+common:
+    target_module: 'timeseries'
+    task_type: 'generic_timeseries_classification'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+
+dataset:
+    # enable/disable dataset loading
+    enable: True
+    dataset_name: motor_fault_classification_dsk3
+    input_data_path: 'http://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk_3inp.zip'
+
+data_processing_feature_extraction:
+    feature_extraction_name: 'MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'
+    gof_test: True
+    frame_size: 256
+    
+training:
+    # enable/disable training
+    enable: True
+    model_name: 'TimeSeries_Generic_6k_t'
+    model_config: ''
+    batch_size: 256
+    training_epochs: 5
+    num_gpus: 0
+    learning_rate: 0.04
+
+testing:
+    enable: False
+
+compilation:
+    # enable/disable compilation
+    enable: False #True
+    # No preset is required for devices other than F28P55
