@@ -142,13 +142,13 @@ class GenericTSDataset(Dataset):
     
     # Form windows of size sequence_window from the dataset
     def __transform_simple_window(self, x_temp):
-        stride_window = int(self.sequence_window * self.stride_size)
+        stride_window = int(self.frame_size * self.stride_size)
         if stride_window == 0:
             self.logger.warning("Stride Window size calculated is 0. Defaulting the value to Sample Window i.e. no overlap.")
-            stride_window = self.sequence_window
+            stride_window = self.frame_size
         if not hasattr(self, 'keep_short_tails'):
             self.keep_short_tails = False
-        x_temp = np.array(basic_transforms.SimpleWindow(x_temp, self.sequence_window, stride_window, self.keep_short_tails))
+        x_temp = np.array(basic_transforms.SimpleWindow(x_temp, self.frame_size, stride_window, self.keep_short_tails))
         if len(self.feat_ext_transform) > 0:
             x_temp = x_temp.reshape(-1, self.variables)
         return x_temp
@@ -602,16 +602,16 @@ class GenericTSDatasetReg(Dataset):
 
     # Form windows of size sequence_window from the dataset
     def __transform_simple_window(self, x_temp, y_temp):
-        stride_window = int(self.sequence_window * self.stride_size)
+        stride_window = int(self.frame_size * self.stride_size)
         if stride_window == 0:
             self.logger.warning(
                 "Stride Window size calculated is 0. Defaulting the value to Sample Window i.e. no overlap.")
-            stride_window = self.sequence_window
+            stride_window = self.frame_size
         if not hasattr(self, 'keep_short_tails'):
             self.keep_short_tails = False
-        x_temp = np.array(basic_transforms.SimpleWindow(x_temp, self.sequence_window, stride_window, self.keep_short_tails))
+        x_temp = np.array(basic_transforms.SimpleWindow(x_temp, self.frame_size, stride_window, self.keep_short_tails))
         y_temp = np.array(
-            basic_transforms.SimpleWindow(y_temp, self.sequence_window, stride_window, self.keep_short_tails))
+            basic_transforms.SimpleWindow(y_temp, self.frame_size, stride_window, self.keep_short_tails))
         if len(self.feat_ext_transform) > 0:
             x_temp = x_temp.reshape(-1, self.variables)
         return x_temp, y_temp
@@ -1078,15 +1078,15 @@ class GenericTSDatasetAD(Dataset):
 
     # Form windows of size sequence_window from the dataset
     def __transform_simple_window(self, x_temp):
-        stride_window = int(self.sequence_window * self.stride_size)
+        stride_window = int(self.frame_size * self.stride_size)
         if stride_window == 0:
             self.logger.warning(
                 "Stride Window size calculated is 0. Defaulting the value to Sample Window i.e. no overlap.")
-            stride_window = self.sequence_window
+            stride_window = self.frame_size
         if not hasattr(self, 'keep_short_tails'):
             self.keep_short_tails = False
         x_temp = np.array(
-            basic_transforms.SimpleWindow(x_temp, self.sequence_window, stride_window, self.keep_short_tails))
+            basic_transforms.SimpleWindow(x_temp, self.frame_size, stride_window, self.keep_short_tails))
         if len(self.feat_ext_transform) > 0:
             x_temp = x_temp.reshape(-1, self.variables)
         return x_temp
