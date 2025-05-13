@@ -4,7 +4,7 @@
 
 ## Overview
 
-The Grid Stability Dataset is a multivariate dataset created by UCI Machine Learning Repository. The dataset is created by stability analysis of 4-node star system. There is 1 generation node in center and 3 consumer nodes. There are 3 parameters (Tau, P, G) for each node amounting to total 12 independent variables. There are two prediction variable for stability (numerical and categorical).
+The Grid Stability Dataset is a multivariate dataset created by UCI Machine Learning Repository. The dataset is created by stability analysis of 4-node star system. There is 1 generation node in center and 3 consumer nodes. There are 3 parameters (Tau, P, G) for each node amounting to total 12 independent variables. There are two prediction variable for stability (numerical and categorical). The dataset obtains the power consumption, reaction time of participants & the price elasticity to predicts whether the grid will be stable or not. [Read More](https://arxiv.org/abs/1508.02217)
 
 Independent Variable:
 

@@ -11,24 +11,19 @@ dataset:
     dataset_name: grid_stability
     input_data_path: 'examples/grid_stability/grid_stability_dataset.zip'
 
-data_processing: # One or more can be cascaded in the list
-    # transforms: 'DownSample SimpleWindow'
-    transforms: [SimpleWindow]
-    # Downsample
-    sampling_rate: 313000
-    new_sr: 3130
+data_processing_feature_extraction:
+    data_proc_transforms: [SimpleWindow]
     # SimpleWindow
-    sequence_window: 384
+    frame_size: 192
     stride_size: 0.01
     variables: 6
 
-feature_extraction:
-   feature_extraction_name: Custom_Default
-   # FFT with Binning
-   transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
-   frame_size: 192
-   feature_size_per_frame: 48
-   num_frame_concat: 4
+    feature_extraction_name: Custom_Default
+    # FFT with Binning
+    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+    frame_size: 192
+    feature_size_per_frame: 48
+    num_frame_concat: 4
 
 training:
     # enable/disable training
