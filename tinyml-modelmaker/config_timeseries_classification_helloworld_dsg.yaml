@@ -9,21 +9,17 @@ dataset:
     enable: True #False
     dataset_name: hello_world
 #    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/HelloWorldData/'
-    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/datasets/HelloWorldData'
-    split_type: within_files
+#    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/HelloWorldData/'
+    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/HelloWorldData/'
+#    split_type: within_files
 #    gof_test: True
-
-
-
-data_processing: # One or more can be cascaded in the list
-    transforms: []
 
 
 data_processing_feature_extraction:
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
-    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
+    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
     variables: 1
 #    feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
 #    feature_extraction_name: FFT1024Input_256Feature_1Frame_Half_Bandwidth
@@ -50,11 +46,11 @@ training:
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
-    model_name: 'TimeSeries_Generic_6k_t'
+    model_name: 'TimeSeries_Generic_1k_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
     batch_size: 256
-    training_epochs: 50
+    training_epochs: 20
     num_gpus: 1  # 1
 #    learning_rate: 0.001
 
@@ -63,7 +59,7 @@ testing:
 
 compilation:
     # enable/disable compilation
-    enable: False #False
+    enable: True #False
     # No preset is required for devices other than F28P55
 #    compile_preset_name: forced_soft_npu_preset
 

@@ -352,14 +352,26 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 
     FFT1024Input_256Feature_1Frame_Full_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
-        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     FFT1024Input_256Feature_1Frame_Half_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=122, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
-        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     FFT1024Input_64Feature_4Frame_Half_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=64, num_frame_concat=4, min_bin=1, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
-        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     FFT1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_bin=1, analysis_bandwidth=4, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    ArcFault_024Input_256Feature_1Frame_Full_Bandwidth=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    ArcFault_1024Input_256Feature_1Frame_Half_Bandwidth=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=122, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
+        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    ArcFault_1024Input_64Feature_4Frame_Half_Bandwidth=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=64, num_frame_concat=4, min_bin=1, analysis_bandwidth=2, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+        common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
+    ArcFault_1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_bin=1, analysis_bandwidth=4, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     # ArcFault_512Input_FFT=dict(
@@ -383,25 +395,46 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
+
+    Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3,),  # ch=1,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
+    #     feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),
+    #     data_processing=dict(transforms=[], sampling_rate=1, variables=3),
+    #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
+    Generic_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
 )
 
 DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsi=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip'),
+        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsi.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=None, data_proc_transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, frame_size=3130, stride_size=0.01),
     ),
     arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     motor_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsh=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip'),
+        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
+    ),
+    hello_world_example_dsg=dict(
+        dataset=dict(input_data_path='http://uda0484689.dhcp.ti.com:8100/tinyml_docker_images/datasets/HelloWorldExample.zip'),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
 )
 DATASET_DEFAULT = 'default'
@@ -705,10 +738,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'arc_fault_classification_dsi',
-    #         'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
+    #         'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsi.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsi.zip',
+    #         'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsi.zip',
     #         'dataset_detailed_name': 'Arc Fault Classification Example1',
     #         'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
     #         'dataset_size': None,
@@ -723,10 +756,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_classification_dsk',
-            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip',
+            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/arc_fault_classification_dsk.zip',
+            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Arc Fault Classification Example2',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -741,10 +774,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_example_dsk',
-            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip',
+            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/motor_fault_classification_dsk.zip',
+            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Motor Bearing Fault Classification Example',
             'dataset_description': 'Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking',
             'dataset_size': None,
@@ -759,12 +792,30 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'blower_imbalance_example_dsh',
-            'input_data_path': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip',
+            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/jacinto7/esd/modelzoo/other/tinyml/00_05_00/datasets/fan_blower_imbalance_dsh.zip.zip',
+            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
             'dataset_detailed_name': 'Blower Imbalance Classification Example',
             'dataset_description': 'Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'hello_world_example_dsg': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'hello_world_example_dsg',
+            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
+        },
+        'info': {
+            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
+            'dataset_detailed_name': 'Generic Timeseries Classification Example',
+            'dataset_description': 'Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
             'dataset_license': 'TI Internal License'

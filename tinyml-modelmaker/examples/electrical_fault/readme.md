@@ -12,7 +12,7 @@ The Electrical Fault Dataset is a multivariate time series dataset. It is obtain
 
 There are 6 measurable parameters/variables - **(Va, Vb, Vc, Ia, Ib, Ic)** i.e the voltage and current of three phases. 
 
-There are two dataset files present in the compressed zip: [electrical_fault.zip](../../../tinyml-datasets/datasets/electrical_fault.zip)
+There are two dataset files present in the compressed zip: [electrical_fault.zip](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/electrical_fault.zip)
 
 - `detect_dataset.xlsx` : which finds if there is a fault or not. Target = [Output (S)]
     - There is one target only i.e. Output (S) which has two unique values (0, 1) denoting fault and no fault.
@@ -57,7 +57,7 @@ run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config_classification_
 Running this configuration file with modelmaker will show an error to train the model properly with good hyper parameters. (This is due to *multicollinearity*)
 
 
-The users can configure the yaml [configuration](config_classification_electrical_fault.yaml) to change parameters related to data preprocessing, training, testing, **feature extraction**, model and model compilation. In this example, we will configure the parameters of feature extraction. 
+The users can configure the yaml [configuration](config_classification_electrical_fault.yaml) to change parameters related to **data preprocessing feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. 
 
 ## What if Multicollinearity in your dataset ?
 
@@ -82,19 +82,19 @@ To solve the problem of Multicollinearity, we can do one or more of the followin
 
 ## Feature Extraction is the solution
 
-In this example we will explore the method to do dimensionality reduction using `FFT` and `Binning` of features. The feature extraction section of yaml [configuration](config_classification_electrical_fault.yaml) can be used to configure it.
+In this example we will explore the method to do dimensionality reduction using `FFT` and `Binning` of features. The **data preprocessing feature extraction** section of yaml [configuration](config_classification_electrical_fault.yaml) can be used to configure it.
 
 ```yaml
-feature_extraction:
+data_processing_feature_extraction:
    feature_extraction_name: Custom_Default
-   transform: []
+   feat_ext_transform: []
 ```
 
 We have to add FFT and BIN and few more transforms in this `transform` variable.
 
 ```yaml
-feature_extraction:
-    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+data_processing_feature_extraction:
+    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
 ```
 - FFT related options: FFT_FE, FFT_POS_HALF, DC_REMOVE, ABS
     1. `FFT_FE` is used to perform fft on frame
@@ -109,8 +109,8 @@ feature_extraction:
 
 Next we will define our features shape.
 ```yaml
-feature_extraction:
-    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+data_processing_feature_extraction:
+    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
     
     frame_size: 192
     feature_size_per_frame: 48
@@ -130,8 +130,8 @@ run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config_classification_
 Another feature extraction is to just perform `FFT` without Binning. For this, we need to remove `Binning` from transforms. The feature size for each frame would become half of the frame size. So, yaml configuration would look like.
 
 ```yaml
-feature_extraction:
-    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
+data_processing_feature_extraction:
+    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
     
     frame_size: 192
     feature_size_per_frame: 96
