@@ -172,13 +172,17 @@ def main(gpu, args):
                 predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
-    mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-    logger.info("Plotting OvR Multiclass ROC score")
-    utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                              label_map=dataset.inverse_label_map, phase='test')
-    logger.info("Plotting Class difference scores")
-    utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                              label_map=dataset.inverse_label_map, phase='test')
+    try:
+        mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
+        logger.info("Plotting OvR Multiclass ROC score")
+        utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
+                                  label_map=dataset.inverse_label_map, phase='test')
+        logger.info("Plotting Class difference scores")
+        utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
+                                  label_map=dataset.inverse_label_map, phase='test')
+    except Exception as e:
+        logger.warning(f"Post Training Analysis plots will not be generated because: {e}")
+
     metric = torcheval.metrics.MulticlassAccuracy()
     metric.update(torch.argmax(predicted, dim=1), ground_truth)
     logger = getLogger("root.main.test_data")
