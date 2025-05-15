@@ -413,7 +413,8 @@ def main(gpu, args):
 
     # Does nothing in Floating Point Training
     model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth, args.epochs)
+        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+        args.epochs, args.quantization_error_logging)
 
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -498,8 +499,7 @@ def main(gpu, args):
         example_input = None  # next(iter(data_loader_test))[0]
         utils.export_model(
             model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, quantization_error_logging=args.quantization_error_logging,
-            example_input=example_input, generic_model=args.generic_model,
+            quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
             remove_hooks_for_jit= True if (args.quantization_method==TinyMLQuantizationMethod.PTQ and args.quantization) else False)
     total_time = timeit.default_timer() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
