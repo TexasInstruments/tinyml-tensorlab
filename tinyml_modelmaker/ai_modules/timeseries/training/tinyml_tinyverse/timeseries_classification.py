@@ -967,7 +967,7 @@ class ModelTraining:
             else:
                 train.run(args)
 
-                if utils.misc_utils.str2bool(self.params.data_processing_feature_extraction.store_feat_ext_data) and utils.misc_utils.str2bool(self.params.feature_extraction.dont_train_just_feat_ext):
+                if utils.misc_utils.str2bool(self.params.data_processing_feature_extraction.store_feat_ext_data) and utils.misc_utils.str2bool(self.params.data_processing_feature_extraction.dont_train_just_feat_ext):
                     return self.params
 
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
