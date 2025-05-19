@@ -383,3 +383,33 @@ def adjust_residual_inputs_qconfig(model : GraphModule, range_max: int=0, quant_
     model.graph.lint()
     model.recompile()
     return model
+
+def assign_same_observers(model : GraphModule, node_1: Node, node_2: Node) -> GraphModule:
+    """
+    Assigns the same observers to the residual inputs of a given node
+    """
+    activation_post_proc = None
+    if hasattr(model, node_1.target):
+        f = getattr(model, node_1.target)
+        if hasattr(f, "activation_post_process"):
+            activation_post_proc = f.activation_post_process
+
+    if activation_post_proc and hasattr(model, node_2.target):
+        f = getattr(model, node_2.target)
+        setattr(f, "activation_post_process", activation_post_proc)
+        model.graph.lint()
+        model.recompile()
+        
+    return model
+
+def assign_same_observers_for_residual_inputs(model: GraphModule):
+    """
+    Find the observers for the residual inputs of a given node and assign same observers to them
+    """
+    residual_operators = set([operator.add, torch.add, "add", torch.cat, torch.stack])
+    for node in model.graph.nodes:
+        target_name = node.target
+        if target_name in residual_operators:
+            node_1, node_2 = node.args
+            assign_same_observers(model, node_1, node_2)    
+    return    

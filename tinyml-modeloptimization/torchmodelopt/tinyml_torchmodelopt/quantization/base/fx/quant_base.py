@@ -73,14 +73,14 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             'weight': {
                 'bitwidth': 8,
                 'qscheme': torch.per_channel_symmetric,
-                'power2_scale': True,
+                'power2_scale': True (TINPU) / False(Generic),
                 'range_max': None,
                 'fixed_range': False
             },
             'activation': {
                 'bitwidth': 8,
                 'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': True,
+                'power2_scale': True (TINPU) / False(Generic),
                 'range_max': None,
                 'fixed_range': False
             }
