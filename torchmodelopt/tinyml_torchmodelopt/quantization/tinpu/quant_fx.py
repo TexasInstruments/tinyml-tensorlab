@@ -42,7 +42,7 @@ from ..common import *
 from ..base.fx import TinyMLQuantFxBaseModule
 
 from .quant_utils import TINPUQuantizedReplacementUtils
-from .quant_utils import adjust_residual_inputs_qconfig
+from .quant_utils import assign_same_observers_for_residual_inputs
 from ... import surgery
 
 
@@ -81,9 +81,26 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
             output_dequantize: The ONNX model output by default is Quantized. \
                 If False, the output of model will be quantized, if True, the output of model will be quantized
         '''
-        self.weight_bw = qconfig_type['weight']['bitwidth'] if qconfig_type else 8
-        self.activation_bw = qconfig_type['activation']['bitwidth'] if qconfig_type else 8
-        self.power2_scale = qconfig_type['weight']['power2_scale'] if qconfig_type else True
+        if qconfig_type == None:
+            qconfig_type = {
+                'weight': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_channel_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                },
+                'activation': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_tensor_symmetric,
+                    'power2_scale': True,
+                    'range_max': None,
+                    'fixed_range': False
+                }
+            }
+        self.weight_bw = qconfig_type['weight']['bitwidth']
+        self.activation_bw = qconfig_type['activation']['bitwidth']
+        self.power2_scale = qconfig_type['weight']['power2_scale']
         self.output_dequantize = output_dequantize
         
         if self.weight_bw >= 8:
@@ -96,7 +113,7 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
 
         backend = 'fbgemm' if platform.system() in ['Windows'] else 'qnnpack'
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
-        self.module = adjust_residual_inputs_qconfig(self.module)
+        # assign_same_observers_for_residual_inputs(self.module)
 
     def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
         '''

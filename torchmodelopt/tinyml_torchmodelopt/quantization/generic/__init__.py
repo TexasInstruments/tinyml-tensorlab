@@ -45,23 +45,24 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         The api being called doesn't actually pass qconfig_type - so it will be defined inside.
         But if you need to pass, it can be defined this way.
         # qconfig_type supported for TINPU in F28 devices
-        qconfig_type = {
-            'weight': {
-                'bitwidth': 8,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False
-            },
-            'activation': {
-                'bitwidth': 8,
-                'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False
-            }
-        }
         '''
+        if qconfig_type == None:
+            qconfig_type = {
+                'weight': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_channel_symmetric,
+                    'power2_scale': False,
+                    'range_max': None,
+                    'fixed_range': False
+                },
+                'activation': {
+                    'bitwidth': 8,
+                    'qscheme': torch.per_tensor_symmetric,
+                    'power2_scale': False,
+                    'range_max': None,
+                    'fixed_range': False
+                }
+            }
 
         # qconfig_type = None is equivalent to WC8AT8 (or DEFAULT) which uses per_tensor_affine
         # Note: activation qscheme=torch.per_tensor_affine can be converted onnx model with QOperator using onnxruntime optimization
