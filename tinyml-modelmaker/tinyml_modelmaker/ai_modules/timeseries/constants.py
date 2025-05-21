@@ -321,12 +321,12 @@ TASK_DESCRIPTIONS = {
         'target_devices': TARGET_DEVICES,
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
-    # TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-    #     'task_name': 'Generic Time Series Classification',
-    #     'target_module': 'timeseries',
-    #     'target_devices': TARGET_DEVICES,
-    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
-    # },
+    TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
+        'task_name': 'Generic Time Series Classification',
+        'target_module': 'timeseries',
+        'target_devices': TARGET_DEVICES,
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+    },
     # TASK_TYPE_AUDIO_CLASSIFICATION: {
     #     'task_name': 'Image Classification',
     #     'target_module': 'vision',
@@ -396,20 +396,31 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
 
-    Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
-        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3,),  # ch=1,
+    Generic_1024Input_FFTBIN_64Feature_8Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=64, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
-    Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
+    Generic_512Input_FFTBIN_32Feature_8Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=512, feature_size_per_frame=32, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_256Input_FFTBIN_16Feature_8Frame=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
-    Generic_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+    Generic_1024Input_FFT_512Feature_1Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=512, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_512Input_FFT_256Feature_1Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=512, feature_size_per_frame=256, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_256Input_FFT_128Feature_1Frame=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
-    # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
-    #     feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),
-    #     data_processing=dict(transforms=[], sampling_rate=1, variables=3),
-    #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
-    Generic_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+    Generic_512Input_RAW_512Feature_1Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=512, feature_size_per_frame=512, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_256Input_RAW_256Feature_1Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=256, feature_size_per_frame=256, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_128Input_RAW_128Feature_1Frame=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
 )

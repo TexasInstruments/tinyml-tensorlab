@@ -7,30 +7,26 @@ common:
 dataset:
     # enable/disable dataset loading
     enable: True #False
-    dataset_name: hello_world
-#    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/HelloWorldData/'
-#    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/HelloWorldData/'
-    input_data_path: '/home/a0484689/PycharmProjects/tinyml_docker_images/HelloWorldData/'
+    dataset_name: hello_world_example_dsg
 #    split_type: within_files
 #    gof_test: True
 
 
 data_processing_feature_extraction:
-#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
-#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
-#    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
-    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: Generic_1024Input_FFTBIN_64Feature_8Frame
+#    feature_extraction_name: Generic_512Input_FFTBIN_32Feature_8Frame
+#    feature_extraction_name: Generic_256Input_FFTBIN_16Feature_8Frame
+#    feature_extraction_name: Generic_1024Input_FFT_512Feature_1Frame
+#    feature_extraction_name: Generic_512Input_FFT_256Feature_1Frame
+#    feature_extraction_name: Generic_256Input_FFT_128Feature_1Frame
+#    feature_extraction_name: Generic_512Input_RAW_512Feature_1Frame
+#    feature_extraction_name: Generic_256Input_RAW_256Feature_1Frame
+#    feature_extraction_name: Generic_128Input_RAW_128Feature_1Frame
+
     variables: 1
-#    feature_extraction_name: FFT1024Input_256Feature_1Frame_Full_Bandwidth
-#    feature_extraction_name: FFT1024Input_256Feature_1Frame_Half_Bandwidth
-#    feature_extraction_name: FFT1024Input_64Feature_4Frame_Half_Bandwidth
-#    feature_extraction_name: FFT1024Input_32Feature_8Frame_Quarter_Bandwidth
-#    feature_extraction_name: Custom_MotorFault
 #    frame_size: 1024
 #    feature_size_per_frame: 64
 #    num_frame_concat: 4
-#    normalize_bin: 1
-#    stacking: 1D
 #    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
 #    offset: 0
 #    scale: 1
@@ -45,13 +41,11 @@ training:
     # enable/disable training
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
-    # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
     model_name: 'TimeSeries_Generic_1k_t'
-#    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
-    model_config: ''
+#    model_spec: ''
     batch_size: 256
     training_epochs: 20
-    num_gpus: 1  # 1
+    num_gpus: 1
 #    learning_rate: 0.001
 
 testing:
@@ -60,6 +54,3 @@ testing:
 compilation:
     # enable/disable compilation
     enable: True #False
-    # No preset is required for devices other than F28P55
-#    compile_preset_name: forced_soft_npu_preset
-
