@@ -6,8 +6,10 @@ This is a tool for collecting data, training and compiling AI models for use on 
 Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.
 
 ## Tasks supported
+* Generic Time Series Classification
 * ARC Fault
 * Motor Fault
+* Fan Blower Imbalance Fault
 
 ## Supported target devices
 These are the devices that are supported currently. As additional devices are supported, this section will be updated.

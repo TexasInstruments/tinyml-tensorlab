@@ -3,8 +3,9 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ can be deployed on a local development board. A live preview/demo will also be\
   \ provided to inspect the quality of the developed model while it runs on the development\
   \ board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from\
-  \ TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* ARC Fault\n\
-  * Motor Fault\n\n## Supported target devices\nThese are the devices that are supported\
+  \ TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic\
+  \ Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance\
+  \ Fault\n\n## Supported target devices\nThese are the devices that are supported\
   \ currently. As additional devices are supported, this section will be updated.\n\
   \n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
@@ -4905,6 +4906,15 @@ task_descriptions:
     target_devices: *id001
     target_module: timeseries
     task_name: Fan Blower Imbalance Fault
+  generic_timeseries_classification:
+    stages:
+    - dataset
+    - data_processing_feature_extraction
+    - training
+    - compilation
+    target_devices: *id001
+    target_module: timeseries
+    task_name: Generic Time Series Classification
   motor_fault:
     stages:
     - dataset
