@@ -290,12 +290,12 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False, nn_for_fea
             half_path = os.path.join(golden_vectors_dir)
 
             # Saving as .txt
-            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%f' if np_raw.dtype.kind == 'f' else '%d', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'adc_{label}_{index}.txt')
             if not nn_for_feature_extraction:
                 np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
                 vector_files.append(half_path + f'features_{label}_{index}.txt')
-            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%d,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'output_{label}_{index}.txt')
 
     header_file_info = """#include "device.h"
