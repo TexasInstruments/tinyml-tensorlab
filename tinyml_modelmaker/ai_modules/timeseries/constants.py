@@ -362,7 +362,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     FFT1024Input_32Feature_8Frame_Quarter_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_bin=1, analysis_bandwidth=4, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
-    ArcFault_024Input_256Feature_1Frame_Full_Bandwidth=dict(
+    ArcFault_1024Input_256Feature_1Frame_Full_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     ArcFault_1024Input_256Feature_1Frame_Half_Bandwidth=dict(
