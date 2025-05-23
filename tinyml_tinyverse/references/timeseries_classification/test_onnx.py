@@ -184,15 +184,16 @@ def main(gpu, args):
         logger.warning(f"Post Training Analysis plots will not be generated because: {e}")
 
     metric = torcheval.metrics.MulticlassAccuracy()
-    metric.update(torch.argmax(predicted, dim=1), ground_truth)
+    # predicted = torch.argmax(predicted, dim=1)
+    metric.update(predicted, ground_truth)
     logger = getLogger("root.main.test_data")
     logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
     logger.info(
-        f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted.type(torch.int64), ground_truth, num_classes):.3f}")
+        f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted, ground_truth, num_classes):.3f}")
     if len(torch.unique(ground_truth)) == 1:
         logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
     else:
-        confusion_matrix = get_confusion_matrix(predicted.type(torch.int64), ground_truth.type(torch.int64),
+        confusion_matrix = get_confusion_matrix(predicted, ground_truth.type(torch.int64),
                                                 num_classes).cpu().numpy()
         logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
             confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
