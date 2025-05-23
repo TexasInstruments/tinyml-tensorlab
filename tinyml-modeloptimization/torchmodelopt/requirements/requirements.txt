@@ -10,3 +10,5 @@ onnxruntime==1.19.0
 progressbar==2.5
 protobuf==5.27.3
 rich==13.7.1
+pandas==2.2.2
+colorama==0.4.6
