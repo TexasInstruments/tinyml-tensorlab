@@ -12,37 +12,38 @@ dataset:
 
 data_processing_feature_extraction: 
 
-    # Available data processing transforms: ['DownSample', 'SimpleWindow']
-    data_proc_transforms: []
-    # Downsample
-    sampling_rate: 313000
-    new_sr: 3130
-    # SimpleWindow
-    frame_size: 256
-    stride_size: 0.01
+    ### Available data processing transforms: ['DownSample', 'SimpleWindow']
+#    data_proc_transforms: []
 
-    #Available feature extraction presets
+    # Downsample
+#   sampling_rate: 313000
+#   new_sr: 3130
+
+    # SimpleWindow
+#   frame_size: 512
+#   stride_size: 0.01
+
+    # Available feature extraction presets
 #    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
-#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
 
-    feature_extraction_name: Custom_MotorFault
-    frame_skip: 10
-    feature_size_per_frame: 64
-    num_frame_concat: 2
-    normalize_bin: 1
-    stacking: 2D1
-    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
-    offset: 0
-    scale: 1
-    log_mul: 20
-    log_base: 10
-    log_threshold: 1e-100
-    nn_for_feature_extraction: False
-    store_feat_ext_data: False
-
-    variables: 3
+    # Custom feature extraction
+#    feature_extraction_name: Custom_MotorFault
+#    feature_size_per_frame: 64
+#    num_frame_concat: 2
+#    normalize_bin: 1
+#    stacking: 2D1
+#    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+#    offset: 0
+#    scale: 1
+#    frame_skip: 1
+#    log_mul: 20
+#    log_base: 10
+#    log_threshold: 1e-100
+#    store_feat_ext_data: False
+#    variables: 3
 
 training:
     # enable/disable training

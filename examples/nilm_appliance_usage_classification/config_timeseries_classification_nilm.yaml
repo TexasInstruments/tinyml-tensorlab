@@ -1,0 +1,33 @@
+
+common:
+    target_module: 'timeseries'
+    task_type: 'generic_timeseries_classification'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+    
+dataset:
+    enable: True
+    dataset_name: esda_nilm_2021_5_variable_4_class_dataset
+    input_data_path: 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip'
+
+data_processing_feature_extraction: 
+    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS','LOG_DB', 'CONCAT',]
+    frame_size: 32
+    feature_size_per_frame: 8
+    num_frame_concat: 8                                                                                                                                            
+    variables: 5
+
+training:
+    enable: True
+    model_name: 'TimeSeries_Generic_6k_t'
+    model_config: ''
+    batch_size: 256
+    training_epochs: 20
+    num_gpus: 0
+    learning_rate: 0.04
+
+testing:
+    enable: True
+
+compilation:
+    enable: True

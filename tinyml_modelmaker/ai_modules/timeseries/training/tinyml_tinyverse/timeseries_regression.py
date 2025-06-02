@@ -73,7 +73,6 @@ _model_descriptions = {
             training_backend='tinyml_tinyverse',
             model_training_id='CNN_TS_GEN_BASE_13K',
             model_name='TimeSeries_Generic_Regr_13k_t',
-            model_architecture='backbone',
             learning_rate=2e-3,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_REGRESSION],
@@ -107,7 +106,6 @@ _model_descriptions = {
             training_backend='tinyml_tinyverse',
             model_training_id='REG_TS_GEN_BASE_3K',
             model_name='TimeSeries_Generic_Regr_3k_t',
-            model_architecture='backbone',
             learning_rate=2e-3,
             model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_REGRESSION],
@@ -402,6 +400,7 @@ class ModelTraining:
                 '--offset', f'{self.params.data_processing_feature_extraction.offset}',
                 '--scale', f'{self.params.data_processing_feature_extraction.scale}',
                 '--nn-for-feature-extraction', f'{self.params.data_processing_feature_extraction.nn_for_feature_extraction}',
+                '--output-dequantize', f'{self.params.training.output_dequantize}',
 
                 #'--tensorboard-logger', 'True',
                 '--variables', f'{self.params.data_processing_feature_extraction.variables}',
@@ -517,6 +516,7 @@ class ModelTraining:
                 '--offset', f'{self.params.data_processing_feature_extraction.offset}',
                 '--scale', f'{self.params.data_processing_feature_extraction.scale}',
                 '--nn-for-feature-extraction', f'{self.params.data_processing_feature_extraction.nn_for_feature_extraction}',
+                '--output-dequantize', f'{self.params.training.output_dequantize}',
 
                 # '--tensorboard-logger', 'True',
                 '--lis', f'{self.params.training.log_file_path}',
