@@ -118,17 +118,17 @@ In this section, we'll focus on the feature extraction configurations available 
 
 2. **dc_remove**: Whether to remove the DC component from the signal (It can take True or False values. Default value: True).
 
-3. **min_bin**: Minimum bin size for binning transformation.(Default value: None)
+3. **min_bin**: Minimum bin size for binning transformation.(Default value: 1)
 
 4. **normalize_bin**: Whether to normalize the binned data (It takes 0 or 1 value. Default value: 0).
 
-5. **frame_size**: Size of each frame to be processed.(Default value: None)
+5. **frame_size**: Size of each frame to be processed.(Default value: 3009)
 
 6. **feature_size_per_frame**: Number of features to extract from each frame.(Default value: None)
 
-7. **num_frame_concat**: Number of frames to concatenate for each sample.(Default value: None)
+7. **num_frame_concat**: Number of frames to concatenate for each sample.(Default value: 1)
 
-8. **frame_skip**: Number of frames to skip between processed frames.(Default value: None)
+8. **frame_skip**: Number of frames to skip between processed frames.(Default value: 1)
 
 9. **log_base**: Base of the logarithm for log scaling (Default value: None).
 
@@ -183,9 +183,9 @@ In this section, we'll focus on the feature extraction configurations available 
          [c1, c2, c3]
       ]
       ```
-      (Default value: None)
+      (Default value: '2D1')
 
-18. **offset**: Controls the overlap between consecutive frames of data (Default value: None).
+18. **offset**: Controls the overlap between consecutive frames of data (Default value: 0).
 
     - Without offset : Frames are created consecutively,with no overlap (step size of 1).
 

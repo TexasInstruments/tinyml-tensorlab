@@ -112,6 +112,7 @@ def init_params(*args, **kwargs):
             quantization_method=TinyMLQuantizationMethod.QAT,
             quantization_weight_bitwidth=8,
             quantization_activation_bitwidth=8,
+            output_dequantize=False,
             with_input_batchnorm=False,
             dual_op=False,
             properties=[
@@ -142,9 +143,9 @@ def init_params(*args, **kwargs):
             feat_ext_transform=[],  # FFT512 FFT256'
             data_proc_transforms=[], #'DownSample, SimpleWindow
             feature_size_per_frame=None,
-            num_frame_concat=None,
-            frame_skip=None,
-            min_bin=None,
+            num_frame_concat=1,
+            frame_skip=1,
+            min_bin=1,
             normalize_bin=0,
             store_feat_ext_data=False,
             feat_ext_store_dir=None,
@@ -154,8 +155,8 @@ def init_params(*args, **kwargs):
             log_base=None,
             log_mul=None,
             log_threshold=None,
-            stacking=None,
-            offset=None,
+            stacking='2D1',
+            offset=0,
             scale=None,
             nn_for_feature_extraction=False,
             gof_test=False,

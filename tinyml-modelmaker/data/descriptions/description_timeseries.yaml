@@ -105,21 +105,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -176,6 +176,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -294,21 +295,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -365,6 +366,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -483,21 +485,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -554,6 +556,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -672,21 +675,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -743,6 +746,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -863,21 +867,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -934,6 +938,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1054,21 +1059,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -1125,6 +1130,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1245,21 +1251,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -1316,6 +1322,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1434,21 +1441,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -1505,6 +1512,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1623,21 +1631,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -1694,6 +1702,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1812,21 +1821,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -1883,6 +1892,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2001,21 +2011,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -2072,6 +2082,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2190,21 +2201,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -2261,6 +2272,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2379,21 +2391,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -2450,6 +2462,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2568,21 +2581,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -2639,6 +2652,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2757,21 +2771,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -2828,6 +2842,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2946,21 +2961,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -3017,6 +3032,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3135,21 +3151,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -3206,6 +3222,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3324,21 +3341,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -3395,6 +3412,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3513,21 +3531,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -3584,6 +3602,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3702,21 +3721,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -3773,6 +3792,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3891,21 +3911,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -3962,6 +3982,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -4080,21 +4101,21 @@ model_descriptions:
       feature_extraction_name: null
       feature_size_per_frame: null
       frame_size: 3009
-      frame_skip: null
+      frame_skip: 1
       gof_test: false
       log_base: null
       log_mul: null
       log_threshold: null
-      min_bin: null
+      min_bin: 1
       new_sr: 3009
       nn_for_feature_extraction: false
       normalize_bin: 0
-      num_frame_concat: null
-      offset: null
+      num_frame_concat: 1
+      offset: 0
       resampling_factor: 1
       sampling_rate: 313000
       scale: null
-      stacking: null
+      stacking: 2D1
       store_feat_ext_data: false
       stride_size: 0.01
       variables: 1
@@ -4151,6 +4172,7 @@ model_descriptions:
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
+      output_dequantize: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:

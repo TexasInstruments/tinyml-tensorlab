@@ -8,6 +8,7 @@ dataset:
     # enable/disable dataset loading
     enable: True #False
     dataset_name: hello_world_example_dsg
+#    input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip
 #    split_type: within_files
 #    gof_test: True
 
@@ -41,11 +42,11 @@ training:
     # enable/disable training
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
-    model_name: 'TimeSeries_Generic_1k_t'
+    model_name: 'TimeSeries_Generic_13k_t'
 #    model_spec: ''
     batch_size: 256
     training_epochs: 20
-    num_gpus: 1
+    num_gpus: 0
 #    learning_rate: 0.001
 
 testing:
