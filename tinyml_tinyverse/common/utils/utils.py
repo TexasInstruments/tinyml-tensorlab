@@ -1465,7 +1465,7 @@ def init_lr_scheduler(
     return lr_scheduler
 
 
-def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, quantization_error_logging=False):
+def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, output_dequantize=False):
     logger = getLogger('root.utils.quantization_wrapped_model')
     if quantization == TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
         if quantization_method == TinyMLQuantizationMethod.QAT:
@@ -1474,9 +1474,9 @@ def quantization_wrapped_model(model, quantization=0, quantization_method='QAT',
             model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
     elif quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=quantization_error_logging)
+            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=output_dequantize)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=quantization_error_logging)
+            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=output_dequantize)
     if quantization:
         logger.info(f"Proceeding with {quantization_method} quantization")
     return model
@@ -1488,7 +1488,7 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
 
     is_ptq = True if (args.quantization_method in ['PTQ'] and args.quantization) else False
     # model = quantization_wrapped_model(
-    #     model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth, args.epochs)
+    #     model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth, args.epochs, args.)
     for epoch in range(args.start_epoch, args.epochs ): # args.epochs
         model.train()
 

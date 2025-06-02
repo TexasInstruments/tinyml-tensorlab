@@ -509,7 +509,7 @@ def main(gpu, args):
         # example_input = next(iter(data_loader_test))[0]
         utils.export_model(
             model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, quantization_error_logging=args.quantization_error_logging,
+            quantization=args.quantization, output_dequantize=args.output_dequantize,
             example_input=None, generic_model=args.generic_model,
             remove_hooks_for_jit=True if (
                         args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
