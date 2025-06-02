@@ -62,7 +62,7 @@ def load_weights(model, pretrained, change_names_dict=None, keep_original_names=
         else:
             pretrained_file = pretrained
         #
-        data = torch.load(pretrained_file, map_location=device)
+        data = torch.load(pretrained_file, map_location=device, weights_only=False)
     else:
         data = pretrained
     #

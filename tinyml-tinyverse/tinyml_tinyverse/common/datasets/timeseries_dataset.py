@@ -173,6 +173,8 @@ class GenericTSDataset(Dataset):
             x_temp = self.__transform_downsample(x_temp)
         if 'SimpleWindow' in self.transforms:
             x_temp = self.__transform_simple_window(x_temp)
+        if self.scale:
+            x_temp = x_temp / float(self.scale)
         # Apply augmenters
         x_temp = apply_augmenters(x_temp, self.augment_pipeline)  # https://tsaug.readthedocs.io/en/stable/quickstart.html
                 
@@ -395,8 +397,6 @@ class GenericTSDataset(Dataset):
         # Iterate the number of variables in dataset
         for ax in range(self.variables):
             x_temp_per_ax = x_temp[ax]
-            if self.scale:
-                x_temp_per_ax = x_temp[ax] / self.scale
             
             number_of_steps = 1
             # Stores the features and raw frames for all steps of single variable
@@ -638,6 +638,8 @@ class GenericTSDatasetReg(Dataset):
             x_temp, y_temp = self.__transform_downsample(x_temp, y_temp)
         if 'SimpleWindow' in self.transforms:
             x_temp, y_temp = self.__transform_simple_window(x_temp, y_temp)
+        if self.scale:
+            x_temp = x_temp / float(self.scale)
         # Apply augmenters
         x_temp = apply_augmenters(x_temp, self.augment_pipeline)  # https://tsaug.readthedocs.io/en/stable/quickstart.html
 
@@ -866,8 +868,6 @@ class GenericTSDatasetReg(Dataset):
         # Iterate the number of variables in dataset
         for ax in range(self.variables):
             x_temp_per_ax = x_temp[ax]
-            if self.scale:
-                x_temp_per_ax = x_temp[ax] / self.scale
 
             number_of_steps = 1
             # Stores the features and raw frames for all steps of single variable
@@ -1111,6 +1111,8 @@ class GenericTSDatasetAD(Dataset):
             x_temp = self.__transform_downsample(x_temp)
         if 'SimpleWindow' in self.transforms:
             x_temp = self.__transform_simple_window(x_temp)
+        if self.scale:
+            x_temp = x_temp / float(self.scale)
         # Apply augmenters
         x_temp = apply_augmenters(x_temp,
                                   self.augment_pipeline)  # https://tsaug.readthedocs.io/en/stable/quickstart.html
@@ -1339,8 +1341,6 @@ class GenericTSDatasetAD(Dataset):
         # Iterate the number of variables in dataset
         for ax in range(self.variables):
             x_temp_per_ax = x_temp[ax]
-            if self.scale:
-                x_temp_per_ax = x_temp[ax] / self.scale
 
             number_of_steps = 1
             # Stores the features and raw frames for all steps of single variable
