@@ -126,10 +126,12 @@ def compute_offset_scale_shift(offset, weight, num_bits_shift=5, num_bits_scale=
 
     if torch.sum(scaled_weights > scale_max) != 0:
         raise RuntimeError(
-            f"Error in Quant convert:compute_offset_scale_shift. Output multiplication could not be converted. \n"
-            f"Invalid in output multiplication value: {weight.cpu().detach().numpy()} \n"
+            f"Error in quantization.convert :: compute_offset_scale_shift. Scaling could not be converted.\n"
+            f"Invalid scale values: {weight.cpu().detach().numpy()}\n"
+            f"Maximum scale value allowed: {scale_max}\n"
             f"Make sure that the model is trained properly with good hyper parameters. "
-            f"(try adjusting: training epochs, learning rate, QAT after float training etc): \n"
+            f"(Try adjusting: training epochs, learning rate, QAT after float training etc)\n"
+            f"Check for multicollinearity and/or scaling input values.\n"
         )
 
     scaled_signed_weights = weight_sign * torch.round(scaled_weights)
