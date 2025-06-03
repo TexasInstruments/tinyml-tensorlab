@@ -170,7 +170,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -394,7 +393,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -618,7 +616,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -842,7 +839,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1066,7 +1062,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1290,7 +1285,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1514,7 +1508,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1738,7 +1731,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1962,7 +1954,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2186,7 +2177,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2410,7 +2400,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2634,7 +2623,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2858,7 +2846,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3082,7 +3069,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3309,7 +3295,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3536,7 +3521,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3763,7 +3747,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3987,7 +3970,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -4211,7 +4193,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -4435,7 +4416,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -4659,7 +4639,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -4883,7 +4862,6 @@
             "increment":0.001
           }
         ],
-        "model_architecture":"backbone",
         "training_devices":{
           "cpu":true,
           "cuda":true,

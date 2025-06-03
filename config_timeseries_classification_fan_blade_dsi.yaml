@@ -22,7 +22,7 @@ data_processing_feature_extraction: # One or more can be cascaded in the list
 #    num_frame_concat: 8
 #    normalize_bin: 1
 #    stacking: 2D1
-#    transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
+#    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
 #    offset: 0
 #    scale: 1
 #    frame_skip: 1
