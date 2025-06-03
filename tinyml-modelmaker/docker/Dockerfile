@@ -90,7 +90,7 @@ RUN source ${HOME_DIR}/.bashrc && \
 #################################################################################
 # Note 1: this can be reversed later as a last step after all installations are done.
 # enabling write permissions for all users, if support is needed for users passed via --user argument of docker run
-RUN chmod -R ugo+rwx ${HOME_DIR}
+# RUN chmod -R ugo+rwx ${HOME_DIR}
 
 # For Path variables
 # Note 3: in the container, .bashrc or .pyenvrc may need to be sourced to activate the Python environment

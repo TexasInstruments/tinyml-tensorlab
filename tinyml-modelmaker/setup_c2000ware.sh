@@ -57,6 +57,7 @@ if [ -e ${C2000WARE_INSTALLER_FILE} ]; then
     echo -e "\033[0;32mDownloaded ${C2000WARE_INSTALLER_FILE} from TI remote repository!\033[0m"
     chmod +x ${C2000WARE_INSTALLER_FILE}
     ${C2000WARE_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
+    rm -f ${C2000WARE_INSTALLER_FILE}
 else
   echo -e "\033[31;5mCRITICAL WARNING! C2000Ware could not be downloaded! \033[0m"  # Blinking Text
   echo -e "\033[0;33mPlease note that C2000Ware requires SW Export License permissions. \033[0m"

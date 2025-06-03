@@ -47,3 +47,4 @@ rm -f ${C2000_CGT_INSTALLER_FILE}
 wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/22.6.1.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
 chmod +x ${C2000_CGT_INSTALLER_FILE}
 ${C2000_CGT_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
+rm -f ${C2000_CGT_INSTALLER_FILE}
