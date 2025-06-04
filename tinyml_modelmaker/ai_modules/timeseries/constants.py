@@ -428,23 +428,23 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsi=dict(
-        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsi.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsi.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=None, data_proc_transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, frame_size=3130, stride_size=0.01),
     ),
     arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     motor_fault_example_dsk=dict(
-        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsh=dict(
-        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     hello_world_example_dsg=dict(
-        dataset=dict(input_data_path='http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
 )
@@ -767,10 +767,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_classification_dsk',
-            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Arc Fault Classification Example2',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -785,10 +785,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_example_dsk',
-            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Motor Bearing Fault Classification Example',
             'dataset_description': 'Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking',
             'dataset_size': None,
@@ -803,10 +803,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'blower_imbalance_example_dsh',
-            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
         },
         'info': {
-            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
             'dataset_detailed_name': 'Blower Imbalance Classification Example',
             'dataset_description': 'Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip',
             'dataset_size': None,
@@ -821,10 +821,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'hello_world_example_dsg',
-            'input_data_path': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
         },
         'info': {
-            'dataset_url': 'http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
             'dataset_detailed_name': 'Generic Timeseries Classification Example',
             'dataset_description': 'Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth',
             'dataset_size': None,
