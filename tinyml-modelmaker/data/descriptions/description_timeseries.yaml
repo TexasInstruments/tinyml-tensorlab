@@ -1395,573 +1395,6 @@ model_descriptions:
       warmup_epochs: 1
       weight_decay: 0.0001
       with_input_batchnorm: true
-  Res_Slice_TimeSeries_Generic_3k_t:
-    common:
-      download_path: ./data/downloads
-      generic_model: true
-      project_path: null
-      project_run_path: null
-      projects_path: ./data/projects
-      run_name: '{date-time}, {model_name}'
-      target_device: null
-      target_machine: evm
-      target_module: timeseries
-      task_category: timeseries_classification
-      task_type: generic_timeseries_classification
-      verbose_mode: true
-    compilation:
-      compile_output_path: null
-      compile_preset_name: null
-      enable: true
-      keep_libc_files: false
-      model_path: null
-      properties:
-      - default: default_preset
-        enum:
-        - label: Default best
-          tooltip: Default Inference Mode
-          value: default_preset
-        label: Compilation Preset
-        name: compile_preset_name
-        type: enum
-    data_processing_feature_extraction:
-      analysis_bandwidth: 1
-      data_proc_transforms: []
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feat_ext_transform: []
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: 3009
-      frame_skip: 1
-      gof_test: false
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: 1
-      new_sr: 3009
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: 1
-      offset: 0
-      resampling_factor: 1
-      sampling_rate: 313000
-      scale: null
-      stacking: 2D1
-      store_feat_ext_data: false
-      stride_size: 0.01
-      variables: 1
-    dataset:
-      annotation_dir: annotations
-      annotation_format: univ_ts_json
-      annotation_path_splits: null
-      annotation_prefix: instances
-      data_dir: classes
-      data_path_splits: null
-      dataset_download: false
-      dataset_name: null
-      dataset_path: null
-      dataset_reload: false
-      enable: true
-      extract_path: null
-      input_annotation_path: null
-      input_data_path: null
-      max_num_files: 10000
-      split_factor:
-      - 0.6
-      - 0.3
-      - 0.1
-      split_names:
-      - train
-      - val
-      - test
-      split_type: amongst_files
-    download:
-      download_path: ''
-      download_url: ''
-    testing:
-      enable: true
-      model_path: null
-      skip_train: false
-      test_data: null
-    training:
-      augment_config: null
-      batch_size: 64
-      dataset_loader: GenericTSDataset
-      dataset_path: null
-      distributed: true
-      dual_op: false
-      enable: true
-      learning_rate: 0.002
-      log_file_path: null
-      log_summary_regex: null
-      lr_scheduler: cosineannealinglr
-      model_config: null
-      model_name: Res_Slice_TimeSeries_Generic_3k_t
-      model_spec: null
-      model_training_id: RES_SLICE_CNN_TS_GEN_BASE_3K
-      num_gpus: 1
-      num_last_epochs: 5
-      optimizer: sgd
-      output_dequantize: false
-      pretrained_checkpoint_path: null
-      project_path: null
-      properties:
-      - default: []
-        dynamic: true
-        label: Preprocessing Parameters
-        name: preprocessing_group
-        type: group
-      - default:
-        - training_epochs
-        - learning_rate
-        dynamic: false
-        label: Training Parameters
-        name: train_group
-        type: group
-      - default: 50
-        label: Epochs
-        max: 300
-        min: 1
-        name: training_epochs
-        type: integer
-      - decimal_places: 3
-        default: 0.04
-        increment: 0.001
-        label: Learning Rate
-        max: 0.1
-        min: 0.001
-        name: learning_rate
-        type: float
-      quantization: 2
-      quantization_activation_bitwidth: 8
-      quantization_method: QAT
-      quantization_weight_bitwidth: 8
-      run_quant_train_only: false
-      target_devices:
-        F280015:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        F28003:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        F28004:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        F2837:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        F28P55:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        F28P65:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-      train_output_path: null
-      training_backend: tinyml_tinyverse
-      training_device: cuda
-      training_devices:
-        cpu: true
-        cuda: true
-        mps: true
-      training_epochs: 10
-      training_master_port: 29500
-      training_path: null
-      training_path_quantization: null
-      warmup_epochs: 1
-      weight_decay: 0.0001
-      with_input_batchnorm: true
-  Res_TimeSeries_Generic_3k_t:
-    common:
-      download_path: ./data/downloads
-      generic_model: true
-      project_path: null
-      project_run_path: null
-      projects_path: ./data/projects
-      run_name: '{date-time}, {model_name}'
-      target_device: null
-      target_machine: evm
-      target_module: timeseries
-      task_category: timeseries_classification
-      task_type: generic_timeseries_classification
-      verbose_mode: true
-    compilation:
-      compile_output_path: null
-      compile_preset_name: null
-      enable: true
-      keep_libc_files: false
-      model_path: null
-      properties:
-      - default: default_preset
-        enum:
-        - label: Default best
-          tooltip: Default Inference Mode
-          value: default_preset
-        label: Compilation Preset
-        name: compile_preset_name
-        type: enum
-    data_processing_feature_extraction:
-      analysis_bandwidth: 1
-      data_proc_transforms: []
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feat_ext_transform: []
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: 3009
-      frame_skip: 1
-      gof_test: false
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: 1
-      new_sr: 3009
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: 1
-      offset: 0
-      resampling_factor: 1
-      sampling_rate: 313000
-      scale: null
-      stacking: 2D1
-      store_feat_ext_data: false
-      stride_size: 0.01
-      variables: 1
-    dataset:
-      annotation_dir: annotations
-      annotation_format: univ_ts_json
-      annotation_path_splits: null
-      annotation_prefix: instances
-      data_dir: classes
-      data_path_splits: null
-      dataset_download: false
-      dataset_name: null
-      dataset_path: null
-      dataset_reload: false
-      enable: true
-      extract_path: null
-      input_annotation_path: null
-      input_data_path: null
-      max_num_files: 10000
-      split_factor:
-      - 0.6
-      - 0.3
-      - 0.1
-      split_names:
-      - train
-      - val
-      - test
-      split_type: amongst_files
-    download:
-      download_path: ''
-      download_url: ''
-    testing:
-      enable: true
-      model_path: null
-      skip_train: false
-      test_data: null
-    training:
-      augment_config: null
-      batch_size: 64
-      dataset_loader: GenericTSDataset
-      dataset_path: null
-      distributed: true
-      dual_op: false
-      enable: true
-      learning_rate: 0.002
-      log_file_path: null
-      log_summary_regex: null
-      lr_scheduler: cosineannealinglr
-      model_config: null
-      model_name: Res_TimeSeries_Generic_3k_t
-      model_spec: null
-      model_training_id: RES_CNN_TS_GEN_BASE_3K
-      num_gpus: 1
-      num_last_epochs: 5
-      optimizer: sgd
-      output_dequantize: false
-      pretrained_checkpoint_path: null
-      project_path: null
-      properties:
-      - default: []
-        dynamic: true
-        label: Preprocessing Parameters
-        name: preprocessing_group
-        type: group
-      - default:
-        - training_epochs
-        - learning_rate
-        dynamic: false
-        label: Training Parameters
-        name: train_group
-        type: group
-      - default: 50
-        label: Epochs
-        max: 300
-        min: 1
-        name: training_epochs
-        type: integer
-      - decimal_places: 3
-        default: 0.04
-        increment: 0.001
-        label: Learning Rate
-        max: 0.1
-        min: 0.001
-        name: learning_rate
-        type: float
-      quantization: 2
-      quantization_activation_bitwidth: 8
-      quantization_method: QAT
-      quantization_weight_bitwidth: 8
-      run_quant_train_only: false
-      target_devices:
-        F280015:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28003:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28004:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F2837:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28P55:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28P65:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-      train_output_path: null
-      training_backend: tinyml_tinyverse
-      training_device: cuda
-      training_devices:
-        cpu: true
-        cuda: true
-        mps: true
-      training_epochs: 10
-      training_master_port: 29500
-      training_path: null
-      training_path_quantization: null
-      warmup_epochs: 1
-      weight_decay: 0.0001
-      with_input_batchnorm: true
-  TimeSeries_Generic_13k:
-    common:
-      download_path: ./data/downloads
-      generic_model: true
-      project_path: null
-      project_run_path: null
-      projects_path: ./data/projects
-      run_name: '{date-time}, {model_name}'
-      target_device: null
-      target_machine: evm
-      target_module: timeseries
-      task_category: timeseries_classification
-      task_type: generic_timeseries_classification
-      verbose_mode: true
-    compilation:
-      compile_output_path: null
-      compile_preset_name: null
-      enable: true
-      keep_libc_files: false
-      model_path: null
-      properties:
-      - default: default_preset
-        enum:
-        - label: Default best
-          tooltip: Default Inference Mode
-          value: default_preset
-        label: Compilation Preset
-        name: compile_preset_name
-        type: enum
-    data_processing_feature_extraction:
-      analysis_bandwidth: 1
-      data_proc_transforms: []
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feat_ext_transform: []
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: 3009
-      frame_skip: 1
-      gof_test: false
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: 1
-      new_sr: 3009
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: 1
-      offset: 0
-      resampling_factor: 1
-      sampling_rate: 313000
-      scale: null
-      stacking: 2D1
-      store_feat_ext_data: false
-      stride_size: 0.01
-      variables: 1
-    dataset:
-      annotation_dir: annotations
-      annotation_format: univ_ts_json
-      annotation_path_splits: null
-      annotation_prefix: instances
-      data_dir: classes
-      data_path_splits: null
-      dataset_download: false
-      dataset_name: null
-      dataset_path: null
-      dataset_reload: false
-      enable: true
-      extract_path: null
-      input_annotation_path: null
-      input_data_path: null
-      max_num_files: 10000
-      split_factor:
-      - 0.6
-      - 0.3
-      - 0.1
-      split_names:
-      - train
-      - val
-      - test
-      split_type: amongst_files
-    download:
-      download_path: ''
-      download_url: ''
-    testing:
-      enable: true
-      model_path: null
-      skip_train: false
-      test_data: null
-    training:
-      augment_config: null
-      batch_size: 64
-      dataset_loader: GenericTSDataset
-      dataset_path: null
-      distributed: true
-      dual_op: false
-      enable: true
-      learning_rate: 0.002
-      log_file_path: null
-      log_summary_regex: null
-      lr_scheduler: cosineannealinglr
-      model_config: null
-      model_name: TimeSeries_Generic_13k
-      model_spec: null
-      model_training_id: CNN_TS_GEN_BASE_13K
-      num_gpus: 1
-      num_last_epochs: 5
-      optimizer: sgd
-      output_dequantize: false
-      pretrained_checkpoint_path: null
-      project_path: null
-      properties:
-      - default: []
-        dynamic: true
-        label: Preprocessing Parameters
-        name: preprocessing_group
-        type: group
-      - default:
-        - training_epochs
-        - learning_rate
-        dynamic: false
-        label: Training Parameters
-        name: train_group
-        type: group
-      - default: 50
-        label: Epochs
-        max: 300
-        min: 1
-        name: training_epochs
-        type: integer
-      - decimal_places: 3
-        default: 0.04
-        increment: 0.001
-        label: Learning Rate
-        max: 0.1
-        min: 0.001
-        name: learning_rate
-        type: float
-      quantization: 1
-      quantization_activation_bitwidth: 8
-      quantization_method: QAT
-      quantization_weight_bitwidth: 8
-      run_quant_train_only: false
-      target_devices:
-        F280015:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        F28003:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        F28004:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        F2837:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        F28P55:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        F28P65:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-      train_output_path: null
-      training_backend: tinyml_tinyverse
-      training_device: cuda
-      training_devices:
-        cpu: true
-        cuda: true
-        mps: true
-      training_epochs: 10
-      training_master_port: 29500
-      training_path: null
-      training_path_quantization: null
-      warmup_epochs: 1
-      weight_decay: 0.0001
-      with_input_batchnorm: false
   TimeSeries_Generic_13k_t:
     common:
       download_path: ./data/downloads
@@ -2110,32 +1543,32 @@ model_descriptions:
         F280015:
           flash: 17343
           inference_time_us: 15184
-          model_selection_factor: 3
+          model_selection_factor: 0
           sram: 4164
         F28003:
           flash: 17343
           inference_time_us: 15184
-          model_selection_factor: 3
+          model_selection_factor: 0
           sram: 4164
         F28004:
           flash: 17343
           inference_time_us: 12654
-          model_selection_factor: 3
+          model_selection_factor: 0
           sram: 4164
         F2837:
           flash: 17343
           inference_time_us: 15184
-          model_selection_factor: 3
+          model_selection_factor: 0
           sram: 4164
         F28P55:
           flash: 11002
           inference_time_us: 2252
-          model_selection_factor: 3
+          model_selection_factor: 0
           sram: 3192
         F28P65:
           flash: 17343
           inference_time_us: 25308
-          model_selection_factor: 3
+          model_selection_factor: 0
           sram: 4164
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -2151,195 +1584,6 @@ model_descriptions:
       warmup_epochs: 1
       weight_decay: 0.0001
       with_input_batchnorm: true
-  TimeSeries_Generic_1k:
-    common:
-      download_path: ./data/downloads
-      generic_model: true
-      project_path: null
-      project_run_path: null
-      projects_path: ./data/projects
-      run_name: '{date-time}, {model_name}'
-      target_device: null
-      target_machine: evm
-      target_module: timeseries
-      task_category: timeseries_classification
-      task_type: generic_timeseries_classification
-      verbose_mode: true
-    compilation:
-      compile_output_path: null
-      compile_preset_name: null
-      enable: true
-      keep_libc_files: false
-      model_path: null
-      properties:
-      - default: default_preset
-        enum:
-        - label: Default best
-          tooltip: Default Inference Mode
-          value: default_preset
-        label: Compilation Preset
-        name: compile_preset_name
-        type: enum
-    data_processing_feature_extraction:
-      analysis_bandwidth: 1
-      data_proc_transforms: []
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feat_ext_transform: []
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: 3009
-      frame_skip: 1
-      gof_test: false
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: 1
-      new_sr: 3009
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: 1
-      offset: 0
-      resampling_factor: 1
-      sampling_rate: 313000
-      scale: null
-      stacking: 2D1
-      store_feat_ext_data: false
-      stride_size: 0.01
-      variables: 1
-    dataset:
-      annotation_dir: annotations
-      annotation_format: univ_ts_json
-      annotation_path_splits: null
-      annotation_prefix: instances
-      data_dir: classes
-      data_path_splits: null
-      dataset_download: false
-      dataset_name: null
-      dataset_path: null
-      dataset_reload: false
-      enable: true
-      extract_path: null
-      input_annotation_path: null
-      input_data_path: null
-      max_num_files: 10000
-      split_factor:
-      - 0.6
-      - 0.3
-      - 0.1
-      split_names:
-      - train
-      - val
-      - test
-      split_type: amongst_files
-    download:
-      download_path: ''
-      download_url: ''
-    testing:
-      enable: true
-      model_path: null
-      skip_train: false
-      test_data: null
-    training:
-      augment_config: null
-      batch_size: 64
-      dataset_loader: GenericTSDataset
-      dataset_path: null
-      distributed: true
-      dual_op: false
-      enable: true
-      learning_rate: 0.002
-      log_file_path: null
-      log_summary_regex: null
-      lr_scheduler: cosineannealinglr
-      model_config: null
-      model_name: TimeSeries_Generic_1k
-      model_spec: null
-      model_training_id: CNN_TS_GEN_BASE_1K
-      num_gpus: 1
-      num_last_epochs: 5
-      optimizer: sgd
-      output_dequantize: false
-      pretrained_checkpoint_path: null
-      project_path: null
-      properties:
-      - default: []
-        dynamic: true
-        label: Preprocessing Parameters
-        name: preprocessing_group
-        type: group
-      - default:
-        - training_epochs
-        - learning_rate
-        dynamic: false
-        label: Training Parameters
-        name: train_group
-        type: group
-      - default: 50
-        label: Epochs
-        max: 300
-        min: 1
-        name: training_epochs
-        type: integer
-      - decimal_places: 3
-        default: 0.04
-        increment: 0.001
-        label: Learning Rate
-        max: 0.1
-        min: 0.001
-        name: learning_rate
-        type: float
-      quantization: 1
-      quantization_activation_bitwidth: 8
-      quantization_method: QAT
-      quantization_weight_bitwidth: 8
-      run_quant_train_only: false
-      target_devices:
-        F280015:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        F28003:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        F28004:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        F2837:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        F28P55:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        F28P65:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-      train_output_path: null
-      training_backend: tinyml_tinyverse
-      training_device: cuda
-      training_devices:
-        cpu: true
-        cuda: true
-        mps: true
-      training_epochs: 10
-      training_master_port: 29500
-      training_path: null
-      training_path_quantization: null
-      warmup_epochs: 1
-      weight_decay: 0.0001
-      with_input_batchnorm: false
   TimeSeries_Generic_1k_t:
     common:
       download_path: ./data/downloads
@@ -2488,32 +1732,32 @@ model_descriptions:
         F280015:
           flash: 3242
           inference_time_us: 9200
-          model_selection_factor: 9
+          model_selection_factor: 3
           sram: 12324
         F28003:
           flash: 3242
           inference_time_us: 9200
-          model_selection_factor: 9
+          model_selection_factor: 3
           sram: 12324
         F28004:
           flash: 3242
           inference_time_us: 7667
-          model_selection_factor: 9
+          model_selection_factor: 3
           sram: 12324
         F2837:
           flash: 3242
           inference_time_us: 9200
-          model_selection_factor: 9
+          model_selection_factor: 3
           sram: 12324
         F28P55:
           flash: 3367
           inference_time_us: 1311
-          model_selection_factor: 9
+          model_selection_factor: 3
           sram: 6224
         F28P65:
           flash: 3242
           inference_time_us: 15334
-          model_selection_factor: 9
+          model_selection_factor: 3
           sram: 12324
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -2529,195 +1773,6 @@ model_descriptions:
       warmup_epochs: 1
       weight_decay: 0.0001
       with_input_batchnorm: true
-  TimeSeries_Generic_4k:
-    common:
-      download_path: ./data/downloads
-      generic_model: true
-      project_path: null
-      project_run_path: null
-      projects_path: ./data/projects
-      run_name: '{date-time}, {model_name}'
-      target_device: null
-      target_machine: evm
-      target_module: timeseries
-      task_category: timeseries_classification
-      task_type: generic_timeseries_classification
-      verbose_mode: true
-    compilation:
-      compile_output_path: null
-      compile_preset_name: null
-      enable: true
-      keep_libc_files: false
-      model_path: null
-      properties:
-      - default: default_preset
-        enum:
-        - label: Default best
-          tooltip: Default Inference Mode
-          value: default_preset
-        label: Compilation Preset
-        name: compile_preset_name
-        type: enum
-    data_processing_feature_extraction:
-      analysis_bandwidth: 1
-      data_proc_transforms: []
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feat_ext_transform: []
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: 3009
-      frame_skip: 1
-      gof_test: false
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: 1
-      new_sr: 3009
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: 1
-      offset: 0
-      resampling_factor: 1
-      sampling_rate: 313000
-      scale: null
-      stacking: 2D1
-      store_feat_ext_data: false
-      stride_size: 0.01
-      variables: 1
-    dataset:
-      annotation_dir: annotations
-      annotation_format: univ_ts_json
-      annotation_path_splits: null
-      annotation_prefix: instances
-      data_dir: classes
-      data_path_splits: null
-      dataset_download: false
-      dataset_name: null
-      dataset_path: null
-      dataset_reload: false
-      enable: true
-      extract_path: null
-      input_annotation_path: null
-      input_data_path: null
-      max_num_files: 10000
-      split_factor:
-      - 0.6
-      - 0.3
-      - 0.1
-      split_names:
-      - train
-      - val
-      - test
-      split_type: amongst_files
-    download:
-      download_path: ''
-      download_url: ''
-    testing:
-      enable: true
-      model_path: null
-      skip_train: false
-      test_data: null
-    training:
-      augment_config: null
-      batch_size: 64
-      dataset_loader: GenericTSDataset
-      dataset_path: null
-      distributed: true
-      dual_op: false
-      enable: true
-      learning_rate: 0.002
-      log_file_path: null
-      log_summary_regex: null
-      lr_scheduler: cosineannealinglr
-      model_config: null
-      model_name: TimeSeries_Generic_4k
-      model_spec: null
-      model_training_id: CNN_TS_GEN_BASE_4K
-      num_gpus: 1
-      num_last_epochs: 5
-      optimizer: sgd
-      output_dequantize: false
-      pretrained_checkpoint_path: null
-      project_path: null
-      properties:
-      - default: []
-        dynamic: true
-        label: Preprocessing Parameters
-        name: preprocessing_group
-        type: group
-      - default:
-        - training_epochs
-        - learning_rate
-        dynamic: false
-        label: Training Parameters
-        name: train_group
-        type: group
-      - default: 50
-        label: Epochs
-        max: 300
-        min: 1
-        name: training_epochs
-        type: integer
-      - decimal_places: 3
-        default: 0.04
-        increment: 0.001
-        label: Learning Rate
-        max: 0.1
-        min: 0.001
-        name: learning_rate
-        type: float
-      quantization: 1
-      quantization_activation_bitwidth: 8
-      quantization_method: QAT
-      quantization_weight_bitwidth: 8
-      run_quant_train_only: false
-      target_devices:
-        F280015:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        F28003:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        F28004:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        F2837:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        F28P55:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        F28P65:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-      train_output_path: null
-      training_backend: tinyml_tinyverse
-      training_device: cuda
-      training_devices:
-        cpu: true
-        cuda: true
-        mps: true
-      training_epochs: 10
-      training_master_port: 29500
-      training_path: null
-      training_path_quantization: null
-      warmup_epochs: 1
-      weight_decay: 0.0001
-      with_input_batchnorm: false
   TimeSeries_Generic_4k_t:
     common:
       download_path: ./data/downloads
@@ -2866,32 +1921,32 @@ model_descriptions:
         F280015:
           flash: 6433
           inference_time_us: 4012
-          model_selection_factor: 7
+          model_selection_factor: 2
           sram: 1940
         F28003:
           flash: 6433
           inference_time_us: 4012
-          model_selection_factor: 7
+          model_selection_factor: 2
           sram: 1940
         F28004:
           flash: 6433
           inference_time_us: 3343
-          model_selection_factor: 7
+          model_selection_factor: 2
           sram: 1940
         F2837:
           flash: 6433
           inference_time_us: 4012
-          model_selection_factor: 7
+          model_selection_factor: 2
           sram: 1940
         F28P55:
           flash: 5426
           inference_time_us: 797
-          model_selection_factor: 7
+          model_selection_factor: 2
           sram: 1664
         F28P65:
           flash: 6433
           inference_time_us: 6686
-          model_selection_factor: 7
+          model_selection_factor: 2
           sram: 1940
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -2907,195 +1962,6 @@ model_descriptions:
       warmup_epochs: 1
       weight_decay: 0.0001
       with_input_batchnorm: true
-  TimeSeries_Generic_6k:
-    common:
-      download_path: ./data/downloads
-      generic_model: true
-      project_path: null
-      project_run_path: null
-      projects_path: ./data/projects
-      run_name: '{date-time}, {model_name}'
-      target_device: null
-      target_machine: evm
-      target_module: timeseries
-      task_category: timeseries_classification
-      task_type: generic_timeseries_classification
-      verbose_mode: true
-    compilation:
-      compile_output_path: null
-      compile_preset_name: null
-      enable: true
-      keep_libc_files: false
-      model_path: null
-      properties:
-      - default: default_preset
-        enum:
-        - label: Default best
-          tooltip: Default Inference Mode
-          value: default_preset
-        label: Compilation Preset
-        name: compile_preset_name
-        type: enum
-    data_processing_feature_extraction:
-      analysis_bandwidth: 1
-      data_proc_transforms: []
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feat_ext_transform: []
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      frame_size: 3009
-      frame_skip: 1
-      gof_test: false
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: 1
-      new_sr: 3009
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: 1
-      offset: 0
-      resampling_factor: 1
-      sampling_rate: 313000
-      scale: null
-      stacking: 2D1
-      store_feat_ext_data: false
-      stride_size: 0.01
-      variables: 1
-    dataset:
-      annotation_dir: annotations
-      annotation_format: univ_ts_json
-      annotation_path_splits: null
-      annotation_prefix: instances
-      data_dir: classes
-      data_path_splits: null
-      dataset_download: false
-      dataset_name: null
-      dataset_path: null
-      dataset_reload: false
-      enable: true
-      extract_path: null
-      input_annotation_path: null
-      input_data_path: null
-      max_num_files: 10000
-      split_factor:
-      - 0.6
-      - 0.3
-      - 0.1
-      split_names:
-      - train
-      - val
-      - test
-      split_type: amongst_files
-    download:
-      download_path: ''
-      download_url: ''
-    testing:
-      enable: true
-      model_path: null
-      skip_train: false
-      test_data: null
-    training:
-      augment_config: null
-      batch_size: 64
-      dataset_loader: GenericTSDataset
-      dataset_path: null
-      distributed: true
-      dual_op: false
-      enable: true
-      learning_rate: 0.002
-      log_file_path: null
-      log_summary_regex: null
-      lr_scheduler: cosineannealinglr
-      model_config: null
-      model_name: TimeSeries_Generic_6k
-      model_spec: null
-      model_training_id: CNN_TS_GEN_BASE_6K
-      num_gpus: 1
-      num_last_epochs: 5
-      optimizer: sgd
-      output_dequantize: false
-      pretrained_checkpoint_path: null
-      project_path: null
-      properties:
-      - default: []
-        dynamic: true
-        label: Preprocessing Parameters
-        name: preprocessing_group
-        type: group
-      - default:
-        - training_epochs
-        - learning_rate
-        dynamic: false
-        label: Training Parameters
-        name: train_group
-        type: group
-      - default: 50
-        label: Epochs
-        max: 300
-        min: 1
-        name: training_epochs
-        type: integer
-      - decimal_places: 3
-        default: 0.04
-        increment: 0.001
-        label: Learning Rate
-        max: 0.1
-        min: 0.001
-        name: learning_rate
-        type: float
-      quantization: 1
-      quantization_activation_bitwidth: 8
-      quantization_method: QAT
-      quantization_weight_bitwidth: 8
-      run_quant_train_only: false
-      target_devices:
-        F280015:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        F28003:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        F28004:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        F2837:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        F28P55:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        F28P65:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-      train_output_path: null
-      training_backend: tinyml_tinyverse
-      training_device: cuda
-      training_devices:
-        cpu: true
-        cuda: true
-        mps: true
-      training_epochs: 10
-      training_master_port: 29500
-      training_path: null
-      training_path_quantization: null
-      warmup_epochs: 1
-      weight_decay: 0.0001
-      with_input_batchnorm: false
   TimeSeries_Generic_6k_t:
     common:
       download_path: ./data/downloads
@@ -3244,32 +2110,32 @@ model_descriptions:
         F280015:
           flash: 8302
           inference_time_us: 20417
-          model_selection_factor: 5
+          model_selection_factor: 1
           sram: 16420
         F28003:
           flash: 8302
           inference_time_us: 20417
-          model_selection_factor: 5
+          model_selection_factor: 1
           sram: 16420
         F28004:
           flash: 8302
           inference_time_us: 17014
-          model_selection_factor: 5
+          model_selection_factor: 1
           sram: 16420
         F2837:
           flash: 8302
           inference_time_us: 20417
-          model_selection_factor: 5
+          model_selection_factor: 1
           sram: 16420
         F28P55:
           flash: 6618
           inference_time_us: 2344
-          model_selection_factor: 5
+          model_selection_factor: 1
           sram: 8338
         F28P65:
           flash: 8302
           inference_time_us: 34029
-          model_selection_factor: 5
+          model_selection_factor: 1
           sram: 16420
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -4749,7 +3615,7 @@ sample_dataset_descriptions:
       task_type: arc_fault
     dataset:
       dataset_name: arc_fault_classification_dsk
-      input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip
     info:
       dataset_description: Example arc-fault timeseries classification dataset with
         2 categories - arc, normal
@@ -4757,14 +3623,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip
   blower_imbalance_example_dsh:
     common:
       task_category: timeseries_classification
       task_type: blower_imbalance
     dataset:
       dataset_name: blower_imbalance_example_dsh
-      input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip
     info:
       dataset_description: Example blower imbalance timeseries classification dataset
         with 2 categories - 0 Clips, 1 Clip
@@ -4772,14 +3638,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip
   hello_world_example_dsg:
     common:
       task_category: timeseries_classification
       task_type: generic_timeseries_classification
     dataset:
       dataset_name: hello_world_example_dsg
-      input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip
     info:
       dataset_description: Example timeseries classification dataset with 3 categories
         - Sine, Square, Sawtooth
@@ -4787,14 +3653,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip
   motor_fault_example_dsk:
     common:
       task_category: timeseries_classification
       task_type: motor_fault
     dataset:
       dataset_name: motor_fault_example_dsk
-      input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip
     info:
       dataset_description: Example motor-fault timeseries classification dataset with
         4 categories - normal, localized, erosion, flaking
@@ -4802,7 +3668,7 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip
 target_device_descriptions:
   AM263:
     device_details: "Quad-core Arm\xAE Cortex\xAE-R5F MCU up to 400 MHz with real-time\
