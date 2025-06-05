@@ -29,7 +29,9 @@ dependencies = [
 "progressbar==2.5",
 "protobuf==5.27.3",
 "rich==13.7.1",
-#"edgeai_torchmodelopt @ git+https://github.com/TexasInstruments/edgeai-modeloptimization.git@r10.0#subdirectory=torchmodelopt",
+"pandas==2.2.2",
+"colorama==0.4.6",
+"torch==2.3.0",
 ]
 
 [project.urls]

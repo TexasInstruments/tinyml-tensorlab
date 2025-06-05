@@ -12,3 +12,4 @@ protobuf==5.27.3
 rich==13.7.1
 pandas==2.2.2
 colorama==0.4.6
+torch==2.3.0
