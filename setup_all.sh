@@ -53,8 +53,8 @@ echo "SOURCE_LOCATION="${SOURCE_LOCATION}
 # clone
 echo "cloning/updating git repositories. this may take some time..."
 echo "if there is any issue, please remove these folders and try again ${PARENT_DIR}/tinyml-tinyverse"
-if [[ ! -d ${PARENT_DIR}/tinyml-tinyverse ]]; then git clone --branch main ${SOURCE_LOCATION}tinyml-tinyverse.git ${PARENT_DIR}/tinyml-tinyverse; else ls ${PARENT_DIR}/tinyml-tinyverse; fi
-if [[ ! -d ${PARENT_DIR}/tinyml-modeloptimization ]]; then git clone --branch main ${SOURCE_LOCATION}tinyml-modeloptimization.git ${PARENT_DIR}/tinyml-modeloptimization; else ls ${PARENT_DIR}/tinyml-modeloptimization; fi
+if [[ ! -d ${PARENT_DIR}/tinyml-tinyverse ]]; then git clone --depth 1 --branch main ${SOURCE_LOCATION}tinyml-tinyverse.git ${PARENT_DIR}/tinyml-tinyverse; else ls ${PARENT_DIR}/tinyml-tinyverse; fi
+if [[ ! -d ${PARENT_DIR}/tinyml-modeloptimization ]]; then git clone --depth 1 --branch main ${SOURCE_LOCATION}tinyml-modeloptimization.git ${PARENT_DIR}/tinyml-modeloptimization; else ls ${PARENT_DIR}/tinyml-modeloptimization; fi
 
 cd ${PARENT_DIR}/tinyml-modelmaker
 echo "cloning/updating done."
