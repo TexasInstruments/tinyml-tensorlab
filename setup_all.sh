@@ -82,18 +82,18 @@ echo "installing repositories..."
 
 echo "installing: tinyml-modeloptimization"
 cd ${PARENT_DIR}/tinyml-modeloptimization/torchmodelopt
-setup.sh
+./setup.sh
 cd ..
 
 echo "installing: tinyml-tinyverse"
 cd ${PARENT_DIR}/tinyml-tinyverse
 # setup_cpu.sh
 # Uncomment below line and comment the above line to install GPU version of torch
-setup.sh
+./setup.sh
 
 echo "installing tinyml-modelmaker"
 cd ${PARENT_DIR}/tinyml-modelmaker
-setup.sh
+./setup.sh
 
 #################################################################################
 ls -d ${PARENT_DIR}/tinyml-*
