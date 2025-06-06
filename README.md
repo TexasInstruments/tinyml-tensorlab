@@ -53,75 +53,61 @@ The other repositories are here for a purpose:
 To begin with, you can use the repo as a `developer` or `user`.
 
   ### Prequisite:
-* **Note**: Irrespective of being a `Linux` or a `Windows` user, it is ideal to use virtual environments on Python rather than operating without one. 
-* For `Linux` we are using `Pyenv` as a Python version management system.
-* For `Windows` we show below using pyenv-win and also using Python's native `venv`
-
 
 * <details> 
-  <summary> Linux OS </summary>
+  <summary> Python Environment  </summary>
+  * **Note**: Irrespective of being a `Linux` or a `Windows` user, it is ideal to use virtual environments on Python rather than operating without one. 
+    * For `Linux` we are using `Pyenv` as a Python version management system.
+    * For `Windows` we show below using pyenv-win and also using Python's native `venv`
+    
+  * <details> 
+    <summary> Linux OS </summary>
   
-  #### Step 1.1: Make sure that you are using bash shell. If it is not bash shell, change it to bash. Verify it by typing:
-  ```
-  echo ${SHELL}
-  ```
+      #### Using Pyenv-Linux (Recommended)
+      * Follow https://github.com/pyenv/pyenv?tab=readme-ov-file#a-getting-pyenv to install pyenv 
+      * Use Python 3.10.xx
+      * `pyenv local <python_version>` is recommended. The version given will be used whenever python is called from within this folder. 
 
-  #### Step 1.2: Install system dependencies
-  ```
-  sudo apt update
-  sudo apt install build-essential curl libbz2-dev libffi-dev liblzma-dev libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev libxml2-dev libxmlsec1-dev llvm make tk-dev xz-utils wget curl
-  sudo apt install -y libffi-dev libjpeg-dev zlib1g-dev graphviz graphviz-dev protobuf-compiler
-  ```
-  #### Step 1.3: Install pyenv using the following commands
-  ```
-  curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+      </details>
 
-  echo '# pyenv settings ' >> ${HOME}/.bashrc
-  echo 'command -v pyenv >/dev/null || export PATH=":${HOME}/.pyenv/bin:$PATH"' >> ${HOME}/.bashrc
-  echo 'eval "$(pyenv init -)"' >> ${HOME}/.bashrc
-  echo 'eval "$(pyenv virtualenv-init -)"' >> ${HOME}/.bashrc
-  echo '' >> ${HOME}/.bashrc
-
-  exec ${SHELL}
-  ```
-
-  Further details on pyenv installation are given here https://github.com/pyenv/pyenv and https://github.com/pyenv/pyenv-installer
-
-  #### Step 1.4: Install Python 3.10 in pyenv and create an environment
-
-  ```
-  pyenv install 3.10
-  pyenv virtualenv 3.10 py310
-  pyenv rehash
-  pyenv activate py310
-  python -m ensurepip --upgrade
-  python -m pip install --upgrade pip setuptools
-  ```
-
-  Note: This activation step needs to be done everytime one starts a new terminal or shell. (Alternately, this also can be written to the .bashrc, so that this will be the default penv environment).
-  ```
-  pyenv activate py310
-  ```
-  </details>
-
-* <details> 
-  <summary> Windows OS </summary>
-
-    #### Using Pyenv-Win (Recommended)
-    * Follow steps 1-5 from here using any Python3.10.xx: https://github.com/pyenv-win/pyenv-win?tab=readme-ov-file#quick-start
-    * Instead of step 6, `pyenv local <python_version>` is recommended. The version given will be used whenever python is called from within this folder.
-  
-    #### Using Python venv
-  
-    * Install Python3.10 from https://www.python.org/downloads/
-  
-    ```commandline
-    python -m venv py310
-    .\py310\Scripts\activate
-    ```
+  * <details> 
+    <summary> Windows OS </summary>
+    
+      #### Using Pyenv-Win (Recommended)
+      * Follow steps 1-5 from here using any Python3.10.xx: https://github.com/pyenv-win/pyenv-win?tab=readme-ov-file#quick-start
+      * Instead of step 6, `pyenv local <python_version>` is recommended. The version given will be used whenever python is called from within this folder.
+      
+      #### Using Python venv
+      
+      * Install Python3.10 from https://www.python.org/downloads/
+      
+      ```commandline
+      python -m venv py310
+      .\py310\Scripts\activate
+      ```
+      </details>
 
 </details>
 
+* **NOTE: C2000 Customers:**
+  * Please download and install [TI C2000 Codegen Tools (TI C2000 CGT)](https://www.ti.com/tool/download/C2000-CGT)
+    * Please set the installed path in your terminal:
+      * Linux: `export CGT_PATH="/path/to/ti-cgt-c2000_22.6.1.LTS"`
+      * Windows: `$env:CGT_PATH="C:\path\to\wherever\present\ti-cgt-c2000_22.6.1.LTS"`
+  * Please download and install [C2000Ware](https://www.ti.com/tool/C2000WARE)
+    * Please set the installed path in your terminal:
+      * Linux: `export C2000WARE_PATH="/path/to/C2000Ware_5_04_00_00"`
+      * Windows: `$env:C2000WARE_PATH="C:\path\to\wherever\present\C2000Ware_5_04_00_00\"`
+  
+* **NOTE: MSPM0 Customers:**
+  * Please download and install [TI Arm Codegen Tools (TI Arm CGT Clang)](https://www.ti.com/tool/download/ARM-CGT-CLANG)
+    * Please set the installed path in your terminal:
+      * Linux: `export MSPM0_CGT_PATH="/path/to/ti-cgt-armllvm_4.0.3.LTS"`
+      * Windows: `$env:MSPM0_CGT_PATH="C:\path\to\wherever\present\ti-cgt-armllvm_4.0.3.LTS"`
+  * Please download and install [MSPM0 SDK](https://www.ti.com/tool/MSPM0-SDK)
+    * Please set the installed path in your terminal:
+      * Linux: `export M0SDK_PATH="/path/to/mspm0_sdk_2_04_00_04"`
+      * Windows: `$env:M0SDK_PATH="C:\path\to\wherever\present\mspm0_sdk_2_04_00_04\"`
 
 
 * ## I'm a User:
@@ -145,81 +131,80 @@ To begin with, you can use the repo as a `developer` or `user`.
       with open('config_timeseries_classification_dsk.yaml') as fp:
           config = yaml.safe_load(fp)
       ```
-    
+    ### Important
+    * This method still expects the C2000Ware/MSPM0 SDK to be installed by the user separately and is not automatically installed.
+    * This method still expects the TI-CGT/ TI Arm-Clang to be installed by the user separately and is not automatically installed.
+    * __Proceeding without installing these SDKs will result in a trained model for the dataset, but will not compile the ONNX model to an compiled artifact.__
+        
     </details>
 
 * ## I'm a developer
   * As a `developer` - The installation will use your brain power (although a tiny bit), but allows you to customize with unimaginable power!
-    * <details>
-      <summary> Linux OS</summary>
+  * <details>
+    <summary> Linux OS</summary>
 
-      ### 1. Set up TI tinyml-tensorlab
-      #### Steps to set up the repositories
+    ### 1. Set up TI tinyml-tensorlab
+    #### Steps to set up the repositories
 
-      0. **NOTE: Please download and install [C2000Ware](https://www.ti.com/tool/C2000WARE)**
-         * Please set the installed path in your terminal: `export C2000WARE_PATH="/path/to/C2000Ware_5_04_00_00"`
-      1. Clone this repository
-      2. `cd tinyml-tensorlab/tinyml-modelmaker`
-      3. Execute (Requires sudo permissions): ``` ./setup_all.sh ```
-      4. Run the following (to install local repositories, ideal for developers): 
-          ```bash
-          cd ../tinyml-tinyverse
-          pip install -e .
-          cd tinyml-modeloptimization/torchmodelopt
-          pip install -e .
-          cd ../tinyml-modelmaker
-          ```
-      5. Now you're ready to go!
-      ```
-      run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_dsk.yaml
-      ```
-      </details>
+    1. Clone this repository
+    2. `cd tinyml-tensorlab/tinyml-modelmaker`
+    3. Execute: ``` ./setup_all.sh ```
+    4. Run the following (to install local repositories, ideal for developers): 
+        ```bash
+        cd ../tinyml-tinyverse
+        pip install -e .
+        cd tinyml-modeloptimization/torchmodelopt
+        pip install -e .
+        cd ../tinyml-modelmaker
+        ```
+    5. Now you're ready to go!
+    ```
+    run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_dsk.yaml
+    ```
+    </details>
     
-      <details>
-      <summary> Windows OS</summary>
+    <details>
+    <summary> Windows OS</summary>
   
-      #### This repository can be used from native Windows terminal directly.
-      * Although we use Pyenv for Python version management on Linux, the same offering for Windows isn't so stable. So even the native venv is good enough.
-        * **It is highly recommended to use PowerShell instead of cmd.exe/Command Terminal**
-        * If you prefer to use Windows Subsystem for Linux, then a [user guide](./docs/Windows_Subsytem_for_Linux.md) to use this toolchain on Windows Subsystem for Linux has been provided.
+    #### This repository can be used from native Windows terminal directly.
+    * Although we use Pyenv for Python version management on Linux, the same offering for Windows isn't so stable. So even the native venv is good enough.
+      * **It is highly recommended to use PowerShell instead of cmd.exe/Command Terminal**
+      * If you prefer to use Windows Subsystem for Linux, then a [user guide](./docs/Windows_Subsytem_for_Linux.md) to use this toolchain on Windows Subsystem for Linux has been provided.
     
-      *  Step 1.1: Clone this repository from GitHub
-      *  Step 1.2: Let us ready up the depedencies
-      ```powershell
-      cd tinyml-tensorlab
-      python -m ensurepip --upgrade
-      python -m pip install --no-input --upgrade pip setuptools wheel
-         ```
-      *  Step 1.3: Install Tiny ML Modelmaker
-      ```powershell
-      cd ..\tinyml-modelmaker
-      python -m pip install --no-input -r requirements.txt
-      python -m pip install --editable . # --use-pep517
-      ```
-      * Tiny ML Modelmaker, by default installs Tiny ML Tinyverse and Tiny ML ModelOptimization repositories as a python package.
-        * If you intend to use this repository as is, then it is enough.
-        * However, if you intend to create models and play with the quantization varieties, then it is better to separately clone
-        * Step 1.4: Installing tinyverse
-          ```powershell
-          cd ..\tinyml-tinyverse
-          python -m pip install --no-input --upgrade pip setuptools
-          pip install https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-1.3.0rc4-cp310-cp310-win_amd64.whl
-          python -m pip install --no-input -r requirements\requirements.txt
-          python -m pip install --no-input -r requirements\requirements_ti_packages.txt
-          python -m pip install --editable . # --use-pep517
-          ```
-        * Step 1.5: Installing model optimization toolkit
-          ```powershell
-          cd ..\tinyml-modeloptimization\torchmodelopt
-          python -m pip install --no-input -r requirements\requirements.txt
-          ## python -m pip install --no-input -r requirements\requirements_ti_packages.txt
-          python -m pip install --editable . --use-pep517
-          ```
-      * We can run it now!
-      ```powershell
-      cd ..\tinyml-modelmaker
-      python .\scripts\run_tinyml_modelmaker.py .\config_timeseries_classification_dsk.yaml --target_device F28P55
-      ```
+    *  Step 1.1: Clone this repository from GitHub
+    *  Step 1.2: Let us ready up the depedencies
+    ```powershell
+    cd tinyml-tensorlab
+    python -m ensurepip --upgrade
+    python -m pip install --no-input --upgrade pip setuptools wheel
+       ```
+    *  Step 1.3: Install Tiny ML Modelmaker
+    ```powershell
+    cd ..\tinyml-modelmaker
+    python -m pip install --no-input -r requirements.txt
+    python -m pip install --editable . # --use-pep517
+    ```
+    * Tiny ML Modelmaker, by default installs Tiny ML Tinyverse and Tiny ML ModelOptimization repositories as a python package.
+      * If you intend to use this repository as is, then it is enough.
+      * However, if you intend to create models and play with the quantization varieties, then it is better to separately clone
+      * Step 1.4: Installing tinyverse
+        ```powershell
+        cd ..\tinyml-tinyverse
+        python -m pip install --no-input -r requirements\requirements.txt
+        python -m pip install --no-input -r requirements\requirements_ti_packages.txt
+        python -m pip install --editable .
+        ```
+      * Step 1.5: Installing model optimization toolkit
+        ```powershell
+        cd ..\tinyml-modeloptimization\torchmodelopt
+        python -m pip install --no-input -r requirements\requirements.txt
+        python -m pip install --editable .
+        ```
+    * We can run it now!
+    ```powershell
+    cd ..\tinyml-modelmaker
+    python .\scripts\run_tinyml_modelmaker.py .\config_timeseries_classification_dsk.yaml --target_device F28P55
+    ```
     
 </details>
   
