@@ -50,6 +50,12 @@ These are the devices that are supported currently. As additional devices are su
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
 * SDK release: 05_04_00
 
+### MSPM0G3507
+* Product information: https://www.ti.com/product/MSPM0G3507
+* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507
+* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
+* SDK release: 2_04_00_06
+
 ## Additional information
 
 

@@ -68,6 +68,7 @@ TARGET_DEVICE_F28004 = 'F28004'
 TARGET_DEVICE_F2837 = 'F2837'
 TARGET_DEVICE_F28P55 = 'F28P55'
 TARGET_DEVICE_F28P65 = 'F28P65'
+TARGET_DEVICE_M0G3507 = 'M0G3507'
 
 TARGET_DEVICES = [
     TARGET_DEVICE_F280015,
@@ -76,6 +77,7 @@ TARGET_DEVICES = [
     TARGET_DEVICE_F2837,
     TARGET_DEVICE_F28P55,
     TARGET_DEVICE_F28P65,
+    TARGET_DEVICE_M0G3507,
 ]
 
 # will not be listed in the GUI, but can be used in command line
@@ -115,6 +117,9 @@ TRAINING_BATCH_SIZE_DEFAULT = {
 
 TARGET_SDK_VERSION = '5.4'
 TARGET_SDK_RELEASE = '05_04_00'
+
+TARGET_SDK_VERSION_M0G3507 = "2.04.00.06"
+TARGET_SDK_RELEASE_M0G3507 = '2_04_00_06'
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
 # TODO: Once the links are up add this
@@ -242,6 +247,23 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
+##### M0G3507 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_M0G3507 = \
+    f'''* Product information: https://www.ti.com/product/MSPM0G3507
+* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507
+* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
+* SDK release: {TARGET_SDK_RELEASE_M0G3507}'''
+
+TARGET_DEVICE_DETAILS_M0G3507= \
+    f'''80MHz Arm® Cortex®-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA
+* More details : https://www.ti.com/product/MSPM0G3507
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_M0G3507}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
 # higher device_selection_factor indicates higher performance device.
 TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F280015: {
@@ -299,6 +321,16 @@ TARGET_DEVICE_DESCRIPTIONS = {
         'device_details': TARGET_DEVICE_DETAILS_AM263,
         'sdk_version': TARGET_SDK_VERSION,
         'sdk_release': TARGET_SDK_RELEASE,
+    },
+
+    TARGET_DEVICE_M0G3507: {
+        'device_name': TARGET_DEVICE_M0G3507,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 7,
+        'device_details': TARGET_DEVICE_DETAILS_M0G3507,
+        'sdk_version': TARGET_SDK_VERSION_M0G3507,
+        'sdk_release': TARGET_SDK_RELEASE_M0G3507,
+      
     },
 }
 
@@ -462,16 +494,30 @@ TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}',
 C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
 C2000WARE_VERSION = 'C2000Ware_5_04_00_00'
 
+MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+M0SDK_VERSION='mspm0_sdk_2_04_00_04'
+
 C2000_CGT_PATH = os.path.abspath(os.getenv('C2000_CGT_PATH', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 C2000WARE_PATH = os.path.abspath(os.getenv('C2000WARE_PATH', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
 
+MSPM0_CGT_PATH = os.path.abspath(os.getenv('MSPM0_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
+M0SDK_PATH = os.path.abspath(os.getenv('M0SDK_PATH', os.path.join(TOOLS_PATH, M0SDK_VERSION)))
+
 CROSS_COMPILER_CL2000 = os.path.join(C2000_CGT_PATH, 'bin', 'cl2000')
+CROSS_COMPILER_MSPM0 = os.path.join(MSPM0_CGT_PATH, 'bin', 'tiarmclang')
 CGT_INCLUDE = os.path.join(C2000_CGT_PATH, 'include')
 C2000WARE_INCLUDE = os.path.join(C2000WARE_PATH, 'device_support', '{DEVICE_NAME}', 'common', 'include')
 DRIVERLIB_INCLUDE = os.path.join(C2000WARE_PATH, 'driverlib', '{DEVICE_NAME}', 'driverlib')
+
+M0SDK_INCLUDE = os.path.join(M0SDK_PATH, 'source')
+SOURCE_INCLUDE_MSPM0 = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
+
+
 CROSS_COMPILER_OPTIONS_C28 = (
     f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{CGT_INCLUDE} -I{DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=.")
 
+CROSS_COMPILER_OPTIONS_MSPM0 = (
+    f"-D__MSPM0G3507__ -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft  -I{SOURCE_INCLUDE_MSPM0} -I{M0SDK_INCLUDE} -Wno-return-type -I.")
 CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
                                                                    DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
@@ -488,7 +534,10 @@ COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=tru
                                   cross_compiler=CROSS_COMPILER_CL2000, )
 COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28',
                                   cross_compiler=CROSS_COMPILER_CL2000, )
-
+COMPILATION_MSPM0_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m0plus',
+                                  cross_compiler=CROSS_COMPILER_MSPM0, )
+COMPILATION_MSPM0_HARD_TINPU = dict(target="c, ti-npu", target_c_mcpu='cortex-m0plus',
+                                  cross_compiler=CROSS_COMPILER_MSPM0, )
 PRESET_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
         TASK_TYPE_ARC_FAULT: {
@@ -738,6 +787,41 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
             ),
         },
+
+    },
+
+     TARGET_DEVICE_M0G3507: {
+        TASK_TYPE_ARC_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
+            ),
+        },
+        TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
+            ),
+        },
+        TASK_TYPE_BLOWER_IMBALANCE: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_REGRESSION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
+            ),
+        },
+        
     },
 }
 

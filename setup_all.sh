@@ -67,10 +67,11 @@ python -m pip install --no-input --upgrade pip setuptools
 python -m pip install --no-input --upgrade wheel # cython numpy==1.26.4
 
 #################################################################################
-# install code get tools
+# install code gen tools
 # Note: this will need sudo access.
-setup_cg_tools.sh
-#setup_c2000ware.sh
+# setup_cg_tools.sh
+# setup_arm_clang_tools.sh
+# setup_c2000ware.sh
 
 #################################################################################
 echo "preparing environment..."
