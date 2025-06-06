@@ -54,7 +54,8 @@ To begin with, you can use the repo as a `developer` or `user`.
 
   ### Prequisite:
 * **Note**: Irrespective of being a `Linux` or a `Windows` user, it is ideal to use virtual environments on Python rather than operating without one. 
-* For `Linux` we are using `Pyenv`, and for `Windows` we are using Python's native `venv`
+* For `Linux` we are using `Pyenv` as a Python version management system.
+* For `Windows` we show below using pyenv-win and also using Python's native `venv`
 
 
 * <details> 
@@ -105,13 +106,19 @@ To begin with, you can use the repo as a `developer` or `user`.
 
 * <details> 
   <summary> Windows OS </summary>
+
+    #### Using Pyenv-Win (Recommended)
+    * Follow steps 1-5 from here using any Python3.10.xx: https://github.com/pyenv-win/pyenv-win?tab=readme-ov-file#quick-start
+    * Instead of step 6, `pyenv local <python_version>` is recommended. The version given will be used whenever python is called from within this folder.
+  
+    #### Using Python venv
   
     * Install Python3.10 from https://www.python.org/downloads/
   
-  ```commandline
-  python -m venv py310
-  .\py310\Scripts\activate
-  ```
+    ```commandline
+    python -m venv py310
+    .\py310\Scripts\activate
+    ```
 
 </details>
 
