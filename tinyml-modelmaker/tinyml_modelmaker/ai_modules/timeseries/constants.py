@@ -495,7 +495,7 @@ C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
 C2000WARE_VERSION = 'C2000Ware_5_04_00_00'
 
 MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
-M0SDK_VERSION='mspm0_sdk_2_04_00_04'
+M0SDK_VERSION='mspm0_sdk_2_04_00_06'
 
 C2000_CGT_PATH = os.path.abspath(os.getenv('C2000_CGT_PATH', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 C2000WARE_PATH = os.path.abspath(os.getenv('C2000WARE_PATH', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
