@@ -3676,6 +3676,17 @@ target_device_descriptions:
       \nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n\
       * Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n\
       * SDK release: 05_04_00\n\nAdditional information:\n\n"
+    device_name: M0G3507
+    device_selection_factor: 7
+    device_type: MCU
+    sdk_release: '2_04_00_06'
+    sdk_version: '2.04.00.06'
+    AM263:
+    device_details: "80MHz Arm® Cortex®-M0+ MCU\ with 128KB flash 32KB SRAM\ 2x4Msps ADC, DAC, 3xCOMP, 2xOPA,
+     \ CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
+      \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
+      * Development board: https://www.ti.com/tool/LP-MSPM0G3507\n* SDK: https://www.ti.com/tool/MSPM0-SDK\n\
+      * SDK release: 2_04_00__06\n\nAdditional information:\n\n"
     device_name: AM263
     device_selection_factor: 6
     device_type: MCU
