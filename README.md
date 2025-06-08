@@ -1,4 +1,4 @@
-# Tiny ML Torch Model Optimization Repository
+# Tiny ML Model Optimization Repository
 
 
 ## Tiny ML TorchModelOpt
