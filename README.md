@@ -106,8 +106,8 @@ To begin with, you can use the repo as a `developer` or `user`.
       * Windows: `$env:MSPM0_CGT_PATH="C:\path\to\wherever\present\ti-cgt-armllvm_4.0.3.LTS"`
   * Please download and install [MSPM0 SDK](https://www.ti.com/tool/MSPM0-SDK)
     * Please set the installed path in your terminal:
-      * Linux: `export M0SDK_PATH="/path/to/mspm0_sdk_2_04_00_04"`
-      * Windows: `$env:M0SDK_PATH="C:\path\to\wherever\present\mspm0_sdk_2_04_00_04\"`
+      * Linux: `export M0SDK_PATH="/path/to/mspm0_sdk_2_05_00_05"`
+      * Windows: `$env:M0SDK_PATH="C:\path\to\wherever\present\mspm0_sdk_2_05_00_05\"`
 
 
 * ## I'm a User:
