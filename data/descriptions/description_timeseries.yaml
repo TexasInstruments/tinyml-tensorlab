@@ -3679,8 +3679,8 @@ target_device_descriptions:
     device_name: M0G3507
     device_selection_factor: 7
     device_type: MCU
-    sdk_release: '2_04_00_06'
-    sdk_version: '2.04.00.06'
+    sdk_release: '2_05_00_05'
+    sdk_version: '2.05.00.05'
     AM263:
     device_details: "80MHz Arm® Cortex®-M0+ MCU\ with 128KB flash 32KB SRAM\ 2x4Msps ADC, DAC, 3xCOMP, 2xOPA,
      \ CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
