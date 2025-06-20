@@ -181,7 +181,7 @@ To begin with, you can use the repo as a `developer` or `user`.
        ```
     *  Step 1.3: Install Tiny ML Modelmaker
     ```powershell
-    cd ..\tinyml-modelmaker
+    cd .\tinyml-modelmaker
     python -m pip install --no-input -r requirements.txt
     python -m pip install --editable . # --use-pep517
     ```
@@ -204,7 +204,7 @@ To begin with, you can use the repo as a `developer` or `user`.
     * We can run it now!
     ```powershell
     cd ..\tinyml-modelmaker
-    python .\scripts\run_tinyml_modelmaker.py .\config_timeseries_classification_dsk.yaml --target_device F28P55
+    python ..\tinyml-modelmaker\run_tinyml_modelmaker.py .\config_timeseries_classification_dsk.yaml --target_device F28P55
     ```
     
 </details>
