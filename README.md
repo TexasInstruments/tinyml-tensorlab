@@ -56,6 +56,7 @@ To begin with, you can use the repo as a `developer` or `user`.
 
 * <details> 
   <summary> Python Environment  </summary>
+  
   * **Note**: Irrespective of being a `Linux` or a `Windows` user, it is ideal to use virtual environments on Python rather than operating without one. 
     * For `Linux` we are using `Pyenv` as a Python version management system.
     * For `Windows` we show below using pyenv-win and also using Python's native `venv`
