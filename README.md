@@ -182,6 +182,7 @@ To begin with, you can use the repo as a `developer` or `user`.
        ```
     *  Step 1.3: Install Tiny ML Modelmaker
     ```powershell
+    git config "--global" core.longpaths true
     cd .\tinyml-modelmaker
     python -m pip install --no-input -r requirements.txt
     python -m pip install --editable . # --use-pep517
