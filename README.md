@@ -203,8 +203,8 @@ To begin with, you can use the repo as a `developer` or `user`.
         ```
     * We can run it now!
     ```powershell
-    cd ..\tinyml-modelmaker
-    python .\tinyml-modelmaker\run_tinyml_modelmaker.py .\config_timeseries_classification_dsk.yaml --target_device F28P55
+    cd ..\..\tinyml-modelmaker
+    python .\tinyml_modelmaker\run_tinyml_modelmaker.py .\config_timeseries_classification_dsk.yaml --target_device F28P55
     ```
     
 </details>
