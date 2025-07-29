@@ -1,7 +1,7 @@
 ##  The Config File
 
 This guide showcases the commonly used options under each section. This file should more or less be enough to guide the user to feeding options.
-However, if you wann delve into the depth of options for each section, we suggest you check out: [All possible options](../tinyml_modelmaker/ai_modules/timeseries/params.py)
+However, if you want to delve into the depth of options for each section, we suggest you check out: [All possible options](../tinyml_modelmaker/ai_modules/timeseries/params.py)
 
 The [config_timeseries_classification_dsk.yaml](../config_timeseries_classification_dsk.yaml) or [config_timeseries_classification_dsi.yaml](../config_timeseries_classification_dsi.yaml) are examples that have combined sections of the following structure with a subset of each of the options.
 
@@ -23,27 +23,21 @@ dataset:                                    # Enable/disable dataset loading
     input_data_path: 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip'  # Can be a url/local folder location to a .zip file or a normal directory 
 ```
 
-### Section 3: Data Processing
+### Section 3: Data Processing and Feature Extraction
 ```python
-data_processing:                            # One or more can be cascaded in the list
-    transforms: [ Downsample, SimpleWindow ]# transforms: 'DownSample SimpleWindow'
-    sampling_rate: 1                               # Original Sample Rate [1]
-    new_sr: 1                               # New Sample Rate, Either Resampling factor or New Sample Rate can be given [1]
-    resampling_factor: 1                    # Either Resampling factor or New Sample Rate can be given [1]
-    stride_window: 1                        # Stride window i.e move by 'n' samples for the next window [1]
-    sequence_window: 512                    # Window frame length [512]
+data_processing_feature_extraction:
+    data_proc_transforms: [ Downsample, SimpleWindow ]  # transforms: 'DownSample SimpleWindow'
+    sampling_rate: 1                                    # Original Sample Rate [1]
+    new_sr: 1                                           # New Sample Rate, New Sample Rate can be given [1]
+    stride_size: 1                                      # Stride size i.e move by 'frame_size*stride_size' samples for the next window [1]
+    frame_size: 512                                     # Window frame length [512]
 
-```
-
-### Section 4: Feature Extraction
-```python
-feature_extraction:
-    transform: None                         # Use this as 'None' for Time Domain processing without any of the below options
-    feature_extraction_name: FFT1024        # Presets supported: FFT1024 (Other presets will be supported soon)
-    feature_size: 512                       # Total number of features extracted (256/384/512) [256]
-    num_frame_concat: 1                     # Number of frames concatenated for feature extraction (1/4/6/16) [1]
-    min_fft_bin: 1                          # Minimum FFT bin number used for feature extraction (0-256) [1]
-    fft_bin_size: 1                         # Number of FFT bins used for each feature (1-8) [1]
+    feat_ext_transform: []                # Use this as '[]' for Time Domain processing without any of the below options
+    feature_extraction_name: FFT1024      # Presets supported: FFT1024 (Other presets will be supported soon)
+    frame_size: 512                       # Total number of features extracted (256/384/512) [256]
+    num_frame_concat: 1                   # Number of frames concatenated for feature extraction (1/4/6/16) [1]
+    min_bin: 1                            # Minimum FFT bin number used for feature extraction (0-256) [1]
+    feature_size_per_frame: 1             # Number of features extracted for each frame (1-8) [1]
 ```
 ### Section 5: Training
 ```python

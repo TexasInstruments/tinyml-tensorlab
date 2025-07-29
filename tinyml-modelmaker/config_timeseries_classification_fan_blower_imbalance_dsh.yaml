@@ -54,5 +54,5 @@ testing:
 compilation:
     # enable/disable compilation
     enable: True #False
-    # No preset is required for devices other than F28P55
-#    compile_preset_name: forced_soft_npu_preset
+    # No preset is required for devices other than F28P55. default_preset is chosen by default
+#    compile_preset_name: compress_npu_layer_data, forced_soft_npu_preset  # Available only for devices with NPU

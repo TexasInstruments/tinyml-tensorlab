@@ -12,7 +12,7 @@ The Electrical Fault Dataset is a multivariate time series dataset. It is obtain
 
 There are 6 measurable parameters/variables - **(Va, Vb, Vc, Ia, Ib, Ic)** i.e the voltage and current of three phases. 
 
-There are two dataset files present in the compressed zip: [electrical_fault.zip](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/electrical_fault.zip)
+There are two dataset files present in the compressed zip: [electrical_fault.zip](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/electrical_fault.zip)
 
 - `detect_dataset.xlsx` : which finds if there is a fault or not. Target = [Output (S)]
     - There is one target only i.e. Output (S) which has two unique values (0, 1) denoting fault and no fault.

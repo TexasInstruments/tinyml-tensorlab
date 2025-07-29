@@ -344,3 +344,11 @@ def str2bool(v):
         #
     #
     return bool(v)
+
+def deep_update_dict(dict1, dict2):
+    for key, value in dict2.items():
+        if isinstance(value, dict) and key in dict1 and isinstance(dict1[key], dict):
+            deep_update_dict(dict1[key], value)
+        else:
+            dict1[key] = value
+    return dict1

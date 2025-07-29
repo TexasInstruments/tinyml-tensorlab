@@ -30,6 +30,7 @@
 
 import os
 import shutil
+from copy import deepcopy
 
 import torch.backends.mps
 
@@ -42,41 +43,68 @@ import tinyml_modelmaker
 from ..... import utils
 from ... import constants
 from .device_run_info import DEVICE_RUN_INFO
-# Let the default model device run info dict be blank
-MOD_DEV_RUN = dict(inference_time_us='TBD', flash='TBD', sram='TBD')
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
 
-# tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
-
-model_urls = {
-    'TimeSeries_Generic_Regr_13k_t': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_Regr_3k_t': {'download_url': '', 'download_path': '', },
-}
-
-
+# Let the default model device run info dict be blank
+MOD_DEV_RUN = dict(inference_time_us='TBD', flash='TBD', sram='TBD')
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
+template_model_description = dict(
+    common=dict(
+        task_category=constants.TASK_CATEGORY_TS_REGRESSION,
+        task_type=constants.TASK_TYPE_GENERIC_TS_REGRESSION,
+        generic_model=True,
+        model_details='',
+    ),
+    download=dict(download_url='', download_path=''),
+    training=dict(
+        quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
+        with_input_batchnorm=True,
+        dataset_loader='GenericTSDatasetReg',
+        training_backend='tinyml_tinyverse',
+        model_training_id='',
+        model_name='',
+        learning_rate=2e-3,
+        model_spec=None,
+        batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_REGRESSION],
+        target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None),},
+        training_devices={constants.TRAINING_DEVICE_CPU: True, constants.TRAINING_DEVICE_CUDA: True, constants.TRAINING_DEVICE_MPS: True,},
+    ),
+    compilation=dict()
+)
 _model_descriptions = {
     # Regression Models
-    'TimeSeries_Generic_Regr_13k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_REGRESSION,
-            task_type=constants.TASK_TYPE_GENERIC_TS_REGRESSION,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_Regr_13k_t'],
+    'TimeSeries_Generic_Regr_10k_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Regression Model with 10k params. 3 Conv+BatchNorm+Relu layers + 2 Linear Layer.'),
         'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            dataset_loader='GenericTSDatasetReg',
-            training_backend='tinyml_tinyverse',
+            model_training_id='REG_TS_GEN_BASE_10K',
+            model_name='TimeSeries_Generic_Regr_10k_t',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+        ),
+    }),
+    'TimeSeries_Generic_Regr_13k_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Regression Model with 13k params. 6 Conv+BatchNorm+Relu layers + Linear Layer.'),
+        'training': dict(
             model_training_id='CNN_TS_GEN_BASE_13K',
             model_name='TimeSeries_Generic_Regr_13k_t',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_REGRESSION],
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
                 constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
                 constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
                 constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
@@ -84,32 +112,15 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
             },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-				constants.TRAINING_DEVICE_MPS: True,
-            }
         ),
-        'compilation': dict()
-    },
-    'TimeSeries_Generic_Regr_3k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_REGRESSION,
-            task_type=constants.TASK_TYPE_GENERIC_TS_REGRESSION,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_Regr_3k_t'],
+    }),
+    'TimeSeries_Generic_Regr_3k_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Regression Model with 3k params. 4 layers of MLPs (Fully Connected Layers)'),
         'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            dataset_loader='GenericTSDatasetReg',
-            training_backend='tinyml_tinyverse',
             model_training_id='REG_TS_GEN_BASE_3K',
             model_name='TimeSeries_Generic_Regr_3k_t',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_REGRESSION],
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
                 constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
                 constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
                 constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
@@ -117,19 +128,14 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
             },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-				constants.TRAINING_DEVICE_MPS: True,
-            }
         ),
-        'compilation': dict()
-    },
+    }),
 }
 
 enabled_models_list = [
     # Regression Models
     'TimeSeries_Generic_Regr_13k_t',
+    'TimeSeries_Generic_Regr_10k_t',
     'TimeSeries_Generic_Regr_3k_t',
 ]
 
@@ -411,6 +417,7 @@ class ModelTraining:
                 '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',
                 '--epochs', f'{self.params.training.training_epochs}',
                 '--lr', f'{self.params.training.learning_rate}',
+                '--lambda-reg', f'{self.params.training.lambda_reg}',
                 '--output-dir', f'{self.params.training.training_path}',
                 ]
 
@@ -452,6 +459,7 @@ class ModelTraining:
                         '--output-dir', f'{self.params.training.training_path_quantization}',
                         '--epochs', f'{max(50, self.params.training.training_epochs // 5)}',
                         '--lr', f'{self.params.training.learning_rate / 100}',
+                        '--lambda-reg', f'{self.params.training.lambda_reg}',
                         '--weights', f'{self.params.training.model_checkpoint_path}',
                         '--quantization', f'{self.params.training.quantization}',
                         '--quantization-method', f'{self.params.training.quantization_method}',

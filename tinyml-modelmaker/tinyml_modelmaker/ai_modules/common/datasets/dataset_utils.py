@@ -135,6 +135,7 @@ def create_inter_file_split(file_list: str, split_list_files: tuple, split_facto
 def create_intra_file_split(file_list: str, split_list_files: tuple, split_factor: float or list, data_dir, out_dir, split_names, shuffle_items=True, random_seed=42):
     '''
     Creates a simple split according to split factor for each of the classes. This utility splits each file as per the split factor
+    Example: If the file has 100 lines --> 50 train, 30 val, 20 test
 
     :param file_list: file_list.txt file that contains all the links to the files for dataset
     :param split_list_files: training_list.txt and validation_list.txt and so on...
@@ -173,17 +174,25 @@ def create_intra_file_split(file_list: str, split_list_files: tuple, split_facto
         shuffle(list_of_files)
 
     out_splits = collections.defaultdict(list)
+    first_row_is_a_header = None
     for class_name, class_files in files_of_a_class.items():
         for class_file in class_files:
             with open(os.path.join(os.path.dirname(out_dir), data_dir, class_file)) as cfp:
                 rows_in_file = cfp.readlines()  # Read the file as a list
+            if re.search(r"[a-zA-Z]", rows_in_file[0]):
+                first_row_is_a_header = rows_in_file[0]
+                rows_in_file = rows_in_file[1:]
+
             # Normalise to split based on integer indices
             split_lengths = [int(split_factor * len(rows_in_file)) for split_factor in split_factors]
             # To add the unused file to test data
             split_lengths[-1] = len(rows_in_file) - sum(split_lengths[:-1])  # adjust the last split so that no element is left behind
             # To add the unused file to train data
             # split_lengths[0] = len(rows_in_file) - sum(split_lengths[1:])  # adjust the last split so that no element is left behind
-            file_split_by_rows = [rows_in_file[x - y: x] for x, y in zip(accumulate(split_lengths), split_lengths)]
+            if first_row_is_a_header:
+                file_split_by_rows = [[first_row_is_a_header] + rows_in_file[x - y: x] for x, y in zip(accumulate(split_lengths), split_lengths)]
+            else:
+                file_split_by_rows = [rows_in_file[x - y: x] for x, y in zip(accumulate(split_lengths), split_lengths)]
             # file_split_by_rows: Contains train, val, test split for each file
             out_file_paths = [f'{os.path.join(class_name, os.path.splitext(os.path.basename(class_file))[0])}_{split_name}{os.path.splitext(os.path.basename(class_file))[1]}' for split_name in split_names]
             for out_file_path, file_split in zip(out_file_paths, file_split_by_rows):

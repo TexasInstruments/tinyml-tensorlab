@@ -1,8 +1,0 @@
-defusedxml==0.7.1
-numpy==1.26.4
-pandas==2.2.2
-pathlib2==2.3.7.post1
-PyYAML==6.0.2
-tqdm==4.66.5
-requests==2.32.3
-pillow==10.4.0

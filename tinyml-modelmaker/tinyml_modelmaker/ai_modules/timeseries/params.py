@@ -98,6 +98,7 @@ def init_params(*args, **kwargs):
             num_last_epochs=5,
             batch_size=8,
             learning_rate=2e-3,
+            lambda_reg=0,
             optimizer='sgd',
             weight_decay=1e-4,
             lr_scheduler='cosineannealinglr',
@@ -121,7 +122,27 @@ def init_params(*args, **kwargs):
                 dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=300),
                 dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1,
                      decimal_places=3, increment=0.001),
-                ]),
+                ],
+            
+            #######################################
+            # nas params
+            #######################################
+            nas_enabled=False,
+            nas_optimization_mode='Memory', # 'Compute' 'Memory'
+            nas_epochs=10,   # num epochs for which search to be executed
+
+            # Preset mode
+            nas_model_size=None,  # 's' 'm' 'l' 'xl'
+
+            # Customization mode
+            nas_nodes_per_layer=4,  # Each layer consists of few nodes for DAG construction
+            nas_layers=3,    # Minimum should be 3
+            nas_init_channels=1,    # Initial feature map channel for conv layer
+            nas_init_channel_multiplier=3,  # First layer channel multiplier
+            nas_fanout_concat=4,   # num nodes_per_layer to concat for output of current layer, it should always be less than equal to nodes_per_layer
+            
+            load_saved_model=None,
+        ),
 
         testing=dict(
             enable=True,

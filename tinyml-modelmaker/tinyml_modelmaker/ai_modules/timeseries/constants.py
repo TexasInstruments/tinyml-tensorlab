@@ -62,21 +62,25 @@ TASK_CATEGORIES = [
 
 # target_device
 TARGET_DEVICE_AM263 = 'AM263'
+TARGET_DEVICE_F280013 = 'F280013'
 TARGET_DEVICE_F280015 = 'F280015'
 TARGET_DEVICE_F28003 = 'F28003'
 TARGET_DEVICE_F28004 = 'F28004'
 TARGET_DEVICE_F2837 = 'F2837'
 TARGET_DEVICE_F28P55 = 'F28P55'
 TARGET_DEVICE_F28P65 = 'F28P65'
+TARGET_DEVICE_F29H85 = 'F29H85'
 TARGET_DEVICE_M0G3507 = 'M0G3507'
 
 TARGET_DEVICES = [
+    TARGET_DEVICE_F280013,
     TARGET_DEVICE_F280015,
     TARGET_DEVICE_F28003,
     TARGET_DEVICE_F28004,
     TARGET_DEVICE_F2837,
     TARGET_DEVICE_F28P55,
     TARGET_DEVICE_F28P65,
+    TARGET_DEVICE_F29H85,
     TARGET_DEVICE_M0G3507,
 ]
 
@@ -115,17 +119,19 @@ TRAINING_BATCH_SIZE_DEFAULT = {
     TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: 64,
 }
 
-TARGET_SDK_VERSION = '5.4'
-TARGET_SDK_RELEASE = '05_04_00'
+TARGET_SDK_VERSION_C2000 = '6.0'
+TARGET_SDK_RELEASE_C2000 = '06_00_00'
+
+TARGET_SDK_VERSION_F29H85 = '1.01'
+TARGET_SDK_RELEASE_F29H85 = '01_01_00'
 
 TARGET_SDK_VERSION_M0G3507 = "2.05.00.05"
 TARGET_SDK_RELEASE_M0G3507 = '2_05_00_05'
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
 # TODO: Once the links are up add this
-'''* Tiny ML introduction: https://ti.com/tinyml
+'''
 * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab
-* Tiny ML tools introduction: https://dev.ti.com/tinyml/
 '''
 
 ##### AM263 ######
@@ -133,7 +139,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_AM263 = \
     f'''* Product information: https://www.ti.com/product/AM2634
 * Development board: https://www.ti.com/tool/LP-AM263
 * SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X
-* SDK release: {TARGET_SDK_RELEASE}'''
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_AM263 = \
     f'''Quad-core Arm® Cortex®-R5F MCU up to 400 MHz with real-time control and security
@@ -150,7 +156,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015 = \
     f'''* Product information: https://www.ti.com/product/TMS320F2800157
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE}'''
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_F280015 = \
     f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
@@ -162,12 +168,29 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
+##### F280013 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013 = \
+    f'''* Product information: https://www.ti.com/product/TMS320F2800137
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F280013 = \
+    f'''C2000™ 120-MHz C28x CPU with FPU and TMU, 256-KB Flash, two 12-bit ADCs, 14 PWM channels, CAN (DCAN), one encoder module (eQEP), UART, and more
+* More details : https://www.ti.com/tool/LAUNCHXL-F2800137
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
 ##### F28003 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_F28003 = \
     f'''* Product information: https://www.ti.com/product/TMS320F280039C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE}'''
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_F28003 = \
     f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
@@ -184,7 +207,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_F28004 = \
     f'''* Product information: https://www.ti.com/product/TMS320F280049C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE}'''
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_F28004 = \
     f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
@@ -201,7 +224,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837 = \
     f'''* Product information: https://www.ti.com/product/TMS320F28377D
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE}'''
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_F2837 = \
     f'''C2000™ 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC
@@ -218,7 +241,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P65 = \
     f'''* Product information: https://www.ti.com/product/TMS320F28P650DK
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE}'''
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_F28P65 = \
     f'''C2000™ 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES
@@ -235,7 +258,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55 = \
     f'''* Product information: https://www.ti.com/product/TMS320F28P550SJ
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE}'''
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_F28P55 = \
     f'''C2000™ 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU
@@ -243,6 +266,23 @@ TARGET_DEVICE_DETAILS_F28P55 = \
 
 Important links:
 {TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F29H85 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F29H85 = \
+    f'''* Product information: https://www.ti.com/product/F29H850TU
+* SOM EVM: https://www.ti.com/tool/F29H85X-SOM-EVM
+* C2000 SDK: https://www.ti.com/tool/download/F29H85X-SDK/
+* SDK release: {TARGET_SDK_RELEASE_F29H85}'''
+
+TARGET_DEVICE_DETAILS_F29H85 = \
+    f'''C2000™ 64-bit MCU with C29x 200MHz tri-core, lockstep, functional safety compliance, 4MB
+* More details : https://www.ti.com/product/F29H850TU
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F29H85}
 
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
@@ -266,71 +306,85 @@ Additional information:
 
 # higher device_selection_factor indicates higher performance device.
 TARGET_DEVICE_DESCRIPTIONS = {
+    TARGET_DEVICE_M0G3507: {
+        'device_name': TARGET_DEVICE_M0G3507,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 0,
+        'device_details': TARGET_DEVICE_DETAILS_M0G3507,
+        'sdk_version': TARGET_SDK_VERSION_M0G3507,
+        'sdk_release': TARGET_SDK_RELEASE_M0G3507,
+    },
+    TARGET_DEVICE_F280013: {
+        'device_name': TARGET_DEVICE_F280013,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 1,
+        'device_details': TARGET_DEVICE_DETAILS_F280013,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
     TARGET_DEVICE_F280015: {
         'device_name': TARGET_DEVICE_F280015,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 0,
+        'device_selection_factor': 2,
         'device_details': TARGET_DEVICE_DETAILS_F280015,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_F28003: {
         'device_name': TARGET_DEVICE_F28003,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 1,
+        'device_selection_factor': 3,
         'device_details': TARGET_DEVICE_DETAILS_F28003,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_F28004: {
         'device_name': TARGET_DEVICE_F28004,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 2,
+        'device_selection_factor': 4,
         'device_details': TARGET_DEVICE_DETAILS_F28004,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_F2837: {
         'device_name': TARGET_DEVICE_F2837,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 3,
+        'device_selection_factor': 5,
         'device_details': TARGET_DEVICE_DETAILS_F2837,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_F28P65: {
         'device_name': TARGET_DEVICE_F28P65,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 4,
+        'device_selection_factor': 6,
         'device_details': TARGET_DEVICE_DETAILS_F28P65,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_F28P55: {
         'device_name': TARGET_DEVICE_F28P55,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 5,
+        'device_selection_factor': 7,
         'device_details': TARGET_DEVICE_DETAILS_F28P55,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_AM263: {
         'device_name': TARGET_DEVICE_AM263,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 6,
+        'device_selection_factor': 8,
         'device_details': TARGET_DEVICE_DETAILS_AM263,
-        'sdk_version': TARGET_SDK_VERSION,
-        'sdk_release': TARGET_SDK_RELEASE,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
-
-    TARGET_DEVICE_M0G3507: {
-        'device_name': TARGET_DEVICE_M0G3507,
+    TARGET_DEVICE_F29H85: {
+        'device_name': TARGET_DEVICE_F29H85,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 7,
-        'device_details': TARGET_DEVICE_DETAILS_M0G3507,
-        'sdk_version': TARGET_SDK_VERSION_M0G3507,
-        'sdk_release': TARGET_SDK_RELEASE_M0G3507,
-      
+        'device_selection_factor': 8,
+        'device_details': TARGET_DEVICE_DETAILS_F29H85,
+        'sdk_version': TARGET_SDK_VERSION_F29H85,
+        'sdk_release': TARGET_SDK_RELEASE_F29H85,
     },
 }
 
@@ -407,8 +461,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=32, num_frame_concat=8, min_bin=1, analysis_bandwidth=4, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
     # ArcFault_512Input_FFT=dict(
-    #     feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=512, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12),
-    #     data_processing=dict(transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
+    #     data_processing_feature_extraction=dict(transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=512, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1,),
     #     common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
 
     MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
@@ -421,8 +474,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
-    #     feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100),
-    #     data_processing=dict(transforms=[], sampling_rate=1, variables=3),
+    #     data_processing_feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),
     #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
@@ -460,23 +512,23 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsi=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsi.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsi.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=None, data_proc_transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, frame_size=3130, stride_size=0.01),
     ),
     arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     motor_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsh=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blower_imbalance_dsh.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     hello_world_example_dsg=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
 )
@@ -486,58 +538,60 @@ DATASET_DEFAULT = 'default'
 # prototxt is not used in AM62 - so those values does not have effect in AM62 - they are given just for completeness.
 # if we really wan't to change the detections settings in AM62, we will have to modify the onnx file, but that's not easy.
 COMPILATION_FORCED_SOFT_NPU = 'forced_soft_npu_preset'
+COMPILATION_NPU_OPT_FOR_SPACE = 'compress_npu_layer_data'
 COMPILATION_DEFAULT = 'default_preset'
 
 HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
 TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
+# C2000 F28 Compiler
 C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
-C2000WARE_VERSION = 'C2000Ware_5_04_00_00'
-
+C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
+CL2000_CROSS_COMPILER = os.path.join(C2000_CG_ROOT, 'bin', 'cl2000')
+C2000_CGT_INCLUDE = os.path.join(C2000_CG_ROOT, 'include')
+# C2000 F28 SDK
+C2000WARE_VERSION = 'C2000Ware_6_00_00_00'
+C2000WARE_ROOT = os.path.abspath(os.getenv('C2000WARE_ROOT', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
+C2000WARE_INCLUDE = os.path.join(C2000WARE_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
+C2000_DRIVERLIB_INCLUDE = os.path.join(C2000WARE_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
+# C2000 F29 Compiler
+C29_CGT_VERSION = 'ti-cgt-c29_2.0.0.STS'
+C29_CG_ROOT = os.path.abspath(os.getenv('C29_CG_ROOT', os.path.join(TOOLS_PATH, C29_CGT_VERSION)))
+C29CLANG_CROSS_COMPILER = os.path.join(C29_CG_ROOT, 'bin', 'c29clang')
+C29_CGT_INCLUDE = os.path.join(C29_CG_ROOT, 'include')
+# C2000 F29H85 SDK --> For F29 there is device wise SDK. --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
+# F29H85_SDK_VERSION = 'f29h85x-sdk_1_01_00_00'
+# F29H85_SDK_ROOT = os.path.abspath(os.getenv('F29H85_SDK_ROOT', os.path.join(TOOLS_PATH, F29H85_SDK_VERSION)))
+# F29H85_SDK_INCLUDE = os.path.join(F29H85_SDK_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
+# F29H85_DRIVERLIB_INCLUDE = os.path.join(F29H85_SDK_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
+# MSPM0 Compiler
 MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
-M0SDK_VERSION='mspm0_sdk_2_05_00_05'
-
-C2000_CGT_PATH = os.path.abspath(os.getenv('C2000_CGT_PATH', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
-C2000WARE_PATH = os.path.abspath(os.getenv('C2000WARE_PATH', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
-
 MSPM0_CGT_PATH = os.path.abspath(os.getenv('MSPM0_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
-M0SDK_PATH = os.path.abspath(os.getenv('M0SDK_PATH', os.path.join(TOOLS_PATH, M0SDK_VERSION)))
-
-CROSS_COMPILER_CL2000 = os.path.join(C2000_CGT_PATH, 'bin', 'cl2000')
-CROSS_COMPILER_MSPM0 = os.path.join(MSPM0_CGT_PATH, 'bin', 'tiarmclang')
-CGT_INCLUDE = os.path.join(C2000_CGT_PATH, 'include')
-C2000WARE_INCLUDE = os.path.join(C2000WARE_PATH, 'device_support', '{DEVICE_NAME}', 'common', 'include')
-DRIVERLIB_INCLUDE = os.path.join(C2000WARE_PATH, 'driverlib', '{DEVICE_NAME}', 'driverlib')
-
-M0SDK_INCLUDE = os.path.join(M0SDK_PATH, 'source')
-SOURCE_INCLUDE_MSPM0 = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
+MSPM0_CROSS_COMPILER = os.path.join(MSPM0_CGT_PATH, 'bin', 'tiarmclang')
+# MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
+# M0SDK_VERSION='mspm0_sdk_2_05_00_05'
+# M0SDK_PATH = os.path.abspath(os.getenv('M0SDK_PATH', os.path.join(TOOLS_PATH, M0SDK_VERSION)))
+# M0SDK_INCLUDE = os.path.join(M0SDK_PATH, 'source')
+# MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
 
 
-CROSS_COMPILER_OPTIONS_C28 = (
-    f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{CGT_INCLUDE} -I{DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=.")
+CROSS_COMPILER_OPTIONS_C28 = (f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I{C2000_DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=.")
+CROSS_COMPILER_OPTIONS_F29H85 = (f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I.")
+CROSS_COMPILER_OPTIONS_MSPM0 = (f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
 
-CROSS_COMPILER_OPTIONS_MSPM0 = (
-    f"-D__MSPM0G3507__ -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft  -I{SOURCE_INCLUDE_MSPM0} -I{M0SDK_INCLUDE} -Wno-return-type -I.")
-CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
-                                                                   DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
-                                                                  DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
-                                                                  DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
-                                                                 DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'xd')
-CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu64',
-                                                                  DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
-CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32',
-                                                                  DEVICE_NAME=TARGET_DEVICE_F28P55.lower() + 'x')
-COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28',
-                                  cross_compiler=CROSS_COMPILER_CL2000, )
-COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28',
-                                  cross_compiler=CROSS_COMPILER_CL2000, )
-COMPILATION_MSPM0_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m0plus',
-                                  cross_compiler=CROSS_COMPILER_MSPM0, )
-COMPILATION_MSPM0_HARD_TINPU = dict(target="c, ti-npu", target_c_mcpu='cortex-m0plus',
-                                  cross_compiler=CROSS_COMPILER_MSPM0, )
+CROSS_COMPILER_OPTIONS_F280013 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280013.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'xd')
+CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu64', DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28P55.lower() + 'x')
+COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
+COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
+COMPILATION_C28_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
+COMPILATION_F29H85_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='c29', cross_compiler=C29CLANG_CROSS_COMPILER, )
+COMPILATION_MSPM0_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m0plus', cross_compiler=MSPM0_CROSS_COMPILER, )
+COMPILATION_MSPM0_HARD_TINPU = dict(target="c, ti-npu", target_c_mcpu='cortex-m0plus', cross_compiler=MSPM0_CROSS_COMPILER, )
 PRESET_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
         TASK_TYPE_ARC_FAULT: {
@@ -577,9 +631,40 @@ PRESET_DESCRIPTIONS = {
             ),
         },
     },
+    TARGET_DEVICE_F280013: {
+        TASK_TYPE_ARC_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
+            ),
+        },
+        TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
+            ),
+        },
+        TASK_TYPE_BLOWER_IMBALANCE: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_REGRESSION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
+            ),
+        },
+    },
     TARGET_DEVICE_F280015: {
         TASK_TYPE_ARC_FAULT: {
-
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),
@@ -711,6 +796,9 @@ PRESET_DESCRIPTIONS = {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
+            COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
             COMPILATION_FORCED_SOFT_NPU: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
@@ -718,6 +806,9 @@ PRESET_DESCRIPTIONS = {
         TASK_TYPE_MOTOR_FAULT: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+            COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
             COMPILATION_FORCED_SOFT_NPU: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
@@ -727,6 +818,9 @@ PRESET_DESCRIPTIONS = {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
+            COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
             COMPILATION_FORCED_SOFT_NPU: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
@@ -734,6 +828,9 @@ PRESET_DESCRIPTIONS = {
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+            COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
             COMPILATION_FORCED_SOFT_NPU: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
@@ -743,6 +840,9 @@ PRESET_DESCRIPTIONS = {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
+            COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
             COMPILATION_FORCED_SOFT_NPU: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
@@ -750,6 +850,9 @@ PRESET_DESCRIPTIONS = {
         TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+            COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
             COMPILATION_FORCED_SOFT_NPU: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
@@ -789,8 +892,42 @@ PRESET_DESCRIPTIONS = {
         },
 
     },
+    
+    TARGET_DEVICE_F29H85: {
+        TASK_TYPE_ARC_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
+            ),
+        },
+        TASK_TYPE_MOTOR_FAULT: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
+            ),
+        },
+        TASK_TYPE_BLOWER_IMBALANCE: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_REGRESSION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
+            ),
+        },
 
-     TARGET_DEVICE_M0G3507: {
+    },
+
+    TARGET_DEVICE_M0G3507: {
         TASK_TYPE_ARC_FAULT: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
@@ -851,10 +988,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_classification_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Arc Fault Classification Example2',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -869,10 +1006,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_example_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Motor Bearing Fault Classification Example',
             'dataset_description': 'Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking',
             'dataset_size': None,
@@ -887,10 +1024,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'blower_imbalance_example_dsh',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blower_imbalance_dsh.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blower_imbalance_dsh.zip',
             'dataset_detailed_name': 'Blower Imbalance Classification Example',
             'dataset_description': 'Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip',
             'dataset_size': None,
@@ -905,10 +1042,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'hello_world_example_dsg',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip',
             'dataset_detailed_name': 'Generic Timeseries Classification Example',
             'dataset_description': 'Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth',
             'dataset_size': None,

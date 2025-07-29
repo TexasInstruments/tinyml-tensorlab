@@ -8,7 +8,7 @@ dataset:
     # enable/disable dataset loading
     enable: True #False
     dataset_name: fan_blade_fault
-    input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blade_fault_dsi.zip
+    input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blade_fault_dsi.zip
 
 data_processing_feature_extraction: # One or more can be cascaded in the list
     data_proc_transforms: []
@@ -52,5 +52,5 @@ testing:
 compilation:
     # enable/disable compilation
     enable: True #False
-    # No preset is required for devices other than F28P55
-#    compile_preset_name: forced_soft_npu_preset
+    # No preset is required for devices other than F28P55. default_preset is chosen by default
+#    compile_preset_name: compress_npu_layer_data, forced_soft_npu_preset  # Available only for devices with NPU

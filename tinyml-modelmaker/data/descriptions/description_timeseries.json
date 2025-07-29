@@ -24,6 +24,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Classification Model with 13k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.",
         "target_module":"timeseries"
       },
       "download":{
@@ -69,41 +70,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
           "F280015":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28003":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28004":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":12654,
-            "sram":4164
+            "inference_time_us":12676,
+            "sram":4160
           },
           "F2837":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28P65":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":25308,
-            "sram":4164
+            "inference_time_us":25353,
+            "sram":4160
           },
           "F28P55":{
             "model_selection_factor":0,
-            "flash":11002,
-            "inference_time_us":2252,
-            "sram":3192
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
           }
         },
         "project_path":null,
@@ -117,6 +124,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -170,6 +178,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -247,6 +265,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Classification Model with 6k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.\nLean model",
         "target_module":"timeseries"
       },
       "download":{
@@ -292,41 +311,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":1,
+            "flash":8302,
+            "inference_time_us":20469,
+            "sram":16416
+          },
           "F280015":{
             "model_selection_factor":1,
             "flash":8302,
-            "inference_time_us":20417,
-            "sram":16420
+            "inference_time_us":20469,
+            "sram":16416
           },
           "F28003":{
             "model_selection_factor":1,
             "flash":8302,
-            "inference_time_us":20417,
-            "sram":16420
+            "inference_time_us":20469,
+            "sram":16416
           },
           "F28004":{
             "model_selection_factor":1,
             "flash":8302,
-            "inference_time_us":17014,
-            "sram":16420
+            "inference_time_us":17058,
+            "sram":16416
           },
           "F2837":{
             "model_selection_factor":1,
             "flash":8302,
-            "inference_time_us":20417,
-            "sram":16420
+            "inference_time_us":20469,
+            "sram":16416
           },
           "F28P65":{
             "model_selection_factor":1,
             "flash":8302,
-            "inference_time_us":34029,
-            "sram":16420
+            "inference_time_us":34116,
+            "sram":16416
           },
           "F28P55":{
             "model_selection_factor":1,
-            "flash":6618,
-            "inference_time_us":2344,
-            "sram":8338
+            "flash":6709,
+            "inference_time_us":2235,
+            "sram":8364
           }
         },
         "project_path":null,
@@ -340,6 +365,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -393,6 +419,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -470,6 +506,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Classification Model with 4k params.\n3 Conv+BatchNorm+Relu layers + Linear Layer.",
         "target_module":"timeseries"
       },
       "download":{
@@ -515,41 +552,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":2,
+            "flash":6433,
+            "inference_time_us":4002,
+            "sram":1936
+          },
           "F280015":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":4012,
-            "sram":1940
+            "inference_time_us":4002,
+            "sram":1936
           },
           "F28003":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":4012,
-            "sram":1940
+            "inference_time_us":4002,
+            "sram":1936
           },
           "F28004":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":3343,
-            "sram":1940
+            "inference_time_us":3335,
+            "sram":1936
           },
           "F2837":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":4012,
-            "sram":1940
+            "inference_time_us":4002,
+            "sram":1936
           },
           "F28P65":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":6686,
-            "sram":1940
+            "inference_time_us":6670,
+            "sram":1936
           },
           "F28P55":{
             "model_selection_factor":2,
-            "flash":5426,
-            "inference_time_us":797,
-            "sram":1664
+            "flash":5527,
+            "inference_time_us":751,
+            "sram":1690
           }
         },
         "project_path":null,
@@ -563,6 +606,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -616,6 +660,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -693,6 +747,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Classification Model with 1k params.\n4 Conv+BatchNorm+Relu layers + Linear Layer.\nVery lean model",
         "target_module":"timeseries"
       },
       "download":{
@@ -738,41 +793,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":3,
+            "flash":3242,
+            "inference_time_us":9256,
+            "sram":12320
+          },
           "F280015":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":9200,
-            "sram":12324
+            "inference_time_us":9256,
+            "sram":12320
           },
           "F28003":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":9200,
-            "sram":12324
+            "inference_time_us":9256,
+            "sram":12320
           },
           "F28004":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":7667,
-            "sram":12324
+            "inference_time_us":7713,
+            "sram":12320
           },
           "F2837":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":9200,
-            "sram":12324
+            "inference_time_us":9256,
+            "sram":12320
           },
           "F28P65":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":15334,
-            "sram":12324
+            "inference_time_us":15426,
+            "sram":12320
           },
           "F28P55":{
             "model_selection_factor":3,
-            "flash":3367,
-            "inference_time_us":1311,
-            "sram":6224
+            "flash":3467,
+            "inference_time_us":1257,
+            "sram":6250
           }
         },
         "project_path":null,
@@ -786,6 +847,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -839,6 +901,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -916,6 +988,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 1400+ params.\nMost accurate model, use for complex data scenarios.",
         "target_module":"timeseries"
       },
       "download":{
@@ -961,41 +1034,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":0,
+            "flash":3576,
+            "inference_time_us":1562,
+            "sram":2280
+          },
           "F280015":{
             "model_selection_factor":0,
-            "flash":3670,
-            "inference_time_us":1256,
-            "sram":3084
+            "flash":3576,
+            "inference_time_us":1562,
+            "sram":2280
           },
           "F28003":{
             "model_selection_factor":0,
-            "flash":3670,
-            "inference_time_us":1256,
-            "sram":3084
+            "flash":3576,
+            "inference_time_us":1562,
+            "sram":2280
           },
           "F28004":{
             "model_selection_factor":0,
-            "flash":3670,
-            "inference_time_us":1046,
-            "sram":3084
+            "flash":3576,
+            "inference_time_us":1302,
+            "sram":2280
           },
           "F2837":{
             "model_selection_factor":0,
-            "flash":3670,
-            "inference_time_us":1256,
-            "sram":3084
+            "flash":3576,
+            "inference_time_us":1562,
+            "sram":2280
           },
           "F28P65":{
             "model_selection_factor":0,
-            "flash":3670,
-            "inference_time_us":2092,
-            "sram":3084
+            "flash":3576,
+            "inference_time_us":2604,
+            "sram":2280
           },
           "F28P55":{
             "model_selection_factor":0,
-            "flash":4980,
-            "inference_time_us":616,
-            "sram":3156
+            "flash":3179,
+            "inference_time_us":395,
+            "sram":2370
           }
         },
         "project_path":null,
@@ -1009,6 +1088,7 @@
         "num_last_epochs":5,
         "batch_size":32,
         "learning_rate":0.04,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -1062,6 +1142,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1139,6 +1229,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 700+ params.\nLarge model, sweet spot between inference speed & memory occupied.",
         "target_module":"timeseries"
       },
       "download":{
@@ -1184,41 +1275,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":1,
+            "flash":1866,
+            "inference_time_us":628,
+            "sram":1538
+          },
           "F280015":{
             "model_selection_factor":1,
-            "flash":1865,
+            "flash":1866,
             "inference_time_us":628,
-            "sram":1542
+            "sram":1538
           },
           "F28003":{
             "model_selection_factor":1,
-            "flash":1865,
+            "flash":1866,
             "inference_time_us":628,
-            "sram":1542
+            "sram":1538
           },
           "F28004":{
             "model_selection_factor":1,
-            "flash":1865,
-            "inference_time_us":523,
-            "sram":1542
+            "flash":1866,
+            "inference_time_us":524,
+            "sram":1538
           },
           "F2837":{
             "model_selection_factor":1,
-            "flash":1865,
+            "flash":1866,
             "inference_time_us":628,
-            "sram":1542
+            "sram":1538
           },
           "F28P65":{
             "model_selection_factor":1,
-            "flash":1865,
-            "inference_time_us":1046,
-            "sram":1542
+            "flash":1866,
+            "inference_time_us":1048,
+            "sram":1538
           },
           "F28P55":{
             "model_selection_factor":1,
-            "flash":2490,
-            "inference_time_us":308,
-            "sram":1578
+            "flash":2623,
+            "inference_time_us":272,
+            "sram":1606
           }
         },
         "project_path":null,
@@ -1232,6 +1329,7 @@
         "num_last_epochs":5,
         "batch_size":32,
         "learning_rate":0.04,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -1285,6 +1383,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1362,6 +1470,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 300+ params. Faster than the 700 & 1400 variant, but also handles less complex data.",
         "target_module":"timeseries"
       },
       "download":{
@@ -1407,41 +1516,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":2,
+            "flash":1797,
+            "inference_time_us":542,
+            "sram":1538
+          },
           "F280015":{
             "model_selection_factor":2,
-            "flash":1796,
-            "inference_time_us":534,
-            "sram":1542
+            "flash":1797,
+            "inference_time_us":542,
+            "sram":1538
           },
           "F28003":{
             "model_selection_factor":2,
-            "flash":1796,
-            "inference_time_us":534,
-            "sram":1542
+            "flash":1797,
+            "inference_time_us":542,
+            "sram":1538
           },
           "F28004":{
             "model_selection_factor":2,
-            "flash":1796,
-            "inference_time_us":445,
-            "sram":1542
+            "flash":1797,
+            "inference_time_us":452,
+            "sram":1538
           },
           "F2837":{
             "model_selection_factor":2,
-            "flash":1796,
-            "inference_time_us":534,
-            "sram":1542
+            "flash":1797,
+            "inference_time_us":542,
+            "sram":1538
           },
           "F28P65":{
             "model_selection_factor":2,
-            "flash":1796,
-            "inference_time_us":890,
-            "sram":1542
+            "flash":1797,
+            "inference_time_us":904,
+            "sram":1538
           },
           "F28P55":{
             "model_selection_factor":2,
-            "flash":2152,
-            "inference_time_us":254,
-            "sram":1578
+            "flash":2285,
+            "inference_time_us":234,
+            "sram":1606
           }
         },
         "project_path":null,
@@ -1455,6 +1570,7 @@
         "num_last_epochs":5,
         "batch_size":32,
         "learning_rate":0.04,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -1508,6 +1624,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1585,6 +1711,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 200+ params.\nSimplest, smallest & fastest model.",
         "target_module":"timeseries"
       },
       "download":{
@@ -1630,41 +1757,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":3,
+            "flash":1619,
+            "inference_time_us":294,
+            "sram":1026
+          },
           "F280015":{
             "model_selection_factor":3,
-            "flash":1618,
-            "inference_time_us":276,
-            "sram":1030
+            "flash":1619,
+            "inference_time_us":294,
+            "sram":1026
           },
           "F28003":{
             "model_selection_factor":3,
-            "flash":1618,
-            "inference_time_us":276,
-            "sram":1030
+            "flash":1619,
+            "inference_time_us":294,
+            "sram":1026
           },
           "F28004":{
             "model_selection_factor":3,
-            "flash":1618,
-            "inference_time_us":230,
-            "sram":1030
+            "flash":1619,
+            "inference_time_us":245,
+            "sram":1026
           },
           "F2837":{
             "model_selection_factor":3,
-            "flash":1618,
-            "inference_time_us":276,
-            "sram":1030
+            "flash":1619,
+            "inference_time_us":294,
+            "sram":1026
           },
           "F28P65":{
             "model_selection_factor":3,
-            "flash":1618,
-            "inference_time_us":460,
-            "sram":1030
+            "flash":1619,
+            "inference_time_us":490,
+            "sram":1026
           },
           "F28P55":{
             "model_selection_factor":3,
-            "flash":2048,
-            "inference_time_us":193,
-            "sram":830
+            "flash":2181,
+            "inference_time_us":178,
+            "sram":858
           }
         },
         "project_path":null,
@@ -1678,6 +1811,7 @@
         "num_last_epochs":5,
         "batch_size":32,
         "learning_rate":0.04,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -1731,6 +1865,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -1811,6 +1955,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with ~0.6k params.\nSimplest model.",
         "target_module":"timeseries"
       },
       "download":{
@@ -1856,41 +2001,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":null,
+            "flash":1214,
+            "inference_time_us":270,
+            "sram":1016
+          },
           "F280015":{
             "model_selection_factor":null,
-            "flash":1213,
+            "flash":1214,
             "inference_time_us":270,
-            "sram":1020
+            "sram":1016
           },
           "F28003":{
             "model_selection_factor":null,
-            "flash":1213,
+            "flash":1214,
             "inference_time_us":270,
-            "sram":1020
+            "sram":1016
           },
           "F28004":{
             "model_selection_factor":null,
-            "flash":1213,
+            "flash":1214,
             "inference_time_us":225,
-            "sram":1020
+            "sram":1016
           },
           "F2837":{
             "model_selection_factor":null,
-            "flash":1213,
+            "flash":1214,
             "inference_time_us":270,
-            "sram":1020
+            "sram":1016
           },
           "F28P65":{
             "model_selection_factor":null,
-            "flash":1213,
+            "flash":1214,
             "inference_time_us":450,
-            "sram":1020
+            "sram":1016
           },
           "F28P55":{
             "model_selection_factor":null,
-            "flash":1836,
-            "inference_time_us":169,
-            "sram":1084
+            "flash":1953,
+            "inference_time_us":159,
+            "sram":1112
           }
         },
         "project_path":null,
@@ -1904,6 +2055,7 @@
         "num_last_epochs":5,
         "batch_size":256,
         "learning_rate":0.01,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -1957,6 +2109,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2037,6 +2199,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 3k params.\nBest & largest of the 3 models, hardest to train.",
         "target_module":"timeseries"
       },
       "download":{
@@ -2082,41 +2245,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":null,
+            "flash":5262,
+            "inference_time_us":7337,
+            "sram":10872
+          },
           "F280015":{
             "model_selection_factor":null,
-            "flash":5261,
+            "flash":5262,
             "inference_time_us":7337,
-            "sram":10876
+            "sram":10872
           },
           "F28003":{
             "model_selection_factor":null,
-            "flash":5261,
+            "flash":5262,
             "inference_time_us":7337,
-            "sram":10876
+            "sram":10872
           },
           "F28004":{
             "model_selection_factor":null,
-            "flash":5261,
+            "flash":5262,
             "inference_time_us":6114,
-            "sram":10876
+            "sram":10872
           },
           "F2837":{
             "model_selection_factor":null,
-            "flash":5261,
+            "flash":5262,
             "inference_time_us":7337,
-            "sram":10876
+            "sram":10872
           },
           "F28P65":{
             "model_selection_factor":null,
-            "flash":5261,
+            "flash":5262,
             "inference_time_us":12229,
-            "sram":10876
+            "sram":10872
           },
           "F28P55":{
             "model_selection_factor":null,
-            "flash":4260,
-            "inference_time_us":1190,
-            "sram":3170
+            "flash":4377,
+            "inference_time_us":1180,
+            "sram":3198
           }
         },
         "project_path":null,
@@ -2130,6 +2299,7 @@
         "num_last_epochs":5,
         "batch_size":256,
         "learning_rate":0.01,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -2183,6 +2353,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2263,6 +2443,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 1k params.\nMiddle of the 3 CNN based models.",
         "target_module":"timeseries"
       },
       "download":{
@@ -2308,41 +2489,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":null,
+            "flash":3069,
+            "inference_time_us":400,
+            "sram":656
+          },
           "F280015":{
             "model_selection_factor":null,
-            "flash":3068,
+            "flash":3069,
             "inference_time_us":400,
-            "sram":660
+            "sram":656
           },
           "F28003":{
             "model_selection_factor":null,
-            "flash":3068,
+            "flash":3069,
             "inference_time_us":400,
-            "sram":660
+            "sram":656
           },
           "F28004":{
             "model_selection_factor":null,
-            "flash":3068,
+            "flash":3069,
             "inference_time_us":334,
-            "sram":660
+            "sram":656
           },
           "F2837":{
             "model_selection_factor":null,
-            "flash":3068,
+            "flash":3069,
             "inference_time_us":400,
-            "sram":660
+            "sram":656
           },
           "F28P65":{
             "model_selection_factor":null,
-            "flash":3068,
+            "flash":3069,
             "inference_time_us":668,
-            "sram":660
+            "sram":656
           },
           "F28P55":{
             "model_selection_factor":null,
-            "flash":2641,
-            "inference_time_us":263,
-            "sram":1088
+            "flash":2754,
+            "inference_time_us":221,
+            "sram":1116
           }
         },
         "project_path":null,
@@ -2356,6 +2543,7 @@
         "num_last_epochs":5,
         "batch_size":256,
         "learning_rate":0.01,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -2409,6 +2597,498 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "frame_size":3009,
+        "stride_size":0.01,
+        "variables":1,
+        "resampling_factor":1,
+        "feature_extraction_name":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "feature_size_per_frame":null,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_bin":1,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":"2D1",
+        "offset":0,
+        "scale":null,
+        "nn_for_feature_extraction":false,
+        "gof_test":false
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "NAS":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "model_details":"Model will be automatically found through NAS framework",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false,
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"NAS",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":"",
+        "dataset_loader":"GenericTSDataset",
+        "model_training_id":"None",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280013":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F280015":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28003":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28004":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F2837":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P65":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "F28P55":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":256,
+        "learning_rate":0.01,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_dequantize":false,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "sampling_rate":313000,
+        "new_sr":3009,
+        "frame_size":3009,
+        "stride_size":0.01,
+        "variables":1,
+        "resampling_factor":1,
+        "feature_extraction_name":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "feature_size_per_frame":null,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "min_bin":1,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":"2D1",
+        "offset":0,
+        "scale":null,
+        "nn_for_feature_extraction":false,
+        "gof_test":false
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "TimeSeries_Generic_Regr_10k_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_regression",
+        "task_category":"timeseries_regression",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "model_details":"Regression Model with 10k params. 3 Conv+BatchNorm+Relu layers + 2 Linear Layer.",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false,
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_Regr_10k_t",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericTSDatasetReg",
+        "model_training_id":"REG_TS_GEN_BASE_10K",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280013":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
+          "F280015":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
+          "F28003":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
+          "F28004":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":12676,
+            "sram":4160
+          },
+          "F2837":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
+          "F28P65":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":25353,
+            "sram":4160
+          },
+          "F28P55":{
+            "model_selection_factor":0,
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_dequantize":false,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2486,6 +3166,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Regression Model with 13k params. 6 Conv+BatchNorm+Relu layers + Linear Layer.",
         "target_module":"timeseries"
       },
       "download":{
@@ -2531,41 +3212,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
-          "F280015":{
-            "model_selection_factor":0,
+          "F280013":{
+            "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
+          },
+          "F280015":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28003":{
-            "model_selection_factor":0,
+            "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28004":{
-            "model_selection_factor":0,
+            "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":12654,
-            "sram":4164
+            "inference_time_us":12676,
+            "sram":4160
           },
           "F2837":{
-            "model_selection_factor":0,
+            "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28P65":{
-            "model_selection_factor":0,
+            "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":25308,
-            "sram":4164
+            "inference_time_us":25353,
+            "sram":4160
           },
           "F28P55":{
-            "model_selection_factor":0,
-            "flash":11002,
-            "inference_time_us":2252,
-            "sram":3192
+            "model_selection_factor":1,
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
           }
         },
         "project_path":null,
@@ -2579,6 +3266,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -2632,6 +3320,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2709,6 +3407,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Regression Model with 3k params. 4 layers of MLPs (Fully Connected Layers)",
         "target_module":"timeseries"
       },
       "download":{
@@ -2754,41 +3453,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
-          "F280015":{
-            "model_selection_factor":1,
+          "F280013":{
+            "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
+          },
+          "F280015":{
+            "model_selection_factor":2,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28003":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28004":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":12654,
-            "sram":4164
+            "inference_time_us":12676,
+            "sram":4160
           },
           "F2837":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28P65":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":25308,
-            "sram":4164
+            "inference_time_us":25353,
+            "sram":4160
           },
           "F28P55":{
-            "model_selection_factor":1,
-            "flash":11002,
-            "inference_time_us":2252,
-            "sram":3192
+            "model_selection_factor":2,
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
           }
         },
         "project_path":null,
@@ -2802,6 +3507,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -2855,6 +3561,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -2932,6 +3648,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Anomaly Detection Model with 16k params. 4 Conv+BatchNorm+Relu layers and then inversion of the same",
         "target_module":"timeseries"
       },
       "download":{
@@ -2977,41 +3694,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":0,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
           "F280015":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28003":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28004":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":12654,
-            "sram":4164
+            "inference_time_us":12676,
+            "sram":4160
           },
           "F2837":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28P65":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":25308,
-            "sram":4164
+            "inference_time_us":25353,
+            "sram":4160
           },
           "F28P55":{
             "model_selection_factor":0,
-            "flash":11002,
-            "inference_time_us":2252,
-            "sram":3192
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
           }
         },
         "project_path":null,
@@ -3025,6 +3748,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -3078,6 +3802,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3155,6 +3889,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Anomaly Detection Model with 4k params. 3 Conv+BatchNorm+Relu layers and then inversion of the same",
         "target_module":"timeseries"
       },
       "download":{
@@ -3200,41 +3935,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
           "F280015":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28003":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28004":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":12654,
-            "sram":4164
+            "inference_time_us":12676,
+            "sram":4160
           },
           "F2837":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28P65":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":25308,
-            "sram":4164
+            "inference_time_us":25353,
+            "sram":4160
           },
           "F28P55":{
             "model_selection_factor":1,
-            "flash":11002,
-            "inference_time_us":2252,
-            "sram":3192
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
           }
         },
         "project_path":null,
@@ -3248,6 +3989,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -3301,6 +4043,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3378,6 +4130,7 @@
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
+        "model_details":"Anomaly Detection Model with 1k params. 3 Conv+BatchNorm+Relu layers and then inversion of the same. Small Channel width.",
         "target_module":"timeseries"
       },
       "download":{
@@ -3423,41 +4176,47 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
+          "F280013":{
+            "model_selection_factor":2,
+            "flash":17343,
+            "inference_time_us":15212,
+            "sram":4160
+          },
           "F280015":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28003":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28004":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":12654,
-            "sram":4164
+            "inference_time_us":12676,
+            "sram":4160
           },
           "F2837":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15184,
-            "sram":4164
+            "inference_time_us":15212,
+            "sram":4160
           },
           "F28P65":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":25308,
-            "sram":4164
+            "inference_time_us":25353,
+            "sram":4160
           },
           "F28P55":{
             "model_selection_factor":2,
-            "flash":11002,
-            "inference_time_us":2252,
-            "sram":3192
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
           }
         },
         "project_path":null,
@@ -3471,6 +4230,7 @@
         "num_last_epochs":5,
         "batch_size":64,
         "learning_rate":0.002,
+        "lambda_reg":0,
         "optimizer":"sgd",
         "weight_decay":0.0001,
         "lr_scheduler":"cosineannealinglr",
@@ -3524,6 +4284,16 @@
             "increment":0.001
           }
         ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
         "training_devices":{
           "cpu":true,
           "cuda":true,
@@ -3652,6 +4422,68 @@
         }
       }
     },
+    "F280013":{
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      },
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      }
+    },
     "F280015":{
       "arc_fault":{
         "default_preset":{
@@ -3910,6 +4742,14 @@
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        },
         "forced_soft_npu_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -3923,6 +4763,14 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
@@ -3946,6 +4794,14 @@
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        },
         "forced_soft_npu_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -3959,6 +4815,14 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
@@ -3982,6 +4846,14 @@
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
           }
         },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        },
         "forced_soft_npu_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -3995,6 +4867,14 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
@@ -4068,67 +4948,215 @@
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I. -Iartifacts --obj_directory=."
+          }
+        }
+      }
+    },
+    "F29H85":{
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      }
+    },
+    "M0G3507":{
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
           }
         }
       }
     }
   },
   "target_device_descriptions":{
+    "M0G3507":{
+      "device_name":"M0G3507",
+      "device_type":"MCU",
+      "device_selection_factor":0,
+      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\nAdditional information:\n\n",
+      "sdk_version":"2.05.00.05",
+      "sdk_release":"2_05_00_05"
+    },
+    "F280013":{
+      "device_name":"F280013",
+      "device_type":"MCU",
+      "device_selection_factor":1,
+      "device_details":"C2000\u2122 120-MHz C28x CPU with FPU and TMU, 256-KB Flash, two 12-bit ADCs, 14 PWM channels, CAN (DCAN), one encoder module (eQEP), UART, and more\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800137\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
+    },
     "F280015":{
       "device_name":"F280015",
       "device_type":"MCU",
-      "device_selection_factor":0,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.4",
-      "sdk_release":"05_04_00"
+      "device_selection_factor":2,
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
     },
     "F28003":{
       "device_name":"F28003",
       "device_type":"MCU",
-      "device_selection_factor":1,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.4",
-      "sdk_release":"05_04_00"
+      "device_selection_factor":3,
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
     },
     "F28004":{
       "device_name":"F28004",
       "device_type":"MCU",
-      "device_selection_factor":2,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.4",
-      "sdk_release":"05_04_00"
+      "device_selection_factor":4,
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
     },
     "F2837":{
       "device_name":"F2837",
       "device_type":"MCU",
-      "device_selection_factor":3,
-      "device_details":"C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.4",
-      "sdk_release":"05_04_00"
+      "device_selection_factor":5,
+      "device_details":"C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
     },
     "F28P65":{
       "device_name":"F28P65",
       "device_type":"MCU",
-      "device_selection_factor":4,
-      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.4",
-      "sdk_release":"05_04_00"
+      "device_selection_factor":6,
+      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
     },
     "F28P55":{
       "device_name":"F28P55",
       "device_type":"MCU",
-      "device_selection_factor":5,
-      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.4",
-      "sdk_release":"05_04_00"
+      "device_selection_factor":7,
+      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
     },
     "AM263":{
       "device_name":"AM263",
       "device_type":"MCU",
-      "device_selection_factor":6,
-      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 05_04_00\n\nAdditional information:\n\n",
-      "sdk_version":"5.4",
-      "sdk_release":"05_04_00"
+      "device_selection_factor":8,
+      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
+      "sdk_version":"6.0",
+      "sdk_release":"06_00_00"
+    },
+    "F29H85":{
+      "device_name":"F29H85",
+      "device_type":"MCU",
+      "device_selection_factor":8,
+      "device_details":"C2000\u2122 64-bit MCU with C29x 200MHz tri-core, lockstep, functional safety compliance, 4MB\n* More details : https://www.ti.com/product/F29H850TU\n\nImportant links:\n* Product information: https://www.ti.com/product/F29H850TU\n* SOM EVM: https://www.ti.com/tool/F29H85X-SOM-EVM\n* C2000 SDK: https://www.ti.com/tool/download/F29H85X-SDK/\n* SDK release: 01_01_00\n\nAdditional information:\n\n",
+      "sdk_version":"1.01",
+      "sdk_release":"01_01_00"
     }
   },
   "task_descriptions":{
@@ -4136,12 +5164,15 @@
       "task_name":"ARC Fault",
       "target_module":"timeseries",
       "target_devices":[
+        "F280013",
         "F280015",
         "F28003",
         "F28004",
         "F2837",
         "F28P55",
-        "F28P65"
+        "F28P65",
+        "F29H85",
+        "M0G3507"
       ],
       "stages":[
         "dataset",
@@ -4154,12 +5185,15 @@
       "task_name":"Motor Fault",
       "target_module":"timeseries",
       "target_devices":[
+        "F280013",
         "F280015",
         "F28003",
         "F28004",
         "F2837",
         "F28P55",
-        "F28P65"
+        "F28P65",
+        "F29H85",
+        "M0G3507"
       ],
       "stages":[
         "dataset",
@@ -4172,12 +5206,15 @@
       "task_name":"Fan Blower Imbalance Fault",
       "target_module":"timeseries",
       "target_devices":[
+        "F280013",
         "F280015",
         "F28003",
         "F28004",
         "F2837",
         "F28P55",
-        "F28P65"
+        "F28P65",
+        "F29H85",
+        "M0G3507"
       ],
       "stages":[
         "dataset",
@@ -4190,12 +5227,15 @@
       "task_name":"Generic Time Series Classification",
       "target_module":"timeseries",
       "target_devices":[
+        "F280013",
         "F280015",
         "F28003",
         "F28004",
         "F2837",
         "F28P55",
-        "F28P65"
+        "F28P65",
+        "F29H85",
+        "M0G3507"
       ],
       "stages":[
         "dataset",
@@ -4213,10 +5253,10 @@
       },
       "dataset":{
         "dataset_name":"arc_fault_classification_dsk",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip",
         "dataset_detailed_name":"Arc Fault Classification Example2",
         "dataset_description":"Example arc-fault timeseries classification dataset with 2 categories - arc, normal",
         "dataset_size":null,
@@ -4231,10 +5271,10 @@
       },
       "dataset":{
         "dataset_name":"motor_fault_example_dsk",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip",
         "dataset_detailed_name":"Motor Bearing Fault Classification Example",
         "dataset_description":"Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking",
         "dataset_size":null,
@@ -4249,10 +5289,10 @@
       },
       "dataset":{
         "dataset_name":"blower_imbalance_example_dsh",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blower_imbalance_dsh.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blower_imbalance_dsh.zip",
         "dataset_detailed_name":"Blower Imbalance Classification Example",
         "dataset_description":"Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip",
         "dataset_size":null,
@@ -4267,10 +5307,10 @@
       },
       "dataset":{
         "dataset_name":"hello_world_example_dsg",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip",
         "dataset_detailed_name":"Generic Timeseries Classification Example",
         "dataset_description":"Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth",
         "dataset_size":null,
@@ -4280,9 +5320,7 @@
     }
   },
   "version_descriptions":{
-    "version":"1.0.0",
-    "sdk_version":"5.4",
-    "sdk_release":"05_04_00"
+    "version":"1.1.0"
   },
   "tooltip_descriptions":{
     "common":{},
@@ -4326,5 +5364,5 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance Fault\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 05_04_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance Fault\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
 }

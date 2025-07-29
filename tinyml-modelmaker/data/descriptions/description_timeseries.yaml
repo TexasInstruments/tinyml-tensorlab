@@ -9,17 +9,19 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ currently. As additional devices are supported, this section will be updated.\n\
   \n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_04_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
+  * SDK release: 06_00_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_04_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n\
+  * SDK release: 06_00_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_04_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n\
+  * SDK release: 06_00_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_04_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
+  * SDK release: 06_00_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_04_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
+  * SDK release: 06_00_00\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n\
+  * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
+  * SDK release: 06_00_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-  * SDK release: 05_04_00\n\n## Additional information\n\n\n\n## Dataset format\n\
+  * SDK release: 06_00_00\n\n## Additional information\n\n\n\n## Dataset format\n\
   - The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
   \ dataset, but there are some changes as explained below.\n\n\n####  Dataset format\n\
   The dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n\
@@ -31,7 +33,7 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \         |--instances_train_list.txt\n                                   |--instances_val_list.txt\n\
   \                                   |--instances_test_list.txt\n</pre>\n\n- Use\
   \ a suitable dataset name instead of dataset_name\n- Look at the example dataset\
-  \ [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip)\
+  \ [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip)\
   \ to understand further.\n- In the config file, provide the name of the dataset\
   \ (dataset_name in this example) in the field dataset_name and provide the path\
   \ or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked\
@@ -70,6 +72,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 1400+\
+        \ params.\nMost accurate model, use for complex data scenarios."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -164,7 +168,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.04
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -172,6 +178,15 @@ model_descriptions:
       model_name: ArcFault_model_1400_t
       model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_1400
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -211,36 +226,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 3576
+          inference_time_us: 1562
+          model_selection_factor: 0
+          sram: 2280
         F280015:
-          flash: 3670
-          inference_time_us: 1256
+          flash: 3576
+          inference_time_us: 1562
           model_selection_factor: 0
-          sram: 3084
+          sram: 2280
         F28003:
-          flash: 3670
-          inference_time_us: 1256
+          flash: 3576
+          inference_time_us: 1562
           model_selection_factor: 0
-          sram: 3084
+          sram: 2280
         F28004:
-          flash: 3670
-          inference_time_us: 1046
+          flash: 3576
+          inference_time_us: 1302
           model_selection_factor: 0
-          sram: 3084
+          sram: 2280
         F2837:
-          flash: 3670
-          inference_time_us: 1256
+          flash: 3576
+          inference_time_us: 1562
           model_selection_factor: 0
-          sram: 3084
+          sram: 2280
         F28P55:
-          flash: 4980
-          inference_time_us: 616
+          flash: 3179
+          inference_time_us: 395
           model_selection_factor: 0
-          sram: 3156
+          sram: 2370
         F28P65:
-          flash: 3670
-          inference_time_us: 2092
+          flash: 3576
+          inference_time_us: 2604
           model_selection_factor: 0
-          sram: 3084
+          sram: 2280
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -259,6 +279,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 200+\
+        \ params.\nSimplest, smallest & fastest model."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -353,7 +375,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.04
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -361,6 +385,15 @@ model_descriptions:
       model_name: ArcFault_model_200_t
       model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_200
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -400,36 +433,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 1619
+          inference_time_us: 294
+          model_selection_factor: 3
+          sram: 1026
         F280015:
-          flash: 1618
-          inference_time_us: 276
+          flash: 1619
+          inference_time_us: 294
           model_selection_factor: 3
-          sram: 1030
+          sram: 1026
         F28003:
-          flash: 1618
-          inference_time_us: 276
+          flash: 1619
+          inference_time_us: 294
           model_selection_factor: 3
-          sram: 1030
+          sram: 1026
         F28004:
-          flash: 1618
-          inference_time_us: 230
+          flash: 1619
+          inference_time_us: 245
           model_selection_factor: 3
-          sram: 1030
+          sram: 1026
         F2837:
-          flash: 1618
-          inference_time_us: 276
+          flash: 1619
+          inference_time_us: 294
           model_selection_factor: 3
-          sram: 1030
+          sram: 1026
         F28P55:
-          flash: 2048
-          inference_time_us: 193
+          flash: 2181
+          inference_time_us: 178
           model_selection_factor: 3
-          sram: 830
+          sram: 858
         F28P65:
-          flash: 1618
-          inference_time_us: 460
+          flash: 1619
+          inference_time_us: 490
           model_selection_factor: 3
-          sram: 1030
+          sram: 1026
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -448,6 +486,9 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 300+\
+        \ params. Faster than the 700 & 1400 variant, but also handles less complex\
+        \ data."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -542,7 +583,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.04
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -550,6 +593,15 @@ model_descriptions:
       model_name: ArcFault_model_300_t
       model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_300
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -589,36 +641,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 1797
+          inference_time_us: 542
+          model_selection_factor: 2
+          sram: 1538
         F280015:
-          flash: 1796
-          inference_time_us: 534
+          flash: 1797
+          inference_time_us: 542
           model_selection_factor: 2
-          sram: 1542
+          sram: 1538
         F28003:
-          flash: 1796
-          inference_time_us: 534
+          flash: 1797
+          inference_time_us: 542
           model_selection_factor: 2
-          sram: 1542
+          sram: 1538
         F28004:
-          flash: 1796
-          inference_time_us: 445
+          flash: 1797
+          inference_time_us: 452
           model_selection_factor: 2
-          sram: 1542
+          sram: 1538
         F2837:
-          flash: 1796
-          inference_time_us: 534
+          flash: 1797
+          inference_time_us: 542
           model_selection_factor: 2
-          sram: 1542
+          sram: 1538
         F28P55:
-          flash: 2152
-          inference_time_us: 254
+          flash: 2285
+          inference_time_us: 234
           model_selection_factor: 2
-          sram: 1578
+          sram: 1606
         F28P65:
-          flash: 1796
-          inference_time_us: 890
+          flash: 1797
+          inference_time_us: 904
           model_selection_factor: 2
-          sram: 1542
+          sram: 1538
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -637,6 +694,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 700+\
+        \ params.\nLarge model, sweet spot between inference speed & memory occupied."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -731,7 +790,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.04
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -739,6 +800,15 @@ model_descriptions:
       model_name: ArcFault_model_700_t
       model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_af_3l.py
       model_training_id: CNN_AF_3L_700
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -778,36 +848,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 1866
+          inference_time_us: 628
+          model_selection_factor: 1
+          sram: 1538
         F280015:
-          flash: 1865
+          flash: 1866
           inference_time_us: 628
           model_selection_factor: 1
-          sram: 1542
+          sram: 1538
         F28003:
-          flash: 1865
+          flash: 1866
           inference_time_us: 628
           model_selection_factor: 1
-          sram: 1542
+          sram: 1538
         F28004:
-          flash: 1865
-          inference_time_us: 523
+          flash: 1866
+          inference_time_us: 524
           model_selection_factor: 1
-          sram: 1542
+          sram: 1538
         F2837:
-          flash: 1865
+          flash: 1866
           inference_time_us: 628
           model_selection_factor: 1
-          sram: 1542
+          sram: 1538
         F28P55:
-          flash: 2490
-          inference_time_us: 308
+          flash: 2623
+          inference_time_us: 272
           model_selection_factor: 1
-          sram: 1578
+          sram: 1606
         F28P65:
-          flash: 1865
-          inference_time_us: 1046
+          flash: 1866
+          inference_time_us: 1048
           model_selection_factor: 1
-          sram: 1542
+          sram: 1538
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -826,6 +901,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with ~0.6k\
+        \ params.\nSimplest model."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -922,7 +999,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.01
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -930,6 +1009,15 @@ model_descriptions:
       model_name: MotorFault_model_1_t
       model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py
       model_training_id: CNN_MF_1L
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -969,36 +1057,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 1214
+          inference_time_us: 270
+          model_selection_factor: null
+          sram: 1016
         F280015:
-          flash: 1213
+          flash: 1214
           inference_time_us: 270
           model_selection_factor: null
-          sram: 1020
+          sram: 1016
         F28003:
-          flash: 1213
+          flash: 1214
           inference_time_us: 270
           model_selection_factor: null
-          sram: 1020
+          sram: 1016
         F28004:
-          flash: 1213
+          flash: 1214
           inference_time_us: 225
           model_selection_factor: null
-          sram: 1020
+          sram: 1016
         F2837:
-          flash: 1213
+          flash: 1214
           inference_time_us: 270
           model_selection_factor: null
-          sram: 1020
+          sram: 1016
         F28P55:
-          flash: 1836
-          inference_time_us: 169
+          flash: 1953
+          inference_time_us: 159
           model_selection_factor: null
-          sram: 1084
+          sram: 1112
         F28P65:
-          flash: 1213
+          flash: 1214
           inference_time_us: 450
           model_selection_factor: null
-          sram: 1020
+          sram: 1016
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1017,6 +1110,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 3k params.\n\
+        Best & largest of the 3 models, hardest to train."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1113,7 +1208,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.01
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -1121,6 +1218,15 @@ model_descriptions:
       model_name: MotorFault_model_2_t
       model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py
       model_training_id: CNN_MF_2L
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -1160,36 +1266,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 5262
+          inference_time_us: 7337
+          model_selection_factor: null
+          sram: 10872
         F280015:
-          flash: 5261
+          flash: 5262
           inference_time_us: 7337
           model_selection_factor: null
-          sram: 10876
+          sram: 10872
         F28003:
-          flash: 5261
+          flash: 5262
           inference_time_us: 7337
           model_selection_factor: null
-          sram: 10876
+          sram: 10872
         F28004:
-          flash: 5261
+          flash: 5262
           inference_time_us: 6114
           model_selection_factor: null
-          sram: 10876
+          sram: 10872
         F2837:
-          flash: 5261
+          flash: 5262
           inference_time_us: 7337
           model_selection_factor: null
-          sram: 10876
+          sram: 10872
         F28P55:
-          flash: 4260
-          inference_time_us: 1190
+          flash: 4377
+          inference_time_us: 1180
           model_selection_factor: null
-          sram: 3170
+          sram: 3198
         F28P65:
-          flash: 5261
+          flash: 5262
           inference_time_us: 12229
           model_selection_factor: null
-          sram: 10876
+          sram: 10872
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1208,6 +1319,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 1k params.\n\
+        Middle of the 3 CNN based models."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1304,7 +1417,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.01
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -1312,6 +1427,15 @@ model_descriptions:
       model_name: MotorFault_model_3_t
       model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_3l.py
       model_training_id: CNN_MF_3L
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -1351,36 +1475,247 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 3069
+          inference_time_us: 400
+          model_selection_factor: null
+          sram: 656
         F280015:
-          flash: 3068
+          flash: 3069
           inference_time_us: 400
           model_selection_factor: null
-          sram: 660
+          sram: 656
         F28003:
-          flash: 3068
+          flash: 3069
           inference_time_us: 400
           model_selection_factor: null
-          sram: 660
+          sram: 656
         F28004:
-          flash: 3068
+          flash: 3069
           inference_time_us: 334
           model_selection_factor: null
-          sram: 660
+          sram: 656
         F2837:
-          flash: 3068
+          flash: 3069
           inference_time_us: 400
           model_selection_factor: null
-          sram: 660
+          sram: 656
         F28P55:
-          flash: 2641
-          inference_time_us: 263
+          flash: 2754
+          inference_time_us: 221
           model_selection_factor: null
-          sram: 1088
+          sram: 1116
         F28P65:
-          flash: 3068
+          flash: 3069
           inference_time_us: 668
           model_selection_factor: null
-          sram: 660
+          sram: 656
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
+  NAS:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: Model will be automatically found through NAS framework
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: 1
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      resampling_factor: 1
+      sampling_rate: 313000
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 256
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      lambda_reg: 0
+      learning_rate: 0.01
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: NAS
+      model_spec: ''
+      model_training_id: None
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      output_dequantize: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 300
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1399,6 +1734,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: "Classification Model with 13k params. \n6 Conv+BatchNorm+Relu\
+        \ layers + Linear Layer."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1493,7 +1830,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -1501,6 +1840,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_13k_t
       model_spec: null
       model_training_id: CNN_TS_GEN_BASE_13K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -1540,36 +1888,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 0
+          sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12654
+          inference_time_us: 12676
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F28P55:
-          flash: 11002
-          inference_time_us: 2252
+          flash: 11081
+          inference_time_us: 2156
           model_selection_factor: 0
-          sram: 3192
+          sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25308
+          inference_time_us: 25353
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1588,6 +1941,11 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: 'Classification Model with 1k params.
+
+        4 Conv+BatchNorm+Relu layers + Linear Layer.
+
+        Very lean model'
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1682,7 +2040,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -1690,6 +2050,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_1k_t
       model_spec: null
       model_training_id: CNN_TS_GEN_BASE_1K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -1729,36 +2098,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 3242
+          inference_time_us: 9256
+          model_selection_factor: 3
+          sram: 12320
         F280015:
           flash: 3242
-          inference_time_us: 9200
+          inference_time_us: 9256
           model_selection_factor: 3
-          sram: 12324
+          sram: 12320
         F28003:
           flash: 3242
-          inference_time_us: 9200
+          inference_time_us: 9256
           model_selection_factor: 3
-          sram: 12324
+          sram: 12320
         F28004:
           flash: 3242
-          inference_time_us: 7667
+          inference_time_us: 7713
           model_selection_factor: 3
-          sram: 12324
+          sram: 12320
         F2837:
           flash: 3242
-          inference_time_us: 9200
+          inference_time_us: 9256
           model_selection_factor: 3
-          sram: 12324
+          sram: 12320
         F28P55:
-          flash: 3367
-          inference_time_us: 1311
+          flash: 3467
+          inference_time_us: 1257
           model_selection_factor: 3
-          sram: 6224
+          sram: 6250
         F28P65:
           flash: 3242
-          inference_time_us: 15334
+          inference_time_us: 15426
           model_selection_factor: 3
-          sram: 12324
+          sram: 12320
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1777,6 +2151,9 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: 'Classification Model with 4k params.
+
+        3 Conv+BatchNorm+Relu layers + Linear Layer.'
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -1871,7 +2248,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -1879,6 +2258,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_4k_t
       model_spec: null
       model_training_id: CNN_TS_GEN_BASE_4K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -1918,36 +2306,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 6433
+          inference_time_us: 4002
+          model_selection_factor: 2
+          sram: 1936
         F280015:
           flash: 6433
-          inference_time_us: 4012
+          inference_time_us: 4002
           model_selection_factor: 2
-          sram: 1940
+          sram: 1936
         F28003:
           flash: 6433
-          inference_time_us: 4012
+          inference_time_us: 4002
           model_selection_factor: 2
-          sram: 1940
+          sram: 1936
         F28004:
           flash: 6433
-          inference_time_us: 3343
+          inference_time_us: 3335
           model_selection_factor: 2
-          sram: 1940
+          sram: 1936
         F2837:
           flash: 6433
-          inference_time_us: 4012
+          inference_time_us: 4002
           model_selection_factor: 2
-          sram: 1940
+          sram: 1936
         F28P55:
-          flash: 5426
-          inference_time_us: 797
+          flash: 5527
+          inference_time_us: 751
           model_selection_factor: 2
-          sram: 1664
+          sram: 1690
         F28P65:
           flash: 6433
-          inference_time_us: 6686
+          inference_time_us: 6670
           model_selection_factor: 2
-          sram: 1940
+          sram: 1936
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -1966,6 +2359,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: "Classification Model with 6k params. \n6 Conv+BatchNorm+Relu\
+        \ layers + Linear Layer.\nLean model"
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -2060,7 +2455,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -2068,6 +2465,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_6k_t
       model_spec: null
       model_training_id: CNN_TS_GEN_BASE_6K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -2107,36 +2513,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 8302
+          inference_time_us: 20469
+          model_selection_factor: 1
+          sram: 16416
         F280015:
           flash: 8302
-          inference_time_us: 20417
+          inference_time_us: 20469
           model_selection_factor: 1
-          sram: 16420
+          sram: 16416
         F28003:
           flash: 8302
-          inference_time_us: 20417
+          inference_time_us: 20469
           model_selection_factor: 1
-          sram: 16420
+          sram: 16416
         F28004:
           flash: 8302
-          inference_time_us: 17014
+          inference_time_us: 17058
           model_selection_factor: 1
-          sram: 16420
+          sram: 16416
         F2837:
           flash: 8302
-          inference_time_us: 20417
+          inference_time_us: 20469
           model_selection_factor: 1
-          sram: 16420
+          sram: 16416
         F28P55:
-          flash: 6618
-          inference_time_us: 2344
+          flash: 6709
+          inference_time_us: 2235
           model_selection_factor: 1
-          sram: 8338
+          sram: 8364
         F28P65:
           flash: 8302
-          inference_time_us: 34029
+          inference_time_us: 34116
           model_selection_factor: 1
-          sram: 16420
+          sram: 16416
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2155,6 +2566,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: Anomaly Detection Model with 16k params. 4 Conv+BatchNorm+Relu
+        layers and then inversion of the same
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -2249,7 +2662,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -2257,6 +2672,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_AD_16k_t
       model_spec: null
       model_training_id: AE_CNN_TS_GEN_BASE_16K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -2296,36 +2720,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 0
+          sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12654
+          inference_time_us: 12676
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
         F28P55:
-          flash: 11002
-          inference_time_us: 2252
+          flash: 11081
+          inference_time_us: 2156
           model_selection_factor: 0
-          sram: 3192
+          sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25308
+          inference_time_us: 25353
           model_selection_factor: 0
-          sram: 4164
+          sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2344,6 +2773,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: Anomaly Detection Model with 1k params. 3 Conv+BatchNorm+Relu
+        layers and then inversion of the same. Small Channel width.
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -2438,7 +2869,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -2446,6 +2879,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_AD_1k_t
       model_spec: null
       model_training_id: AE_CNN_TS_GEN_BASE_1K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -2485,36 +2927,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 2
+          sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 2
-          sram: 4164
+          sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 2
-          sram: 4164
+          sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12654
+          inference_time_us: 12676
           model_selection_factor: 2
-          sram: 4164
+          sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 2
-          sram: 4164
+          sram: 4160
         F28P55:
-          flash: 11002
-          inference_time_us: 2252
+          flash: 11081
+          inference_time_us: 2156
           model_selection_factor: 2
-          sram: 3192
+          sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25308
+          inference_time_us: 25353
           model_selection_factor: 2
-          sram: 4164
+          sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2533,6 +2980,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: Anomaly Detection Model with 4k params. 3 Conv+BatchNorm+Relu
+        layers and then inversion of the same
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -2627,7 +3076,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -2635,6 +3086,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_AD_4k_t
       model_spec: null
       model_training_id: AE_CNN_TS_GEN_BASE_4K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -2674,36 +3134,248 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 1
+          sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 1
-          sram: 4164
+          sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 1
-          sram: 4164
+          sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12654
+          inference_time_us: 12676
           model_selection_factor: 1
-          sram: 4164
+          sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15184
+          inference_time_us: 15212
           model_selection_factor: 1
-          sram: 4164
+          sram: 4160
         F28P55:
-          flash: 11002
-          inference_time_us: 2252
+          flash: 11081
+          inference_time_us: 2156
           model_selection_factor: 1
-          sram: 3192
+          sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25308
+          inference_time_us: 25353
           model_selection_factor: 1
-          sram: 4164
+          sram: 4160
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
+  TimeSeries_Generic_Regr_10k_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: Regression Model with 10k params. 3 Conv+BatchNorm+Relu layers
+        + 2 Linear Layer.
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_regression
+      task_type: generic_timeseries_regression
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      frame_size: 3009
+      frame_skip: 1
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 3009
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      resampling_factor: 1
+      sampling_rate: 313000
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDatasetReg
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: TimeSeries_Generic_Regr_10k_t
+      model_spec: null
+      model_training_id: REG_TS_GEN_BASE_10K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      output_dequantize: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 300
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 0
+          sram: 4160
+        F280015:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 0
+          sram: 4160
+        F28003:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 0
+          sram: 4160
+        F28004:
+          flash: 17343
+          inference_time_us: 12676
+          model_selection_factor: 0
+          sram: 4160
+        F2837:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 0
+          sram: 4160
+        F28P55:
+          flash: 11081
+          inference_time_us: 2156
+          model_selection_factor: 0
+          sram: 3218
+        F28P65:
+          flash: 17343
+          inference_time_us: 25353
+          model_selection_factor: 0
+          sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2722,6 +3394,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: Regression Model with 13k params. 6 Conv+BatchNorm+Relu layers
+        + Linear Layer.
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -2816,7 +3490,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -2824,6 +3500,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_Regr_13k_t
       model_spec: null
       model_training_id: CNN_TS_GEN_BASE_13K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -2863,36 +3548,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 1
+          sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15184
-          model_selection_factor: 0
-          sram: 4164
+          inference_time_us: 15212
+          model_selection_factor: 1
+          sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15184
-          model_selection_factor: 0
-          sram: 4164
+          inference_time_us: 15212
+          model_selection_factor: 1
+          sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12654
-          model_selection_factor: 0
-          sram: 4164
+          inference_time_us: 12676
+          model_selection_factor: 1
+          sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15184
-          model_selection_factor: 0
-          sram: 4164
+          inference_time_us: 15212
+          model_selection_factor: 1
+          sram: 4160
         F28P55:
-          flash: 11002
-          inference_time_us: 2252
-          model_selection_factor: 0
-          sram: 3192
+          flash: 11081
+          inference_time_us: 2156
+          model_selection_factor: 1
+          sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25308
-          model_selection_factor: 0
-          sram: 4164
+          inference_time_us: 25353
+          model_selection_factor: 1
+          sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2911,6 +3601,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      model_details: Regression Model with 3k params. 4 layers of MLPs (Fully Connected
+        Layers)
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -3005,7 +3697,9 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      lambda_reg: 0
       learning_rate: 0.002
+      load_saved_model: null
       log_file_path: null
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
@@ -3013,6 +3707,15 @@ model_descriptions:
       model_name: TimeSeries_Generic_Regr_3k_t
       model_spec: null
       model_training_id: REG_TS_GEN_BASE_3K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
       num_gpus: 1
       num_last_epochs: 5
       optimizer: sgd
@@ -3052,36 +3755,41 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 15212
+          model_selection_factor: 2
+          sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15184
-          model_selection_factor: 1
-          sram: 4164
+          inference_time_us: 15212
+          model_selection_factor: 2
+          sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15184
-          model_selection_factor: 1
-          sram: 4164
+          inference_time_us: 15212
+          model_selection_factor: 2
+          sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12654
-          model_selection_factor: 1
-          sram: 4164
+          inference_time_us: 12676
+          model_selection_factor: 2
+          sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15184
-          model_selection_factor: 1
-          sram: 4164
+          inference_time_us: 15212
+          model_selection_factor: 2
+          sram: 4160
         F28P55:
-          flash: 11002
-          inference_time_us: 2252
-          model_selection_factor: 1
-          sram: 3192
+          flash: 11081
+          inference_time_us: 2156
+          model_selection_factor: 2
+          sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25308
-          model_selection_factor: 1
-          sram: 4164
+          inference_time_us: 25353
+          model_selection_factor: 2
+          sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -3146,6 +3854,73 @@ preset_descriptions:
             -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type
           target: c
           target_c_mcpu: cortex_r5
+  F280013:
+    arc_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    generic_timeseries_anomalydetection:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    generic_timeseries_classification:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    generic_timeseries_regression:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: c28
   F280015:
     arc_fault:
       default_preset:
@@ -3416,6 +4191,16 @@ preset_descriptions:
           target_c_mcpu: c28
   F28P55:
     arc_fault:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: c28
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -3437,6 +4222,16 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     blower_imbalance:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: c28
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -3458,6 +4253,16 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_anomalydetection:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: c28
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -3479,6 +4284,16 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_classification:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: c28
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -3500,6 +4315,16 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     generic_timeseries_regression:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: c28
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -3521,6 +4346,16 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     motor_fault:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
+          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
+            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
+            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I. -Iartifacts --obj_directory=.
+          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: c28
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -3608,6 +4443,104 @@ preset_descriptions:
             -I. -Iartifacts --obj_directory=.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
+  F29H85:
+    arc_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
+          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I.
+          target: c, ti-npu type=soft
+          target_c_mcpu: c29
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
+          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I.
+          target: c, ti-npu type=soft
+          target_c_mcpu: c29
+    generic_timeseries_anomalydetection:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
+          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I.
+          target: c, ti-npu type=soft
+          target_c_mcpu: c29
+    generic_timeseries_classification:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
+          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I.
+          target: c, ti-npu type=soft
+          target_c_mcpu: c29
+    generic_timeseries_regression:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
+          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I.
+          target: c, ti-npu type=soft
+          target_c_mcpu: c29
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
+          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
+            -I.
+          target: c, ti-npu type=soft
+          target_c_mcpu: c29
+  M0G3507:
+    arc_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m0plus
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m0plus
+    generic_timeseries_anomalydetection:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m0plus
+    generic_timeseries_classification:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m0plus
+    generic_timeseries_regression:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m0plus
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m0plus
 sample_dataset_descriptions:
   arc_fault_example_dsk:
     common:
@@ -3615,7 +4548,7 @@ sample_dataset_descriptions:
       task_type: arc_fault
     dataset:
       dataset_name: arc_fault_classification_dsk
-      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip
     info:
       dataset_description: Example arc-fault timeseries classification dataset with
         2 categories - arc, normal
@@ -3623,14 +4556,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip
   blower_imbalance_example_dsh:
     common:
       task_category: timeseries_classification
       task_type: blower_imbalance
     dataset:
       dataset_name: blower_imbalance_example_dsh
-      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blower_imbalance_dsh.zip
     info:
       dataset_description: Example blower imbalance timeseries classification dataset
         with 2 categories - 0 Clips, 1 Clip
@@ -3638,14 +4571,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/fan_blower_imbalance_dsh.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blower_imbalance_dsh.zip
   hello_world_example_dsg:
     common:
       task_category: timeseries_classification
       task_type: generic_timeseries_classification
     dataset:
       dataset_name: hello_world_example_dsg
-      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip
     info:
       dataset_description: Example timeseries classification dataset with 3 categories
         - Sine, Square, Sawtooth
@@ -3653,14 +4586,14 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/hello_world_dsg.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip
   motor_fault_example_dsk:
     common:
       task_category: timeseries_classification
       task_type: motor_fault
     dataset:
       dataset_name: motor_fault_example_dsk
-      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip
     info:
       dataset_description: Example motor-fault timeseries classification dataset with
         4 categories - normal, localized, erosion, flaking
@@ -3668,96 +4601,119 @@ sample_dataset_descriptions:
       dataset_license: TI Internal License
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip
 target_device_descriptions:
   AM263:
     device_details: "Quad-core Arm\xAE Cortex\xAE-R5F MCU up to 400 MHz with real-time\
       \ control and security\n* More details : https://www.ti.com/product/AM2634\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n\
       * Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n\
-      * SDK release: 05_04_00\n\nAdditional information:\n\n"
-    device_name: M0G3507
-    device_selection_factor: 7
-    device_type: MCU
-    sdk_release: '2_05_00_05'
-    sdk_version: '2.05.00.05'
-    AM263:
-    device_details: "80MHz Arm® Cortex®-M0+ MCU\ with 128KB flash 32KB SRAM\ 2x4Msps ADC, DAC, 3xCOMP, 2xOPA,
-     \ CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
-      \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
-      * Development board: https://www.ti.com/tool/LP-MSPM0G3507\n* SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_04_00__06\n\nAdditional information:\n\n"
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
     device_name: AM263
-    device_selection_factor: 6
+    device_selection_factor: 8
     device_type: MCU
-    sdk_release: '05_04_00'
-    sdk_version: '5.4'
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
+  F280013:
+    device_details: "C2000\u2122 120-MHz C28x CPU with FPU and TMU, 256-KB Flash,\
+      \ two 12-bit ADCs, 14 PWM channels, CAN (DCAN), one encoder module (eQEP), UART,\
+      \ and more\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800137\n\nImportant\
+      \ links:\n* Product information: https://www.ti.com/product/TMS320F2800137\n\
+      * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
+    device_name: F280013
+    device_selection_factor: 1
+    device_type: MCU
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
   F280015:
     device_details: "C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA,\
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_04_00\n\nAdditional information:\n\n"
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
     device_name: F280015
-    device_selection_factor: 0
+    device_selection_factor: 2
     device_type: MCU
-    sdk_release: '05_04_00'
-    sdk_version: '5.4'
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
   F28003:
     device_details: "C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA,\
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_04_00\n\nAdditional information:\n\n"
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
     device_name: F28003
-    device_selection_factor: 1
+    device_selection_factor: 3
     device_type: MCU
-    sdk_release: '05_04_00'
-    sdk_version: '5.4'
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
   F28004:
     device_details: "C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA,\
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_04_00\n\nAdditional information:\n\n"
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
     device_name: F28004
-    device_selection_factor: 2
+    device_selection_factor: 4
     device_type: MCU
-    sdk_release: '05_04_00'
-    sdk_version: '5.4'
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
   F2837:
     device_details: "C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU,\
       \ 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_04_00\n\nAdditional information:\n\n"
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
     device_name: F2837
-    device_selection_factor: 3
+    device_selection_factor: 5
     device_type: MCU
-    sdk_release: '05_04_00'
-    sdk_version: '5.4'
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
   F28P55:
     device_details: "C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash,\
       \ 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_04_00\n\nAdditional information:\n\n"
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
     device_name: F28P55
-    device_selection_factor: 5
+    device_selection_factor: 7
     device_type: MCU
-    sdk_release: '05_04_00'
-    sdk_version: '5.4'
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
   F28P65:
     device_details: "C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash,\
       \ 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 05_04_00\n\nAdditional information:\n\n"
+      * SDK release: 06_00_00\n\nAdditional information:\n\n"
     device_name: F28P65
-    device_selection_factor: 4
+    device_selection_factor: 6
     device_type: MCU
-    sdk_release: '05_04_00'
-    sdk_version: '5.4'
+    sdk_release: '06_00_00'
+    sdk_version: '6.0'
+  F29H85:
+    device_details: "C2000\u2122 64-bit MCU with C29x 200MHz tri-core, lockstep, functional\
+      \ safety compliance, 4MB\n* More details : https://www.ti.com/product/F29H850TU\n\
+      \nImportant links:\n* Product information: https://www.ti.com/product/F29H850TU\n\
+      * SOM EVM: https://www.ti.com/tool/F29H85X-SOM-EVM\n* C2000 SDK: https://www.ti.com/tool/download/F29H85X-SDK/\n\
+      * SDK release: 01_01_00\n\nAdditional information:\n\n"
+    device_name: F29H85
+    device_selection_factor: 8
+    device_type: MCU
+    sdk_release: '01_01_00'
+    sdk_version: '1.01'
+  M0G3507:
+    device_details: "80MHz Arm\xAE Cortex\xAE-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps\
+      \ ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
+      \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
+      * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
+      * SDK release: 2_05_00_05\n\nAdditional information:\n\n"
+    device_name: M0G3507
+    device_selection_factor: 0
+    device_type: MCU
+    sdk_release: '2_05_00_05'
+    sdk_version: 2.05.00.05
 task_descriptions:
   arc_fault:
     stages:
@@ -3766,12 +4722,15 @@ task_descriptions:
     - training
     - compilation
     target_devices: &id001
+    - F280013
     - F280015
     - F28003
     - F28004
     - F2837
     - F28P55
     - F28P65
+    - F29H85
+    - M0G3507
     target_module: timeseries
     task_name: ARC Fault
   blower_imbalance:
@@ -3854,6 +4813,4 @@ training_module_descriptions:
   timeseries_regression:
   - timeseries_regression
 version_descriptions:
-  sdk_release: '05_04_00'
-  sdk_version: '5.4'
-  version: 1.0.0
+  version: 1.1.0

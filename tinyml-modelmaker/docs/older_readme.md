@@ -100,8 +100,7 @@ cd /opt/code/tinyml-modelmaker
 Step 1.1: Clone this repository from GitHub
 ```powershell
 cd ..\tinyml-modelmaker
-python -m pip install --no-input -r requirements.txt
-python -m pip install --editable . # --use-pep517
+python -m pip install --no-input --editable . 
 ```
 * Tiny ML Modelmaker, by default installs Tiny ML Tinyverse and Tiny ML ModelOptimization repositories as a python package.
 * If you intend to use this repository as is, then it is enough.
@@ -119,7 +118,7 @@ This tool depends on several repositories that we have published at https://gith
 The following setup script can take care of cloning the required repositories and running their setup scripts.
 
 **NOTE: Please download and install [C2000Ware](https://www.ti.com/tool/C2000WARE)**
-* Please set the installed path in your terminal: `export C2000WARE_PATH="/path/to/C2000Ware_5_04_00_00"`
+* Please set the installed path in your terminal: `export C2000WARE_ROOT="/path/to/C2000Ware_6_00_00_00"`
 
 ```
 ./setup_all.sh 
