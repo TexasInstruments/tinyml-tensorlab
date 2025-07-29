@@ -489,9 +489,9 @@ def main(gpu, args):
             # utils.save_on_master(
             #     checkpoint,
             #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
-            if avg_mse < best['mse']:
+            if avg_mse <= best['mse']:
                 logger.info(
-                    f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) < {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
+                    f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) <= {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
                 best['mse'] = avg_mse
                 best['epoch'] = epoch
                 utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))

@@ -172,11 +172,14 @@ def main(gpu, args):
     # utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
     #                           label_map=dataset.inverse_label_map, phase='test')
     metric = torcheval.metrics.MeanSquaredError()
+    r2_score = torcheval.metrics.R2Score()
     # np.save(os.path.join(args.output_dir, 'predicted.npy'), predicted.to('cpu').numpy())
     # np.save(os.path.join(args.output_dir, 'ground_truth.npy'), ground_truth.to('cpu').numpy())
     metric.update(predicted.to('cpu'), ground_truth.to('cpu'))
+    r2_score.update(predicted.to('cpu'), ground_truth.to('cpu'))
     logger = getLogger("root.main.test_data")
     logger.info(f"Test Data Evaluation RMSE: {metric.compute():.2f}")
+    logger.info(f"Test Data Evaluation R2-Score: {r2_score.compute():.2f}")
     return
 
 def run(args):

@@ -953,7 +953,7 @@ def seed_everything(seed: int):
         torch.mps.manual_seed(seed)
 
 
-def train_one_epoch_regression(model, criterion, optimizer, data_loader, device, epoch, transform,
+def train_one_epoch_regression(model, criterion, optimizer, data_loader, device, epoch, transform, lambda_reg=0.01,
                     apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False, **kwargs):
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
@@ -985,6 +985,12 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
 
         if not is_ptq:
             optimizer.zero_grad()
+            if lambda_reg:
+                l1_norm = sum(p.abs().sum() for p in model.parameters())
+                l2_norm = sum(p.pow(2.0).sum() for p in model.parameters())
+
+                loss += (lambda_reg*(l1_norm))
+                loss += (lambda_reg*(l2_norm))
             if apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()

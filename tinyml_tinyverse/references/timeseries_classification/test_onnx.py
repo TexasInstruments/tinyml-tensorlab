@@ -189,16 +189,22 @@ def main(gpu, args):
     metric.update(predicted, ground_truth)
     logger = getLogger("root.main.test_data")
     logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
-    logger.info(
-        f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted, ground_truth, num_classes):.3f}")
+    try:
+        logger.info(
+            f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted, ground_truth, num_classes):.3f}")
+    except ValueError as e:
+        logger.warning("Not able to compute AUC ROC. Error: " + str(e))
     if len(torch.unique(ground_truth)) == 1:
         logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
     else:
-        confusion_matrix = get_confusion_matrix(predicted, ground_truth.type(torch.int64),
-                                                num_classes).cpu().numpy()
-        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
-            confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-            index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
+        try:
+            confusion_matrix = get_confusion_matrix(predicted, ground_truth.type(torch.int64),
+                                                    num_classes).cpu().numpy()
+            logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
+                confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+                index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
+        except ValueError as e:
+            logger.warning("Not able to compute Confusion Matrix. Error: " + str(e))
     return
 
 def run(args):

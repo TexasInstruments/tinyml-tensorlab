@@ -68,7 +68,7 @@ import platform
 import random
 import sys
 import timeit
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
 import numpy as np
@@ -76,6 +76,7 @@ import pandas as pd
 
 from tinyml_tinyverse.common.models import NeuralNetworkWithPreprocess
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQuantizationMethod
+from tinyml_torchmodelopt.nas.train_cnn_search import search_and_get_model
 
 # Torch Modules
 import torch
@@ -161,7 +162,7 @@ def get_args_parser():
     parser.add_argument('--gpus', default=1, type=int, help='number of gpus')
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
     parser.add_argument('--epochs', default=90, type=int, metavar='N', help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N', help='number of data loading workers (default: 16)')
+    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 8, type=int, metavar='N', help='number of data loading workers (default: 16)')
     parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
     parser.add_argument('--lr', default=0.1, type=float, help='initial learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
@@ -215,6 +216,22 @@ def get_args_parser():
 
     parser.add_argument("--with-input-batchnorm", default=True, help="onnx opset 18 doesn't export input batchnorm, use this if using TINPU style QAT only")
 
+    #######################################
+    # nas args
+    #######################################
+    parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS")
+    parser.add_argument("--nas_optimization_mode", default="Memory", type=str,  help="Optimize model for compute or storage efficiency")
+    parser.add_argument("--nas_model_size", default='None', choices=['s', 'm', 'l', 'xl', 'None'], help="Proxy for model size")
+    parser.add_argument("--nas_epochs", default=10, type=int, help="Iterations for search")
+
+    parser.add_argument("--nas_nodes_per_layer", default=4, type=int, help="Number of nodes per layer")
+    parser.add_argument("--nas_layers", default=3, type=int, help="Shoulde be minimum 3")
+    parser.add_argument("--nas_init_channels", default=1, type=int, help="Initial channel size of the first feature map")
+    parser.add_argument("--nas_init_channel_multiplier", default=3, type=int, help="Channel size of after first preprocess")
+    parser.add_argument("--nas_fanout_concat", default=4, type=int, help="Number of nodes to concat for output after each layer")
+
+    parser.add_argument("--load_saved_model", type=str, default='None', help="Model path for pre-searched nas model")
+
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
@@ -260,7 +277,7 @@ def generate_model_aux(output_dir, dataset):
         fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
     return
 
-def generate_golden_vectors(output_dir, dataset, generic_model=False, nn_for_feature_extraction=False):
+def generate_golden_vectors(output_dir, dataset, output_int, generic_model=False, nn_for_feature_extraction=False):
     logger = getLogger("root.generate_golden_vectors")
     import onnxruntime as ort
     vector_files = []
@@ -291,12 +308,12 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False, nn_for_fea
             half_path = os.path.join(golden_vectors_dir)
 
             # Saving as .txt
-            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%f' if np_raw.dtype.kind == 'f' else '%d', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'adc_{label}_{index}.txt')
             if not nn_for_feature_extraction:
                 np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
                 vector_files.append(half_path + f'features_{label}_{index}.txt')
-            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%d,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%d,' if output_int else '%f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'output_{label}_{index}.txt')
 
     header_file_info = """#include "device.h"
@@ -328,6 +345,66 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False, nn_for_fea
     generate_model_aux(output_dir, dataset)
     return
 
+######################################
+def get_nas_args(args, data_loader, data_loader_test, num_classes, variables):
+    if args.nas_model_size != "None":
+        model_size = args.nas_model_size
+        if model_size == 's':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 3
+            args.nas_init_channels = 1
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'm':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 10
+            args.nas_init_channels = 1
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'l':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 12
+            args.nas_init_channels = 4
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'xl':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 20
+            args.nas_init_channels = 4
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'xxl':
+            args.nas_nodes_per_layer = 6
+            args.nas_layers = 20
+            args.nas_init_channels = 8
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+
+    nas_args_dict = {
+        'lr': args.lr,
+        'momentum': args.momentum,
+        'weight_decay': args.weight_decay,
+        'gpu': 0,
+        'nas_budget': args.nas_epochs,
+        'nas_init_channels': args.nas_init_channels,
+        'nas_nodes_per_layer': args.nas_nodes_per_layer,
+        'nas_layers': args.nas_layers,
+        'nas_multiplier': args.nas_fanout_concat,
+        'nas_stem_multiplier': args.nas_init_channel_multiplier,
+        'nas_optimization_mode': args.nas_optimization_mode,
+        'in_channels': variables,
+        'grad_clip': 5,
+        'mode': 'cnn', 
+        'arch_learning_rate': 1e-2,
+        'arch_weight_decay': 1e-3,
+        'unrolled': True,
+        'num_classes': num_classes,
+        'train_loader': data_loader,
+        'valid_loader': data_loader_test,
+        'with_input_batchnorm': args.with_input_batchnorm,
+    }
+
+    return Namespace(**nas_args_dict)
 
 def main(gpu, args):
     transform = None
@@ -338,7 +415,7 @@ def main(gpu, args):
     log_file = os.path.join(args.output_dir, 'run.log')
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True if args.quantization else False, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
-    utils.seed_everything(args.seed)
+    # utils.seed_everything(args.seed)
     logger = getLogger("root.main")
     from ..version import get_version_str
     logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
@@ -410,12 +487,28 @@ def main(gpu, args):
     # Model Creation
     variables = dataset.X.shape[1]  # n,c,h,w --> c is 1 (args.variables. However, after motor fault was supported, it concatenates 3x128 to 1x384 hence channels have been changed
     input_features = dataset.X.shape[2]
-    # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
-    model = models.get_model(
-        args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
-        model_spec=args.model_spec, with_input_batchnorm=False if args.nn_for_feature_extraction else misc_utils.str2bool(args.with_input_batchnorm),
-        dual_op=args.dual_op)
-    if args.generic_model:
+    # 
+    if args.load_saved_model == 'None':
+        if args.nas_enabled == 'True':
+            if args.quantization:
+                model = torch.load(os.path.join(os.path.dirname(args.output_dir), os.path.join('base', 'nas_model.pt')), weights_only=False)
+            else:
+                nas_args = get_nas_args(args, data_loader, data_loader_test, num_classes, variables)
+                model = search_and_get_model(nas_args)
+                if not model:
+                    logger.error("Please check on prior errors. NAS wasn't able to create a model")
+                    sys.exit(1)
+                torch.save(model, os.path.join(args.output_dir, 'nas_model.pt'))
+        else:
+            # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
+            model = models.get_model(
+                args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
+                model_spec=args.model_spec, with_input_batchnorm=False if args.nn_for_feature_extraction else misc_utils.str2bool(args.with_input_batchnorm),
+                dual_op=args.dual_op)
+    else:
+        model = torch.load(args.load_saved_model, weights_only=False)       
+    
+    if args.generic_model or args.nas_enabled:
         # logger.info("\nModel:\n{}\n".format(model))
         logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
 
@@ -510,16 +603,10 @@ def main(gpu, args):
             # utils.save_on_master(
             #     checkpoint,
             #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
-            if avg_accuracy > best['accuracy']:
-                logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) > {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
-                best['accuracy'] = avg_accuracy
-                best['f1'] = avg_f1
-                best['auc'] = auc
-                best['conf_matrix'] = avg_conf_matrix
-                best['epoch'] = epoch
-                utils.save_on_master(
-                    checkpoint,
-                    os.path.join(args.output_dir, 'checkpoint.pth'))
+            if avg_accuracy >= best['accuracy']:
+                logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) >= {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
+                best['accuracy'], best['f1'], best['auc'], best['conf_matrix'], best['epoch'] = avg_accuracy,avg_f1, auc, avg_conf_matrix, epoch
+                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
     logger = getLogger(f"root.main.{phase}.BestEpoch")
     logger.info("")
@@ -557,7 +644,10 @@ def main(gpu, args):
 
     if args.gen_golden_vectors:
         generate_golden_vector_dir(args.output_dir)
-        generate_golden_vectors(args.output_dir, dataset, args.generic_model, args.nn_for_feature_extraction)
+        output_int = False
+        if args.quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU and args.output_dequantize == False:
+            output_int = True
+        generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
         
     return
 

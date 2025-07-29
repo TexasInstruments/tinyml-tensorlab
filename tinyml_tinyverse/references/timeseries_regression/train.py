@@ -159,6 +159,7 @@ def get_args_parser():
     parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N', help='number of data loading workers (default: 16)')
     parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
     parser.add_argument('--lr', default=0.1, type=float, help='initial learning rate')
+    parser.add_argument('--lambda-reg', default=0.01, type=float, help='lambda for L1 & L2 normalization in regression')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
     parser.add_argument('--wd', '--weight-decay', default=4e-5, type=float, metavar='W', help='weight decay (default: 1e-4)', dest='weight_decay')
     parser.add_argument('--label-smoothing', default=0.0, type=float, help='label smoothing (default: 0.0)', dest='label_smoothing')
@@ -255,7 +256,7 @@ def generate_model_aux(output_dir, dataset):
         fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
     return
 
-def generate_golden_vectors(output_dir, dataset, generic_model=False):
+def generate_golden_vectors(output_dir, output_int, dataset, generic_model=False):
     logger = getLogger("root.generate_golden_vectors")
     import onnxruntime as ort
     vector_files = []
@@ -270,24 +271,22 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
     golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
     
     logger.info(f"Creating Golden data for reference at {golden_vectors_dir}")
-    label_index_dict = {dataset.inverse_label_map.get(label): np.where(dataset.Y == label)[0] for label in np.unique(dataset.Y)}
+    number_of_samples = len(dataset)
 
-    for label, indices in label_index_dict.items():
-        # For each label, 4 random golden test vectors will be selected and printed out
-        for index in random.sample(list(indices), k=2):  # Originally k=4
-            np_raw = dataset.X_raw[index]
-            np_feat = dataset.X[index]
-            pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
+    for index in random.sample(range(number_of_samples), k=8):  # Originally k=4
+        np_raw = dataset.X_raw[index]
+        np_feat = dataset.X[index]
+        pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
 
-            half_path = os.path.join(golden_vectors_dir)
+        half_path = os.path.join(golden_vectors_dir)
 
-            # Saving as .txt
-            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%f' if np_raw.dtype.kind == 'f' else '%d', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'adc_{label}_{index}.txt')
-            np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'features_{label}_{index}.txt')
-            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'output_{label}_{index}.txt')
+        # Saving as .txt
+        np.savetxt(half_path + f'adc_{index}.txt', np_raw.flatten(), fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,', header=f'//(Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+        vector_files.append(half_path + f'adc_{index}.txt')
+        np.savetxt(half_path + f'features_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//(Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+        vector_files.append(half_path + f'features_{index}.txt')
+        np.savetxt(half_path + f'output_{index}.txt', pred.flatten(), fmt='%d,' if output_int else '%f,', header=f'//(Index: {index}): Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+        vector_files.append(half_path + f'output_{index}.txt')
 
     header_file_info = """#include "device.h"
 // //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,7 +313,8 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
                 header_file_info += '*/\n'
         os.remove(file_path)
     generate_test_vector(output_dir, header_file_info)
-    generate_model_aux(output_dir, dataset)
+    # generate_model_aux(output_dir, dataset)
+    # TODO: Enable the above line once we know what is required
     return
 
 
@@ -458,7 +458,7 @@ def main(gpu, args):
         if args.distributed:
             train_sampler.set_epoch(epoch)
         utils.train_one_epoch_regression(
-            model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
+            model, criterion, optimizer, data_loader, device, epoch, transform, args.lambda_reg, args.apex, model_ema,
             print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
             is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
@@ -480,8 +480,8 @@ def main(gpu, args):
             # utils.save_on_master(
             #     checkpoint,
             #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
-            if avg_mse < best['mse']:
-                logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) < {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
+            if avg_mse <= best['mse']:
+                logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) <= {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
                 best['mse'] = avg_mse
                 best['r2'] = avg_r2_score
                 best['epoch'] = epoch
@@ -507,9 +507,11 @@ def main(gpu, args):
     logger.info('Training time {}'.format(total_time_str))
 
     if args.gen_golden_vectors:
-        # generate_golden_vectors(args.output_dir, dataset, args.generic_model)
-        # TODO: Enable the above line once we know what is required
-        pass
+        generate_golden_vector_dir(args.output_dir)
+        output_int = False
+        if args.quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU and args.output_dequantize == False:
+            output_int = True
+        generate_golden_vectors(args.output_dir, output_int, dataset, args.generic_model)
         
     return
 

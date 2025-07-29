@@ -295,6 +295,7 @@ default_tvm_args = dict(
     target_ti_npu_mode=None,
     target_ti_npu_skip_normalize=None,
     target_ti_npu_output_int=None,
+    target_ti_npu_opt_for_space=None,
     executor_graph_link_params=None,
     executor_aot_link_params=None,
     executor_aot_workspace_byte_alignment=None,
