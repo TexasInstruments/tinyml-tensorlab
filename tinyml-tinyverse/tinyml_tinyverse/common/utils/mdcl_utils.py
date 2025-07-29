@@ -135,7 +135,7 @@ def add_log_file_handlers(logger, base_log_filename=None, extra_log_files=[]):
                 log_file = log_path
                 log_dir = os.path.realpath(os.path.dirname(log_path))
                 pathlib.Path(log_dir).mkdir(parents=True, exist_ok=True)
-            f2_handler = logging.FileHandler(log_file, mode="w")
+            f2_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
             f2_handler.setFormatter(formatter)
             if log_level is not None:
                 f2_handler.setLevel(log_level)
@@ -162,9 +162,9 @@ def Logger(log_file=None, DEBUG=False, name="root", extra_log_files=[],
         log_dir = os.path.realpath(os.path.dirname(log_file))
         pathlib.Path(log_dir).mkdir(parents=True, exist_ok=True)
         if append_log:
-            f_handler = logging.FileHandler(log_file)
+            f_handler = logging.FileHandler(log_file, encoding="utf-8")
         else:
-            f_handler = logging.FileHandler(log_file, mode="w")
+            f_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
         f_handler.setFormatter(formatter)
         logger.addHandler(f_handler)  # write to file
         add_log_file_handlers(logger, os.path.basename(log_file), extra_log_files)

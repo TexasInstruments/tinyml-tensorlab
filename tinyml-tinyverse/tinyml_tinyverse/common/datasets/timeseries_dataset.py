@@ -39,7 +39,6 @@ import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
-from torch.utils.hipify.hipify_python import PYTORCH_TEMPLATE_MAP
 from tqdm import tqdm
 import yaml
 
@@ -156,14 +155,37 @@ class GenericTSDataset(Dataset):
     # Stores the data in x_temp from the datafile
     def _load_datafile(self, datafile):
         file_extension = ops(datafile)[-1]
+
+        # For .npy files, we assume it is regular numpy array and not structured array with named columns.
+        # Also we assume first column is timestamp, hence excluding first column.
         if file_extension == ".npy":
             x_temp = np.load(datafile)
             if len(x_temp.shape) > 1:
-                x_temp = x_temp[:, 1:]
+                x_temp = x_temp[:, 1:self.variables+1]
+
         elif file_extension in [".pkl", ".csv", ".txt"]:
-            x_temp = pd.read_pickle(datafile) if file_extension == '.pkl' else pd.read_csv(datafile)
-            non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
-            x_temp = x_temp[non_time_columns].values[:, :self.variables]
+            # Note: When saving a DataFrame to .pkl, if headers are provided, they are saved as metadata. If not pandas assigns default headers (0,1,2...).
+            # In both these cases headers are not part of .values array.
+            if file_extension == ".pkl":
+                x_temp = pd.read_pickle(datafile)
+                if not isinstance(x_temp,pd.DataFrame):
+                    raise TypeError("Data loaded from .pkl file is not a pandas DataFrame. Please check the file format.")
+                if x_temp.shape[0]==0:
+                    raise ValueError("File has no rows.")
+                x_temp = x_temp[[col for col in x_temp.columns if 'time' not in str(col).lower()]] 
+            else:
+                # For .csv files, first row is considered as value and not header, hence specifying header=None. 
+                x_temp = pd.read_csv(datafile, header=None, dtype=str) # Read as string to avoid dtype issues.
+                if x_temp.shape[0]==0:
+                    raise ValueError("File has no rows.")
+                x_temp=x_temp[[col_index for col_index,value in x_temp.iloc[0].items() if 'time' not in str(value).lower()]]
+                try:
+                    float(x_temp.iloc[0, 0])
+                except (ValueError, TypeError):
+                    x_temp = x_temp[1:]
+
+            x_temp = x_temp.values.astype(float) # Converting values from str back to float.
+            x_temp = x_temp[:, :self.variables]
         else:
             raise Exception("Supports only .npy, .pkl, .txt and .csv file formats for now")
         label = opb(opd(datafile))
@@ -390,6 +412,8 @@ class GenericTSDataset(Dataset):
     def __feature_extraction(self, x_temp, datafile):
 
         number_of_frames = x_temp.shape[1] // self.frame_size
+        if number_of_frames < self.num_frame_concat:
+            raise ValueError(f"number_of_frames formed with the file ({number_of_frames}) < num_frame_concat ({self.num_frame_concat}) provided by the user's config. Either increase rows in the file or choose lesser frames to concatenate.")
 
         concatenated_features = []
         concatenated_raw_frames = []
@@ -516,8 +540,11 @@ class GenericTSDataset(Dataset):
                 exit()
             except KeyboardInterrupt as ki:
                 exit()
-
-        if not self.X.shape[0]:
+        try:
+            if not self.X.shape[0]:
+                self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
+                raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
+        except Exception as e:
             self.logger.error("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
             raise Exception("Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
         if self.X.ndim == 3:
@@ -610,8 +637,7 @@ class GenericTSDatasetReg(Dataset):
         if not hasattr(self, 'keep_short_tails'):
             self.keep_short_tails = False
         x_temp = np.array(basic_transforms.SimpleWindow(x_temp, self.frame_size, stride_window, self.keep_short_tails))
-        y_temp = np.array(
-            basic_transforms.SimpleWindow(y_temp, self.frame_size, stride_window, self.keep_short_tails))
+        y_temp = np.array(basic_transforms.SimpleWindow(y_temp, self.frame_size, stride_window, self.keep_short_tails))
         if len(self.feat_ext_transform) > 0:
             x_temp = x_temp.reshape(-1, self.variables)
         return x_temp, y_temp
@@ -622,14 +648,31 @@ class GenericTSDatasetReg(Dataset):
         if file_extension == ".npy":
             data = np.load(datafile)
             if len(data.shape) > 1:
-                x_temp = data[:, 1:self.variables]
-                y_temp = data[:, self.variables:]
-
+                x_temp = data[:, 1:self.variables+1]
+                y_temp = data[:, -1].reshape(-1, 1)
         elif file_extension in [".pkl", ".csv", ".txt"]:
-            data = pd.read_pickle(datafile) if file_extension == '.pkl' else pd.read_csv(datafile)
-            usable_columns = [col for col in data.columns if col.lower() not in ['time']]
-            x_temp = data[usable_columns].values[:, :self.variables]
-            y_temp = data[usable_columns].values[:, self.variables:]
+            # Note: When saving a DataFrame to .pkl, if headers are provided, they are saved as metadata. If not pandas assigns default headers (0,1,2...).
+            # In both these cases headers are not part of .values array.
+            if file_extension == ".pkl":
+                data = pd.read_pickle(datafile)
+                if not isinstance(data,pd.DataFrame):
+                    raise TypeError("Data loaded from .pkl file is not a pandas DataFrame. Please check the file format.")
+                if data.shape[0]==0:
+                    raise ValueError("File has no rows.")
+                data = data[[col for col in data.columns if 'time' not in str(col).lower()]]
+            else:
+                # For .csv files, first row is considered as value and not header, hence specifying header=None. 
+                data = pd.read_csv(datafile, header=None, dtype=str) # Read as string to avoid dtype issues.
+                if data.shape[0]==0:
+                    raise ValueError("File has no rows.")
+                data=data[[col_index for col_index,value in data.iloc[0].items() if 'time' not in str(value).lower()]]
+                try:
+                    float(data.iloc[0, 0])
+                except (ValueError, TypeError):
+                    data = data[1:]
+            data = data.values.astype(float) 
+            x_temp = data[:, :self.variables]
+            y_temp = data[:, -1].reshape(-1, 1)
         else:
             raise Exception("Supports only .npy, .pkl, .txt and .csv file formats for now")
 
@@ -644,6 +687,10 @@ class GenericTSDatasetReg(Dataset):
         x_temp = apply_augmenters(x_temp, self.augment_pipeline)  # https://tsaug.readthedocs.io/en/stable/quickstart.html
 
         x_temp_raw_out = x_temp.copy()
+        if y_temp.ndim == 2:
+            y_temp = np.array(basic_transforms.SimpleWindow(y_temp, self.frame_size, 1, self.keep_short_tails))
+        # y_temp = y_temp.transpose(0, 2, 1) # (10, 1024, 2) -> (10, 2, 1024)
+        # y_temp = y_temp.mean(axis=2)       # (10, 2, 1024) -> (10, 2)
         return x_temp, y_temp.mean(axis=1), x_temp_raw_out
 
     # Stores the (x_temp, x_temp_raw_out, y_temp) after applying all the feat-ext-transform
@@ -1094,14 +1141,37 @@ class GenericTSDatasetAD(Dataset):
     # Stores the data in x_temp from the datafile
     def _load_datafile(self, datafile):
         file_extension = ops(datafile)[-1]
+
+        # For .npy files, we assume it is regular numpy array and not structured array with named columns.
+        # Also we assume first column is timestamp, hence excluding first column.
         if file_extension == ".npy":
             x_temp = np.load(datafile)
             if len(x_temp.shape) > 1:
-                x_temp = x_temp[:, 1:]
+                x_temp = x_temp[:, 1:self.variables+1]
+
         elif file_extension in [".pkl", ".csv", ".txt"]:
-            x_temp = pd.read_pickle(datafile) if file_extension == '.pkl' else pd.read_csv(datafile)
-            non_time_columns = [col for col in x_temp.columns if 'time' not in col.lower()]
-            x_temp = x_temp[non_time_columns].values[:, :self.variables]
+            # Note: When saving a DataFrame to .pkl, if headers are provided, they are saved as metadata. If not pandas assigns default headers (0,1,2...).
+            # In both these cases headers are not part of .values array.
+            if file_extension == ".pkl":
+                x_temp = pd.read_pickle(datafile)
+                if not isinstance(x_temp,pd.DataFrame):
+                    raise TypeError("Data loaded from .pkl file is not a pandas DataFrame. Please check the file format.")
+                if x_temp.shape[0]==0:
+                    raise ValueError("File has no rows.")
+                x_temp = x_temp[[col for col in x_temp.columns if 'time' not in str(col).lower()]] 
+            else:
+                # For .csv files, first row is considered as value and not header, hence specifying header=None. 
+                x_temp = pd.read_csv(datafile, header=None, dtype=str) # Read as string to avoid dtype issues.
+                if x_temp.shape[0]==0:
+                    raise ValueError("File has no rows.")
+                x_temp=x_temp[[col_index for col_index,value in x_temp.iloc[0].items() if 'time' not in str(value).lower()]]
+                try:
+                    float(x_temp.iloc[0, 0])
+                except (ValueError, TypeError):
+                    x_temp = x_temp[1:]
+
+            x_temp = x_temp.values.astype(float) # Converting values from str back to float.
+            x_temp = x_temp[:, :self.variables]
         else:
             raise Exception("Supports only .npy, .pkl, .txt and .csv file formats for now")
         label = opb(opd(datafile))

@@ -92,7 +92,7 @@ def get_args_parser():
                              "e.g. '--pass-config tir.add_lower_pass=opt_level1,pass1,opt_level2,pass2'.", type=str,
                         nargs='+', default=['tir.disable_vectorize=1', 'tir.usmp.algorithm=hill_climb'], )
     parser.add_argument('--executor', help="The graph executor to build the model ", type=str, default='aot', )
-    parser.add_argument('--executor_aot_unpacked_api', help='', type=int, default=1, )
+    parser.add_argument('--executor_aot_unpacked_api', help='', type=bool, default=True, )
     parser.add_argument('--executor_aot_interface_api', help='', type=str, default='c', )
     parser.add_argument('--runtime', help="The runtime configuration.", type=str, default='crt', )
     parser.add_argument('--keep_libc_files', help='Keep lib0.c, lib1.c, lib2.c... files', action=BooleanOptionalAction)
@@ -165,7 +165,7 @@ def main(args):
                 logger.error(f"Compilation will fail as path is invalid: {arg[2:]}")
                 exit_flag = 1
     if exit_flag:
-        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_PATH or CGT_PATH")
+        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_ROOT/CGT_PATH (C2000), MSPM0_CGT_PATH(MSPM0), C29_CG_ROOT (F29x)")
         logger.error("Exiting due to previous errors. Compiled model directory will be empty.")
         return
 
