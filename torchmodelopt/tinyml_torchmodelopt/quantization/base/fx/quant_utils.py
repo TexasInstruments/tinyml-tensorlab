@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2018-2023, Texas Instruments Incorporated - http://www.ti.com
+# Copyright (c) 2018-2025, Texas Instruments Incorporated - http://www.ti.com
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without

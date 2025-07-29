@@ -9,7 +9,9 @@ pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@main#su
 To setup the repository for development, this python package and the dependencies can be installed by using the setup file.
 
 ```commandline
-./setup.sh
+python -m ensurepip --upgrade
+python -m pip install --no-input --upgrade pip setuptools
+python -m pip install --no-input --editable .
 ```
 
 ## Quantization Aware Training (QAT)

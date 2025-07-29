@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2018-2023, Texas Instruments Incorporated - http://www.ti.com
+# Copyright (c) 2018-2025, Texas Instruments Incorporated - http://www.ti.com
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -122,14 +122,16 @@ class TinyMLQConfigType:
                     'qscheme': torch.per_channel_symmetric,
                     'power2_scale': False,
                     'range_max': None,
-                    'fixed_range': False
+                    'fixed_range': False,
+                    'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
                 },
                 'activation': {
                     'bitwidth': activation_bitwidth,
                     'qscheme': torch.per_tensor_symmetric,
                     'power2_scale': False,
                     'range_max': None,
-                    'fixed_range': False
+                    'fixed_range': False,
+                    'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
                 }
             }
         elif weight_bitwidth == 2:
@@ -142,13 +144,15 @@ class TinyMLQConfigType:
                     'fixed_range': False,
                     'quant_min': -1,
                     'quant_max': 1,
+                    'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
                 },
                 'activation': {
                     'bitwidth': activation_bitwidth,
                     'qscheme': torch.per_tensor_symmetric,
                     'power2_scale': False,
                     'range_max': None,
-                    'fixed_range': False
+                    'fixed_range': False,
+                    'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
                 }
             }
         else:
