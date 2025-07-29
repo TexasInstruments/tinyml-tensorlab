@@ -64,40 +64,40 @@ Additionally, the models were tested with multiple input combinations, varying t
 
 Below is the detailed table of metrics for various models tested with different input shapes. The table includes the **Shape**, **MACs**, and **Parameters** for each model.
 
-| **Model**               | **Shape (N, C, H, W)** | **MACs**   | **Parameters** |
-|--------------------------|------------------------|------------|----------------|
-| TimeSeries_Generic_1k_t  | 1, 1, 128, 1          | 73924      | 972            |
-| TimeSeries_Generic_1k_t  | 1, 1, 256, 1          | 147652     | 972            |
-| TimeSeries_Generic_1k_t  | 1, 1, 512, 1          | 295108     | 972            |
-| TimeSeries_Generic_1k_t  | 1, 1, 1024, 1         | 590020     | 972            |
-| TimeSeries_Generic_1k_t  | 1, 3, 128, 1          | 84428      | 1316           |
-| TimeSeries_Generic_1k_t  | 1, 3, 256, 1          | 168396     | 1316           |
-| TimeSeries_Generic_1k_t  | 1, 3, 512, 1          | 336332     | 1316           |
-| TimeSeries_Generic_1k_t  | 1, 3, 1024, 1         | 672204     | 1316           |
-| TimeSeries_Generic_4k_t  | 1, 1, 128, 1          | 35700      | 3684           |
-| TimeSeries_Generic_4k_t  | 1, 1, 256, 1          | 71028      | 3684           |
-| TimeSeries_Generic_4k_t  | 1, 1, 512, 1          | 141684     | 3684           |
-| TimeSeries_Generic_4k_t  | 1, 1, 1024, 1         | 282996     | 3684           |
-| TimeSeries_Generic_4k_t  | 1, 3, 128, 1          | 43388      | 4316           |
-| TimeSeries_Generic_4k_t  | 1, 3, 256, 1          | 85884      | 4316           |
-| TimeSeries_Generic_4k_t  | 1, 3, 512, 1          | 170876     | 4316           |
-| TimeSeries_Generic_4k_t  | 1, 3, 1024, 1         | 340860     | 4316           |
-| TimeSeries_Generic_6k_t  | 1, 1, 128, 1          | 196004     | 5188           |
-| TimeSeries_Generic_6k_t  | 1, 1, 256, 1          | 391588     | 5188           |
-| TimeSeries_Generic_6k_t  | 1, 1, 512, 1          | 782756     | 5188           |
-| TimeSeries_Generic_6k_t  | 1, 1, 1024, 1         | 1565092    | 5188           |
-| TimeSeries_Generic_6k_t  | 1, 3, 128, 1          | 217004     | 5868           |
-| TimeSeries_Generic_6k_t  | 1, 3, 256, 1          | 433068     | 5868           |
-| TimeSeries_Generic_6k_t  | 1, 3, 512, 1          | 865196     | 5868           |
-| TimeSeries_Generic_6k_t  | 1, 3, 1024, 1         | 1729452    | 5868           |
-| TimeSeries_Generic_13k_t | 1, 1, 128, 1          | 167252     | 12980          |
-| TimeSeries_Generic_13k_t | 1, 1, 256, 1          | 333652     | 12980          |
-| TimeSeries_Generic_13k_t | 1, 1, 512, 1          | 666452     | 12980          |
-| TimeSeries_Generic_13k_t | 1, 1, 1024, 1         | 1332052    | 12980          |
-| TimeSeries_Generic_13k_t | 1, 3, 128, 1          | 175452     | 14124          |
-| TimeSeries_Generic_13k_t | 1, 3, 256, 1          | 349020     | 14124          |
-| TimeSeries_Generic_13k_t | 1, 3, 512, 1          | 696156     | 14124          |
-| TimeSeries_Generic_13k_t | 1, 3, 1024, 1         | 1390428    | 14124          |
+| **Model**                | **Shape (N, C, H, W)** | **MACs** | **Parameters** |
+|--------------------------|------------------------|----------|----------------|
+| TimeSeries_Generic_1k_t  | 1, 1, 128, 1           | 73924    | 972            |
+| TimeSeries_Generic_1k_t  | 1, 1, 256, 1           | 147652   | 972            |
+| TimeSeries_Generic_1k_t  | 1, 1, 512, 1           | 295108   | 972            |
+| TimeSeries_Generic_1k_t  | 1, 1, 1024, 1          | 590020   | 972            |
+| TimeSeries_Generic_1k_t  | 1, 3, 128, 1           | 84428    | 1316           |
+| TimeSeries_Generic_1k_t  | 1, 3, 256, 1           | 168396   | 1316           |
+| TimeSeries_Generic_1k_t  | 1, 3, 512, 1           | 336332   | 1316           |
+| TimeSeries_Generic_1k_t  | 1, 3, 1024, 1          | 672204   | 1316           |
+| TimeSeries_Generic_4k_t  | 1, 1, 128, 1           | 35700    | 3684           |
+| TimeSeries_Generic_4k_t  | 1, 1, 256, 1           | 71028    | 3684           |
+| TimeSeries_Generic_4k_t  | 1, 1, 512, 1           | 141684   | 3684           |
+| TimeSeries_Generic_4k_t  | 1, 1, 1024, 1          | 282996   | 3684           |
+| TimeSeries_Generic_4k_t  | 1, 3, 128, 1           | 43388    | 4316           |
+| TimeSeries_Generic_4k_t  | 1, 3, 256, 1           | 85884    | 4316           |
+| TimeSeries_Generic_4k_t  | 1, 3, 512, 1           | 170876   | 4316           |
+| TimeSeries_Generic_4k_t  | 1, 3, 1024, 1          | 340860   | 4316           |
+| TimeSeries_Generic_6k_t  | 1, 1, 128, 1           | 196004   | 6692           |
+| TimeSeries_Generic_6k_t  | 1, 1, 256, 1           | 391588   | 6692           |
+| TimeSeries_Generic_6k_t  | 1, 1, 512, 1           | 782756   | 6692           |
+| TimeSeries_Generic_6k_t  | 1, 1, 1024, 1          | 1565092  | 6692           |
+| TimeSeries_Generic_6k_t  | 1, 3, 128, 1           | 217004   | 7052           |
+| TimeSeries_Generic_6k_t  | 1, 3, 256, 1           | 433068   | 7052           |
+| TimeSeries_Generic_6k_t  | 1, 3, 512, 1           | 865196   | 7052           |
+| TimeSeries_Generic_6k_t  | 1, 3, 1024, 1          | 1729452  | 7052           |
+| TimeSeries_Generic_13k_t | 1, 1, 128, 1           | 167252   | 12980          |
+| TimeSeries_Generic_13k_t | 1, 1, 256, 1           | 333652   | 12980          |
+| TimeSeries_Generic_13k_t | 1, 1, 512, 1           | 666452   | 12980          |
+| TimeSeries_Generic_13k_t | 1, 1, 1024, 1          | 1332052  | 12980          |
+| TimeSeries_Generic_13k_t | 1, 3, 128, 1           | 175452   | 14124          |
+| TimeSeries_Generic_13k_t | 1, 3, 256, 1           | 349020   | 14124          |
+| TimeSeries_Generic_13k_t | 1, 3, 512, 1           | 696156   | 14124          |
+| TimeSeries_Generic_13k_t | 1, 3, 1024, 1          | 1390428  | 14124          |
 
 </details>
 
