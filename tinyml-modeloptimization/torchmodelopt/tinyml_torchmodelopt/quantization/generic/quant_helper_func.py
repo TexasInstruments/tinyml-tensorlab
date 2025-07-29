@@ -96,15 +96,15 @@ def compute_offset_scale_shift(offset: torch.Tensor, weight: torch.Tensor, round
         >>> oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(zero_point*0.0, 1/scale, num_bits_scale=8)
             oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -128, 127, ndim=4, dim=1)
     """
-    one = torch.ones(size=(1,))
+    one = torch.tensor([1.0])
     if not isinstance(offset, torch.Tensor):
         offset = one * (offset)
     if not isinstance(weight, torch.Tensor):
         weight = one * (weight)
     # Find the bounding values of scale
-    scale_max: int = 2**num_bits_scale - 1
+    scale_max = 2**num_bits_scale - 1
     # Max right shift operation supported
-    shift_max: int = 2**num_bits_shift - 1
+    shift_max = 2**num_bits_shift - 1
     # Separate the value and sign of weights
     if clip_weights:
         if max(weight.aminmax()) > scale_max:
@@ -124,13 +124,8 @@ def compute_offset_scale_shift(offset: torch.Tensor, weight: torch.Tensor, round
 
     mask = torch.isnan(scaled_weights)
     scaled_weights[mask], shift[mask] = 0, 1
-    import warnings
-    from torch.jit import TracerWarning
-    warnings.filterwarnings("ignore", category=TracerWarning)
-    check = scaled_weights > scale_max
-    check = True in check.cpu().detach().numpy()
 
-    if check:
+    if torch.sum(scaled_weights > scale_max) != 0:
         raise RuntimeError(
             f"Error in quantization.convert :: compute_offset_scale_shift. Scaling could not be converted.\n"
             f"Invalid scale values: {weight.cpu().detach().numpy()}\n"

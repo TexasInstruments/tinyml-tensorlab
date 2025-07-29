@@ -1,49 +1,47 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = [ "setuptools>=42",
+	"wheel",]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_torchmodelopt"
-version = "1.0.0"
+version = "1.1.0"
 description = "Tiny ML Model Optimization ToolKit For Torch"
-authors = [
-    { name = "Adithya Thonse", email = "thonse@ti.com" }
-]
-license = { text = "BSD 3-Clause" }
 readme = "README.md"
 requires-python = "==3.10.*"
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Programming Language :: Python :: 3.10"
-]
-dependencies = [
-"numpy==1.26.4",
-"Cython==3.0.11",
-"protobuf==5.27.3",
-"pillow>=10.4.0",
-"onnxsim==0.4.36",
-"onnx==1.16.1",
-"onnxsim==0.4.36",
-"onnxoptimizer==0.3.13",
-"onnxruntime==1.19.0",
-"progressbar==2.5",
-"protobuf==5.27.3",
-"rich==13.7.1",
-"pandas==2.2.2",
-"colorama==0.4.6",
-"torch==2.3.0",
-]
+classifiers = [ "Development Status :: 4 - Beta",
+	"Programming Language :: Python :: 3.10",]
+dependencies = [ "numpy==2.2.6",
+	"Cython==3.1.2",
+	"protobuf==6.31.1",
+	"pillow==11.2.1",
+	"onnxsim==0.4.36",
+	"onnx==1.18.0",
+	"onnxsim==0.4.36",
+	"onnxoptimizer==0.3.13",
+	"onnxruntime==1.22.0",
+	"progressbar==2.5",
+	"protobuf==6.31.1",
+	"rich==14.0.0",
+	"pandas==2.3.0",
+	"colorama==0.4.6",
+	"torch==2.7.1",]
+[[project.authors]]
+name = "Adithya Thonse"
+email = "thonse@ti.com"
+
+[project.license]
+text = "BSD 3-Clause"
 
 [project.urls]
-"Homepage" = "https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modeloptimization"
+Homepage = "https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modeloptimization"
 
 [tool.setuptools]
 include-package-data = true
 
-
 [tool.setuptools.packages.find]
-include = ["tinyml_torchmodelopt*"]
-exclude = ["tests*"]
+include = [ "tinyml_torchmodelopt*",]
+exclude = [ "tests*",]
 
-[tool.setuptools.dynamic]
-version = {attr = "tinyml_torchmodelopt.__version__"}
+[tool.setuptools.dynamic.version]
+attr = "tinyml_torchmodelopt.__version__"

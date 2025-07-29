@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2018-2023, Texas Instruments Incorporated - http://www.ti.com
+# Copyright (c) 2018-2025, Texas Instruments Incorporated - http://www.ti.com
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@
 import os
 import warnings
 import copy
+import numpy as np
 import torch
 from torch.ao.quantization import quantize_fx
 from torch.ao.quantization import QConfigMapping
@@ -41,12 +42,13 @@ from ... import common
 from . import qconfig_types
 from . import quant_utils
 from . import bias_calibration
+from . import fake_quant_types
 
 
 class TinyMLQuantFxBaseModule(torch.nn.Module):
     def __init__(self, model, qconfig_type=None, example_inputs=None, is_qat=True, backend="qnnpack",
-                 total_epochs=0, num_batch_norm_update_epochs=None, num_observer_update_epochs=False, 
-                 prepare_qdq=True, bias_calibration_factor=0.0, verbose=True):
+                 total_epochs=0, num_batch_norm_update_epochs=None, num_observer_update_epochs=False,
+                 prepare_qdq=True, bias_calibration_factor=0.0, verbose=True, float_ops=False):
         '''
         Parameters:
             model: input model to be quantized
@@ -142,6 +144,9 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         if not verbose:
             quant_utils.print_once_dict = {'Freezing BN for subsequent epochs': None,
                                            'Freezing ranges for subsequent epochs': None}
+            
+        # Temperature logspace array for uniform shift from soft quant to hard quant
+        self.temperature_log_space = np.exp(np.linspace(np.log(1), np.log(500), self.total_epochs))
 
     def set_quant_backend(self, backend=None):
         if backend not in torch.backends.quantized.supported_engines:
@@ -171,12 +176,19 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             freeze_bn = enable_freeze_bn and ((not self.is_qat) or (self.num_epochs_tracked >= num_batch_norm_update_epochs))
             freeze_observers = enable_freeze_observer and ((self.num_epochs_tracked >= num_observer_update_epochs))
             self.freeze(freeze_bn=freeze_bn, freeze_observers=freeze_observers)
-            self.num_epochs_tracked += 1
             if (not self.is_qat) and self.bias_calibration_factor:
                 self.bias_calibration_hooks = bias_calibration.insert_bias_calibration_hooks(self.module, self.total_epochs, self.num_epochs_tracked)
             #
+            for m in self.modules():
+                if isinstance(m, fake_quant_types.SoftTanhFakeQuantize) or isinstance(m, fake_quant_types.SoftSigmoidFakeQuantize):
+                    temperature = self.temperature_log_space[self.num_epochs_tracked]
+                    m.update_temperature(temperature)
+                #
+            #
+            self.num_epochs_tracked += 1
         else:
-            self.freeze()
+            if self.num_epochs_tracked == self.total_epochs:
+                self.freeze()
             if (not self.is_qat) and self.bias_calibration_factor:
                 self.bias_calibration_hooks = bias_calibration.remove_hooks(self.module, self.bias_calibration_hooks)
             #
@@ -245,8 +257,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                 os.remove(qdq_filename)
             #
         else:
-            torch.onnx.export(model, example_inputs.to(device=device), filename, opset_version=opset_version,
-                              **export_kwargs)
+            torch.onnx.export(model, example_inputs.to(device=device), filename, opset_version=opset_version, **export_kwargs)
         #
         if simplify:
             try:

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright (c) 2018-2023, Texas Instruments
+# Copyright (c) 2018-2025, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -35,11 +35,5 @@
 python -m ensurepip --upgrade
 python -m pip install --no-input --upgrade pip setuptools
 
-echo 'Installing python packages...'
-python -m pip install --no-input -r requirements/requirements.txt
-#python -m pip install --no-input -r requirements/requirements_ti_packages.txt
-
-#echo 'installing pytorch...'
-#python -m pip install --no-input torch
 echo 'installing the pytorch model optimization toolkit...'
-python -m pip install --editable . --use-pep517
+python -m pip install --no-input --editable .
