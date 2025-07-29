@@ -28,9 +28,10 @@ relevant_df = relevant_df.drop(columns=['target_tinie_type', 'code', 'ro', 'rw',
 relevant_df = relevant_df.set_index(['model'])  # 'cycles',
 # relevant_df = relevant_df.set_index(['model', 'target', 'tinie_type'])  # 'cycles',
 
-device_list = [constants.TARGET_DEVICE_F280015, constants.TARGET_DEVICE_F28003, constants.TARGET_DEVICE_F28004,
+device_list = [constants.TARGET_DEVICE_F280013, constants.TARGET_DEVICE_F280015, constants.TARGET_DEVICE_F28003, constants.TARGET_DEVICE_F28004,
                constants.TARGET_DEVICE_F2837, constants.TARGET_DEVICE_F28P65]
 freq_MHz_dict  = {
+    constants.TARGET_DEVICE_F280013: 120,
     constants.TARGET_DEVICE_F280015: 120,
     constants.TARGET_DEVICE_F28003: 120,
     constants.TARGET_DEVICE_F28004: 100,

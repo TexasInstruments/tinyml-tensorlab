@@ -221,8 +221,8 @@ def get_task_descriptions(params):
 def get_version_descriptions(params):
     version_descriptions = {
         'version': version.get_version(),
-        'sdk_version': constants.TARGET_SDK_VERSION,
-        'sdk_release': constants.TARGET_SDK_RELEASE,
+        # 'sdk_version': constants.TARGET_SDK_VERSION_C2000,
+        # 'sdk_release': constants.TARGET_SDK_RELEASE_C2000,
     }
     return version_descriptions
 
@@ -333,6 +333,9 @@ These are the devices that are supported currently. As additional devices are su
 ### {constants.TARGET_DEVICE_F28003}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28003}
 
+### {constants.TARGET_DEVICE_F280013}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013}
+
 ### {constants.TARGET_DEVICE_F280015}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015}
 
@@ -362,7 +365,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 

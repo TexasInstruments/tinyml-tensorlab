@@ -71,7 +71,7 @@ Additionally, we reduced the number of variables from the original 30 to just 5 
 - **Reactive Power**  
 - **Phase**
 
-From these selected classes, we created the **train**, **validation**, and **test** datasets and structured the data to make it compatible with **TinyML ModelMaker** for classification tasks. You can access the refined dataset as a ZIP file [here](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip).
+From these selected classes, we created the **train**, **validation**, and **test** datasets and structured the data to make it compatible with **TinyML ModelMaker** for classification tasks. You can access the refined dataset as a ZIP file [here](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip).
 
 ## Usage in TinyML ModelMaker
 

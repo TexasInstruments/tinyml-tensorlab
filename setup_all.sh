@@ -64,7 +64,7 @@ echo "cloning/updating done."
 # upgrade pip
 python -m ensurepip --upgrade
 python -m pip install --no-input --upgrade pip setuptools
-python -m pip install --no-input --upgrade wheel # cython numpy==1.26.4
+python -m pip install --no-input --upgrade wheel
 
 #################################################################################
 # install code gen tools
@@ -82,18 +82,20 @@ echo "installing repositories..."
 
 echo "installing: tinyml-modeloptimization"
 cd ${PARENT_DIR}/tinyml-modeloptimization/torchmodelopt
-./setup.sh
-cd ..
+echo 'installing as a local module'
+python -m pip install --no-input --editable .
 
 echo "installing: tinyml-tinyverse"
 cd ${PARENT_DIR}/tinyml-tinyverse
 # setup_cpu.sh
 # Uncomment below line and comment the above line to install GPU version of torch
-./setup.sh
+#./setup.sh
+python -m pip install --no-input --editable .
 
 echo "installing tinyml-modelmaker"
 cd ${PARENT_DIR}/tinyml-modelmaker
-./setup.sh
+echo 'Installing as a local module'
+python -m pip install --no-input --editable .
 
 #################################################################################
 ls -d ${PARENT_DIR}/tinyml-*

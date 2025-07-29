@@ -2,7 +2,7 @@
 
 ### To add a model, the following guide will help you
 - The model needs to be added to TinyVerse
-- Say for example, to add a model for audio tasks
+- Say for example, to add a model for any task
 - Head over to `<root>/tinyml-tinyverse/tinyml_tinyverse/common/models`
 - In the directory, add a `<model_name>.py` file or add the model to any of the existing `generic_*_models.py`
 - and add the corresponding model name to `__init__.py` in the `model_dict`
@@ -16,4 +16,4 @@
 - Head over to `<root>/tinyml-modelmaker/tinyml_modelmaker/ai_modules/common/timeseries/training/tinyml_tinyverse/`
 - Note: In the above path `timeseries` needs to be replaced with the respective ai_module, i.e `audio` or `vision` etc
 - In case the added model is for a classification task, then go to the script: Eg.: `timeseries_classification.py` 
-- Add the model details under `model_urls`, `_model_descriptions` and `enabled_models_list`
+- Add the model details under `_model_descriptions` and `enabled_models_list`

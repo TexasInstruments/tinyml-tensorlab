@@ -54,21 +54,21 @@ pip install requests pandas
 
 # Motivation for the Example
 
-The `config_timeseries_classification_wisdm.yaml` file is used to configure the parameters for pre_processing, training, testing, compilation of a timeseries classification model on the WISDM dataset.
+The `config_timeseries_classification_wisdm.yaml` file is used to configure the parameters for data_processing_feature_extraction, training, testing, compilation of a timeseries classification model on the WISDM dataset.
 
 The following example of wisdm dataset is provided to 
 - **Showcase the support for residual connections in ml model**
-    - tinyml-tinyverse/tinyml_tinyverse/common/models/generic_models.py: `RES_CNN_TS_GEN_BASE_3K`
-    - RES_CNN_TS_GEN_BASE_3K is the class name present in generic_models.py and can be called using the model_name Res_TimeSeries_Generic_3k_t in yaml configuration.
+    - tinyml-tinyverse/tinyml_tinyverse/common/models/generic_models.py: `RES_CAT_CNN_TS_GEN_BASE_3K`
+    - RES_CAT_CNN_TS_GEN_BASE_3K is the class name present in generic_models.py and can be called using the model_name Res_Cat_TimeSeries_Generic_3k_t in yaml configuration.
 - **Using model_config to change model parameters**
     - model_config: 'examples/branched_model_parameters/residual_network_config.yaml'
     - It can be used to configure parameters related to model
 
 ## Model & Configuration
 
-### Res_TimeSeries_Generic_3k_t Model
+### Res_Cat_TimeSeries_Generic_3k_t Model
 <p align="center">  
-    <img src="readme/model.onnx.png" width="180" alt="Residual Connections ONNX Model">
+    <img src="readme/model_onnx.png" width="180" alt="Residual Connections ONNX Model">
 </p>
 
 The model architecture includes input batch normalization and two branches with customizable channel convolution layers. The outputs of the two branches are concatenated and passed through a pooling function. The resulting layer is then flattened and fed into a fully connected layer to produce the final output.
@@ -78,8 +78,8 @@ The initial branch consists of three convolution layers with (input_channel, out
 ### Configurable Model Params
 
 - `model_name`: Select the ml model to be used during training
-    - model_name = [ `TimeSeries_Generic_1k_t`, `Res_TimeSeries_Generic_3k_t`, `TimeSeries_Generic_13k_t` ]
-- `model_config`: Configure the model parameters for `Res_TimeSeries_Generic_3k_t` using the yaml file `residual_network_config.yaml`
+    - model_name = [ `TimeSeries_Generic_1k_t`, `Res_Cat_TimeSeries_Generic_3k_t`, `TimeSeries_Generic_13k_t` ]
+- `model_config`: Configure the model parameters for `Res_Cat_TimeSeries_Generic_3k_t` using the yaml file `residual_network_config.yaml`
     - `out_channel_layer1`: out features of the first convolution layer 
     - `out_channel_layer2`: out features of the second convolution layer
     - `out_channel_layer3`: out features of the third convolution layer
@@ -92,13 +92,13 @@ run_tinyml_modelmaker.sh F28P55 examples/branched_model_parameters/config_timese
 ```
 ## Comparison of models
 
-| model_name                    | # Parameters  | Accuracy  | AUC-ROC-Score |
-| :---                          | :----------:  | :----:    | :-----------: |
-| TimeSeries_Generic_1k_t       | 1,316         | 94.92%    |    0.995      |
-| Res_TimeSeries_Generic_3k_t   | 3,132         | 93.84%    |    0.965      |
-| TimeSeries_Generic_13k_t      | 14,124        | 94.45%    |    0.987      |
+| model_name                        | # Parameters  | Accuracy  | AUC-ROC-Score |
+| :---                              | :----------:  | :----:    | :-----------: |
+| TimeSeries_Generic_1k_t           | 1,316         | 94.92%    |    0.995      |
+| Res_Cat_TimeSeries_Generic_3k_t   | 3,132         | 93.84%    |    0.965      |
+| TimeSeries_Generic_13k_t          | 14,124        | 94.45%    |    0.987      |
 
-** The purpose of this example is to demonstrate the support for residual connections and not to showcase that the Res_TimeSeries_Generic_3k_t model is better than the rest.
+** The purpose of this example is to demonstrate the support for residual connections and not to showcase that the Res_Cat_TimeSeries_Generic_3k_t model is better than the rest.
 
 
 <hr>
@@ -106,3 +106,4 @@ run_tinyml_modelmaker.sh F28P55 examples/branched_model_parameters/config_timese
 ### Version History:
 
 [28th Feb 2025]: Compatible with v1.0 of Tiny ML Modelmaker
+[10th June 2025]: Compatible with v1.0 of Tiny ML Modelmaker

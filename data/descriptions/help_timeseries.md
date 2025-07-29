@@ -18,43 +18,43 @@ These are the devices that are supported currently. As additional devices are su
 * Product information: https://www.ti.com/product/TMS320F28P550SJ
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 05_04_00
+* SDK release: 06_00_00
 
 ### F28P65
 * Product information: https://www.ti.com/product/TMS320F28P650DK
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 05_04_00
+* SDK release: 06_00_00
 
 ### F2837
 * Product information: https://www.ti.com/product/TMS320F28377D
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 05_04_00
+* SDK release: 06_00_00
 
 ### F28004
 * Product information: https://www.ti.com/product/TMS320F280049C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 05_04_00
+* SDK release: 06_00_00
 
 ### F28003
 * Product information: https://www.ti.com/product/TMS320F280039C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 05_04_00
+* SDK release: 06_00_00
+
+### F280013
+* Product information: https://www.ti.com/product/TMS320F2800137
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: 06_00_00
 
 ### F280015
 * Product information: https://www.ti.com/product/TMS320F2800157
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 05_04_00
-
-### MSPM0G3507
-* Product information: https://www.ti.com/product/MSPM0G3507
-* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507
-* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: 2_05_00_05
+* SDK release: 06_00_00
 
 ## Additional information
 
@@ -83,7 +83,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 

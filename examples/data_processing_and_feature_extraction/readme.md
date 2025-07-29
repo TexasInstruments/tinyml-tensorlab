@@ -15,7 +15,7 @@ The dataset consists of measurements from a vibration sensor along _3 axes_ doma
 5. **No Lubrication**<br>
 6. **Localized Fault**<br>
 
-This dataset is already formatted according to TinyML Modelmaker needs. The link to the dataset can be found [here](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip).
+This dataset is already formatted according to TinyML Modelmaker needs. The link to the dataset can be found [here](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip).
 
 ## Usage in TinyML ModelMaker
 

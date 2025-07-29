@@ -28,7 +28,7 @@ data_processing_feature_extraction:
 training:
     # enable/disable training
     enable: True #False
-    model_name: 'Res_Slice_TimeSeries_Generic_3k_t'
+    model_name: 'Res_Cat_TimeSeries_Generic_3k_t'
     num_gpus: 0
 
 testing:

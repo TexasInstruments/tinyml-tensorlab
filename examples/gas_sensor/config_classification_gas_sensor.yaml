@@ -4,33 +4,31 @@ common:
     task_type: 'generic_timeseries_classification'
     target_device: 'F28P55'
     run_name: '{date-time}/{model_name}'
-
 dataset:
     # enable/disable dataset loading
     enable: True #False
-    dataset_name: wisdm_example
-    input_data_path: 'examples/branched_model_parameters/wisdm_dataset.zip'
+    dataset_name: gas_sensor
+    input_data_path: examples/gas_sensor/gas_sensor_dataset.zip
+    split_type: within_files
 
 data_processing_feature_extraction: # One or more can be cascaded in the list
-    # transforms: 'DownSample SimpleWindow'
     data_proc_transforms: [SimpleWindow]
     # SimpleWindow
-    frame_size: 128
-    stride_size: 0.01
-    variables: 3
+    frame_size: 192
+    stride_size: 0.02
+    variables: 10
+    scale: 0.00390625 # 1/256
 
 training:
     # enable/disable training
     enable: True #False
-    model_name: 'Res_Cat_TimeSeries_Generic_3k_t'
-    model_config: 'examples/branched_model_parameters/residual_network_config.yaml'
-    batch_size: 32
-    training_epochs: 10
-    num_gpus: 0
+    model_name: 'TimeSeries_Generic_1k_t'
+    num_gpus: 0  # 1
+    epochs: 20
+    output_dequantize: False # True
 
 testing:
     enable: True
-    skip_train: False  # True
 
 compilation:
     # enable/disable compilation

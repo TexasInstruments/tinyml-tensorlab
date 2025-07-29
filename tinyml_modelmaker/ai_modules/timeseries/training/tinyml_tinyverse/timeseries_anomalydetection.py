@@ -30,6 +30,7 @@
 
 import os
 import shutil
+from copy import deepcopy
 
 import torch.backends.mps
 
@@ -42,42 +43,54 @@ import tinyml_modelmaker
 from ..... import utils
 from ... import constants
 from .device_run_info import DEVICE_RUN_INFO
-# Let the default model device run info dict be blank
-MOD_DEV_RUN = dict(inference_time_us='TBD', flash='TBD', sram='TBD')
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
 
-# tinyml_tinyverse_path = os.path.join(repo_parent_path, 'tinyml-tinyverse')
-
-model_urls = {
-    'TimeSeries_Generic_AD_16k_t': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_AD_4k_t': {'download_url': '', 'download_path': '', },
-    'TimeSeries_Generic_AD_1k_t': {'download_url': '', 'download_path': '', },
-}
-
+# Let the default model device run info dict be blank
+MOD_DEV_RUN = dict(inference_time_us='TBD', flash='TBD', sram='TBD')
 
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
+template_model_description = dict(
+    common=dict(
+        task_category=constants.TASK_CATEGORY_TS_ANOMALYDETECTION,
+        task_type=constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+        generic_model=True,
+        model_details='',
+    ),
+    download=dict(download_url='', download_path=''),
+    training=dict(
+        quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
+        with_input_batchnorm=True,
+        dataset_loader='GenericTSDatasetAD',
+        training_backend='tinyml_tinyverse',
+        model_training_id='',
+        model_name='',
+        learning_rate=2e-3,
+        model_spec=None,
+        batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION],
+        target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None),},
+        training_devices={constants.TRAINING_DEVICE_CPU: True, constants.TRAINING_DEVICE_CUDA: True, constants.TRAINING_DEVICE_MPS: True,},
+    ),
+    compilation=dict()
+)
 _model_descriptions = {
     # Regression Models
-    'TimeSeries_Generic_AD_16k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_ANOMALYDETECTION,
-            task_type=constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_AD_16k_t'],
+    'TimeSeries_Generic_AD_16k_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Anomaly Detection Model with 16k params. 4 Conv+BatchNorm+Relu layers and then inversion of the same'),
         'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            dataset_loader='GenericTSDatasetAD',
-            training_backend='tinyml_tinyverse',
             model_training_id='AE_CNN_TS_GEN_BASE_16K',
             model_name='TimeSeries_Generic_AD_16k_t',
-            learning_rate=2e-3,
-            model_spec=None,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION],
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
                 constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
                 constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
                 constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
@@ -85,32 +98,15 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
             },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-				constants.TRAINING_DEVICE_MPS: True,
-            }
         ),
-        'compilation': dict()
-    },
-    'TimeSeries_Generic_AD_4k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_ANOMALYDETECTION,
-            task_type=constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_AD_4k_t'],
+    }),
+    'TimeSeries_Generic_AD_4k_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Anomaly Detection Model with 4k params. 3 Conv+BatchNorm+Relu layers and then inversion of the same'),
         'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            dataset_loader='GenericTSDatasetAD',
-            training_backend='tinyml_tinyverse',
             model_training_id='AE_CNN_TS_GEN_BASE_4K',
             model_name='TimeSeries_Generic_AD_4k_t',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION],
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
                 constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
                 constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
                 constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
@@ -118,32 +114,15 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
             },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-				constants.TRAINING_DEVICE_MPS: True,
-            }
         ),
-        'compilation': dict()
-    },
-    'TimeSeries_Generic_AD_1k_t': {
-        'common': dict(
-            task_category=constants.TASK_CATEGORY_TS_ANOMALYDETECTION,
-            task_type=constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
-            generic_model=True,
-        ),
-        'download': model_urls['TimeSeries_Generic_AD_1k_t'],
+    }),
+    'TimeSeries_Generic_AD_1k_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Anomaly Detection Model with 1k params. 3 Conv+BatchNorm+Relu layers and then inversion of the same. Small Channel width.'),
         'training': dict(
-            quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-            with_input_batchnorm=True,
-            dataset_loader='GenericTSDatasetAD',
-            training_backend='tinyml_tinyverse',
             model_training_id='AE_CNN_TS_GEN_BASE_1K',
             model_name='TimeSeries_Generic_AD_1k_t',
-            learning_rate=2e-3,
-            model_spec=None,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION],
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
                 constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
                 constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
                 constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
@@ -151,14 +130,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
             },
-            training_devices={
-                constants.TRAINING_DEVICE_CPU: True,
-                constants.TRAINING_DEVICE_CUDA: True,
-				constants.TRAINING_DEVICE_MPS: True,
-            }
         ),
-        'compilation': dict()
-    },
+    }),
 }
 
 enabled_models_list = [
