@@ -3,7 +3,7 @@
 If you want to use the repository as it is, i.e a Python package, then you can simply install this as a pip installable package:
 
 ```commandline
-pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@main#subdirectory=tinyml-modeloptimization/torchmodelopt
+pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.1#subdirectory=tinyml-modeloptimization/torchmodelopt
 ```
 
 To setup the repository for development, this python package and the dependencies can be installed by using the setup file.
