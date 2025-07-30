@@ -525,7 +525,11 @@ def main(gpu, args):
             utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir, opset_version=args.opset_version, quantization=args.quantization, generic_model=args.generic_model)
             return
 
-    model.to(device)
+    try:
+        model.to(device)
+    except AssertionError as e:
+        logger.error(f"Input options have asked to run on GPU, but no GPU was found. Either change num_gpus to 0 or verify that your GPU works. Error raised: {e}")
+        sys.exit(1)
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
 
     model_without_ddp = model
