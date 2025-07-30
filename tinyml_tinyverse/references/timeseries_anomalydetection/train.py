@@ -432,7 +432,11 @@ def main(gpu, args):
                                generic_model=args.generic_model)
             return
 
-    model.to(device)
+    try:
+        model.to(device)
+    except AssertionError as e:
+        logger.error(f"Input options have asked to run on GPU, but no GPU was found. Either change num_gpus to 0 or verify that your GPU works. Error raised: {e}")
+        sys.exit(1)
     criterion = nn.MSELoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
     optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
     lr_scheduler = utils.init_lr_scheduler(
