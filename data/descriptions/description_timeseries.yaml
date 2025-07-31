@@ -229,37 +229,37 @@ model_descriptions:
         F280013:
           flash: 3576
           inference_time_us: 1562
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 2280
         F280015:
           flash: 3576
           inference_time_us: 1562
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 2280
         F28003:
           flash: 3576
           inference_time_us: 1562
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 2280
         F28004:
           flash: 3576
           inference_time_us: 1302
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 2280
         F2837:
           flash: 3576
           inference_time_us: 1562
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 2280
         F28P55:
           flash: 3179
           inference_time_us: 395
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 2370
         F28P65:
           flash: 3576
           inference_time_us: 2604
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 2280
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -436,37 +436,37 @@ model_descriptions:
         F280013:
           flash: 1619
           inference_time_us: 294
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 1026
         F280015:
           flash: 1619
           inference_time_us: 294
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 1026
         F28003:
           flash: 1619
           inference_time_us: 294
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 1026
         F28004:
           flash: 1619
           inference_time_us: 245
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 1026
         F2837:
           flash: 1619
           inference_time_us: 294
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 1026
         F28P55:
           flash: 2181
           inference_time_us: 178
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 858
         F28P65:
           flash: 1619
           inference_time_us: 490
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 1026
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -644,37 +644,37 @@ model_descriptions:
         F280013:
           flash: 1797
           inference_time_us: 542
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1538
         F280015:
           flash: 1797
           inference_time_us: 542
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1538
         F28003:
           flash: 1797
           inference_time_us: 542
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1538
         F28004:
           flash: 1797
           inference_time_us: 452
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1538
         F2837:
           flash: 1797
           inference_time_us: 542
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1538
         F28P55:
           flash: 2285
           inference_time_us: 234
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1606
         F28P65:
           flash: 1797
           inference_time_us: 904
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1538
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -851,37 +851,37 @@ model_descriptions:
         F280013:
           flash: 1866
           inference_time_us: 628
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 1538
         F280015:
           flash: 1866
           inference_time_us: 628
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 1538
         F28003:
           flash: 1866
           inference_time_us: 628
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 1538
         F28004:
           flash: 1866
           inference_time_us: 524
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 1538
         F2837:
           flash: 1866
           inference_time_us: 628
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 1538
         F28P55:
           flash: 2623
           inference_time_us: 272
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 1606
         F28P65:
           flash: 1866
           inference_time_us: 1048
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 1538
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -1060,37 +1060,37 @@ model_descriptions:
         F280013:
           flash: 1214
           inference_time_us: 270
-          model_selection_factor: null
+          model_selection_factor: 3
           sram: 1016
         F280015:
           flash: 1214
           inference_time_us: 270
-          model_selection_factor: null
+          model_selection_factor: 3
           sram: 1016
         F28003:
           flash: 1214
           inference_time_us: 270
-          model_selection_factor: null
+          model_selection_factor: 3
           sram: 1016
         F28004:
           flash: 1214
           inference_time_us: 225
-          model_selection_factor: null
+          model_selection_factor: 3
           sram: 1016
         F2837:
           flash: 1214
           inference_time_us: 270
-          model_selection_factor: null
+          model_selection_factor: 3
           sram: 1016
         F28P55:
           flash: 1953
           inference_time_us: 159
-          model_selection_factor: null
+          model_selection_factor: 3
           sram: 1112
         F28P65:
           flash: 1214
           inference_time_us: 450
-          model_selection_factor: null
+          model_selection_factor: 3
           sram: 1016
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -1269,37 +1269,37 @@ model_descriptions:
         F280013:
           flash: 5262
           inference_time_us: 7337
-          model_selection_factor: null
+          model_selection_factor: 1
           sram: 10872
         F280015:
           flash: 5262
           inference_time_us: 7337
-          model_selection_factor: null
+          model_selection_factor: 1
           sram: 10872
         F28003:
           flash: 5262
           inference_time_us: 7337
-          model_selection_factor: null
+          model_selection_factor: 1
           sram: 10872
         F28004:
           flash: 5262
           inference_time_us: 6114
-          model_selection_factor: null
+          model_selection_factor: 1
           sram: 10872
         F2837:
           flash: 5262
           inference_time_us: 7337
-          model_selection_factor: null
+          model_selection_factor: 1
           sram: 10872
         F28P55:
           flash: 4377
           inference_time_us: 1180
-          model_selection_factor: null
+          model_selection_factor: 1
           sram: 3198
         F28P65:
           flash: 5262
           inference_time_us: 12229
-          model_selection_factor: null
+          model_selection_factor: 1
           sram: 10872
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -1478,37 +1478,37 @@ model_descriptions:
         F280013:
           flash: 3069
           inference_time_us: 400
-          model_selection_factor: null
+          model_selection_factor: 2
           sram: 656
         F280015:
           flash: 3069
           inference_time_us: 400
-          model_selection_factor: null
+          model_selection_factor: 2
           sram: 656
         F28003:
           flash: 3069
           inference_time_us: 400
-          model_selection_factor: null
+          model_selection_factor: 2
           sram: 656
         F28004:
           flash: 3069
           inference_time_us: 334
-          model_selection_factor: null
+          model_selection_factor: 2
           sram: 656
         F2837:
           flash: 3069
           inference_time_us: 400
-          model_selection_factor: null
+          model_selection_factor: 2
           sram: 656
         F28P55:
           flash: 2754
           inference_time_us: 221
-          model_selection_factor: null
+          model_selection_factor: 2
           sram: 1116
         F28P65:
           flash: 3069
           inference_time_us: 668
-          model_selection_factor: null
+          model_selection_factor: 2
           sram: 656
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -1684,37 +1684,37 @@ model_descriptions:
         F280013:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 4
+          model_selection_factor: 2
           sram: TBD
         F280015:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 4
+          model_selection_factor: 2
           sram: TBD
         F28003:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 4
+          model_selection_factor: 2
           sram: TBD
         F28004:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 4
+          model_selection_factor: 2
           sram: TBD
         F2837:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 4
+          model_selection_factor: 2
           sram: TBD
         F28P55:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 4
+          model_selection_factor: 2
           sram: TBD
         F28P65:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 4
+          model_selection_factor: 2
           sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -1891,37 +1891,37 @@ model_descriptions:
         F280013:
           flash: 17343
           inference_time_us: 15212
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 4160
         F280015:
           flash: 17343
           inference_time_us: 15212
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 4160
         F28003:
           flash: 17343
           inference_time_us: 15212
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 4160
         F28004:
           flash: 17343
           inference_time_us: 12676
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 4160
         F2837:
           flash: 17343
           inference_time_us: 15212
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 4160
         F28P55:
           flash: 11081
           inference_time_us: 2156
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 3218
         F28P65:
           flash: 17343
           inference_time_us: 25353
-          model_selection_factor: 0
+          model_selection_factor: 1
           sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -2101,37 +2101,37 @@ model_descriptions:
         F280013:
           flash: 3242
           inference_time_us: 9256
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 12320
         F280015:
           flash: 3242
           inference_time_us: 9256
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 12320
         F28003:
           flash: 3242
           inference_time_us: 9256
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 12320
         F28004:
           flash: 3242
           inference_time_us: 7713
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 12320
         F2837:
           flash: 3242
           inference_time_us: 9256
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 12320
         F28P55:
           flash: 3467
           inference_time_us: 1257
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 6250
         F28P65:
           flash: 3242
           inference_time_us: 15426
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 12320
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -2309,37 +2309,37 @@ model_descriptions:
         F280013:
           flash: 6433
           inference_time_us: 4002
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1936
         F280015:
           flash: 6433
           inference_time_us: 4002
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1936
         F28003:
           flash: 6433
           inference_time_us: 4002
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1936
         F28004:
           flash: 6433
           inference_time_us: 3335
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1936
         F2837:
           flash: 6433
           inference_time_us: 4002
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1936
         F28P55:
           flash: 5527
           inference_time_us: 751
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1690
         F28P65:
           flash: 6433
           inference_time_us: 6670
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 1936
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -2516,37 +2516,37 @@ model_descriptions:
         F280013:
           flash: 8302
           inference_time_us: 20469
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 16416
         F280015:
           flash: 8302
           inference_time_us: 20469
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 16416
         F28003:
           flash: 8302
           inference_time_us: 20469
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 16416
         F28004:
           flash: 8302
           inference_time_us: 17058
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 16416
         F2837:
           flash: 8302
           inference_time_us: 20469
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 16416
         F28P55:
           flash: 6709
           inference_time_us: 2235
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 8364
         F28P65:
           flash: 8302
           inference_time_us: 34116
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 16416
       train_output_path: null
       training_backend: tinyml_tinyverse

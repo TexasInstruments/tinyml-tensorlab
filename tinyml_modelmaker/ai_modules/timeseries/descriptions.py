@@ -108,9 +108,9 @@ def set_default_flash(model_descriptions):
 
 
 def set_model_selection_factor(model_descriptions):
-    for m in model_descriptions.values():
-        for target_device in m.training.target_devices.keys():
-            m.training.target_devices[target_device].model_selection_factor = None
+    # for m in model_descriptions.values():
+    #     for target_device in m.training.target_devices.keys():
+    #         m.training.target_devices[target_device].model_selection_factor = None
     task_types = set()
     for m in model_descriptions.values():
         if isinstance(m.common.task_type, list):
@@ -121,7 +121,7 @@ def set_model_selection_factor(model_descriptions):
     target_devices = set([t for t_list in target_devices for t in t_list])
     for target_device in target_devices:
         for task_type in task_types:
-            model_desc_list = [m for m in model_descriptions.values() if m.common.task_type == task_type]
+            model_desc_list = [m for m in model_descriptions.values() if task_type in m.common.task_type]
             model_desc_list = [m for m in model_desc_list if target_device in list(m.training.target_devices.keys())]
             inference_time_us = [m.training.target_devices[target_device].inference_time_us for m in
                                          model_desc_list]
