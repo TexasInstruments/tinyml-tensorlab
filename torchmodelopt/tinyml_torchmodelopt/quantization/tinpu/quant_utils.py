@@ -240,9 +240,12 @@ class TINPUQuantizedReplacementUtils():
 
     def from_q_qbn(self, start: Node, end: Node):
         # Quantized Batch Normalization Module
+        # x = torch.round(x / q_scale) * q_scale    qdq of x
+        # x = (x + bn_offset) * bn_scale            bn of x
         qbn_module = self._get_named_modules()[end.target]
         bn_sigma = torch.sqrt(qbn_module.running_var + qbn_module.eps)
         q_scale = getattr(self.module, start.args[1].target)
+        q_zp = getattr(self.module, start.args[2].target)
         qdq_module = QDQModule(1/q_scale, q_scale)
 
         scale = qbn_module.scale
@@ -253,13 +256,21 @@ class TINPUQuantizedReplacementUtils():
         combined_weight = (qbn_module.weight / bn_sigma)
         # then modify the weight by output scale so that the output is converted to output scale
         bn_scale = combined_weight / scale
-        # OSS Module
-        # for BN represented as offset, scale and shift, the scale can be an 8bit quantity        
-        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, int_bias=False, num_bits_scale=8)
+        round_offset = scale / 2 / combined_weight
+        num_bits_scale = 8
+        if len(self.float_ops):
+            bn_offset = bn_offset / q_scale - q_zp
+            bn_scale = bn_scale * q_scale
+            round_offset = round_offset / q_scale
+            num_bits_scale = 32
+            oss_offset, oss_scale, oss_shift = torch.tensor([q_scale / 2 + q_zp * q_scale]), torch.tensor([1 / q_scale]), torch.tensor([1])
+            qdq_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 2**(self.activation_bw) - 1, ndim=4, dim=1)
+        # OSS Module for First BN represented as offset, scale and shift, the scale can be an 8bit quantity
+        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, round_offset, int_bias=False, num_bits_scale=num_bits_scale)
         normalize_input = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -2**(self.activation_bw - 1), 2**(self.activation_bw - 1) - 1, ndim=4, dim=1)
         if len(self.float_ops):
-            # qbn_module = torch.nn.Sequential(qdq_module, normalize_input)
-            qbn_module = normalize_input
+            # qdq_module = QDQModule(1/q_scale, 1)
+            qbn_module = torch.nn.Sequential(qdq_module, normalize_input)
         else:
             qbn_module = normalize_input
         # Remove the scale, zero_point, quantize method and bn layer with OSS Module
@@ -475,13 +486,15 @@ class TINPUQuantizedReplacementUtils():
         zero_point = getattr(self.module, start.args[2].target)
         # OSS Module
         oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(zero_point*0.0, 1/scale, num_bits_scale=self.num_bits_scale)
-        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -(2**(self.activation_bw - 1)), 2**(self.activation_bw - 1) - 1, ndim=4, dim=1)
+        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -(2**(self.activation_bw - 1)), 2**(self.activation_bw - 1) - 1, ndim=2, dim=1)
         # Get the module present after quantization
         if end.target in named_modules:
             # If flatten module is present in named_modules, we use the module
             replace_module = named_modules[end.target]
         # Sequential Module comprising of OSS and Replacement Module
-        seq_module = torch.nn.Sequential(oss_module, replace_module)
+        seq_module = replace_module
+        if self.float_ops.__len__():
+            seq_module = torch.nn.Sequential(oss_module, replace_module)
         replace_call_function_or_method(self.module, start, end, seq_module, self._get_module_num())      
         return None
     

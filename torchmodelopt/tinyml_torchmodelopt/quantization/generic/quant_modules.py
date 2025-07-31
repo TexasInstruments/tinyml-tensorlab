@@ -1,7 +1,7 @@
 import torch
 
 class GENERICOffsetScaleShift(torch.nn.Module):
-    def __init__(self, offset, mult, shift_mult, scale, zp, quant_min, quant_max, quantize_per_channel=False, use_floor=True, ndim=4, dim=1):
+    def __init__(self, q_scale, q_zp, offset, mult, shift_mult, scale, zp, quant_min, quant_max, quantize_per_channel=False, use_floor=True, ndim=4, dim=1):
         super().__init__()
         self.quant_min = quant_min
         self.quant_max = quant_max
@@ -9,6 +9,8 @@ class GENERICOffsetScaleShift(torch.nn.Module):
         self.use_floor = use_floor
         self.scale = scale
         self.zp = zp
+        self.q_scale = q_scale
+        self.q_zp = q_zp
         if ndim == 4 and dim == 1:
             self.register_buffer('offset', offset.reshape(1, -1, 1, 1))
             self.register_buffer('mult', mult.reshape(1, -1, 1, 1))
@@ -28,6 +30,8 @@ class GENERICOffsetScaleShift(torch.nn.Module):
         return f'offset={self.offset}, mult={self.mult}, shift={self.shift_mult}, quant_min={self.quant_min}, quant_max={self.quant_max}'
 
     def forward(self, x):
+        x = torch.quantize_per_tensor(x, self.q_scale, self.q_zp, torch.quint8)
+        x = x.dequantize()
         y = (x + self.offset) * self.mult
         y = y * self.shift_mult
         if self.use_floor:
