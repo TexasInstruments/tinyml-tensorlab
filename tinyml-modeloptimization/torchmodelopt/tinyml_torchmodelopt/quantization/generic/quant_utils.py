@@ -245,6 +245,8 @@ class GENERICQuantizedReplacementUtils():
         # Quantized Batch Normalization Module
         qbn_module = self._get_named_modules()[end.target]
         bn_sigma = torch.sqrt(qbn_module.running_var + qbn_module.eps)
+        q_scale = getattr(self.module, start.args[1].target)
+        q_zp = getattr(self.module, start.args[2].target)
 
         scale = qbn_module.scale
         zero_point = qbn_module.zero_point
@@ -256,8 +258,8 @@ class GENERICQuantizedReplacementUtils():
         bn_scale = combined_weight
         # OSS Module
         # for BN represented as offset, scale and shift, the scale can be an 8bit quantity        
-        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, num_bits_scale=8)
-        normalize_input = GENERICOffsetScaleShift(oss_offset, oss_scale, oss_shift, scale, zero_point, -2**(self.activation_bw - 1), 2**(self.activation_bw - 1) - 1, ndim=4, dim=1)
+        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, int_bias=False, num_bits_scale=8)
+        normalize_input = GENERICOffsetScaleShift(q_scale, q_zp, oss_offset, oss_scale, oss_shift, scale, zero_point, -2**(self.activation_bw - 1), 2**(self.activation_bw - 1) - 1, ndim=4, dim=1)
         qbn_module = torch.nn.Sequential(normalize_input)
         # Remove the scale, zero_point, quantize method and bn layer with OSS Module
         replace_call_function_or_method(self.module, start, end, qbn_module, self._get_module_num())
