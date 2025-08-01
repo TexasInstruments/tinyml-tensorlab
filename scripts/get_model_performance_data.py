@@ -21,12 +21,10 @@ relevant_df['target_tinie_type'] = relevant_df['target_tinie_type'].str.split('_
 relevant_df[['target', 'tinie_type']] = relevant_df['target_tinie_type'].str.split('_', expand=True)
 
 # Do a few calculations and add relevant columns
-# relevant_df['inference_time_us'] = relevant_df['cycles'] // 150  # P55 by default runs at 150MHz, dividing by 150 because we report time in us (not seconds)
-relevant_df['flash'] = relevant_df['ro'] + relevant_df['code']
-relevant_df['sram'] = relevant_df['rw']
+relevant_df['flash'] = (relevant_df['ro'] + relevant_df['code']).astype(object)
+relevant_df['sram'] = relevant_df['rw'].astype(object)
 relevant_df = relevant_df.drop(columns=['target_tinie_type', 'code', 'ro', 'rw', 'total'])
 relevant_df = relevant_df.set_index(['model'])  # 'cycles',
-# relevant_df = relevant_df.set_index(['model', 'target', 'tinie_type'])  # 'cycles',
 
 device_list = [constants.TARGET_DEVICE_F280013, constants.TARGET_DEVICE_F280015, constants.TARGET_DEVICE_F28003, constants.TARGET_DEVICE_F28004,
                constants.TARGET_DEVICE_F2837, constants.TARGET_DEVICE_F28P65]
@@ -40,22 +38,16 @@ freq_MHz_dict  = {
     constants.TARGET_DEVICE_F28P55: 150,
 }
 
-scaling_factors_dict = {k:v/freq_MHz_dict[constants.TARGET_DEVICE_F28P55] for k, v in freq_MHz_dict.items()}
-
-
-# Convert CPU Cycles to microseconds. Data was collected by running on F28P55
-relevant_df['inference_time_us'] = (relevant_df['cycles']/freq_MHz_dict[constants.TARGET_DEVICE_F28P55]).astype(int)
-relevant_df = relevant_df.drop(columns=['cycles'])
-
 hard_tinie_df = relevant_df.loc[relevant_df.tinie_type=='hard']
+hard_tinie_df['inference_time_us'] = (hard_tinie_df['cycles']/freq_MHz_dict[constants.TARGET_DEVICE_F28P55]).astype(int).astype(object)
 hard_tinie_df['device'] = constants.TARGET_DEVICE_F28P55
 
 soft_tinie_df = relevant_df.loc[relevant_df.tinie_type=='soft']
 soft_tinie_df['device'] = [device_list for i in soft_tinie_df.index]
 soft_tinie_df = soft_tinie_df.explode('device')
-soft_tinie_df['inference_time_us'] = (soft_tinie_df['inference_time_us'] * soft_tinie_df['device'].map(scaling_factors_dict)).astype(int)
+soft_tinie_df['inference_time_us'] = (soft_tinie_df['cycles'] / soft_tinie_df['device'].map(freq_MHz_dict)).astype(int).astype(object)
 
-device_info_df = pd.concat((soft_tinie_df, hard_tinie_df)).drop(columns=['tinie_type', 'target']).reset_index()  # .reset_index().set_index(['model', 'device'])
+device_info_df = pd.concat((soft_tinie_df, hard_tinie_df)).drop(columns=['tinie_type', 'target'])  # .reset_index().set_index(['model', 'device'])
 device_info_dict = {model: {device: {col: group[col].values[0] for col in ['inference_time_us', 'sram', 'flash']} for device, group in sub_group.groupby('device')} for model, sub_group in device_info_df.groupby('model')}
 """
 The above dict comprehension is to get this structure
@@ -67,5 +59,11 @@ The above dict comprehension is to get this structure
                                 'inference_time_us': 552,
                                 'sram': 1158}, ...
 """
-print("Please copy the below dictionary to the relevant py script (Example: device_run_info.py)")
+print("Please copy the below dictionary to the relevant py script (Example: device_run_info.py).")
 print(PrettyPrinter(depth=3).pprint(device_info_dict))
+'''
+You may have use the regex: 
+,\n\s*'i -> , 'i
+,\n\s*'s -> , 's
+ 
+'''
