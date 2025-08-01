@@ -73,37 +73,37 @@
           "F280013":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":12676,
+            "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":25353,
+            "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
@@ -313,39 +313,39 @@
         "target_devices":{
           "F280013":{
             "model_selection_factor":1,
-            "flash":8302,
-            "inference_time_us":20469,
-            "sram":16416
+            "flash":11331,
+            "inference_time_us":11091,
+            "sram":3264
           },
           "F280015":{
             "model_selection_factor":1,
-            "flash":8302,
-            "inference_time_us":20469,
-            "sram":16416
+            "flash":11331,
+            "inference_time_us":11091,
+            "sram":3264
           },
           "F28003":{
             "model_selection_factor":1,
-            "flash":8302,
-            "inference_time_us":20469,
-            "sram":16416
+            "flash":11331,
+            "inference_time_us":11091,
+            "sram":3264
           },
           "F28004":{
             "model_selection_factor":1,
-            "flash":8302,
-            "inference_time_us":17058,
-            "sram":16416
+            "flash":11331,
+            "inference_time_us":13310,
+            "sram":3264
           },
           "F2837":{
             "model_selection_factor":1,
-            "flash":8302,
-            "inference_time_us":20469,
-            "sram":16416
+            "flash":11331,
+            "inference_time_us":11091,
+            "sram":3264
           },
           "F28P65":{
             "model_selection_factor":1,
-            "flash":8302,
-            "inference_time_us":34116,
-            "sram":16416
+            "flash":11331,
+            "inference_time_us":6655,
+            "sram":3264
           },
           "F28P55":{
             "model_selection_factor":1,
@@ -555,37 +555,37 @@
           "F280013":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":4002,
+            "inference_time_us":6254,
             "sram":1936
           },
           "F280015":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":4002,
+            "inference_time_us":6254,
             "sram":1936
           },
           "F28003":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":4002,
+            "inference_time_us":6254,
             "sram":1936
           },
           "F28004":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":3335,
+            "inference_time_us":7505,
             "sram":1936
           },
           "F2837":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":4002,
+            "inference_time_us":6254,
             "sram":1936
           },
           "F28P65":{
             "model_selection_factor":2,
             "flash":6433,
-            "inference_time_us":6670,
+            "inference_time_us":3752,
             "sram":1936
           },
           "F28P55":{
@@ -796,37 +796,37 @@
           "F280013":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":9256,
+            "inference_time_us":14463,
             "sram":12320
           },
           "F280015":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":9256,
+            "inference_time_us":14463,
             "sram":12320
           },
           "F28003":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":9256,
+            "inference_time_us":14463,
             "sram":12320
           },
           "F28004":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":7713,
+            "inference_time_us":17356,
             "sram":12320
           },
           "F2837":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":9256,
+            "inference_time_us":14463,
             "sram":12320
           },
           "F28P65":{
             "model_selection_factor":3,
             "flash":3242,
-            "inference_time_us":15426,
+            "inference_time_us":8678,
             "sram":12320
           },
           "F28P55":{
@@ -1037,37 +1037,37 @@
           "F280013":{
             "model_selection_factor":0,
             "flash":3576,
-            "inference_time_us":1562,
+            "inference_time_us":2441,
             "sram":2280
           },
           "F280015":{
             "model_selection_factor":0,
             "flash":3576,
-            "inference_time_us":1562,
+            "inference_time_us":2441,
             "sram":2280
           },
           "F28003":{
             "model_selection_factor":0,
             "flash":3576,
-            "inference_time_us":1562,
+            "inference_time_us":2441,
             "sram":2280
           },
           "F28004":{
             "model_selection_factor":0,
             "flash":3576,
-            "inference_time_us":1302,
+            "inference_time_us":2929,
             "sram":2280
           },
           "F2837":{
             "model_selection_factor":0,
             "flash":3576,
-            "inference_time_us":1562,
+            "inference_time_us":2441,
             "sram":2280
           },
           "F28P65":{
             "model_selection_factor":0,
             "flash":3576,
-            "inference_time_us":2604,
+            "inference_time_us":1464,
             "sram":2280
           },
           "F28P55":{
@@ -1278,37 +1278,37 @@
           "F280013":{
             "model_selection_factor":1,
             "flash":1866,
-            "inference_time_us":628,
+            "inference_time_us":982,
             "sram":1538
           },
           "F280015":{
             "model_selection_factor":1,
             "flash":1866,
-            "inference_time_us":628,
+            "inference_time_us":982,
             "sram":1538
           },
           "F28003":{
             "model_selection_factor":1,
             "flash":1866,
-            "inference_time_us":628,
+            "inference_time_us":982,
             "sram":1538
           },
           "F28004":{
             "model_selection_factor":1,
             "flash":1866,
-            "inference_time_us":524,
+            "inference_time_us":1179,
             "sram":1538
           },
           "F2837":{
             "model_selection_factor":1,
             "flash":1866,
-            "inference_time_us":628,
+            "inference_time_us":982,
             "sram":1538
           },
           "F28P65":{
             "model_selection_factor":1,
             "flash":1866,
-            "inference_time_us":1048,
+            "inference_time_us":589,
             "sram":1538
           },
           "F28P55":{
@@ -1519,37 +1519,37 @@
           "F280013":{
             "model_selection_factor":2,
             "flash":1797,
-            "inference_time_us":542,
+            "inference_time_us":847,
             "sram":1538
           },
           "F280015":{
             "model_selection_factor":2,
             "flash":1797,
-            "inference_time_us":542,
+            "inference_time_us":847,
             "sram":1538
           },
           "F28003":{
             "model_selection_factor":2,
             "flash":1797,
-            "inference_time_us":542,
+            "inference_time_us":847,
             "sram":1538
           },
           "F28004":{
             "model_selection_factor":2,
             "flash":1797,
-            "inference_time_us":452,
+            "inference_time_us":1017,
             "sram":1538
           },
           "F2837":{
             "model_selection_factor":2,
             "flash":1797,
-            "inference_time_us":542,
+            "inference_time_us":847,
             "sram":1538
           },
           "F28P65":{
             "model_selection_factor":2,
             "flash":1797,
-            "inference_time_us":904,
+            "inference_time_us":508,
             "sram":1538
           },
           "F28P55":{
@@ -1760,37 +1760,37 @@
           "F280013":{
             "model_selection_factor":3,
             "flash":1619,
-            "inference_time_us":294,
+            "inference_time_us":460,
             "sram":1026
           },
           "F280015":{
             "model_selection_factor":3,
             "flash":1619,
-            "inference_time_us":294,
+            "inference_time_us":460,
             "sram":1026
           },
           "F28003":{
             "model_selection_factor":3,
             "flash":1619,
-            "inference_time_us":294,
+            "inference_time_us":460,
             "sram":1026
           },
           "F28004":{
             "model_selection_factor":3,
             "flash":1619,
-            "inference_time_us":245,
+            "inference_time_us":552,
             "sram":1026
           },
           "F2837":{
             "model_selection_factor":3,
             "flash":1619,
-            "inference_time_us":294,
+            "inference_time_us":460,
             "sram":1026
           },
           "F28P65":{
             "model_selection_factor":3,
             "flash":1619,
-            "inference_time_us":490,
+            "inference_time_us":276,
             "sram":1026
           },
           "F28P55":{
@@ -2004,37 +2004,37 @@
           "F280013":{
             "model_selection_factor":2,
             "flash":1214,
-            "inference_time_us":270,
+            "inference_time_us":423,
             "sram":1016
           },
           "F280015":{
             "model_selection_factor":2,
             "flash":1214,
-            "inference_time_us":270,
+            "inference_time_us":423,
             "sram":1016
           },
           "F28003":{
             "model_selection_factor":2,
             "flash":1214,
-            "inference_time_us":270,
+            "inference_time_us":423,
             "sram":1016
           },
           "F28004":{
             "model_selection_factor":2,
             "flash":1214,
-            "inference_time_us":225,
+            "inference_time_us":508,
             "sram":1016
           },
           "F2837":{
             "model_selection_factor":2,
             "flash":1214,
-            "inference_time_us":270,
+            "inference_time_us":423,
             "sram":1016
           },
           "F28P65":{
             "model_selection_factor":2,
             "flash":1214,
-            "inference_time_us":450,
+            "inference_time_us":254,
             "sram":1016
           },
           "F28P55":{
@@ -2248,37 +2248,37 @@
           "F280013":{
             "model_selection_factor":0,
             "flash":5262,
-            "inference_time_us":7337,
+            "inference_time_us":11465,
             "sram":10872
           },
           "F280015":{
             "model_selection_factor":0,
             "flash":5262,
-            "inference_time_us":7337,
+            "inference_time_us":11465,
             "sram":10872
           },
           "F28003":{
             "model_selection_factor":0,
             "flash":5262,
-            "inference_time_us":7337,
+            "inference_time_us":11465,
             "sram":10872
           },
           "F28004":{
             "model_selection_factor":0,
             "flash":5262,
-            "inference_time_us":6114,
+            "inference_time_us":13758,
             "sram":10872
           },
           "F2837":{
             "model_selection_factor":0,
             "flash":5262,
-            "inference_time_us":7337,
+            "inference_time_us":11465,
             "sram":10872
           },
           "F28P65":{
             "model_selection_factor":0,
             "flash":5262,
-            "inference_time_us":12229,
+            "inference_time_us":6879,
             "sram":10872
           },
           "F28P55":{
@@ -2492,37 +2492,37 @@
           "F280013":{
             "model_selection_factor":1,
             "flash":3069,
-            "inference_time_us":400,
+            "inference_time_us":627,
             "sram":656
           },
           "F280015":{
             "model_selection_factor":1,
             "flash":3069,
-            "inference_time_us":400,
+            "inference_time_us":627,
             "sram":656
           },
           "F28003":{
             "model_selection_factor":1,
             "flash":3069,
-            "inference_time_us":400,
+            "inference_time_us":627,
             "sram":656
           },
           "F28004":{
             "model_selection_factor":1,
             "flash":3069,
-            "inference_time_us":334,
+            "inference_time_us":752,
             "sram":656
           },
           "F2837":{
             "model_selection_factor":1,
             "flash":3069,
-            "inference_time_us":400,
+            "inference_time_us":627,
             "sram":656
           },
           "F28P65":{
             "model_selection_factor":1,
             "flash":3069,
-            "inference_time_us":668,
+            "inference_time_us":376,
             "sram":656
           },
           "F28P55":{
@@ -2974,37 +2974,37 @@
           "F280013":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":12676,
+            "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":25353,
+            "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
@@ -3215,37 +3215,37 @@
           "F280013":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":12676,
+            "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":25353,
+            "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
@@ -3456,37 +3456,37 @@
           "F280013":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":12676,
+            "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":25353,
+            "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
@@ -3697,37 +3697,37 @@
           "F280013":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":12676,
+            "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
             "model_selection_factor":0,
             "flash":17343,
-            "inference_time_us":25353,
+            "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
@@ -3938,37 +3938,37 @@
           "F280013":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":12676,
+            "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
             "model_selection_factor":1,
             "flash":17343,
-            "inference_time_us":25353,
+            "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
@@ -4179,37 +4179,37 @@
           "F280013":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":12676,
+            "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":15212,
+            "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
             "model_selection_factor":2,
             "flash":17343,
-            "inference_time_us":25353,
+            "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
