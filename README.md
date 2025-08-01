@@ -184,7 +184,6 @@ To begin with, you can use the repo as a `developer` or `user`.
     ```powershell
     git config "--global" core.longpaths true
     cd .\tinyml-modelmaker
-    python -m pip install --no-input -r requirements.txt
     python -m pip install --editable . # --use-pep517
     ```
     * Tiny ML Modelmaker, by default installs Tiny ML Tinyverse and Tiny ML ModelOptimization repositories as a python package.
@@ -193,14 +192,11 @@ To begin with, you can use the repo as a `developer` or `user`.
       * Step 1.4: Installing tinyverse
         ```powershell
         cd ..\tinyml-tinyverse
-        python -m pip install --no-input -r requirements\requirements.txt
-        python -m pip install --no-input -r requirements\requirements_ti_packages.txt
         python -m pip install --editable .
         ```
       * Step 1.5: Installing model optimization toolkit
         ```powershell
         cd ..\tinyml-modeloptimization\torchmodelopt
-        python -m pip install --no-input -r requirements\requirements.txt
         python -m pip install --editable .
         ```
     * We can run it now!
