@@ -228,27 +228,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 3576
-          inference_time_us: 1562
+          inference_time_us: 2441
           model_selection_factor: 0
           sram: 2280
         F280015:
           flash: 3576
-          inference_time_us: 1562
+          inference_time_us: 2441
           model_selection_factor: 0
           sram: 2280
         F28003:
           flash: 3576
-          inference_time_us: 1562
+          inference_time_us: 2441
           model_selection_factor: 0
           sram: 2280
         F28004:
           flash: 3576
-          inference_time_us: 1302
+          inference_time_us: 2929
           model_selection_factor: 0
           sram: 2280
         F2837:
           flash: 3576
-          inference_time_us: 1562
+          inference_time_us: 2441
           model_selection_factor: 0
           sram: 2280
         F28P55:
@@ -258,7 +258,7 @@ model_descriptions:
           sram: 2370
         F28P65:
           flash: 3576
-          inference_time_us: 2604
+          inference_time_us: 1464
           model_selection_factor: 0
           sram: 2280
       train_output_path: null
@@ -435,27 +435,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 1619
-          inference_time_us: 294
+          inference_time_us: 460
           model_selection_factor: 3
           sram: 1026
         F280015:
           flash: 1619
-          inference_time_us: 294
+          inference_time_us: 460
           model_selection_factor: 3
           sram: 1026
         F28003:
           flash: 1619
-          inference_time_us: 294
+          inference_time_us: 460
           model_selection_factor: 3
           sram: 1026
         F28004:
           flash: 1619
-          inference_time_us: 245
+          inference_time_us: 552
           model_selection_factor: 3
           sram: 1026
         F2837:
           flash: 1619
-          inference_time_us: 294
+          inference_time_us: 460
           model_selection_factor: 3
           sram: 1026
         F28P55:
@@ -465,7 +465,7 @@ model_descriptions:
           sram: 858
         F28P65:
           flash: 1619
-          inference_time_us: 490
+          inference_time_us: 276
           model_selection_factor: 3
           sram: 1026
       train_output_path: null
@@ -643,27 +643,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 1797
-          inference_time_us: 542
+          inference_time_us: 847
           model_selection_factor: 2
           sram: 1538
         F280015:
           flash: 1797
-          inference_time_us: 542
+          inference_time_us: 847
           model_selection_factor: 2
           sram: 1538
         F28003:
           flash: 1797
-          inference_time_us: 542
+          inference_time_us: 847
           model_selection_factor: 2
           sram: 1538
         F28004:
           flash: 1797
-          inference_time_us: 452
+          inference_time_us: 1017
           model_selection_factor: 2
           sram: 1538
         F2837:
           flash: 1797
-          inference_time_us: 542
+          inference_time_us: 847
           model_selection_factor: 2
           sram: 1538
         F28P55:
@@ -673,7 +673,7 @@ model_descriptions:
           sram: 1606
         F28P65:
           flash: 1797
-          inference_time_us: 904
+          inference_time_us: 508
           model_selection_factor: 2
           sram: 1538
       train_output_path: null
@@ -850,27 +850,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 1866
-          inference_time_us: 628
+          inference_time_us: 982
           model_selection_factor: 1
           sram: 1538
         F280015:
           flash: 1866
-          inference_time_us: 628
+          inference_time_us: 982
           model_selection_factor: 1
           sram: 1538
         F28003:
           flash: 1866
-          inference_time_us: 628
+          inference_time_us: 982
           model_selection_factor: 1
           sram: 1538
         F28004:
           flash: 1866
-          inference_time_us: 524
+          inference_time_us: 1179
           model_selection_factor: 1
           sram: 1538
         F2837:
           flash: 1866
-          inference_time_us: 628
+          inference_time_us: 982
           model_selection_factor: 1
           sram: 1538
         F28P55:
@@ -880,7 +880,7 @@ model_descriptions:
           sram: 1606
         F28P65:
           flash: 1866
-          inference_time_us: 1048
+          inference_time_us: 589
           model_selection_factor: 1
           sram: 1538
       train_output_path: null
@@ -1059,27 +1059,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 1214
-          inference_time_us: 270
+          inference_time_us: 423
           model_selection_factor: 2
           sram: 1016
         F280015:
           flash: 1214
-          inference_time_us: 270
+          inference_time_us: 423
           model_selection_factor: 2
           sram: 1016
         F28003:
           flash: 1214
-          inference_time_us: 270
+          inference_time_us: 423
           model_selection_factor: 2
           sram: 1016
         F28004:
           flash: 1214
-          inference_time_us: 225
+          inference_time_us: 508
           model_selection_factor: 2
           sram: 1016
         F2837:
           flash: 1214
-          inference_time_us: 270
+          inference_time_us: 423
           model_selection_factor: 2
           sram: 1016
         F28P55:
@@ -1089,7 +1089,7 @@ model_descriptions:
           sram: 1112
         F28P65:
           flash: 1214
-          inference_time_us: 450
+          inference_time_us: 254
           model_selection_factor: 2
           sram: 1016
       train_output_path: null
@@ -1268,27 +1268,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 5262
-          inference_time_us: 7337
+          inference_time_us: 11465
           model_selection_factor: 0
           sram: 10872
         F280015:
           flash: 5262
-          inference_time_us: 7337
+          inference_time_us: 11465
           model_selection_factor: 0
           sram: 10872
         F28003:
           flash: 5262
-          inference_time_us: 7337
+          inference_time_us: 11465
           model_selection_factor: 0
           sram: 10872
         F28004:
           flash: 5262
-          inference_time_us: 6114
+          inference_time_us: 13758
           model_selection_factor: 0
           sram: 10872
         F2837:
           flash: 5262
-          inference_time_us: 7337
+          inference_time_us: 11465
           model_selection_factor: 0
           sram: 10872
         F28P55:
@@ -1298,7 +1298,7 @@ model_descriptions:
           sram: 3198
         F28P65:
           flash: 5262
-          inference_time_us: 12229
+          inference_time_us: 6879
           model_selection_factor: 0
           sram: 10872
       train_output_path: null
@@ -1477,27 +1477,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 3069
-          inference_time_us: 400
+          inference_time_us: 627
           model_selection_factor: 1
           sram: 656
         F280015:
           flash: 3069
-          inference_time_us: 400
+          inference_time_us: 627
           model_selection_factor: 1
           sram: 656
         F28003:
           flash: 3069
-          inference_time_us: 400
+          inference_time_us: 627
           model_selection_factor: 1
           sram: 656
         F28004:
           flash: 3069
-          inference_time_us: 334
+          inference_time_us: 752
           model_selection_factor: 1
           sram: 656
         F2837:
           flash: 3069
-          inference_time_us: 400
+          inference_time_us: 627
           model_selection_factor: 1
           sram: 656
         F28P55:
@@ -1507,7 +1507,7 @@ model_descriptions:
           sram: 1116
         F28P65:
           flash: 3069
-          inference_time_us: 668
+          inference_time_us: 376
           model_selection_factor: 1
           sram: 656
       train_output_path: null
@@ -1890,27 +1890,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12676
+          inference_time_us: 28522
           model_selection_factor: 0
           sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28P55:
@@ -1920,7 +1920,7 @@ model_descriptions:
           sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25353
+          inference_time_us: 14261
           model_selection_factor: 0
           sram: 4160
       train_output_path: null
@@ -2100,27 +2100,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 3242
-          inference_time_us: 9256
+          inference_time_us: 14463
           model_selection_factor: 3
           sram: 12320
         F280015:
           flash: 3242
-          inference_time_us: 9256
+          inference_time_us: 14463
           model_selection_factor: 3
           sram: 12320
         F28003:
           flash: 3242
-          inference_time_us: 9256
+          inference_time_us: 14463
           model_selection_factor: 3
           sram: 12320
         F28004:
           flash: 3242
-          inference_time_us: 7713
+          inference_time_us: 17356
           model_selection_factor: 3
           sram: 12320
         F2837:
           flash: 3242
-          inference_time_us: 9256
+          inference_time_us: 14463
           model_selection_factor: 3
           sram: 12320
         F28P55:
@@ -2130,7 +2130,7 @@ model_descriptions:
           sram: 6250
         F28P65:
           flash: 3242
-          inference_time_us: 15426
+          inference_time_us: 8678
           model_selection_factor: 3
           sram: 12320
       train_output_path: null
@@ -2308,27 +2308,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 6433
-          inference_time_us: 4002
+          inference_time_us: 6254
           model_selection_factor: 2
           sram: 1936
         F280015:
           flash: 6433
-          inference_time_us: 4002
+          inference_time_us: 6254
           model_selection_factor: 2
           sram: 1936
         F28003:
           flash: 6433
-          inference_time_us: 4002
+          inference_time_us: 6254
           model_selection_factor: 2
           sram: 1936
         F28004:
           flash: 6433
-          inference_time_us: 3335
+          inference_time_us: 7505
           model_selection_factor: 2
           sram: 1936
         F2837:
           flash: 6433
-          inference_time_us: 4002
+          inference_time_us: 6254
           model_selection_factor: 2
           sram: 1936
         F28P55:
@@ -2338,7 +2338,7 @@ model_descriptions:
           sram: 1690
         F28P65:
           flash: 6433
-          inference_time_us: 6670
+          inference_time_us: 3752
           model_selection_factor: 2
           sram: 1936
       train_output_path: null
@@ -2514,40 +2514,40 @@ model_descriptions:
       run_quant_train_only: false
       target_devices:
         F280013:
-          flash: 8302
-          inference_time_us: 20469
+          flash: 11331
+          inference_time_us: 11091
           model_selection_factor: 1
-          sram: 16416
+          sram: 3264
         F280015:
-          flash: 8302
-          inference_time_us: 20469
+          flash: 11331
+          inference_time_us: 11091
           model_selection_factor: 1
-          sram: 16416
+          sram: 3264
         F28003:
-          flash: 8302
-          inference_time_us: 20469
+          flash: 11331
+          inference_time_us: 11091
           model_selection_factor: 1
-          sram: 16416
+          sram: 3264
         F28004:
-          flash: 8302
-          inference_time_us: 17058
+          flash: 11331
+          inference_time_us: 13310
           model_selection_factor: 1
-          sram: 16416
+          sram: 3264
         F2837:
-          flash: 8302
-          inference_time_us: 20469
+          flash: 11331
+          inference_time_us: 11091
           model_selection_factor: 1
-          sram: 16416
+          sram: 3264
         F28P55:
           flash: 6709
           inference_time_us: 2235
           model_selection_factor: 1
           sram: 8364
         F28P65:
-          flash: 8302
-          inference_time_us: 34116
+          flash: 11331
+          inference_time_us: 6655
           model_selection_factor: 1
-          sram: 16416
+          sram: 3264
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
@@ -2722,27 +2722,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12676
+          inference_time_us: 28522
           model_selection_factor: 0
           sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28P55:
@@ -2752,7 +2752,7 @@ model_descriptions:
           sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25353
+          inference_time_us: 14261
           model_selection_factor: 0
           sram: 4160
       train_output_path: null
@@ -2929,27 +2929,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12676
+          inference_time_us: 28522
           model_selection_factor: 2
           sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F28P55:
@@ -2959,7 +2959,7 @@ model_descriptions:
           sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25353
+          inference_time_us: 14261
           model_selection_factor: 2
           sram: 4160
       train_output_path: null
@@ -3136,27 +3136,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12676
+          inference_time_us: 28522
           model_selection_factor: 1
           sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F28P55:
@@ -3166,7 +3166,7 @@ model_descriptions:
           sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25353
+          inference_time_us: 14261
           model_selection_factor: 1
           sram: 4160
       train_output_path: null
@@ -3343,27 +3343,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12676
+          inference_time_us: 28522
           model_selection_factor: 0
           sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 0
           sram: 4160
         F28P55:
@@ -3373,7 +3373,7 @@ model_descriptions:
           sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25353
+          inference_time_us: 14261
           model_selection_factor: 0
           sram: 4160
       train_output_path: null
@@ -3550,27 +3550,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12676
+          inference_time_us: 28522
           model_selection_factor: 1
           sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 1
           sram: 4160
         F28P55:
@@ -3580,7 +3580,7 @@ model_descriptions:
           sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25353
+          inference_time_us: 14261
           model_selection_factor: 1
           sram: 4160
       train_output_path: null
@@ -3757,27 +3757,27 @@ model_descriptions:
       target_devices:
         F280013:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F280015:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F28003:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F28004:
           flash: 17343
-          inference_time_us: 12676
+          inference_time_us: 28522
           model_selection_factor: 2
           sram: 4160
         F2837:
           flash: 17343
-          inference_time_us: 15212
+          inference_time_us: 23768
           model_selection_factor: 2
           sram: 4160
         F28P55:
@@ -3787,7 +3787,7 @@ model_descriptions:
           sram: 3218
         F28P65:
           flash: 17343
-          inference_time_us: 25353
+          inference_time_us: 14261
           model_selection_factor: 2
           sram: 4160
       train_output_path: null
