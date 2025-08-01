@@ -242,6 +242,28 @@ To begin with, you can use the repo as a `developer` or `user`.
 <hr>
 
 ## What is New
+- [2025-Aug] Major feature updates (version 1.1.0) of the software
+  - General:
+    - Generic Timeseries Classification is available with fixed point reference dataset.
+    - Compatible with C2000Ware 6.0.0
+  - Model Optimization:
+    - Aggressive Quantization Modes for Weights & Activation: 2W8A, 4W4A, 4W8A --> massive speedup and memory saved
+    - Neural network Architecture Search for generating a TINPU compatible model directly based on user's dataset
+  - Dataset:
+    - Dataset can be split into train-test-val on a file-by-file basis or within-a-file basis
+  - Device Support:
+    - Full Support for F280013x
+    - Preliminary Support for F29H85x and MSPM0G3507x
+  - Compilation:
+    - Upgraded TI MCU Neural Network Compiler for MCUs to 2.0.0
+  - Windows Platform Specific:
+    - Major quantization accuracy improvements  
+  - Miscellananeous:
+    - Fixed model performance data that appears on the terminal when a training is initiated
+    - Added Model Descriptions for all models
+    - Setup of the repos is now smoother and cleaner
+      
+
 - [2025-Apr] Major feature updates (version 1.0.0) of the software
   - General:
     - Tiny ML Modelmaker is now a pip installable package!
@@ -263,7 +285,6 @@ To begin with, you can use the repo as a `developer` or `user`.
     - Run now begins with displaying inference time, sram usage and flash usage for all the devices for any model.
   - Dataset
     - Goodness of Fit of dataset now enabled.
-    - Dataset can be split into train-test-val on a file-by-file basis or within-a-file basis
   - Extensive Documentation & Know-How Examples to use Modelmaker 
 - [2024-November] Updated (version 0.9.0) of the software
 - [2024-August] Release version 0.8.0 of the software
