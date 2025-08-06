@@ -37,7 +37,7 @@ from .. import constants
 _model_descriptions = {}
 _training_module_descriptions = {}
 
-from .tinyml_tinyverse import timeseries_classification, timeseries_regression, timeseries_anomalydetection
+from .tinyml_tinyverse import timeseries_classification, timeseries_regression, timeseries_anomalydetection, timeseries_forecasting
 
 ## classification
 _model_descriptions.update(timeseries_classification.get_model_descriptions())
@@ -48,6 +48,9 @@ _training_module_descriptions.update({'timeseries_regression':[constants.TASK_CA
 ## anomalydetection
 _model_descriptions.update(timeseries_anomalydetection.get_model_descriptions())
 _training_module_descriptions.update({'timeseries_anomalydetection':[constants.TASK_CATEGORY_TS_ANOMALYDETECTION]})
+## forecasting
+_model_descriptions.update(timeseries_forecasting.get_model_descriptions())
+_training_module_descriptions.update({'timeseries_forecasting':[constants.TASK_CATEGORY_TS_FORECASTING]})
 
 def get_training_module_descriptions(target_device=None, training_device=None):
     return _training_module_descriptions

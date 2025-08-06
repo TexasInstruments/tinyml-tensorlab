@@ -101,4 +101,22 @@ DEVICE_RUN_INFO = {'ArcFault_model_1400_t': {'F280013': {'flash': 3576, 'inferen
     'F28004': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
     'F2837': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
     'F28P55': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
-    'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}},}
+    'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}},
+
+ 'TimeSeries_Generic_Forecasting_13k_t': {
+ 'F280013': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F280015': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28003': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28004': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F2837': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28P55': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}},
+ 
+'TimeSeries_Generic_Forecasting_3k_t': {
+ 'F280013': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F280015': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28003': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28004': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F2837': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28P55': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+ 'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}},}

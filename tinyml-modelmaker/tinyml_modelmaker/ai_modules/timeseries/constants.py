@@ -41,6 +41,7 @@ TASK_TYPE_BLOWER_IMBALANCE = 'blower_imbalance'
 TASK_TYPE_GENERIC_TS_CLASSIFICATION = 'generic_timeseries_classification'
 TASK_TYPE_GENERIC_TS_REGRESSION = 'generic_timeseries_regression'
 TASK_TYPE_GENERIC_TS_ANOMALYDETECTION = 'generic_timeseries_anomalydetection'
+TASK_TYPE_GENERIC_TS_FORECASTING= 'generic_timeseries_forecasting'
 
 TASK_TYPES = [
     TASK_TYPE_ARC_FAULT,
@@ -48,16 +49,18 @@ TASK_TYPES = [
     TASK_TYPE_BLOWER_IMBALANCE,
     TASK_TYPE_GENERIC_TS_CLASSIFICATION,
     TASK_TYPE_GENERIC_TS_REGRESSION,
-    TASK_TYPE_GENERIC_TS_ANOMALYDETECTION
+    TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+    TASK_TYPE_GENERIC_TS_FORECASTING,
 ]
 
 # task_category
 TASK_CATEGORY_TS_CLASSIFICATION = 'timeseries_classification'
 TASK_CATEGORY_TS_REGRESSION = 'timeseries_regression'
 TASK_CATEGORY_TS_ANOMALYDETECTION = 'timeseries_anomalydetection'
+TASK_CATEGORY_TS_FORECASTING = 'timeseries_forecasting'
 
 TASK_CATEGORIES = [
-    TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_REGRESSION
+    TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_REGRESSION,TASK_CATEGORY_TS_FORECASTING,
 ]
 
 # target_device
@@ -117,6 +120,7 @@ TRAINING_BATCH_SIZE_DEFAULT = {
     TASK_TYPE_GENERIC_TS_CLASSIFICATION: 64,
     TASK_TYPE_GENERIC_TS_REGRESSION: 64,
     TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: 64,
+    TASK_TYPE_GENERIC_TS_FORECASTING: 64,
 }
 
 TARGET_SDK_VERSION_C2000 = '6.0'
@@ -419,6 +423,13 @@ TASK_DESCRIPTIONS = {
     #     'target_devices': TARGET_DEVICES,
     #     'stages': ['dataset', 'training', 'compilation'],
     # },
+    TASK_TYPE_GENERIC_TS_FORECASTING: {
+        'task_name': 'Generic Time Series Forecasting',
+        'target_module': 'timeseries',
+        'target_devices': TARGET_DEVICES,
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+    },
+
 }
 
 DATA_PREPROCESSING_DEFAULT = 'default'
@@ -630,6 +641,12 @@ PRESET_DESCRIPTIONS = {
                                  cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
             ),
         },
+        TASK_CATEGORY_TS_FORECASTING: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(target="c", target_c_mcpu='cortex_r5', cross_compiler="tiarmclang",
+                                 cross_compiler_options="-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type", )
+            ),
+        },
     },
     TARGET_DEVICE_F280013: {
         TASK_TYPE_ARC_FAULT: {
@@ -658,6 +675,11 @@ PRESET_DESCRIPTIONS = {
             ),
         },
         TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280013, )
             ),
@@ -694,6 +716,11 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
             ),
         },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F280015, )
+            ),
+        },
     },
     TARGET_DEVICE_F28003: {
         TASK_TYPE_ARC_FAULT: {
@@ -722,6 +749,11 @@ PRESET_DESCRIPTIONS = {
             ),
         },
         TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28003, )
             ),
@@ -758,6 +790,11 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
             ),
         },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28004, )
+            ),
+        },
     },
     TARGET_DEVICE_F28P65: {
         TASK_TYPE_ARC_FAULT: {
@@ -786,6 +823,11 @@ PRESET_DESCRIPTIONS = {
             ),
         },
         TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
+            ),
+        },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P65, )
             ),
@@ -858,6 +900,17 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
             ),
         },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+            COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_C28_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+            COMPILATION_FORCED_SOFT_NPU: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F28P55, )
+            ),
+        },
     },
     TARGET_DEVICE_F2837: {
         TASK_TYPE_ARC_FAULT: {
@@ -890,9 +943,14 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
             ),
         },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_C28_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F2837)
+            ),
+        },
 
     },
-    
+
     TARGET_DEVICE_F29H85: {
         TASK_TYPE_ARC_FAULT: {
             COMPILATION_DEFAULT: dict(
@@ -924,9 +982,13 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
             ),
         },
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_F29H85_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_F29H85)
+            ),
+        },
 
     },
-
     TARGET_DEVICE_M0G3507: {
         TASK_TYPE_ARC_FAULT: {
             COMPILATION_DEFAULT: dict(
@@ -958,8 +1020,13 @@ PRESET_DESCRIPTIONS = {
                 compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
             ),
         },
-        
+        TASK_TYPE_GENERIC_TS_FORECASTING: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0)
+            ),
+        },
     },
+    
 }
 
 SAMPLE_DATASET_DESCRIPTIONS = {
