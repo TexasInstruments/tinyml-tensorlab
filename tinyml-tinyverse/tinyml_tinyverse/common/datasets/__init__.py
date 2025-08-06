@@ -1,2 +1,2 @@
-from .timeseries_dataset import GenericTSDataset, GenericTSDatasetReg, GenericTSDatasetAD
+from .timeseries_dataset import GenericTSDataset, GenericTSDatasetReg, GenericTSDatasetAD, GenericTSDatasetForecasting
 
