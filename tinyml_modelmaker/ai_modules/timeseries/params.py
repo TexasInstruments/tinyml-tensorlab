@@ -157,8 +157,10 @@ def init_params(*args, **kwargs):
             new_sr=3009,
             #sequence_window=3009,
             frame_size=3009,
+            forecast_horizon=1, #Number of future timesteps to be predicted in Forecasting
             stride_size=0.01,
             variables=1,
+            target_variables=[],
             resampling_factor=1,
             feature_extraction_name=None,
             feat_ext_transform=[],  # FFT512 FFT256'
