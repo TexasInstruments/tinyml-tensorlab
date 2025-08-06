@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from logging import getLogger
 import textwrap
 import math
+import pickle
 
 # Function that computes Fourier transform + Absolute value of positive frequencies + Logarithmic scaling
 def compute_fourier_abs_log(frame_size, classes_dir, frame_skip,class_names): 
@@ -228,13 +229,29 @@ def goodness_of_fit_test(frame_size, classes_dir, output_dir,class_names):
     num_of_frames = 0
     for class_name in class_names:
         class_dir = os.path.join(classes_dir, class_name)
-        csv_files = [f for f in os.listdir(class_dir) if f.endswith('.csv')]  # Filter for CSV files
+        files = os.listdir(class_dir)
        
-        for csv_file in csv_files:
-            csv_path = os.path.join(class_dir, csv_file)
-            with open(csv_path, 'r') as file:
-                num_of_rows = sum(1 for row in file) #- 1  # Subtract 1 for the header row (if any)
-                num_of_frames += num_of_rows // frame_size
+        for file_name in files:
+            file_path = os.path.join(class_dir, file_name)
+
+            if file_name.endswith('.csv'):
+                df = pd.read_csv(file_path)
+                num_of_rows = len(df)
+
+            elif file_name.endswith('.npy'):
+                data = np.load(file_path)
+                num_of_rows = data.shape[0]
+
+            elif file_name.endswith('.pkl'):
+                with open(file_path, 'rb') as f:
+                    data = pickle.load(f)
+                    num_of_rows = data.shape[0]
+
+            elif file_name.endswith('.txt'):
+                with open(file_path, 'r') as f:
+                    num_of_rows = sum(1 for _ in f)
+            
+            num_of_frames += num_of_rows // frame_size
     
     frame_skip=math.ceil(num_of_frames/3000)
     logger.info(f"Total number of frames: {num_of_frames}")

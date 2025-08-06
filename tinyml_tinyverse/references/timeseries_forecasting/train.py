@@ -72,6 +72,7 @@ from argparse import ArgumentParser
 from logging import getLogger
 
 import numpy as np
+import matplotlib.pyplot as plt
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQuantizationMethod
 
 # Torch Modules
@@ -80,14 +81,12 @@ import torch.nn as nn
 import torchinfo
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg, GenericTSDatasetAD
-
+from tinyml_tinyverse.common.datasets import GenericTSDatasetForecasting
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
-dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset, 'GenericTSDatasetReg' : GenericTSDatasetReg,
-                       'GenericTSDatasetAD' : GenericTSDatasetAD,}
+dataset_loader_dict = {'GenericTSDatasetForecasting' : GenericTSDatasetForecasting}
 
 
 def split_weights(weights_name):
@@ -115,6 +114,8 @@ def get_args_parser():
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
     parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
     parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--forecast-horizon',help="Number of future timesteps to be predicted", type=int)
+    parser.add_argument('--target-variables',help='Target variables to be predicted', default=[])
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
 
     parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
@@ -145,8 +146,8 @@ def get_args_parser():
     parser.add_argument('--data-path', default=os.path.join('.', 'data', 'datasets'), help='dataset')
     parser.add_argument('--dataset', default='folder', help='dataset')
     parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
-    parser.add_argument("--loader-type", default="regression", type=str,
-                        help="Dataset Loader Type: classification/regression")
+    parser.add_argument("--loader-type", default="forecasting", type=str,
+                        help="Dataset Loader Type: classification/regression/forecasting")
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
     parser.add_argument('--model', default='ArcDet4x16', help='model')
     parser.add_argument('--dual-op', default=False, help='True if you need model to have FC layer input as secondary output', type=misc_utils.str_or_bool)
@@ -158,8 +159,8 @@ def get_args_parser():
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
     parser.add_argument('--epochs', default=90, type=int, metavar='N', help='number of total epochs to run')
     parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N', help='number of data loading workers (default: 16)')
-    parser.add_argument('--opt', default='Adam', type=str, help='optimizer')
-    parser.add_argument('--lr', default=0.001, type=float, help='initial learning rate')
+    parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
+    parser.add_argument('--lr', default=0.1, type=float, help='initial learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
     parser.add_argument('--wd', '--weight-decay', default=4e-5, type=float, metavar='W', help='weight decay (default: 1e-4)', dest='weight_decay')
     parser.add_argument('--label-smoothing', default=0.0, type=float, help='label smoothing (default: 0.0)', dest='label_smoothing')
@@ -213,7 +214,9 @@ def get_args_parser():
 
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
-    
+    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
+    parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
+
     return parser
 
 def generate_golden_vector_dir(output_dir):
@@ -281,7 +284,7 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
             half_path = os.path.join(golden_vectors_dir)
 
             # Saving as .txt
-            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%f' if np_raw.dtype.kind == 'f' else '%d', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'adc_{label}_{index}.txt')
             np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'features_{label}_{index}.txt')
@@ -321,14 +324,13 @@ def main(gpu, args):
     transform = None
     if not args.output_dir:
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
-        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'anomalydetection', output_folder, args.model,
-                                       args.date)
+        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'forecasting', output_folder, args.model, args.date)
     utils.mkdir(args.output_dir)
     log_file = os.path.join(args.output_dir, 'run.log')
-    logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root",
-                    append_log=True if args.quantization else False, console_log=True)
+    logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True if args.quantization else False, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)
+    logger = getLogger("root.main")
     from ..version import get_version_str
     logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
     logger.info("Script: {}".format(os.path.relpath(__file__)))
@@ -341,7 +343,7 @@ def main(gpu, args):
         (args.weights_url, args.weights_enum) = split_weights(args.weights)
 
     if args.device != 'cpu' and args.distributed is True:
-        os.environ['RANK'] = str(int(os.environ['RANK']) * args.gpus + gpu) if 'RANK' in os.environ else str(gpu)
+        os.environ['RANK'] = str(int(os.environ['RANK'])*args.gpus + gpu) if 'RANK' in os.environ else str(gpu)
         os.environ['LOCAL_RANK'] = str(gpu)
 
     if args.lr_warmup_epochs > 0 and args.epochs <= args.lr_warmup_epochs:
@@ -356,38 +358,27 @@ def main(gpu, args):
     # torch.backends.cudnn.benchmark = True
     if isinstance(args.data_proc_transforms, list):
         if len(args.data_proc_transforms) and isinstance(args.data_proc_transforms[0], list):
-            args.transforms = args.data_proc_transforms[
-                                  0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
+            args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
         else:
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
     # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args,
-                                                                         dataset_loader_dict)  # (126073, 1, 152), 126073
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict) 
+    
+    if misc_utils.str2bool(args.dont_train_just_feat_ext):
+        logger.info("Exiting execution without training")
+        sys.exit(0)
 
-    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    try:
-        utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train',
-                                            output_dir=args.output_dir)
-        utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation',
-                                            output_dir=args.output_dir)
-    except Exception as e:
-        logger.warning(f"Feature Extraction plots will not be generated because: {e}")
-    # The below two lines work fine, but slows down a lot
-    # plot_graph(dataset, graph_type='tsne', instance_type='train')
-    # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
-    # if misc_utils.str2bool(args.dont_train_just_feat_ext):
-    #     logger.info("Exiting execution without training")
-    #     sys.exit(0)
-
-    # generate_golden_vector_dir(args.output_dir)
-    # if misc_utils.str2bool(args.gen_golden_vectors):
-    #     generate_user_input_config(args.output_dir, dataset)
-    #     if misc_utils.str2bool(args.dont_train_just_feat_ext):
-    #         logger.info('ModelMaker completed for test bench. Exiting.')
-    #         sys.exit()
+    generate_golden_vector_dir(args.output_dir)
+    if misc_utils.str2bool(args.gen_golden_vectors):
+        generate_user_input_config(args.output_dir, dataset)
+        if misc_utils.str2bool(args.dont_train_just_feat_ext):
+            logger.info('ModelMaker completed for test bench. Exiting.')
+            sys.exit()
 
     # collate_fn = None
-    num_classes = len(dataset.classes)
+    #num_classes = len(dataset.classes)
+    num_target_variables=dataset.Y.shape[-1] if dataset.Y is not None else 1 # Number of target variables to be predicted
+    total_forecast_outputs=args.forecast_horizon*num_target_variables
 
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
@@ -398,15 +389,14 @@ def main(gpu, args):
         dataset_test, batch_size=args.batch_size,
         sampler=test_sampler, num_workers=args.workers, pin_memory=True,
         collate_fn=utils.collate_fn, )
-
     logger.info("Creating model")
     # Model Creation
     variables = dataset.X.shape[1]  # n,c,h,w --> c is 1 (args.variables. However, after motor fault was supported, it concatenates 3x128 to 1x384 hence channels have been changed
     input_features = dataset.X.shape[2]
-    logger.info(f"Variables: {variables}, Input_features: {input_features}")
+    
     # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
     model = models.get_model(
-        args.model, variables, num_classes=input_features, input_features=input_features, model_config=args.model_config,
+        args.model, variables, total_forecast_outputs, input_features=input_features, model_config=args.model_config,
         model_spec=args.model_spec, with_input_batchnorm=misc_utils.str2bool(args.with_input_batchnorm),
         dual_op=args.dual_op)
     if args.generic_model:
@@ -420,24 +410,19 @@ def main(gpu, args):
 
     # Does nothing in Floating Point Training
     model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth, args.epochs)
+        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+        args.epochs, args.output_dequantize)
 
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
 
     if args.export_only:
         if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
-            utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir,
-                               opset_version=args.opset_version, quantization=args.quantization,
-                               generic_model=args.generic_model)
+            utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir, opset_version=args.opset_version, quantization=args.quantization, generic_model=args.generic_model)
             return
 
-    try:
-        model.to(device)
-    except AssertionError as e:
-        logger.error(f"Input options have asked to run on GPU, but no GPU was found. Either change num_gpus to 0 or verify that your GPU works. Error raised: {e}")
-        sys.exit(1)
-    criterion = nn.MSELoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
+    model.to(device)
+    criterion = nn.HuberLoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
     optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
     lr_scheduler = utils.init_lr_scheduler(
         args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
@@ -464,59 +449,133 @@ def main(gpu, args):
 
     logger.info("Start training")
     start_time = timeit.default_timer()
-    best = dict(mse=np.inf, epoch=None)
+ 
+    best_epoch_values = {
+        'epoch': -1,
+        'true_values': None,
+        'predictions': None,
+        'overall_smape': float('inf'),  # Overall SMAPE for the best epoch
+    }
+    
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
-        utils.train_one_epoch_anomalydetection(
+
+        utils.train_one_epoch_forecasting(
             model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
-            print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
+            print_freq=args.print_freq, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op,
             is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
+
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        avg_mse, _ = utils.evaluate_anomalydetection(model, criterion, data_loader_test, device=device,
-                                                     transform=transform, phase=phase, num_classes=num_classes,
-                                                     dual_op=args.dual_op)
+
+        #logger.info(f"\nEpoch {epoch}:")
+        target_array,prediction_array,overall_smape= utils.evaluate_forecasting(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op)
+
         if model_ema:
-            avg_mse, _ = utils.evaluate_anomalydetection(
+            target_array,prediction_array,overall_smape = utils.evaluate_forecasting(
                 model_ema, criterion, data_loader_test, device=device, transform=transform,
                 log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
-        if args.output_dir:
-            checkpoint = {
-                'model': model_without_ddp.state_dict(),
-                'optimizer': optimizer.state_dict(),
-                'lr_scheduler': lr_scheduler.state_dict(),
-                'epoch': epoch,
-                'args': args}
-            if model_ema:
-                checkpoint['model_ema'] = model_ema.state_dict()
-            # utils.save_on_master(
-            #     checkpoint,
-            #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
-            if avg_mse <= best['mse']:
-                logger.info(
-                    f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) <= {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
-                best['mse'] = avg_mse
-                best['epoch'] = epoch
-                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
+        logger.info(f"Epoch {epoch}: Current SMAPE across all target varibales and across all predicted timesteps: {overall_smape:.2f}%")
+        # Update best results if current epoch is better
+        if overall_smape<best_epoch_values['overall_smape']:
+            best_epoch_values['overall_smape'] = overall_smape
+            best_epoch_values['epoch'] = epoch
+            best_epoch_values['true_values'] = target_array
+            best_epoch_values['predictions'] = prediction_array
+
+            if args.output_dir:
+                checkpoint = {
+                    'model': model_without_ddp.state_dict(),
+                    'optimizer': optimizer.state_dict(),
+                    'lr_scheduler': lr_scheduler.state_dict(),
+                    'epoch': epoch,
+                    'args': args,
+                    'metrics': {
+                        'overall_smape': overall_smape,
+                    }
+                }
+                if model_ema:
+                    checkpoint['model_ema'] = model_ema.state_dict()
+    
+                utils.save_on_master(checkpoint,os.path.join(args.output_dir, 'checkpoint.pth'))
+        logger.info(f"Epoch {epoch}: Best Overall SMAPE across all variables across all predicted timsteps so far: {best_epoch_values['overall_smape']:.2f}% (Epoch {best_epoch_values['epoch']})") 
+
+    # Log best epoch metrics
     logger = getLogger(f"root.main.{phase}.BestEpoch")
-    logger.info("")
     logger.info("Printing statistics of best epoch:")
-    logger.info(f"Best Epoch: {best['epoch']}")
-    logger.info(f"MSE {best['mse']:.3f}")
-    # logger.info(f"R2-Score {best['r2']:.3f}")
-    logger.info("")
+    logger.info(f"Best epoch:{best_epoch_values['epoch']+1}")
+    logger.info(f"Overall SMAPE across all variables: {best_epoch_values['overall_smape']:.2f}%")
+    logger.info("Per-Variable Metrics:")
+
+    for idx,item in enumerate(dataset.header_row):
+        for target_variable_name in item:
+            logger.info(f"  Variable {target_variable_name}:")
+            logger.info(f"      SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(best_epoch_values['true_values'][:,:,idx],best_epoch_values['predictions'][:,:,idx]):.2f}%")
+            logger.info(f"      R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(best_epoch_values['predictions'][:,:,idx],best_epoch_values['true_values'][:,:,idx]):.4f}")
+
+            # Log timestep specific metrics
+            for step in range(args.forecast_horizon): 
+                logger.info(f"      Timestep {step+1}:")
+                logger.info(f"          SMAPE: {utils.smape(best_epoch_values['true_values'][:,step,idx],best_epoch_values['predictions'][:,step,idx]):.2f}%")
+                logger.info(f"          R²: {utils.get_r2_score(best_epoch_values['predictions'][:,step,idx],best_epoch_values['true_values'][:,step,idx]):.4f}")
+
+    # Save final predictions and create visualizations for best epoch
+    if args.output_dir and best_epoch_values['true_values'] is not None:
+        
+        results_dir = os.path.join(args.output_dir, f'best_epoch_{best_epoch_values["epoch"]}_results')
+        os.makedirs(results_dir, exist_ok=True)
+
+        # Save predictions in CSV format
+        utils.save_forecasting_predictions_csv(
+            best_epoch_values['true_values'],
+            best_epoch_values['predictions'],
+            results_dir,
+            dataset.header_row,
+            args.forecast_horizon,
+        )
+
+        plots_dir=os.path.join(results_dir, 'prediction_plots')
+        os.makedirs(plots_dir, exist_ok=True)
+
+        # Create scatter plots for each variable
+        for idx,item in enumerate(dataset.header_row):
+            for target_variable_name in item:
+                fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
+
+                for step in range(args.forecast_horizon):
+                    step_targets = best_epoch_values['true_values'][:, step, idx]
+                    step_outputs = best_epoch_values['predictions'][:, step, idx]
+                    #step_key = f'var-{var}-step-{step}'
+                    step_smape = utils.smape(best_epoch_values['true_values'][:,step,idx],best_epoch_values['predictions'][:,step,idx])
+                    step_r2 = utils.get_r2_score(best_epoch_values['predictions'][:,step,idx],best_epoch_values['true_values'][:,step,idx])
+
+                    # Scatter plot
+                    ax = axes[step]
+                    ax.scatter(step_targets, step_outputs, alpha=0.5, label=f'Predictions')
+
+                    # Add perfect prediction line
+                    min_val = min(step_targets.min(), step_outputs.min())
+                    max_val = max(step_targets.max(), step_outputs.max())
+                    ax.plot([min_val, max_val], [min_val, max_val], 'k--',label='Perfect Prediction')
+
+                    ax.set_xlabel(f"Actual Variable {target_variable_name}")
+                    ax.set_ylabel(f"Predicted Variable {target_variable_name}")
+                    ax.set_title(f"{step+1}-step ahead\nR² = {step_r2:.4f},SMAPE = {step_smape:.2f}%")
+                    ax.legend()
+
+                plt.tight_layout()
+                plt.savefig(os.path.join(plots_dir,f'{target_variable_name}_predictions.png'))
+                plt.close()
 
     logger.info('Exporting model after training.')
-    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
-        # example_input = next(iter(data_loader_test))[0]
+    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
+        example_input = None  # next(iter(data_loader_test))[0]
         utils.export_model(
             model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, output_dequantize=args.output_dequantize,
-            example_input=None, generic_model=args.generic_model,
-            remove_hooks_for_jit=True if (
-                        args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
+            quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
+            remove_hooks_for_jit= True if (args.quantization_method==TinyMLQuantizationMethod.PTQ and args.quantization) else False)
     total_time = timeit.default_timer() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
@@ -525,7 +584,7 @@ def main(gpu, args):
         # generate_golden_vectors(args.output_dir, dataset, args.generic_model)
         # TODO: Enable the above line once we know what is required
         pass
-
+        
     return
 
 
@@ -546,7 +605,6 @@ def run(args):
 
 if __name__ == "__main__":
     arguments = get_args_parser().parse_args()
-
     # run the training.
     # if args.distributed is True is set, then this will launch distributed training
     # depending on args.gpus

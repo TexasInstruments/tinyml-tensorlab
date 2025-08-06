@@ -77,7 +77,7 @@ from glob import glob
 from logging import getLogger
 
 import matplotlib.pyplot as plt
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve, auc, mean_squared_error, r2_score
 from sklearn.preprocessing import label_binarize
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
@@ -90,7 +90,6 @@ import torch.distributed as dist
 from cryptography.fernet import Fernet
 from tabulate import tabulate
 from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc
-from torcheval.metrics.functional import r2_score, mean_squared_error
 
 from ..models.generic_models import FEModel  # , FEModel2
 from tinyml_torchmodelopt.quantization import (
@@ -173,7 +172,7 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
     logger = getLogger("root.load_data")
     logger.info("Loading data")
     dataset_loader = dataset_loader_dict.get(args.dataset_loader)
-
+    
     st = timeit.default_timer()
     if test_only:
         # datadir is supposed to be test dir
@@ -714,14 +713,26 @@ def get_au_roc(output, target, classes):
     return multiclass_auroc(output, target, num_classes=classes, average='macro')
 
 
-def get_r2_score(output, target):
-    return r2_score(output, target, multioutput='uniform_average')  # variance_weighted, raw_values
+def get_r2_score(output,target):
+    return r2_score(target, output, multioutput='uniform_average')  # variance_weighted, raw_values
 
 
-def get_mse(output, target):
-    return mean_squared_error(output, target, multioutput='uniform_average')  # raw_values
+def get_mse(output,target):
+    return mean_squared_error(target,output,multioutput='uniform_average')  # raw_values
 
-
+# Calculate Symmetric Mean Absolute Percentage Error
+def smape(y_true, y_pred):
+    if torch.is_tensor(y_true):
+        numerator = torch.abs(y_pred - y_true)
+        denominator = (torch.abs(y_true) + torch.abs(y_pred)) / 2.0
+        denominator=np.where(denominator==0,1e-8,denominator)  # Avoid division by zero
+        return torch.mean(numerator / denominator) * 100  # Multiply by 100 to get percentage
+    else:
+        numerator = np.abs(y_pred - y_true)
+        denominator = (np.abs(y_true) + np.abs(y_pred)) / 2.0
+        denominator=np.where(denominator==0,1e-8,denominator)  # Avoid division by zero
+        return np.mean(numerator / denominator) * 100  # Multiply by 100 to get percentage
+    
 def number_of_correct(pred, target):
     # count number of correct predictions
     return pred.squeeze().eq(target).sum().item()
@@ -965,7 +976,6 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
     if transform:
         transform = transform.to(device)
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
-        # for batch_idx, (data, target) in enumerate(data_loader):
         start_time = timeit.default_timer()
         data = data.to(device).float()
         target = target.to(device).float()
@@ -980,7 +990,6 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
         else:
             output = model(data)  # (n,1,8000) -> (n,35)
 
-        # negative log-likelihood for a tensor of size (batch x 1 x n_output)
         loss = criterion(output, target)
 
         if not is_ptq:
@@ -998,9 +1007,7 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
                 loss.backward()
             optimizer.step()
 
-        # acc1 = accuracy(output, target, topk=(1,))
-        # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
-        mse = get_mse(output, target)  # .squeeze()
+        mse = get_mse(output, target).squeeze()
         batch_size = output.shape[0]
         metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
         metric_logger.meters['mse'].update(mse, n=batch_size)
@@ -1009,6 +1016,119 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
     if model_ema:
         model_ema.update_parameters(model)
 
+def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device, epoch, transform,
+                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False, **kwargs):
+    model.train()
+    metric_logger = MetricLogger(delimiter="  ", phase=phase)
+    metric_logger.add_meter("lr", window_size=1, fmt="{value}")
+    metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
+
+    header = f"Epoch: [{epoch}]"
+    # TODO: If transform is required
+    if transform:
+        transform = transform.to(device)
+    
+    for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+        start_time = timeit.default_timer()
+        data = data.to(device).float()
+        target = target.to(device).float()
+
+        # apply transform and model on whole batch directly on device
+        # TODO: If transform is required
+        if transform:
+            data = transform(data)
+
+        if dual_op:
+            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
+        else:
+            output = model(data)  # (n,1,8000) -> (n,35)"
+
+        output = output.view_as(target)
+
+        loss = criterion(output, target)
+
+        if not is_ptq:
+            optimizer.zero_grad()
+            if apex:
+                with amp.scale_loss(loss, optimizer) as scaled_loss:
+                    scaled_loss.backward()
+            else:
+                loss.backward()
+            optimizer.step()
+
+        smape_score = smape(target.detach().cpu().numpy(), output.detach().cpu().numpy())
+        batch_size = output.shape[0]
+        metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
+        metric_logger.meters['smape'].update(smape_score, n=batch_size)
+        metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
+
+    if model_ema:
+        model_ema.update_parameters(model)
+    
+
+def evaluate_forecasting(model, criterion, data_loader, device, transform=None, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+    logger = getLogger(f"root.train_utils.evaluate.{phase}")
+    model.eval()
+    metric_logger = MetricLogger(delimiter="  ", phase=phase)
+    print_freq = min(print_freq, len(data_loader))
+    header = f'Test: {log_suffix}'
+
+    targets=[]
+    outputs=[]
+
+    with torch.no_grad():
+        for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+            # Move data and target to the specified device
+            data = data.to(device, non_blocking=True).float()
+            target = target.to(device, non_blocking=True).float()
+
+            # Apply transformation if provided
+            if transform:
+                data = transform(data)
+
+            # Forward pass through the model
+            if dual_op:
+                output, _ = model(data)  # Ignore secondary_output if not needed
+            else:
+                output = model(data)
+
+            # Reshape output to match target shape
+            output = output.view_as(target)
+
+            # Compute loss
+            loss = criterion(output, target)
+            metric_logger.update(loss=loss.item())
+
+            targets.append(target.cpu().numpy())
+            outputs.append(output.cpu().numpy())
+
+    target_array=np.vstack(targets)
+    prediction_array=np.vstack(outputs)
+    overall_smape= smape(target_array, prediction_array)
+    return target_array,prediction_array,overall_smape
+
+def save_forecasting_predictions_csv(true_values, predictions, output_dir,header_row, forecast_horizon):
+    """
+    Save predictions in CSV format with alternating ground truth and predicted values.
+
+    Args:
+        true_values (np.ndarray): Ground truth values [batch_size,forecast_horizon, n_variables]
+        predictions (np.ndarray): Predicted values [batch_size,forecast_horizon, n_variables]
+        output_dir (str): Base directory to save CSV files
+        header_row (list): List of variable names: column number in key value pairs
+        forecast_horizon (int): Number of time steps to forecast
+    """
+    csv_dir=os.path.join(output_dir, 'predictions_csv')
+    os.makedirs(csv_dir, exist_ok=True)
+
+    for idx,item in enumerate(header_row):
+        for target_variable_name in item:
+            data = {}
+            for step in range(forecast_horizon):
+                data[f'ground_{step+1}'] = true_values[:, step, idx]
+                data[f'predicted_{step+1}'] = predictions[:, step, idx]
+            df = pd.DataFrame(data)
+            df.to_csv(os.path.join(csv_dir,f'{target_variable_name}_predictions.csv'), index=False)
 
 def evaluate_regression(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
@@ -1342,7 +1462,6 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
         # export converted onnx model
         model_copy.export(dummy_input, onnx_file, opset_version=opset_version)
 
-        # export a torchscript model as well for visualization
         if remove_hooks_for_jit:
             remove_hooks(model_copy)
         ts_model = torch.jit.trace(model_copy, dummy_input)

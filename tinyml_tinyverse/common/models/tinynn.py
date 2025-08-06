@@ -42,7 +42,7 @@ import torch.nn
 
 
 __all__ = ['IdentityLayer', 'ConvLayer', 'BatchNormLayer', 'ReLULayer', 'MaxPoolLayer', 'AvgPoolLayer',
-           'AdaptiveAvgPoolLayer', 'LinearLayer', 'ConvBNReLULayer', 'ReshapeLayer']
+           'AdaptiveAvgPoolLayer', 'LinearLayer', 'ConvBNReLULayer', 'ReshapeLayer',]
 
 
 def compute_output_size(type, input_tensor_size, kernel_size, padding, stride, dilation, **kwargs):
@@ -188,7 +188,6 @@ def ReshapeLayer(ndim=2, input_tensor_size=None):
         output_tensor_size = [input_tensor_size[0], np.prod(input_tensor_size[1:])]
     else:
         assert ndim==2, f'ndim must be 2 for now. got {ndim}'
-
     return layer, output_tensor_size
 
 
@@ -202,3 +201,6 @@ def ReluLayer(input_tensor_size=None):
     layer = torch.nn.ReLU()
     output_tensor_size = copy.deepcopy(input_tensor_size)
     return layer, output_tensor_size
+
+
+

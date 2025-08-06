@@ -38,7 +38,7 @@ from .generic_classification_models import *
 from .generic_regression_models import *
 from .generic_feature_extraction_models import *
 from .generic_autoencoder_models import *
-
+from .generic_forecasting_models import *
 
 model_dict = {
     'CNN_TS_GEN_BASE_100': CNN_TS_GEN_BASE_100,
@@ -55,6 +55,7 @@ model_dict = {
     'AE_CNN_TS_GEN_BASE_16K': AE_CNN_TS_GEN_BASE_16K,
     'HAR_TINIE_CNN_2K': HAR_TINIE_CNN_2K,
     'YOLO_Classifier_8K': YOLO_Classifier_8K,
+    'FC_CNN_TS_GEN_BASE_13K':FC_CNN_TS_GEN_BASE_13K,
     # 'CNN_AF_3L_200': CNN_AF_3L_200,
     # 'CNN_AF_3L_300': CNN_AF_3L_300,
     # 'CNN_AF_3L_700': CNN_AF_3L_700,

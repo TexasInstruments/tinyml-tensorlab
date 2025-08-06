@@ -36,20 +36,20 @@ from argparse import ArgumentParser
 from logging import getLogger
 
 import onnxruntime as ort
-import pandas as pd
 import torch
 import torcheval
-from tabulate import tabulate
-from tvm.script.ir_builder.tir import float32
 
-from tinyml_tinyverse.common.datasets import GenericTSDataset
+from tinyml_tinyverse.common.datasets import GenericTSDatasetForecasting
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
 
-dataset_loader_dict = {'GenericTSDataset': GenericTSDataset}
+import matplotlib.pyplot as plt
+import numpy as np
+
+dataset_loader_dict = {'GenericTSDatasetForecasting': GenericTSDatasetForecasting,}
 
 
 def get_args_parser():
@@ -57,8 +57,8 @@ def get_args_parser():
     parser = ArgumentParser(description=DESCRIPTION)
     parser.add_argument('--dataset', default='folder', help='dataset')
     parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
-    parser.add_argument("--loader-type", default="regression", type=str,
-                        help="Dataset Loader Type: classification/regression")
+    parser.add_argument("--loader-type", default="forecasting", type=str,
+                        help="Dataset Loader Type: classification/regression/forecasting")
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
     parser.add_argument('--data-path', default=os.path.join('.', 'data', 'datasets'), help='dataset')
     parser.add_argument('--output-dir', default=None, help='path where to save')
@@ -87,6 +87,8 @@ def get_args_parser():
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
     parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
     parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--forecast-horizon', help="Number of future timesteps to be predicted", type=int)
+    parser.add_argument('--target-variables',help='Target variables to be predicted', default=[])
     # Arc Fault and Motor Fault Related Params
     parser.add_argument('--frame-size', help="Frame Size")
     parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
@@ -114,7 +116,7 @@ def main(gpu, args):
     transform = None
     if not args.output_dir:
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
-        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'classification', output_folder, args.model, args.date)
+        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'forecasting', output_folder, args.model, args.date)
     utils.mkdir(args.output_dir)
     log_file = os.path.join(args.output_dir, 'run.log')
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)
@@ -136,18 +138,12 @@ def main(gpu, args):
         else:
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
     dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict, test_only=True)  # (126073, 1, 152), 126073
-
-    num_classes = len(dataset.classes)
-
+    
     logger.info("Loading data:")
-    data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=args.batch_size,
-        sampler=train_sampler, num_workers=args.workers, pin_memory=True,
-        collate_fn=utils.collate_fn)
-    # data_loader_test = torch.utils.data.DataLoader(
-    #     dataset_test, batch_size=args.batch_size,
-    #     sampler=test_sampler, num_workers=args.workers, pin_memory=True,
-    #     collate_fn=utils.collate_fn, )
+    data_loader_test = torch.utils.data.DataLoader(
+         dataset_test, batch_size=args.batch_size,
+         sampler=test_sampler, num_workers=args.workers, pin_memory=True,
+         collate_fn=utils.collate_fn, )
     logger.info(f"Loading ONNX model: {args.model_path}")
     if not args.generic_model:
         utils.decrypt(args.model_path, utils.get_crypt_key())
@@ -157,55 +153,81 @@ def main(gpu, args):
 
     input_name = ort_sess.get_inputs()[0].name
     output_name = ort_sess.get_outputs()[0].name
+
     predicted = torch.tensor([]).to(device, non_blocking=True)
     ground_truth = torch.tensor([]).to(device, non_blocking=True)
-    for batched_raw_data, batched_data, batched_target in data_loader:
-        batched_raw_data = batched_raw_data.to(device, non_blocking=True).long()
+
+    for _, batched_data, batched_target in data_loader_test:
         batched_data = batched_data.to(device, non_blocking=True).float()
-        batched_target = batched_target.to(device, non_blocking=True).long()
+        batched_target = batched_target.to(device, non_blocking=True).float()
         if transform:
             batched_data = transform(batched_data)
-        if args.nn_for_feature_extraction:
-            for data in batched_raw_data:
-                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy().astype(np.float32)})[0]).to(device)))
-        else:
-            for data in batched_data:
-                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
+        for data in batched_data:
+            predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
-    try:
-        mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-        logger.info("Plotting OvR Multiclass ROC score")
-        utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                                  label_map=dataset.inverse_label_map, phase='test')
-        logger.info("Plotting Class difference scores")
-        utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                                  label_map=dataset.inverse_label_map, phase='test')
-    except Exception as e:
-        logger.warning(f"Post Training Analysis plots will not be generated because: {e}")
-
-    metric = torcheval.metrics.MulticlassAccuracy()
-    # predicted = torch.argmax(predicted, dim=1)
-    metric.update(predicted, ground_truth)
+    predicted=predicted.view_as(ground_truth)
+    
     logger = getLogger("root.main.test_data")
-    logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
-    try:
-        logger.info(
-            f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted, ground_truth, num_classes):.3f}")
-    except ValueError as e:
-        logger.warning("Not able to compute AUC ROC. Error: " + str(e))
-    if len(torch.unique(ground_truth)) == 1:
-        logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
-    else:
-        try:
-            confusion_matrix = get_confusion_matrix(predicted, ground_truth.type(torch.int64),
-                                                    num_classes).cpu().numpy()
-            logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
-                confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-                index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
-        except ValueError as e:
-            logger.warning("Not able to compute Confusion Matrix. Error: " + str(e))
-    return
+    for idx,item in enumerate(dataset_test.header_row):
+        for target_variable_name in item:
+            logger.info(f"Variable {target_variable_name}:")
+            logger.info(f"  SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(ground_truth[:,:,idx],predicted[:,:,idx]):.2f}%")
+            logger.info(f"  R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(predicted[:,:,idx],ground_truth[:,:,idx]):.4f}")
+
+            # Log timestep specific metrics
+            for step in range(args.forecast_horizon): 
+                logger.info(f"  Timestep {step+1}:")
+                logger.info(f"      SMAPE: {utils.smape(ground_truth[:,step,idx],predicted[:,step,idx]):.2f}%")
+                logger.info(f"      R²: {utils.get_r2_score(predicted[:,step,idx],ground_truth[:,step,idx]):.4f}")
+
+    # Save final predictions and create visualizations for best epoch
+    if args.output_dir and ground_truth is not None:
+        
+        results_dir = os.path.join(args.output_dir, 'test_results')
+        os.makedirs(results_dir, exist_ok=True)
+
+        # Save predictions in CSV format
+        utils.save_forecasting_predictions_csv(
+            ground_truth,
+            predicted,
+            results_dir,
+            dataset_test.header_row,
+            args.forecast_horizon,
+        )
+        
+        plots_dir=os.path.join(results_dir, 'prediction_plots')
+        os.makedirs(plots_dir, exist_ok=True)
+
+        # Create scatter plots for each variable
+        for idx,item in enumerate(dataset_test.header_row):
+            for target_variable_name in item:
+                fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
+
+                for step in range(args.forecast_horizon):
+                    step_targets = ground_truth[:, step, idx]
+                    step_outputs = predicted[:, step, idx]
+            
+                    step_smape = utils.smape(ground_truth[:,step,idx],predicted[:,step,idx])
+                    step_r2 = utils.get_r2_score(predicted[:,step,idx],ground_truth[:,step,idx])
+
+                    # Scatter plot
+                    ax = axes[step]
+                    ax.scatter(step_targets, step_outputs, alpha=0.5, label=f'Predictions')
+
+                    # Add perfect prediction line
+                    min_val = min(step_targets.min(), step_outputs.min())
+                    max_val = max(step_targets.max(), step_outputs.max())
+                    ax.plot([min_val, max_val], [min_val, max_val], 'k--',label='Perfect Prediction')
+
+                    ax.set_xlabel(f"Actual Variable {target_variable_name}")
+                    ax.set_ylabel(f"Predicted Variable {target_variable_name}")
+                    ax.set_title(f"{step+1}-step ahead\nR² = {step_r2:.4f},SMAPE = {step_smape:.2f}%")
+                    ax.legend()
+
+                plt.tight_layout()
+                plt.savefig(os.path.join(plots_dir,f'{target_variable_name}_predictions.png'))
+                plt.close()
 
 def run(args):
     if args.device != 'cpu' and args.distributed is True:
