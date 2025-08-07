@@ -77,7 +77,7 @@ from glob import glob
 from logging import getLogger
 
 import matplotlib.pyplot as plt
-from sklearn.metrics import roc_curve, auc, mean_squared_error, r2_score
+from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
@@ -89,7 +89,7 @@ import torch
 import torch.distributed as dist
 from cryptography.fernet import Fernet
 from tabulate import tabulate
-from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc
+from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc, r2_score, mean_squared_error
 
 from ..models.generic_models import FEModel  # , FEModel2
 from tinyml_torchmodelopt.quantization import (
@@ -721,17 +721,11 @@ def get_mse(output,target):
     return mean_squared_error(target,output,multioutput='uniform_average')  # raw_values
 
 # Calculate Symmetric Mean Absolute Percentage Error
-def smape(y_true, y_pred):
-    if torch.is_tensor(y_true):
-        numerator = torch.abs(y_pred - y_true)
-        denominator = (torch.abs(y_true) + torch.abs(y_pred)) / 2.0
-        denominator=np.where(denominator==0,1e-8,denominator)  # Avoid division by zero
-        return torch.mean(numerator / denominator) * 100  # Multiply by 100 to get percentage
-    else:
-        numerator = np.abs(y_pred - y_true)
-        denominator = (np.abs(y_true) + np.abs(y_pred)) / 2.0
-        denominator=np.where(denominator==0,1e-8,denominator)  # Avoid division by zero
-        return np.mean(numerator / denominator) * 100  # Multiply by 100 to get percentage
+def smape(y_true, y_pred): # y_true and y_pred must be tensors
+    numerator = torch.abs(y_pred - y_true)
+    denominator = (torch.abs(y_true) + torch.abs(y_pred)) / 2.0
+    denominator=np.where(denominator==0,1e-8,denominator)  # Avoid division by zero
+    return torch.mean(numerator / denominator) * 100  # Multiply by 100 to get percentage
     
 def number_of_correct(pred, target):
     # count number of correct predictions
@@ -965,7 +959,7 @@ def seed_everything(seed: int):
 
 
 def train_one_epoch_regression(model, criterion, optimizer, data_loader, device, epoch, transform, lambda_reg=0.01,
-                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False, **kwargs):
+                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
@@ -1017,7 +1011,7 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
         model_ema.update_parameters(model)
 
 def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device, epoch, transform,
-                    apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False, **kwargs):
+                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
@@ -1056,7 +1050,7 @@ def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device
                 loss.backward()
             optimizer.step()
 
-        smape_score = smape(target.detach().cpu().numpy(), output.detach().cpu().numpy())
+        smape_score = smape(target.detach(), output.detach()).item()
         batch_size = output.shape[0]
         metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
         metric_logger.meters['smape'].update(smape_score, n=batch_size)
@@ -1066,11 +1060,11 @@ def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device
         model_ema.update_parameters(model)
     
 
-def evaluate_forecasting(model, criterion, data_loader, device, transform=None, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+def evaluate_forecasting(model, criterion, data_loader, device, transform=None, log_suffix='', print_freq=None, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    print_freq = min(print_freq, len(data_loader))
+    print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
 
     targets=[]
@@ -1098,14 +1092,17 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
             # Compute loss
             loss = criterion(output, target)
             metric_logger.update(loss=loss.item())
-
-            targets.append(target.cpu().numpy())
-            outputs.append(output.cpu().numpy())
-
-    target_array=np.vstack(targets)
-    prediction_array=np.vstack(outputs)
-    overall_smape= smape(target_array, prediction_array)
-    return target_array,prediction_array,overall_smape
+            batch_size = data.shape[0]
+            smape_score = smape(target.detach(), output.detach()).item()
+            metric_logger.meters['smape'].update(smape_score, n=batch_size)
+            targets.append(target)
+            outputs.append(output)
+            
+    metric_logger.synchronize_between_processes()
+    target_tensor=torch.cat(targets, dim=0)
+    prediction_tensor=torch.cat(outputs, dim=0)
+    overall_smape= smape(target_tensor, prediction_tensor)
+    return target_tensor,prediction_tensor,overall_smape
 
 def save_forecasting_predictions_csv(true_values, predictions, output_dir,header_row, forecast_horizon):
     """
@@ -1130,11 +1127,11 @@ def save_forecasting_predictions_csv(true_values, predictions, output_dir,header
             df = pd.DataFrame(data)
             df.to_csv(os.path.join(csv_dir,f'{target_variable_name}_predictions.csv'), index=False)
 
-def evaluate_regression(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+def evaluate_regression(model, criterion, data_loader, device, transform, log_suffix='', print_freq=None, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    print_freq = min(print_freq, len(data_loader))
+    print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
 
     target_array = torch.Tensor([]).to(device, non_blocking=True)
@@ -1179,14 +1176,14 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     metric_logger.synchronize_between_processes()
 
     # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
-    logger.info(f'{header} MSE {metric_logger.mse.global_avg:.3f}')
-    logger.info(f'{header} R2-Score {metric_logger.r2.global_avg:.3f}')
+    logger.info(f'{header} MSE {get_mse(predictions_array, target_array):.3f}')
+    logger.info(f'{header} R2-Score {get_r2_score(predictions_array, target_array):.3f}')
     return metric_logger.mse.global_avg, metric_logger.r2.global_avg
 
 
 def train_one_epoch_anomalydetection(
         model, criterion, optimizer, data_loader, device, epoch, transform,
-        apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False, **kwargs):
+        apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
     # train_one_epoch_regression(
     #     model, criterion, optimizer, data_loader, device, epoch, transform,
     #     apex=apex, model_ema=model_ema, print_freq=print_freq, phase=phase, dual_op=dual_op, is_ptq=is_ptq, **kwargs)
@@ -1240,11 +1237,11 @@ def train_one_epoch_anomalydetection(
 
 
 def evaluate_anomalydetection(
-        model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, **kwargs):
+        model, criterion, data_loader, device, transform, log_suffix='', print_freq=None, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    print_freq = min(print_freq, len(data_loader))
+    print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
 
     target_array = torch.Tensor([]).to(device, non_blocking=True)
@@ -1296,9 +1293,10 @@ def evaluate_anomalydetection(
 
 def train_one_epoch_classification(
         model, criterion, optimizer, data_loader, device, epoch, transform,
-        apex=False, model_ema=None, print_freq=100, phase="", dual_op=True, is_ptq=False,
+        apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
         nn_for_feature_extraction=False, **kwargs):
     model.train()
+    print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
@@ -1354,11 +1352,11 @@ def train_one_epoch_classification(
         model_ema.update_parameters(model)
 
 
-def evaluate_classification(model, criterion, data_loader, device, transform, log_suffix='', print_freq=100, phase='', dual_op=True, nn_for_feature_extraction=False, **kwargs):
+def evaluate_classification(model, criterion, data_loader, device, transform, log_suffix='', print_freq=None, phase='', dual_op=True, nn_for_feature_extraction=False, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    print_freq = min(print_freq, len(data_loader))
+    print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
     confusion_matrix_total = np.zeros((kwargs.get('num_classes'), kwargs.get('num_classes')))
 
@@ -1388,11 +1386,10 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
 
             loss = criterion(output.squeeze(), target)
             acc1 = accuracy(output.squeeze(), target, topk=(1,))
+            f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
 
             confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
             confusion_matrix_total += confusion_matrix
-
-            f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
 
             # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
             # au_roc_total += au_roc
@@ -1408,8 +1405,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     metric_logger.synchronize_between_processes()
 
     # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
-    logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f}')
-    logger.info(f'{header} F1-Score {metric_logger.f1.global_avg:.3f}')
+    logger.info(f'{header} Acc@1 {accuracy(predictions_array.squeeze(), target_array, topk=(1,))[0]:.3f}')
+    logger.info(f'{header} F1-Score {get_f1_score(predictions_array.squeeze(), target_array, kwargs.get("num_classes")):.3f}')
     # auc = get_au_roc_from_conf_matrix(confusion_matrix_total)
     # logger.info('AU-ROC Score: {:.3f}'.format(auc))
     auc = get_au_roc(predictions_array, target_array, kwargs.get('num_classes'))
