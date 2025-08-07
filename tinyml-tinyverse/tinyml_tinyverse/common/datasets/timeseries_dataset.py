@@ -688,7 +688,7 @@ class GenericTSDatasetReg(Dataset):
 
         x_temp_raw_out = x_temp.copy()
         if y_temp.ndim == 2:
-            y_temp = np.array(basic_transforms.SimpleWindow(y_temp, self.frame_size, 1, self.keep_short_tails))
+            y_temp = np.array(basic_transforms.SimpleWindow(y_temp, self.frame_size, 1, keep_short_tails=False))
         # y_temp = y_temp.transpose(0, 2, 1) # (10, 1024, 2) -> (10, 2, 1024)
         # y_temp = y_temp.mean(axis=2)       # (10, 2, 1024) -> (10, 2)
         return x_temp, y_temp.mean(axis=1), x_temp_raw_out

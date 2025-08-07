@@ -172,7 +172,7 @@ def get_args_parser():
     parser.add_argument('--lr-warmup-decay', default=0.01, type=float, help='the decay for lr')
     parser.add_argument('--lr-step-size', default=30, type=int, help='decrease lr every step-size epochs')
     parser.add_argument('--lr-gamma', default=0.1, type=float, help='decrease lr by a factor of lr-gamma')
-    parser.add_argument('--print-freq', default=10, type=int, help='print frequency')
+    parser.add_argument('--print-freq', default=None, type=int, help='print frequency')
     parser.add_argument('--output-dir', default=None, help='path where to save')
     parser.add_argument('--resume', default='', help='resume from checkpoint')
     parser.add_argument('--start-epoch', default=0, type=int, metavar='N', help='start epoch')
@@ -470,10 +470,10 @@ def main(gpu, args):
             lr_scheduler.step()
 
         #logger.info(f"\nEpoch {epoch}:")
-        target_array,prediction_array,overall_smape= utils.evaluate_forecasting(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op)
+        target_tensor,prediction_tensor,overall_smape= utils.evaluate_forecasting(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op)
 
         if model_ema:
-            target_array,prediction_array,overall_smape = utils.evaluate_forecasting(
+            target_tensor,prediction_tensor,overall_smape = utils.evaluate_forecasting(
                 model_ema, criterion, data_loader_test, device=device, transform=transform,
                 log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
 
@@ -482,8 +482,8 @@ def main(gpu, args):
         if overall_smape<best_epoch_values['overall_smape']:
             best_epoch_values['overall_smape'] = overall_smape
             best_epoch_values['epoch'] = epoch
-            best_epoch_values['true_values'] = target_array
-            best_epoch_values['predictions'] = prediction_array
+            best_epoch_values['true_values'] = target_tensor.clone()
+            best_epoch_values['predictions'] = prediction_tensor.clone()
 
             if args.output_dir:
                 checkpoint = {
