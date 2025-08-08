@@ -130,7 +130,7 @@ To begin with, you can use the repo as a `developer` or `user`.
       * You can load one like this:
     * ```python
       import yaml  
-      with open('arc_fault/config_timeseries_classification_dsk.yaml') as fp:
+      with open('dc_arc_fault/config_dsk.yaml') as fp:
           config = yaml.safe_load(fp)
       ```
     ### Important
