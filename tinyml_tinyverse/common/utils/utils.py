@@ -1102,6 +1102,7 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
     target_tensor=torch.cat(targets, dim=0)
     prediction_tensor=torch.cat(outputs, dim=0)
     overall_smape= smape(target_tensor, prediction_tensor)
+    logger.info(f"Current SMAPE across all target variables and across all predicted timesteps: {overall_smape:.2f}%")
     return target_tensor,prediction_tensor,overall_smape
 
 def save_forecasting_predictions_csv(true_values, predictions, output_dir,header_row, forecast_horizon):

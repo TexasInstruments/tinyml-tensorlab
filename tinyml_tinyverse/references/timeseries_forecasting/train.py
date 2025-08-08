@@ -469,7 +469,6 @@ def main(gpu, args):
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
 
-        #logger.info(f"\nEpoch {epoch}:")
         target_tensor,prediction_tensor,overall_smape= utils.evaluate_forecasting(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op)
 
         if model_ema:
@@ -477,7 +476,6 @@ def main(gpu, args):
                 model_ema, criterion, data_loader_test, device=device, transform=transform,
                 log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
 
-        logger.info(f"Epoch {epoch}: Current SMAPE across all target varibales and across all predicted timesteps: {overall_smape:.2f}%")
         # Update best results if current epoch is better
         if overall_smape<best_epoch_values['overall_smape']:
             best_epoch_values['overall_smape'] = overall_smape
@@ -500,7 +498,7 @@ def main(gpu, args):
                     checkpoint['model_ema'] = model_ema.state_dict()
     
                 utils.save_on_master(checkpoint,os.path.join(args.output_dir, 'checkpoint.pth'))
-        logger.info(f"Epoch {epoch}: Best Overall SMAPE across all variables across all predicted timsteps so far: {best_epoch_values['overall_smape']:.2f}% (Epoch {best_epoch_values['epoch']})") 
+        logger.info(f"Epoch {epoch}: Best Overall SMAPE across all variables across all predicted timesteps so far: {best_epoch_values['overall_smape']:.2f}% (Epoch {best_epoch_values['epoch']})")
 
     # Log best epoch metrics
     logger = getLogger(f"root.main.{phase}.BestEpoch")
