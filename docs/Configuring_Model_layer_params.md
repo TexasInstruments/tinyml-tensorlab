@@ -4,7 +4,7 @@
 * Called the model_config, examples can be found inside the [misc](../misc) folder.
 * To use this, you need to provide the path of the local `model_config` in the `config_*_*.yaml` under the `training` subsection.
 * Example:
-  * In [config_timeseries_classification_dsi.yaml](../config_timeseries_classification_dsi.yaml)
+  * In [config_dsi.yaml](../examples/dc_arc_fault/config_dsi.yaml)
   * Under training section:
 ```yaml
 training:

@@ -23,14 +23,14 @@ Prepare the zipped dataset by running the grid_stability python file. The script
 cd examples/grid_stability
 python grid_stability.py
 ```
-The path of this zipped dataset file is already mentioned in [configuration](config_classification_grid_stability.yaml) yaml, make sure it is same.
+The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
 
 ```yaml
 dataset:
     input_data_path: 'examples/grid_stability/grid_stability_dataset.zip'
 ```
 
-This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the yaml [configuration](config_classification_grid_stability.yaml).
+This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml).
 
 ## How ModelMaker helps ?
 
@@ -38,10 +38,10 @@ TinyML ModelMaker is an end-to-end model development tool that provides dataset 
 
 ```bash
 cd tinyml-modelmaker
-run_tinyml_modelmaker.sh F28P55 examples/grid_stability/config_timeseries_grid_stability.yaml
+run_tinyml_modelmaker.sh F28P55 examples/grid_stability/config.yaml
 ```
 
-ModelMaker will start by loading the dataset, train the model, test the model, compile the model. ModelMaker will create the output folder in `tinyml-modelmaker/data/projects/{dataset_name}`. For this example dataset_name is `grid_stability`. You can find the dataset name in the configuration [yaml](config_classification_grid_stability.yaml)
+ModelMaker will start by loading the dataset, train the model, test the model, compile the model. ModelMaker will create the output folder in `tinyml-modelmaker/data/projects/{dataset_name}`. For this example dataset_name is `grid_stability`. You can find the dataset name in the configuration [yaml](config.yaml)
 
 ```yaml
 dataset:
@@ -111,15 +111,15 @@ TinyML ModelMaker outputs extracted features, pca analysis of extracted features
             1. test_vector.c: contains test data and its output, this can be used to check if the model is working correctly in device
             2. user_input_config.h: configuration of feature extraction for ai library present in c2000ware
         3. model.onnx: onnx floating point model
-        4. pca_on_feature_extracted_train_data.png: PCA analysis of extracted features. [Refer here](../how_good_is_your_feature_extraction/readme.md)
+        4. pca_on_feature_extracted_train_data.png: PCA analysis of extracted features. [Refer here](../../docs/how_good_is_your_feature_extraction/readme.md)
     2. **quantization**
         1. feat_ext_data: stores the extracted features of dataset in NumPy (.npy)
         2. **golden_vectors**
             1. **test_vector.c**: contains test data and its output, this can be used to check if the model is working correctly in device
             2. **user_input_config.h**: configuration of feature extraction for ai library present in c2000ware
         3. **model.onnx**: onnx fixed point model
-        4. pca_on_feature_extracted_train_data.png: PCA analysis of extracted features. [Refer here](../how_good_is_your_feature_extraction/readme.md)
-        5. **post_training_analysis**: Performing a quick insight on the model performance (not latency related). [Refer here](../post_training_analysis/Post_Training_Analysis.md)
+        4. pca_on_feature_extracted_train_data.png: PCA analysis of extracted features. [Refer here](../../docs/how_good_is_your_feature_extraction/readme.md)
+        5. **post_training_analysis**: Performing a quick insight on the model performance (not latency related). [Refer here](../../docs/post_training_analysis/Post_Training_Analysis.md)
 3. run.json, run.yaml, status.json, status.yaml: complete list of configurations used to run the ModelMaker
 
 ## Output for Target Device

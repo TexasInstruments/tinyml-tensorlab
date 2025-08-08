@@ -22,7 +22,7 @@ This dataset is already formatted according to TinyML Modelmaker needs. The link
 This dataset is designed to work with TinyML ModelMaker, an end-to-end model development tool that provides dataset handling, model training, and compilation.
 
 ```bash
-./run_tinyml_modelmaker.sh F28P55 examples/data_processing_and_feature_extraction/config_timeseries_classification_motor_fault_dsk.yaml
+./run_tinyml_modelmaker.sh F28P55 examples/data_processing_and_feature_extraction/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.

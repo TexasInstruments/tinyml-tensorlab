@@ -2,7 +2,8 @@
 ### -Fasna Sharaf, Adithya Thonse, Tushar Sharma
 <hr>
 
-## Overview
+<details>
+<summary> Preface </summary>
 
 The Motor Fault Four Class Dataset is a multivariate time series dataset designed for bearing fault detection and classification in industrial motors based on extracted features from the dataset. This has been collected on an internal TI Testbed.
 
@@ -20,7 +21,7 @@ This dataset is already formatted according to TinyML Modelmaker needs. It can b
 This dataset is designed to work with TinyML ModelMaker, an end-to-end model development tool that provides dataset handling, model training, and compilation.
 
 ```bash
-./run_tinyml_modelmaker.sh F28P55 examples/goodness_of_fit_test/config_timeseries_classification_motor_fault_dsk3.yaml
+./run_tinyml_modelmaker.sh F28P55 examples/goodness_of_fit_test/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
@@ -34,6 +35,8 @@ The YAML configuration file sets up the model training process in TinyML ModelMa
 - **Training Section**: Configures the model training parameters, including the model name, batch size, epochs, and learning rate.
 - **Testing Section**: Indicates if testing should be enabled.
 - **Compilation Section**: Sets options for compiling the trained model.
+
+</details>
 
 In this example, we'll dive deeper into the GoF test for time-series classification datasets.
 
@@ -116,7 +119,7 @@ Here, {date-time} represents the timestamp of the run, {model_name} is the name 
 Here is the plot we got for the Motor Fault Four Class Dataset (frame_size=256):
 
 <p align="center">
-    <img src="./GoF_plots/motor_dsk3inp_GoF_frame_size_256.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/motor_dsk3inp_GoF_frame_size_256.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 <p align="center">GoF Test Plots for Motor Fault Four Class Dataset</p>
 
@@ -131,7 +134,7 @@ One possible explanation is the dataset’s sampling frequency. Upon closer insp
 To explore this further, the dataset was filtered to include only samples collected at 40Hz, and the GoF test was run again (frame_size=256).
 
 <p align="center">
-    <img src="./GoF_plots/motor_dsk3inp_GoF_frame_size_256_40Hz.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/motor_dsk3inp_GoF_frame_size_256_40Hz.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 <p align="center">Filtered GoF Test Plot for Motor Fault Four Class Dataset (40Hz)</p>
 
@@ -142,7 +145,7 @@ To explore this further, the dataset was filtered to include only samples collec
 For example, consider the Motor Fault Six-Class Dataset. Running the GoF test on this dataset with frame_size=256 produces the following plot:
 
 <p align="center">
-    <img src="./GoF_plots/motor_dsk_GoF_frame_size_256.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/motor_dsk_GoF_frame_size_256.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 <p align="center">GoF Test Plot for Motor Fault Six Class Dataset</p>
 
@@ -151,7 +154,7 @@ This time, the second and fourth plots display many clusters per class, suggesti
 To investigate further, the dataset was filtered to include only 40Hz samples, just like before (frame_size=256):
 
 <p align="center">
-    <img src="./GoF_plots/motor_dsk_GoF_frame_size_256_40Hz.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/motor_dsk_GoF_frame_size_256_40Hz.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 <p align="center">Filtered GoF Test Plot for Motor Fault Six Class Dataset (40Hz)</p>
 
@@ -160,7 +163,7 @@ Interestingly, even after filtering by frequency, each class still has around th
 A deeper look into the dataset reveals a key detail, it contains records collected from three different motors. This suggests that the clustering pattern may be influenced by the specific motor used during data collection. To test this, the data was further filtered to include records from only one specific motor (frame_size=256):
 
 <p align="center">
-    <img src="./GoF_plots/motor_dsk_GoF_frame_size_256_40Hz_m1.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/motor_dsk_GoF_frame_size_256_40Hz_m1.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 <p align="center">Filtered GoF Test Plot for Motor Fault Six Class Dataset (40Hz, Single motor)</p>
 
@@ -175,7 +178,7 @@ In this analysis, we observe the separation and overlap of clusters of different
 For example, take a look at the filtered GoF test plot for Motor Fault Four Class Dataset (40Hz) which we saw earlier:
 
 <p align="center">
-    <img src="./GoF_plots/motor_dsk3inp_GoF_frame_size_256_40Hz.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/motor_dsk3inp_GoF_frame_size_256_40Hz.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 <p align="center">Filtered GoF Test Plot for Motor Fault Four Class Dataset (40Hz)</p>
 
@@ -188,13 +191,13 @@ On the other hand, class 0 (Normal) and class 2 (Erosion) are consistently well 
 Now let's take **Arc Fault Classification Dataset** for this analysis. When working with this dataset which has two classes, *Arc* and *Normal*, we explore how changing the `frame_size` impacts the results of the GoF plots. Let’s start by plotting with `frame_size=256`.
 
 <p align="center">
-    <img src="./GoF_plots/arc_fault_dsi_GoF_frame_size_256.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/arc_fault_dsi_GoF_frame_size_256.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 
 Unfortunately, the plot doesn’t look great; the clusters lack purity, meaning they are not suitable for classification. So, let's increase the `frame_size` to `512`.
 
 <p align="center">
-    <img src="./GoF_plots/arc_fault_dsi_GoF_frame_size_512.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/arc_fault_dsi_GoF_frame_size_512.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 
 There is still not much improvement. The classes overlap significantly in the first four plots, while the next four plots show less overlap. However, the separation is still not good enough for classification and can increase the risk of misclassification. So let's increase the `frame_size` further to `1024` and `2048`.
@@ -202,11 +205,11 @@ There is still not much improvement. The classes overlap significantly in the fi
 <table align="center">
   <tr>
     <td align="center">
-      <img src="./GoF_plots/arc_fault_dsi_GoF_frame_size_1024.png" width="100%">
+      <img src="GoF_plots/arc_fault_dsi_GoF_frame_size_1024.png" width="100%">
       <br>Frame Size: 1024
     </td>
     <td align="center">
-      <img src="./GoF_plots/arc_fault_dsi_GoF_frame_size_2048.png" width="100%">
+      <img src="GoF_plots/arc_fault_dsi_GoF_frame_size_2048.png" width="100%">
       <br>Frame Size: 2048
     </td>
   </tr>
@@ -215,7 +218,7 @@ There is still not much improvement. The classes overlap significantly in the fi
 Once again, in both these graphs, in the first four plots there is no cluster purity as well no class separation. However, when we compare 5th and 6th plots with the earlier plot, we can see that classes tend to overlap less in these plots. However, there is still a risk of misclassification because the classes here don't have much sufficient separation. Now, let’s try with `frame_size=4096`. 
 
 <p align="center">
-    <img src="./GoF_plots/arc_fault_dsi_GoF_frame_size_4096.png" style="width:60vw; max-width:550px; height:auto;">
+    <img src="GoF_plots/arc_fault_dsi_GoF_frame_size_4096.png" style="width:60vw; max-width:550px; height:auto;">
 </p>
 
 Now we get a good result! Particularly in the 5th plot, which uses the combination **WT+MinMax Scaler+PCA**, we see clear, well separated clusters. This means the dataset is classifiable using this setup.

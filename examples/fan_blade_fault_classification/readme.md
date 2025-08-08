@@ -73,8 +73,8 @@ This application example showcases the following story:
 
 * You can use the Model Composer GUI or Tiny ML Modelmaker to train your model and compile it.
 * In Model Composer, you can play with different settings that can get your model to accuracy suited to you
-* For TinyML Modelmaker, you can use [this](config_timeseries_classification_fan_blade_dsi.yaml) config file and run it as follows from the `tinyml-modelmaker` directory
-  * `run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_fan_blade_dsi.yaml`
+* For TinyML Modelmaker, you can use [this](config.yaml) config file and run it as follows from the `tinyml-modelmaker` directory
+  * `run_tinyml_modelmaker.sh F28P55 fan_blade_fault_classification/config.yaml`
 * This configuration file should give you a 100% accuracy
 
 ## Live Preview

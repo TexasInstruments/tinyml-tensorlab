@@ -1,6 +1,6 @@
 # Neural Architecture Search (NAS) in ModelMaker
 
-ModelMaker supports Neural Architecture Search (NAS) for timeseries classification tasks, allowing users to automatically search for optimal neural network architectures based on their requirements. The NAS configuration is managed via YAML config files named `config_timeseries_classification_nas_example.yaml`.
+ModelMaker supports Neural Architecture Search (NAS) for timeseries classification tasks, allowing users to automatically search for optimal neural network architectures based on their requirements. The NAS configuration is managed via YAML config files named `config.yaml`.
 
 ## Code Flow Overview
 
@@ -111,5 +111,5 @@ training:
 - `nas_init_channel_multiplier`
 - `nas_fanout_concat`
 
-Refer to the example YAML config (`config_timeseries_classification_nas_example.yaml`) for usage patterns and default values.
+Refer to the example YAML config (`config.yaml`) for usage patterns and default values.
 

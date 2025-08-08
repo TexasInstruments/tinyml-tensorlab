@@ -22,6 +22,7 @@ or import it and follow the steps provided below.
 - `NUM_SPLITS`: Number of files to be created for each class
 
 ## Usage
+
 ```python
 from wisdm import *
 # import and configure 
@@ -54,7 +55,7 @@ pip install requests pandas
 
 # Motivation for the Example
 
-The `config_timeseries_classification_wisdm.yaml` file is used to configure the parameters for data_processing_feature_extraction, training, testing, compilation of a timeseries classification model on the WISDM dataset.
+The `config.yaml` file is used to configure the parameters for data_processing_feature_extraction, training, testing, compilation of a timeseries classification model on the WISDM dataset.
 
 The following example of wisdm dataset is provided to 
 - **Showcase the support for residual connections in ml model**
@@ -88,7 +89,7 @@ To run this example for device: `F28P55`:
 ```sh
 cd tinyml-modelmaker
 
-run_tinyml_modelmaker.sh F28P55 examples/branched_model_parameters/config_timeseries_classification_wisdm.yaml
+run_tinyml_modelmaker.sh F28P55 examples/branched_model_parameters/config.yaml
 ```
 ## Comparison of models
 
