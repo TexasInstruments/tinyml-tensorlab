@@ -17,7 +17,7 @@ DATA_DIR=${WORK_DIR:-"./data"}
 export TOOLS_PATH=${TOOLS_PATH:-$HOME_DIR/bin}
 
 TARGET_SOC=${1:-F28P55}
-CONFIG_FILE=${2:-config_timeseries_classification_kilby.yaml}
+CONFIG_FILE=${2:-dc_arc_fault/config_dsk.yaml}
 
 #################################################################################
 export PYTHONPATH=.:$PYTHONPATH

@@ -3,7 +3,7 @@
 This guide showcases the commonly used options under each section. This file should more or less be enough to guide the user to feeding options.
 However, if you want to delve into the depth of options for each section, we suggest you check out: [All possible options](../tinyml_modelmaker/ai_modules/timeseries/params.py)
 
-The [config_timeseries_classification_dsk.yaml](../config_timeseries_classification_dsk.yaml) or [config_timeseries_classification_dsi.yaml](../config_timeseries_classification_dsi.yaml) are examples that have combined sections of the following structure with a subset of each of the options.
+The [config_dsk.yaml](../examples/dc_arc_fault/config_dsk.yaml) or [config_dsi.yaml](../examples/dc_arc_fault/config_dsi.yaml) are examples that have combined sections of the following structure with a subset of each of the options.
 
 ### Section1: Common
 These options are about the overall run

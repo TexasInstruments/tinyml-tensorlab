@@ -35,7 +35,7 @@ Prepare the zipped dataset by running the electrical_fault python file. The scri
 cd examples/electrical_fault
 python electrical_fault.py
 ```
-The path of this zipped dataset file is already mentioned in [configuration](config_classification_electrical_fault.yaml) yaml, make sure it is same.
+The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
 
 ```yaml
 dataset:
@@ -44,20 +44,20 @@ dataset:
 
 ## Usage in TinyML ModelMaker
 
-This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the yaml [configuration](config_classification_electrical_fault.yaml) using the below code.
+This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config_classification_electrical_fault.yaml
+run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config.yaml
 ```
 
 1. `run_tinyml_modelmaker.sh` is the script to run modelmaker. It take two required arguments.
 2. `F28P55` is the name of target device.
-3. `examples/electrical_fault/config_classification_electrical_fault.yaml` path of the yaml configuration to run
+3. `examples/electrical_fault/config.yaml` path of the yaml configuration to run
 
 Running this configuration file with modelmaker will show an error to train the model properly with good hyper parameters. (This is due to *multicollinearity*)
 
 
-The users can configure the yaml [configuration](config_classification_electrical_fault.yaml) to change parameters related to **data preprocessing feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. 
+The users can configure the yaml [configuration](config.yaml) to change parameters related to **data preprocessing feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. 
 
 ## What if Multicollinearity in your dataset ?
 
@@ -82,7 +82,7 @@ To solve the problem of Multicollinearity, we can do one or more of the followin
 
 ## Feature Extraction is the solution
 
-In this example we will explore the method to do dimensionality reduction using `FFT` and `Binning` of features. The **data preprocessing feature extraction** section of yaml [configuration](config_classification_electrical_fault.yaml) can be used to configure it.
+In this example we will explore the method to do dimensionality reduction using `FFT` and `Binning` of features. The **data preprocessing feature extraction** section of yaml [configuration](config.yaml) can be used to configure it.
 
 ```yaml
 data_processing_feature_extraction:
@@ -121,10 +121,10 @@ data_processing_feature_extraction:
 2. `feature_size_per_frame`: size of binned features from one frame
 3. `num_frame_concat`: number of frames used for concatenating features
 
-After doing the above changes in yaml [configuration](config_classification_electrical_fault.yaml) file. Run the modelmaker again for this dataset.
+After doing the above changes in yaml [configuration](config.yaml) file. Run the modelmaker again for this dataset.
 
 ```bash
-run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config_classification_electrical_fault.yaml
+run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config.yaml
 ```
 
 Another feature extraction is to just perform `FFT` without Binning. For this, we need to remove `Binning` from transforms. The feature size for each frame would become half of the frame size. So, yaml configuration would look like.

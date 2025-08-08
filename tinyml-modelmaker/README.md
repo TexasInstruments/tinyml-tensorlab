@@ -9,24 +9,51 @@ The following are the key functionality supported by this tool:
 - Model training: Model training repositories such as [tinyml-tinyverse](https://github.com/TexasInstruments/tinyml-tinyverse) built using [PyTorch](https://pytorch.org/) are integrated. Several models with pretrained checkpoints are incorporated for each of these repositories. 
 - Model compilation: Model compilation tools [TI’s Neural Network Compiler](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/) for TI's microcontrollers have been integrated.
 
+<hr>
 
-Tasks and Models
+## 1. Use Cases
+* Most are part of the [examples](./examples) folder
 
-| Task | Modality                  | Example Application                                     | Description |
-| --- |---------------------------|---------------------------------------------------------| --- | 
-| Classification | Timeseries (Univariate)   | Arc Detection, Fall Detection                           | 1 to n-class classification of timeseries data |
-| Classification | Timeseries (Multivariate) | Arc Detection, Motor Bearing Fault Detection, Gyroscope | 1 to n-class classification of timeseries data |
-
-
-
-These functionalities that are supported are fully integrated and the user can control it by setting  parameters in the config file.
+| Documentation                                                                           | AI Task        | Dataset Type            | Description                                                                                                                                                                                                                                                                                               |
+|-----------------------------------------------------------------------------------------|----------------|-------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Simple Waveform Classification](examples/hello_world/readme.md)                        | Classification | Univariate Timeseries   | Classify sine/square/sawtooth waves based on input current data. Serves as an example to use the toolchain                                                                                                                                                                                                |
+| [Arc Fault Detection](examples/dc_arc_fault/readme.md)                                  | Classification | Univariate Timeseries   | Detect electrical current flow through an unintended path, often due to damaged, frayed, or improperly installed wiring.                                                                                                                                                                                  |
+| [Motor Bearing Fault Detection](examples/motor_bearing_fault/readme.md)                 | Classification | Multivariate Timeseries | Motor bearing faults are often seen in HVAC systems with rotating parts. Classify between 5 bearing fault types + normally working bearing based on vibration data.                                                                                                                                       |
+| [Blower Imbalance Classification](examples/blower_imbalance/readme.md)                  | Classification | Multivariate Timeseries | Often seen in blowers over time, the blades accumulate dust and particulate matter which clogs and causes some of the blades to be heavier than the other and ultimately resulting in increased energy consumption that is undesirable. Use currents along the three phase motor to determine imbalances  |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+| [Non Intrusive Load Monitoring](examples/nilm_appliance_usage_classification/readme.md) | Classification | Multivariate Timeseries | NILM can determine which appliances were active at any given time from a single meter reading                                                                                                                                                                                                             |                                                                                                                                                                                                                                                                                                           
+| [Grid Stability](examples/grid_stability/readme.md)                                     | Classification | Multivariate Timeseries | The dataset is created by stability analysis of 4-node star system. There is 1 generation node in center and 3 consumer nodes. There are 3 parameters (Tau, P, G) for each node amounting to total 12 independent variables. There are two prediction variable for stability (numerical and categorical). |
+| [Gas Sensor Dataset](examples/gas_sensor/readme.md)                                     | Classification | Multivariate Timeseries | Predict the kind of gas present & its concentration                                                                                                                                                                                                                                                       |
+| [Electric Fault Detection](examples/electrical_fault/readme.md)                         | Classification | Multivariate Timeseries | Find faults in transmission line and classify the type of fault using the line voltage and current.                                                                                                                                                                                                       |
+| [Wearables: Human Activity Recognition](examples/branched_model_parameters/readme.md)   | Classification | Multivariate Timeseries | Based on accelerometer and gyroscope data, detect if a person is walking, jogging, sitting, standing, upstair                                                                                                                                                                                             |
+| [Fan Blade Fault Classification](examples/fan_blade_fault_classification/readme.md)     | Classification | Multivariate Timeseries | Based on accelerometer data, detect the different kind of faults in a BLDC fan.                                                                                                                                                                                                                           |
+| [ECG Classification](examples/ecg_classification/readme.md)                             | Classification | Multivariate Timeseries | Classify whether a heartbeat is normal or anomalous from ECG data                                                                                                                                                                                                                                         |
+| [PMSM rotor winding ](examples/forecasting_pmsm_rotor/readme.md)                        | Forecasting    | Multivariate Timeseries | Forecast the next state of the rotor winding in a PMSM motor                                                                                                                                                                                                                                              |
 
 <hr>
 
-## Dataset & Datafile format
+## 2. Using this toolchain
 
-* [For Timeseries Classification](./docs/DatasetFormat_Timeseries_Classification.md) - Application such as Arc Fault Classification, Motor Bearing Fault Classification, Fan Blower Imbalance Detection and any other classification task.
+| Documentation                                                                                                                    | Description                                                                                                                                                             |
+|----------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Dataset & Datafile format for Timeseries Classification](./docs/DatasetFormat_Timeseries_Classification.md)                     | Dataset format for applications such as Arc Fault Classification, Motor Bearing Fault Classification, Fan Blower Imbalance Detection and any other classification task. |
+| [A guide to Bring Your Own Data](examples/grid_stability/readme.md)                                                              | Understanding the outputs generated by Tiny ML Modelmaker                                                                                                               |
+| [Playing with your Own Dataset](examples/electrical_fault/readme.md)                                                             | A guide to explore Tiny ML Modelmaker from an external dataset POV                                                                                                      |
+| [Understanding the config.yaml](./docs/UnderstandingConfigFile.md)                                                               | Basics of the config.yaml that can run Tiny ML Modelmaker                                                                                                               |
+| [Understanding Data Processing and Feature Extraction in the config.yaml](docs/data_processing_and_feature_extraction/readme.md) | Explore the config.yaml with a more descriptive explanation on the Data Processing and Feature Extraction sections                                                      |
+| [Bring Your Own Model for Compilation](docs/byom_for_compilation_only/readme.md)                                                           | You have your own (onnx/tflite) model that you think is capable of running on TI device. You want to use Tiny ML modelmaker to compile it                               |
+| [Adding Models](./docs/AddingModels.md)                                                                                          | A guide to adding your own model definitions to Tiny Ml Tinyverse, Modelmaker                                                                                           |
+| [Adding Modalities](./docs/AddingModalities.md)                                                                                  | A guide to creating your own new flow (for example: audio_classification)                                                                                               |
 
+<hr>
+
+## 3. Spotlight features that are worth exploring
+
+| Documentation                                                                              | Description                                                                                                        |
+|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| [Using Neural Network Architecture Search](docs/NAS/readme.md)                             | A guide to using Neural Network Architecture Search to automatically create a model based on the dataset provided. |
+| [Goodness of Fit Dataset](./docs/goodness_of_fit_test/readme.md)                           | Evaluate whether your time-series dataset is suitable for classification                                           |
+| [Post Training Analysis](docs/post_training_analysis/readme.md)                            | Understanding the Post Training Insights that the Tiny ML Modelmaker generates                                     |
+| [How Good is your Feature Extraction?](docs/how_good_is_your_feature_extraction/readme.md) | Understanding the need for feature extraction and insights into the dataset that Tiny ML Modelmaker provides       |
 
 <hr>
 
@@ -36,23 +63,4 @@ These functionalities that are supported are fully integrated and the user can c
 * The config file can be in .yaml or in .json format
 * If the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.
 
-
 <hr>
-
-## Additional Docs & Examples
-
-| Documentation                                                                                                                        | Description                                                                                                                               |
-|--------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| [A guide to Bring Your Own Data](examples/grid_stability/readme.md)                                                                  | Understanding the outputs generated by Tiny ML Modelmaker                                                                                 |
-| [Playing with your Own Dataset](examples/electrical_fault/readme.md)                                                                 | A guide to explore Tiny ML Modelmaker from an external dataset POV                                                                        |
-| [Understanding the config.yaml](./docs/UnderstandingConfigFile.md)                                                                   | Basics of the config.yaml that can run Tiny ML Modelmaker                                                                                 |
-| [Understanding Data Processing and Feature Extraction in the config.yaml](examples/data_processing_and_feature_extraction/readme.md) | Explore the config.yaml with a more descriptive explanation on the Data Processing and Feature Extraction sections                        |
-| [How Good is your Feature Extraction?](examples/how_good_is_your_feature_extraction/readme.md)                                       | Understanding the need for feature extraction and insights into the dataset that Tiny ML Modelmaker provides                              |
-| [Post Training Analysis](examples/post_training_analysis/readme.md)                                                                  | Understanding the Post Training Insights that the Tiny ML Modelmaker generates                                                            |
-| [Bring Your Own Model for Compilation](./docs/BYOM_for_Compilation.md)                                                               | You have your own (onnx/tflite) model that you think is capable of running on TI device. You want to use Tiny ML modelmaker to compile it |
-| [Adding Models](./docs/AddingModels.md)                                                                                              | A guide to adding your own model definitions to Tiny Ml Tinyverse, Modelmaker                                                             |
-| [Adding Modalities](./docs/AddingModalities.md)                                                                                      | A guide to creating your own new flow (for example: audio_classification)                                                                 |
-| [Using Neural Network Architecture Search](./docs/NAS_docs.md)                                                                       | A guide to using Neural Network Architecture Search to automatically create a model based on the dataset provided.                        |
-
-
-

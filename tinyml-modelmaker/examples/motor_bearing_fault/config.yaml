@@ -1,28 +1,26 @@
-
 common:
     target_module: 'timeseries'
     task_type: 'motor_fault'
     target_device: 'F28P55'
     run_name: '{date-time}/{model_name}'
+
 dataset:
     # enable/disable dataset loading
     enable: True #False
-    dataset_name: fan_blade_fault
-    input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blade_fault_dsi.zip
+    dataset_name: 'motor_fault_example_dsk'
 
-data_processing_feature_extraction: # One or more can be cascaded in the list
-    data_proc_transforms: []
-#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
+data_processing_feature_extraction:
     feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
 #    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
-#    feature_extraction_name: Custom_MotorFault
-#    frame_size: 256
-#    feature_size_per_frame: 128
-#    num_frame_concat: 8
+#    feature_extraction_name: 'Custom_MotorFault'
+#    frame_size: 1024
+#    feature_size_per_frame: 64
+#    num_frame_concat: 4
 #    normalize_bin: 1
-#    stacking: 2D1
-#    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
+#    stacking: 1D
+#    feat_ext_transform: [ 'FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT' ]
 #    offset: 0
 #    scale: 1
 #    frame_skip: 1
@@ -31,6 +29,7 @@ data_processing_feature_extraction: # One or more can be cascaded in the list
 #    log_threshold: 1e-100
 #    store_feat_ext_data: False
 #    nn_for_feature_extraction: False
+    gof_test: False
     variables: 3
 
 training:
@@ -38,12 +37,12 @@ training:
     enable: True #False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: MotorFault_model_1_t, MotorFault_model_2_t, MotorFault_model_3_t
-    model_name: 'TimeSeries_Generic_4k_t'
+    model_name: 'TimeSeries_Generic_1k_t'
 #    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_mf_1l.py'
     model_config: ''
     batch_size: 256
     training_epochs: 20
-    num_gpus: 1  # 1
+    num_gpus: 0
 #    learning_rate: 0.001
 
 testing:

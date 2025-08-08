@@ -161,9 +161,9 @@ run_tinyml_modelmaker.sh  <target_device> <config_file>
  
 Timeseries Classification (Arc fault detection) example
 ```
-run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_dsi.yaml
+run_tinyml_modelmaker.sh F28P55 dc_arc_fault/config_dsi.yaml
 (or)
-run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_dsk.yaml
+run_tinyml_modelmaker.sh F28P55 dc_arc_fault/config_dsk.yaml
 ```
 
 Where F28P55 above is an example of target_device supported.

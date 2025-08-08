@@ -56,7 +56,7 @@ Let us look at some datasets. (These were random runs with some set of inputs, a
 <summary>  3. Motor Bearing Fault Classification Dataset </summary> 
 * Since this is a relatively complex dataset, Let us explore the 4 feature extraction mechnaisms that Tiny ML Modelmaker provides OOB for the Motor Bearing Fault Detection. This is present even in the below file:
 
-[config_timeseries_classification_motor_bearing_dsk.yaml](../../config_timeseries_classification_motor_bearing_dsk.yaml)
+[config.yaml](../../examples/motor_bearing_fault/config.yaml)
 
   * feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
   * feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1

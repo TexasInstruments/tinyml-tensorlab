@@ -78,7 +78,7 @@ From these selected classes, we created the **train**, **validation**, and **tes
 Here is the command to use the refined dataset we produced earlier with TinyML ModelMaker:
 
 ```bash
-./run_tinyml_modelmaker.sh F28P55 examples/nilm_appliance_usage_classification/config_timeseries_classification_nilm.yaml
+./run_tinyml_modelmaker.sh F28P55 examples/nilm_appliance_usage_classification/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.

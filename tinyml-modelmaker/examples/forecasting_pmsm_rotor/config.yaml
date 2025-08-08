@@ -48,6 +48,6 @@ testing:
 
 compilation:
     # enable/disable compilation
-    enable: True #False
+    enable: False #False
     keep_libc_files: False
 #    compile_preset_name: default_preset/forced_soft_npu_preset
