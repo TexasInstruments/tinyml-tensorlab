@@ -130,7 +130,7 @@ To begin with, you can use the repo as a `developer` or `user`.
       * You can load one like this:
     * ```python
       import yaml  
-      with open('config_timeseries_classification_dsk.yaml') as fp:
+      with open('arc_fault/config_timeseries_classification_dsk.yaml') as fp:
           config = yaml.safe_load(fp)
       ```
     ### Important
@@ -161,7 +161,7 @@ To begin with, you can use the repo as a `developer` or `user`.
         ```
     5. Now you're ready to go!
     ```
-    run_tinyml_modelmaker.sh F28P55 config_timeseries_classification_dsk.yaml
+    run_tinyml_modelmaker.sh F28P55 arc_fault/config_timeseries_classification_dsk.yaml
     ```
     </details>
     
@@ -202,7 +202,7 @@ To begin with, you can use the repo as a `developer` or `user`.
     * We can run it now!
     ```powershell
     cd ..\..\tinyml-modelmaker
-    python .\tinyml_modelmaker\run_tinyml_modelmaker.py .\config_timeseries_classification_dsk.yaml --target_device F28P55
+    python .\tinyml_modelmaker\run_tinyml_modelmaker.py .\arc_fault\config_timeseries_classification_dsk.yaml --target_device F28P55
     ```
     
 </details>
