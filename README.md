@@ -97,9 +97,9 @@ To begin with, you can use the repo as a `developer` or `user`.
       * Windows: `$env:CGT_PATH="C:\path\to\wherever\present\ti-cgt-c2000_22.6.1.LTS"`
   * Please download and install [C2000Ware](https://www.ti.com/tool/C2000WARE)
     * Please set the installed path in your terminal:
-      * Linux: `export C2000WARE_PATH="/path/to/C2000Ware_5_05_00_00"`
-      * Windows: `$env:C2000WARE_PATH="C:\path\to\wherever\present\C2000Ware_5_05_00_00\"`
-        * Default: `$env:C2000WARE_PATH="C:\ti\c2000\C2000Ware_5_05_00_00"`
+      * Linux: `export C2000WARE_PATH="/path/to/C2000Ware_6_00_00_00"`
+      * Windows: `$env:C2000WARE_PATH="C:\path\to\wherever\present\C2000Ware_6_00_00_00\"`
+        * Default: `$env:C2000WARE_PATH="C:\ti\c2000\C2000Ware_6_00_00_00"`
   
 * **NOTE: MSPM0 Customers:**
   * Please download and install [TI Arm Codegen Tools (TI Arm CGT Clang)](https://www.ti.com/tool/download/ARM-CGT-CLANG)
