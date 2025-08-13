@@ -1655,7 +1655,7 @@ class GenericTSDatasetForecasting(Dataset):
     def _load_datafile(self, datafile):
         # Converting self.target_variables into list
         import ast
-        self.target_variables=ast.literal_eval(self.target_variables)
+        target_variables=ast.literal_eval(self.target_variables)
 
         file_extension = ops(datafile)[-1]
         if file_extension == ".npy":
@@ -1681,18 +1681,18 @@ class GenericTSDatasetForecasting(Dataset):
                 data=data[[col_index for col_index,value in data.iloc[0].items() if 'time' not in str(value).lower()]]
                 try:
                     float(data.iloc[0, 0])
-                    if self.target_variables == []:
+                    if target_variables == []:
                         self.header_row = [{'{}'.format(idx): idx} for idx in range(len(data.iloc[0].tolist()))]
                     else:
-                        self.header_row= [{str(idx): int(idx)} for idx in self.target_variables]
+                        self.header_row= [{str(idx): int(idx)} for idx in target_variables]
                 except (ValueError, TypeError):
                     is_int=lambda x: isinstance(x, int) or (isinstance(x, str) and x.isdigit())
-                    if self.target_variables==[]:
+                    if target_variables==[]:
                         self.header_row = [{value: idx} for idx, value in enumerate(data.iloc[0].tolist())]
-                    elif is_int(self.target_variables[0]):
-                        self.header_row = [{data.iloc[0].tolist()[int(idx)]: int(idx)} for idx in self.target_variables]
-                    elif isinstance(self.target_variables[0], str):
-                        self.header_row = [{value: data.iloc[0].tolist().index(value)} for value in self.target_variables]
+                    elif is_int(target_variables[0]):
+                        self.header_row = [{data.iloc[0].tolist()[int(idx)]: int(idx)} for idx in target_variables]
+                    elif isinstance(target_variables[0], str):
+                        self.header_row = [{value: data.iloc[0].tolist().index(value)} for value in target_variables]
                     data = data[1:]
             data = data.values.astype(float) 
             

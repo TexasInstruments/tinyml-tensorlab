@@ -1013,6 +1013,7 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
 def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device, epoch, transform,
                     apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
     model.train()
+    print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
