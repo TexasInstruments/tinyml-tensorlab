@@ -14,21 +14,20 @@ dataset:
 
 data_processing_feature_extraction: # One or more can be cascaded in the list
     # transforms: 'Downsample SimpleWindow'
-    data_proc_transforms: ['SimpleWindow']
+    data_proc_transforms: ['SimpleWindow'] # 'SimpleWindow' must be specified for forecasting tasks
     # Downsample
     #sampling_rate: 5
     #new_sr: 2
     # SimpleWindow
-    frame_size: 10 
+    frame_size: 10
     stride_size: 0.1 
     forecast_horizon: 2 # Number of future timesteps to be predicted
     variables: 7 # takes the first 'variables' columns after the time columns as input to predict the target variables
-    target_variables: [7,8,9,10,11] # Other format for `target_variables` specification: ['pm', 'stator_yoke'] or  [7,10] or ['7','8','10',]. If numbers which represent indices, are provided in list, assign column number 0 to the first non time column and continue numbering from there
+    target_variables: [7,11] # Other format for `target_variables` specification: ['pm','torque'] or  [7,11] or ['7','11',]. If numbers which represent indices, are provided in list, assign column number 0 to the first non time column and continue numbering from there
 
 training:
     # enable/disable training
     enable: True #False
-#    optimizer: 'adam'
     with_input_batchnorm: False
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
@@ -40,14 +39,14 @@ training:
     num_gpus: 0
     quantization: 1
     optimizer: adam
-    learning_rate: 0.001
+    learning_rate: 0.01
     output_dequantize: True
 
 testing:
-    enable: True
+    enable: True # False
 
 compilation:
     # enable/disable compilation
-    enable: False #False
+    enable: True # False
     keep_libc_files: False
-#    compile_preset_name: default_preset/forced_soft_npu_preset
+    compile_preset_name: forced_soft_npu_preset
