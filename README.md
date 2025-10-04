@@ -161,7 +161,7 @@ To begin with, you can use the repo as a `developer` or `user`.
         ```
     5. Now you're ready to go!
     ```
-    run_tinyml_modelmaker.sh F28P55 examples/dc_arc_fault/config_dsk.yaml
+    run_tinyml_modelmaker.sh examples/dc_arc_fault/config_dsk.yaml
     ```
     </details>
     
@@ -202,7 +202,7 @@ To begin with, you can use the repo as a `developer` or `user`.
     * We can run it now!
     ```powershell
     cd ..\..\tinyml-modelmaker
-    python .\tinyml_modelmaker\run_tinyml_modelmaker.py .\examples\dc_arc_fault\config_dsk.yaml --target_device F28P55
+    python .\tinyml_modelmaker\run_tinyml_modelmaker.py .\examples\dc_arc_fault\config_dsk.yaml
     ```
     
 </details>
