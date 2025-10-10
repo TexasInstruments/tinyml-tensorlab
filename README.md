@@ -242,8 +242,11 @@ To begin with, you can use the repo as a `developer` or `user`.
 <hr>
 
 ## What is New
-- [2025-Oct] More features
+
+- [2025-Oct] Release version 1.2.0 of the software
+
     <details>
+
     - Device Support:
       - Added MSPM0 based MCUs: MSPM0G3507, MSPM0G5187
       - Added Connectivity device: CC2745R10-Q1, CC2755R10
@@ -262,9 +265,12 @@ To begin with, you can use the repo as a `developer` or `user`.
         - BatchNorm is supported by GENERIC quantization
         - Experimental features like additional QDQ at input of model and floating bias can be enabled individually
         - Residual Add supported for different scales, zero points, but not optimised for TINPU
-      </details>
+      
+  </details>
+    
 - [2025-Aug] Release version 1.1.0 of the software
-    <details>
+    
+  <details>
 
   - General:
     - Generic Timeseries Classification is available with fixed point reference dataset.
@@ -281,7 +287,7 @@ To begin with, you can use the repo as a `developer` or `user`.
     - Upgraded TI MCU Neural Network Compiler for MCUs to 2.0.0
   - Windows Platform Specific:
     - Major quantization accuracy improvements  
-  - Miscellananeous:
+  - Miscellaneous:
     - Fixed model performance data that appears on the terminal when a training is initiated
     - Added Model Descriptions for all models
     - Setup of the repos is now smoother and cleaner
@@ -313,10 +319,9 @@ To begin with, you can use the repo as a `developer` or `user`.
   - Extensive Documentation & Know-How Examples to use Modelmaker
   
   </details>
-  
 - [2024-November] Updated (version 0.9.0) of the software
 - [2024-August] Release version 0.8.0 of the software
 - [2024-July] Release version 0.7.0 of the software
 - [2024-June] Release version 0.6.0 of the software
 - [2024-May] First release (version 0.5.0) of the software
- 
+
