@@ -242,7 +242,28 @@ To begin with, you can use the repo as a `developer` or `user`.
 <hr>
 
 ## What is New
-- [2025-Aug] Major feature updates (version 1.1.0) of the software
+- [2025-Oct] More features
+    <details>
+    - Device Support:
+      - Added MSPM0 based MCUs: MSPM0G3507, MSPM0G5187
+      - Added Connectivity device: CC2745R10-Q1, CC2755R10
+    - General:
+        - Supports simple gain augmentation for classification tasks
+        - Prints dataset file level confusion matrix for classification tasks       
+        - Golden Test Vectors for Regression tasks
+        - Run modelmaker with only the config, no more target device required in the input. 
+    - Flows:
+        - Timeseries Forecasting flows supported
+        - L1, L2 normalization can be enabled in regression using lambda_reg param
+    - Model Optimization:
+        - How to use: Documentation updated.
+        - Example code for performing regression in modeloptimization
+        - Fixing clipping of input data to int8 or uint8 based on dataset (zero_point) (only the input zero point is fixed and not the intermediate layers)
+        - BatchNorm is supported by GENERIC quantization
+        - Experimental features like additional QDQ at input of model and floating bias can be enabled individually
+        - Residual Add supported for different scales, zero points, but not optimised for TINPU
+      </details>
+- [2025-Aug] Release version 1.1.0 of the software
     <details>
 
   - General:
@@ -266,8 +287,6 @@ To begin with, you can use the repo as a `developer` or `user`.
     - Setup of the repos is now smoother and cleaner
 
   </details>
-      
-
 - [2025-Apr] Major feature updates (version 1.0.0) of the software
   <details>
 
