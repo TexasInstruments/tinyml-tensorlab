@@ -93,19 +93,19 @@ To begin with, you can use the repo as a `developer` or `user`.
 * **NOTE: C2000 Customers:**
   * Please download and install [TI C2000 Codegen Tools (TI C2000 CGT)](https://www.ti.com/tool/download/C2000-CGT)
     * Please set the installed path in your terminal:
-      * Linux: `export CGT_PATH="/path/to/ti-cgt-c2000_22.6.1.LTS"`
-      * Windows: `$env:CGT_PATH="C:\path\to\wherever\present\ti-cgt-c2000_22.6.1.LTS"`
+      * Linux: `export C2000_CG_ROOT="/path/to/ti-cgt-c2000_22.6.1.LTS"`
+      * Windows: `$env:C2000_CG_ROOT="C:\path\to\wherever\present\ti-cgt-c2000_22.6.1.LTS"`
   * Please download and install [C2000Ware](https://www.ti.com/tool/C2000WARE)
     * Please set the installed path in your terminal:
-      * Linux: `export C2000WARE_PATH="/path/to/C2000Ware_6_00_00_00"`
-      * Windows: `$env:C2000WARE_PATH="C:\path\to\wherever\present\C2000Ware_6_00_00_00\"`
-        * Default: `$env:C2000WARE_PATH="C:\ti\c2000\C2000Ware_6_00_00_00"`
+      * Linux: `export C2000WARE_ROOT="/path/to/C2000Ware_6_00_00_00"`
+      * Windows: `$env:C2000WARE_ROOT="C:\path\to\wherever\present\C2000Ware_6_00_00_00\"`
+        * Default: `$env:C2000WARE_ROOT="C:\ti\c2000\C2000Ware_6_00_00_00"`
   
 * **NOTE: MSPM0 Customers:**
   * Please download and install [TI Arm Codegen Tools (TI Arm CGT Clang)](https://www.ti.com/tool/download/ARM-CGT-CLANG)
     * Please set the installed path in your terminal:
-      * Linux: `export MSPM0_CGT_PATH="/path/to/ti-cgt-armllvm_4.0.3.LTS"`
-      * Windows: `$env:MSPM0_CGT_PATH="C:\path\to\wherever\present\ti-cgt-armllvm_4.0.3.LTS"`
+      * Linux: `export MSPM0_C2000_CG_ROOT="/path/to/ti-cgt-armllvm_4.0.3.LTS"`
+      * Windows: `$env:MSPM0_C2000_CG_ROOT="C:\path\to\wherever\present\ti-cgt-armllvm_4.0.3.LTS"`
   * Please download and install [MSPM0 SDK](https://www.ti.com/tool/MSPM0-SDK)
     * Please set the installed path in your terminal:
       * Linux: `export M0SDK_PATH="/path/to/mspm0_sdk_2_05_00_05"`
