@@ -83,6 +83,23 @@ template_model_description = dict(
 )
 _model_descriptions = {
     # Regression Models
+    'TimeSeries_Generic_AD_17k_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Fan blade Anomaly Detection Model with 17k params. 4 Conv+BatchNorm+Relu layers and then inversion of the same'),
+        'training': dict(
+            model_training_id='AD_CNN_TS_17K',
+            model_name='TimeSeries_Generic_AD_17k_t',
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION],
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+        ),
+    }),
     'TimeSeries_Generic_AD_16k_t': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(model_details='Anomaly Detection Model with 16k params. 4 Conv+BatchNorm+Relu layers and then inversion of the same'),
         'training': dict(
@@ -136,6 +153,7 @@ _model_descriptions = {
 
 enabled_models_list = [
     # Regression Models
+    'TimeSeries_Generic_AD_17k_t',
     'TimeSeries_Generic_AD_16k_t',
     'TimeSeries_Generic_AD_4k_t',
     'TimeSeries_Generic_AD_1k_t',
@@ -162,18 +180,6 @@ class ModelTraining:
     def __init__(self, *args, quit_event=None, **kwargs):
         self.params = self.init_params(*args, **kwargs)
         self.quit_event = quit_event
-
-        # num classes
-        # TODO: Is the below required?
-        '''
-        self.train_ann_file = f'{self.params.dataset.dataset_path}/annotations/{self.params.dataset.annotation_prefix}_train.json'
-        self.val_ann_file = f'{self.params.dataset.dataset_path}/annotations/{self.params.dataset.annotation_prefix}_val.json'
-        with open(self.train_ann_file) as train_ann_fp:
-            train_anno = json.load(train_ann_fp)
-            categories = train_anno['categories']
-            self.object_categories = [cat['name'] for cat in categories]
-        #
-        '''
 
         log_summary_regex = {
             'js': [
@@ -382,7 +388,6 @@ class ModelTraining:
                 '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
                 '--resampling-factor', f'{self.params.data_processing_feature_extraction.resampling_factor}',
                 '--new-sr', f'{self.params.data_processing_feature_extraction.new_sr}',
-                #'--sequence-window', f'{self.params.data_processing_feature_extraction.sequence_window}',
                 '--stride-size', f'{self.params.data_processing_feature_extraction.stride_size}',
                 '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,
                 '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
@@ -498,7 +503,6 @@ class ModelTraining:
                 '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
                 '--resampling-factor', f'{self.params.data_processing_feature_extraction.resampling_factor}',
                 '--new-sr', f'{self.params.data_processing_feature_extraction.new_sr}',
-                #'--sequence-window', f'{self.params.data_processing_feature_extraction.sequence_window}',
                 '--stride-size', f'{self.params.data_processing_feature_extraction.stride_size}',
 
                 '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,
@@ -531,6 +535,9 @@ class ModelTraining:
 
             args = test.get_args_parser().parse_args(argv)
             args.quit_event = self.quit_event
+            
+            args.cache_dataset = None
+            args.gpu =  self.params.training.num_gpus
             # launch the training
             test.run(args)
 

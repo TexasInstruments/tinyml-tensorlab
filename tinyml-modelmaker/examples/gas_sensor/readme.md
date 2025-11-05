@@ -29,11 +29,11 @@ dataset:
 This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelmaker.sh F28P55 examples/gas_sensor/config.yaml
+run_tinyml_modelmaker.sh examples/gas_sensor/config.yaml
 ```
 
 1. `run_tinyml_modelmaker.sh` is the script to run modelmaker. It take two required arguments TARGET_SOC and CONFIG_FILE.
-2. `F28P55` is the name of target soc.
+2. `F28P55` is the name of target soc present in config.yaml.
 3. `examples/gas_sensor/config.yaml` path of the yaml configuration file to run
 
 The users can configure the yaml [configuration](config.yaml) to change parameters related to data preprocessing feature extraction, **training**, testing, model and model compilation. In this example, we will configure the parameter of training, specifically *output_dequantize*. 

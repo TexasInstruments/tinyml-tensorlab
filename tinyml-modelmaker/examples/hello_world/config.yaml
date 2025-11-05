@@ -8,7 +8,7 @@ dataset:
     # enable/disable dataset loading
     enable: True #False
     dataset_name: hello_world_example_dsg
-#    input_data_path: http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/hello_world_dsg.zip
+#    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/hello_world_dsg.zip
 #    split_type: within_files
 #    gof_test: True
 
@@ -51,6 +51,7 @@ training:
 
 testing:
     enable: True
+    # device_inference: True    # Can be used only in presence of test-suite
 
 compilation:
     # enable/disable compilation

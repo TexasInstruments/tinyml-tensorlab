@@ -100,7 +100,7 @@ def main(config):
 if __name__ == '__main__':
     print(f'argv: {sys.argv}')
     # the cwd must be the root of the repository
-    if os.path.split(os.getcwd())[-1] == 'scripts':
+    if os.path.split(os.getcwd())[-1] == 'tinyml_modelmaker':
         os.chdir('..')
     #
 

@@ -191,8 +191,8 @@ sudo apt-get install build-essential
   * Now you can run:
 
   ```bash
-  run.sh train mcconfig_timeseries_classification.yaml  # To train
-  run.sh compile mcconfig_timeseries_classification.yaml  # To compile
+  run.sh train configs/f28_generic_timeseries.yaml  # To train
+  run.sh compile configs/f28_generic_timeseries.yaml  # To compile
   ```
 
   #### Note: To edit the files inside the docker image: (e.g the config yaml)

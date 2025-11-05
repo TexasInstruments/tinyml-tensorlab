@@ -12,11 +12,11 @@ dataset:
     
 data_processing_feature_extraction:
     data_proc_transforms: [Downsample, SimpleWindow]
+    gain_variations: {arc: [0.9, 1.1], normal: [0.8, 1.2]}
     # Downsample
     sampling_rate: 313000
     new_sr: 3130
     # SimpleWindow
-    #sequence_window: 256
     frame_size: 256
     stride_size: 0.01
 

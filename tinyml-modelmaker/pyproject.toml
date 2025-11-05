@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_modelmaker"
-version = "1.1.0"
+version = "1.2.0"
 description = "Tiny ML ModelMaker"
 readme = "README.md"
 requires-python = "==3.10.*"
@@ -30,10 +30,10 @@ dependencies = [
 	"matplotlib==3.10.3",
 	"scikit-learn==1.7.0",
 	"torch==2.7.1",
-    "tinyml_tinyverse @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.1#subdirectory=tinyml-tinyverse",
-	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.1#subdirectory=tinyml-modeloptimization/torchmodelopt",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.0.0-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.0.0-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
+    "tinyml_tinyverse @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.2#subdirectory=tinyml-tinyverse",
+	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.2#subdirectory=tinyml-modeloptimization/torchmodelopt",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
 	"Cython==3.1.2",
 	"protobuf==6.31.1",
 	"onnxsim==0.4.36",

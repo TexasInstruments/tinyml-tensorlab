@@ -1,31 +1,25 @@
 #!/usr/bin/env bash
 
 #################################################################################
-if [ $# -le 1 ]; then
+if [ $# -le 0 ]; then
     echo "help:"
-    echo "$0 target_device config_file"
+    echo "$0 config_file"
     exit 0
 fi
-
 #################################################################################
 HOME_DIR=${HOME}
 HOME_DIR=$(realpath $HOME_DIR)
 
 WORK_DIR=${WORK_DIR:-"./"}
 DATA_DIR=${WORK_DIR:-"./data"}
-
 export TOOLS_PATH=${TOOLS_PATH:-$HOME_DIR/bin}
-
-TARGET_SOC=${1:-F28P55}
-CONFIG_FILE=${2:-dc_arc_fault/config_dsk.yaml}
-
-#################################################################################
+CONFIG_FILE=${1:-dc_arc_fault/config_dsk.yaml}
 export PYTHONPATH=.:$PYTHONPATH
 
-#################################################################################
-# print some settings
-echo "Target device                     : ${TARGET_SOC}"
 echo "PYTHONPATH                        : ${PYTHONPATH}"
+python tinyml_modelmaker/run_tinyml_modelmaker.py ${CONFIG_FILE}
 
 #################################################################################
-python tinyml_modelmaker/run_tinyml_modelmaker.py ${CONFIG_FILE} --target_device ${TARGET_SOC}
+# This script was changed to remove target device as an argument on 4th October 2025 and is effective from 1.2 release
+# Check TINYML_ALGO-448
+#################################################################################

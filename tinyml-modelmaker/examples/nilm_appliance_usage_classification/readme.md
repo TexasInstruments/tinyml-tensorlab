@@ -71,14 +71,14 @@ Additionally, we reduced the number of variables from the original 30 to just 5 
 - **Reactive Power**  
 - **Phase**
 
-From these selected classes, we created the **train**, **validation**, and **test** datasets and structured the data to make it compatible with **TinyML ModelMaker** for classification tasks. You can access the refined dataset as a ZIP file [here](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip).
+From these selected classes, we created the **train**, **validation**, and **test** datasets and structured the data to make it compatible with **TinyML ModelMaker** for classification tasks. You can access the refined dataset as a ZIP file [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip).
 
 ## Usage in TinyML ModelMaker
 
 Here is the command to use the refined dataset we produced earlier with TinyML ModelMaker:
 
 ```bash
-./run_tinyml_modelmaker.sh F28P55 examples/nilm_appliance_usage_classification/config.yaml
+./run_tinyml_modelmaker.sh examples/nilm_appliance_usage_classification/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
@@ -97,7 +97,9 @@ On running the YAML file, the following accuracies were observed:
 - **F1-Score**: 1.000  
 - **AUC ROC Score**: 1.000  
 
+
 **Confusion Matrix**:
+
 | Ground Truth                          | Predicted: +fridge | Predicted: +fridge+tumble_dryer+washer_dryer | Predicted: +fridge+washer_dryer | Predicted: +fridge+washing_machine+washer_dryer |
 |---------------------------------------|--------------------|---------------------------------------------|---------------------------------|-----------------------------------------------|
 | **+fridge**                           | 83                 | 0                                           | 0                               | 0                                             |
@@ -113,7 +115,9 @@ On running the YAML file, the following accuracies were observed:
 - **F1-Score**: 1.000  
 - **AUC ROC Score**: 1.000  
 
+
 **Confusion Matrix**:
+
 | Ground Truth                          | Predicted: +fridge | Predicted: +fridge+tumble_dryer+washer_dryer | Predicted: +fridge+washer_dryer | Predicted: +fridge+washing_machine+washer_dryer |
 |---------------------------------------|--------------------|---------------------------------------------|---------------------------------|-----------------------------------------------|
 | **+fridge**                           | 83                 | 0                                           | 0                               | 0                                             |
@@ -127,13 +131,15 @@ On running the YAML file, the following accuracies were observed:
 - **Evaluation Accuracy**: 99.10%  
 - **AUC ROC Score**: 0.988  
 
+
 **Confusion Matrix**:
+
 | Ground Truth                          | Predicted: +fridge | Predicted: +fridge+tumble_dryer+washer_dryer | Predicted: +fridge+washer_dryer | Predicted: +fridge+washing_machine+washer_dryer |
 |---------------------------------------|--------------------|---------------------------------------------|---------------------------------|-----------------------------------------------|
 | **+fridge**                           | 83                 | 0                                           | 0                               | 0                                             |
 | **+fridge+tumble_dryer+washer_dryer** | 0                  | 41                                          | 2                               | 0                                             |
 | **+fridge+washer_dryer**              | 0                  | 0                                           | 5                               | 0                                             |
-| **+fridge+washing_machine+washer_dryer** | 0                | 0                                           | 0                               | 91                                                  |
+| **+fridge+washing_machine+washer_dryer** | 0                | 0                                           | 0                               | 91 											  |
 
 
 You can find the compiled model at: tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation

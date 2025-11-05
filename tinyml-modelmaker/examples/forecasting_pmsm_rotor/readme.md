@@ -65,7 +65,7 @@ For this example, we have already prepared the dataset in the required format. Y
 You can run this example directly in **TinyML ModelMaker** using the following command:
 
 ```bash
-./run_tinyml_modelmaker.sh F28P55 examples/forecasting_pmsm_rotor/config.yaml
+./run_tinyml_modelmaker.sh examples/forecasting_pmsm_rotor/config.yaml
 ```
 
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
@@ -99,7 +99,7 @@ dataset:
     enable: True
     data_dir: 'files'
     dataset_name: pmsm_rotor_temp_prediction_dataset
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/pmsm_rotor_temp.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/pmsm_rotor_temp.zip
 ```
 
 ### `data_processing_feature_extraction` section
@@ -346,9 +346,78 @@ They are located under the `predictions_csv` folder. It will conatin separate CS
 
 Also you can see the compiled mode at: `data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation`
 
+
+## Running on Device
+
+To run the model on a device, we will use **quantization 0**, which means the model is trained in floating-point precision (no quantization). After successfully running Modelmaker, you will get four main files:
+
+1. **Artifacts**:
+   - `mod.a` and `tvmgen_default.h` are generated and stored in:
+     ```
+     data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation/artifacts
+     ```
+
+2. **Golden Vectors**:
+   - `user_input_config.h` and `test_vector.c` are stored in:
+     ```
+     data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/golden_vectors
+     ```
+
+In this example, we will use the following setup:
+
+- **Device**: LAUNCHXL-F28P55X
+- **C2000Ware Version**: 6.00
+- **Code Composer Studio (CCS)**: Version 20.2.0
+
+<hr>
+
+### Steps to Run on Device
+
+1. **Extract the Example Project**:
+   - Download the zip file [ex_pmsm_forecasting_f28p55x](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/misc/ex_pmsm_forecasting_f28p55x.zip).
+   - Extract the zip file.
+   - Copy the extracted folder to the following directory in your C2000Ware installation:
+     ```
+     {C2000Ware_Installation_Path}/libraries/ai/feature_extract/c28/examples/
+     ```
+
+2.  Launch Code Composer Studio (CCS), go to the **File** tab, and select **Import Projects**.
+
+3. Browse to the folder `ex_pmsm_forecasting_f28p55x`, click **Select Folder**, and then click **Finish** to import the project.
+
+4. Go to the **Project** tab and select **Build Project**.
+
+5. Change the active target device from `TMS320F28P550SJ9.ccxml` to `TMS320F28P550SJ9_LaunchPad.ccxml`.
+
+6. Connect the LAUNCHXL-F28P55X to your system.
+
+7. Go to the **Run** tab and select **Flash Project**.
+
+8. After flashing, the debug screen will appear. Click the debug icon to start debugging.
+
+We can see that golden vectors match the float output values.
+
+<hr>
+
+## Performance Metrics
+
+Here are the key performance metrics for the model running on the device:
+
+| Metric               | Value       |
+|----------------------|-------------|
+| **Cycles**           | 633583      |
+| **Inference Time**   | 4223.887 µs |
+| **Results Match**    | TRUE        |
+| **Code Size**        | 1473 bytes  |
+| **RO Data**          | 18960 bytes |
+| **RW Data**          | 2576 bytes  |
+| **Total Size**       | 23009 bytes |
+| **Flash Usage**      | 20433 bytes |
+| **SRAM Usage**       | 2576 bytes  |
+
 <hr>
 Update history:
-[12th Aug 2025]: Compatible with v1.0 of Tiny ML Modelmaker
+[14th Oct 2025]: Compatible with v1.2 of Tiny ML Modelmaker
 
 
 

@@ -133,8 +133,9 @@ class ModelCompilation():
         ]
         # compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
         args = compile_scr.get_args_parser().parse_args(argv)
-        compile_scr.run(args)
+        exit_flag = compile_scr.run(args)
         args.quit_event = self.quit_event
+        return exit_flag
 
     def _get_compiled_artifact_dir(self):
         # compiled_artifact_dir = os.path.join(self.work_dir, self.params.compilation.model_compilation_id)

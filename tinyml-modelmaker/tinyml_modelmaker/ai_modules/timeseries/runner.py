@@ -110,9 +110,9 @@ class ModelRunner():
                                                                         self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
 
         if self.params.common.target_device in self.params.training.target_devices:
-            inference_time_us_list = {k:v['inference_time_us'] for k,v in self.params.training.target_devices.items()}
-            sram_usage_list = {k: v['sram'] for k, v in self.params.training.target_devices.items()}
-            flash_usage_list = {k: v['flash'] for k, v in self.params.training.target_devices.items()}
+            inference_time_us_list = {k:v.get('inference_time_us') for k,v in self.params.training.target_devices.items()}
+            sram_usage_list = {k: v.get('sram') for k, v in self.params.training.target_devices.items()}
+            flash_usage_list = {k: v.get('flash') for k, v in self.params.training.target_devices.items()}
             print('---------------------------------------------------------------------')
             print(f'Run Name: {self.params.common.run_name}')
             print(f'- Model: {self.params.training.model_name}')
@@ -196,7 +196,8 @@ class ModelRunner():
                 self.params.dataset.annotation_path_splits,
                 self.params.training.model_proto_path,
                 self.params.training.log_file_path,
-                self.params.training.tspa_license_path
+                self.params.training.tspa_license_path,
+                self.params.training.file_level_classification_log_path
             ]
 
             if self.params.training.quantization == TinyMLQuantizationVersion.NO_QUANTIZATION:
@@ -240,7 +241,13 @@ class ModelRunner():
             # with open(self.params.compilation.log_file_path, 'a') as lfp:
             #     lfp.write(f'\nModelmaker version: {__version__}\n')
             self.model_compilation.clear()
-            self.model_compilation.run()
+            exit_flag = self.model_compilation.run()
+            if exit_flag:
+                print(f'Compilation failed')
+                with open(self.params.compilation.log_file_path, 'a') as lfp:
+                    lfp.write('FAILURE: ModelMaker - Compilation failed.')
+                return self.params
+            
             os.makedirs(self.params.compilation.model_compiled_path, exist_ok=True)
             model_compilation_package_files = [
                 os.path.join(self.params.compilation.compilation_path, 'artifacts'),
@@ -264,6 +271,14 @@ class ModelRunner():
             print(f'Compiled model is at: {self.params.compilation.compilation_path}')
             with open(self.params.compilation.log_file_path, 'a') as lfp:
                 lfp.write('\nSUCCESS: ModelMaker - Compilation completed.')
+            if self.params.testing.device_inference:
+                try:
+                    from tinyml_testsuite import test_golden_vector
+                    run_params_file = os.path.join(self.params.common.project_run_path, 'run.yaml')
+                    test_golden_vector(run_params_file, True)
+                except ImportError as e:
+                    print(f"Device Inference cannot be done due to an exception: {e}")
+
 
         return self.params
 

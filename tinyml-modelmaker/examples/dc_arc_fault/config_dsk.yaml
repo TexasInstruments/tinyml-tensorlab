@@ -15,8 +15,7 @@ dataset:
 data_processing_feature_extraction:
     # One or more can be cascaded in the list
     # transforms: 'DownSample SimpleWindow'
-    data_proc_transforms: []
-    # Downsample
+#    gain_variations: {class_0_normal: [0.9, 1.1], class_1_arc: [0.8, 1.2]}
     #sampling_rate: 313000
     #new_sr: 3130
     # SimpleWindow

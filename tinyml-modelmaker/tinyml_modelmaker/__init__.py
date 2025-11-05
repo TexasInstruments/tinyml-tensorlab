@@ -41,5 +41,6 @@ def get_task_category_type_from_task_type(task_type):
         ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_REGRESSION: ai_modules.timeseries.constants.TASK_CATEGORY_TS_REGRESSION,
         ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: ai_modules.timeseries.constants.TASK_CATEGORY_TS_ANOMALYDETECTION,
         ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_FORECASTING: ai_modules.timeseries.constants.TASK_CATEGORY_TS_FORECASTING,
-    }
+        ai_modules.vision.constants.TASK_TYPE_IMAGE_CLASSIFICATION: ai_modules.vision.constants.TASK_CATEGORY_IMAGE_CLASSIFICATION,
+    } 
     return task_type_to_task_category_type_map.get(task_type)

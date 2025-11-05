@@ -154,16 +154,16 @@ pip list | grep 'torch\|torchaudio'
 <details>
 
 ```
-run_tinyml_modelmaker.sh  <target_device> <config_file>
+run_tinyml_modelmaker.sh  <config_file>
 ```
 
 #### Examples: 
  
 Timeseries Classification (Arc fault detection) example
 ```
-run_tinyml_modelmaker.sh F28P55 dc_arc_fault/config_dsi.yaml
+run_tinyml_modelmaker.sh examples/dc_arc_fault/config_dsi.yaml
 (or)
-run_tinyml_modelmaker.sh F28P55 dc_arc_fault/config_dsk.yaml
+run_tinyml_modelmaker.sh examples/dc_arc_fault/config_dsk.yaml
 ```
 
 Where F28P55 above is an example of target_device supported.
