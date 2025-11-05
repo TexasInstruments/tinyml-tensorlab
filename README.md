@@ -243,7 +243,7 @@ To begin with, you can use the repo as a `developer` or `user`.
 
 ## What is New
 
-- [2025-Oct] Release version 1.2.0 of the software
+- [2025-Nov] Release version 1.2.0 of the software
 
     <details>
 
@@ -251,25 +251,27 @@ To begin with, you can use the repo as a `developer` or `user`.
       - Added MSPM0 based MCUs: MSPM0G3507, MSPM0G5187
       - Added Connectivity device: CC2745R10-Q1, CC2755R10
     - General:
-        - Supports simple gain augmentation for classification tasks
-        - Prints dataset file level confusion matrix for classification tasks       
-        - Golden Test Vectors for Regression tasks
-        - Run modelmaker with only the config, no more target device required in the input. 
+      - Supports simple gain augmentation for classification tasks
+      - Prints dataset file level confusion matrix for classification tasks       
+      - Golden Test Vectors for Regression tasks
+      - Run modelmaker with only the config, no more target device required in the input. 
     - Flows:
-        - Timeseries Forecasting flows supported
-        - L1, L2 normalization can be enabled in regression using lambda_reg param
+      - Timeseries Forecasting flows supported
+      - L1, L2 normalization can be enabled in regression using lambda_reg param
     - Model Optimization:
-        - How to use: Documentation updated.
-        - Example code for performing regression in modeloptimization
-        - Fixing clipping of input data to int8 or uint8 based on dataset (zero_point) (only the input zero point is fixed and not the intermediate layers)
-        - BatchNorm is supported by GENERIC quantization
-        - Experimental features like additional QDQ at input of model and floating bias can be enabled individually
-        - Residual Add supported for different scales, zero points, but not optimised for TINPU
+      - How to use: Documentation updated.
+      - Example code for performing regression in modeloptimization
+      - Fixing clipping of input data to int8 or uint8 based on dataset (zero_point) (only the input zero point is fixed and not the intermediate layers)
+      - BatchNorm is supported by GENERIC quantization
+      - Experimental features like additional QDQ at input of model and floating bias can be enabled individually
+      - Residual Add supported for different scales, zero points, but not optimised for TINPU
+    - Compilation:
+      - Upgraded TI MCU Neural Network Compiler for MCUs to 2.1.0 LTS
+      - Supported all layer configs with 8-bit activations and 8-/4-/2-bit weights that can be offloaded to TI-NPU 
+      - Supported all layer configs with 8-bit activations and 8-bit weights that can be accelerated using the M33 Custom Datapath Extension (CDE).
       
   </details>
-    
 - [2025-Aug] Release version 1.1.0 of the software
-    
   <details>
 
   - General:
@@ -323,5 +325,5 @@ To begin with, you can use the repo as a `developer` or `user`.
 - [2024-August] Release version 0.8.0 of the software
 - [2024-July] Release version 0.7.0 of the software
 - [2024-June] Release version 0.6.0 of the software
-- [2024-May] First release (version 0.5.0) of the software
+- [2024-May] First public release (version 0.5.0) of the software
 
