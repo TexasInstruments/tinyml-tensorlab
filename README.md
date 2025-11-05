@@ -165,7 +165,7 @@ The table below summarizes the resource usage for each model across various targ
   <img src="./graphs/cycles_vs_memory_usage_plots/generic_c28_total_memory_vs_cycles.png" alt="generic_c28_total_memory_vs_cycles" style="width: 80vw;">
   <p>
   <br>
-    <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/misc/generic_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Generic Models Across All Target Devices</a></b>
+    <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/misc/generic_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Generic Models Across All Target Devices</a></b>
   </p>
 </div>
 </details>
@@ -199,7 +199,7 @@ Some metrics are provided to help you understand the computational requirements 
 
 ## Model Accuracy Comparison Across Different Feature Extraction Presets
 
-To evaluate the performance of generic models for motor fault classification, we use the **Motor Fault Dataset** ([Dataset Link](http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/motor_fault_classification_dsk.zip)). The dataset is processed using four different feature extraction presets, and the models are trained on the extracted features.  
+To evaluate the performance of generic models for motor fault classification, we use the **Motor Fault Dataset** ([Dataset Link](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_classification_dsk.zip)). The dataset is processed using four different feature extraction presets, and the models are trained on the extracted features.  
 
 ### Feature Extraction Presets 
 
@@ -393,7 +393,7 @@ The table below summarizes the resource usage for each model across various targ
   <img src="./graphs/cycles_vs_memory_usage_plots/motorfault_c28_total_memory_vs_cycles.png" alt="motorfault_c28_total_memory_vs_cycles" style="width: 80vw;">
   <p>
   <br>
-    <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/misc/motor_fault_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Motor Fault GUI Models Across All Target Devices</a></b>
+    <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/misc/motor_fault_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Motor Fault GUI Models Across All Target Devices</a></b>
   </p>
 </div>
 
@@ -495,7 +495,7 @@ The table below summarizes the resource usage for each model across various targ
   <img src="./graphs/cycles_vs_memory_usage_plots/arcFault_c28_total_memory_vs_cycles.png" alt="arcFault_c28_total_memory_vs_cycles" style="width: 80vw;">
   <p>
   <br>
-    <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/misc/arc_fault_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Arc Fault GUI Models Across All Target Devices</a></b>
+    <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/misc/arc_fault_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Arc Fault GUI Models Across All Target Devices</a></b>
   </p>
 </div>
 
