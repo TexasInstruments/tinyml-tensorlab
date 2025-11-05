@@ -75,6 +75,7 @@ from itertools import combinations
 from collections import OrderedDict, defaultdict, deque
 from glob import glob
 from logging import getLogger
+from os.path import basename as opb
 
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
@@ -479,6 +480,190 @@ def plot_regression(ground_truth, predictions, output_dir, phase=''):
     plt.savefig(os.path.join(output_dir, f'Regression_plot_{phase}.png'))
 
 
+
+def plot_actual_vs_predicted_regression(ground_truth, predictions, output_dir, phase='', max_points=1000):
+    logger = getLogger("root.utils.plot_actual_vs_predicted")
+    
+    if predictions.shape != ground_truth.shape:
+        raise ValueError("predictions and ground_truth must have the same shape.")
+    
+    # Handle 1D arrays as 2D for uniformity
+    if predictions.ndim == 1:
+        predictions = predictions[:, np.newaxis]
+        ground_truth = ground_truth[:, np.newaxis]
+    
+    num_axes = predictions.shape[1]  # Number of axes to plot
+    
+    # Sample points if there are too many
+    num_samples = predictions.shape[0]
+    if num_samples > max_points:
+        indices = np.random.choice(num_samples, max_points, replace=False)
+        predictions = predictions[indices]
+        ground_truth = ground_truth[indices]
+    
+    # Set up the figure for subplots
+    fig, axes = plt.subplots(1, num_axes, figsize=(7 * num_axes, 6), squeeze=False)
+    
+    for axis in range(num_axes):
+        ax = axes[0, axis]
+        
+        # Scatter plot of actual vs predicted
+        ax.scatter(ground_truth[:, axis], predictions[:, axis], 
+                  color='blue', alpha=0.6, edgecolor='k', s=50)
+        
+        # Calculate min and max for both axes to set equal scales
+        min_val = min(ground_truth[:, axis].min(), predictions[:, axis].min())
+        max_val = max(ground_truth[:, axis].max(), predictions[:, axis].max())
+        
+        # Add perfect prediction line (y=x)
+        ax.plot([min_val, max_val], [min_val, max_val], 'r--', linewidth=2, 
+                label='Perfect Prediction')
+        
+        # Calculate R-squared
+        correlation_matrix = np.corrcoef(ground_truth[:, axis], predictions[:, axis])
+        correlation_xy = correlation_matrix[0,1]
+        r_squared = correlation_xy**2
+        
+        # Calculate Mean Absolute Error
+        # mae = np.mean(np.abs(predictions[:, axis] - ground_truth[:, axis]))
+        
+        # Add labels, title, and legend
+        ax.set_xlabel('Actual Values', fontsize=12)
+        ax.set_ylabel('Predicted Values', fontsize=12)
+        ax.set_title(f'Actual vs Predicted \n$R^2={r_squared:.4f}$', fontsize=14)
+        
+        # Make axes equal to ensure proper display of the diagonal
+        ax.set_aspect('equal')
+        ax.grid(alpha=0.3)
+        ax.legend()
+    plt.tight_layout()
+    save_path = os.path.join(output_dir, f'actual_vs_predicted_{phase}.png')
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    logger.info(f"Plot is saved at: {save_path}")
+    plt.close(fig)
+
+
+def plot_residual_error_regression(ground_truth, predictions, output_dir, phase='', bins=20):
+    from scipy import stats
+    logger = getLogger("root.utils.plot_residual_error")
+    
+    if isinstance(ground_truth, torch.Tensor):
+        ground_truth = ground_truth.detach().cpu().numpy()
+    if isinstance(predictions, torch.Tensor):
+        predictions = predictions.detach().cpu().numpy()
+    if ground_truth.ndim > 1:
+        ground_truth = ground_truth.flatten()
+    if predictions.ndim > 1:
+        predictions = predictions.flatten()    
+    residuals = ground_truth - predictions
+    
+    fig, ax = plt.subplots(figsize=(10, 7))
+    
+    n, bins, patches = ax.hist(residuals, bins=bins, density=True, 
+                              hatch='///', edgecolor='black', 
+                              alpha=0.7, label='Residual')
+    
+    mu, sigma = stats.norm.fit(residuals)
+    x = np.linspace(min(residuals), max(residuals), 100)
+    y = stats.norm.pdf(x, mu, sigma)
+    ax.plot(x, y, 'r-', linewidth=2, label=f'Normal Fit\nμ={mu:.4f}, σ={sigma:.4f}')
+    mean_residual = np.mean(residuals)
+    std_residual = np.std(residuals)
+    median_residual = np.median(residuals)
+    
+    ax.axvline(mean_residual, color='blue', linestyle='-', linewidth=2, label=f'Mean: {mean_residual:.4f}')
+    ax.axvline(median_residual, color='green', linestyle='--', linewidth=2, label=f'Median: {median_residual:.4f}')
+    
+    ax.set_xlabel('Deviation (Actual - Predicted)', fontsize=14)
+    ax.set_ylabel('Frequency', fontsize=14)
+    title = f'Residual Error Distribution\nStd Dev: {std_residual:.4f}'
+    ax.set_title(title, fontsize=16)
+    ax.set_ylim(bottom=0)
+    ax.grid(alpha=0.3, linestyle='--')
+    
+    ax.legend(loc='upper right')
+    
+    stats_text = (f'Statistics:\n'
+                 f'Mean: {mean_residual:.4f}\n'
+                 f'Median: {median_residual:.4f}\n'
+                 f'Std Dev: {std_residual:.4f}\n'
+                 f'Min: {min(residuals):.4f}\n'
+                 f'Max: {max(residuals):.4f}')
+    
+    props = dict(boxstyle='round', facecolor='white', alpha=0.7)
+    ax.text(0.02, 0.97, stats_text, transform=ax.transAxes, 
+           fontsize=12, va='top', bbox=props)
+    
+    plt.tight_layout()
+    save_path = os.path.join(output_dir, f'residual_error_{phase}.png')
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    logger.info(f"Residual plot saved at: {save_path}")
+    plt.close(fig)
+
+
+def get_regression_results(predicted, ground_truth, args, mean_residual, std_residual):
+    save_dir =  os.path.join(args.output_dir, 'post_training_analysis')
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    df = pd.DataFrame({
+    "predicted": predicted.to('cpu').numpy().flatten(),
+    "ground_truth": ground_truth.to('cpu').numpy().flatten()
+    })
+    filtered_data = []
+    weight_count = {}
+    threshold1 = mean_residual + std_residual
+    threshold2 = mean_residual - std_residual
+
+    for i in range(len(df)):
+        if (-df['predicted'][i] + df['ground_truth'][i]) > threshold1 or (-df['predicted'][i] + df['ground_truth'][i]) < threshold2:
+            if df['ground_truth'][i] in weight_count:
+                weight_count[df['ground_truth'][i]] += 1
+            else:
+                weight_count[df['ground_truth'][i]] = 1
+        else:
+            filtered_data.append({
+                'predicted': df['predicted'][i],
+                'actual': df['ground_truth'][i]
+            })
+
+    df1 = pd.DataFrame(filtered_data)
+    df1.to_csv(os.path.join(save_dir, "results_on_test_set.csv"), index=False)
+    logger = getLogger("root.utils.Test")
+    logger.info(f"Outputs on the test set saved at : {os.path.join(save_dir, 'results_on_test_set.csv')}")
+    predicted = torch.tensor(df1['predicted'].values, dtype=torch.float32)
+    ground_truth = torch.tensor(df1['actual'].values, dtype=torch.float32)
+    return predicted, ground_truth
+
+
+def plot_reconstruction_errors(anomaly_errors, normal_test_errors,normal_data_mean, threshold,image_save_folder, bins=100,  log_scale=False):
+    plt.figure(figsize=(10, 6))
+    
+    plt.hist(anomaly_errors, bins, alpha=0.3, label="Anomaly", color='b')
+    plt.hist(normal_test_errors, bins, alpha=0.3, label="Normal", color='r')
+    
+
+    # Add vertical lines for means
+    plt.axvline(np.mean(anomaly_errors), color='b', linestyle='dashed', linewidth=2,
+                label=f'Anomaly test mean: {np.mean(anomaly_errors):.4f}')
+    plt.axvline(np.mean(normal_test_errors), color='r', linestyle='dashed', linewidth=2,
+                label=f'Normal test mean: {np.mean(normal_test_errors):.4f}')
+    plt.axvline(normal_data_mean, color='orange',linestyle='dashed', linewidth=2,
+                label=f'Normal train mean: {normal_data_mean}')
+    plt.axvline(threshold, color='green', linestyle='dashed', linewidth=2,
+                label=f'Threshold: {threshold:.4f}')
+
+    if(log_scale):
+        plt.xscale('log')
+        plt.yscale('log')
+
+    plt.title('Distribution of Reconstruction Errors', fontsize=16)
+    plt.xlabel(f'Reconstruction Error{"(Log scale)" if log_scale else ""}', fontsize=14)
+    plt.ylabel(f'Error count{"(Log scale)" if log_scale else ""}', fontsize=14)
+    plt.legend(loc='upper right')
+    
+    plt.savefig(os.path.join(image_save_folder, f'reconstruction_error{"_log_scale" if log_scale else ""}.png'))
+    plt.close()
+    
 class SmoothedValue:
     """Track a series of values and provide access to smoothed values over a
     window or the global series average.
@@ -969,13 +1154,11 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
     # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+    # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+    for _, data, target in data_loader:
         start_time = timeit.default_timer()
         data = data.to(device).float()
         target = target.to(device).float()
-
-        # apply transform and model on whole batch directly on device
-        # TODO: If transform is required
         if transform:
             data = transform(data)
 
@@ -985,7 +1168,6 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
             output = model(data)  # (n,1,8000) -> (n,35)
 
         loss = criterion(output, target)
-
         if not is_ptq:
             optimizer.zero_grad()
             if lambda_reg:
@@ -1000,7 +1182,6 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
             else:
                 loss.backward()
             optimizer.step()
-
         mse = get_mse(output, target).squeeze()
         batch_size = output.shape[0]
         metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
@@ -1138,12 +1319,17 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
 
     target_array = torch.Tensor([]).to(device, non_blocking=True)
     predictions_array = torch.Tensor([]).to(device, non_blocking=True)
-
     with torch.no_grad():
-        for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
-            # for data, target in data_loader:
+        # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+        val_loss = 0
+        target_list = []
+        predictions_list = []
+        for _, data, target in data_loader:
+
+
             data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).long()
+            target = target.to(device, non_blocking=True).float()
+
             if transform:
                 data = transform(data)
 
@@ -1152,57 +1338,42 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
             else:
                 output = model(data)
 
-            target_array = torch.cat((target_array, target))
-            predictions_array = torch.cat((predictions_array, output))
-
             loss = criterion(output, target)  # .squeeze()
+            val_loss += loss.item()
             mse = get_mse(output, target)  # .squeeze()
             r2 = get_r2_score(output, target)  # .squeeze()
-
-            # confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
-            # confusion_matrix_total += confusion_matrix
-            #
-            # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
-
-            # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
-            # au_roc_total += au_roc
+            target_list.append(target)
+            predictions_list.append(output)
             # FIXME need to take into account that the datasets could have been padded in distributed setup
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
             metric_logger.meters['mse'].update(mse, n=batch_size)
             metric_logger.meters['r2'].update(r2, n=batch_size)
-            # metric_logger.meters['auroc'].update(au_roc, n=batch_size)
-            # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
-            # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
-    # gather the stats from all processes
-    metric_logger.synchronize_between_processes()
 
-    # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
+    metric_logger.synchronize_between_processes()
+    target_array = torch.cat(target_list)
+    predictions_array = torch.cat(predictions_list)
+
+
     logger.info(f'{header} MSE {get_mse(predictions_array, target_array):.3f}')
     logger.info(f'{header} R2-Score {get_r2_score(predictions_array, target_array):.3f}')
-    return metric_logger.mse.global_avg, metric_logger.r2.global_avg
-
+    return get_mse(predictions_array, target_array), get_r2_score(predictions_array, target_array)
 
 def train_one_epoch_anomalydetection(
         model, criterion, optimizer, data_loader, device, epoch, transform,
         apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
-    # train_one_epoch_regression(
-    #     model, criterion, optimizer, data_loader, device, epoch, transform,
-    #     apex=apex, model_ema=model_ema, print_freq=print_freq, phase=phase, dual_op=dual_op, is_ptq=is_ptq, **kwargs)
     model.train()
+    print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    metric_logger.add_meter("lr", window_size=1, fmt="{value}")
-    metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
-
-    header = f"Epoch: [{epoch}]"
-    # TODO: If transform is required
+    header = f"Training   - Epoch[{epoch}]:"
     if transform:
         transform = transform.to(device)
-    for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+    for _,data, labels in metric_logger.log_every(data_loader, print_freq, header):
         # for batch_idx, (data, target) in enumerate(data_loader):
         start_time = timeit.default_timer()
         data = data.to(device).float()
-        target = target.to(device).float()
+        #In anomlay detection with auto encoder, the target and the input data both are same. 
+        target = data.clone()
 
         # apply transform and model on whole batch directly on device
         # TODO: If transform is required
@@ -1214,7 +1385,6 @@ def train_one_epoch_anomalydetection(
         else:
             output = model(data)  # (n,1,8000) -> (n,35)
 
-        # negative log-likelihood for a tensor of size (batch x 1 x n_output)
         loss = criterion(output, target)
 
         if not is_ptq:
@@ -1226,34 +1396,26 @@ def train_one_epoch_anomalydetection(
                 loss.backward()
             optimizer.step()
 
-        # acc1 = accuracy(output, target, topk=(1,))
-        # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
-        # mse = get_mse(output, target)  # .squeeze()
-        batch_size = output.shape[0]
-        metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
-        # metric_logger.meters['mse'].update(mse, n=batch_size)
-        metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
-
+        metric_logger.update(loss=loss.item())
+        
     if model_ema:
         model_ema.update_parameters(model)
 
 
 def evaluate_anomalydetection(
-        model, criterion, data_loader, device, transform, log_suffix='', print_freq=None, phase='', dual_op=True, **kwargs):
+        model, criterion, data_loader, device, transform, epoch, log_suffix='', print_freq=None, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     print_freq = print_freq if print_freq else len(data_loader)
-    header = f'Test: {log_suffix}'
-
-    target_array = torch.Tensor([]).to(device, non_blocking=True)
-    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
+    header = f'Validation{log_suffix} - Epoch[{epoch}]: '
 
     with torch.no_grad():
-        for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+        for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
             data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).long()
+            #In anomlay detection with auto encoder, the target and the input data both are same. 
+            target = data
             if transform:
                 data = transform(data)
 
@@ -1262,35 +1424,11 @@ def evaluate_anomalydetection(
             else:
                 output = model(data)
 
-            target_array = torch.cat((target_array, target))
-            predictions_array = torch.cat((predictions_array, output))
-
-            loss = criterion(output, target)  # .squeeze()
-            # mse = get_mse(output, target)  # .squeeze()
-            # r2 = get_r2_score(output, target)  # .squeeze()
-
-            # confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
-            # confusion_matrix_total += confusion_matrix
-            #
-            # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
-
-            # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
-            # au_roc_total += au_roc
-            # FIXME need to take into account that the datasets could have been padded in distributed setup
+            loss = criterion(output, target) 
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
-            # metric_logger.meters['mse'].update(mse, n=batch_size)
-            # metric_logger.meters['r2'].update(r2, n=batch_size)
-            # metric_logger.meters['auroc'].update(au_roc, n=batch_size)
-            # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
-            # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
-    # gather the stats from all processes
     metric_logger.synchronize_between_processes()
-
-    # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
-    # logger.info(f'{header} MSE {metric_logger.mse.global_avg:.3f}')
-    # logger.info(f'{header} R2-Score {metric_logger.r2.global_avg:.3f}')
-    return metric_logger.loss.global_avg, metric_logger.loss.global_avg
+    return metric_logger.loss.global_avg
 
 
 def train_one_epoch_classification(
@@ -1427,8 +1565,45 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     #                                                      headers="keys", tablefmt='grid')))
 
     # logger.info(f'AU-ROC: {au_roc_total}')
-    return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, auc, confusion_matrix_total
+    return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, auc, confusion_matrix_total, predictions_array, target_array
 
+def print_file_level_classification_summary(dataset, predicted, ground_truth,phase):
+    logger_flcs = getLogger(f"root.utils.print_file_level_classification_summary.{phase}")
+    # Convert model output scores into predicted class labels
+    predicted_classes = torch.argmax(predicted, dim=1).cpu().numpy()
+    ground_truth_np = ground_truth.cpu().numpy()
+    
+    unique_files = np.unique(dataset.file_names)
+    num_classes = len(dataset.inverse_label_map)
+    class_names = list(dataset.inverse_label_map.values())
+    
+    results = []
+    
+    # For each file, count how many samples were classified into each class
+    for file in unique_files:
+        # Find indices of samples that belong to this file
+        file_indices = np.where(np.array(dataset.file_names) == file)[0]
+        # If no samples from this file, skip
+        if len(file_indices) == 0:
+            continue
+        # Get predictions and ground truth for this file's samples
+        file_predictions = predicted_classes[file_indices]
+        file_ground_truth = ground_truth_np[file_indices]
+        true_class = file_ground_truth[0]
+        true_class_name = dataset.inverse_label_map[true_class]
+
+        # Count predictions per class for this file
+        counts = [np.sum(file_predictions == c) for c in range(num_classes)]
+        
+        # Add to results
+        row = {'True Class': true_class_name, 'File': opb(file), 'Total Samples': len(file_indices)}
+        for i, class_name in enumerate(class_names):
+            row[f'Predicted as {class_name}'] = counts[i]
+        
+        results.append(row)
+    
+    df = pd.DataFrame(results)
+    logger_flcs.info(f'File-Level Classification Summary of {phase}:\n {tabulate(df, headers="keys", tablefmt="pretty")}')
 
 def export_model(model, input_shape, output_dir, opset_version=17, quantization=0,
                  example_input=None, generic_model=False, remove_hooks_for_jit=False):
@@ -1461,7 +1636,7 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
         # export converted onnx model
         model_copy.export(dummy_input, onnx_file, opset_version=opset_version)
 
-        if remove_hooks_for_jit:
+        if remove_hooks_for_jit:   
             remove_hooks(model_copy)
         ts_model = torch.jit.trace(model_copy, dummy_input)
         torch.jit.save(ts_model, os.path.splitext(onnx_file)[0]+"_ts.pth")

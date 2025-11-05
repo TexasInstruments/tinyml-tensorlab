@@ -85,8 +85,7 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ")
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
-    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
     # Arc Fault and Motor Fault Related Params
     parser.add_argument('--frame-size', help="Frame Size")
     parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")

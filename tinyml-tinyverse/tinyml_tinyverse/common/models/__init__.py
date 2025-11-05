@@ -39,6 +39,7 @@ from .generic_regression_models import *
 from .generic_feature_extraction_models import *
 from .generic_autoencoder_models import *
 from .generic_forecasting_models import *
+from .generic_image_models import *
 
 model_dict = {
     'CNN_TS_GEN_BASE_100': CNN_TS_GEN_BASE_100,
@@ -50,12 +51,17 @@ model_dict = {
     'RES_CAT_CNN_TS_GEN_BASE_3K': RES_CAT_CNN_TS_GEN_BASE_3K,
     'REG_TS_GEN_BASE_3K': REG_TS_GEN_BASE_3K,
     'REG_TS_GEN_BASE_10K': REG_TS_GEN_BASE_10K,
+    'REG_TS_CNN_13K' : REG_TS_CNN_13K,
+    'REG_TS_CNN_4K' : REG_TS_CNN_4K,
     'AE_CNN_TS_GEN_BASE_1K': AE_CNN_TS_GEN_BASE_1K,
     'AE_CNN_TS_GEN_BASE_4K': AE_CNN_TS_GEN_BASE_4K,
     'AE_CNN_TS_GEN_BASE_16K': AE_CNN_TS_GEN_BASE_16K,
+    'AD_CNN_TS_17K':AD_CNN_TS_17K,
     'HAR_TINIE_CNN_2K': HAR_TINIE_CNN_2K,
     'YOLO_Classifier_8K': YOLO_Classifier_8K,
     'FC_CNN_TS_GEN_BASE_13K':FC_CNN_TS_GEN_BASE_13K,
+    'CNN_LENET5':  CNN_LENET5,
+    'CNN_TS_PIR2D_BASE': CNN_TS_PIR2D_BASE
     # 'CNN_AF_3L_200': CNN_AF_3L_200,
     # 'CNN_AF_3L_300': CNN_AF_3L_300,
     # 'CNN_AF_3L_700': CNN_AF_3L_700,

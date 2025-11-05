@@ -190,3 +190,51 @@ class AE_CNN_TS_GEN_BASE_1K(torch.nn.Module):
         x = torch.nn.functional.interpolate(x, scale_factor=(2, 1), mode='nearest')  # Upsample
         x = self.decoder(x)
         return x
+    
+
+class AD_CNN_TS_17K(torch.nn.Module):
+    def __init__(self, config):
+        super(AD_CNN_TS_17K, self).__init__()
+
+        output_channels = 8
+        self.encoder = torch.nn.Sequential(
+            torch.nn.Conv2d(config['variables'], output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
+            torch.nn.ReLU(),
+            torch.nn.Conv2d(output_channels, output_channels*2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels*2),
+            torch.nn.ReLU(),
+            torch.nn.Conv2d(output_channels*2, output_channels*4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels*4),
+            torch.nn.ReLU(),
+            torch.nn.Conv2d(output_channels*4, output_channels*8, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels*8),
+            torch.nn.ReLU(),
+        )
+
+        ### Decode here
+        self.decoder = torch.nn.Sequential(
+            torch.nn.Upsample(scale_factor=(2,1), mode='bilinear'),
+            torch.nn.Conv2d(output_channels*8, output_channels*4, kernel_size=(3, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels*4),
+            torch.nn.ReLU(),
+            torch.nn.Upsample(scale_factor=(2,1), mode='bilinear'),
+            torch.nn.Conv2d(output_channels*4, output_channels*2, kernel_size=(3, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels*2),
+            torch.nn.ReLU(),
+            torch.nn.Upsample(scale_factor=(2,1), mode='bilinear'),
+            torch.nn.Conv2d(output_channels*2, output_channels, kernel_size=(3, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
+            torch.nn.ReLU(),
+            torch.nn.Upsample(scale_factor=(2,1), mode='bilinear'),
+            torch.nn.Conv2d(output_channels, config['variables'], kernel_size=(3, 1), padding=(1, 0)),
+        )
+
+    def forward(self, x):
+        # Encode
+        encoded = self.encoder(x)
+        
+        # Decode
+        decoded = self.decoder(encoded)
+        
+        return decoded

@@ -69,6 +69,7 @@ import random
 import sys
 import timeit
 from argparse import ArgumentParser
+import onnxruntime as ort
 from logging import getLogger
 
 import numpy as np
@@ -80,14 +81,14 @@ import torch.nn as nn
 import torchinfo
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg, GenericTSDatasetAD
+from tinyml_tinyverse.common.datasets import GenericTSDatasetAD
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
-dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset, 'GenericTSDatasetReg' : GenericTSDatasetReg,
-                       'GenericTSDatasetAD' : GenericTSDatasetAD,}
+dataset_loader_dict = {'GenericTSDatasetAD' : GenericTSDatasetAD,}
+dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
 
 
 def split_weights(weights_name):
@@ -113,8 +114,7 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
-    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
 
     parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
@@ -213,6 +213,7 @@ def get_args_parser():
 
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
+    parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
     
     return parser
 
@@ -221,7 +222,7 @@ def generate_golden_vector_dir(output_dir):
     create_dir(golden_vectors_dir)
     return
 
-def generate_user_input_config(output_dir, dataset):
+def generate_user_input_config(output_dir, dataset, threshold):
     logger = getLogger("root.generate_user_input_config")
     golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
     user_input_config_h = os.path.join(golden_vectors_dir, 'user_input_config.h')
@@ -232,6 +233,7 @@ def generate_user_input_config(output_dir, dataset):
         fp.write("#define INPUT_CONFIG_H_\n\n")
         fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
         fp.write('\n'.join([f'#define {k} {v}' for k, v in dataset.feature_extraction_params.items()]))
+        fp.write(''.join([f'\n#define RECONSTRUCTION_ERROR_THRESHOLD {threshold}\n']))
         fp.write("\n\n#endif /* INPUT_CONFIG_H_ */\n")
     return
 
@@ -254,7 +256,7 @@ def generate_model_aux(output_dir, dataset):
         fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
     return
 
-def generate_golden_vectors(output_dir, dataset, generic_model=False):
+def generate_golden_vectors(output_dir, dataset,output_int,threshold, generic_model=False):
     logger = getLogger("root.generate_golden_vectors")
     import onnxruntime as ort
     vector_files = []
@@ -269,24 +271,21 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
     golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
     
     logger.info(f"Creating Golden data for reference at {golden_vectors_dir}")
-    label_index_dict = {dataset.inverse_label_map.get(label): np.where(dataset.Y == label)[0] for label in np.unique(dataset.Y)}
 
-    for label, indices in label_index_dict.items():
-        # For each label, 4 random golden test vectors will be selected and printed out
-        for index in random.sample(list(indices), k=2):  # Originally k=4
-            np_raw = dataset.X_raw[index]
-            np_feat = dataset.X[index]
-            pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
+   
+    for index in random.sample(list(range(len(dataset.X))), k=4):
+        np_raw = dataset.X_raw[index]
+        np_feat = dataset.X[index]
+        pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
+        half_path = os.path.join(golden_vectors_dir)
 
-            half_path = os.path.join(golden_vectors_dir)
-
-            # Saving as .txt
-            np.savetxt(half_path + f'adc_{label}_{index}.txt', np_raw.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'adc_{label}_{index}.txt')
-            np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'features_{label}_{index}.txt')
-            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%.0f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\nint8_t golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'output_{label}_{index}.txt')
+        # Saving as .txt
+        np.savetxt(half_path + f'adc_{index}.txt', np_raw.flatten(), fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,', header=f'//(Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+        vector_files.append(half_path + f'adc_{index}.txt')
+        np.savetxt(half_path + f'features_{index}.txt', np_feat.flatten(), fmt='%f,' if np_feat.dtype.kind == 'f' else '%d,', header=f'//(Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+        vector_files.append(half_path + f'features_{index}.txt')
+        np.savetxt(half_path + f'output_{index}.txt', pred.flatten(), fmt='%d,' if output_int else '%f,', header=f'//(Index: {index}):  Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+        vector_files.append(half_path + f'output_{index}.txt')
 
     header_file_info = """#include "device.h"
 // //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -313,8 +312,37 @@ def generate_golden_vectors(output_dir, dataset, generic_model=False):
                 header_file_info += '*/\n'
         os.remove(file_path)
     generate_test_vector(output_dir, header_file_info)
-    generate_model_aux(output_dir, dataset)
+    generate_user_input_config(output_dir, dataset, threshold)
     return
+
+def load_datasets(data_path, args, dataset_loader_dict):
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(data_path, args, dataset_loader_dict)
+    return dataset, dataset_test, train_sampler, test_sampler
+
+def get_reconstruction_errors_stats(generic_model, model_path, device, data_loader):
+    if not generic_model:
+        utils.decrypt(model_path, utils.get_crypt_key())
+    ort_sess = ort.InferenceSession(model_path)
+    if not generic_model:
+        utils.encrypt(model_path, utils.get_crypt_key())
+    
+    input_name = ort_sess.get_inputs()[0].name
+    output_name = ort_sess.get_outputs()[0].name
+    errors = torch.tensor([]).to(device, non_blocking=True)
+    for _, data, targets in data_loader:
+        data = data.to(device, non_blocking=True).float()
+        targets = targets.to(device, non_blocking=True).long()
+        batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
+        for input, target_label in zip(data, targets):
+            input = input.unsqueeze(0).cpu().numpy()
+            output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
+            current_output_error = torch.mean((torch.from_numpy(input).to(device) - output)**2, dim=(1,2,3))
+            batch_reconstruction_errors = torch.cat((batch_reconstruction_errors, current_output_error))
+        errors = torch.cat((errors, batch_reconstruction_errors))
+    
+    normal_error_mean = torch.mean(errors)
+    normal_error_std = torch.std(errors)
+    return normal_error_mean.cpu(), normal_error_std.cpu()
 
 
 def main(gpu, args):
@@ -360,43 +388,23 @@ def main(gpu, args):
                                   0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
         else:
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
-    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args,
-                                                                         dataset_loader_dict)  # (126073, 1, 152), 126073
 
-    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    try:
-        utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train',
-                                            output_dir=args.output_dir)
-        utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation',
-                                            output_dir=args.output_dir)
-    except Exception as e:
-        logger.warning(f"Feature Extraction plots will not be generated because: {e}")
-    # The below two lines work fine, but slows down a lot
-    # plot_graph(dataset, graph_type='tsne', instance_type='train')
-    # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
-    # if misc_utils.str2bool(args.dont_train_just_feat_ext):
-    #     logger.info("Exiting execution without training")
-    #     sys.exit(0)
+    if args.quantization:  # Quant Train
+        dataset, dataset_test, train_sampler, test_sampler = dataset_load_state['dataset'], dataset_load_state['dataset_test'], dataset_load_state['train_sampler'], dataset_load_state['test_sampler']
+    else:  # Float Train
+        dataset, dataset_test, train_sampler, test_sampler = load_datasets(args.data_path, args, dataset_loader_dict)
+        dataset_load_state['dataset'], dataset_load_state['dataset_test'], dataset_load_state['train_sampler'], dataset_load_state['test_sampler'] = dataset, dataset_test, train_sampler, test_sampler
 
-    # generate_golden_vector_dir(args.output_dir)
-    # if misc_utils.str2bool(args.gen_golden_vectors):
-    #     generate_user_input_config(args.output_dir, dataset)
-    #     if misc_utils.str2bool(args.dont_train_just_feat_ext):
-    #         logger.info('ModelMaker completed for test bench. Exiting.')
-    #         sys.exit()
-
-    # collate_fn = None
     num_classes = len(dataset.classes)
 
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size,
-        sampler=train_sampler, num_workers=args.workers, pin_memory=True,
+        sampler=train_sampler, num_workers=args.workers, pin_memory=True if gpu>0 else False,
         collate_fn=utils.collate_fn)
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=args.batch_size,
-        sampler=test_sampler, num_workers=args.workers, pin_memory=True,
+        sampler=test_sampler, num_workers=args.workers, pin_memory=True if gpu>0 else False,
         collate_fn=utils.collate_fn, )
 
     logger.info("Creating model")
@@ -410,8 +418,11 @@ def main(gpu, args):
         model_spec=args.model_spec, with_input_batchnorm=misc_utils.str2bool(args.with_input_batchnorm),
         dual_op=args.dual_op)
     if args.generic_model:
-        # logger.info("\nModel:\n{}\n".format(model))
-        logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
+        try:
+            if not args.quantization:  # Only show model summary for float
+                logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
+        except UnicodeEncodeError as e:
+            logger.warning(f"Model Information/summary could not be provided because of {e}")
 
     if args.weights:
         if args.weights_url:
@@ -420,7 +431,7 @@ def main(gpu, args):
 
     # Does nothing in Floating Point Training
     model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth, args.epochs)
+        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth, args.epochs,args.output_dequantize)
 
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -474,12 +485,12 @@ def main(gpu, args):
             is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        avg_mse, _ = utils.evaluate_anomalydetection(model, criterion, data_loader_test, device=device,
-                                                     transform=transform, phase=phase, num_classes=num_classes,
+        avg_mse = utils.evaluate_anomalydetection(model, criterion, data_loader_test, device=device,
+                                                     transform=transform, print_freq=args.print_freq, epoch=epoch, phase=phase, num_classes=num_classes,
                                                      dual_op=args.dual_op)
         if model_ema:
-            avg_mse, _ = utils.evaluate_anomalydetection(
-                model_ema, criterion, data_loader_test, device=device, transform=transform,
+            avg_mse = utils.evaluate_anomalydetection(
+                model_ema, criterion, data_loader_test, device=device, transform=transform,epoch=epoch,
                 log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
         if args.output_dir:
             checkpoint = {
@@ -505,7 +516,6 @@ def main(gpu, args):
     logger.info("Printing statistics of best epoch:")
     logger.info(f"Best Epoch: {best['epoch']}")
     logger.info(f"MSE {best['mse']:.3f}")
-    # logger.info(f"R2-Score {best['r2']:.3f}")
     logger.info("")
 
     logger.info('Exporting model after training.')
@@ -513,7 +523,7 @@ def main(gpu, args):
         # example_input = next(iter(data_loader_test))[0]
         utils.export_model(
             model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, output_dequantize=args.output_dequantize,
+            quantization=args.quantization, 
             example_input=None, generic_model=args.generic_model,
             remove_hooks_for_jit=True if (
                         args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
@@ -521,11 +531,17 @@ def main(gpu, args):
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     logger.info('Training time {}'.format(total_time_str))
 
-    if args.gen_golden_vectors:
-        # generate_golden_vectors(args.output_dir, dataset, args.generic_model)
-        # TODO: Enable the above line once we know what is required
-        pass
+    #calculate threshold by getting the mean and standard deviation of reconstruction errors of training normal data
+    model_path = os.path.join(args.output_dir, 'model.onnx')
+    error_mean, error_std = get_reconstruction_errors_stats(args.generic_model, model_path, args.device, data_loader)
+    threshold = error_mean + 3*error_std
 
+    if args.gen_golden_vectors:
+        generate_golden_vector_dir(args.output_dir)
+        output_int = False
+        if args.quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU and args.output_dequantize == False:
+            output_int = True
+        generate_golden_vectors(args.output_dir, dataset, output_int,threshold, args.generic_model)
     return
 
 

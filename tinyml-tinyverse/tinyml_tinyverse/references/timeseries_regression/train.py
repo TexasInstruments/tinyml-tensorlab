@@ -80,14 +80,14 @@ import torch.nn as nn
 import torchinfo
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg
+from tinyml_tinyverse.common.datasets import GenericTSDatasetReg
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
-dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset, 'GenericTSDatasetReg' : GenericTSDatasetReg}
-
+dataset_loader_dict = {'GenericTSDatasetReg' : GenericTSDatasetReg}
+dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
 
 def split_weights(weights_name):
     weights_list = weights_name.split(',')
@@ -112,10 +112,8 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
-    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
-
     parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
     parser.add_argument('--store-feat-ext-data', help='Store Data post Feature extractions')
     parser.add_argument('--feat-ext-store-dir', help='Store Data post Feature extractions in this directory')
@@ -204,7 +202,7 @@ def get_args_parser():
     parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int, choices=TinyMLQuantizationVersion.get_choices(), help="Quantization Aware Training (QAT)")
     # parser.add_argument("--quantization-type", default="DEFAULT", help="Actual Quantization Flavour - applies only if quantization is enabled")
     parser.add_argument("--quantization-method", default="QAT", choices=["PTQ", "QAT"], help="Actual Quantization Flavour - applies only if quantization is enabled")
-    parser.add_argument("--weight-bitwidth", default=8, type=int, choices=[8, 4, 2], help="Weight Bitwidth - applies only if quantization is enabled")
+    parser.add_argument("--weight-bitwidth", default=8, type=int, choices=[16, 8, 4, 2], help="Weight Bitwidth - applies only if quantization is enabled")
     parser.add_argument("--activation-bitwidth", default=8, type=int, help="Activation Bitwidth- applies only if quantization is enabled")
 
     parser.add_argument("--quantization-error-logging", default=True, type=misc_utils.str_or_bool, help="log the quantization error")
@@ -215,7 +213,6 @@ def get_args_parser():
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
     parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
-
     return parser
 
 def generate_golden_vector_dir(output_dir):
@@ -255,6 +252,10 @@ def generate_model_aux(output_dir, dataset):
         fp.write(f'const NUMBER_OF_CLASSES = {len(dataset.classes)};\n')
         fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
     return
+
+def load_datasets(data_path, args, dataset_loader_dict):
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(data_path, args, dataset_loader_dict)
+    return dataset, dataset_test, train_sampler, test_sampler
 
 def generate_golden_vectors(output_dir, output_int, dataset, generic_model=False):
     logger = getLogger("root.generate_golden_vectors")
@@ -359,7 +360,12 @@ def main(gpu, args):
         else:
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
     # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict)  # (126073, 1, 152), 126073
+
+    if not args.quantization:
+        dataset, dataset_test, train_sampler, test_sampler = load_datasets(args.data_path, args, dataset_loader_dict)
+        dataset_load_state['dataset'], dataset_load_state['dataset_test'], dataset_load_state['train_sampler'], dataset_load_state['test_sampler'] = dataset, dataset_test, train_sampler, test_sampler
+    else:
+        dataset, dataset_test, train_sampler, test_sampler = dataset_load_state['dataset'], dataset_load_state['dataset_test'], dataset_load_state['train_sampler'], dataset_load_state['test_sampler']     
 
     # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
     try:
@@ -404,8 +410,11 @@ def main(gpu, args):
         model_spec=args.model_spec, with_input_batchnorm=misc_utils.str2bool(args.with_input_batchnorm),
         dual_op=args.dual_op)
     if args.generic_model:
-        # logger.info("\nModel:\n{}\n".format(model))
-        logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
+        try:
+            if not args.quantization:  # Only show model summary for float
+                logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
+        except UnicodeEncodeError as e:
+            logger.warning(f"Model Information/summary could not be provided because of {e}")
 
     if args.weights:
         if args.weights_url:
@@ -430,7 +439,7 @@ def main(gpu, args):
     except AssertionError as e:
         logger.error(f"Input options have asked to run on GPU, but no GPU was found. Either change num_gpus to 0 or verify that your GPU works. Error raised: {e}")
         sys.exit(1)
-    criterion = nn.HuberLoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
+    criterion = nn.MSELoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
     optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
     lr_scheduler = utils.init_lr_scheduler(
         args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
@@ -467,7 +476,8 @@ def main(gpu, args):
             is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        avg_mse, avg_r2_score = utils.evaluate_regression(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
+        logger.info(f"Epoch : {epoch}")
+        avg_mse, avg_r2_score= utils.evaluate_regression(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         if model_ema:
             avg_mse, avg_r2_score = utils.evaluate_regression(
                 model_ema, criterion, data_loader_test, device=device, transform=transform,
@@ -481,16 +491,12 @@ def main(gpu, args):
                 'args': args}
             if model_ema:
                 checkpoint['model_ema'] = model_ema.state_dict()
-            # utils.save_on_master(
-            #     checkpoint,
-            #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
             if avg_mse <= best['mse']:
                 logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) <= {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
                 best['mse'] = avg_mse
                 best['r2'] = avg_r2_score
                 best['epoch'] = epoch
                 utils.save_on_master(checkpoint,os.path.join(args.output_dir, 'checkpoint.pth'))
-
     logger = getLogger(f"root.main.{phase}.BestEpoch")
     logger.info("")
     logger.info("Printing statistics of best epoch:")

@@ -35,12 +35,15 @@ from os.path import basename as opb
 from os.path import dirname as opd
 from os.path import splitext as ops
 
+from ast import literal_eval
 import numpy as np
 import pandas as pd
+import random
 import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
 import yaml
+import cmsisdsp as dsp
 
 from ..augmenters import AddNoise, Convolve, Crop, Drift, Dropout, Pool, Quantize, Resize, Reverse, TimeWarp
 from ..transforms import basic_transforms
@@ -77,6 +80,7 @@ class GenericTSDataset(Dataset):
         self.preprocessing_flags = []
         self.X = []
         self.Y = []
+        self.file_names=[] # Stores file name of each sample
 
         # store all the kwargs in self
         for key, value in kwargs.items():
@@ -132,14 +136,13 @@ class GenericTSDataset(Dataset):
             
         self._walker = load_list(kwargs_list_key, list_filename)
         self.classes = sorted(set([opb(opd(datafile)) for datafile in self._walker]))
-        return None
-    
+
     # Downsample the dataset by a factor (sampling_rate/new_sr)
     def __transform_downsample(self, x_temp):
         x_temp = basic_transforms.Downsample(x_temp, self.sampling_rate, self.new_sr)
         return x_temp
     
-    # Form windows of size sequence_window from the dataset
+    # Form windows of size frame_size from the dataset
     def __transform_simple_window(self, x_temp):
         stride_window = int(self.frame_size * self.stride_size)
         if stride_window == 0:
@@ -151,7 +154,20 @@ class GenericTSDataset(Dataset):
         if len(self.feat_ext_transform) > 0:
             x_temp = x_temp.reshape(-1, self.variables)
         return x_temp
-    
+
+    # Applies a gain factor to the array
+    def __transform_gain(self, array, label):
+        try:
+            gain_variations = literal_eval(self.gain_variations)
+            if label in gain_variations.keys():
+                gain = random.uniform(gain_variations[label][0], gain_variations[label][1])
+                array = array * gain
+            else:
+                self.logger.warning(f"Dataset class:{label} not found in input gain variations: {gain_variations.keys()}")
+        except ValueError as e:
+            self.logger.warning(f"Gain Variations couldn't be applied: {e}")
+        return array
+
     # Stores the data in x_temp from the datafile
     def _load_datafile(self, datafile):
         file_extension = ops(datafile)[-1]
@@ -287,7 +303,7 @@ class GenericTSDataset(Dataset):
         # self.logger.debug(f"Transform: Binning input shape: {wave_frame.shape}")
         result_wave = np.empty((self.feature_size_per_frame))
         bin_size = self.bin_size
-        bin_offset = self.min_bin if self.min_bin else 0
+        bin_offset = self.min_bin
 
         for idx in range(self.feature_size_per_frame):
             idx1 = bin_offset + (idx)*bin_size
@@ -334,15 +350,177 @@ class GenericTSDataset(Dataset):
         return wave_frame, result_wave
     
     def __transform_log(self, wave_frame):
-        result_wave = wave_frame
         if self.log_base == 'e':
-            result_wave = self.log_mul*np.log(self.log_threshold + wave_frame)
-        elif self.log_base == 10:
-            result_wave = self.log_mul*np.log10(self.log_threshold + wave_frame)
+            result_wave = self.log_mul * np.log(self.log_threshold + wave_frame)
         else:
-            self.logger.warning("log_base value not defined, defaulting base of log to np.log10")
-            result_wave = self.log_mul*np.log10(self.log_threshold + wave_frame)
+            try:
+                base = float(self.log_base)
+                result_wave = self.log_mul * np.log(self.log_threshold + wave_frame) / np.log(base)
+            except (ValueError, TypeError):
+                # If log_base can't be converted to float, default to base 10
+                self.logger.warning("log_base can't be converted to float, default to base 10")
+                result_wave = self.log_mul * np.log10(self.log_threshold + wave_frame)
         return wave_frame, result_wave
+    
+    def __transform_to_q15(self, wave_frame):
+        def q15sat(x):
+            if x > 0x7FFF:
+                return(np.int16(0x7FFF))
+            elif x < -0x8000:
+                return(np.int16(-0x8000))
+            else:
+                return(np.int16(x))
+        q15satV=np.vectorize(q15sat)
+        def toQ15(x):
+            return(q15satV(np.round(np.array(x) * (1<<15))))
+        result_wave = toQ15(wave_frame)
+        return wave_frame,result_wave
+
+    def __transform_binning_q15(self, wave_frame):
+        result_wave = np.empty((self.feature_size_per_frame))
+        bin_size = self.bin_size
+        bin_offset = self.min_bin if self.min_bin else 0
+        for idx in range(self.feature_size_per_frame): 
+            idx1 = bin_offset + (idx)*bin_size 
+            sum_of_bin = np.sum(wave_frame[idx1:idx1+bin_size])
+            avg = sum_of_bin // (bin_size if self.normalize_bin else 1)
+            result_wave[idx]=np.clip(avg, -32768, 32767).astype(np.int16)  
+        return wave_frame,result_wave
+
+    def __transform_fft_q15(self, wave_frame):
+        inst = dsp.arm_rfft_instance_q15()
+        dsp.arm_rfft_init_q15(inst, self.frame_size,0,1)         # forward FFT
+        result_wave = dsp.arm_rfft_q15(inst, wave_frame)
+        return wave_frame, result_wave
+ 
+    def __transform_q15_scale(self,wave_frame):
+         result_wave = dsp.arm_shift_q15(wave_frame, self.q15_scale_factor)
+         return wave_frame, result_wave
+    
+    def __transform_q15_cmplx_mag(self,wave_frame):  
+        # self.logger.debug(f"Transform: q15 mag: Shape output shape: {wave_frame.shape}")
+        result_wave = dsp.arm_cmplx_mag_q15(wave_frame[:self.frame_size+2]) 
+        # self.logger.debug(f"Transform: q15 mag: Shape output shape: {result_wave.shape}")
+        return wave_frame, result_wave
+
+
+    def __transform_kurtosis(self, wave_frame):
+        wave_frame = np.array(wave_frame, dtype=np.float32)  # Convert row to NumPy array
+        # Pad the row (4 zeros at the beginning, 3 zeros at the end)
+        padded_frame = np.pad(wave_frame, (4, 3), mode='constant', constant_values=0)
+        kurtosis_features = []  # List to store kurtosis features
+
+        for i in range(self.window_count):
+            stride_window = int(self.frame_size * self.stride_size)
+            start = i * stride_window 
+            end = start + self.frame_size
+            if end > len(padded_wave_frame):  # Ensure window does not exceed length
+                break
+            window = padded_frame[start:end]  # Extract 32-sample window
+
+            window_kurtosis = []  # List to store kurtosis for this window
+            # Compute kurtosis for each 8-sample chunk within the 32-sample window
+            chunk_count = self.frame_size//self.chunk_size # DEFAULT: 4
+            for j in range(chunk_count): 
+                chunk_start = j * self.chunk_size
+                chunk_end = chunk_start + self.chunk_size
+                chunk = window[chunk_start:chunk_end]
+                # Compute kurtosis of the chunk
+                chunk_kurtosis = kurtosis(chunk, fisher=True, bias=False)  # Fisher=True for normal zero kurtosis
+                window_kurtosis.append(chunk_kurtosis)
+            result_wave.append(window_kurtosis)
+            # print("shape of kurtosis after  iteration:", np.shape(result_wave)) # Store 4 kurtosis values per window
+        #result_wave = np.array(result_wave).flatten()
+        result_wave = np.array(result_wave)
+        return wave_frame, result_wave
+    
+    def __transform_slope_changes(self, wave_frame):
+        first_derivative = np.diff(wave_frame)
+        result_wave = np.sum(np.diff(np.sign(first_derivative)) != 0) / len(first_derivative)
+        return wave_frame, result_wave
+
+    def __transform_zero_crossing_rate(self, wave_frame):
+        result_wave = np.sum(np.diff(np.sign(wave_frame)) != 0) / len(wave_frame)
+        return wave_frame, result_wave
+
+    def __transform_dominant_frequency(self, wave_frame):
+        # Function to calculate top two dominant frequencies in a signal
+        num_bins   = self.fft_size // 2 + 1  # Number of frequency bins
+        fft_result = np.abs(fft.fft(signal, n=self.fft_size))[:num_bins]  # Compute FFT magnitude
+        freq_bins = np.linspace(0, self.sampling_rate / 2, num_bins)  # Compute frequency bins
+        sorted_indices = np.argsort(fft_result[1:])[-2:] + 1  # Get indices of top 2 frequencies (excluding DC)
+        result_wave = freq_bins[sorted_indices] # Return the corresponding frequency values
+        return wave_frame, result_wave 
+    
+    def __transform_spectral_entropy(self, wave_frame):
+        num_bins   = self.fft_size // 2 + 1  # Number of frequency bins
+        fft_result = np.abs(fft.fft(signal, n=self.fft_size))[:num_bins]  # Compute FFT magnitude
+        power_spectrum = fft_result ** 2  # Compute power spectrum
+        psd_norm = power_spectrum / np.sum(power_spectrum)  # Normalize
+        result_wave = entropy(psd_norm)  # Compute entropy
+        return wave_frame, result_wave 
+
+    def __transform_symmetric_mirror(self, wave_frame):
+        result_wave = np.tile(wave_frame, self.fft_size // len(wave_frame) + 1)
+        result_wave = result_wave[:self.fft_size]
+        return wave_frame, result_wave 
+
+
+    def __transform_pir_feature_extract(self, wave_frame):
+        padded_frame = np.pad(wave_frame, (4, 3), mode='constant', constant_values=0)
+        fft_features = []
+        zcr_features = []
+        slope_features = []
+        dom_freq_features = []
+        spectral_entropy_features = []
+        stride_window = int(self.frame_size * self.stride_size)
+        window_size = len(padded_frame) - (self.window_count*stride_window) 
+        for i in range(self.window_count + 1):            
+            start = i * stride_window
+            end = start + window_size
+            if end > len(padded_frame):  # Ensure window does not exceed length
+                break
+            window = padded_frame[start:end]  # Extract window
+            # Symmetrically mirror the window to 128 samples
+            _, mirrored_window = self.__transform_symmetric_mirror(window)
+            num_bins = self.fft_size// 2 + 1 
+            # Perform FFT and take absolute values
+            fft_result = np.abs(np.fft.fft(mirrored_window, n=self.fft_size))[:num_bins]
+            fft_features.append(fft_result)  # Store FFT output
+        fft_features = np.array(fft_features)
+        fft_features = fft_features[:-1,1:]  # Remove the last one to maintain window_count
+        bin_count_pool = 16
+        pool_size      = self.fft_size//(2*bin_count_pool)
+        fft_features = fft_features.reshape(self.window_count, bin_count_pool, pool_size).mean(axis=-1)  # Average Pooling
+
+        _,kurt_features = self.__transform_kurtosis(wave_frame)
+
+        for i in range(self.window_count):
+            start = i * stride_window
+            end = start + window_size
+            if end > len(padded_frame):  # Ensure window does not exceed length
+                break
+            window = padded_frame[start:end]
+            _,zcr = self.__transform_zero_crossing_rate(window)
+            zcr_features.append(zcr)
+            _,slope = self.__transform_slope_changes(window)
+            slope_features.append(slope)
+            _,dom_freqs = self.__transform_dominant_frequency(window)
+            dom_freq_features.append(dom_freqs)
+            _,spectral_entropy =self. __transform_spectral_entropy(window)
+            spectral_entropy_features.append(spectral_entropy)
+        zcr_features = np.array(zcr_features)
+        slope_features = np.array(slope_features)
+        dom_freq_features = np.array(dom_freq_features)
+        spectral_entropy_features = np.array(spectral_entropy_features)
+        zcr_features = zcr_features.reshape(-1, 1)
+        slope_features = slope_features.reshape(-1, 1)
+        spectral_entropy_features = spectral_entropy_features.reshape(-1, 1)
+        # Combine all features into a single array
+        result_wave = np.hstack([fft_features, kurt_features, zcr_features, slope_features, dom_freq_features, spectral_entropy_features])
+        #print("resulting wave shape:", result_wave.shape) #debug statement
+        return wave_frame, result_wave
+
 
     # Rearrange the shape from (C,N,W) to (N,C,W,H)
     def __transform_shape(self, concatenated_features, raw_frames):
@@ -354,62 +532,133 @@ class GenericTSDataset(Dataset):
         return x_temp, x_temp_raw_out
 
     def __prepare_feature_extraction_variables(self):
+        '''
+        This function calculates the feature extraction parameters, preprocessing flags and model information.
+        The parameters are stored in self.feature_extraction_params and self.preprocessing_flags
+        and then saved in user_input_config.h file to be using in application code.
+        '''
 
-        self.feature_size = self.feature_size_per_frame * self.num_frame_concat
-        self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+        # Dataset definition (1, self.ch, self.wl, self.hl)
         self.ch = self.variables
         self.hl = 1
-        self.wl = self.feature_size_per_frame * self.num_frame_concat
+        self.wl = self.frame_size
+        # Below are the parameters required even when feature extraction transforms are not applied. 
 
-        if self.stacking == '1D':
-            self.wl *= self.variables
-            self.ch = 1
-
-        # Store the feature extraction parameters
+        # This defines the input of the feature extraction library (run_feature_extraction)
+        self.feature_extraction_params['FE_VARIABLES'] = self.variables
         self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        self.feature_extraction_params['FE_HL'] = self.hl
+        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size
+
+        # This defines the input of the model (tvmgen_default_run)
         self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
         self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
-        self.feature_extraction_params['FE_HL'] = self.hl
-        self.feature_extraction_params['FE_OFFSET'] = self.offset
-        self.feature_extraction_params['FE_SCALE'] = self.scale
-        self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
-        self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
-        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
-        self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
-        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
-        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
 
-        # Store the feature extraction parameters specifically related to FFT used for AI Library
-        if 'RAW_FE' not in self.transforms:
-            self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
-            self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
-            if not self.log_mul:
-                self.log_mul = 20
-                self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
-            self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
-            if not self.log_base:
-                self.log_base = 10
-                self.logger.warning(f"Defaulting log base to: {self.log_base}.")
-            self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
-            try:
-                self.log_threshold = eval(self.log_threshold)
-            except Exception as e:
-                self.log_threshold = 1e-100
-                self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
+        # This defines the output of the model (tvmgen_default_run)
+        self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
+        # self.feature_extraction_params['FE_COMPLEX_MAG_SCALE_FACTOR'] = self.q15_scale_factor
+                # Whether to perform batch normalization in FE Library or in the model. based on (skip_normalize=true)
+        self.preprocessing_flags.append('SKIP_NORMALIZE')
+        # Below are the feature extraction transform specific parameters.
+        if len(self.feat_ext_transform) > 0:
+            # Recalculating wl and ch when its 1D stacking
+            if self.stacking == '1D':
+                self.wl *= self.variables
+                self.ch = 1
+                self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
+                self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
+            # Store other feature extraction parameters
+            # Offset params
+            self.feature_extraction_params['FE_OFFSET'] = self.offset
+            self.feature_extraction_params['FE_SCALE'] = self.scale
             
-        # Store the preprocessing flags used for AI Library
-        if 'WINDOWING' in self.transforms:
-            self.preprocessing_flags.append('FE_WIN')
-        if 'FFT_FE' in self.transforms:
-            self.preprocessing_flags.append('FE_FFT')
-        if 'BINNING' in self.transforms:
-            self.preprocessing_flags.append('FE_BIN')
-        if 'RAW_FE' in self.transforms:
-            self.preprocessing_flags.append('FE_RAW')
-        
+            # Store the preprocessing flags specifically related to AI Library
+            if 'FFT_Q15' in self.transforms:
+                self.preprocessing_flags.append('FE_RFFT')
+            if 'Q15_SCALE' in self.transforms:
+                self.feature_extraction_params['FE_COMPLEX_MAG_SCALE_FACTOR'] = self.q15_scale_factor
+                self.preprocessing_flags.append('FE_COMPLEX_MAG_SCALE')
+            if 'Q15_MAG' in self.transforms:
+                self.preprocessing_flags.append('FE_MAG')
+            if 'WINDOWING' in self.transforms:
+                self.preprocessing_flags.append('FE_WIN')
+            if 'RAW_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_RAW')
+            if 'PIR_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_PIR')
+            if 'KURT_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_KURT')
+            if 'ENT_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_ENT')
+            if 'ZCR_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_ZCR')
+            if 'DOM_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_DOM')
+            if 'SLOPE_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_SLOPE')         
+            if 'FFT_FE' in self.transforms:
+                # In feature extraction library this is equivalent to FFT + POS_HALF + ABS
+                self.preprocessing_flags.append('FE_FFT')
+                self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
+                self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin
+                self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size//2 + (self.min_bin if self.min_bin else 1)
+            if 'DC_REMOVE' in self.transforms:
+                self.preprocessing_flags.append('FE_DC_REM')
+                self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] - 1
+            if 'NORMALIZE' in self.transforms:
+                # Normalize the FFT output by frame size
+                self.preprocessing_flags.append('FE_NORMALIZE')
+            if 'BINNING' in self.transforms:
+                self.preprocessing_flags.append('FE_BIN')
+                if self.feature_size_per_frame is None:
+                    raise ValueError("Error: 'feature_size_per_frame' must be specified when using BINNING transform")
+                self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+                self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
+                self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
+                self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin
+                # Normalize the binned output by bin size
+                self.feature_extraction_params['FE_BIN_NORMALIZE'] = 1 if self.normalize_bin else 0
+            if 'BIN_Q15' in self.transforms:
+                self.preprocessing_flags.append('FE_BIN')
+                if self.feature_size_per_frame is None:
+                    raise ValueError("Error: 'feature_size_per_frame' must be specified when using BINNING transform")
+                self.bin_size = (self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME']) // self.feature_size_per_frame // self.analysis_bandwidth
+                self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
+                self.feature_extraction_params['FE_BIN_SIZE'] = self.frame_size // self.feature_size_per_frame // 2 // self.analysis_bandwidth
+                self.feature_extraction_params['FE_BIN_OFFSET']= self.min_bin
+                self.feature_extraction_params['FE_BIN_NORMALIZE'] = 1 if self.normalize_bin else 0
+            if 'LOG_DB' in self.transforms:
+                self.preprocessing_flags.append('FE_LOG')
+                if not self.log_mul:
+                    self.log_mul = 20
+                    self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
+                self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
+                if not self.log_base:
+                    self.log_base = 10
+                    self.logger.warning(f"Defaulting log base to: {self.log_base}.")
+                if self.log_base == 'e':
+                    self.feature_extraction_params['FE_LOG_BASE'] = 2.71828183
+                else:
+                    self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
+
+                try:
+                    self.log_threshold = eval(self.log_threshold)
+                except Exception as e:
+                    self.log_threshold = 1e-100
+                    self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
+                self.feature_extraction_params['FE_LOG_TOL']=self.log_threshold
+            if 'CONCAT' in self.transforms:
+                self.preprocessing_flags.append('FE_CONCAT')
+                self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat
+                self.wl = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] * self.num_frame_concat
+                if self.stacking == '1D':
+                    self.wl *= self.variables
+                self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
+                # No need to pass frame_skip since modelmaker only uses frame_skip
+                #self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip 
         return
 
-    def __feature_extraction(self, x_temp, datafile):
+    def __feature_extraction(self, x_temp, datafile, apply_gain_variations=False):
 
         number_of_frames = x_temp.shape[1] // self.frame_size
         if number_of_frames < self.num_frame_concat:
@@ -452,6 +701,8 @@ class GenericTSDataset(Dataset):
                         start_idx = index_frame * self.frame_size + n * self.offset
                     end_idx = start_idx + self.frame_size
                     wave_frame = x_temp_per_ax[start_idx: end_idx]
+                    if apply_gain_variations:
+                        wave_frame = self.__transform_gain(wave_frame, opb(opd(datafile)))  # gain variation augmentation
                     raw_wave = wave_frame
                     # Contains the frame on which transforms will be applied
                     raw_frame_per_ax.append(raw_wave)
@@ -460,6 +711,14 @@ class GenericTSDataset(Dataset):
                         raw_wave, wave_frame = self.__transform_windowing(wave_frame)
                     if 'RAW_FE' in self.transforms:
                         raw_wave, wave_frame = self.__transform_raw(wave_frame)
+                    if 'TO_Q15' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_to_q15(wave_frame)
+                    if 'FFT_Q15' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_fft_q15(wave_frame)
+                    if 'Q15_SCALE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_q15_scale(wave_frame)
+                    if 'Q15_MAG' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_q15_cmplx_mag(wave_frame)
                     if 'FFT_FE' in self.transforms:
                         raw_wave, wave_frame = self.__transform_fft(wave_frame)
                     if 'NORMALIZE' in self.transforms:
@@ -468,6 +727,18 @@ class GenericTSDataset(Dataset):
                         raw_wave, wave_frame = self.__transform_pos_half_fft(wave_frame)
                     if 'ABS' in self.transforms:
                         raw_wave, wave_frame = self.__transform_absolute(wave_frame)
+                    if 'KURT_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_kurtosis(wave_frame)
+                    if 'ENT_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_spectral_entropy(wave_frame)
+                    if 'ZCR_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_zero_crossing_rate(wave_frame)
+                    if 'DOM_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_dominant_frequency(wave_frame)
+                    if 'SLOPE_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_slope_changes(wave_frame)
+                    if 'PIR_FE' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_pir_feature_extract(wave_frame)
                     if 'DC_REMOVE' in self.transforms:
                         wave_frame = wave_frame[1:]
                     # if 'HAAR' in self.transforms:
@@ -476,6 +747,8 @@ class GenericTSDataset(Dataset):
                     #     raw_wave, wave_frame = self.__transform_hadamard(wave_frame)
                     # if 'BIN' in self.transforms:
                     #     raw_wave, wave_frame = self.__transform_basic_binning(wave_frame)
+                    if 'BIN_Q15' in self.transforms:
+                        raw_wave, wave_frame = self.__transform_binning_q15(wave_frame)
                     if 'BINNING' in self.transforms:
                         raw_wave, wave_frame = self.__transform_binning(wave_frame)
                     if 'LOG_DB' in self.transforms:
@@ -515,8 +788,7 @@ class GenericTSDataset(Dataset):
         return x_temp, x_temp_raw_out
     
     def prepare(self, **kwargs):
-        if len(self.feat_ext_transform) > 0:
-            self.__prepare_feature_extraction_variables()
+        self.__prepare_feature_extraction_variables()
         if hasattr(self, 'store_feat_ext_data'):
             if not str2bool_or_none(self.feat_ext_store_dir):
                 self.feat_ext_store_dir = os.path.join(self.output_dir, 'feat_ext_data')
@@ -529,9 +801,21 @@ class GenericTSDataset(Dataset):
                     x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + '_raw.npy')
                     np.save(x_raw_out_file_path, x_temp.flatten())
                 if len(self.feat_ext_transform) > 0:
-                    x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T, datafile)   # Applies feature extraction transforms
+                    if self.gain_variations:
+                        gain_variations = literal_eval(self.gain_variations)
+                        if label in gain_variations.keys():
+                            x_temp1, x_temp_raw_out1 = self.__feature_extraction(x_temp.T, datafile, apply_gain_variations=True)   # Applies feature extraction transforms
+                            x_temp2, x_temp_raw_out2 = self.__feature_extraction(x_temp.T, datafile)  # Applies feature extraction transforms
+                            x_temp = np.concatenate((x_temp1, x_temp2))
+                            x_temp_raw_out = np.concatenate((x_temp_raw_out1, x_temp_raw_out2))
+                        else:
+                            x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T, datafile)  # Applies feature extraction transforms
+                    else:
+                        x_temp, x_temp_raw_out = self.__feature_extraction(x_temp.T, datafile)   # Applies feature extraction transforms
                     if hasattr(self, 'store_feat_ext_data') and self.store_feat_ext_data:
                         self._store_feat_ext(datafile, x_temp, x_temp_raw_out, label)
+                file_names= [datafile for i in range(x_temp.shape[0])]
+                self.file_names.extend(file_names)
                 self._rearrange_dims(datafile, x_temp, label, x_temp_raw_out)
             except ValueError as v:
                 self.logger.warning(f"File will be skipped due to an error: {datafile} : {v}")
@@ -619,7 +903,6 @@ class GenericTSDatasetReg(Dataset):
 
         self._walker = load_list(kwargs_list_key, list_filename)
         self.classes = sorted(set([opb(opd(datafile)) for datafile in self._walker]))
-        return None
 
     # Downsample the dataset by a factor (sampling_rate/new_sr)
     def __transform_downsample(self, x_temp, y_temp):
@@ -627,7 +910,7 @@ class GenericTSDatasetReg(Dataset):
         y_temp = basic_transforms.Downsample(y_temp, self.sampling_rate, self.new_sr)
         return x_temp, y_temp
 
-    # Form windows of size sequence_window from the dataset
+    # Form windows of size frame_size from the dataset
     def __transform_simple_window(self, x_temp, y_temp):
         stride_window = int(self.frame_size * self.stride_size)
         if stride_window == 0:
@@ -849,60 +1132,70 @@ class GenericTSDatasetReg(Dataset):
         return x_temp, x_temp_raw_out
 
     def __prepare_feature_extraction_variables(self):
-
-        self.feature_size = self.feature_size_per_frame * self.num_frame_concat
-        self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+        '''
+        This function calculates the feature extraction parameters, preprocessing flags and model information.
+        The parameters are stored in self.feature_extraction_params and self.preprocessing_flags
+        and then saved in user_input_config.h file to be using in application code.
+        '''
+        # Calculation of feature extraction parameters
         self.ch = self.variables
         self.hl = 1
-        self.wl = self.feature_size_per_frame * self.num_frame_concat
+        self.wl = self.frame_size
 
-        if self.stacking == '1D':
-            self.wl *= self.variables
-            self.ch = 1
-
-        # Store the feature extraction parameters
-        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        # Store the model information parameters
         self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
         self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
         self.feature_extraction_params['FE_HL'] = self.hl
-        self.feature_extraction_params['FE_OFFSET'] = self.offset
-        self.feature_extraction_params['FE_SCALE'] = self.scale
-        self.feature_extraction_params[
-            'FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
-        self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
-        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
         self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
-        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
-        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
+        
+        if len(self.feat_ext_transform) > 0:
+            self.wl = self.feature_size_per_frame * self.num_frame_concat
+
+            if self.stacking == '1D':
+                self.wl *= self.variables
+                self.ch = 1
+            self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
+            self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
+            self.feature_size = self.feature_size_per_frame * self.num_frame_concat
+            self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+            # Store the feature extraction parameters
+            self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+            self.feature_extraction_params['FE_OFFSET'] = self.offset
+            self.feature_extraction_params['FE_SCALE'] = self.scale
+            self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
+            self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
+            self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
+            self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
+            self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
 
         # Store the feature extraction parameters specifically related to FFT used for AI Library
-        if 'RAW_FE' not in self.transforms:
-            self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
-            self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
-            if not self.log_mul:
-                self.log_mul = 20
-                self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
-            self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
-            if not self.log_base:
-                self.log_base = 10
-                self.logger.warning(f"Defaulting log base to: {self.log_base}.")
-            self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
-            try:
-                self.log_threshold = eval(self.log_threshold)
-            except Exception as e:
-                self.log_threshold = 1e-100
-                self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
-
+            if 'RAW_FE' not in self.transforms:
+                self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
+                self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
+                if not self.log_mul:
+                    self.log_mul = 20
+                    self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
+                self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
+                if not self.log_base:
+                    self.log_base = 10
+                    self.logger.warning(f"Defaulting log base to: {self.log_base}.")
+                self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
+                try:
+                    self.log_threshold = eval(self.log_threshold)
+                except Exception as e:
+                    self.log_threshold = 1e-100
+                    self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
+            
         # Store the preprocessing flags used for AI Library
-        if 'WINDOWING' in self.transforms:
-            self.preprocessing_flags.append('FE_WIN')
-        if 'FFT_FE' in self.transforms:
-            self.preprocessing_flags.append('FE_FFT')
-        if 'BINNING' in self.transforms:
-            self.preprocessing_flags.append('FE_BIN')
-        if 'RAW_FE' in self.transforms:
-            self.preprocessing_flags.append('FE_RAW')
-
+            if 'WINDOWING' in self.transforms:
+                self.preprocessing_flags.append('FE_WIN')
+            if 'FFT_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_FFT')
+            if 'BINNING' in self.transforms:
+                self.preprocessing_flags.append('FE_BIN')
+            if 'RAW_FE' in self.transforms:
+                self.preprocessing_flags.append('FE_RAW')
+        
         return
 
     def __feature_extraction(self, x_temp, datafile):
@@ -1011,8 +1304,7 @@ class GenericTSDatasetReg(Dataset):
         return x_temp, x_temp_raw_out
 
     def prepare(self, **kwargs):
-        if len(self.feat_ext_transform) > 0:
-            self.__prepare_feature_extraction_variables()
+        self.__prepare_feature_extraction_variables()
         if hasattr(self, 'store_feat_ext_data'):
             if not str2bool_or_none(self.feat_ext_store_dir):
                 self.feat_ext_store_dir = os.path.join(self.output_dir, 'feat_ext_data')
@@ -1053,7 +1345,7 @@ class GenericTSDatasetReg(Dataset):
 class GenericTSDatasetAD(Dataset):
     def __init__(self, subset: str = None, dataset_dir: str = None, **kwargs):
 
-        self.logger = getLogger("root.GenericTSDataset")
+        self.logger = getLogger("root.GenericTSDatasetAD")
         self._path = dataset_dir
         self.classes = list()
         self.label_map = dict()
@@ -1115,7 +1407,7 @@ class GenericTSDatasetAD(Dataset):
             list_filename = '*val*_list.txt'
 
         self._walker = load_list(kwargs_list_key, list_filename)
-        self.classes = sorted(set([opb(opd(datafile)) for datafile in self._walker]))
+        self.classes = sorted(set([path for path in os.listdir(dataset_dir) ]))
         return None
 
     # Downsample the dataset by a factor (sampling_rate/new_sr)
@@ -1123,7 +1415,7 @@ class GenericTSDatasetAD(Dataset):
         x_temp = basic_transforms.Downsample(x_temp, self.sampling_rate, self.new_sr)
         return x_temp
 
-    # Form windows of size sequence_window from the dataset
+    # Form windows of size frame_size from the dataset
     def __transform_simple_window(self, x_temp):
         stride_window = int(self.frame_size * self.stride_size)
         if stride_window == 0:
@@ -1218,7 +1510,7 @@ class GenericTSDatasetAD(Dataset):
 
     # Rearranges the dimensions of x_temp to generalize for different channels
     def _rearrange_dims(self, datafile, x_temp, label, x_temp_raw_out, **kwargs):
-        # y_temp = np.array([label for i in range(x_temp.shape[0])])
+        y_temp = np.array([label for i in range(x_temp.shape[0])])
         try:
             if x_temp.ndim == 2:
                 self.logger.warning("Not enough dimensions present. Extract more features")
@@ -1232,7 +1524,7 @@ class GenericTSDatasetAD(Dataset):
             else:
                 self.X = np.concatenate((self.X, x_temp))
                 self.X_raw = np.concatenate((self.X_raw, x_temp_raw_out))
-            # self.Y = np.concatenate((self.Y, y_temp))
+            self.Y = np.concatenate((self.Y, y_temp))
         except ValueError as e:
             self.logger.warning('Skipping {} as Error encountered: {}'.format(datafile, e))
         return
@@ -1241,7 +1533,7 @@ class GenericTSDatasetAD(Dataset):
         return len(self.X)
 
     def __getitem__(self, index):
-        return torch.from_numpy(self.X_raw[index]), torch.from_numpy(self.X[index]), torch.from_numpy(self.X[index])
+        return torch.from_numpy(self.X_raw[index]),torch.from_numpy(self.X[index]), torch.from_numpy(np.array([self.Y[index]]))
 
     def _process_targets(self):
         self.label_map = {k: v for v, k in enumerate(self.classes)}  # {'class_0': 0, 'class_1': 1}
@@ -1345,60 +1637,83 @@ class GenericTSDatasetAD(Dataset):
         return x_temp, x_temp_raw_out
 
     def __prepare_feature_extraction_variables(self):
-
-        self.feature_size = self.feature_size_per_frame * self.num_frame_concat
-        self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+        '''
+        This function calculates the feature extraction parameters, preprocessing flags and model information.
+        The parameters are stored in self.feature_extraction_params and self.preprocessing_flags
+        and then saved in user_input_config.h file to be using in application code.
+        '''
+        # Calculation of feature extraction parameters
         self.ch = self.variables
         self.hl = 1
-        self.wl = self.feature_size_per_frame * self.num_frame_concat
-
+        self.wl = self.frame_size
+        
+        self.feature_extraction_params['FE_VARIABLES'] = self.variables
+        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        self.feature_extraction_params['FE_HL'] = self.hl
+        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size
+        
+        if self.feature_size_per_frame != None:
+            self.wl = self.feature_size_per_frame*self.num_frame_concat
+            
         if self.stacking == '1D':
             self.wl *= self.variables
             self.ch = 1
-
-        # Store the feature extraction parameters
-        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        
         self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
         self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
-        self.feature_extraction_params['FE_HL'] = self.hl
         self.feature_extraction_params['FE_OFFSET'] = self.offset
         self.feature_extraction_params['FE_SCALE'] = self.scale
-        self.feature_extraction_params[
-            'FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
-        self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
+        self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
         self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
-        self.feature_extraction_params['FE_NN_OUT_SIZE'] = len(self.classes)
+        self.feature_extraction_params['FE_NN_OUT_SIZE'] = self.wl*self.ch
+        self.feature_extraction_params['FE_FEATURE_SIZE'] = self.wl
+        self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
         self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
         self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
-
-        # Store the feature extraction parameters specifically related to FFT used for AI Library
-        if 'RAW_FE' not in self.transforms:
-            self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
-            self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
-            if not self.log_mul:
-                self.log_mul = 20
-                self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
-            self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
-            if not self.log_base:
-                self.log_base = 10
-                self.logger.warning(f"Defaulting log base to: {self.log_base}.")
-            self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
-            try:
-                self.log_threshold = eval(self.log_threshold)
-            except Exception as e:
-                self.log_threshold = 1e-100
-                self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
 
         # Store the preprocessing flags used for AI Library
         if 'WINDOWING' in self.transforms:
             self.preprocessing_flags.append('FE_WIN')
         if 'FFT_FE' in self.transforms:
             self.preprocessing_flags.append('FE_FFT')
+            self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size//2 + (self.min_bin if self.min_bin else 1)
         if 'BINNING' in self.transforms:
             self.preprocessing_flags.append('FE_BIN')
+            if self.feature_size_per_frame is None:
+                    raise ValueError("Error: 'feature_size_per_frame' must be specified when using BINNING transform")
+            self.feature_extraction_params['FE_BIN_NORMALIZE'] = 1 if self.normalize_bin else 0
+            self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+            self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
+            self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
         if 'RAW_FE' in self.transforms:
             self.preprocessing_flags.append('FE_RAW')
+        if 'DC_REMOVE' in self.transforms:
+            self.preprocessing_flags.append('FE_DC_REM')    
+        if 'NORMALIZE' in self.transforms:
+            # Normalize the FFT output by frame size
+            self.preprocessing_flags.append('FE_NORMALIZE')
+        if 'LOG_DB' in self.transforms:
+                self.preprocessing_flags.append('FE_LOG')
+                if not self.log_mul:
+                    self.log_mul = 20
+                    self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
+                self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
+                if not self.log_base:
+                    self.log_base = 10
+                    self.logger.warning(f"Defaulting log base to: {self.log_base}.")
+                if self.log_base == 'e':
+                    self.feature_extraction_params['FE_LOG_BASE'] = 2.71828183
+                else:
+                    self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
 
+                try:
+                    self.log_threshold = eval(self.log_threshold)
+                except Exception as e:
+                    self.log_threshold = 1e-100
+                    self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
+                self.feature_extraction_params['FE_LOG_TOL']=self.log_threshold
+        if 'CONCAT' in self.transforms:
+            self.preprocessing_flags.append('FE_CONCAT')
         return
 
     def __feature_extraction(self, x_temp, datafile):
@@ -1474,7 +1789,8 @@ class GenericTSDatasetAD(Dataset):
 
                     # Contains the frame after all transformations are applied except concatenation
                     features_of_frame_per_ax.append(wave_frame)
-
+                if number_of_frames < self.num_frame_concat:
+                    self.logger.warning(f"Only {number_of_frames} frames available in {datafile}, but {self.num_frame_concat} required for concatenation")
                 for index_frame in range(self.num_frame_concat - 1, number_of_frames):
                     if (index_frame % self.frame_skip == 0):
                         if 'CONCAT' in self.transforms:
@@ -1508,8 +1824,7 @@ class GenericTSDatasetAD(Dataset):
         return x_temp, x_temp_raw_out
 
     def prepare(self, **kwargs):
-        if len(self.feat_ext_transform) > 0:
-            self.__prepare_feature_extraction_variables()
+        self.__prepare_feature_extraction_variables()
         if hasattr(self, 'store_feat_ext_data'):
             if not str2bool_or_none(self.feat_ext_store_dir):
                 self.feat_ext_store_dir = os.path.join(self.output_dir, 'feat_ext_data')
@@ -1545,7 +1860,7 @@ class GenericTSDatasetAD(Dataset):
                 "Aborting run as the dataset loaded is empty. Check either input options or data or compatibility between the two.")
         if self.X.ndim == 3:
             self.X = np.expand_dims(self.X, axis=-1)
-        # self._process_targets()
+        self._process_targets()
         return self
     
 class GenericTSDatasetForecasting(Dataset):
@@ -1614,7 +1929,6 @@ class GenericTSDatasetForecasting(Dataset):
             list_filename = '*val*_list.txt'
 
         self._walker = load_list(kwargs_list_key, list_filename)
-        return None
 
     # Downsample the dataset by a factor (sampling_rate/new_sr)
     def __transform_downsample(self, x_temp, y_temp):
@@ -1653,10 +1967,6 @@ class GenericTSDatasetForecasting(Dataset):
         return x_windows, y_windows
 
     def _load_datafile(self, datafile):
-        # Converting self.target_variables into list
-        import ast
-        target_variables=ast.literal_eval(self.target_variables)
-
         file_extension = ops(datafile)[-1]
         if file_extension == ".npy":
             data = np.load(datafile)
@@ -1681,18 +1991,18 @@ class GenericTSDatasetForecasting(Dataset):
                 data=data[[col_index for col_index,value in data.iloc[0].items() if 'time' not in str(value).lower()]]
                 try:
                     float(data.iloc[0, 0])
-                    if target_variables == []:
+                    if self.target_variables == []:
                         self.header_row = [{'{}'.format(idx): idx} for idx in range(len(data.iloc[0].tolist()))]
                     else:
-                        self.header_row= [{str(idx): int(idx)} for idx in target_variables]
+                        self.header_row= [{str(idx): int(idx)} for idx in self.target_variables]
                 except (ValueError, TypeError):
                     is_int=lambda x: isinstance(x, int) or (isinstance(x, str) and x.isdigit())
-                    if target_variables==[]:
+                    if self.target_variables==[]:
                         self.header_row = [{value: idx} for idx, value in enumerate(data.iloc[0].tolist())]
-                    elif is_int(target_variables[0]):
-                        self.header_row = [{data.iloc[0].tolist()[int(idx)]: int(idx)} for idx in target_variables]
-                    elif isinstance(target_variables[0], str):
-                        self.header_row = [{value: data.iloc[0].tolist().index(value)} for value in target_variables]
+                    elif is_int(self.target_variables[0]):
+                        self.header_row = [{data.iloc[0].tolist()[int(idx)]: int(idx)} for idx in self.target_variables]
+                    elif isinstance(self.target_variables[0], str):
+                        self.header_row = [{value: data.iloc[0].tolist().index(value)} for value in self.target_variables]
                     data = data[1:]
             data = data.values.astype(float) 
             
@@ -1717,6 +2027,7 @@ class GenericTSDatasetForecasting(Dataset):
         x_temp_raw_out = x_temp.copy()
         return x_temp, y_temp, x_temp_raw_out
 
+    '''
     # Stores the (x_temp, x_temp_raw_out, y_temp) after applying all the feat-ext-transform
     def _store_feat_ext(self, datafile, x_temp, x_temp_raw_out, label):
         y_temp = np.array([label for i in range(x_temp.shape[0])])
@@ -1742,6 +2053,7 @@ class GenericTSDatasetForecasting(Dataset):
                 self.logger.warning(
                     "'store_feat_ext_data' chosen but 'feat_ext_store_dir' not provided. Skipping storage")
         return
+    '''
 
     # Rearranges the dimensions of x_temp to generalize for different channels
     def _rearrange_dims(self, datafile, x_temp, y_temp, x_temp_raw_out, **kwargs):
@@ -1752,6 +2064,7 @@ class GenericTSDatasetForecasting(Dataset):
                 raise Exception("Not enough dimensions present. Extract more features")
             if x_temp.ndim == 3:
                 x_temp = x_temp.transpose(0, 2, 1)
+                x_temp_raw_out = x_temp_raw_out.transpose(0, 2, 1)
                 x_temp = np.expand_dims(x_temp, axis=3)
             if len(self.X) == 0:
                 self.X = x_temp
@@ -1860,64 +2173,35 @@ class GenericTSDatasetForecasting(Dataset):
         x_temp_raw_out = raw_frames.transpose(1, 0, 2)
         # self.logger.debug(f"Transform: Shape output shape: {x_temp.shape}")
         return x_temp, x_temp_raw_out
-    
+    '''
     def __prepare_feature_extraction_variables(self):
+        #print("All self attributes:")
+        #for key, value in vars(self).items():
+        #    print(f"{key}: {value}")
+        import ast
+        self.target_variables = ast.literal_eval(self.target_variables)
+        '''
+        This function calculates the feature extraction parameters, preprocessing flags and model information.
+        The parameters are stored in self.feature_extraction_params and self.preprocessing_flags
+        and then saved in user_input_config.h file to be using in application code.
+        '''
 
-        self.feature_size = self.feature_size_per_frame * self.num_frame_concat
-        self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
+        # Calculation of feature extraction parameters
         self.ch = self.variables
         self.hl = 1
-        self.wl = self.feature_size_per_frame * self.num_frame_concat
+        self.wl = self.frame_size
 
-        if self.stacking == '1D':
-            self.wl *= self.variables
-            self.ch = 1
-
-        # Store the feature extraction parameters
-        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        # Below are the parameters required even when feature extraction transforms are not applied.
         self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
+        self.feature_extraction_params['FE_VARIABLES'] = self.variables
         self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
         self.feature_extraction_params['FE_HL'] = self.hl
-        self.feature_extraction_params['FE_OFFSET'] = self.offset
-        self.feature_extraction_params['FE_SCALE'] = self.scale
-        self.feature_extraction_params[
-            'FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
-        self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
-        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
-        self.feature_extraction_params['FE_NN_OUT_SIZE'] = self.forecast_horizon
-        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
-        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
-
-        # Store the feature extraction parameters specifically related to FFT used for AI Library
-        if 'RAW_FE' not in self.transforms:
-            self.feature_extraction_params['FE_FEATURE_SIZE'] = self.feature_size
-            self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
-            if not self.log_mul:
-                self.log_mul = 20
-                self.logger.warning(f"Defaulting log multiplier to: {self.log_mul}.")
-            self.feature_extraction_params['FE_LOG_MUL'] = self.log_mul
-            if not self.log_base:
-                self.log_base = 10
-                self.logger.warning(f"Defaulting log base to: {self.log_base}.")
-            self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
-            try:
-                self.log_threshold = eval(self.log_threshold)
-            except Exception as e:
-                self.log_threshold = 1e-100
-                self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
-
-        # Store the preprocessing flags used for AI Library
-        if 'WINDOWING' in self.transforms:
-            self.preprocessing_flags.append('FE_WIN')
-        if 'FFT_FE' in self.transforms:
-            self.preprocessing_flags.append('FE_FFT')
-        if 'BINNING' in self.transforms:
-            self.preprocessing_flags.append('FE_BIN')
-        if 'RAW_FE' in self.transforms:
-            self.preprocessing_flags.append('FE_RAW')
-
+        self.feature_extraction_params['FE_FRAME_SIZE'] = self.frame_size
+        # feature_size per frame is required even if feature extraction transforms are not there because it is required for batchnorm in feature extraction library
+        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME']=self.frame_size
+        self.feature_extraction_params['FE_NN_OUT_SIZE']=self.forecast_horizon*len(self.target_variables)
         return
-
+    '''
     def __feature_extraction(self, x_temp, datafile):
         number_of_frames = x_temp.shape[1] // self.frame_size
         concatenated_features = []
@@ -2020,9 +2304,9 @@ class GenericTSDatasetForecasting(Dataset):
         return x_temp, x_temp_raw_out
     '''
     def prepare(self, **kwargs):
+        
+        self.__prepare_feature_extraction_variables()
         '''
-        if len(self.feat_ext_transform) > 0:
-            self.__prepare_feature_extraction_variables()
         if hasattr(self, 'store_feat_ext_data'):
             if not str2bool_or_none(self.feat_ext_store_dir):
                 self.feat_ext_store_dir = os.path.join(self.output_dir, 'feat_ext_data')
@@ -2031,8 +2315,7 @@ class GenericTSDatasetForecasting(Dataset):
         '''
         for datafile in tqdm(self._walker):
             try:
-                x_temp, y_temp, x_temp_raw_out = self._load_datafile(
-                    datafile)  # Loads the dataset and applied data processing transforms
+                x_temp, y_temp, x_temp_raw_out = self._load_datafile(datafile)  # Loads the dataset and applied data processing transforms
                 '''
                 if hasattr(self, 'dont_train_just_feat_ext') and self.dont_train_just_feat_ext:
                     x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + '_raw.npy')

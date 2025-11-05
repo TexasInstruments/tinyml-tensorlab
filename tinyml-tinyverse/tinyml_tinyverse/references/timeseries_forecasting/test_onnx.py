@@ -85,8 +85,7 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ")
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
-    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
     parser.add_argument('--forecast-horizon', help="Number of future timesteps to be predicted", type=int)
     parser.add_argument('--target-variables',help='Target variables to be predicted', default=[])
     # Arc Fault and Motor Fault Related Params
@@ -203,7 +202,7 @@ def main(gpu, args):
         for idx,item in enumerate(dataset_test.header_row):
             for target_variable_name in item:
                 fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
-
+                axes = axes.flatten()
                 for step in range(args.forecast_horizon):
                     step_targets = ground_truth[:, step, idx]
                     step_outputs = predicted[:, step, idx]

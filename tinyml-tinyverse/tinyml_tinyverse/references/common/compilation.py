@@ -165,9 +165,9 @@ def main(args):
                 logger.error(f"Compilation will fail as path is invalid: {arg[2:]}")
                 exit_flag = 1
     if exit_flag:
-        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_ROOT/CGT_PATH (C2000), MSPM0_CGT_PATH(MSPM0), C29_CG_ROOT (F29x)")
+        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_ROOT/CGT_PATH (C2000), MSPM0_CGT_PATH(MSPM0), C29_CG_ROOT (F29x), CC2755_CGT_PATH (CC2755)")
         logger.error("Exiting due to previous errors. Compiled model directory will be empty.")
-        return
+        return exit_flag
 
     args.model_format = None
     args.input_shapes = None
@@ -195,11 +195,12 @@ def main(args):
 
     if not args.keep_intermittent_files:
         remove_intermittent_files(args.output_dir)
+    return exit_flag
 
 
 def run(args):
     # This code was majorly cleaned up in TINYML_ALGO-212
-    main(args)
+    return main(args)
 
 
 if __name__ == "__main__":

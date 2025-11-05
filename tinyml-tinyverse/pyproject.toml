@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_tinyverse"
-version = "1.1.0"
+version = "1.2.0"
 description = "A tiny machine learning project in the tinyverse"
 readme = "README.md"
 requires-python = "==3.10.*"
@@ -34,9 +34,11 @@ dependencies = [ "numpy==2.2.6",
 	"scikit-learn==1.7.0",
 	"torch==2.7.1",
 	"cython",
-	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.1#subdirectory=tinyml-modeloptimization/torchmodelopt",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.0.0-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.0.0-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
+	"cmsisdsp==1.10.1",
+	"torchvision==0.22.1",
+	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.2#subdirectory=tinyml-modeloptimization/torchmodelopt",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
 	"colorama==0.4.6",
 	"PyWavelets==1.8.0",]
 [[project.authors]]
