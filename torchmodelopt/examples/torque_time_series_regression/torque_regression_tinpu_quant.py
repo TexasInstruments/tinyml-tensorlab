@@ -464,7 +464,7 @@ def validate_saved_model(model_name: str, dataloader: DataLoader) -> float:
 if __name__ == '__main__':
 
     MODEL_NAME = "torque_measurement.onnx"
-    CSV_FILE = "http://software-dl.ti.com/C2000/esd/mcu_ai/01_00_00/datasets/torque_measurement.csv" # torque_measurement.csv
+    CSV_FILE = "https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/torque_measurement.csv" # torque_measurement.csv
     NUM_EPOCHS = 50 #25
     WINDOW_LENGTH = 128 #256 #128 #64
     WINDOW_OFFSET = WINDOW_LENGTH//2  # WINDOW_LENGTH//4

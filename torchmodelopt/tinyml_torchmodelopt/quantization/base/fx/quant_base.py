@@ -48,7 +48,7 @@ from . import fake_quant_types
 class TinyMLQuantFxBaseModule(torch.nn.Module):
     def __init__(self, model, qconfig_type=None, example_inputs=None, is_qat=True, backend="qnnpack",
                  total_epochs=0, num_batch_norm_update_epochs=None, num_observer_update_epochs=False,
-                 prepare_qdq=True, bias_calibration_factor=0.0, verbose=True, float_ops=False):
+                 prepare_qdq=True, bias_calibration_factor=0.0, verbose=True, float_ops=[]):
         '''
         Parameters:
             model: input model to be quantized
