@@ -98,22 +98,6 @@ _model_descriptions = {
             },
         ),
     }),
-    'TimeSeries_Generic_Regr_13k_t': utils.deep_update_dict(deepcopy(template_model_description), {
-        'common': dict(model_details='Regression Model with 13k params. 6 Conv+BatchNorm+Relu layers + Linear Layer.'),
-        'training': dict(
-            model_training_id='CNN_TS_GEN_BASE_13K',
-            model_name='TimeSeries_Generic_Regr_13k_t',
-            target_devices={
-                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
-                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
-                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
-                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
-                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
-                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
-                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
-            },
-        ),
-    }),
     'TimeSeries_Generic_Regr_3k_t': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(model_details='Regression Model with 3k params. 4 layers of MLPs (Fully Connected Layers)'),
         'training': dict(
@@ -130,13 +114,46 @@ _model_descriptions = {
             },
         ),
     }),
+        'Reg_Washing_Machine_13K_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Regression Model for washing machine with 13K params. 3 Conv+BatchNorm+Relu layers + Linear Layer.'),
+        'training': dict(
+            model_training_id='REG_TS_CNN_13K',
+            model_name='Reg_Washing_Machine_13K_t',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+        ),
+    }),
+        'Reg_Washing_Machine_4K_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Regression Model for washing machine with 4K params. 2 Conv+BatchNorm+Relu layers + Linear Layer.'),
+        'training': dict(
+            model_training_id='REG_TS_CNN_4K',
+            model_name='Reg_Washing_Machine_4K_t',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+        ),
+    }),
 }
 
 enabled_models_list = [
     # Regression Models
-    'TimeSeries_Generic_Regr_13k_t',
     'TimeSeries_Generic_Regr_10k_t',
     'TimeSeries_Generic_Regr_3k_t',
+    'Reg_Washing_Machine_13K_t',
+    'Reg_Washing_Machine_4K_t'
 ]
 
 
@@ -380,7 +397,6 @@ class ModelTraining:
                 '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
                 '--resampling-factor', f'{self.params.data_processing_feature_extraction.resampling_factor}',
                 '--new-sr', f'{self.params.data_processing_feature_extraction.new_sr}',
-                #'--sequence-window', f'{self.params.data_processing_feature_extraction.sequence_window}',
                 '--stride-size', f'{self.params.data_processing_feature_extraction.stride_size}',
                 '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,
                 '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
@@ -502,7 +518,6 @@ class ModelTraining:
                 '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
                 '--resampling-factor', f'{self.params.data_processing_feature_extraction.resampling_factor}',
                 '--new-sr', f'{self.params.data_processing_feature_extraction.new_sr}',
-                #'--sequence-window', f'{self.params.data_processing_feature_extraction.sequence_window}',
                 '--stride-size', f'{self.params.data_processing_feature_extraction.stride_size}',
 
                 '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,

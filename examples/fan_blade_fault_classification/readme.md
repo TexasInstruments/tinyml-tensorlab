@@ -67,14 +67,14 @@ This application example showcases the following story:
 
 ## Dataset
 
-* The dataset collected with this setup at TI can be found [here](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/fan_blade_fault_dsi.zip)
+* The dataset collected with this setup at TI can be found [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/fan_blade_fault_dsi.zip)
 
 ## Training the Model
 
 * You can use the Model Composer GUI or Tiny ML Modelmaker to train your model and compile it.
 * In Model Composer, you can play with different settings that can get your model to accuracy suited to you
 * For TinyML Modelmaker, you can use [this](config.yaml) config file and run it as follows from the `tinyml-modelmaker` directory
-  * `run_tinyml_modelmaker.sh F28P55 fan_blade_fault_classification/config.yaml`
+  * `run_tinyml_modelmaker.sh fan_blade_fault_classification/config.yaml`
 * This configuration file should give you a 100% accuracy
 
 ## Live Preview

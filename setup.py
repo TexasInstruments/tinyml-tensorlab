@@ -19,7 +19,7 @@ if __name__ == '__main__':
 #
 # def get_version():
 #     # from version import __version__
-#     __version__ = '1.1.0'
+#     __version__ = '1.2.0'
 #     hash = git_hash()
 #     version_str = __version__ + '+' + hash.strip().decode('ascii') if (hash is not None) else __version__
 #     return version_str

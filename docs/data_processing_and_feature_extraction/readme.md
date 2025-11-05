@@ -15,14 +15,14 @@ The dataset consists of measurements from a vibration sensor along _3 axes_ doma
 5. **No Lubrication**<br>
 6. **Localized Fault**<br>
 
-This dataset is already formatted according to TinyML Modelmaker needs. The link to the dataset can be found [here](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/motor_fault_classification_dsk.zip).
+This dataset is already formatted according to TinyML Modelmaker needs. The link to the dataset can be found [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_classification_dsk.zip).
 
 ## Usage in TinyML ModelMaker
 
 This dataset is designed to work with TinyML ModelMaker, an end-to-end model development tool that provides dataset handling, model training, and compilation.
 
 ```bash
-./run_tinyml_modelmaker.sh F28P55 examples/data_processing_and_feature_extraction/config.yaml
+./run_tinyml_modelmaker.sh docs/data_processing_and_feature_extraction/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
@@ -45,6 +45,7 @@ The YAML configuration file sets up the model training process in TinyML ModelMa
 ## Data Processing
 
 In this section, we'll cover how to configure data processing transforms available in the YAML file.
+* They key difference between the `data processing` subsection v/s the `feature extraction` subsection is that - `data processing` is only done on the training side (on PC) whereas `feature extraction` is done on both: training (on PC) and inference side (on device)
 
 **Available Transforms:**
 
@@ -52,6 +53,7 @@ Whatever transform you want to use, cascade it in the `data_proc_transforms` lis
 
 1. **Simple Window**: Creates windows of specified size from the dataset.
 2. **Downsample**: Reduces the sampling rate of the dataset.
+3. **Gain Variation**: Introduce a gain multiplier to each class in a dataset for a classification task.
  
 The `variables` parameter specify the number of input channels (or variables) in the dataset.
 
@@ -106,6 +108,18 @@ data_processing_feature_extraction:
     variables: 3
 ```
 
+### Using Gain Variation:
+
+* This is an augmentation technique wherein a random number is picked from a uniform distribution based on the [min, max] range provided for each class.
+* The format for gain_variations must be in the dictionary format as shown below.
+* `gain_variations: {class1_name: [min, max], class2_name: [min, max]....}`
+* With this, the raw data of the corresponding class is multiplied with a random number from a uniform distribution between `min` and `max`
+```yaml
+data_processing_feature_extraction:
+    gain_variations: {arc: [0.9, 1.1], normal: [0.8, 1.2]}
+```
+* Note: This can be used along with Downsample or Simple Window
+
 By following these configurations, you can customize the data processing steps in your model training pipeline. 
 
 ## Feature Extraction
@@ -159,6 +173,15 @@ In this section, we'll focus on the feature extraction configurations available 
       (ix) **LOG_DB**: Converts the amplitude to a logarithmic scale in decibels. It takes into account `log_base`, `log_mul` and `log_threshold` parameters.
 
       (x) **CONCAT**: Concatenates the extracted features into a single vector. It takes into account the `num_frame_concat` parameter.
+      
+      (xi) **TO_Q15**:  Converts the input waveform from floating-point to fixed-point Q15 format (−1 → −32768, +1 → +32767) with saturation handling.
+      
+      (xii) **BIN_Q15**: Groups adjacent Q15 samples into fixed-size bins and computes the average (optionally normalized) per bin, clipping results to the 16-bit range.
+      
+      (xiii)**FFT_Q15**: Performs a fixed-point RFFT (Real FFT) on the Q15 input frame to obtain its frequency-domain representation.
+      
+      (xiv) **Q15_SCALE:**: Applies a bit-shift–based scaling on the Q15 signal using the specified `q15_scale_factor` (power-of-two multiplication or division).
+      (xv)**Q15_MAG**: Computes the magnitude of complex Q15 FFT output samples to obtain the real-valued amplitude spectrum.
 
 13. **store_feat_ext_data**: Whether to store the extracted features (It can take True or False values. (Default value: False)).
 
@@ -194,6 +217,8 @@ In this section, we'll focus on the feature extraction configurations available 
 19. **scale**: Adjusts the amplitude of the extracted features to a specific range (Default value: None).
 
 20. **variables**: Specify the number of input channels (or variables) in the dataset.
+
+21. **q15_scale_factor**: Defines the bit-shift amount used to scale Q15 data; positive values left-shift (amplify) the signal, while negative values right-shift (attenuate) it.
 
 <br>
 Here is an example of how to custom specify the parameters for feature extraction:

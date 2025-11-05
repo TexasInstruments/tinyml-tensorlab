@@ -39,6 +39,7 @@ import shutil
 
 from .... import utils
 from . import dataset_utils
+from ...timeseries.constants import TASK_CATEGORY_TS_ANOMALYDETECTION
 
 
 def get_datasets_list(task_type=None):
@@ -116,32 +117,73 @@ class DatasetHandling:
             for directory in glob(opj(self.params.dataset.input_data_path, '*')):
                 utils.misc_utils.make_symlink(os.path.abspath(directory), opj(self.params.dataset.dataset_path, os.path.basename(directory)))  # self.params.dataset.data_dir
             if need_to_create_splits:
-                # self.file_list = dataset_utils.create_filelist(self.params.dataset.dataset_path, self.params.common.project_run_path, ignore_str='_list.txt')
                 annotations_dir = opj(self.params.dataset.dataset_path,  self.params.dataset.annotation_dir)
                 utils.misc_utils.remove_if_exists(annotations_dir)
+                utils.misc_utils.remove_if_exists(opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_edited'))
+                utils.misc_utils.remove_if_exists(opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_original'))
                 os.makedirs(annotations_dir, exist_ok=True)
-
+                
                 for split_name in self.params.dataset.split_names:
-                    split_list_file = opj(self.params.dataset.dataset_path, self.params.dataset.annotation_dir,
-                                                   f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')
+                    split_list_file = opj(self.params.dataset.dataset_path, self.params.dataset.annotation_dir,f'{self.params.dataset.annotation_prefix}_{split_name}_list.txt')
                     self.params.dataset.annotation_path_splits.append(split_list_file)
 
-                self.file_list = dataset_utils.create_filelist(
-                    opj(self.params.dataset.dataset_path, self.params.dataset.data_dir), annotations_dir,
-                    ignore_str_list=['_list.txt', '.md', 'LICENSE', '.DS_Store', '_background_noise_'])
-                self.logger.info(f'File list is written to: {self.file_list}')
-                if self.params.dataset.split_type == 'amongst_files':
-                    dataset_utils.create_inter_file_split(self.file_list, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
-                elif self.params.dataset.split_type == 'within_files':
-                    out_dir = opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_edited')
-                    os.makedirs(out_dir, exist_ok=True)
-                    dataset_utils.create_intra_file_split(self.file_list, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor,
-                                                          self.params.dataset.data_dir, out_dir, self.params.dataset.split_names, shuffle_items=True, random_seed=42)
-                    shutil.move(opj(self.params.dataset.dataset_path, self.params.dataset.data_dir), opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_original'))
-                    shutil.move(out_dir, opj(self.params.dataset.dataset_path, self.params.dataset.data_dir))
+                #We need to handle the datasplitting differently for anomaly detection compared to other categerios 
+                #In Anomaly detection, we don't use anomaly data to train the model, so we need to add all anomaly data to test list
+                #Splitting will be applied only on Normal data and then model will be trained on normal training data only
+                if self.params.common.task_category == TASK_CATEGORY_TS_ANOMALYDETECTION:
+                    self.normal_files_path =  opj(self.params.dataset.dataset_path, self.params.dataset.data_dir, "Normal")
+                    self.anomaly_files_path = opj(self.params.dataset.dataset_path, self.params.dataset.data_dir, "Anomaly")
+                    normal_file_list = dataset_utils.get_file_list(self.normal_files_path)
+                    anomaly_file_list = dataset_utils.get_file_list(self.anomaly_files_path)
+                    normal_file_list = [os.path.join(os.path.basename(os.path.dirname(file)), os.path.basename(file)) for file in normal_file_list]
+                    anomaly_file_list = [os.path.join(os.path.basename(os.path.dirname(file)), os.path.basename(file)) for file in anomaly_file_list]
+                    
+                    #Store the file paths in txt files for processing purpose
+                    normal_paths_file = os.path.join(annotations_dir, 'normal_list.txt')
+                    anomaly_paths_file = os.path.join(annotations_dir, 'anomlay_list.txt')
+                    with open(normal_paths_file, 'w') as file:
+                        file.write('\n'.join(normal_file_list))
+                    with open(anomaly_paths_file, 'w') as file:
+                        file.write('\n'.join(anomaly_file_list))
+                    
+                    if self.params.dataset.split_type == 'amongst_files':
+                        dataset_utils.create_inter_file_split(normal_paths_file, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
+                    elif self.params.dataset.split_type == 'within_files':
+                        
+                        out_dir = opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_edited')
+                        os.makedirs(out_dir, exist_ok=True)
+                        dataset_utils.create_intra_file_split(normal_paths_file, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor,
+                                                            self.params.dataset.data_dir, out_dir, self.params.dataset.split_names, shuffle_items=True, random_seed=42)
+                        shutil.move(opj(self.params.dataset.dataset_path, self.params.dataset.data_dir), opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_original'))
+                        shutil.move(out_dir, opj(self.params.dataset.dataset_path, self.params.dataset.data_dir))
+                        shutil.move(opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_original',"Anomaly"), opj(self.params.dataset.dataset_path, self.params.dataset.data_dir))
+                        
+                    #add all the anomaly file paths to test list as we will use the anomaly data during test only. 
+                    annotation_test_list_path =  opj(self.params.dataset.dataset_path, self.params.dataset.annotation_dir,f'{self.params.dataset.annotation_prefix}_test_list.txt')
+                    with open(anomaly_paths_file, 'r') as source:
+                            content = source.read()
+                    with open(annotation_test_list_path, 'a') as destination:
+                        destination.write('\n'+content)
+                    os.remove(normal_paths_file)
+                    os.remove(anomaly_paths_file)
+                    
+                else:
+                    self.file_list = dataset_utils.create_filelist(
+                        opj(self.params.dataset.dataset_path, self.params.dataset.data_dir), annotations_dir,
+                        ignore_str_list=['_list.txt', '.md', 'LICENSE', '.DS_Store', '_background_noise_'])
+                    self.logger.info(f'File list is written to: {self.file_list}')
+                    if self.params.dataset.split_type == 'amongst_files':
+                        dataset_utils.create_inter_file_split(self.file_list, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
+                    elif self.params.dataset.split_type == 'within_files':
+                        out_dir = opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_edited')
+                        os.makedirs(out_dir, exist_ok=True)
+                        dataset_utils.create_intra_file_split(self.file_list, self.params.dataset.annotation_path_splits, self.params.dataset.split_factor,
+                                                            self.params.dataset.data_dir, out_dir, self.params.dataset.split_names, shuffle_items=True, random_seed=42)
+                        shutil.move(opj(self.params.dataset.dataset_path, self.params.dataset.data_dir), opj(self.params.dataset.dataset_path, self.params.dataset.data_dir + '_original'))
+                        shutil.move(out_dir, opj(self.params.dataset.dataset_path, self.params.dataset.data_dir))
 
-                    # self.out_files = dataset_utils.create_simple_split(self.file_list, self.params.common.project_run_path + '/dataset', self.params.dataset.split_names, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
-                self.logger.info('Splits of the dataset can be found at: {}'.format(self.params.dataset.annotation_path_splits))
+                        # self.out_files = dataset_utils.create_simple_split(self.file_list, self.params.common.project_run_path + '/dataset', self.params.dataset.split_names, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
+                    self.logger.info('Splits of the dataset can be found at: {}'.format(self.params.dataset.annotation_path_splits))
         else:
             assert False, f'invalid dataset provided at {self.params.dataset.input_data_path}'
 

@@ -1,0 +1,34 @@
+<projectSpec>
+  <project
+        name="ex_model_performance_f28p55x"
+        device="TMS320F28P550SJ9"
+        products="sysconfig;C2000WARE"
+        cgtVersion="22.6.2.LTS"
+        outputFormat="ELF"
+        launchWizard="False"
+        linkerCommandFile=""
+        enableSysConfigTool="true"
+        sysConfigBuildOptions="--product ${C2000WARE_ROOT}/.metadata/sdk.json --device F28P55x --package 128PDT --part F28P55x_128PDT"
+        >
+    <configuration name="CPU1_LAUNCHXL_FLASH" compilerBuildOptions="--opt_level=off -I${PROJECT_ROOT}/device -I${C2000WARE_DLIB_ROOT} -I${PROJECT_ROOT}/artifacts -I${C2000WARE_LIBRARIES}/math/FPUfastRTS/c28/include -I${C2000WARE_LIBRARIES}/dsp/FPU/c28/include -I${C2000WARE_LIBRARIES}/dsp/FPU/c28/examples/common/ -v28 -ml -mt --float_support=fpu32 --tmu_support=tmu0 --define=_LAUNCHXL_F28P55X	--define=DEBUG --define=_FLASH --diag_warning=225 --diag_suppress=10063"  linkerBuildOptions="--entry_point code_start --stack_size=0x200 --heap_size=0x100 -I${C2000WARE_LIBRARIES}/dsp/FPU/c28/lib -I${C2000WARE_LIBRARIES}/math/FPUfastRTS/c28/lib -I${PROJECT_ROOT}/artifacts -l=mod.a -l=rts2800_fpu32_fast_supplement_eabi.lib -l=c28x_fpu_dsp_library_eabi.lib"/>
+    <configuration name="CPU1_FLASH" compilerBuildOptions="--opt_level=off -I${PROJECT_ROOT}/device -I${C2000WARE_DLIB_ROOT} -I${PROJECT_ROOT}/artifacts -I${C2000WARE_LIBRARIES}/math/FPUfastRTS/c28/include -I${C2000WARE_LIBRARIES}/dsp/FPU/c28/include -I${C2000WARE_LIBRARIES}/dsp/FPU/c28/examples/common/ -v28 -ml -mt --float_support=fpu32 --tmu_support=tmu0 --define=DEBUG --define=_FLASH --diag_warning=225 --diag_suppress=10063"  linkerBuildOptions="--entry_point code_start --stack_size=0x200 --heap_size=0x100 -I${C2000WARE_LIBRARIES}/dsp/FPU/c28/lib -I${C2000WARE_LIBRARIES}/math/FPUfastRTS/c28/lib -I${PROJECT_ROOT}/artifacts -l=mod.a -l=rts2800_fpu32_fast_supplement_eabi.lib -l=c28x_fpu_dsp_library_eabi.lib"/>
+    <pathVariable name="C2000WARE_DLIB_ROOT" path="../../../../../../../driverlib/f28p55x/driverlib/" scope="project"/>
+    <pathVariable name="C2000WARE_DEVICE_SUPPORT" path="../../../../../../../device_support" scope="project"/>
+    <pathVariable name="C2000WARE_LIBRARIES" path="../../../../../../../libraries" scope="project"/>
+    <pathVariable name="C2000WARE_ROOT" path="../../../../../../../" scope="project" />
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT/f28p55x/common/include/driverlib.h" targetDirectory="device"/>
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT/f28p55x/common/include/device.h" targetDirectory="device"/>
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT/f28p55x/common/source/device.c" targetDirectory="device"/>
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT/f28p55x/common/source/f28p55x_codestartbranch.asm" targetDirectory="device"/>
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT/f28p55x/common/targetConfigs/TMS320F28P550SJ9_LaunchPad.ccxml" targetDirectory="targetConfigs"/>
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT/f28p55x/common/targetConfigs/TMS320F28P550SJ9.ccxml" targetDirectory="targetConfigs" applicableConfigurations="CPU1_FLASH"/>
+    <file action="link" path="C2000WARE_DLIB_ROOT/ccs/Debug/driverlib.lib" targetDirectory=""/>  
+    <file action="copy" path="../artifacts" targetDirectory=""/>   
+    <file action="copy" path="../application_main.c" targetDirectory=""/>  
+    <file action="copy" path="../user_input_config.h" targetDirectory=""/>
+    <file action="copy" path="../profiling_c28.c" targetDirectory=""/>  
+    <file action="copy" path="../profiling.h" targetDirectory=""/> 
+    <file action="copy" path="../28p55x_lnk.cmd" targetDirectory=""/>
+    <file action="copy" path="../c2000.syscfg" targetDirectory=""/>
+	</project>
+</projectSpec>

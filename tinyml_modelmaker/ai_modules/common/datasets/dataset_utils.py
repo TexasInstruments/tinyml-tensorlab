@@ -63,8 +63,9 @@ def create_filelist(input_data_path: str, output_dir: str, ignore_str_list=None)
     '''
     filelist = []
     for root, dirs, files in os.walk(input_data_path):
+        relative_root = os.path.relpath(root, input_data_path)
         for filename in files:
-            tmp_name = os.path.join(os.path.basename(root), filename)
+            tmp_name = os.path.join(relative_root, filename) if relative_root != "." else filename
             if not any(re.search(ignore_str, tmp_name) for ignore_str in ignore_str_list):
                 filelist.append(tmp_name)
 

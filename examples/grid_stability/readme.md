@@ -38,7 +38,7 @@ TinyML ModelMaker is an end-to-end model development tool that provides dataset 
 
 ```bash
 cd tinyml-modelmaker
-run_tinyml_modelmaker.sh F28P55 examples/grid_stability/config.yaml
+run_tinyml_modelmaker.sh examples/grid_stability/config.yaml
 ```
 
 ModelMaker will start by loading the dataset, train the model, test the model, compile the model. ModelMaker will create the output folder in `tinyml-modelmaker/data/projects/{dataset_name}`. For this example dataset_name is `grid_stability`. You can find the dataset name in the configuration [yaml](config.yaml)

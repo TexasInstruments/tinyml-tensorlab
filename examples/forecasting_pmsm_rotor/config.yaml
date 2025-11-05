@@ -10,7 +10,7 @@ dataset:
     enable: True
     data_dir: 'files'
     dataset_name: pmsm_rotor_temp_prediction_dataset
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/pmsm_rotor_temp.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/pmsm_rotor_temp.zip
 
 data_processing_feature_extraction: # One or more can be cascaded in the list
     # transforms: 'Downsample SimpleWindow'
@@ -37,10 +37,10 @@ training:
     batch_size: 256
     training_epochs: 15
     num_gpus: 0
-    quantization: 1
+    quantization: 0
     optimizer: adam
     learning_rate: 0.01
-    output_dequantize: True
+    # output_dequantize: True
 
 testing:
     enable: True # False
@@ -48,5 +48,5 @@ testing:
 compilation:
     # enable/disable compilation
     enable: True # False
-    keep_libc_files: False
-    compile_preset_name: forced_soft_npu_preset
+    # keep_libc_files: True
+    # compile_preset_name: forced_soft_npu_preset

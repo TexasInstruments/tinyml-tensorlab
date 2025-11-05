@@ -8,8 +8,7 @@ dataset:
     # enable/disable dataset loading
     enable: True
     dataset_name: ecg
-    input_data_path: /home/a0484689/PycharmProjects/tinyml_docker_images/ecg_dataset/
-#    split_names: [training, validation]
+    # input_data_path: '''
 
 data_processing_feature_extraction:
     # One or more can be cascaded in the list
@@ -31,7 +30,7 @@ training:
     # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
     # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
     model_name: 'TimeSeries_Generic_4k_t'
-    # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
+    # model_spec: ''
     model_config: ''
     batch_size: 256
     training_epochs: 50

@@ -70,8 +70,9 @@ python -m pip install --no-input --upgrade wheel
 # install code gen tools
 # Note: this will need sudo access.
 # setup_cg_tools.sh
-# setup_arm_clang_tools.sh
+# setup_armclang_tools.sh
 # setup_c2000ware.sh
+# setup_f29clang_tools.sh
 
 #################################################################################
 echo "preparing environment..."

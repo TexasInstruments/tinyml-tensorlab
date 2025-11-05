@@ -85,11 +85,11 @@ The initial branch consists of three convolution layers with (input_channel, out
     - `out_channel_layer2`: out features of the second convolution layer
     - `out_channel_layer3`: out features of the third convolution layer
 
-To run this example for device: `F28P55`:
+To run this example for device: `F28P55`, it should be mentioned inside the target_device field in the config.yaml:
 ```sh
 cd tinyml-modelmaker
 
-run_tinyml_modelmaker.sh F28P55 examples/branched_model_parameters/config.yaml
+run_tinyml_modelmaker.sh examples/branched_model_parameters/config.yaml
 ```
 ## Comparison of models
 

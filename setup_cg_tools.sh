@@ -41,10 +41,10 @@ mkdir -p ${TOOLS_PATH}
 
 #################################################################################
 # c2000 cgtools
-C2000_CGT_INSTALLER=ti_cgt_c2000_22.6.1.LTS_linux-x64_installer.bin
+C2000_CGT_INSTALLER=ti_cgt_c2000_22.6.3.LTS_linux-x64_installer.bin
 C2000_CGT_INSTALLER_FILE=${INSTALLER_PATH}/${C2000_CGT_INSTALLER}
 rm -f ${C2000_CGT_INSTALLER_FILE}
-wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/22.6.1.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
+wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/22.6.3.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
 chmod +x ${C2000_CGT_INSTALLER_FILE}
 ${C2000_CGT_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
 rm -f ${C2000_CGT_INSTALLER_FILE}

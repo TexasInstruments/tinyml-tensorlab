@@ -25,8 +25,8 @@ The last line of the above file is where you specify the model to be compiled.
 
 Then, you can run the following using [config.yaml](config.yaml)
 ```
-run_tinyml_modelmaker.sh  <target_device> <config_file>
+run_tinyml_modelmaker.sh  <config_file>
 
 Example:
-run_tinyml_modelmaker.sh F28P55 config.yaml
+run_tinyml_modelmaker.sh config.yaml
 ```

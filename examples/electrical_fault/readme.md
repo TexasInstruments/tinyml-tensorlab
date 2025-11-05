@@ -12,7 +12,7 @@ The Electrical Fault Dataset is a multivariate time series dataset. It is obtain
 
 There are 6 measurable parameters/variables - **(Va, Vb, Vc, Ia, Ib, Ic)** i.e the voltage and current of three phases. 
 
-There are two dataset files present in the compressed zip: [electrical_fault.zip](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/electrical_fault.zip)
+There are two dataset files present in the compressed zip: [electrical_fault.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/electrical_fault.zip)
 
 - `detect_dataset.xlsx` : which finds if there is a fault or not. Target = [Output (S)]
     - There is one target only i.e. Output (S) which has two unique values (0, 1) denoting fault and no fault.
@@ -47,11 +47,11 @@ dataset:
 This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config.yaml
+run_tinyml_modelmaker.sh examples/electrical_fault/config.yaml
 ```
 
 1. `run_tinyml_modelmaker.sh` is the script to run modelmaker. It take two required arguments.
-2. `F28P55` is the name of target device.
+2. `F28P55` is the name of target device present in the config.yaml.
 3. `examples/electrical_fault/config.yaml` path of the yaml configuration to run
 
 Running this configuration file with modelmaker will show an error to train the model properly with good hyper parameters. (This is due to *multicollinearity*)
@@ -124,7 +124,7 @@ data_processing_feature_extraction:
 After doing the above changes in yaml [configuration](config.yaml) file. Run the modelmaker again for this dataset.
 
 ```bash
-run_tinyml_modelmaker.sh F28P55 examples/electrical_fault/config.yaml
+run_tinyml_modelmaker.sh examples/electrical_fault/config.yaml
 ```
 
 Another feature extraction is to just perform `FFT` without Binning. For this, we need to remove `Binning` from transforms. The feature size for each frame would become half of the frame size. So, yaml configuration would look like.

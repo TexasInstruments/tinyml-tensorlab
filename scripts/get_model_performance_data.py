@@ -1,11 +1,12 @@
 import pandas as pd
 from pprint import PrettyPrinter
 from tinyml_modelmaker.ai_modules.timeseries import constants
+from tinyml_modelmaker.ai_modules.vision import constants
 
 valid_model_list = ['MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
                     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
                     'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t',
-                    'TimeSeries_Generic_13k_t', ]
+                    'TimeSeries_Generic_13k_t', 'Lenet5', 'PIRDetection_model_1_t']
 soft_tinie_targets = ['c28_soft_int_in_int_out']
 hard_tinie_targets = ['c28_hard_int_in_int_out']
 valid_tinie_targets = soft_tinie_targets + hard_tinie_targets
@@ -27,7 +28,8 @@ relevant_df = relevant_df.drop(columns=['target_tinie_type', 'code', 'ro', 'rw',
 relevant_df = relevant_df.set_index(['model'])  # 'cycles',
 
 device_list = [constants.TARGET_DEVICE_F280013, constants.TARGET_DEVICE_F280015, constants.TARGET_DEVICE_F28003, constants.TARGET_DEVICE_F28004,
-               constants.TARGET_DEVICE_F2837, constants.TARGET_DEVICE_F28P65]
+               constants.TARGET_DEVICE_F2837, constants.TARGET_DEVICE_F28P65,  constants.TARGET_DEVICE_MSPM0G3507,
+    constants.TARGET_DEVICE_MSPM0G5187,constants.TARGET_DEVICE_CC2755]
 freq_MHz_dict  = {
     constants.TARGET_DEVICE_F280013: 120,
     constants.TARGET_DEVICE_F280015: 120,
@@ -36,6 +38,9 @@ freq_MHz_dict  = {
     constants.TARGET_DEVICE_F2837: 120,
     constants.TARGET_DEVICE_F28P65: 200,
     constants.TARGET_DEVICE_F28P55: 150,
+    constants.TARGET_DEVICE_MSPM0G3507: 111,
+    constants.TARGET_DEVICE_MSPM0G5187: 111,
+    constants.TARGET_DEVICE_CC2755: 96,
 }
 
 hard_tinie_df = relevant_df.loc[relevant_df.tinie_type=='hard']

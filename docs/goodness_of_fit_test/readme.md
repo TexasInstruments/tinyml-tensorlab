@@ -21,7 +21,7 @@ This dataset is already formatted according to TinyML Modelmaker needs. It can b
 This dataset is designed to work with TinyML ModelMaker, an end-to-end model development tool that provides dataset handling, model training, and compilation.
 
 ```bash
-./run_tinyml_modelmaker.sh F28P55 examples/goodness_of_fit_test/config.yaml
+./run_tinyml_modelmaker.sh docs/goodness_of_fit_test/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.

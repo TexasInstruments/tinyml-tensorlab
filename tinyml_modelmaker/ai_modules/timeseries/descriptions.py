@@ -90,21 +90,21 @@ def set_default_inference_time_us(model_descriptions):
     for m in model_descriptions.values():
         for target_device in m.training.target_devices.keys():
             if not m.training.target_devices[target_device].get('inference_time_us'):
-                m.training.target_devices[target_device].inference_time_us = None
+                m.training.target_devices[target_device].inference_time_us = "TBD"
 
 
 def set_default_sram(model_descriptions):
     for m in model_descriptions.values():
         for target_device in m.training.target_devices.keys():
             if not m.training.target_devices[target_device].get('sram'):
-                m.training.target_devices[target_device].sram = None
+                m.training.target_devices[target_device].sram = "TBD"
 
 
 def set_default_flash(model_descriptions):
     for m in model_descriptions.values():
         for target_device in m.training.target_devices.keys():
             if not m.training.target_devices[target_device].get('flash'):
-                m.training.target_devices[target_device].flash = None
+                m.training.target_devices[target_device].flash = "TBD"
 
 
 def set_model_selection_factor(model_descriptions):
@@ -339,6 +339,16 @@ These are the devices that are supported currently. As additional devices are su
 ### {constants.TARGET_DEVICE_F280015}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015}
 
+### {constants.TARGET_DEVICE_MSPM0G3507}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3507}
+
+### {constants.TARGET_DEVICE_MSPM0G5187}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G5187}
+
+### {constants.TARGET_DEVICE_CC2755}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2755}
+
+
 ## Additional information
 {constants.TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}
 
@@ -365,7 +375,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](http://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 

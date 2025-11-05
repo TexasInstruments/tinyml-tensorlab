@@ -10,7 +10,7 @@ dataset:
     enable: True
     data_dir: 'files'
     dataset_name: battery_dataset
-    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_01_00/datasets/battery_dataset.zip'
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/battery_dataset.zip'
 #    split_names: [training, validation]
 
 data_processing_feature_extraction: # One or more can be cascaded in the list
