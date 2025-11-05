@@ -27,7 +27,7 @@ def is_both_node_equal(named_modules: Dict, main_module_node: torch.Node, patter
     both_node_equal = both_node_equal or (main_module_node.op == 'call_function' and are_both_function_equal(main_module_node.target, pattern_type_node))
     return both_node_equal
 
-def simple_chain_searcher(main_module: GraphModule, pattern_type: List) -> List[torch.Node]:
+def simple_chain_searcher(main_module: GraphModule, pattern_type: List) -> List[List[torch.Node]]:
     '''
     Finds the pattern_type in main_module graph and returns the list of nodes corresponding to pattern
     The function searches the list of main_module graph nodes in `linear` fashion. It matches the type of nodes 

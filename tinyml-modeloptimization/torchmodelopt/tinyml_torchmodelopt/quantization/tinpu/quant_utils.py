@@ -1,3 +1,4 @@
+from numpy import ceil, log2
 import torch
 from torch.fx import GraphModule, Node
 
@@ -5,7 +6,7 @@ from typing import Dict, List, Tuple
 from .quant_modules import *
 
 class TINPUQuantizedReplacementUtils():
-    def __init__(self, model: GraphModule, weight_bw: int, activation_bw: int, power2_scale: bool, float_ops: bool):
+    def __init__(self, model: GraphModule, weight_bw: int, activation_bw: int, power2_scale: bool, float_ops: List):
 
         self.module: GraphModule = model
         self.graph_quant_params: Dict[str, Dict] = dict()
@@ -15,13 +16,13 @@ class TINPUQuantizedReplacementUtils():
         self.activation_bw = activation_bw
         self.num_bits_scale = 1 if power2_scale else 8
         self.rename_nodes_flag = False
-        self.float_ops = float_ops
-        
-        if self.float_ops:
-            self.float_ops = [(2, 2), (2, 4), (2, 8), (4, 2), (4, 4), (4, 8), (8, 2), (8, 4), (8, 8)]
-        else:
-            self.float_ops = [] # [(2, 2), (2, 4), (2, 8), (4, 2), (4, 4), (4, 8), (8, 2), (8, 4), (8, 8)]
 
+        self.init_qdq = False
+        self.float_ops = []
+        if 'qdq' in float_ops:
+            self.init_qdq = True
+        if 'fb' in float_ops:
+            self.float_ops = [(2, 2), (2, 4), (2, 8), (4, 2), (4, 4), (4, 8), (8, 2), (8, 4), (8, 8)]
 
         if self._check_module_before_quant():
             nodes = self._get_nodes()
@@ -193,7 +194,7 @@ class TINPUQuantizedReplacementUtils():
         module = self.module
         return module
     
-    def search_pattern(self, replacement_pattern: List) -> List[Node]:
+    def search_pattern(self, replacement_pattern: List) -> List[List[torch.Node]]:
         matches = simple_chain_searcher(self.module, replacement_pattern)
         return matches
     
@@ -229,7 +230,12 @@ class TINPUQuantizedReplacementUtils():
         zero_point = getattr(self.module, q_node.args[2].target)
         # OSS Module
         oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(zero_point*0.0, 1/scale, int_bias=False, num_bits_scale=8)
-        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -(2**(self.activation_bw - 1)), 2**(self.activation_bw - 1) - 1, ndim=4, dim=1)
+        quant_min = -(2**(self.activation_bw - 1))
+        quant_max = 2**(self.activation_bw - 1) - 1
+        if zero_point == 0:
+            quant_min = 0
+            quant_max = 2**self.activation_bw - 1
+        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, quant_min, quant_max, ndim=4, dim=1)
         # Replace quantize function with OSS Module
         replace_call_function_or_method(self.module, start, end, oss_module, self._get_module_num())
         return None
@@ -247,33 +253,50 @@ class TINPUQuantizedReplacementUtils():
         q_scale = getattr(self.module, start.args[1].target)
         q_zp = getattr(self.module, start.args[2].target)
         qdq_module = QDQModule(1/q_scale, q_scale)
+        channels = qbn_module.running_mean.shape[0]
 
         scale = qbn_module.scale
         zero_point = qbn_module.zero_point
-
-        bn_offset = (- qbn_module.running_mean + qbn_module.bias * bn_sigma / qbn_module.weight)
-        # first get the effective weight due to batchnorm
-        combined_weight = (qbn_module.weight / bn_sigma)
-        # then modify the weight by output scale so that the output is converted to output scale
-        bn_scale = combined_weight / scale
-        round_offset = scale / 2 / combined_weight
-        num_bits_scale = 8
-        if len(self.float_ops):
-            bn_offset = bn_offset / q_scale - q_zp
-            bn_scale = bn_scale * q_scale
-            round_offset = round_offset / q_scale
-            num_bits_scale = 32
-            oss_offset, oss_scale, oss_shift = torch.tensor([q_scale / 2 + q_zp * q_scale]), torch.tensor([1 / q_scale]), torch.tensor([1])
-            qdq_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 2**(self.activation_bw) - 1, ndim=4, dim=1)
-        # OSS Module for First BN represented as offset, scale and shift, the scale can be an 8bit quantity
-        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, round_offset, int_bias=False, num_bits_scale=num_bits_scale)
-        normalize_input = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -2**(self.activation_bw - 1), 2**(self.activation_bw - 1) - 1, ndim=4, dim=1)
-        if len(self.float_ops):
-            # qdq_module = QDQModule(1/q_scale, 1)
-            qbn_module = torch.nn.Sequential(qdq_module, normalize_input)
-        else:
+        if not self.init_qdq:
+            bn_offset = (- qbn_module.running_mean + qbn_module.bias * bn_sigma / qbn_module.weight)
+            # first get the effective weight due to batchnorm
+            combined_weight = (qbn_module.weight / bn_sigma)
+            # then modify the weight by output scale so that the output is converted to output scale
+            bn_scale = combined_weight / scale
+            round_offset = scale / 2 / combined_weight
+            num_bits_scale = 8
+            quant_min = -(2**(self.activation_bw - 1))
+            quant_max = 2**(self.activation_bw - 1) - 1
+            if zero_point == 0:
+                quant_min = 0
+                quant_max = 2**self.activation_bw - 1
+            if self.init_qdq:
+                bn_offset = bn_offset / q_scale - q_zp
+                bn_scale = bn_scale * q_scale
+                round_offset = round_offset / q_scale
+                num_bits_scale = 32
+                oss_offset, oss_scale, oss_shift = torch.tensor([q_scale / 2 + q_zp * q_scale]), torch.tensor([1 / q_scale]), torch.tensor([1])
+                qdq_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 2**(self.activation_bw) - 1, ndim=4, dim=1)
+            # OSS Module for First BN represented as offset, scale and shift, the scale can be an 8bit quantity
+            oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, round_offset, int_bias=False, num_bits_scale=num_bits_scale)
+            normalize_input = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, quant_min, quant_max, ndim=4, dim=1)
             qbn_module = normalize_input
-        # Remove the scale, zero_point, quantize method and bn layer with OSS Module
+            # Remove the scale, zero_point, quantize method and bn layer with OSS Module
+        else:
+            range_of_input = q_scale * (2**self.activation_bw - 1)
+            float_scaler_bits = ceil(log2(range_of_input)) + 1
+            float_scaler = 2**float_scaler_bits     # accounts for decimal places while rounding for quantization
+            qbn_module = torch.nn.Sequential(
+                MultiplyModule(torch.tensor([float_scaler / q_scale]).reshape(1,1,1,1)),         # Mul
+                FloorClip(),
+                AddModule(torch.tensor([float_scaler / 2 ]).reshape(1,1,1,1)),               # Add
+                MultiplyModule(1/torch.tensor([float_scaler]).reshape(1,1,1,1)),            # Mul
+                FloorClip(-2**self.activation_bw, 2**self.activation_bw - 1),                                                              # Floor, Clip
+                MultiplyModule((float_scaler*(q_scale*qbn_module.weight/bn_sigma/scale).reshape(1,channels,1,1).detach().cpu()).type(torch.int)),   # Mul
+                AddModule(((float_scaler*(scale/2 + qbn_module.bias - (qbn_module.running_mean/bn_sigma*qbn_module.weight))/scale).reshape(1,channels,1,1).detach().cpu()).type(torch.int)),
+                MultiplyModule(torch.tensor([1/float_scaler]).reshape(1,1,1,1)),        # Mul
+                FloorClip(-2**self.activation_bw, 2**self.activation_bw - 1),                                                             # Floor, Clip
+            )
         replace_call_function_or_method(self.module, start, end, qbn_module, self._get_module_num())
         return None
     
@@ -365,12 +388,16 @@ class TINPUQuantizedReplacementUtils():
         # conv_module.bias.data.copy_(qbias)
         relative_mult = (acc_scale / qlinear_module.scale).float()
         oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(qbias, relative_mult, round_offset, int_bias=int_bias, num_bits_scale=self.num_bits_scale)
-
+        quant_min = -(2**(self.activation_bw - 1))
+        quant_max = 2**(self.activation_bw - 1) - 1
+        if qlinear_module.zero_point == 0:
+            quant_min = 0
+            quant_max = 2**self.activation_bw - 1
         if with_relu:
             oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 2**self.activation_bw - 1, ndim=2, dim=1)
             seq_module = torch.nn.Sequential(linear_module, oss_module, torch.nn.ReLU(), torch.nn.Hardtanh(0, 2**self.activation_bw - 1))
         else:
-            oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -2**(self.activation_bw - 1), 2**(self.activation_bw - 1) - 1, ndim=2, dim=1)
+            oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, quant_min, quant_max, ndim=2, dim=1)
             seq_module = torch.nn.Sequential(linear_module, oss_module)
         replace_call_module(self.module, start, end, seq_module, self._get_module_num(), self.rename_nodes_flag)
         return None
@@ -486,7 +513,12 @@ class TINPUQuantizedReplacementUtils():
         zero_point = getattr(self.module, start.args[2].target)
         # OSS Module
         oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(zero_point*0.0, 1/scale, num_bits_scale=self.num_bits_scale)
-        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -(2**(self.activation_bw - 1)), 2**(self.activation_bw - 1) - 1, ndim=2, dim=1)
+        quant_min = -(2**(self.activation_bw - 1))
+        quant_max = 2**(self.activation_bw - 1) - 1
+        if zero_point == 0:
+            quant_min = 0
+            quant_max = 2**self.activation_bw - 1
+        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, quant_min, quant_max, ndim=2, dim=1)
         # Get the module present after quantization
         if end.target in named_modules:
             # If flatten module is present in named_modules, we use the module

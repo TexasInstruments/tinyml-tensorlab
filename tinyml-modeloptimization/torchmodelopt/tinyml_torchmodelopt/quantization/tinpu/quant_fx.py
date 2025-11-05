@@ -34,7 +34,7 @@ import torch
 from torch.fx import GraphModule
 
 import platform
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 
 from ..common import *
@@ -46,7 +46,7 @@ from ... import surgery
 
 
 class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
-    def __init__(self, *args, qconfig_type: dict=None, output_dequantize: bool=False, **kwargs) -> None:
+    def __init__(self, *args, qconfig_type: Optional[dict] = None, output_dequantize: bool=False, **kwargs) -> None:
         '''
         The QAT wrapper module does the preparation like in:
         qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
@@ -101,7 +101,7 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         self.activation_bw = qconfig_type['activation']['bitwidth']
         self.power2_scale = qconfig_type['weight']['power2_scale']
         self.output_dequantize = output_dequantize
-        self.float_ops = kwargs.get('float_ops', False)
+        self.float_ops = kwargs.get('float_ops', [])
 
         if self.weight_bw >= 8:
             assert self.power2_scale is True, 'for 8bit quantization, power2_scale must be set to True'
@@ -115,7 +115,7 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
         # assign_same_observers_for_residual_inputs(self.module)
 
-    def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
+    def convert(self, *args, model_qconfig_format: str = TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
         '''
         The convert function is used to convert the model to TINPU supported ONNX model. 
         Args:
@@ -134,23 +134,28 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
             self.module = surgery.replace_unsupported_layers(self.module, replacement_dict={'tinyml_modelopt_quant_replace_types': {'quant_replace_types': _convert_replacement_func}})
         return self
 
-    def export(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
+    def export(self, *args, model_qconfig_format: str = TinyMLModelQConfigFormat.TINPU_INT_MODEL, simplify: bool = True, skipped_optimizers=None, **kwargs):
         skipped_optimizers = skipped_optimizers or ['fuse_add_bias_into_conv', 'eliminate_nop_with_unit']
         super().export(*args, model_qconfig_format=model_qconfig_format, simplify=simplify, skipped_optimizers=skipped_optimizers, **kwargs)
 
     def measure_stats(self, float_output, quant_output):
         diff_output = (float_output - quant_output)
         diff_output_abs = diff_output.abs()
-        diff_output_sqr = diff_output**2
-        float_output_sqr = float_output**2
+        diff_output_sqr = diff_output ** 2
+        float_output_sqr = float_output ** 2
         quant_error_min = diff_output_abs.min().item()
         quant_error_max = diff_output_abs.max().item()
         quant_error_mean = diff_output_abs.mean().item()
         quant_snr_db = (10 * torch.log10(float_output_sqr.mean() / diff_output_sqr.mean())).item()
         quant_psnr_db = (10 * torch.log10(float_output_sqr.max() / diff_output_sqr.mean())).item()
         quant_absmu_by_sigma = (float_output.abs().mean() / diff_output.std()).item()
-        diff_output_stats = dict(snr_db=quant_snr_db, psnr_db=quant_psnr_db, absmu_by_sigma=quant_absmu_by_sigma,
-                                 mean=quant_error_mean, min=quant_error_min, max=quant_error_max)
+        diff_output_stats = dict(
+            snr_db=quant_snr_db, 
+            psnr_db=quant_psnr_db, 
+            absmu_by_sigma=quant_absmu_by_sigma,
+            mean=quant_error_mean, 
+            min=quant_error_min, 
+            max=quant_error_max)
         return diff_output_stats
 
     def is_batch_normalized(self, module: GraphModule) -> bool:
