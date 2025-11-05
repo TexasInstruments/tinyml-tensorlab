@@ -68,25 +68,30 @@ import platform
 import random
 import sys
 import timeit
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
 import numpy as np
-import matplotlib.pyplot as plt
+import pandas as pd
+from collections import defaultdict
+from tinyml_tinyverse.common.models import NeuralNetworkWithPreprocess
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQuantizationMethod
+from tinyml_torchmodelopt.nas.train_cnn_search import search_and_get_model
 
 # Torch Modules
 import torch
 import torch.nn as nn
 import torchinfo
+from tabulate import tabulate
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GenericTSDatasetForecasting
+from tinyml_tinyverse.common.datasets import GenericImageDataset
+
 # Tiny ML TinyVerse Modules
-from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
+from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights,gof_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
-dataset_loader_dict = {'GenericTSDatasetForecasting' : GenericTSDatasetForecasting}
+dataset_loader_dict = {'GenericImageDataset':GenericImageDataset}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
 
 
@@ -110,33 +115,19 @@ def get_args_parser():
     DESCRIPTION = "This script loads time series data and trains it generating a model"
     parser = ArgumentParser(description=DESCRIPTION)
     # parser.add_argument('--out_dir', help='Run directory', default=os.getcwd())
-    parser.add_argument('--resampling-factor', help="Resampling ratio")
-    parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
-    parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
-    parser.add_argument('--forecast-horizon',help="Number of future timesteps to be predicted", type=int)
-    parser.add_argument('--target-variables',help='Target variables to be predicted', default=[])
+
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
 
     parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
     parser.add_argument('--store-feat-ext-data', help='Store Data post Feature extractions')
     parser.add_argument('--feat-ext-store-dir', help='Store Data post Feature extractions in this directory')
     parser.add_argument('--dont-train-just-feat-ext', help='Quit after Feature Extraction without Training. Does not have any effect if --store-feat-ext-data is not used')
-    parser.add_argument('--frame-size', help="Frame Size")
-    parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
-    parser.add_argument('--num-frame-concat', help="Number of FFT frames to concat")
-    parser.add_argument('--frame-skip', help="Skip frames while computing FFT")
-    parser.add_argument('--min-bin', help="Remove DC Component from FFT")
-    parser.add_argument('--normalize-bin', help="Normalize FFT Binning")
-    parser.add_argument('--dc-remove', help="Remove DC Component from FFT")
-    parser.add_argument('--analysis-bandwidth', help="Spectrum of FFT used for binning")
-    # parser.add_argument('--num-channel', help="Number of input channels (ex.axis, phase)", default=16, type=int)
-    parser.add_argument('--log-base', help="base value for logarithm")
-    parser.add_argument('--log-mul', help="multiplier for logarithm")
-    parser.add_argument('--log-threshold', help="offset added to values for logarithmic calculation")
-    parser.add_argument('--stacking', help="1D/2D1/None")
-    parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
-    parser.add_argument('--scale', help="Scaling factor to input data")
+    parser.add_argument('--image-height', help="Image dimension(Height)")
+    parser.add_argument('--image-width', help="Image dimension(Width)")
+    parser.add_argument('--image-mean', help="Average pixel intensity of dataset computed per channel")
+    parser.add_argument('--image-scale', help="Standard deviation of pixel intensities per channel")
+    parser.add_argument('--image-num-channel', help="Number of channels( RGB=3, Greyscale=1) present in the image")
+
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
 
     parser.add_argument('--gen_golden_vectors', help="Generate golden vectors to feed into the model", type=misc_utils.str_or_bool, default=True)
@@ -145,9 +136,10 @@ def get_args_parser():
 
     parser.add_argument('--data-path', default=os.path.join('.', 'data', 'datasets'), help='dataset')
     parser.add_argument('--dataset', default='folder', help='dataset')
+    parser.add_argument('--gof-test', type=misc_utils.str2bool, default=False, help='Enable goodness-of-fit test') 
     parser.add_argument('--dataset-loader', default='SimpleTSDataset', help='dataset loader')
-    parser.add_argument("--loader-type", default="forecasting", type=str,
-                        help="Dataset Loader Type: classification/regression/forecasting")
+    parser.add_argument("--loader-type", default="classification", type=str,
+                        help="Dataset Loader Type: classification/regression")
     parser.add_argument('--annotation-prefix', default='instances', help='annotation-prefix')
     parser.add_argument('--model', default='ArcDet4x16', help='model')
     parser.add_argument('--dual-op', default=False, help='True if you need model to have FC layer input as secondary output', type=misc_utils.str_or_bool)
@@ -158,7 +150,7 @@ def get_args_parser():
     parser.add_argument('--gpus', default=1, type=int, help='number of gpus')
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
     parser.add_argument('--epochs', default=90, type=int, metavar='N', help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 16, type=int, metavar='N', help='number of data loading workers (default: 16)')
+    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 8, type=int, metavar='N', help='number of data loading workers (default: 16)')
     parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
     parser.add_argument('--lr', default=0.1, type=float, help='initial learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
@@ -190,7 +182,7 @@ def get_args_parser():
     # distributed training parameters
     parser.add_argument('--world-size', default=1, type=int, help='number of distributed processes')
     parser.add_argument('--dist-url', default='env://', help='url used to set up distributed training')
-    parser.add_argument("--distributed", default=None, type=misc_utils.str2bool_or_none, help="use distributed training even if this script is not launched using torch.distributed.launch or run")
+    parser.add_argument("--distributed", default=None, type=misc_utils.str2bool_or_none, help="use dstributed training even if this script is not launched using torch.disctibuted.launch or run")
 
     parser.add_argument('--model-ema', action='store_true', help='enable tracking Exponential Moving Average of model parameters')
     parser.add_argument('--model-ema-decay', type=float, default=0.9, help='decay factor for Exponential Moving Average of model parameters(default: 0.9)')
@@ -201,7 +193,7 @@ def get_args_parser():
 
     parser.add_argument("--compile-model", default=0, type=int, help="Compile the model using PyTorch2.0 functionality")
     parser.add_argument("--opset-version", default=17, type=int, help="ONNX Opset version")
-
+    
     parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int, choices=TinyMLQuantizationVersion.get_choices(), help="Quantization Aware Training (QAT)")
     # parser.add_argument("--quantization-type", default="DEFAULT", help="Actual Quantization Flavour - applies only if quantization is enabled")
     parser.add_argument("--quantization-method", default="QAT", choices=["PTQ", "QAT"], help="Actual Quantization Flavour - applies only if quantization is enabled")
@@ -211,6 +203,22 @@ def get_args_parser():
     parser.add_argument("--quantization-error-logging", default=True, type=misc_utils.str_or_bool, help="log the quantization error")
 
     parser.add_argument("--with-input-batchnorm", default=True, help="onnx opset 18 doesn't export input batchnorm, use this if using TINPU style QAT only")
+
+    #######################################
+    # nas args
+    #######################################
+    parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS")
+    parser.add_argument("--nas_optimization_mode", default="Memory", type=str,  help="Optimize model for compute or storage efficiency")
+    parser.add_argument("--nas_model_size", default='None', choices=['s', 'm', 'l', 'xl', 'None'], help="Proxy for model size")
+    parser.add_argument("--nas_epochs", default=10, type=int, help="Iterations for search")
+
+    parser.add_argument("--nas_nodes_per_layer", default=4, type=int, help="Number of nodes per layer")
+    parser.add_argument("--nas_layers", default=3, type=int, help="Shoulde be minimum 3")
+    parser.add_argument("--nas_init_channels", default=1, type=int, help="Initial channel size of the first feature map")
+    parser.add_argument("--nas_init_channel_multiplier", default=3, type=int, help="Channel size of after first preprocess")
+    parser.add_argument("--nas_fanout_concat", default=4, type=int, help="Number of nodes to concat for output after each layer")
+
+    parser.add_argument("--load_saved_model", type=str, default='None', help="Model path for pre-searched nas model")
 
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
@@ -257,7 +265,7 @@ def generate_model_aux(output_dir, dataset):
         fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
     return
 
-def generate_golden_vectors(output_dir, output_int, dataset, generic_model=False):
+def generate_golden_vectors(output_dir, dataset, output_int, generic_model=False, nn_for_feature_extraction=False):
     logger = getLogger("root.generate_golden_vectors")
     import onnxruntime as ort
     vector_files = []
@@ -272,22 +280,31 @@ def generate_golden_vectors(output_dir, output_int, dataset, generic_model=False
     golden_vectors_dir = os.path.join(output_dir, 'golden_vectors')
     
     logger.info(f"Creating Golden data for reference at {golden_vectors_dir}")
-    number_of_samples = len(dataset)
+    label_index_dict = {dataset.inverse_label_map.get(label): np.where(dataset.Y == label)[0] for label in np.unique(dataset.Y)}
 
-    for index in random.sample(range(number_of_samples), k=8):  # Originally k=4
-        np_raw = dataset.X_raw[index]
-        np_feat = dataset.X[index]
-        pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
+    for label, indices in label_index_dict.items():
+        # For each label, 4 random golden test vectors will be selected and printed out
+        for index in random.sample(list(indices), k=2):  # Originally k=4
+            np_raw = dataset.X_raw[index]
+            if nn_for_feature_extraction:
+                np_feat = np_raw
+                pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_raw, 0).astype(np.float32)})[0]
+            else:
+                np_feat = dataset.X[index]
+                pred = ort_sess.run([output_name], {input_name: np.expand_dims(np_feat, 0).astype(np.float32)})[0]
 
-        half_path = os.path.join(golden_vectors_dir)
+            half_path = os.path.join(golden_vectors_dir)
 
-        # Saving as .txt
-        np.savetxt(half_path + f'adc_{index}.txt', np_raw.flatten(), fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,', header=f'//(Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
-        vector_files.append(half_path + f'adc_{index}.txt')
-        #np.savetxt(half_path + f'features_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//(Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
-        #vector_files.append(half_path + f'features_{index}.txt')
-        np.savetxt(half_path + f'output_{index}.txt', pred.flatten(), fmt='%d,' if output_int else '%f,', header=f'//(Index: {index}): Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
-        vector_files.append(half_path + f'output_{index}.txt')
+            # Saving as .txt
+            arr = np_raw.detach().cpu().numpy().flatten()
+            # np.savetxt(half_path + f'image_{label}_{index}.txt', np_raw.flatten(), fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,', header=f'//Class: {label} (Index: {index}): Image Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
+            np.savetxt(half_path + f'image_{label}_{index}.txt', arr, fmt='%f,' if arr.dtype.kind == 'f' else '%d,',header=f'//Class: {label} (Index: {index}): Image Data\nfloat raw_input_test[{len(arr)}]= {{',footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'image_{label}_{index}.txt')
+            if not nn_for_feature_extraction:
+                np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+                vector_files.append(half_path + f'features_{label}_{index}.txt')
+            np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%d,' if output_int else '%f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'output_{label}_{index}.txt')
 
     header_file_info = """#include "device.h"
 // //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -297,26 +314,87 @@ def generate_golden_vectors(output_dir, output_int, dataset, generic_model=False
     
     for i, file_path in enumerate(vector_files):
         # There are 3 vector files for each set. So First (index 0) and Third (index 2) need to have the /* and */ respectively
-        if i % 2 == 0:
-            if i // 2 == 0:
+        if i % 3 == 0:
+            if i // 3 == 0:
                 # Set0 will not be commented so that the generated code can run automatically without build errors
-                header_file_info += f'\n\n// SET {i // 2}'
+                header_file_info += f'\n\n// SET {i // 3}'
             else:
-                header_file_info += f'\n/*\n// SET {i // 2}'
+                header_file_info += f'\n/*\n// SET {i // 3}'
         with open(file_path) as fp:
             file_array = fp.read()
             header_file_info += f'\n{file_array};\n'
-        if i % 2 ==1:
-            if i // 2 == 0:
+        if i % 3 == 2:
+            if i // 3 == 0:
                 # Set0 will not be commented so that the generated code can run automatically without build errors
                 header_file_info += '\n'
             else:
                 header_file_info += '*/\n'
         os.remove(file_path)
+    # generate_user_input_config(output_dir, dataset)
     generate_test_vector(output_dir, header_file_info)
-    # generate_model_aux(output_dir, dataset)
-    # TODO: Enable the above line once we know what is required
+    generate_model_aux(output_dir, dataset)
     return
+
+######################################
+def get_nas_args(args, data_loader, data_loader_test, num_classes, variables):
+    if args.nas_model_size != "None":
+        model_size = args.nas_model_size
+        if model_size == 's':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 3
+            args.nas_init_channels = 1
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'm':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 10
+            args.nas_init_channels = 1
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'l':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 12
+            args.nas_init_channels = 4
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'xl':
+            args.nas_nodes_per_layer = 4
+            args.nas_layers = 20
+            args.nas_init_channels = 4
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+        elif model_size == 'xxl':
+            args.nas_nodes_per_layer = 6
+            args.nas_layers = 20
+            args.nas_init_channels = 8
+            args.nas_init_channel_multiplier = 3 
+            args.nas_fanout_concat = 4
+
+    nas_args_dict = {
+        'lr': args.lr,
+        'momentum': args.momentum,
+        'weight_decay': args.weight_decay,
+        'gpu': 0,
+        'nas_budget': args.nas_epochs,
+        'nas_init_channels': args.nas_init_channels,
+        'nas_nodes_per_layer': args.nas_nodes_per_layer,
+        'nas_layers': args.nas_layers,
+        'nas_multiplier': args.nas_fanout_concat,
+        'nas_stem_multiplier': args.nas_init_channel_multiplier,
+        'nas_optimization_mode': args.nas_optimization_mode,
+        'in_channels': variables,
+        'grad_clip': 5,
+        'mode': 'cnn', 
+        'arch_learning_rate': 1e-2,
+        'arch_weight_decay': 1e-3,
+        'unrolled': True,
+        'num_classes': num_classes,
+        'train_loader': data_loader,
+        'valid_loader': data_loader_test,
+        'with_input_batchnorm': args.with_input_batchnorm,
+    }
+
+    return Namespace(**nas_args_dict)
 
 def load_datasets(data_path, args, dataset_loader_dict):
     dataset, dataset_test, train_sampler, test_sampler = utils.load_data(data_path, args, dataset_loader_dict)
@@ -326,20 +404,17 @@ def main(gpu, args):
     transform = None
     if not args.output_dir:
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
-        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'forecasting', output_folder, args.model, args.date)
+        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'classification', output_folder, args.model, args.date)
     utils.mkdir(args.output_dir)
     log_file = os.path.join(args.output_dir, 'run.log')
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True if args.quantization else False, console_log=True)
     # logger = command_display(args.lis or log_file, args.DEBUG)
-    utils.seed_everything(args.seed)
+    # utils.seed_everything(args.seed)
     logger = getLogger("root.main")
     from ..version import get_version_str
     logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
     logger.info("Script: {}".format(os.path.relpath(__file__)))
 
-    # if args.quantization and args.store_feat_ext_data:
-    #     logger.info("Avoiding storage of feature extracted data again during QAT")
-    #     args.store_feat_ext_data = False
 
     if args.weights:
         (args.weights_url, args.weights_enum) = split_weights(args.weights)
@@ -369,22 +444,30 @@ def main(gpu, args):
     else:  # Float Train
         dataset, dataset_test, train_sampler, test_sampler = load_datasets(args.data_path, args, dataset_loader_dict)
         dataset_load_state['dataset'], dataset_load_state['dataset_test'], dataset_load_state['train_sampler'], dataset_load_state['test_sampler'] = dataset, dataset_test, train_sampler, test_sampler
+  
+
+    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
+    try:
+        utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
+        utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
+        # The below two lines work fine, but slows down a lot
+        # plot_graph(dataset, graph_type='tsne', instance_type='train')
+        # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
+        if args.gof_test:
+            if args.frame_size !='None':
+                gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
+            else:
+                logger.warning(f"Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
     
+    except Exception as e:
+        logger.warning(f"Feature Extraction plots will not be generated because: {e}")
+
     if misc_utils.str2bool(args.dont_train_just_feat_ext):
-        logger.info("Exiting execution without training")
+        logger.info('Exiting execution without training')
         sys.exit(0)
 
-    generate_golden_vector_dir(args.output_dir)
-    if misc_utils.str2bool(args.gen_golden_vectors):
-        generate_user_input_config(args.output_dir, dataset)
-        if misc_utils.str2bool(args.dont_train_just_feat_ext):
-            logger.info('ModelMaker completed for test bench. Exiting.')
-            sys.exit()
-
     # collate_fn = None
-    #num_classes = len(dataset.classes)
-    num_target_variables=dataset.Y.shape[-1] if dataset.Y is not None else 1 # Number of target variables to be predicted
-    total_forecast_outputs=args.forecast_horizon*num_target_variables
+    num_classes = len(dataset.classes)
 
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
@@ -395,20 +478,37 @@ def main(gpu, args):
         dataset_test, batch_size=args.batch_size,
         sampler=test_sampler, num_workers=args.workers, pin_memory=True,
         collate_fn=utils.collate_fn, )
+
     logger.info("Creating model")
     # Model Creation
     variables = dataset.X.shape[1]  # n,c,h,w --> c is 1 (args.variables. However, after motor fault was supported, it concatenates 3x128 to 1x384 hence channels have been changed
-    input_features = dataset.X.shape[2]
+    input_features = (dataset.X.shape[2], dataset.X.shape[3])
     
-    # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
-    model = models.get_model(
-        args.model, variables, total_forecast_outputs, input_features=input_features, model_config=args.model_config,
-        model_spec=args.model_spec, with_input_batchnorm=misc_utils.str2bool(args.with_input_batchnorm),
-        dual_op=args.dual_op)
-    if args.generic_model:
+    # 
+    if args.load_saved_model == 'None':
+        if args.nas_enabled == 'True':
+            if args.quantization:
+                model = torch.load(os.path.join(os.path.dirname(args.output_dir), os.path.join('base', 'nas_model.pt')), weights_only=False)
+            else:
+                nas_args = get_nas_args(args, data_loader, data_loader_test, num_classes, variables)
+                model = search_and_get_model(nas_args)
+                if not model:
+                    logger.error("Please check on prior errors. NAS wasn't able to create a model")
+                    sys.exit(1)
+                torch.save(model, os.path.join(args.output_dir, 'nas_model.pt'))
+        else:
+            # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
+            model = models.get_model(
+                args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
+                model_spec=args.model_spec, with_input_batchnorm=False if args.nn_for_feature_extraction else misc_utils.str2bool(args.with_input_batchnorm),
+                dual_op=args.dual_op)
+    else:
+        model = torch.load(args.load_saved_model, weights_only=False)       
+    
+    if args.generic_model or args.nas_enabled:
         try:
             if not args.quantization:  # Only show model summary for float
-                logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
+                logger.info(f"{torchinfo.summary(model, (1, variables, input_features[0], input_features[1]))}")
         except UnicodeEncodeError as e:
             logger.warning(f"Model Information/summary could not be provided because of {e}")
 
@@ -416,11 +516,6 @@ def main(gpu, args):
         if args.weights_url:
             logger.info(f"loading pretrained checkpoint for training: {args.weights_url}")
             model = load_weights.load_weights(model, args.weights_url, state_dict_name=args.weights_state_dict_name)
-
-    # Does nothing in Floating Point Training
-    model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs, args.output_dequantize)
 
     if args.distributed and args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -430,12 +525,12 @@ def main(gpu, args):
             utils.export_model(model, input_shape=(1, variables, input_features), output_dir=args.output_dir, opset_version=args.opset_version, quantization=args.quantization, generic_model=args.generic_model)
             return
 
-    model.to(device)
-    criterion = nn.HuberLoss()  # SmoothL1Loss, HuberLoss, MSELoss, L1Loss
-    optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
-    lr_scheduler = utils.init_lr_scheduler(
-        args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
-        args.lr_warmup_method, args.lr_warmup_decay)
+    try:
+        model.to(device)
+    except AssertionError as e:
+        logger.error(f"Input options have asked to run on GPU, but no GPU was found. Either change num_gpus to 0 or verify that your GPU works. Error raised: {e}")
+        sys.exit(1)
+    criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
 
     model_without_ddp = model
     if args.distributed:
@@ -458,129 +553,93 @@ def main(gpu, args):
 
     logger.info("Start training")
     start_time = timeit.default_timer()
- 
-    best_epoch_values = {
-        'epoch': -1,
-        'true_values': None,
-        'predictions': None,
-        'overall_smape': float('inf'),  # Overall SMAPE for the best epoch
-    }
+    best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
+
+    # model = NeuralNetworkWithPreprocess
+    if args.nn_for_feature_extraction:
+        fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2], with_input_batchnorm=False if args.quantization==TinyMLQuantizationVersion.QUANTIZATION_GENERIC else True).to(device)  # dataset.X_raw.shape[2],
+        fe_model = NeuralNetworkWithPreprocess(fe_model, None)
+        # Feature Extraction Model
+        optimizer = utils.init_optimizer(fe_model, args.opt, args.lr, args.momentum, args.weight_decay)
+        lr_scheduler = utils.init_lr_scheduler(
+            args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
+            args.lr_warmup_method, args.lr_warmup_decay)
+        fe_model = utils.get_trained_feature_extraction_model(
+            fe_model, args, data_loader, data_loader_test, device, lr_scheduler, optimizer)
+
+        # Train this model
+        model = NeuralNetworkWithPreprocess(fe_model, model)
+    else:
+        model = NeuralNetworkWithPreprocess(None, model)
+    # Does nothing in Floating Point Training
+    model = utils.quantization_wrapped_model(
+        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+        args.epochs, args.output_dequantize)
     
+    optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
+    lr_scheduler = utils.init_lr_scheduler(
+        args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
+        args.lr_warmup_method, args.lr_warmup_decay)
+
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
-
-        utils.train_one_epoch_forecasting(
+        utils.train_one_epoch_classification(
             model, criterion, optimizer, data_loader, device, epoch, transform, args.apex, model_ema,
-            print_freq=args.print_freq, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op,
-            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
-
+            print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
+            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False,
+            nn_for_feature_extraction=args.nn_for_feature_extraction)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-
-        target_tensor,prediction_tensor,overall_smape= utils.evaluate_forecasting(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op)
-
+        avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
         if model_ema:
-            target_tensor,prediction_tensor,overall_smape = utils.evaluate_forecasting(
-                model_ema, criterion, data_loader_test, device=device, transform=transform,
-                log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
+            avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model_ema, criterion, data_loader_test, device=device, transform=transform,
+                                          log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
+        if args.output_dir:
+            checkpoint = {
+                'model': model_without_ddp.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'lr_scheduler': lr_scheduler.state_dict(),
+                'epoch': epoch,
+                'args': args}
+            if model_ema:
+                checkpoint['model_ema'] = model_ema.state_dict()
+            # utils.save_on_master(
+            #     checkpoint,
+            #     os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
+            if avg_accuracy >= best['accuracy']:
+                logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) >= {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
+                best['accuracy'], best['f1'], best['auc'], best['conf_matrix'], best['epoch'] = avg_accuracy,avg_f1, auc, avg_conf_matrix, epoch
+                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
-        # Update best results if current epoch is better
-        if overall_smape<best_epoch_values['overall_smape']:
-            best_epoch_values['overall_smape'] = overall_smape
-            best_epoch_values['epoch'] = epoch
-            best_epoch_values['true_values'] = target_tensor.clone()
-            best_epoch_values['predictions'] = prediction_tensor.clone()
-
-            if args.output_dir:
-                checkpoint = {
-                    'model': model_without_ddp.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-                    'lr_scheduler': lr_scheduler.state_dict(),
-                    'epoch': epoch,
-                    'args': args,
-                    'metrics': {
-                        'overall_smape': overall_smape,
-                    }
-                }
-                if model_ema:
-                    checkpoint['model_ema'] = model_ema.state_dict()
-    
-                utils.save_on_master(checkpoint,os.path.join(args.output_dir, 'checkpoint.pth'))
-        logger.info(f"Epoch {epoch}: Best Overall SMAPE across all variables across all predicted timesteps so far: {best_epoch_values['overall_smape']:.2f}% (Epoch {best_epoch_values['epoch']})")
-
-    # Log best epoch metrics
     logger = getLogger(f"root.main.{phase}.BestEpoch")
+    logger.info("")
     logger.info("Printing statistics of best epoch:")
-    logger.info(f"Best epoch:{best_epoch_values['epoch']+1}")
-    logger.info(f"Overall SMAPE across all variables: {best_epoch_values['overall_smape']:.2f}%")
-    logger.info("Per-Variable Metrics:")
-
-    for idx,item in enumerate(dataset.header_row):
-        for target_variable_name in item:
-            logger.info(f"  Variable {target_variable_name}:")
-            logger.info(f"      SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(best_epoch_values['true_values'][:,:,idx],best_epoch_values['predictions'][:,:,idx]):.2f}%")
-            logger.info(f"      R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(best_epoch_values['predictions'][:,:,idx],best_epoch_values['true_values'][:,:,idx]):.4f}")
-
-            # Log timestep specific metrics
-            for step in range(args.forecast_horizon): 
-                logger.info(f"      Timestep {step+1}:")
-                logger.info(f"          SMAPE: {utils.smape(best_epoch_values['true_values'][:,step,idx],best_epoch_values['predictions'][:,step,idx]):.2f}%")
-                logger.info(f"          R²: {utils.get_r2_score(best_epoch_values['predictions'][:,step,idx],best_epoch_values['true_values'][:,step,idx]):.4f}")
-
-    # Save final predictions and create visualizations for best epoch
-    if args.output_dir and best_epoch_values['true_values'] is not None:
-        
-        results_dir = os.path.join(args.output_dir, f'best_epoch_{best_epoch_values["epoch"]}_results')
-        os.makedirs(results_dir, exist_ok=True)
-
-        # Save predictions in CSV format
-        utils.save_forecasting_predictions_csv(
-            best_epoch_values['true_values'],
-            best_epoch_values['predictions'],
-            results_dir,
-            dataset.header_row,
-            args.forecast_horizon,
-        )
-
-        plots_dir=os.path.join(results_dir, 'prediction_plots')
-        os.makedirs(plots_dir, exist_ok=True)
-
-        # Create scatter plots for each variable
-        for idx,item in enumerate(dataset.header_row):
-            for target_variable_name in item:
-                fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
-                axes = axes.flatten()
-                for step in range(args.forecast_horizon):
-                    step_targets = best_epoch_values['true_values'][:, step, idx]
-                    step_outputs = best_epoch_values['predictions'][:, step, idx]
-                    #step_key = f'var-{var}-step-{step}'
-                    step_smape = utils.smape(best_epoch_values['true_values'][:,step,idx],best_epoch_values['predictions'][:,step,idx])
-                    step_r2 = utils.get_r2_score(best_epoch_values['predictions'][:,step,idx],best_epoch_values['true_values'][:,step,idx])
-
-                    # Scatter plot
-                    ax = axes[step]
-                    ax.scatter(step_targets, step_outputs, alpha=0.5, label=f'Predictions')
-
-                    # Add perfect prediction line
-                    min_val = min(step_targets.min(), step_outputs.min())
-                    max_val = max(step_targets.max(), step_outputs.max())
-                    ax.plot([min_val, max_val], [min_val, max_val], 'k--',label='Perfect Prediction')
-
-                    ax.set_xlabel(f"Actual Variable {target_variable_name}")
-                    ax.set_ylabel(f"Predicted Variable {target_variable_name}")
-                    ax.set_title(f"{step+1}-step ahead\nR² = {step_r2:.4f},SMAPE = {step_smape:.2f}%")
-                    ax.legend()
-
-                plt.tight_layout()
-                plt.savefig(os.path.join(plots_dir,f'{target_variable_name}_predictions.png'))
-                plt.close()
-
+    logger.info(f"Best Epoch: {best['epoch']}")
+    logger.info(f"Acc@1 {best['accuracy']:.3f}")
+    logger.info(f"F1-Score {best['f1']:.3f}")
+    logger.info(f"AUC ROC Score {best['f1']:.3f}")
+    logger.info("")
+    # logger.info(f"Confusion Matrix:\n" + '\n'.join(
+    #     [f"Ground Truth:(Class {dataset.inverse_label_map[i]}), Predicted:(Class {dataset.inverse_label_map[j]}): {int(best['conf_matrix'][i][j])}" for j in
+    #      range(num_classes) for i in range(num_classes)]))
+    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
+                  columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+                  index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
+                                                         headers="keys", tablefmt='grid')))
+    # if args.nn_for_feature_extraction:
+    #     logger.info("Feature extraction AI model is being combined with AI model")
+    #     model = models.CombinedModel(fe_model, model)
     logger.info('Exporting model after training.')
-    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):       
-        example_input = None  # next(iter(data_loader_test))[0]
+    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
+        if args.nn_for_feature_extraction:
+            example_input = next(iter(data_loader_test))[0]
+            input_shape = (1,) + dataset.X_raw.shape[1:]
+        else:
+            example_input = next(iter(data_loader_test))[1]
+            input_shape = (1,) + dataset.X.shape[1:]
         utils.export_model(
-            model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
+            model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
             quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
             remove_hooks_for_jit= True if (args.quantization_method==TinyMLQuantizationMethod.PTQ and args.quantization) else False)
     total_time = timeit.default_timer() - start_time
@@ -592,7 +651,7 @@ def main(gpu, args):
         output_int = False
         if args.quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU and args.output_dequantize == False:
             output_int = True
-        generate_golden_vectors(args.output_dir, output_int, dataset, args.generic_model)
+        generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
         
     return
 
@@ -614,6 +673,7 @@ def run(args):
 
 if __name__ == "__main__":
     arguments = get_args_parser().parse_args()
+
     # run the training.
     # if args.distributed is True is set, then this will launch distributed training
     # depending on args.gpus

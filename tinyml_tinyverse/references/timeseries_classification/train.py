@@ -92,7 +92,7 @@ from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights,gof_ut
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
 
 dataset_loader_dict = {'GenericTSDataset' : GenericTSDataset}
-
+dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
 
 def split_weights(weights_name):
     weights_list = weights_name.split(',')
@@ -104,7 +104,7 @@ def split_weights(weights_name):
             weights_urls.append(w)
         else:
             weights_enums.append(w)
-    return ((weights_urls[0] if len(weights_urls)>0 else None), (weights_enums[0] if len(weights_enums)>0 else None))
+    return (weights_urls[0] if len(weights_urls) > 0 else None), (weights_enums[0] if len(weights_enums) > 0 else None)
 
 
 def get_args_parser():
@@ -116,9 +116,9 @@ def get_args_parser():
     # parser.add_argument('--out_dir', help='Run directory', default=os.getcwd())
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ", type=float, required=True)
+    parser.add_argument('--gain-variations', help='Gain Variation Dictionary to be applied to each of the classes')
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    #parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
-    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
 
     parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
@@ -129,6 +129,7 @@ def get_args_parser():
     parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
     parser.add_argument('--num-frame-concat', help="Number of FFT frames to concat")
     parser.add_argument('--frame-skip', help="Skip frames while computing FFT")
+    parser.add_argument('--q15-scale-factor', help="q15 scaling factor")
     parser.add_argument('--min-bin', help="Remove DC Component from FFT")
     parser.add_argument('--normalize-bin', help="Normalize FFT Binning")
     parser.add_argument('--dc-remove', help="Remove DC Component from FFT")
@@ -140,6 +141,14 @@ def get_args_parser():
     parser.add_argument('--stacking', help="1D/2D1/None")
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
     parser.add_argument('--scale', help="Scaling factor to input data")
+    # PIR Detection related params
+    parser.add_argument('--window-count', help="Number of windows in each input frame ", type=int, default=1)
+    # parser.add_argument('--window-overlap', help="stride length for overlapping windows ", type=int, default=[])
+    # parser.add_argument('--window-size', help="length of  window in samples ", type=int, default=[])
+    parser.add_argument('--chunk-size', help="length of kurtosis section size within a  window in samples ", type=int, default=[])
+    parser.add_argument('--fft-size', help="dimension of a FFT operation on input frame ", type=int, default=[])
+    # End of PIR Detection related params
+    
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
 
     parser.add_argument('--gen_golden_vectors', help="Generate golden vectors to feed into the model", type=misc_utils.str_or_bool, default=True)
@@ -201,6 +210,7 @@ def get_args_parser():
     parser.add_argument('--date', default=datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), help='current date')
     parser.add_argument('--seed', default=42, help="Seed for all randomness", type=int)
     parser.add_argument('--lis', help='Log File', type=str,)# default=ops(opb(__file__))[0] + ".lis")
+    parser.add_argument('--file-level-classification-log', help='File level classification log file', type=str,)
     parser.add_argument('--DEBUG', action='store_true', help='Log mode set to DEBUG')
 
     parser.add_argument("--compile-model", default=0, type=int, help="Compile the model using PyTorch2.0 functionality")
@@ -219,7 +229,7 @@ def get_args_parser():
     #######################################
     # nas args
     #######################################
-    parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS")
+    parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS", type=misc_utils.str2bool)
     parser.add_argument("--nas_optimization_mode", default="Memory", type=str,  help="Optimize model for compute or storage efficiency")
     parser.add_argument("--nas_model_size", default='None', choices=['s', 'm', 'l', 'xl', 'None'], help="Proxy for model size")
     parser.add_argument("--nas_epochs", default=10, type=int, help="Iterations for search")
@@ -345,6 +355,11 @@ def generate_golden_vectors(output_dir, dataset, output_int, generic_model=False
     generate_model_aux(output_dir, dataset)
     return
 
+
+def load_datasets(data_path, args, dataset_loader_dict):
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(data_path, args, dataset_loader_dict)
+    return dataset, dataset_test, train_sampler, test_sampler
+
 ######################################
 def get_nas_args(args, data_loader, data_loader_test, num_classes, variables):
     if args.nas_model_size != "None":
@@ -447,24 +462,27 @@ def main(gpu, args):
             args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
         else:
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
-    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict)  # (126073, 1, 152), 126073
 
-    # if misc_utils.str2bool_or_none(args.store_feat_ext_data):
-    try:
-        utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
-        utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
-        # The below two lines work fine, but slows down a lot
-        # plot_graph(dataset, graph_type='tsne', instance_type='train')
-        # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
-        if args.gof_test:
-            if args.frame_size !='None':
-                gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
-            else:
-                logger.warning(f"Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
-    
-    except Exception as e:
-        logger.warning(f"Feature Extraction plots will not be generated because: {e}")
+    if args.quantization:  # Quant Train
+        dataset, dataset_test, train_sampler, test_sampler = dataset_load_state['dataset'], dataset_load_state['dataset_test'], dataset_load_state['train_sampler'], dataset_load_state['test_sampler']
+    else:  # Float Train
+        dataset, dataset_test, train_sampler, test_sampler = load_datasets(args.data_path, args, dataset_loader_dict)
+        dataset_load_state['dataset'], dataset_load_state['dataset_test'], dataset_load_state['train_sampler'], dataset_load_state['test_sampler'] = dataset, dataset_test, train_sampler, test_sampler
+
+        try:
+            utils.plot_feature_components_graph(dataset, graph_type='pca', instance_type='train', output_dir=args.output_dir)
+            utils.plot_feature_components_graph(dataset_test, graph_type='pca', instance_type='validation', output_dir=args.output_dir)
+            # The below two lines work fine, but slows down a lot
+            # plot_graph(dataset, graph_type='tsne', instance_type='train')
+            # plot_graph(dataset_test, graph_type='tsne', instance_type='validation')
+            if args.gof_test:
+                if args.frame_size !='None':
+                    gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), classes_dir=args.data_path, output_dir=args.output_dir,class_names=dataset.classes)
+                else:
+                    logger.warning(f"Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
+
+        except Exception as e:
+            logger.warning(f"Feature Extraction plots will not be generated because: {e}")
 
     if misc_utils.str2bool(args.dont_train_just_feat_ext):
         logger.info('Exiting execution without training')
@@ -509,8 +527,11 @@ def main(gpu, args):
         model = torch.load(args.load_saved_model, weights_only=False)       
     
     if args.generic_model or args.nas_enabled:
-        # logger.info("\nModel:\n{}\n".format(model))
-        logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
+        if not args.quantization:  # Float train
+            try:
+                logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
+            except UnicodeEncodeError as e:
+                logger.warning(f"Model Information/summary could not be provided because of {e}")
 
     if args.weights:
         if args.weights_url:
@@ -541,6 +562,11 @@ def main(gpu, args):
     if args.model_ema:
         model_ema = utils.ExponentialMovingAverage(model_without_ddp, device=device, decay=args.model_ema_decay)
 
+    optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
+    lr_scheduler = utils.init_lr_scheduler(
+        args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
+        args.lr_warmup_method, args.lr_warmup_decay)
+
     if args.resume:
         checkpoint = torch.load(args.resume, map_location=args.device)
         model_without_ddp.load_state_dict(checkpoint['model'])
@@ -557,7 +583,7 @@ def main(gpu, args):
 
     # model = NeuralNetworkWithPreprocess
     if args.nn_for_feature_extraction:
-        fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2], with_input_batchnorm=False if args.quantization==TinyMLQuantizationVersion.QUANTIZATION_GENERIC else True).to(device)  # dataset.X_raw.shape[2],
+        fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2], with_input_batchnorm=False if args.quantization==TinyMLQuantizationVersion.QUANTIZATION_GENERIC else True).to(device)
         fe_model = NeuralNetworkWithPreprocess(fe_model, None)
         # Feature Extraction Model
         optimizer = utils.init_optimizer(fe_model, args.opt, args.lr, args.momentum, args.weight_decay)
@@ -575,11 +601,6 @@ def main(gpu, args):
     model = utils.quantization_wrapped_model(
         model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
         args.epochs, args.output_dequantize)
-    
-    optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
-    lr_scheduler = utils.init_lr_scheduler(
-        args.lr_scheduler, optimizer, args.epochs, args.lr_warmup_epochs, args.lr_step_size, args.lr_gamma,
-        args.lr_warmup_method, args.lr_warmup_decay)
 
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
@@ -591,9 +612,9 @@ def main(gpu, args):
             nn_for_feature_extraction=args.nn_for_feature_extraction)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
+        avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
         if model_ema:
-            avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model_ema, criterion, data_loader_test, device=device, transform=transform,
+            avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(model_ema, criterion, data_loader_test, device=device, transform=transform,
                                           log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
         if args.output_dir:
             checkpoint = {
@@ -610,6 +631,8 @@ def main(gpu, args):
             if avg_accuracy >= best['accuracy']:
                 logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) >= {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
                 best['accuracy'], best['f1'], best['auc'], best['conf_matrix'], best['epoch'] = avg_accuracy,avg_f1, auc, avg_conf_matrix, epoch
+                best['predictions'] = predictions
+                best['ground_truth'] = ground_truth
                 utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
     logger = getLogger(f"root.main.{phase}.BestEpoch")
@@ -627,6 +650,13 @@ def main(gpu, args):
                   columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
                   index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
                                                          headers="keys", tablefmt='grid')))
+    
+    # Generate and log the file level classification summary to help identify files causing false alarms
+    Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG, name="root.utils.print_file_level_classification_summary", append_log=True if args.quantization else False, console_log=False)
+    getLogger("root.utils.print_file_level_classification_summary").propagate = False # Ensuring logs don't go to parent logger (run.log)
+    utils.print_file_level_classification_summary(dataset_test, best['predictions'], best['ground_truth'], phase)   
+    logger.info(f"Generated file-level classification summary in: {args.file_level_classification_log}") 
+                                             
     # if args.nn_for_feature_extraction:
     #     logger.info("Feature extraction AI model is being combined with AI model")
     #     model = models.CombinedModel(fe_model, model)

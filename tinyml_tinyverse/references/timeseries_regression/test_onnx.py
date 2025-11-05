@@ -34,7 +34,7 @@ import os
 import platform
 from argparse import ArgumentParser
 from logging import getLogger
-
+import pandas as pd
 import onnxruntime as ort
 import torch
 import torcheval
@@ -82,8 +82,7 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ")
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
-    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
     # Arc Fault and Motor Fault Related Params
     parser.add_argument('--frame-size', help="Frame Size")
     parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
@@ -158,7 +157,7 @@ def main(gpu, args):
     ground_truth = torch.tensor([]).to(device, non_blocking=True)
     for _, batched_data, batched_target in data_loader:
         batched_data = batched_data.to(device, non_blocking=True).float()
-        batched_target = batched_target.to(device, non_blocking=True).long()
+        batched_target = batched_target.to(device, non_blocking=True).float()
         if transform:
             batched_data = transform(batched_data)
         for data in batched_data:
@@ -167,18 +166,20 @@ def main(gpu, args):
 
     mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
     logger.info("Plotting Regressions on dataset")
-    utils.plot_regression(ground_truth.to('cpu'), predicted.to('cpu'), os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
-    # logger.info("Plotting Class difference scores")
-    # utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-    #                           label_map=dataset.inverse_label_map, phase='test')
+
     metric = torcheval.metrics.MeanSquaredError()
     r2_score = torcheval.metrics.R2Score()
-    # np.save(os.path.join(args.output_dir, 'predicted.npy'), predicted.to('cpu').numpy())
-    # np.save(os.path.join(args.output_dir, 'ground_truth.npy'), ground_truth.to('cpu').numpy())
+    residuals = ground_truth - predicted
+    mean_residual = torch.mean(residuals)
+    std_residual = torch.std(residuals)
+    predicted, ground_truth = utils.get_regression_results(predicted, ground_truth, args, mean_residual, std_residual)
+    utils.plot_actual_vs_predicted_regression(ground_truth.to('cpu'), predicted.to('cpu'), os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
+    utils.plot_residual_error_regression(ground_truth.to('cpu'), predicted.to('cpu'), os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
+
     metric.update(predicted.to('cpu'), ground_truth.to('cpu'))
     r2_score.update(predicted.to('cpu'), ground_truth.to('cpu'))
     logger = getLogger("root.main.test_data")
-    logger.info(f"Test Data Evaluation RMSE: {metric.compute():.2f}")
+    logger.info(f"Test Data Evaluation RMSE: {torch.sqrt(metric.compute()):.2f}")
     logger.info(f"Test Data Evaluation R2-Score: {r2_score.compute():.2f}")
     return
 

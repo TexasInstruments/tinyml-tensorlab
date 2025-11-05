@@ -331,3 +331,50 @@ class YOLO_Classifier_8K(GenericModelWithSpec):
             x = layer(x)
         return x
 
+class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
+    def __init__(self, config, input_features=(25,25), variables=1, num_classes=3, with_input_batchnorm=True):  # Change to 3-class classification
+        super().__init__(config, input_features=input_features, variables=variables, with_input_batchnorm=with_input_batchnorm, num_classes=num_classes)
+        # Define the layers of the CNN
+        self.bn0   = torch.nn.BatchNorm2d(num_features=1) # make sure this works 
+        self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=8, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.bn1   = torch.nn.BatchNorm2d(num_features=8)
+        self.relu1 = torch.nn.ReLU()
+        self.conv2 = torch.nn.Conv2d(in_channels=8, out_channels=16, kernel_size=(3,3), stride=(1,1), padding=(1,1))
+        self.bn2   = torch.nn.BatchNorm2d(num_features=16)
+        self.relu2 = torch.nn.ReLU()
+        self.pool  = torch.nn.MaxPool2d(kernel_size=(3,3), stride=(2,2), padding=(0,0))
+
+        conv1_hw = int((self.input_features + 2*self.conv1.padding[0] - self.conv1.kernel_size[0]) / self.conv1.stride[0] + 1)
+        pool1_hw = int((conv1_hw - self.pool.kernel_size) / self.pool.stride + 1)
+        conv2_hw = int((pool1_hw + 2*self.conv2.padding[0] - self.conv2.kernel_size[0]) / self.conv2.stride[0] + 1)
+        pool2_hw = int((conv2_hw - self.pool.kernel_size) / self.pool.stride + 1)
+        fc_input_features = int(pool2_hw * pool2_hw * self.conv2.out_channels)  # total features to fc1 
+
+        self.flatten = torch.nn.Flatten()
+        self.fc1     = torch.nn.Linear(in_features=fc_input_features, out_features=128)
+        self.relu3 = torch.nn.ReLU()
+        self.dropout = torch.nn.Dropout(0.3)
+        self.fc2 = torch.nn.Linear(in_features=128, out_features=self.num_classes)  # Change to 3 output classes
+
+    def forward(self, x):
+        if x.ndim ==5:
+            x = x.squeeze(1)
+        #x = self.bn0(x.permute(0,2,1,3)).permute(0,2,1,3)
+        x = self.bn0(x)
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu1(x)
+        x = self.pool(x)
+        x = self.conv2(x)
+        x = self.bn2(x)
+        x = self.relu2(x)
+        x = self.pool(x)
+        x = self.flatten(x)
+        if self.fc1 is None:
+            self.fc1 = torch.nn.Linear(x.shape[1],128).to(x.device)
+            
+        x = self.fc1(x)
+        fe = self.relu3(x)
+        x = self.dropout(fe)
+        x = self.fc2(x)  # Output layer
+        return x, fe

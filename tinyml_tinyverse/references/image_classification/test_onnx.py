@@ -42,14 +42,14 @@ import torcheval
 from tabulate import tabulate
 from tvm.script.ir_builder.tir import float32
 
-from tinyml_tinyverse.common.datasets import GenericTSDataset
+from tinyml_tinyverse.common.datasets import GenericImageDataset
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
 
-dataset_loader_dict = {'GenericTSDataset': GenericTSDataset}
+dataset_loader_dict = {'GenericImageDataset': GenericImageDataset}
 
 
 def get_args_parser():
@@ -69,7 +69,6 @@ def get_args_parser():
     parser.add_argument('--date', default=datetime.datetime.now().strftime("%Y%m%d-%H%M%S"), help='current date')
     parser.add_argument('--seed', default=42, help="Seed for all randomness", type=int)
     parser.add_argument('--lis', help='Log File', type=str,)# default=ops(opb(__file__))[0] + ".lis")
-    parser.add_argument('--file-level-classification-log', help='File-level classification Log File', type=str,)
     parser.add_argument('--DEBUG', action='store_true', help='Log mode set to DEBUG')
 
     # Training parameters
@@ -81,40 +80,18 @@ def get_args_parser():
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
     parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
 
-    # Simple TimeSeries Params
+    # Vision Related Params
     parser.add_argument('--variables', help="1- if Univariate, 2/3/.. if multivariate")
-    parser.add_argument('--resampling-factor', help="Resampling ratio")
-    parser.add_argument('--sampling-rate', help="Sampled frequency ")
-    parser.add_argument('--gain-variations', help='Gain Variation Dictionary to be applied to each of the classes')
-    parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
-    # Arc Fault and Motor Fault Related Params
-    parser.add_argument('--frame-size', help="Frame Size")
-    parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
-    parser.add_argument('--num-frame-concat', help="Number of FFT frames to concat")
-    parser.add_argument('--frame-skip', help="Skip frames while computing FFT")
-    parser.add_argument('--q15-scale-factor', help="q15 scaling factor")
-    parser.add_argument('--min-bin', help="Remove DC Component from FFT")
-    parser.add_argument('--normalize-bin', help="Normalize Binning")
-    parser.add_argument('--dc-remove', help="Remove DC Component from FFT")
-    parser.add_argument('--analysis-bandwidth', help="Spectrum of FFT used for binning")
-    # parser.add_argument('--num-channel', help="Number of input channels (ex.axis, phase)", default=16, type=int)
-    parser.add_argument('--log-base', help="base value for logarithm")
-    parser.add_argument('--log-mul', help="multiplier for logarithm")
-    parser.add_argument('--log-threshold', help="offset added to values for logarithmic calculation")
-    parser.add_argument('--stacking', help="1D/2D1/None")
-    parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
-    parser.add_argument('--scale', help="Scaling factor to input data")
+    parser.add_argument('--image-height', help="Image dimension(Height)")
+    parser.add_argument('--image-width', help="Image dimension(Width)")
+    parser.add_argument('--image-mean', help="Average pixel intensity of dataset computed per channel")
+    parser.add_argument('--image-scale', help="Standard deviation of pixel intensities per channel")
+    parser.add_argument('--image-num-channel', help="Number of channels( RGB=3, Greyscale=1) present in the image")
+
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
     parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
-    # PIR Detection related params
-    parser.add_argument('--window-count', help="Number of windows in each input frame ", type=int, default=[])
-    # parser.add_argument('--window-overlap', help="stride length for overlapping windows ", type=int, default=[])
-    # parser.add_argument('--window-size', help="length of  window in samples ", type=int, default=[])
-    parser.add_argument('--chunk-size', help="length of kurtosis section size within a  window in samples ", type=int, default=[])
-    parser.add_argument('--fft-size', help="dimension of a FFT operation on input frame ", type=int, default=[])
-    # End of PIR Detection related params
+
     return parser
 
 
@@ -213,17 +190,6 @@ def main(gpu, args):
                 index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
         except ValueError as e:
             logger.warning("Not able to compute Confusion Matrix. Error: " + str(e))
-        
-        try:
-            # Generate and log the file-level classification summary to help identify files causing false alarms
-            Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG, name="root.utils.print_file_level_classification_summary", append_log=True, console_log=False)
-            getLogger("root.utils.print_file_level_classification_summary").propagate = False # Ensuring logs don't go to parent logger (run.log)
-            utils.print_file_level_classification_summary(dataset_test, predicted, ground_truth, "TestData")   
-            logger.info(f"Generated File-level classification summary of test data in: {args.file_level_classification_log}") 
-
-        except Exception as e:
-            logger.error(f"Failed to generate file-level classification summary: {str(e)}")
-        
     return
 
 def run(args):

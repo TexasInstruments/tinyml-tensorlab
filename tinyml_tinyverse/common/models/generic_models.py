@@ -33,7 +33,7 @@ from .generic_classification_models import *
 from .generic_regression_models import *
 from .generic_feature_extraction_models import *
 from .generic_autoencoder_models import *
-
+from .generic_image_models import *
 
 if __name__ == '__main__':
     yaml.Dumper.ignore_aliases = lambda *data: True

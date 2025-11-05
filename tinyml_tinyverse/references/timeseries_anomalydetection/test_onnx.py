@@ -31,6 +31,7 @@
 
 import datetime
 import os
+import csv
 import platform
 from argparse import ArgumentParser
 from logging import getLogger
@@ -38,7 +39,7 @@ from logging import getLogger
 import onnxruntime as ort
 import torch
 import torcheval
-
+import numpy as np
 from tinyml_tinyverse.common.datasets import GenericTSDataset, GenericTSDatasetReg, GenericTSDatasetAD
 
 # Tiny ML TinyVerse Modules
@@ -83,8 +84,7 @@ def get_args_parser():
     parser.add_argument('--resampling-factor', help="Resampling ratio")
     parser.add_argument('--sampling-rate', help="Sampled frequency ")
     parser.add_argument('--new-sr', help="Required to subsample every nth value from the dataset")  # default=3009)
-    parser.add_argument('--sequence-window', help="Window length (s) to stride by")  # default=0.001)
-    parser.add_argument('--stride-size', help="Window length per sequence in sec", type=float)
+    parser.add_argument('--stride-size', help="Fraction (0-1) that will be multiplied by frame-size to get the actual stride", type=float)
     # Arc Fault and Motor Fault Related Params
     parser.add_argument('--frame-size', help="Frame Size")
     parser.add_argument('--feature-size-per-frame', help="FFT feature size per frame")
@@ -102,7 +102,7 @@ def get_args_parser():
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
     parser.add_argument('--scale', help="Scaling factor to input data")
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
-
+    parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
     return parser
 
 
@@ -110,11 +110,10 @@ def main(gpu, args):
     transform = None
     if not args.output_dir:
         output_folder = os.path.basename(os.path.split(args.data_path)[0])
-        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'classification', output_folder, args.model, args.date)
+        args.output_dir = os.path.join('.', 'data', 'checkpoints', 'anomalydetection', output_folder, args.model, args.date)
     utils.mkdir(args.output_dir)
     log_file = os.path.join(args.output_dir, 'run.log')
     logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)
-    # logger = command_display(args.lis or log_file, args.DEBUG)
     utils.seed_everything(args.seed)
     from ..version import get_version_str
     logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
@@ -133,17 +132,11 @@ def main(gpu, args):
             args.transforms = args.data_proc_transforms + args.feat_ext_transform
     dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict, test_only=True)  # (126073, 1, 152), 126073
 
-    num_classes = len(dataset.classes)
-
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size,
-        sampler=train_sampler, num_workers=args.workers, pin_memory=True,
+        sampler=train_sampler, num_workers=args.workers, pin_memory=True if gpu>0 else False,
         collate_fn=utils.collate_fn)
-    # data_loader_test = torch.utils.data.DataLoader(
-    #     dataset_test, batch_size=args.batch_size,
-    #     sampler=test_sampler, num_workers=args.workers, pin_memory=True,
-    #     collate_fn=utils.collate_fn, )
     logger.info(f"Loading ONNX model: {args.model_path}")
     if not args.generic_model:
         utils.decrypt(args.model_path, utils.get_crypt_key())
@@ -153,34 +146,173 @@ def main(gpu, args):
 
     input_name = ort_sess.get_inputs()[0].name
     output_name = ort_sess.get_outputs()[0].name
-    predicted = torch.tensor([]).to(device, non_blocking=True)
+    errors = torch.tensor([]).to(device, non_blocking=True)
     ground_truth = torch.tensor([]).to(device, non_blocking=True)
-    for _, batched_data, batched_target in data_loader:
-        batched_data = batched_data.to(device, non_blocking=True).float()
-        batched_target = batched_target.to(device, non_blocking=True).long()
+    for _, data, targets in data_loader:
+        data = data.to(device, non_blocking=True).float()
+        targets = targets.to(device, non_blocking=True).long()
         if transform:
-            batched_data = transform(batched_data)
-        for data in batched_data:
-            predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
-        ground_truth = torch.cat((ground_truth, batched_target))
+            data = transform(data)
+        batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
+        batch_target_labels = torch.tensor([]).to(device, non_blocking=True)
+        for input, target_label in zip(data, targets):
+            input = input.unsqueeze(0).cpu().numpy()
+            output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
+            current_output_errors = torch.mean((torch.from_numpy(input).to(device) - output)**2, dim=(1,2,3))
+            batch_reconstruction_errors = torch.cat((batch_reconstruction_errors, current_output_errors))
+            batch_target_labels = torch.cat((batch_target_labels, target_label))
+        errors = torch.cat((errors, batch_reconstruction_errors))
+        ground_truth = torch.cat((ground_truth, batch_target_labels))
+    
+    post_training_analysis_path = os.path.join(args.output_dir, 'post_training_analysis')
+    mdcl_utils.create_dir(post_training_analysis_path)
+    #The classes folder in dataset should have two folders named Anomaly and Normal. Then dataset.classes[0] will be Anomaly and dataset.classes[1] will be Normal 
+    anomaly_errors = errors[ground_truth == 0].cpu().numpy()
+    normal_errors = errors[ground_truth == 1].cpu().numpy()
+    logger.info("Plotting reconstructions errors")
+    
+    normal_train_mean, normal_train_std = get_reconstruction_errors_stats(args)
+    anomaly_test_mean = np.mean(anomaly_errors)
+    anomaly_test_std = np.std(anomaly_errors)
+    normal_test_mean = np.mean(normal_errors)
+    normal_test_std = np.std(normal_errors)
+    
+    #Results
+    logger.info(f"Reconstruction Error Statistics:")
+    logger.info(f"Normal training data - Mean: {normal_train_mean:.6f}, Std: {normal_train_std:.6f}")
+    logger.info(f"Anomaly test data - Mean: {anomaly_test_mean:.6f}, Std: {anomaly_test_std:.6f}")
+    logger.info(f"Normal test data - Mean: {normal_test_mean:.6f}, Std: {normal_test_std:.6f}")
+    
+    #Threshold
+    # K is the number of standard deviation we are going away from the mean. This is used to find appropriate threshold. 
+    
+    
+    all_k_values = [i*0.5 for i in range(0, 10)]
+    results_data = []
+    best_f1_score = 0
+    best_f1_score_index = 0
+    for i, k in enumerate(all_k_values):
+        threshold = normal_train_mean + k*normal_train_std
+        results = get_model_performance(threshold,normal_errors, anomaly_errors)
+        results["k_value"] = k
+        results["threshold"] = float(threshold)
+        results_data.append(results)
+        if results["f1_score"]>best_f1_score:
+            best_f1_score_index = i
+            best_f1_score = results["f1_score"]
+            
+    csv_path = os.path.join(post_training_analysis_path, 'threshold_performance.csv')
+    with open(csv_path, 'w', newline='') as csvfile:
+        # Define CSV headers based on your results dictionary keys
+        fieldnames = ['k_value', 'threshold', 'accuracy', 'precision', 'recall', 
+                    'f1_score', 'false_positive_rate', 'true_positives', 
+                    'true_negatives', 'false_positives', 'false_negatives']
+        
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        
+        # Write each result row
+        for result in results_data:
+            # Format percentages for better readability in CSV
+            for key in ['accuracy', 'precision', 'recall', 'f1_score', 'false_positive_rate']:
+                if key in result:
+                    result[key] = round(result[key], 2)  # Keep as numeric value for sorting
+            
+            writer.writerow(result)
 
-    mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-        # Reshape predicted and ground_truth to be 2D
-    predicted = predicted.view(predicted.size(0), -1)
-    ground_truth = ground_truth.view(ground_truth.size(0), -1)
-    # logger.info("Plotting Regressions on dataset")
-    # utils.plot_regression(ground_truth.to('cpu'), predicted.to('cpu'), os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
-    # logger.info("Plotting Class difference scores")
-    # utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-    #                           label_map=dataset.inverse_label_map, phase='test')
-    metric = torcheval.metrics.MeanSquaredError()
-    # np.save(os.path.join(args.output_dir, 'predicted.npy'), predicted.to('cpu').numpy())
-    # np.save(os.path.join(args.output_dir, 'ground_truth.npy'), ground_truth.to('cpu').numpy())
-    metric.update(predicted.to('cpu'), ground_truth.to('cpu'))
-    logger = getLogger("root.main.test_data")
-    logger.info(f"Test Data Evaluation RMSE: {metric.compute():.2f}")
-    return
+    logger.info(f"Threshold performance data saved to {csv_path}")
+    
+    best_results = results_data[best_f1_score_index]
+    best_threshold = best_results["threshold"]
+    logger.info(f"Threshold for K = {best_results['k_value']} : {best_threshold:.6f}")
+    utils.plot_reconstruction_errors(anomaly_errors, normal_errors, normal_train_mean, best_threshold, post_training_analysis_path)
+    utils.plot_reconstruction_errors(anomaly_errors, normal_errors, normal_train_mean, best_threshold, post_training_analysis_path,log_scale=True)
+    
+    
+    logger.info(f"False positive rate: {best_results['false_positive_rate']:.2f}%")
+    logger.info(f"Anomaly detection rate (recall): {best_results['recall']:.2f}%")
+    logger.info(f"Accuracy: {best_results['accuracy']:.2f}%")
+    logger.info(f"Precision: {best_results['precision']:.2f}%")
+    logger.info(f"F1 Score: {best_results['f1_score']:.2f}%")
 
+    logger.info("\nConfusion Matrix:")
+    logger.info(f"                         Predicted Normal        Predicted Anomaly")
+    logger.info(f"Actual  Normal text     {best_results['true_negatives']:17d}    {best_results['false_positives']:18d}")
+    logger.info(f"Actual Anomaly          {best_results['false_negatives']:17d}    {best_results['true_positives']:18d}")
+
+
+def get_model_performance(threshold, normal_errors, anomaly_errors):
+    normal_detected_as_anomaly =sum(1 for x in normal_errors if x > threshold)
+    anomaly_detected_as_anomaly =sum(1 for x in anomaly_errors if x > threshold)
+    normal_detected_as_normal = len(normal_errors) - normal_detected_as_anomaly
+    anomaly_detected_as_normal = len(anomaly_errors) - anomaly_detected_as_anomaly
+    
+    true_positives = anomaly_detected_as_anomaly
+    true_negatives = normal_detected_as_normal
+    false_positives = normal_detected_as_anomaly
+    false_negatives = anomaly_detected_as_normal
+    
+    accuracy = (true_positives + true_negatives)/(true_positives + true_negatives + false_negatives + false_positives) * 100
+    precision = true_positives/(true_positives + false_positives) * 100 if true_positives + false_positives > 0 else 0
+    recall = true_positives/(true_positives + false_negatives) * 100 if true_positives + false_negatives >0 else 0
+    f1_score = 2*precision*recall/(precision+recall) if precision + recall > 0 else 0
+    false_positive_rate = false_positives/(true_negatives + false_positives) *100 if true_negatives + false_positives > 0 else 0
+    
+    return  {
+        'accuracy': accuracy,
+        'precision':precision,
+        'recall':recall,
+        'f1_score': f1_score,
+        'false_positive_rate':false_positive_rate,
+        'true_positives':true_positives,
+        'true_negatives': true_negatives,
+        'false_positives': false_positives,
+        'false_negatives': false_negatives
+    } 
+
+def get_reconstruction_errors_stats(args):
+    log_file = os.path.join(args.output_dir, 'run.log')
+    logger = Logger(log_file=args.lis or log_file, DEBUG=args.DEBUG, name="root", append_log=True, console_log=True)
+    utils.seed_everything(args.seed)
+    device = torch.device(args.device)
+
+    if isinstance(args.data_proc_transforms, list):
+        if len(args.data_proc_transforms) and isinstance(args.data_proc_transforms[0], list):
+            args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
+        else:
+            args.transforms = args.data_proc_transforms + args.feat_ext_transform
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict) 
+
+    logger.info("Loading data:")
+    data_loader = torch.utils.data.DataLoader(
+        dataset, batch_size=args.batch_size,
+        sampler=train_sampler, num_workers=args.workers, pin_memory=True if args.gpu>0 else False,
+        collate_fn=utils.collate_fn)
+    logger.info(f"Loading ONNX model: {args.model_path}")
+    if not args.generic_model:
+        utils.decrypt(args.model_path, utils.get_crypt_key())
+    ort_sess = ort.InferenceSession(args.model_path)
+    if not args.generic_model:
+        utils.encrypt(args.model_path, utils.get_crypt_key())
+
+    input_name = ort_sess.get_inputs()[0].name
+    output_name = ort_sess.get_outputs()[0].name
+    errors = torch.tensor([]).to(device, non_blocking=True)
+    for _, data, targets in data_loader:
+        data = data.to(device, non_blocking=True).float()
+        targets = targets.to(device, non_blocking=True).long()
+        batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
+        for input, target_label in zip(data, targets):
+            input = input.unsqueeze(0).cpu().numpy()
+            output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
+            current_output_error = torch.mean((torch.from_numpy(input).to(device) - output)**2, dim=(1,2,3))
+            batch_reconstruction_errors = torch.cat((batch_reconstruction_errors, current_output_error))
+        errors = torch.cat((errors, batch_reconstruction_errors))
+    
+    normal_error_mean = torch.mean(errors)
+    normal_error_std = torch.std(errors)
+    return normal_error_mean.cpu(), normal_error_std.cpu()
+    
 def run(args):
     if args.device != 'cpu' and args.distributed is True:
         # for explanation of what is happening here, please see this:

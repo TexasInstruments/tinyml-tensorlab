@@ -99,7 +99,11 @@ class GenericModelWithSpec(nn.Module):
 
         # instantiate the model
         layers = collections.OrderedDict()
-        input_tensor_size = [1, variables, input_features, 1]
+     #   input_tensor_size = [1, variables, input_features, 1]
+        if isinstance(input_features, (tuple, list)):
+             input_tensor_size = [1, variables, input_features[0], input_features[1]]
+        else:
+            input_tensor_size = [1, variables, input_features, 1]
         for layer_id, layer_spec in layers_spec.items():
             layer_type_str = layer_spec.pop('type')
             layer_type_str = layer_type_str.split('.')[-1]
