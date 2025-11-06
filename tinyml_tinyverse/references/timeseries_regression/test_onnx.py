@@ -169,10 +169,12 @@ def main(gpu, args):
 
     metric = torcheval.metrics.MeanSquaredError()
     r2_score = torcheval.metrics.R2Score()
-    residuals = ground_truth - predicted
-    mean_residual = torch.mean(residuals)
-    std_residual = torch.std(residuals)
-    predicted, ground_truth = utils.get_regression_results(predicted, ground_truth, args, mean_residual, std_residual)
+    df = pd.DataFrame({
+    "predicted": predicted.to('cpu').numpy().flatten(),
+    "ground_truth": ground_truth.to('cpu').numpy().flatten()
+    })
+    df.to_csv(os.path.join(args.output_dir, 'post_training_analysis', "results_on_test_set.csv"), index=False)
+    logger.info(f"Outputs on the test set saved at : {os.path.join(args.output_dir, 'post_training_analysis', 'results_on_test_set.csv')}")
     utils.plot_actual_vs_predicted_regression(ground_truth.to('cpu'), predicted.to('cpu'), os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
     utils.plot_residual_error_regression(ground_truth.to('cpu'), predicted.to('cpu'), os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
 
