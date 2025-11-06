@@ -646,12 +646,12 @@ HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
 TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
 # C2000 F28 Compiler
-C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
+C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.3.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 CL2000_CROSS_COMPILER = os.path.join(C2000_CG_ROOT, 'bin', 'cl2000')
 C2000_CGT_INCLUDE = os.path.join(C2000_CG_ROOT, 'include')
 # C2000 F28 SDK
-C2000WARE_VERSION = 'C2000Ware_6_00_00_00'
+C2000WARE_VERSION = 'C2000Ware_6_00_01_00'
 C2000WARE_ROOT = os.path.abspath(os.getenv('C2000WARE_ROOT', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
 C2000WARE_INCLUDE = os.path.join(C2000WARE_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
 C2000_DRIVERLIB_INCLUDE = os.path.join(C2000WARE_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
