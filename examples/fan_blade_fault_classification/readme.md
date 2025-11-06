@@ -15,7 +15,7 @@ Involves using TI toolchains to collect the data and train the model and preview
 This application example showcases the following story:
 * [Loading your F28P55x device with a Live Data Capture Code](#capturing-data)
 * [Collecting a dataset on Model Composer](#collected-dataset)
-* [Training an AI Model and Compiling it:](training-the-model)
+* [Training an AI Model and Compiling it:](#training-the-model)
   * on Edge AI Studio - Model Composer
   * on Tiny ML Modelmaker
 * [Deploying the model on F28P55x device and visualising it in Live Preview Mode](#live-preview)

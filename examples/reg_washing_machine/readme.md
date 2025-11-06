@@ -2,14 +2,14 @@
 # Washing Machine Weight Loading
 ## Prediction of weight of clothes in Washing Machine based on Voltage, Current and Speed Features
 
-### - Abhijeet Pal, Adithya Thonse, Tushar Sharma, Fasna S, Jashwanth Jadda
+### - Abhijeet Pal, Adithya Thonse, Tushar Sharma, Fasna S, Jaswanth Jadda
 
 ## Overview :
-Prediction of weight of clothes in washing machine eliminates the use of weight sensor which is required for automatic water level adjustment, reducing manufacturing costs. We use machine learning models using features such as voltage, current and speed, ensuring water level adjustment without any mechanical failure. Provides a cost-effective and reliable sensor-less solution.
+Prediction of weight of clothes in washing machine eliminates the use of weight sensor which is required for automatic water level adjustment, reducing manufacturing costs. We use machine learning models using features such as voltage, current and speed, ensuring water level adjustment without any mechanical failure due to sensor. Provides a cost-effective and reliable sensor-less solution.
 
 ## About the Dataset :
 
-The dataset consists of 6 current, voltage and speed based features. The dataset is obtained from TI Kilby Labs in Torque Control Mode. We have dataset of 100g precision from 0g to 1000g. Two different models are proposed and we obtain best RMSE of 33.90g.
+The dataset consists of 6 current, voltage and speed based features. The dataset is obtained from TI Kilby Labs. We have dataset of 100g precision from 0g to 900g. Two different models are proposed and we obtain best RMSE of 25.78g.
 
 The variables in the dataset are as follows :  
 
@@ -45,7 +45,7 @@ For regression tasks, the dataset structure is expected to be as follows :
 
 * We need to have the annotations folder in regression task.
 
-* The dataset can be directly downloaded from https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/washing_machine_load_dataset.zip, it's directly downloaded in the example
+* The dataset can be directly downloaded from https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/washing_machine_loading_data.zip, it's directly downloaded in the example
 
 ## Usage in TinyML ModelMaker
 
@@ -76,7 +76,7 @@ In the dataset section
 ``` 
 data_dir: 'files'
 dataset_name: 'washing_machine'
-input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/washing_machine_load_dataset.zip
+input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/washing_machine_loading_data.zip
 ``` 
 
 * The downloaded dataset, has data_dir, i.e. location of the files as {files} folder
@@ -85,8 +85,8 @@ In the data_processing_feature_extraction section
 
 ``` 
 feat_ext_transform: ['SimpleWindow']
-frame_size: 256
-feature_size_per_frame: 256
+frame_size: 1024
+feature_size_per_frame: 1024
 variables: 6
 ``` 
 
@@ -109,15 +109,30 @@ quantization: 0
 * Batch size can be tuned, 128 is used in this example. 
 * Quantization is set to 0, only float models are used for good accuracy
 * The Loss used for Training is Mean Squared Error (MSE) and metric used is RMSE
+* It's recommended to run the model for atleast 500 training epochs to obtain good RMSE in weight loading prediction
+## Dataset Split
+The dataset consists of 391 files, each file consists of 12300 datapoints on average of the washing machine running in constant torque mode (Mode 2)
+
+Train : 276 files
+Validation : 51 files
+Test : 64 files
+
+Train - Val - Test split of (70% : 14% : 16%)
 
 ## Results
-RMSE values obtained for both the models and different frame sizes
+RMSE values obtained for both the models and different frame sizes on the test set
+
 | Frame Size | Reg_Washing_Machine_4k_t | Reg_Washing_Machine_13k_t |
 |----------|-------------|-------------|
-| 256 | 50.54 | 33.90 |
-| 512 | 40.51 | 35.70 |
-| 1024 | 43.19 | 37.87 |
+| 256 | 63.00 | 35.77 |
+| 512 | 46.91 | 32.58 |
+| 1024 | 59.01 | 25.78 |
 
+The above table shows results after training the models for 500 epochs each
+
+We observe that for the 13K parameter model, the RMSE reduces as the frame size is increased. This can be attributed to the larger context with which the model learns when frame size is large.
+
+However, for the 4K model, as the number of parameters are too less, it is not able to learn larger context properly. Hence, it does not show much improvement as the frame size increases from 512 to 1024, but still it shows improvement when frame size is increased from 256 to 512.
 
 ## Running on Device
 
