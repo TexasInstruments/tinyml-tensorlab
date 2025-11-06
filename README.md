@@ -104,13 +104,8 @@ To begin with, you can use the repo as a `developer` or `user`.
 * **NOTE: MSPM0 Customers:**
   * Please download and install [TI Arm Codegen Tools (TI Arm CGT Clang)](https://www.ti.com/tool/download/ARM-CGT-CLANG)
     * Please set the installed path in your terminal:
-      * Linux: `export MSPM0_C2000_CG_ROOT="/path/to/ti-cgt-armllvm_4.0.3.LTS"`
-      * Windows: `$env:MSPM0_C2000_CG_ROOT="C:\path\to\wherever\present\ti-cgt-armllvm_4.0.3.LTS"`
-  * Please download and install [MSPM0 SDK](https://www.ti.com/tool/MSPM0-SDK)
-    * Please set the installed path in your terminal:
-      * Linux: `export M0SDK_PATH="/path/to/mspm0_sdk_2_05_00_05"`
-      * Windows: `$env:M0SDK_PATH="C:\path\to\wherever\present\mspm0_sdk_2_05_00_05\"`
-
+      * Linux: `export ARM_LLVM_CGT_PATH="/path/to/ti-cgt-armllvm_4.0.3.LTS"`
+      * Windows: `$env:ARM_LLVM_CGT_PATH="C:\path\to\wherever\present\ti-cgt-armllvm_4.0.3.LTS"`
 
 * ## I'm a User:
   * As a `user` - The installation and usage is very simple. It is just a `pip install`. But beware that you will not be able to modify any of the features or customize AI models/transforms for your use case
