@@ -47,8 +47,6 @@ from .device_run_info import DEVICE_RUN_INFO
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
 
-# Let the default model device run info dict be blank
-MOD_DEV_RUN = dict(inference_time_us='TBD', flash='TBD', sram='TBD')
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
 template_model_description = dict(
     common=dict(

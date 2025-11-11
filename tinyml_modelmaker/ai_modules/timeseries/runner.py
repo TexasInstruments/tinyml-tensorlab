@@ -391,3 +391,19 @@ class ModelRunner():
     @staticmethod
     def get_help_descriptions(*args, **kwargs):
         return descriptions.get_help_descriptions(*args, **kwargs)
+
+    @staticmethod
+    def get_live_capture_example_descriptions(*args, **kwargs):
+        return descriptions.get_live_capture_example_descriptions(*args, **kwargs)
+
+    @staticmethod
+    def get_live_preview_example_descriptions(*args, **kwargs):
+        return descriptions.get_live_preview_example_descriptions(*args, **kwargs)
+
+    @staticmethod
+    def get_context_help_descriptions(*args, **kwargs):
+        return descriptions.get_context_help_descriptions(*args, **kwargs)
+
+    @staticmethod
+    def get_help_url_descriptions(*args, **kwargs):
+        return descriptions.get_help_url_descriptions(*args, **kwargs)

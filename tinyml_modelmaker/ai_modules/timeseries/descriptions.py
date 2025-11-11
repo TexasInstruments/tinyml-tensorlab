@@ -35,7 +35,8 @@ from . import constants, training
 
 
 def _get_paretto_front_best(xy_list, x_index=0, y_index=1, inverse_relaionship=False):
-    xy_list = sorted(xy_list, key=lambda x: x[x_index], reverse=inverse_relaionship)
+    xy_list = sorted(
+        xy_list, key=lambda x: x[x_index], reverse=inverse_relaionship)
     paretto_front = [xy_list[0]]
     for xy in xy_list[1:]:
         if xy[y_index] >= paretto_front[-1][y_index]:
@@ -43,7 +44,8 @@ def _get_paretto_front_best(xy_list, x_index=0, y_index=1, inverse_relaionship=F
         #
     #
     # sort based on first index - reverse order in inference time is ascending order in FPS (faster performance)
-    paretto_front = sorted(paretto_front, key=lambda x: x[x_index], reverse=True)
+    paretto_front = sorted(
+        paretto_front, key=lambda x: x[x_index], reverse=True)
     return paretto_front
 
 
@@ -56,18 +58,22 @@ def _get_paretto_front_approx(xy_list, x_index=0, y_index=1, inverse_relaionship
     norm_xy_list = [[(xy[0] - min_x + 1) / (max_x - min_x + 1), (xy[1] - min_y + 1) / (max_y - min_y + 1), xy[2]] for xy
                     in xy_list]
     if inverse_relaionship:
-        efficiency_list = [list(xy) + [xy[y_index] * xy[x_index]] for xy in norm_xy_list]
+        efficiency_list = [list(xy) + [xy[y_index] * xy[x_index]]
+                           for xy in norm_xy_list]
     else:
-        efficiency_list = [list(xy) + [xy[y_index] / xy[x_index]] for xy in norm_xy_list]
+        efficiency_list = [list(xy) + [xy[y_index] / xy[x_index]]
+                           for xy in norm_xy_list]
     #
-    efficiency_list = sorted(efficiency_list, key=lambda x: x[-1], reverse=True)
+    efficiency_list = sorted(
+        efficiency_list, key=lambda x: x[-1], reverse=True)
     # take the good models
     num_models_selected = max(len(efficiency_list) * 2 // 3, 1)
     efficiency_list = efficiency_list[:num_models_selected]
     selected_indices = [xy[2] for xy in efficiency_list]
     selected_entries = [xy for xy in xy_list if xy[2] in selected_indices]
     # sort based on first index - reverse order in inference time is ascending order in FPS (faster performance)
-    paretto_front = sorted(selected_entries, key=lambda x: x[x_index], reverse=True)
+    paretto_front = sorted(
+        selected_entries, key=lambda x: x[x_index], reverse=True)
     return paretto_front
 
 
@@ -82,7 +88,8 @@ def get_paretto_front_combined(xy_list, x_index=0, y_index=1, inverse_relaionshi
     selected_indices = set(selected_indices)
     paretto_front = [xy for xy in xy_list if xy[2] in selected_indices]
     # sort based on first index - reverse order in inference time is ascending order in FPS (faster performance)
-    paretto_front = sorted(paretto_front, key=lambda x: x[x_index], reverse=True)
+    paretto_front = sorted(
+        paretto_front, key=lambda x: x[x_index], reverse=True)
     return paretto_front
 
 
@@ -117,14 +124,17 @@ def set_model_selection_factor(model_descriptions):
             task_types.update(m.common.task_type)
         else:
             task_types.add(m.common.task_type)
-    target_devices = [list(m.training.target_devices.keys()) for m in model_descriptions.values()]
+    target_devices = [list(m.training.target_devices.keys())
+                      for m in model_descriptions.values()]
     target_devices = set([t for t_list in target_devices for t in t_list])
     for target_device in target_devices:
         for task_type in task_types:
-            model_desc_list = [m for m in model_descriptions.values() if task_type in m.common.task_type]
-            model_desc_list = [m for m in model_desc_list if target_device in list(m.training.target_devices.keys())]
+            model_desc_list = [
+                m for m in model_descriptions.values() if task_type in m.common.task_type]
+            model_desc_list = [m for m in model_desc_list if target_device in list(
+                m.training.target_devices.keys())]
             inference_time_us = [m.training.target_devices[target_device].inference_time_us for m in
-                                         model_desc_list]
+                                 model_desc_list]
             # accuracy_factor = [m.training.target_devices[target_device].accuracy_factor for m in model_desc_list]
             accuracy_factor = ['TBD' for _ in model_desc_list]
             xy_list = [(inference_time_us[i], accuracy_factor[i], i) for i in
@@ -136,7 +146,8 @@ def set_model_selection_factor(model_descriptions):
                 xy_list_shortlisted = [(1, 1, xy[2]) for xy in xy_list]
             #
             if len(xy_list_shortlisted) > 0:
-                xy_list_shortlisted = get_paretto_front_combined(xy_list_shortlisted)
+                xy_list_shortlisted = get_paretto_front_combined(
+                    xy_list_shortlisted)
                 for paretto_id, xy in enumerate(xy_list_shortlisted):
                     xy_id = xy[2]
                     m = model_desc_list[xy_id]
@@ -154,7 +165,8 @@ def get_training_module_descriptions(params):
     training_module_descriptions = training.get_training_module_descriptions(target_device=params.common.target_device,
                                                                              training_device=params.training.training_device)
     #
-    training_module_descriptions = utils.ConfigDict(training_module_descriptions)
+    training_module_descriptions = utils.ConfigDict(
+        training_module_descriptions)
     return training_module_descriptions
 
 
@@ -394,3 +406,193 @@ The config file can be in .yaml or in .json format
 {tooltip_string}
 '''
     return help_string
+
+
+def get_live_capture_example_descriptions(params):
+    live_capture_example_descriptions = {
+        'arc_fault': {
+            'F28P55': {
+                'ccsProj': 'ml_arc_detection_F28P55x',
+                'deviceName': 'TMS320F28P550SJ9',
+                'files': [],
+                'from': 'solutions/tida_010955/f28p55x/ccs/arc_detection_f28p55x.projectspec',
+                'pkgId': 'digital_power_c2000ware_sdk_software_package',
+                'targetCfg': 'targetConfigs/TMS320F28P550SJ9.ccxml',
+                'transport': {'baudRate': 4687500}
+            },
+            'MSPM0G5187': {
+                'ccsProj': 'ac_arc_fault_data_capture',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/ai/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 4687500}
+            }
+        },
+        'generic_timeseries_classification': {
+            'MSPM0G5187': {
+                'ccsProj': 'time_series_data_capture',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/ai/time_series_data_capture/ticlang/time_series_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            }
+        },
+        'motor_fault': {
+            'F28P55': {
+                'ccsProj': 'eAI_data_acq_dap_f28p55x',
+                'deviceName': 'TMS320F28P550SJ9',
+                'files': [],
+                'from': 'solutions/edge_ai_fault_detection_with_mc/data_collection_preparation/ccs/eAI_data_acq_dap_f28p55x.projectspec',
+                'pkgId': 'motor_control_c2000ware_sdk_software_package',
+                'targetCfg': 'targetConfigs/TMS320F28P550SJ9_LaunchPad.ccxml',
+                'transport': {'baudRate': 2343750}
+            },
+            'MSPM0G5187': {
+                'ccsProj': 'motor_fault_data_capture',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/ai/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            }
+        }
+    }
+    return live_capture_example_descriptions
+
+
+def get_live_preview_example_descriptions(params):
+    live_preview_example_descriptions = {
+        'arc_fault': {
+            'F28P55': {
+                'ccsProj': 'ml_arc_detection_F28P55x',
+                'deviceName': 'TMS320F28P550SJ9',
+                'files': [{'from': 'artifacts/', 'to': 'arc_model'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': ''},
+                          {'from': 'model_aux.h', 'to': ''}],
+                'from': 'solutions/tida_010955/f28p55x/ccs/arc_detection_f28p55x.projectspec',
+                'pkgId': 'digital_power_c2000ware_sdk_software_package',
+                'targetCfg': 'targetConfigs/TMS320F28P550SJ9.ccxml',
+                'transport': {'baudRate': 4687500}
+            },
+            'MSPM0G5187': {
+                'ccsProj': 'ac_arc_fault_detection_live_preview',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/',
+                'to': 'arc_model'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': ''},
+                {'from': 'model_aux.h', 'to': ''}],
+                'from': 'examples/nortos/LP_MSPM0G5187/ai/ac_arc_fault_detection_live_preview/ac_arc_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 4687500}
+            }
+        },
+        'generic_timeseries_classification': {
+            'MSPM0G5187': {
+                'ccsProj': 'time_series_live_preview',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/',
+                'to': 'AI_artifacts'},
+                {'from': 'golden_vectors/user_input_config.h',
+                'to': ''},
+                {'from': 'model_aux.h',
+                'to': ''}],
+                'from': 'examples/nortos/LP_MSPM0G5187/ai/time_series_live_preview/ticlang/time_series_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 2343750}
+            }
+        },
+        'motor_fault': {
+            'F28P55': {
+                'ccsProj': 'eAI_mfd_eval_f28p55x',
+                'deviceName': 'TMS320F28P550SJ9',
+                'files': [{'from': 'artifacts/', 'to': 'AI_artifacts'},
+                       {'from': 'golden_vectors/user_input_config.h', 'to': ''},
+                       {'from': 'model_aux.h', 'to': ''}],
+                'from': 'solutions/edge_ai_fault_detection_with_mc/motor_fault_livepreview_validation_f28p55x/ccs/eAI_mfd_eval_f28p55x.projectspec',
+                'pkgId': 'motor_control_c2000ware_sdk_software_package',
+                'targetCfg': 'targetConfigs/TMS320F28P550SJ9_LaunchPad.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM0G5187': {
+                'ccsProj': 'motor_fault_detection_live_preview',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/',
+                    'to': 'AI_artifacts'},
+                   {'from': 'golden_vectors/user_input_config.h', 'to': ''},
+                   {'from': 'model_aux.h', 'to': ''}],
+                'from': 'examples/nortos/LP_MSPM0G5187/ai/motor_fault_detection_live_preview/ticlang/motor_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            }
+        }
+    }
+    return live_preview_example_descriptions
+
+
+def get_context_help_descriptions(params):
+    context_help_descriptions = {
+        'annotate': {
+            'mce_demo_task_1_default_annotate': {
+                'context': {'task_type': ['mce_demo_task_1']},
+                'help_url': 'file://gettingStarted/annotate.md'}
+        },
+        'capture': {
+            'mce_demo_task_1_default_capture': {
+                'context': {'task_type': ['mce_demo_task_1']},
+                'help_url': 'file://gettingStarted/capture.md'}
+        },
+        'capture_visualization': {
+            'mce_demo_task_1_default_visualization': {
+                'context': {'task_type': ['mce_demo_task_1']},
+                'help_url': 'https://dev.ti.com/tirex/explore'}
+        },
+        'compile': {
+            'default_compile_all': {
+                'context': {'task_type': ['mce_demo_task_1', 'mce_demo_task_2', 'mce_demo_task_3']},
+                'help_url': 'file://gettingStarted/compile_all.md'},
+            'mce_demo_task_1_MCEDemo_Device_2_compile_1': {
+                'context': {'devices': ['F28P55', 'MCEDemo_Device_2'],
+                            'task_type': ['arc_fault', 'generic_timeseries', 'mce_demo_task_1']},
+                'help_url': 'https://dev.ti.com/'},
+            'mce_demo_task_1_MCEDemo_Device_2_compile_2': {
+                'context': {'devices': ['F28P55', 'MCEDemo_Device_2'],
+                            'task_type': ['mce_demo_task_1']},
+                'help_url': 'file://gettingStarted/compile_device2.md'},
+            'unsupported_device_compile': {
+                'context': {'devices': ['F28P55'],
+                            'task_type': ['arc_fault', 'generic_timeseries', 'mce_demo_task_1']},
+                'help_url': 'file://gettingStarted/compile_f28p55.md'},
+            'unsupported_task_compile': {
+                'context': {'task_type': ['motor_fault']},
+                'help_url': 'file://gettingStarted/should_not_be_included.md'}
+        },
+        'deploy': {
+            'mce_demo_task_1_default_deploy': {
+                'context': {'task_type': ['mce_demo_task_1']},
+                'help_url': 'file://gettingStarted/deploy.md'}
+        },
+        'livedemo': {
+            'mce_demo_task_1_default_livedemo': {
+                'context': {'task_type': ['mce_demo_task_1']},
+                'help_url': 'file://gettingStarted/livedemo.md'}
+        },
+        'train': {
+            'mce_demo_task_1_default_train': {
+                'context': {'task_type': ['mce_demo_task_1']},
+                'help_url': 'file://gettingStarted/train.md'}
+        }
+    }
+    return context_help_descriptions
+
+
+def get_help_url_descriptions(params):
+    help_url_descriptions = "file://help.md"
+    return help_url_descriptions

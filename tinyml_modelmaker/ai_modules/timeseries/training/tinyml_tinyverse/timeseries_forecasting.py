@@ -44,8 +44,8 @@ from ..... import utils
 from ... import constants
 from .device_run_info import DEVICE_RUN_INFO
 
-# Let the default model device run info dict be blank
-MOD_DEV_RUN = dict(inference_time_us='TBD', flash='TBD', sram='TBD')
+
+
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
 template_model_description = dict(
     common=dict(

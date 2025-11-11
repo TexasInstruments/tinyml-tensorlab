@@ -1,5 +1,5 @@
 # Motor Fault Classification Time Series Dataset : Focus on Data Processing and Feature Extraction 
-### -Fasna Sharaf, Adithya Thonse, Tushar Sharma
+### -Fasna Sharaf, Adithya Thonse, Tushar Sharma, Laavanaya Dhawan
 <hr>
 
 ## Overview

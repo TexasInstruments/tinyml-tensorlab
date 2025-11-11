@@ -120,7 +120,7 @@ def init_params(*args, **kwargs):
             properties=[
                 dict(type="group", dynamic=True, name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                 dict(type="group", dynamic=False, name="train_group", label="Training Parameters", default=["training_epochs", "learning_rate"]),
-                dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=300),
+                dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=1000),
                 dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1,
                      decimal_places=3, increment=0.001),
                 ],
