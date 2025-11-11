@@ -73,13 +73,13 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
-          "F280013":{
+          "F280015":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
-          "F280015":{
+          "F280013":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -187,7 +187,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -455,7 +455,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -564,6 +564,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
         "model_details":"Classification Model with 13k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.",
+        "help_url":"file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -653,12 +654,14 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":0,
+            "help_url":"file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":0,
+            "help_url":"file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -703,6 +706,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"generictimeseries.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -723,7 +727,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -832,6 +836,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
         "model_details":"Classification Model with 6k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.\nLean model",
+        "help_url":"file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -921,12 +926,14 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":1,
+            "help_url":"file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":1,
+            "help_url":"file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -971,6 +978,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"generictimeseries.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -991,7 +999,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -1100,6 +1108,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
         "model_details":"Classification Model with 4k params.\n3 Conv+BatchNorm+Relu layers + Linear Layer.",
+        "help_url":"file://models/TimeSeries_Generic_4k_t/TimeSeries_Generic_4k_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -1189,12 +1198,14 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":2,
+            "help_url":"file://models/TimeSeries_Generic_4k_t/TimeSeries_Generic_4k_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":2,
+            "help_url":"file://models/TimeSeries_Generic_4k_t/TimeSeries_Generic_4k_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -1239,6 +1250,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"generictimeseries.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -1259,7 +1271,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -1368,6 +1380,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":true,
         "model_details":"Classification Model with 1k params.\n4 Conv+BatchNorm+Relu layers + Linear Layer.\nVery lean model",
+        "help_url":"file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -1457,12 +1470,14 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":3,
+            "help_url":"file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":3,
+            "help_url":"file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -1507,6 +1522,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"generictimeseries.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -1527,7 +1543,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -1636,6 +1652,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
         "model_details":"TI\u2122 handcrafted model.\nClassification Model with 1400+ params.\nMost accurate model, use for complex data scenarios.",
+        "help_url":"file://models/ArcFault_model_1400_t/ArcFault_model_1400_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -1725,21 +1742,17 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":0,
+            "help_url":"file://models/ArcFault_model_1400_t/ArcFault_model_1400_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":0,
+            "help_url":"file://models/ArcFault_model_1400_t/ArcFault_model_1400_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
           }
         },
         "project_path":null,
@@ -1775,6 +1788,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"arcfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -1795,7 +1809,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -1904,6 +1918,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
         "model_details":"TI\u2122 handcrafted model.\nClassification Model with 700+ params.\nLarge model, sweet spot between inference speed & memory occupied.",
+        "help_url":"file://models/ArcFault_model_700_t/ArcFault_model_700_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -1993,21 +2008,17 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":1,
+            "help_url":"file://models/ArcFault_model_700_t/ArcFault_model_700_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":1,
+            "help_url":"file://models/ArcFault_model_700_t/ArcFault_model_700_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":1,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
           }
         },
         "project_path":null,
@@ -2043,6 +2054,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"arcfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -2063,7 +2075,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -2172,6 +2184,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
         "model_details":"TI\u2122 handcrafted model.\nClassification Model with 300+ params. Faster than the 700 & 1400 variant, but also handles less complex data.",
+        "help_url":"file://models/ArcFault_model_300_t/ArcFault_model_300_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -2261,21 +2274,17 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":2,
+            "help_url":"file://models/ArcFault_model_300_t/ArcFault_model_300_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":2,
+            "help_url":"file://models/ArcFault_model_300_t/ArcFault_model_300_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":2,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
           }
         },
         "project_path":null,
@@ -2311,6 +2320,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"arcfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -2331,7 +2341,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -2440,6 +2450,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
         "model_details":"TI\u2122 handcrafted model.\nClassification Model with 200+ params.\nSimplest, smallest & fastest model.",
+        "help_url":"file://models/ArcFault_model_200_t/ArcFault_model_200_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -2529,21 +2540,17 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":3,
+            "help_url":"file://models/ArcFault_model_200_t/ArcFault_model_200_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":3,
+            "help_url":"file://models/ArcFault_model_200_t/ArcFault_model_200_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":3,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
           }
         },
         "project_path":null,
@@ -2579,6 +2586,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"arcfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -2599,7 +2607,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -2711,6 +2719,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
         "model_details":"TI\u2122 handcrafted model.\nClassification Model with ~0.6k params.\nSimplest model.",
+        "help_url":"file://models/MotorFault_model_1_t/MotorFault_model_1_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -2800,12 +2809,14 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":2,
+            "help_url":"file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":2,
+            "help_url":"file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -2850,6 +2861,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"motorfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -2870,7 +2882,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -2982,6 +2994,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
         "model_details":"TI\u2122 handcrafted model.\nClassification Model with 3k params.\nBest & largest of the 3 models, hardest to train.",
+        "help_url":"file://models/MotorFault_model_2_t/MotorFault_model_2_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -3071,12 +3084,14 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":0,
+            "help_url":"file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":0,
+            "help_url":"file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -3121,6 +3136,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"motorfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -3141,7 +3157,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -3253,6 +3269,7 @@
         "run_name":"{date-time}, {model_name}",
         "generic_model":false,
         "model_details":"TI\u2122 handcrafted model.\nClassification Model with 1k params.\nMiddle of the 3 CNN based models.",
+        "help_url":"file://models/MotorFault_model_3_t/MotorFault_model_3_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -3342,12 +3359,14 @@
           },
           "MSPM0G3507":{
             "model_selection_factor":1,
+            "help_url":"file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G3507.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
           "MSPM0G5187":{
             "model_selection_factor":1,
+            "help_url":"file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G5187.md",
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -3392,6 +3411,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"motorfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -3412,7 +3432,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -3608,18 +3628,6 @@
             "inference_time_us":"TBD",
             "sram":"TBD"
           },
-          "MSPM0G3507":{
-            "model_selection_factor":6,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "MSPM0G5187":{
-            "model_selection_factor":6,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
           "CC2755":{
             "model_selection_factor":1,
             "flash":"TBD",
@@ -3680,7 +3688,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -3834,60 +3842,6 @@
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
-          "F280013":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "F280015":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "F28003":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "F28004":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "F2837":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "F28P65":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "F28P55":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "MSPM0G3507":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
-          "MSPM0G5187":{
-            "model_selection_factor":0,
-            "inference_time_us":"TBD",
-            "sram":"TBD",
-            "flash":"TBD"
-          },
           "CC2755":{
             "model_selection_factor":0,
             "flash":"TBD",
@@ -3948,7 +3902,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -4198,7 +4152,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -4448,7 +4402,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -4698,7 +4652,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -4948,7 +4902,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -5198,7 +5152,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -5448,7 +5402,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -5698,7 +5652,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -5948,7 +5902,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -6198,7 +6152,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -6448,7 +6402,7 @@
             "type":"integer",
             "default":50,
             "min":1,
-            "max":300
+            "max":1000
           },
           {
             "label":"Learning Rate",
@@ -7485,65 +7439,65 @@
       "device_name":"F280013",
       "device_type":"MCU",
       "device_selection_factor":0,
-      "device_details":"C2000\u2122 120-MHz C28x CPU with FPU and TMU, 256-KB Flash, two 12-bit ADCs, 14 PWM channels, CAN (DCAN), one encoder module (eQEP), UART, and more\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800137\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"C2000\u2122 120-MHz C28x CPU with FPU and TMU, 256-KB Flash, two 12-bit ADCs, 14 PWM channels, CAN (DCAN), one encoder module (eQEP), UART, and more\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800137\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "F280015":{
       "device_name":"F280015",
       "device_type":"MCU",
       "device_selection_factor":1,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "F28003":{
       "device_name":"F28003",
       "device_type":"MCU",
       "device_selection_factor":2,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "F28004":{
       "device_name":"F28004",
       "device_type":"MCU",
       "device_selection_factor":3,
-      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"C2000\u2122 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "F2837":{
       "device_name":"F2837",
       "device_type":"MCU",
       "device_selection_factor":4,
-      "device_details":"C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"C2000\u2122 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "F28P65":{
       "device_name":"F28P65",
       "device_type":"MCU",
       "device_selection_factor":5,
-      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"C2000\u2122 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "F28P55":{
       "device_name":"F28P55",
       "device_type":"MCU",
       "device_selection_factor":6,
-      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"C2000\u2122 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "AM263":{
       "device_name":"AM263",
       "device_type":"MCU",
       "device_selection_factor":7,
-      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 06_00_00\n\nAdditional information:\n\n",
-      "sdk_version":"6.0",
-      "sdk_release":"06_00_00"
+      "device_details":"Quad-core Arm\u00ae Cortex\u00ae-R5F MCU up to 400 MHz with real-time control and security\n* More details : https://www.ti.com/product/AM2634\n\nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n* Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n* SDK release: 06_00_01\n\nAdditional information:\n\n",
+      "sdk_version":"6.0.1",
+      "sdk_release":"06_00_01"
     },
     "F29H85":{
       "device_name":"F29H85",
@@ -7867,5 +7821,318 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance Fault\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_00\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: http://tgrex10.toro.design.ti.com/tirex4-handoff/explore/node?node=A__AEIJm0rwIeU.2P1OBWwlaA__SIMPLELINK-SDK-EDGEAI-PLUGIN__Nz0hc8j__LATEST&placeholder=true\n* SDK release: 09_12_00_00\n\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+  "live_capture_example":{
+    "arc_fault":{
+      "F28P55":{
+        "ccsProj":"ml_arc_detection_F28P55x",
+        "deviceName":"TMS320F28P550SJ9",
+        "files":[],
+        "from":"solutions/tida_010955/f28p55x/ccs/arc_detection_f28p55x.projectspec",
+        "pkgId":"digital_power_c2000ware_sdk_software_package",
+        "targetCfg":"targetConfigs/TMS320F28P550SJ9.ccxml",
+        "transport":{
+          "baudRate":4687500
+        }
+      },
+      "MSPM0G5187":{
+        "ccsProj":"ac_arc_fault_data_capture",
+        "deviceName":"MSPM0G5187",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM0G5187/ai/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":4687500
+        }
+      }
+    },
+    "generic_timeseries_classification":{
+      "MSPM0G5187":{
+        "ccsProj":"time_series_data_capture",
+        "deviceName":"MSPM0G5187",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM0G5187/ai/time_series_data_capture/ticlang/time_series_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      }
+    },
+    "motor_fault":{
+      "F28P55":{
+        "ccsProj":"eAI_data_acq_dap_f28p55x",
+        "deviceName":"TMS320F28P550SJ9",
+        "files":[],
+        "from":"solutions/edge_ai_fault_detection_with_mc/data_collection_preparation/ccs/eAI_data_acq_dap_f28p55x.projectspec",
+        "pkgId":"motor_control_c2000ware_sdk_software_package",
+        "targetCfg":"targetConfigs/TMS320F28P550SJ9_LaunchPad.ccxml",
+        "transport":{
+          "baudRate":2343750
+        }
+      },
+      "MSPM0G5187":{
+        "ccsProj":"motor_fault_data_capture",
+        "deviceName":"MSPM0G5187",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM0G5187/ai/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      }
+    }
+  },
+  "live_preview_example":{
+    "arc_fault":{
+      "F28P55":{
+        "ccsProj":"ml_arc_detection_F28P55x",
+        "deviceName":"TMS320F28P550SJ9",
+        "files":[
+          {
+            "from":"artifacts/",
+            "to":"arc_model"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":""
+          },
+          {
+            "from":"model_aux.h",
+            "to":""
+          }
+        ],
+        "from":"solutions/tida_010955/f28p55x/ccs/arc_detection_f28p55x.projectspec",
+        "pkgId":"digital_power_c2000ware_sdk_software_package",
+        "targetCfg":"targetConfigs/TMS320F28P550SJ9.ccxml",
+        "transport":{
+          "baudRate":4687500
+        }
+      },
+      "MSPM0G5187":{
+        "ccsProj":"ac_arc_fault_detection_live_preview",
+        "deviceName":"MSPM0G5187",
+        "files":[
+          {
+            "from":"artifacts/",
+            "to":"arc_model"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":""
+          },
+          {
+            "from":"model_aux.h",
+            "to":""
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM0G5187/ai/ac_arc_fault_detection_live_preview/ac_arc_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":4687500
+        }
+      }
+    },
+    "generic_timeseries_classification":{
+      "MSPM0G5187":{
+        "ccsProj":"time_series_live_preview",
+        "deviceName":"MSPM0G5187",
+        "files":[
+          {
+            "from":"artifacts/",
+            "to":"AI_artifacts"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":""
+          },
+          {
+            "from":"model_aux.h",
+            "to":""
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM0G5187/ai/time_series_live_preview/ticlang/time_series_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":2343750
+        }
+      }
+    },
+    "motor_fault":{
+      "F28P55":{
+        "ccsProj":"eAI_mfd_eval_f28p55x",
+        "deviceName":"TMS320F28P550SJ9",
+        "files":[
+          {
+            "from":"artifacts/",
+            "to":"AI_artifacts"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":""
+          },
+          {
+            "from":"model_aux.h",
+            "to":""
+          }
+        ],
+        "from":"solutions/edge_ai_fault_detection_with_mc/motor_fault_livepreview_validation_f28p55x/ccs/eAI_mfd_eval_f28p55x.projectspec",
+        "pkgId":"motor_control_c2000ware_sdk_software_package",
+        "targetCfg":"targetConfigs/TMS320F28P550SJ9_LaunchPad.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      },
+      "MSPM0G5187":{
+        "ccsProj":"motor_fault_detection_live_preview",
+        "deviceName":"MSPM0G5187",
+        "files":[
+          {
+            "from":"artifacts/",
+            "to":"AI_artifacts"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":""
+          },
+          {
+            "from":"model_aux.h",
+            "to":""
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM0G5187/ai/motor_fault_detection_live_preview/ticlang/motor_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      }
+    }
+  },
+  "context_help":{
+    "annotate":{
+      "mce_demo_task_1_default_annotate":{
+        "context":{
+          "task_type":[
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"file://gettingStarted/annotate.md"
+      }
+    },
+    "capture":{
+      "mce_demo_task_1_default_capture":{
+        "context":{
+          "task_type":[
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"file://gettingStarted/capture.md"
+      }
+    },
+    "capture_visualization":{
+      "mce_demo_task_1_default_visualization":{
+        "context":{
+          "task_type":[
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"https://dev.ti.com/tirex/explore"
+      }
+    },
+    "compile":{
+      "default_compile_all":{
+        "context":{
+          "task_type":[
+            "mce_demo_task_1",
+            "mce_demo_task_2",
+            "mce_demo_task_3"
+          ]
+        },
+        "help_url":"file://gettingStarted/compile_all.md"
+      },
+      "mce_demo_task_1_MCEDemo_Device_2_compile_1":{
+        "context":{
+          "devices":[
+            "F28P55",
+            "MCEDemo_Device_2"
+          ],
+          "task_type":[
+            "arc_fault",
+            "generic_timeseries",
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"https://dev.ti.com/"
+      },
+      "mce_demo_task_1_MCEDemo_Device_2_compile_2":{
+        "context":{
+          "devices":[
+            "F28P55",
+            "MCEDemo_Device_2"
+          ],
+          "task_type":[
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"file://gettingStarted/compile_device2.md"
+      },
+      "unsupported_device_compile":{
+        "context":{
+          "devices":[
+            "F28P55"
+          ],
+          "task_type":[
+            "arc_fault",
+            "generic_timeseries",
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"file://gettingStarted/compile_f28p55.md"
+      },
+      "unsupported_task_compile":{
+        "context":{
+          "task_type":[
+            "motor_fault"
+          ]
+        },
+        "help_url":"file://gettingStarted/should_not_be_included.md"
+      }
+    },
+    "deploy":{
+      "mce_demo_task_1_default_deploy":{
+        "context":{
+          "task_type":[
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"file://gettingStarted/deploy.md"
+      }
+    },
+    "livedemo":{
+      "mce_demo_task_1_default_livedemo":{
+        "context":{
+          "task_type":[
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"file://gettingStarted/livedemo.md"
+      }
+    },
+    "train":{
+      "mce_demo_task_1_default_train":{
+        "context":{
+          "task_type":[
+            "mce_demo_task_1"
+          ]
+        },
+        "help_url":"file://gettingStarted/train.md"
+      }
+    }
+  },
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance Fault\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: http://tgrex10.toro.design.ti.com/tirex4-handoff/explore/node?node=A__AEIJm0rwIeU.2P1OBWwlaA__SIMPLELINK-SDK-EDGEAI-PLUGIN__Nz0hc8j__LATEST&placeholder=true\n* SDK release: 09_12_00_00\n\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
+  "help_url":"file://help.md"
 }
