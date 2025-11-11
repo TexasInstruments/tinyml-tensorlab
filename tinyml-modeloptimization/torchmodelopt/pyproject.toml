@@ -25,7 +25,11 @@ dependencies = [ "numpy==2.2.6",
 	"rich==14.0.0",
 	"pandas==2.3.0",
 	"colorama==0.4.6",
-	"torch==2.7.1",]
+	"torch==2.7.1",
+	"torchmetrics==1.8.2",
+    "torchvision==0.22.1",
+	"scikit-learn==1.7.0"
+]
 [[project.authors]]
 name = "Adithya Thonse"
 email = "thonse@ti.com"
