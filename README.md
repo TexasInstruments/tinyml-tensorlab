@@ -41,7 +41,9 @@ tinyml-modeloptimization/
         ├── examples/
             ├── audio_keyword_spotting/                     # Advanced example on Google Speech Dataset
             ├── fmnist_image_classification/                # Simple example on Fashion MNIST Dataset
+            ├── mnist_lenet5_classification/                # Simple example on MNIST Dataset
             ├── motor_fault_time_series_classification/     # Moderate example on MotorFault Dataset
+            ├── torque_time_series_regression/              # Simple example on regression flow
             ├── README.md    
         ├── requirements/
             ├── requirements.txt

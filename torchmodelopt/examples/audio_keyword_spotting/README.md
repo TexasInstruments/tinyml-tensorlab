@@ -2,10 +2,6 @@
 
 ## Installation Instructions
 
-The python packages and dependencies to run this Audio Keyword Spotting example can be installed by running the following command:
-
-```commandline
-python -m pip install --no-input -r requirements.txt
 ```
 To run the Audio Keyword spotting example run the following command:
 
