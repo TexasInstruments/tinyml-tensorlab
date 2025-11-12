@@ -1638,6 +1638,275 @@
         ]
       }
     },
+    "TimeSeries_Generic_100_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "model_details":"Classification Model with 100 params.\n2 Conv+BatchNorm+Relu layers+ Adapt Avg Pool +Linear Layer.\nUltra lean model",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false,
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_100_t",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericTSDataset",
+        "model_training_id":"CNN_TS_GEN_BASE_100",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280013":{
+            "model_selection_factor":4,
+            "flash":3242,
+            "inference_time_us":14463,
+            "sram":12320
+          },
+          "F280015":{
+            "model_selection_factor":4,
+            "flash":3242,
+            "inference_time_us":14463,
+            "sram":12320
+          },
+          "F28003":{
+            "model_selection_factor":4,
+            "flash":3242,
+            "inference_time_us":14463,
+            "sram":12320
+          },
+          "F28004":{
+            "model_selection_factor":4,
+            "flash":3242,
+            "inference_time_us":17356,
+            "sram":12320
+          },
+          "F2837":{
+            "model_selection_factor":4,
+            "flash":3242,
+            "inference_time_us":14463,
+            "sram":12320
+          },
+          "F28P65":{
+            "model_selection_factor":4,
+            "flash":3242,
+            "inference_time_us":8678,
+            "sram":12320
+          },
+          "F28P55":{
+            "model_selection_factor":4,
+            "flash":3467,
+            "inference_time_us":1257,
+            "sram":6250
+          },
+          "MSPM0G3507":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "MSPM0G5187":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          },
+          "CC2755":{
+            "model_selection_factor":4,
+            "flash":"TBD",
+            "inference_time_us":"TBD",
+            "sram":"TBD"
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_dequantize":false,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "script":"generictimeseries.py",
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":1000
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "sampling_rate":1,
+        "new_sr":1,
+        "frame_size":1,
+        "forecast_horizon":1,
+        "stride_size":0.01,
+        "variables":1,
+        "target_variables":[],
+        "resampling_factor":1,
+        "gain_variations":null,
+        "feature_extraction_name":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "feature_size_per_frame":null,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "q15_scale_factor":4,
+        "min_bin":1,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "window_count":1,
+        "chunk_size":1,
+        "fft_size":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":"2D1",
+        "offset":0,
+        "scale":null,
+        "nn_for_feature_extraction":false,
+        "gof_test":false
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ArcFault_model_1400_t":{
       "common":{
         "verbose_mode":true,
@@ -5720,6 +5989,256 @@
         ]
       }
     },
+    "TimeSeries_Generic_Linear_AD":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"generic_timeseries_anomalydetection",
+        "task_category":"timeseries_anomalydetection",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":true,
+        "model_details":"Anomaly Detection Model with 3 encoder layers and 3 decoder layers. Each layer in enocder and decoder is a Linear layer",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false,
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"TimeSeries_Generic_Linear_AD",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericTSDatasetAD",
+        "model_training_id":"AD_3_LAYER_DEEP_LINEAR_MODEL_TS",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280013":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":23768,
+            "sram":4160
+          },
+          "F280015":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":23768,
+            "sram":4160
+          },
+          "F28003":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":23768,
+            "sram":4160
+          },
+          "F28004":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":28522,
+            "sram":4160
+          },
+          "F2837":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":23768,
+            "sram":4160
+          },
+          "F28P65":{
+            "model_selection_factor":1,
+            "flash":17343,
+            "inference_time_us":14261,
+            "sram":4160
+          },
+          "F28P55":{
+            "model_selection_factor":1,
+            "flash":11081,
+            "inference_time_us":2156,
+            "sram":3218
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_dequantize":false,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":1000
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "sampling_rate":1,
+        "new_sr":1,
+        "frame_size":1,
+        "forecast_horizon":1,
+        "stride_size":0.01,
+        "variables":1,
+        "target_variables":[],
+        "resampling_factor":1,
+        "gain_variations":null,
+        "feature_extraction_name":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "feature_size_per_frame":null,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "q15_scale_factor":4,
+        "min_bin":1,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "window_count":1,
+        "chunk_size":1,
+        "fft_size":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":"2D1",
+        "offset":0,
+        "scale":null,
+        "nn_for_feature_extraction":false,
+        "gof_test":false
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
     "TimeSeries_Generic_AD_16k_t":{
       "common":{
         "verbose_mode":true,
@@ -5780,43 +6299,43 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280013":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":17343,
             "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
-            "model_selection_factor":1,
+            "model_selection_factor":2,
             "flash":11081,
             "inference_time_us":2156,
             "sram":3218
@@ -6030,43 +6549,43 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280013":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":17343,
             "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":17343,
             "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
-            "model_selection_factor":2,
+            "model_selection_factor":3,
             "flash":11081,
             "inference_time_us":2156,
             "sram":3218
@@ -6280,43 +6799,43 @@
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280013":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F280015":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28003":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28004":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":17343,
             "inference_time_us":28522,
             "sram":4160
           },
           "F2837":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":17343,
             "inference_time_us":23768,
             "sram":4160
           },
           "F28P65":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":17343,
             "inference_time_us":14261,
             "sram":4160
           },
           "F28P55":{
-            "model_selection_factor":3,
+            "model_selection_factor":4,
             "flash":11081,
             "inference_time_us":2156,
             "sram":3218

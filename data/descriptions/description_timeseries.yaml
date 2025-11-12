@@ -3837,6 +3837,241 @@ model_descriptions:
       warmup_epochs: 1
       weight_decay: 0.0001
       with_input_batchnorm: true
+  TimeSeries_Generic_100_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: 'Classification Model with 100 params.
+
+        2 Conv+BatchNorm+Relu layers+ Adapt Avg Pool +Linear Layer.
+
+        Ultra lean model'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: TimeSeries_Generic_100_t
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_100
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      output_dequantize: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseries.py
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 1000
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        F280013:
+          flash: 3242
+          inference_time_us: 14463
+          model_selection_factor: 4
+          sram: 12320
+        F280015:
+          flash: 3242
+          inference_time_us: 14463
+          model_selection_factor: 4
+          sram: 12320
+        F28003:
+          flash: 3242
+          inference_time_us: 14463
+          model_selection_factor: 4
+          sram: 12320
+        F28004:
+          flash: 3242
+          inference_time_us: 17356
+          model_selection_factor: 4
+          sram: 12320
+        F2837:
+          flash: 3242
+          inference_time_us: 14463
+          model_selection_factor: 4
+          sram: 12320
+        F28P55:
+          flash: 3467
+          inference_time_us: 1257
+          model_selection_factor: 4
+          sram: 6250
+        F28P65:
+          flash: 3242
+          inference_time_us: 8678
+          model_selection_factor: 4
+          sram: 12320
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
   TimeSeries_Generic_13k_t:
     common:
       download_path: ./data/downloads
@@ -4951,37 +5186,37 @@ model_descriptions:
         F280013:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 4160
         F280015:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 4160
         F28003:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 4160
         F28004:
           flash: 17343
           inference_time_us: 28522
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 4160
         F2837:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 4160
         F28P55:
           flash: 11081
           inference_time_us: 2156
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 3218
         F28P65:
           flash: 17343
           inference_time_us: 14261
-          model_selection_factor: 1
+          model_selection_factor: 2
           sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -5383,37 +5618,37 @@ model_descriptions:
         F280013:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 4160
         F280015:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 4160
         F28003:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 4160
         F28004:
           flash: 17343
           inference_time_us: 28522
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 4160
         F2837:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 4160
         F28P55:
           flash: 11081
           inference_time_us: 2156
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 3218
         F28P65:
           flash: 17343
           inference_time_us: 14261
-          model_selection_factor: 3
+          model_selection_factor: 4
           sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -5599,37 +5834,37 @@ model_descriptions:
         F280013:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 4160
         F280015:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 4160
         F28003:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 4160
         F28004:
           flash: 17343
           inference_time_us: 28522
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 4160
         F2837:
           flash: 17343
           inference_time_us: 23768
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 4160
         F28P55:
           flash: 11081
           inference_time_us: 2156
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 3218
         F28P65:
           flash: 17343
           inference_time_us: 14261
-          model_selection_factor: 2
+          model_selection_factor: 3
           sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -6065,6 +6300,222 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
+  TimeSeries_Generic_Linear_AD:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: Anomaly Detection Model with 3 encoder layers and 3 decoder layers.
+        Each layer in enocder and decoder is a Linear layer
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_anomalydetection
+      task_type: generic_timeseries_anomalydetection
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDatasetAD
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: TimeSeries_Generic_Linear_AD
+      model_spec: null
+      model_training_id: AD_3_LAYER_DEEP_LINEAR_MODEL_TS
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      output_dequantize: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 1000
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        F280013:
+          flash: 17343
+          inference_time_us: 23768
+          model_selection_factor: 1
+          sram: 4160
+        F280015:
+          flash: 17343
+          inference_time_us: 23768
+          model_selection_factor: 1
+          sram: 4160
+        F28003:
+          flash: 17343
+          inference_time_us: 23768
+          model_selection_factor: 1
+          sram: 4160
+        F28004:
+          flash: 17343
+          inference_time_us: 28522
+          model_selection_factor: 1
+          sram: 4160
+        F2837:
+          flash: 17343
+          inference_time_us: 23768
+          model_selection_factor: 1
+          sram: 4160
+        F28P55:
+          flash: 11081
+          inference_time_us: 2156
+          model_selection_factor: 1
+          sram: 3218
+        F28P65:
+          flash: 17343
+          inference_time_us: 14261
+          model_selection_factor: 1
+          sram: 4160
       train_output_path: null
       training_backend: tinyml_tinyverse
       training_device: cuda
