@@ -11,7 +11,7 @@ dataset:
     input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_classification_dsk_3inp.zip'
 
 data_processing_feature_extraction:
-    feature_extraction_name: 'MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'
+    feature_extraction_name: 'Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'
     gof_test: True
     frame_size: 256
     

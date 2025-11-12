@@ -2709,10 +2709,7 @@
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":[
-          "motor_fault",
-          "blower_imbalance"
-        ],
+        "task_type":"motor_fault",
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -2817,12 +2814,6 @@
           "MSPM0G5187":{
             "model_selection_factor":2,
             "help_url":"file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G5187.md",
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":2,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -2984,10 +2975,7 @@
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":[
-          "motor_fault",
-          "blower_imbalance"
-        ],
+        "task_type":"motor_fault",
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -3092,12 +3080,6 @@
           "MSPM0G5187":{
             "model_selection_factor":0,
             "help_url":"file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G5187.md",
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -3259,10 +3241,7 @@
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":[
-          "motor_fault",
-          "blower_imbalance"
-        ],
+        "task_type":"motor_fault",
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
@@ -3367,12 +3346,6 @@
           "MSPM0G5187":{
             "model_selection_factor":1,
             "help_url":"file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G5187.md",
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":1,
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
@@ -3527,20 +3500,21 @@
         ]
       }
     },
-    "NAS":{
+    "FanImbalance_model_1_t":{
       "common":{
         "verbose_mode":true,
         "download_path":"./data/downloads",
         "projects_path":"./data/projects",
         "project_path":null,
         "project_run_path":null,
-        "task_type":"generic_timeseries_classification",
+        "task_type":"blower_imbalance",
         "task_category":"timeseries_classification",
         "target_machine":"evm",
         "target_device":null,
         "run_name":"{date-time}, {model_name}",
-        "generic_model":true,
-        "model_details":"Model will be automatically found through NAS framework",
+        "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with ~0.6k params.\nSimplest model.",
+        "help_url":"file://models/MotorFault_model_1_t/MotorFault_model_1_t.md",
         "target_module":"timeseries"
       },
       "download":{
@@ -3577,62 +3551,56 @@
       },
       "training":{
         "enable":true,
-        "model_name":"NAS",
+        "model_name":"FanImbalance_model_1_t",
         "augment_config":null,
         "model_config":null,
-        "model_spec":"",
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py",
         "dataset_loader":"GenericTSDataset",
-        "model_training_id":"None",
+        "model_training_id":"CNN_MF_1L",
         "training_backend":"tinyml_tinyverse",
         "pretrained_checkpoint_path":null,
         "target_devices":{
           "F280013":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "model_selection_factor":2,
+            "flash":1214,
+            "inference_time_us":423,
+            "sram":1016
           },
           "F280015":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "model_selection_factor":2,
+            "flash":1214,
+            "inference_time_us":423,
+            "sram":1016
           },
           "F28003":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "model_selection_factor":2,
+            "flash":1214,
+            "inference_time_us":423,
+            "sram":1016
           },
           "F28004":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "model_selection_factor":2,
+            "flash":1214,
+            "inference_time_us":508,
+            "sram":1016
           },
           "F2837":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "model_selection_factor":2,
+            "flash":1214,
+            "inference_time_us":423,
+            "sram":1016
           },
           "F28P65":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "model_selection_factor":2,
+            "flash":1214,
+            "inference_time_us":254,
+            "sram":1016
           },
           "F28P55":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
+            "model_selection_factor":2,
+            "flash":1953,
+            "inference_time_us":159,
+            "sram":1112
           }
         },
         "project_path":null,
@@ -3668,6 +3636,511 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"motorfault.py",
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":1000
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "sampling_rate":1,
+        "new_sr":1,
+        "frame_size":1,
+        "forecast_horizon":1,
+        "stride_size":0.01,
+        "variables":1,
+        "target_variables":[],
+        "resampling_factor":1,
+        "gain_variations":null,
+        "feature_extraction_name":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "feature_size_per_frame":null,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "q15_scale_factor":4,
+        "min_bin":1,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "window_count":1,
+        "chunk_size":1,
+        "fft_size":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":"2D1",
+        "offset":0,
+        "scale":null,
+        "nn_for_feature_extraction":false,
+        "gof_test":false
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "FanImbalance_model_2_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"blower_imbalance",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 3k params.\nBest & largest of the 3 models, hardest to train.",
+        "help_url":"file://models/MotorFault_model_2_t/MotorFault_model_2_t.md",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false,
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"FanImbalance_model_2_t",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py",
+        "dataset_loader":"GenericTSDataset",
+        "model_training_id":"CNN_MF_2L",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280013":{
+            "model_selection_factor":0,
+            "flash":5262,
+            "inference_time_us":11465,
+            "sram":10872
+          },
+          "F280015":{
+            "model_selection_factor":0,
+            "flash":5262,
+            "inference_time_us":11465,
+            "sram":10872
+          },
+          "F28003":{
+            "model_selection_factor":0,
+            "flash":5262,
+            "inference_time_us":11465,
+            "sram":10872
+          },
+          "F28004":{
+            "model_selection_factor":0,
+            "flash":5262,
+            "inference_time_us":13758,
+            "sram":10872
+          },
+          "F2837":{
+            "model_selection_factor":0,
+            "flash":5262,
+            "inference_time_us":11465,
+            "sram":10872
+          },
+          "F28P65":{
+            "model_selection_factor":0,
+            "flash":5262,
+            "inference_time_us":6879,
+            "sram":10872
+          },
+          "F28P55":{
+            "model_selection_factor":0,
+            "flash":4377,
+            "inference_time_us":1180,
+            "sram":3198
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":256,
+        "learning_rate":0.01,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_dequantize":false,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "script":"motorfault.py",
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":1000
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "sampling_rate":1,
+        "new_sr":1,
+        "frame_size":1,
+        "forecast_horizon":1,
+        "stride_size":0.01,
+        "variables":1,
+        "target_variables":[],
+        "resampling_factor":1,
+        "gain_variations":null,
+        "feature_extraction_name":null,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "feature_size_per_frame":null,
+        "num_frame_concat":1,
+        "frame_skip":1,
+        "q15_scale_factor":4,
+        "min_bin":1,
+        "normalize_bin":0,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "dc_remove":true,
+        "analysis_bandwidth":1,
+        "window_count":1,
+        "chunk_size":1,
+        "fft_size":1,
+        "log_base":null,
+        "log_mul":null,
+        "log_threshold":null,
+        "stacking":"2D1",
+        "offset":0,
+        "scale":null,
+        "nn_for_feature_extraction":false,
+        "gof_test":false
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "FanImbalance_model_3_t":{
+      "common":{
+        "verbose_mode":true,
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"blower_imbalance",
+        "task_category":"timeseries_classification",
+        "target_machine":"evm",
+        "target_device":null,
+        "run_name":"{date-time}, {model_name}",
+        "generic_model":false,
+        "model_details":"TI\u2122 handcrafted model.\nClassification Model with 1k params.\nMiddle of the 3 CNN based models.",
+        "help_url":"file://models/MotorFault_model_3_t/MotorFault_model_3_t.md",
+        "target_module":"timeseries"
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":"classes",
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "dataset_download":false,
+        "dataset_reload":false,
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"FanImbalance_model_3_t",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_3l.py",
+        "dataset_loader":"GenericTSDataset",
+        "model_training_id":"CNN_MF_3L",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "F280013":{
+            "model_selection_factor":1,
+            "flash":3069,
+            "inference_time_us":627,
+            "sram":656
+          },
+          "F280015":{
+            "model_selection_factor":1,
+            "flash":3069,
+            "inference_time_us":627,
+            "sram":656
+          },
+          "F28003":{
+            "model_selection_factor":1,
+            "flash":3069,
+            "inference_time_us":627,
+            "sram":656
+          },
+          "F28004":{
+            "model_selection_factor":1,
+            "flash":3069,
+            "inference_time_us":752,
+            "sram":656
+          },
+          "F2837":{
+            "model_selection_factor":1,
+            "flash":3069,
+            "inference_time_us":627,
+            "sram":656
+          },
+          "F28P65":{
+            "model_selection_factor":1,
+            "flash":3069,
+            "inference_time_us":376,
+            "sram":656
+          },
+          "F28P55":{
+            "model_selection_factor":1,
+            "flash":2754,
+            "inference_time_us":221,
+            "sram":1116
+          }
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "warmup_epochs":1,
+        "num_last_epochs":5,
+        "batch_size":256,
+        "learning_rate":0.01,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "training_master_port":29500,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_dequantize":false,
+        "with_input_batchnorm":true,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "script":"motorfault.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -7511,17 +7984,17 @@
       "device_name":"MSPM0G3507",
       "device_type":"MCU",
       "device_selection_factor":9,
-      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\nAdditional information:\n\n",
-      "sdk_version":"2.05.00.05",
-      "sdk_release":"2_05_00_05"
+      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_08_00_03\n\nAdditional information:\n\n",
+      "sdk_version":"2.08.00.03",
+      "sdk_release":"2_08_00_03"
     },
     "MSPM0G5187":{
       "device_name":"MSPM0G5187",
       "device_type":"MCU",
       "device_selection_factor":10,
-      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G5187\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\nAdditional information:\n\n",
-      "sdk_version":"2.05.00.05",
-      "sdk_release":"2_05_00_05"
+      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G5187\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_08_00_03\n\nAdditional information:\n\n",
+      "sdk_version":"2.08.00.03",
+      "sdk_release":"2_08_00_03"
     },
     "CC2755":{
       "device_name":"CC2755",
@@ -7821,6 +8294,223 @@
       }
     }
   },
+  "live_capture":{
+    "a":{
+      "context":{
+        "task_type":[
+          "arc_fault"
+        ]
+      },
+      "defaultValues":{
+        "acqMode":0,
+        "device":0,
+        "samples":1024,
+        "samplingFrequency":200000
+      },
+      "propInfo":[
+        {
+          "caption":"device",
+          "id":"device",
+          "infoText":"Current support is F28P55. You can try other device using correct application example and baud rate.",
+          "options":[
+            "F28P55",
+            "MSPM0G5187"
+          ],
+          "widgetType":"select"
+        },
+        {
+          "caption":"sensor",
+          "id":"sensor",
+          "infoText":"Connect hardware to detect sensors",
+          "widgetType":"select"
+        },
+        {
+          "caption":"capture signal mode",
+          "id":"acqMode",
+          "infoText":"Select Time Domain Current to capture time domain analog signal. Select Time Domain Current and Label to capture both time domain analog and arc labeling input signals.",
+          "options":[
+            "Time Domain Current",
+            "Time Domain Current and Label"
+          ],
+          "widgetType":"select"
+        },
+        {
+          "caption":"sampling frequency",
+          "format":"dec",
+          "id":"samplingFrequency",
+          "minValue":1,
+          "precision":0,
+          "widgetType":"input"
+        },
+        {
+          "caption":"samples",
+          "format":"dec",
+          "id":"samples",
+          "infoText":"This number will be rounded up to a multiple of 1024.",
+          "minValue":1024,
+          "multiplesOf":1024,
+          "precision":0,
+          "widgetType":"input"
+        }
+      ]
+    },
+    "b":{
+      "context":{
+        "task_type":[
+          "motor_fault",
+          "blower_imbalance"
+        ]
+      },
+      "defaultValues":{
+        "device":0,
+        "labelName":"",
+        "labelNumber":0,
+        "motorName":"motor",
+        "motorNumber":0,
+        "samplingTime":4
+      },
+      "propInfo":[
+        {
+          "caption":"device",
+          "id":"device",
+          "infoText":"Current support is F28P55. You can try other device using correct application example and baud rate.",
+          "options":[
+            "F28P55",
+            "MSPM0G5187"
+          ],
+          "widgetType":"select"
+        },
+        {
+          "caption":"sensor",
+          "id":"sensor",
+          "infoText":"Connect hardware to detect sensors",
+          "widgetType":"select"
+        },
+        {
+          "caption":"continuous measurement time (s)",
+          "format":"dec",
+          "id":"samplingTime",
+          "minValue":1,
+          "precision":0,
+          "widgetType":"input"
+        },
+        {
+          "as":{
+            "kind":"filename",
+            "order":1
+          },
+          "caption":"device under test name",
+          "format":"text",
+          "id":"motorName",
+          "infoText":"This name is used as part of a filename for saving captured data",
+          "placeholder":"Enter name",
+          "widgetType":"input"
+        },
+        {
+          "as":{
+            "kind":"filename",
+            "order":2,
+            "prefix":"m"
+          },
+          "caption":"device under test number",
+          "format":"dec",
+          "id":"motorNumber",
+          "infoText":"This number is used as part of a filename for saving captured data",
+          "placeholder":"Enter number",
+          "widgetType":"input"
+        },
+        {
+          "as":{
+            "kind":"filename",
+            "order":4
+          },
+          "caption":"label description",
+          "format":"text",
+          "id":"labelName",
+          "infoText":"This name is used as part of a filename for saving captured data",
+          "optional":true,
+          "placeholder":"Enter description",
+          "widgetType":"input"
+        },
+        {
+          "as":{
+            "kind":"filename",
+            "order":3,
+            "prefix":"label"
+          },
+          "caption":"label number",
+          "format":"dec",
+          "id":"labelNumber",
+          "infoText":"This number is used as part of a filename for saving captured data",
+          "placeholder":"Enter label number",
+          "widgetType":"input"
+        }
+      ]
+    },
+    "c":{
+      "context":{
+        "task_type":[
+          "generic_timeseries_classification"
+        ]
+      },
+      "defaultValues":{
+        "device":0,
+        "labelName":"Sine",
+        "samples":256,
+        "samplingFrequency":5000,
+        "samplingTime":4
+      },
+      "propInfo":[
+        {
+          "caption":"device",
+          "id":"device",
+          "infoText":"Current support is MSPM0G3507. You can try other device using correct application example and baud rate.",
+          "options":[
+            "MSPM0G3507",
+            "MSPM0G5187"
+          ],
+          "widgetType":"select"
+        },
+        {
+          "caption":"sensor",
+          "id":"sensor",
+          "infoText":"Connect hardware to detect sensors",
+          "widgetType":"select"
+        },
+        {
+          "caption":"continuous measurement time (s)",
+          "format":"dec",
+          "id":"samplingTime",
+          "minValue":1,
+          "precision":0,
+          "widgetType":"input"
+        },
+        {
+          "as":{
+            "kind":"filename",
+            "order":1
+          },
+          "caption":"label description",
+          "format":"text",
+          "id":"labelName",
+          "infoText":"This name is used as part of a filename for saving captured data",
+          "optional":true,
+          "placeholder":"Enter description",
+          "widgetType":"input"
+        },
+        {
+          "caption":"samples",
+          "format":"dec",
+          "id":"samples",
+          "infoText":"This number will be rounded up to a multiple of 256.",
+          "minValue":256,
+          "multiplesOf":256,
+          "precision":0,
+          "widgetType":"input"
+        }
+      ]
+    }
+  },
   "live_capture_example":{
     "arc_fault":{
       "F28P55":{
@@ -7882,6 +8572,63 @@
           "baudRate":115200
         }
       }
+    }
+  },
+  "live_preview":{
+    "a":{
+      "context":{
+        "task_type":[
+          "arc_fault"
+        ]
+      },
+      "defaultValues":{
+        "samples":1024,
+        "samplingFrequency":200000
+      },
+      "propInfo":[
+        {
+          "caption":"sensor",
+          "id":"sensor",
+          "infoText":"Connect hardware to detect sensors",
+          "widgetType":"select"
+        },
+        {
+          "caption":"sampling frequency",
+          "format":"dec",
+          "id":"samplingFrequency",
+          "minValue":1,
+          "precision":0,
+          "widgetType":"input"
+        },
+        {
+          "caption":"samples",
+          "format":"dec",
+          "id":"samples",
+          "infoText":"This number will be rounded up to a multiple of 1024.",
+          "minValue":1024,
+          "multiplesOf":1024,
+          "precision":0,
+          "widgetType":"input"
+        }
+      ]
+    },
+    "b":{
+      "context":{
+        "task_type":[
+          "motor_fault",
+          "blower_imbalance",
+          "generic_timeseries_classification"
+        ]
+      },
+      "defaultValues":{},
+      "propInfo":[
+        {
+          "caption":"sensor",
+          "id":"sensor",
+          "infoText":"Connect hardware to detect sensors",
+          "widgetType":"select"
+        }
+      ]
     }
   },
   "live_preview_example":{
@@ -8133,6 +8880,6 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance Fault\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_05_00_05\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: http://tgrex10.toro.design.ti.com/tirex4-handoff/explore/node?node=A__AEIJm0rwIeU.2P1OBWwlaA__SIMPLELINK-SDK-EDGEAI-PLUGIN__Nz0hc8j__LATEST&placeholder=true\n* SDK release: 09_12_00_00\n\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance Fault\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_08_00_03\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_08_00_03\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: http://tgrex10.toro.design.ti.com/tirex4-handoff/explore/node?node=A__AEIJm0rwIeU.2P1OBWwlaA__SIMPLELINK-SDK-EDGEAI-PLUGIN__Nz0hc8j__LATEST&placeholder=true\n* SDK release: 09_12_00_00\n\n\n## Additional information\n\n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
   "help_url":"file://help.md"
 }

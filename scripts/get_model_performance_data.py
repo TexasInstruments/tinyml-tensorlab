@@ -1,7 +1,7 @@
 import pandas as pd
 from pprint import PrettyPrinter
 from tinyml_modelmaker.ai_modules.timeseries import constants
-from tinyml_modelmaker.ai_modules.vision import constants
+from tinyml_modelmaker.ai_modules.vision import constants as constants_vision
 
 valid_model_list = ['MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
                     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',

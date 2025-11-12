@@ -10,10 +10,10 @@ dataset:
     dataset_name: 'motor_fault_example_dsk'
 
 data_processing_feature_extraction:
-    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
-#    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
-#    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
-#    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+#    feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
+#    feature_extraction_name: Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
+#    feature_extraction_name: Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
 #    feature_extraction_name: 'Custom_MotorFault'
 #    frame_size: 1024
 #    feature_size_per_frame: 64

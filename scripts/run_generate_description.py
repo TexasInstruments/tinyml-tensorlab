@@ -94,8 +94,10 @@ def run(config):
 
     # tooltip descriptions
     tooltip_descriptions = ai_target_module.runner.ModelRunner.get_tooltip_descriptions(params)
-    live_capture_descriptions = ai_target_module.runner.ModelRunner.get_live_capture_example_descriptions(params)
-    live_preview_descriptions = ai_target_module.runner.ModelRunner.get_live_preview_example_descriptions(params)
+    live_capture_descriptions = ai_target_module.runner.ModelRunner.get_live_capture_descriptions(params)
+    live_capture_example_descriptions = ai_target_module.runner.ModelRunner.get_live_capture_example_descriptions(params)
+    live_preview_descriptions = ai_target_module.runner.ModelRunner.get_live_preview_descriptions(params)
+    live_preview_example_descriptions = ai_target_module.runner.ModelRunner.get_live_preview_example_descriptions(params)
     context_help_descriptions = ai_target_module.runner.ModelRunner.get_context_help_descriptions(params)
 
     # help descriptions - to be written to markdown (.md) file
@@ -110,8 +112,10 @@ def run(config):
                        sample_dataset_descriptions=sample_dataset_descriptions,
                        version_descriptions=version_descriptions,
                        tooltip_descriptions=tooltip_descriptions,
-                       live_capture_example=live_capture_descriptions,
-                       live_preview_example=live_preview_descriptions,
+                       live_capture=live_capture_descriptions,
+                       live_capture_example=live_capture_example_descriptions,
+                       live_preview=live_preview_descriptions,
+                       live_preview_example=live_preview_example_descriptions,
                        context_help=context_help_descriptions,
                        help_descriptions=help_descriptions,
                        help_url=help_url_descriptions)

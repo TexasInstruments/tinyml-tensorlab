@@ -137,8 +137,8 @@ TARGET_SDK_RELEASE_C2000 = '06_00_01'
 TARGET_SDK_VERSION_F29H85 = '1.00'
 TARGET_SDK_RELEASE_F29H85 = '01_00_00'
 
-TARGET_SDK_VERSION_MSPM0 = "2.05.00.05"
-TARGET_SDK_RELEASE_MSPM0 = '2_05_00_05'
+TARGET_SDK_VERSION_MSPM0 = "2.08.00.03"
+TARGET_SDK_RELEASE_MSPM0 = '2_08_00_03'
 
 TARGET_SDK_VERSION_CC2755 = '9.12.00.00'
 TARGET_SDK_RELEASE_CC2755 = '09_12_00_00'
@@ -551,19 +551,19 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     ArcFault_1024Input_FE_RFFT_128Feature_8Frame_1InputChannel_removeDC_Full_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT'], frame_size=1024, feature_size_per_frame=128, num_frame_concat=8, min_bin=1, frame_skip=8, scale=1, offset=0, normalize_bin=True, variables=1, q15_scale_factor=4, data_proc_transforms=[],),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
-    MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
+    Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3,),  # ch=1,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
-    MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
+    Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
-    MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+    Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     # MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_1D=dict(
     #     data_processing_feature_extraction=dict(transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, ch=1, offset=0, scale=1, stacking='1D', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=3),
     #     common=dict(task_type=TASK_TYPE_MOTOR_FAULT),),
-    MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+    Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
@@ -614,11 +614,11 @@ DATASET_EXAMPLES = dict(
     ),
     motor_fault_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_classification_dsk.zip'),
-        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsh=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/fan_blower_imbalance_dsh.zip'),
-        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     hello_world_example_dsg=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/hello_world_dsg.zip'),
@@ -671,7 +671,7 @@ MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
 ARM_LLVM_CGT_PATH = os.path.abspath(os.getenv('ARM_LLVM_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
 MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
-# M0SDK_VERSION='mspm0_sdk_2_05_00_05'
+# M0SDK_VERSION='mspm0_sdk_2_08_00_03'
 # M0SDK_PATH = os.path.abspath(os.getenv('M0SDK_PATH', os.path.join(TOOLS_PATH, M0SDK_VERSION)))
 # M0SDK_INCLUDE = os.path.join(M0SDK_PATH, 'source')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
