@@ -100,9 +100,9 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
   * SDK release: 06_00_01\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_05_00_05\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
+  * SDK release: 2_08_00_03\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_05_00_05\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
+  * SDK release: 2_08_00_03\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: http://tgrex10.toro.design.ti.com/tirex4-handoff/explore/node?node=A__AEIJm0rwIeU.2P1OBWwlaA__SIMPLELINK-SDK-EDGEAI-PLUGIN__Nz0hc8j__LATEST&placeholder=true\n\
   * SDK release: 09_12_00_00\n\n\n## Additional information\n\n\n\n## Dataset format\n\
   - The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
@@ -151,6 +151,169 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ to EVM\nCompiled model can be downloaded into the EVM for running model inference\
   \ in SDK. Instructions are given in the help section.\n"
 help_url: file://help.md
+live_capture:
+  a:
+    context:
+      task_type:
+      - arc_fault
+    defaultValues:
+      acqMode: 0
+      device: 0
+      samples: 1024
+      samplingFrequency: 200000
+    propInfo:
+    - caption: device
+      id: device
+      infoText: Current support is F28P55. You can try other device using correct
+        application example and baud rate.
+      options:
+      - F28P55
+      - MSPM0G5187
+      widgetType: select
+    - caption: sensor
+      id: sensor
+      infoText: Connect hardware to detect sensors
+      widgetType: select
+    - caption: capture signal mode
+      id: acqMode
+      infoText: Select Time Domain Current to capture time domain analog signal. Select
+        Time Domain Current and Label to capture both time domain analog and arc labeling
+        input signals.
+      options:
+      - Time Domain Current
+      - Time Domain Current and Label
+      widgetType: select
+    - caption: sampling frequency
+      format: dec
+      id: samplingFrequency
+      minValue: 1
+      precision: 0
+      widgetType: input
+    - caption: samples
+      format: dec
+      id: samples
+      infoText: This number will be rounded up to a multiple of 1024.
+      minValue: 1024
+      multiplesOf: 1024
+      precision: 0
+      widgetType: input
+  b:
+    context:
+      task_type:
+      - motor_fault
+      - blower_imbalance
+    defaultValues:
+      device: 0
+      labelName: ''
+      labelNumber: 0
+      motorName: motor
+      motorNumber: 0
+      samplingTime: 4
+    propInfo:
+    - caption: device
+      id: device
+      infoText: Current support is F28P55. You can try other device using correct
+        application example and baud rate.
+      options:
+      - F28P55
+      - MSPM0G5187
+      widgetType: select
+    - caption: sensor
+      id: sensor
+      infoText: Connect hardware to detect sensors
+      widgetType: select
+    - caption: continuous measurement time (s)
+      format: dec
+      id: samplingTime
+      minValue: 1
+      precision: 0
+      widgetType: input
+    - as:
+        kind: filename
+        order: 1
+      caption: device under test name
+      format: text
+      id: motorName
+      infoText: This name is used as part of a filename for saving captured data
+      placeholder: Enter name
+      widgetType: input
+    - as:
+        kind: filename
+        order: 2
+        prefix: m
+      caption: device under test number
+      format: dec
+      id: motorNumber
+      infoText: This number is used as part of a filename for saving captured data
+      placeholder: Enter number
+      widgetType: input
+    - as:
+        kind: filename
+        order: 4
+      caption: label description
+      format: text
+      id: labelName
+      infoText: This name is used as part of a filename for saving captured data
+      optional: true
+      placeholder: Enter description
+      widgetType: input
+    - as:
+        kind: filename
+        order: 3
+        prefix: label
+      caption: label number
+      format: dec
+      id: labelNumber
+      infoText: This number is used as part of a filename for saving captured data
+      placeholder: Enter label number
+      widgetType: input
+  c:
+    context:
+      task_type:
+      - generic_timeseries_classification
+    defaultValues:
+      device: 0
+      labelName: Sine
+      samples: 256
+      samplingFrequency: 5000
+      samplingTime: 4
+    propInfo:
+    - caption: device
+      id: device
+      infoText: Current support is MSPM0G3507. You can try other device using correct
+        application example and baud rate.
+      options:
+      - MSPM0G3507
+      - MSPM0G5187
+      widgetType: select
+    - caption: sensor
+      id: sensor
+      infoText: Connect hardware to detect sensors
+      widgetType: select
+    - caption: continuous measurement time (s)
+      format: dec
+      id: samplingTime
+      minValue: 1
+      precision: 0
+      widgetType: input
+    - as:
+        kind: filename
+        order: 1
+      caption: label description
+      format: text
+      id: labelName
+      infoText: This name is used as part of a filename for saving captured data
+      optional: true
+      placeholder: Enter description
+      widgetType: input
+    - caption: samples
+      format: dec
+      id: samples
+      infoText: This number will be rounded up to a multiple of 256.
+      minValue: 256
+      multiplesOf: 256
+      precision: 0
+      widgetType: input
 live_capture_example:
   arc_fault:
     F28P55:
@@ -200,6 +363,45 @@ live_capture_example:
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 115200
+live_preview:
+  a:
+    context:
+      task_type:
+      - arc_fault
+    defaultValues:
+      samples: 1024
+      samplingFrequency: 200000
+    propInfo:
+    - caption: sensor
+      id: sensor
+      infoText: Connect hardware to detect sensors
+      widgetType: select
+    - caption: sampling frequency
+      format: dec
+      id: samplingFrequency
+      minValue: 1
+      precision: 0
+      widgetType: input
+    - caption: samples
+      format: dec
+      id: samples
+      infoText: This number will be rounded up to a multiple of 1024.
+      minValue: 1024
+      multiplesOf: 1024
+      precision: 0
+      widgetType: input
+  b:
+    context:
+      task_type:
+      - motor_fault
+      - blower_imbalance
+      - generic_timeseries_classification
+    defaultValues: {}
+    propInfo:
+    - caption: sensor
+      id: sensor
+      infoText: Connect hardware to detect sensors
+      widgetType: select
 live_preview_example:
   arc_fault:
     F28P55:
@@ -1201,6 +1403,660 @@ model_descriptions:
       warmup_epochs: 1
       weight_decay: 0.0001
       with_input_batchnorm: true
+  FanImbalance_model_1_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      help_url: file://models/MotorFault_model_1_t/MotorFault_model_1_t.md
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with ~0.6k\
+        \ params.\nSimplest model."
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: blower_imbalance
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 256
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.01
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: FanImbalance_model_1_t
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_1l.py
+      model_training_id: CNN_MF_1L
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      output_dequantize: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: motorfault.py
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 1000
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        F280013:
+          flash: 1214
+          inference_time_us: 423
+          model_selection_factor: 2
+          sram: 1016
+        F280015:
+          flash: 1214
+          inference_time_us: 423
+          model_selection_factor: 2
+          sram: 1016
+        F28003:
+          flash: 1214
+          inference_time_us: 423
+          model_selection_factor: 2
+          sram: 1016
+        F28004:
+          flash: 1214
+          inference_time_us: 508
+          model_selection_factor: 2
+          sram: 1016
+        F2837:
+          flash: 1214
+          inference_time_us: 423
+          model_selection_factor: 2
+          sram: 1016
+        F28P55:
+          flash: 1953
+          inference_time_us: 159
+          model_selection_factor: 2
+          sram: 1112
+        F28P65:
+          flash: 1214
+          inference_time_us: 254
+          model_selection_factor: 2
+          sram: 1016
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
+  FanImbalance_model_2_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      help_url: file://models/MotorFault_model_2_t/MotorFault_model_2_t.md
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 3k params.\n\
+        Best & largest of the 3 models, hardest to train."
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: blower_imbalance
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 256
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.01
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: FanImbalance_model_2_t
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_2l.py
+      model_training_id: CNN_MF_2L
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      output_dequantize: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: motorfault.py
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 1000
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        F280013:
+          flash: 5262
+          inference_time_us: 11465
+          model_selection_factor: 0
+          sram: 10872
+        F280015:
+          flash: 5262
+          inference_time_us: 11465
+          model_selection_factor: 0
+          sram: 10872
+        F28003:
+          flash: 5262
+          inference_time_us: 11465
+          model_selection_factor: 0
+          sram: 10872
+        F28004:
+          flash: 5262
+          inference_time_us: 13758
+          model_selection_factor: 0
+          sram: 10872
+        F2837:
+          flash: 5262
+          inference_time_us: 11465
+          model_selection_factor: 0
+          sram: 10872
+        F28P55:
+          flash: 4377
+          inference_time_us: 1180
+          model_selection_factor: 0
+          sram: 3198
+        F28P65:
+          flash: 5262
+          inference_time_us: 6879
+          model_selection_factor: 0
+          sram: 10872
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
+  FanImbalance_model_3_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      help_url: file://models/MotorFault_model_3_t/MotorFault_model_3_t.md
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 1k params.\n\
+        Middle of the 3 CNN based models."
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}, {model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: blower_imbalance
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: classes
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 256
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.01
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: FanImbalance_model_3_t
+      model_spec: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cnn_mf_3l.py
+      model_training_id: CNN_MF_3L
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      optimizer: sgd
+      output_dequantize: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: motorfault.py
+        type: group
+      - default:
+        - training_epochs
+        - learning_rate
+        dynamic: false
+        label: Training Parameters
+        name: train_group
+        type: group
+      - default: 50
+        label: Epochs
+        max: 1000
+        min: 1
+        name: training_epochs
+        type: integer
+      - decimal_places: 3
+        default: 0.04
+        increment: 0.001
+        label: Learning Rate
+        max: 0.1
+        min: 0.001
+        name: learning_rate
+        type: float
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        F280013:
+          flash: 3069
+          inference_time_us: 627
+          model_selection_factor: 1
+          sram: 656
+        F280015:
+          flash: 3069
+          inference_time_us: 627
+          model_selection_factor: 1
+          sram: 656
+        F28003:
+          flash: 3069
+          inference_time_us: 627
+          model_selection_factor: 1
+          sram: 656
+        F28004:
+          flash: 3069
+          inference_time_us: 752
+          model_selection_factor: 1
+          sram: 656
+        F2837:
+          flash: 3069
+          inference_time_us: 627
+          model_selection_factor: 1
+          sram: 656
+        F28P55:
+          flash: 2754
+          inference_time_us: 221
+          model_selection_factor: 1
+          sram: 1116
+        F28P65:
+          flash: 3069
+          inference_time_us: 376
+          model_selection_factor: 1
+          sram: 656
+      train_output_path: null
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+      with_input_batchnorm: true
   MotorFault_model_1_t:
     common:
       download_path: ./data/downloads
@@ -1216,9 +2072,7 @@ model_descriptions:
       target_machine: evm
       target_module: timeseries
       task_category: timeseries_classification
-      task_type:
-      - motor_fault
-      - blower_imbalance
+      task_type: motor_fault
       verbose_mode: true
     compilation:
       compile_output_path: null
@@ -1372,11 +2226,6 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
         F280013:
           flash: 1214
           inference_time_us: 423
@@ -1453,9 +2302,7 @@ model_descriptions:
       target_machine: evm
       target_module: timeseries
       task_category: timeseries_classification
-      task_type:
-      - motor_fault
-      - blower_imbalance
+      task_type: motor_fault
       verbose_mode: true
     compilation:
       compile_output_path: null
@@ -1609,11 +2456,6 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: 5262
           inference_time_us: 11465
@@ -1690,9 +2532,7 @@ model_descriptions:
       target_machine: evm
       target_module: timeseries
       task_category: timeseries_classification
-      task_type:
-      - motor_fault
-      - blower_imbalance
+      task_type: motor_fault
       verbose_mode: true
     compilation:
       compile_output_path: null
@@ -1846,11 +2686,6 @@ model_descriptions:
       quantization_weight_bitwidth: 8
       run_quant_train_only: false
       target_devices:
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
         F280013:
           flash: 3069
           inference_time_us: 627
@@ -1895,226 +2730,6 @@ model_descriptions:
         MSPM0G5187:
           flash: TBD
           help_url: file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G5187.md
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-      train_output_path: null
-      training_backend: tinyml_tinyverse
-      training_device: cuda
-      training_devices:
-        cpu: true
-        cuda: true
-        mps: true
-      training_epochs: 10
-      training_master_port: 29500
-      training_path: null
-      training_path_quantization: null
-      warmup_epochs: 1
-      weight_decay: 0.0001
-      with_input_batchnorm: true
-  NAS:
-    common:
-      download_path: ./data/downloads
-      generic_model: true
-      model_details: Model will be automatically found through NAS framework
-      project_path: null
-      project_run_path: null
-      projects_path: ./data/projects
-      run_name: '{date-time}, {model_name}'
-      target_device: null
-      target_machine: evm
-      target_module: timeseries
-      task_category: timeseries_classification
-      task_type: generic_timeseries_classification
-      verbose_mode: true
-    compilation:
-      compile_output_path: null
-      compile_preset_name: null
-      enable: true
-      keep_libc_files: false
-      model_path: null
-      properties:
-      - default: default_preset
-        enum:
-        - label: Default best
-          tooltip: Default Inference Mode
-          value: default_preset
-        label: Compilation Preset
-        name: compile_preset_name
-        type: enum
-    data_processing_feature_extraction:
-      analysis_bandwidth: 1
-      chunk_size: 1
-      data_proc_transforms: []
-      dc_remove: true
-      dont_train_just_feat_ext: false
-      feat_ext_store_dir: null
-      feat_ext_transform: []
-      feature_extraction_name: null
-      feature_size_per_frame: null
-      fft_size: 1
-      forecast_horizon: 1
-      frame_size: 1
-      frame_skip: 1
-      gain_variations: null
-      gof_test: false
-      log_base: null
-      log_mul: null
-      log_threshold: null
-      min_bin: 1
-      new_sr: 1
-      nn_for_feature_extraction: false
-      normalize_bin: 0
-      num_frame_concat: 1
-      offset: 0
-      q15_scale_factor: 4
-      resampling_factor: 1
-      sampling_rate: 1
-      scale: null
-      stacking: 2D1
-      store_feat_ext_data: false
-      stride_size: 0.01
-      target_variables: []
-      variables: 1
-      window_count: 1
-    dataset:
-      annotation_dir: annotations
-      annotation_format: univ_ts_json
-      annotation_path_splits: null
-      annotation_prefix: instances
-      data_dir: classes
-      data_path_splits: null
-      dataset_download: false
-      dataset_name: null
-      dataset_path: null
-      dataset_reload: false
-      enable: true
-      extract_path: null
-      input_annotation_path: null
-      input_data_path: null
-      max_num_files: 10000
-      split_factor:
-      - 0.6
-      - 0.3
-      - 0.1
-      split_names:
-      - train
-      - val
-      - test
-      split_type: amongst_files
-    download:
-      download_path: ''
-      download_url: ''
-    testing:
-      device_inference: false
-      enable: true
-      model_path: null
-      skip_train: false
-      test_data: null
-    training:
-      augment_config: null
-      batch_size: 256
-      dataset_loader: GenericTSDataset
-      dataset_path: null
-      distributed: true
-      dual_op: false
-      enable: true
-      file_level_classification_log_path: null
-      lambda_reg: 0
-      learning_rate: 0.01
-      load_saved_model: null
-      log_file_path: null
-      log_summary_regex: null
-      lr_scheduler: cosineannealinglr
-      model_config: null
-      model_name: NAS
-      model_spec: ''
-      model_training_id: None
-      nas_enabled: false
-      nas_epochs: 10
-      nas_fanout_concat: 4
-      nas_init_channel_multiplier: 3
-      nas_init_channels: 1
-      nas_layers: 3
-      nas_model_size: null
-      nas_nodes_per_layer: 4
-      nas_optimization_mode: Memory
-      num_gpus: 1
-      num_last_epochs: 5
-      optimizer: sgd
-      output_dequantize: false
-      pretrained_checkpoint_path: null
-      project_path: null
-      properties:
-      - default: []
-        dynamic: true
-        label: Preprocessing Parameters
-        name: preprocessing_group
-        type: group
-      - default:
-        - training_epochs
-        - learning_rate
-        dynamic: false
-        label: Training Parameters
-        name: train_group
-        type: group
-      - default: 50
-        label: Epochs
-        max: 1000
-        min: 1
-        name: training_epochs
-        type: integer
-      - decimal_places: 3
-        default: 0.04
-        increment: 0.001
-        label: Learning Rate
-        max: 0.1
-        min: 0.001
-        name: learning_rate
-        type: float
-      quantization: 2
-      quantization_activation_bitwidth: 8
-      quantization_method: QAT
-      quantization_weight_bitwidth: 8
-      run_quant_train_only: false
-      target_devices:
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F280013:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F280015:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28003:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28004:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F2837:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28P55:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        F28P65:
-          flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
@@ -7046,23 +7661,23 @@ target_device_descriptions:
       \ ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_05_00_05\n\nAdditional information:\n\n"
+      * SDK release: 2_08_00_03\n\nAdditional information:\n\n"
     device_name: MSPM0G3507
     device_selection_factor: 9
     device_type: MCU
-    sdk_release: '2_05_00_05'
-    sdk_version: 2.05.00.05
+    sdk_release: '2_08_00_03'
+    sdk_version: 2.08.00.03
   MSPM0G5187:
     device_details: "80MHz Arm\xAE Cortex\xAE-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps\
       \ ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G5187\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_05_00_05\n\nAdditional information:\n\n"
+      * SDK release: 2_08_00_03\n\nAdditional information:\n\n"
     device_name: MSPM0G5187
     device_selection_factor: 10
     device_type: MCU
-    sdk_release: '2_05_00_05'
-    sdk_version: 2.05.00.05
+    sdk_release: '2_08_00_03'
+    sdk_version: 2.08.00.03
 task_descriptions:
   arc_fault:
     stages:

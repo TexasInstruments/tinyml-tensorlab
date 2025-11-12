@@ -100,6 +100,23 @@ _model_descriptions = {
             },
         ),
     }),
+    'TimeSeries_Generic_Linear_AD': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(model_details='Anomaly Detection Model with 3 encoder layers and 3 decoder layers. Each layer in enocder and decoder is a Linear layer'),
+        'training': dict(
+            model_training_id='AD_3_LAYER_DEEP_LINEAR_MODEL_TS',
+            model_name='TimeSeries_Generic_Linear_AD',
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION],
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+        ),
+    }),
     'TimeSeries_Generic_AD_16k_t': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(model_details='Anomaly Detection Model with 16k params. 4 Conv+BatchNorm+Relu layers and then inversion of the same'),
         'training': dict(
@@ -154,6 +171,7 @@ _model_descriptions = {
 enabled_models_list = [
     # Regression Models
     'TimeSeries_Generic_AD_17k_t',
+    'TimeSeries_Generic_Linear_AD',
     'TimeSeries_Generic_AD_16k_t',
     'TimeSeries_Generic_AD_4k_t',
     'TimeSeries_Generic_AD_1k_t',

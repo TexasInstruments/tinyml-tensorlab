@@ -408,6 +408,180 @@ The config file can be in .yaml or in .json format
     return help_string
 
 
+def get_live_capture_descriptions(params):
+    live_capture_descriptions = {
+        'a': {
+            'context': {
+                'task_type': ['arc_fault']
+            },
+            'defaultValues': {
+                'acqMode': 0,
+                'device': 0,
+                'samples': 1024,
+                'samplingFrequency': 200000
+            },
+         'propInfo': [
+             {
+                 'caption': 'device',
+                 'id': 'device',
+                 'infoText': 'Current support is F28P55. You can try other device using correct application example and baud rate.',
+                 'options': ['F28P55', 'MSPM0G5187'],
+                 'widgetType': 'select'
+             },
+             {
+                 'caption': 'sensor',
+                 'id': 'sensor',
+                 'infoText': 'Connect hardware to detect sensors',
+                 'widgetType': 'select'
+             },
+             {
+                 'caption': 'capture signal mode',
+                 'id': 'acqMode',
+                 'infoText': 'Select Time Domain Current to capture time domain analog signal. Select Time Domain Current and Label to capture both time domain analog and arc labeling input signals.',
+                 'options': [
+                     'Time Domain Current',
+                     'Time Domain Current and Label'],
+                 'widgetType': 'select'
+             },
+             {
+                 'caption': 'sampling frequency',
+                 'format': 'dec',
+                 'id': 'samplingFrequency',
+                 'minValue': 1,
+                 'precision': 0,
+                 'widgetType': 'input'
+             },
+             {
+                 'caption': 'samples',
+                 'format': 'dec',
+                 'id': 'samples',
+                 'infoText': 'This number will be rounded up to a multiple of 1024.',
+                 'minValue': 1024,
+                 'multiplesOf': 1024,
+                 'precision': 0,
+                 'widgetType': 'input'
+             }
+         ]
+        },
+        'b': {
+            'context': {
+                'task_type': ['motor_fault', 'blower_imbalance']},
+            'defaultValues': { 'device': 0,
+                            'labelName': '',
+                            'labelNumber': 0,
+                            'motorName': 'motor',
+                            'motorNumber': 0,
+                            'samplingTime': 4},
+            'propInfo': [
+                {
+                    'caption': 'device',
+                    'id': 'device',
+                    'infoText': 'Current support is F28P55. You can try other device using correct application example and baud rate.',
+                    'options': ['F28P55', 'MSPM0G5187'],
+                    'widgetType': 'select'
+                },
+                {
+                    'caption': 'sensor',
+                    'id': 'sensor',
+                    'infoText': 'Connect hardware to detect sensors',
+                    'widgetType': 'select'
+                },
+                {
+                    'caption': 'continuous measurement time (s)',
+                    'format': 'dec',
+                    'id': 'samplingTime',
+                    'minValue': 1,
+                    'precision': 0,
+                    'widgetType': 'input'
+                },
+                {
+                    'as': {'kind': 'filename', 'order': 1},
+                    'caption': 'device under test name',
+                    'format': 'text',
+                    'id': 'motorName',
+                    'infoText': 'This name is used as part of a filename for saving captured data',
+                    'placeholder': 'Enter name',
+                    'widgetType': 'input'
+                },
+                {
+                    'as': {'kind': 'filename', 'order': 2, 'prefix': 'm'},
+                    'caption': 'device under test number',
+                    'format': 'dec',
+                    'id': 'motorNumber',
+                    'infoText': 'This number is used as part of a filename for saving captured data',
+                    'placeholder': 'Enter number',
+                    'widgetType': 'input'
+                },
+                {
+                    'as': {'kind': 'filename', 'order': 4},
+                    'caption': 'label description',
+                    'format': 'text',
+                    'id': 'labelName',
+                    'infoText': 'This name is used as part of a filename for saving captured data',
+                    'optional': True,
+                    'placeholder': 'Enter description',
+                    'widgetType': 'input'},
+                {
+                    'as': {'kind': 'filename', 'order': 3, 'prefix': 'label'},
+                    'caption': 'label number',
+                    'format': 'dec',
+                    'id': 'labelNumber',
+                    'infoText': 'This number is used as part of a filename for saving captured data',
+                    'placeholder': 'Enter label number',
+                    'widgetType': 'input'}
+            ]
+        },
+        'c': {
+            'context': {'task_type': ['generic_timeseries_classification']},
+            'defaultValues': {
+                'device': 0,
+                'labelName': 'Sine',
+                'samples': 256,
+                'samplingFrequency': 5000,
+                'samplingTime': 4},
+            'propInfo': [
+                {
+                    'caption': 'device',
+                    'id': 'device',
+                    'infoText': 'Current support is MSPM0G3507. You can try other device using correct application example and baud rate.',
+                    'options': ['MSPM0G3507', 'MSPM0G5187'],
+                    'widgetType': 'select'},
+                {
+                    'caption': 'sensor',
+                    'id': 'sensor',
+                    'infoText': 'Connect hardware to detect sensors',
+                    'widgetType': 'select'},
+                {
+                    'caption': 'continuous measurement time (s)',
+                    'format': 'dec',
+                    'id': 'samplingTime',
+                    'minValue': 1,
+                    'precision': 0,
+                    'widgetType': 'input'},
+                {
+                    'as': {'kind': 'filename', 'order': 1},
+                    'caption': 'label description',
+                    'format': 'text',
+                    'id': 'labelName',
+                    'infoText': 'This name is used as part of a filename for saving captured data',
+                    'optional': True,
+                    'placeholder': 'Enter description',
+                    'widgetType': 'input'},
+                {
+                    'caption': 'samples',
+                    'format': 'dec',
+                    'id': 'samples',
+                    'infoText': 'This number will be rounded up to a multiple of 256.',
+                    'minValue': 256,
+                    'multiplesOf': 256,
+                    'precision': 0,
+                    'widgetType': 'input'}
+            ]
+        }
+    }
+    return live_capture_descriptions
+
+
 def get_live_capture_example_descriptions(params):
     live_capture_example_descriptions = {
         'arc_fault': {
@@ -463,6 +637,56 @@ def get_live_capture_example_descriptions(params):
         }
     }
     return live_capture_example_descriptions
+
+
+def get_live_preview_descriptions(params):
+    live_preview_descriptions = {
+        'a': {
+            'context': {
+                'task_type': ['arc_fault']},
+            'defaultValues': {'samples': 1024, 'samplingFrequency': 200000},
+            'propInfo': [
+                {
+                    'caption': 'sensor',
+                    'id': 'sensor',
+                    'infoText': 'Connect hardware to detect sensors',
+                    'widgetType': 'select'
+                },
+                {
+                    'caption': 'sampling frequency',
+                    'format': 'dec',
+                    'id': 'samplingFrequency',
+                    'minValue': 1,
+                    'precision': 0,
+                    'widgetType': 'input'
+                },
+                {
+                    'caption': 'samples',
+                    'format': 'dec',
+                    'id': 'samples',
+                    'infoText': 'This number will be rounded up to a multiple of 1024.',
+                    'minValue': 1024,
+                    'multiplesOf': 1024,
+                    'precision': 0,
+                    'widgetType': 'input'
+                }
+            ]
+        },
+        'b': {
+            'context': {
+                'task_type': [ 'motor_fault', 'blower_imbalance', 'generic_timeseries_classification']},
+            'defaultValues': {},
+            'propInfo': [
+                {
+                    'caption': 'sensor',
+                    'id': 'sensor',
+                    'infoText': 'Connect hardware to detect sensors',
+                    'widgetType': 'select'
+                }
+            ]
+        }
+    }
+    return live_preview_descriptions
 
 
 def get_live_preview_example_descriptions(params):

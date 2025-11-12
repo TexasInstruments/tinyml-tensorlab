@@ -1,0 +1,33 @@
+common:
+    target_module: 'timeseries'
+    task_type: 'generic_timeseries_anomalydetection'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+
+dataset:
+    enable: True 
+    dataset_name: 'motor_fault_example_dsk_ad'
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_anomaly_detection_dataset.zip'
+
+data_processing_feature_extraction:
+    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+    variables: 3
+    feature_size_per_frame: 4
+
+training:
+    enable: True
+    model_name: 'TimeSeries_Generic_Linear_AD'
+    model_config: ''
+    batch_size: 64
+    learning_rate: 0.001
+    training_epochs: 200
+    num_gpus: 1
+    quantization: 1
+    output_dequantize: True
+
+testing:
+    enable: True
+
+compilation:
+    enable: True 
+    compile_preset_name: 'forced_soft_npu_preset'

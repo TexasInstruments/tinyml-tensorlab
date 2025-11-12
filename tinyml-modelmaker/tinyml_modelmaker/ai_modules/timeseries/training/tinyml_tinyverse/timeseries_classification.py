@@ -305,7 +305,7 @@ _model_descriptions = {
     }),
     'MotorFault_model_1_t': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
-            task_type=[constants.TASK_TYPE_MOTOR_FAULT, constants.TASK_TYPE_BLOWER_IMBALANCE],
+            task_type=constants.TASK_TYPE_MOTOR_FAULT,
             generic_model=False,
             model_details='TI\u2122 handcrafted model.\nClassification Model with ~0.6k params.\nSimplest model.',
             help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t.md"
@@ -326,14 +326,13 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2, help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2, help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_CC2755]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'MotorFault_model_2_t': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
-            task_type=[constants.TASK_TYPE_MOTOR_FAULT, constants.TASK_TYPE_BLOWER_IMBALANCE],
+            task_type=constants.TASK_TYPE_MOTOR_FAULT,
             generic_model=False,
             model_details='TI\u2122 handcrafted model.\nClassification Model with 3k params.\nBest & largest of the 3 models, hardest to train.',
             help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t.md"
@@ -354,14 +353,13 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0, help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0, help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_CC2755]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'MotorFault_model_3_t': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
-            task_type=[constants.TASK_TYPE_MOTOR_FAULT, constants.TASK_TYPE_BLOWER_IMBALANCE],
+            task_type=constants.TASK_TYPE_MOTOR_FAULT,
             generic_model=False,
             model_details='TI\u2122 handcrafted model.\nClassification Model with 1k params.\nMiddle of the 3 CNN based models.',
             help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t.md"
@@ -382,7 +380,81 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1, help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1, help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_CC2755]),
+            },
+            properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+        ),
+    }),
+    'FanImbalance_model_1_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            task_type=constants.TASK_TYPE_BLOWER_IMBALANCE,
+            generic_model=False,
+            model_details='TI\u2122 handcrafted model.\nClassification Model with ~0.6k params.\nSimplest model.',
+            help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t.md"
+        ),
+        'training': dict(
+            model_training_id='CNN_MF_1L',
+            model_name='FanImbalance_model_1_t',
+            learning_rate=0.01,
+            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_1l.py'),
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_BLOWER_IMBALANCE],
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+            properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+        ),
+    }),
+    'FanImbalance_model_2_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            task_type=constants.TASK_TYPE_BLOWER_IMBALANCE,
+            generic_model=False,
+            model_details='TI\u2122 handcrafted model.\nClassification Model with 3k params.\nBest & largest of the 3 models, hardest to train.',
+            help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t.md"
+        ),
+        'training': dict(
+            model_training_id='CNN_MF_2L',
+            model_name='FanImbalance_model_2_t',
+            learning_rate=0.01,
+            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_2l.py'),
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_BLOWER_IMBALANCE],
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F28P55]),
+            },
+            properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+        ),
+    }),
+    'FanImbalance_model_3_t': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            task_type=constants.TASK_TYPE_BLOWER_IMBALANCE,
+            generic_model=False,
+            model_details='TI\u2122 handcrafted model.\nClassification Model with 1k params.\nMiddle of the 3 CNN based models.',
+            help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t.md"
+        ),
+        'training': dict(
+            model_training_id='CNN_MF_3L',
+            model_name='FanImbalance_model_3_t',
+            learning_rate=0.01,
+            model_spec=os.path.join(repo_parent_path, 'tinyml-mlbackend', 'tinyml_proprietary_models', 'cnn_mf_3l.py'),
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_BLOWER_IMBALANCE],
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F28P55]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
@@ -420,13 +492,6 @@ _model_descriptions = {
             learning_rate=0.04,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_PIR_DETECTION],
             target_devices={
-                #constants.TARGET_DEVICE_F280013: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F280013]),
-                #constants.TARGET_DEVICE_F280015: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F280015]),
-                #constants.TARGET_DEVICE_F28003: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28003]),
-                #constants.TARGET_DEVICE_F28004: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28004]),
-                #constants.TARGET_DEVICE_F2837: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F2837]),
-                #constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28P65]),
-                #constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_CC2755]),
             },
         ),
@@ -438,7 +503,8 @@ enabled_models_list = [
     'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t', 'TimeSeries_Generic_13k_t',
     'Res_Add_TimeSeries_Generic_3k_t', 'Res_Cat_TimeSeries_Generic_3k_t',
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
-    'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t', 'NAS','PIRDetection_model_1_t',
+    'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t', 'PIRDetection_model_1_t',
+    'FanImbalance_model_1_t', 'FanImbalance_model_2_t', 'FanImbalance_model_3_t'
 ]
 
 

@@ -14,7 +14,7 @@ dataset:
 data_processing_feature_extraction: 
     data_proc_transforms: []
     #the length of input feature_size for the model should multiples of 2 for now. 
-    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
     variables: 3
     num_frame_concat: 4
     stride_size: 0.5

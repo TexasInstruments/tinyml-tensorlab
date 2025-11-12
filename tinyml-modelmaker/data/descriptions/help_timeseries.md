@@ -60,13 +60,13 @@ These are the devices that are supported currently. As additional devices are su
 * Product information: https://www.ti.com/product/MSPM0G3507
 * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507
 * MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: 2_05_00_05
+* SDK release: 2_08_00_03
 
 ### MSPM0G5187
 * Product information: https://www.ti.com/product/MSPM0G5187
 * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187
 * MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: 2_05_00_05
+* SDK release: 2_08_00_03
 
 ### CC2755
 * Product information: https://www.ti.com/product/CC2755R10

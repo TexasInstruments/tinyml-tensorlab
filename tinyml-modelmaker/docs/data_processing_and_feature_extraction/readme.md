@@ -276,7 +276,7 @@ data_processing_feature_extraction:
 
 Instead of custom specifying these parameters above, you can select from one of the predefined feature extraction presets available to simplify the process. These presets are defined to move directly to feature extraction without applying data processing transforms like Simple Window and Downsampling.  Here are the available options for the motor fault dataset (training results for each preset are provided under each preset):
 
-1. **MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D**:
+1. **Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D**:
 
     Definition for this preset:-
 
@@ -301,7 +301,7 @@ Instead of custom specifying these parameters above, you can select from one of 
 
    ```yaml
    data_processing_feature_extraction:
-    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
+    feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
     store_feat_ext_data: False
    ```
    &emsp;(An additional parameter along with this preset is set not to store feature extraction data.)
@@ -318,7 +318,7 @@ Instead of custom specifying these parameters above, you can select from one of 
  
 <br>
 
-2. **MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1**:
+2. **Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1**:
 
    Definition for this preset:-
 
@@ -343,7 +343,7 @@ Instead of custom specifying these parameters above, you can select from one of 
 
    ```yaml
    data_processing_feature_extraction:
-    feature_extraction_name: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
     store_feat_ext_data: False
    ```
 
@@ -357,7 +357,7 @@ Instead of custom specifying these parameters above, you can select from one of 
       
    &emsp;   AUC ROC Score:1.000
 
-3. **MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1**:
+3. **Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1**:
 
    Definition for this preset:-
 
@@ -382,7 +382,7 @@ Instead of custom specifying these parameters above, you can select from one of 
 
    ```yaml
    data_processing_feature_extraction:
-    feature_extraction_name: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
     store_feat_ext_data: False
    ```
 
@@ -396,7 +396,7 @@ Instead of custom specifying these parameters above, you can select from one of 
 
    &emsp;   AUC ROC Score: 0.979
 
-4. **MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1**:
+4. **Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1**:
 
    Definition for this preset:-
 
@@ -418,7 +418,7 @@ Instead of custom specifying these parameters above, you can select from one of 
 
    ```yaml
    data_processing_feature_extraction:
-    feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+    feature_extraction_name: Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
     store_feat_ext_data: False
    ```
 
@@ -434,7 +434,7 @@ Instead of custom specifying these parameters above, you can select from one of 
 
 <br>     
 
-For this example, only training is enabled, while testing and compilation are set to False in the YAML file. By comparing the training results of each preset, we can see that the second preset,`MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1`, gives the best accuracy. Hence, it is a very good feature extraction preset for this example.
+For this example, only training is enabled, while testing and compilation are set to False in the YAML file. By comparing the training results of each preset, we can see that the second preset,`Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1`, gives the best accuracy. Hence, it is a very good feature extraction preset for this example.
 
 <hr>
 Update history:
