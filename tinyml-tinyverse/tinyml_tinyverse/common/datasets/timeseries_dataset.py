@@ -1652,31 +1652,21 @@ class GenericTSDatasetAD(Dataset):
         self.feature_extraction_params['FE_HL'] = self.hl
         self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size
         
-        if self.feature_size_per_frame != None:
-            self.wl = self.feature_size_per_frame*self.num_frame_concat
-            
-        if self.stacking == '1D':
-            self.wl *= self.variables
-            self.ch = 1
-        
-        self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
-        self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
-        self.feature_extraction_params['FE_OFFSET'] = self.offset
-        self.feature_extraction_params['FE_SCALE'] = self.scale
-        self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
-        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
-        self.feature_extraction_params['FE_NN_OUT_SIZE'] = self.wl*self.ch
-        self.feature_extraction_params['FE_FEATURE_SIZE'] = self.wl
-        self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
-        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
-        self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
 
         # Store the preprocessing flags used for AI Library
         if 'WINDOWING' in self.transforms:
             self.preprocessing_flags.append('FE_WIN')
+        if 'RAW_FE' in self.transforms:
+            self.preprocessing_flags.append('FE_RAW')
         if 'FFT_FE' in self.transforms:
             self.preprocessing_flags.append('FE_FFT')
-            self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size//2 + (self.min_bin if self.min_bin else 1)
+        if 'NORMALIZE' in self.transforms:
+            self.preprocessing_flags.append('FE_NORMALIZE')
+        if 'FFT_POS_HALF' in self.transforms:
+            self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] =  self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME']//2 + (self.min_bin if self.min_bin else 1)
+        if 'DC_REMOVE' in self.transforms:
+            self.preprocessing_flags.append('FE_DC_REM')    
+            self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] =  self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] - 1
         if 'BINNING' in self.transforms:
             self.preprocessing_flags.append('FE_BIN')
             if self.feature_size_per_frame is None:
@@ -1685,13 +1675,6 @@ class GenericTSDatasetAD(Dataset):
             self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
             self.feature_extraction_params['FE_FFT_BIN_SIZE'] = self.bin_size
             self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
-        if 'RAW_FE' in self.transforms:
-            self.preprocessing_flags.append('FE_RAW')
-        if 'DC_REMOVE' in self.transforms:
-            self.preprocessing_flags.append('FE_DC_REM')    
-        if 'NORMALIZE' in self.transforms:
-            # Normalize the FFT output by frame size
-            self.preprocessing_flags.append('FE_NORMALIZE')
         if 'LOG_DB' in self.transforms:
                 self.preprocessing_flags.append('FE_LOG')
                 if not self.log_mul:
@@ -1714,6 +1697,24 @@ class GenericTSDatasetAD(Dataset):
                 self.feature_extraction_params['FE_LOG_TOL']=self.log_threshold
         if 'CONCAT' in self.transforms:
             self.preprocessing_flags.append('FE_CONCAT')
+            self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] *= self.num_frame_concat
+        
+        self.wl = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME']
+        
+        if self.stacking == '1D':
+            self.wl *= self.variables
+            self.ch = 1
+            
+        self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
+        self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
+        self.feature_extraction_params['FE_OFFSET'] = self.offset
+        self.feature_extraction_params['FE_SCALE'] = self.scale
+        self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin if self.min_bin != None else self.min_bin if self.min_bin else 1
+        self.feature_extraction_params['FE_NUM_FRAME_CONCAT'] = self.num_frame_concat if self.num_frame_concat else 1
+        self.feature_extraction_params['FE_NN_OUT_SIZE'] = self.wl*self.ch
+        self.feature_extraction_params['FE_FEATURE_SIZE'] = self.wl
+        self.feature_extraction_params['FE_FRAME_SKIP'] = self.frame_skip
+        self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
         return
 
     def __feature_extraction(self, x_temp, datafile):
