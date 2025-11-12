@@ -459,38 +459,90 @@ TASK_DESCRIPTIONS = {
     TASK_TYPE_ARC_FAULT: {
         'task_name': 'ARC Fault',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G5187,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
 
     TASK_TYPE_MOTOR_FAULT: {
         'task_name': 'Motor Fault',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G5187,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
     TASK_TYPE_BLOWER_IMBALANCE: {
         'task_name': 'Fan Blower Imbalance Fault',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
     TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-        'task_name': 'Generic Time Series Classification',
+        'task_name': 'n-Class Time Series Classification',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_CC2755,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
-    TASK_TYPE_GENERIC_TS_FORECASTING: {
-        'task_name': 'Generic Time Series Forecasting',
-        'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
-        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
-    },
+    # TASK_TYPE_GENERIC_TS_REGRESSION: {
+    #     'task_name': 'Generic Time Series Regression',
+    #     'target_module': 'timeseries',
+    #     'target_devices': TARGET_DEVICES,
+    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+    # },
+    # TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+    #     'task_name': 'Generic Time Series Anomaly Detection',
+    #     'target_module': 'timeseries',
+    #     'target_devices': TARGET_DEVICES,
+    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+    # },
+    # TASK_TYPE_GENERIC_TS_FORECASTING: {
+    #     'task_name': 'Generic Time Series Forecasting',
+    #     'target_module': 'timeseries',
+    #     'target_devices': TARGET_DEVICES,
+    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+    # },
     TASK_TYPE_PIR_DETECTION: {
         'task_name': 'PIR Detection',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_CC2755,],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
 }
@@ -1147,11 +1199,6 @@ PRESET_DESCRIPTIONS = {
     },
     
     TARGET_DEVICE_CC2755: {
-        TASK_TYPE_ARC_FAULT: {
-            COMPILATION_DEFAULT: dict(
-                compilation=dict(**COMPILATION_CC2755_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_CC2755, )
-            ),
-        },
         TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
             COMPILATION_DEFAULT: dict(
                 compilation=dict(**COMPILATION_CC2755_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_CC2755)

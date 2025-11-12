@@ -80,7 +80,7 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ can be deployed on a local development board. A live preview/demo will also be\
   \ provided to inspect the quality of the developed model while it runs on the development\
   \ board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from\
-  \ TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Generic\
+  \ TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* n-Class\
   \ Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance\
   \ Fault\n\n## Supported target devices\nThese are the devices that are supported\
   \ currently. As additional devices are supported, this section will be updated.\n\
@@ -7021,14 +7021,6 @@ preset_descriptions:
           target: c
           target_c_mcpu: cortex_r5
   CC2755:
-    arc_fault:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16
-            -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type
-          target: c, ti-npu type=soft
-          target_c_mcpu: cortex-m33
     generic_timeseries_anomalydetection:
       default_preset:
         compilation:
@@ -8136,7 +8128,41 @@ task_descriptions:
     - data_processing_feature_extraction
     - training
     - compilation
-    target_devices: &id001
+    target_devices:
+    - F280013
+    - F280015
+    - F28003
+    - F28004
+    - F2837
+    - F28P55
+    - F28P65
+    - MSPM0G3507
+    - MSPM0G5187
+    target_module: timeseries
+    task_name: ARC Fault
+  blower_imbalance:
+    stages:
+    - dataset
+    - data_processing_feature_extraction
+    - training
+    - compilation
+    target_devices:
+    - F280013
+    - F280015
+    - F28003
+    - F28004
+    - F2837
+    - F28P55
+    - F28P65
+    target_module: timeseries
+    task_name: Fan Blower Imbalance Fault
+  generic_timeseries_classification:
+    stages:
+    - dataset
+    - data_processing_feature_extraction
+    - training
+    - compilation
+    target_devices:
     - F280013
     - F280015
     - F28003
@@ -8148,41 +8174,23 @@ task_descriptions:
     - MSPM0G5187
     - CC2755
     target_module: timeseries
-    task_name: ARC Fault
-  blower_imbalance:
-    stages:
-    - dataset
-    - data_processing_feature_extraction
-    - training
-    - compilation
-    target_devices: *id001
-    target_module: timeseries
-    task_name: Fan Blower Imbalance Fault
-  generic_timeseries_classification:
-    stages:
-    - dataset
-    - data_processing_feature_extraction
-    - training
-    - compilation
-    target_devices: *id001
-    target_module: timeseries
-    task_name: Generic Time Series Classification
-  generic_timeseries_forecasting:
-    stages:
-    - dataset
-    - data_processing_feature_extraction
-    - training
-    - compilation
-    target_devices: *id001
-    target_module: timeseries
-    task_name: Generic Time Series Forecasting
+    task_name: n-Class Time Series Classification
   motor_fault:
     stages:
     - dataset
     - data_processing_feature_extraction
     - training
     - compilation
-    target_devices: *id001
+    target_devices:
+    - F280013
+    - F280015
+    - F28003
+    - F28004
+    - F2837
+    - F28P55
+    - F28P65
+    - MSPM0G3507
+    - MSPM0G5187
     target_module: timeseries
     task_name: Motor Fault
   pir_detection:
@@ -8191,7 +8199,8 @@ task_descriptions:
     - data_processing_feature_extraction
     - training
     - compilation
-    target_devices: *id001
+    target_devices:
+    - CC2755
     target_module: timeseries
     task_name: PIR Detection
 tooltip_descriptions:
