@@ -194,6 +194,26 @@ _model_descriptions = {
         properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
+    'TimeSeries_Generic_100_t': utils.deep_update_dict(deepcopy(template_model_description), {
+		'common': dict(model_details='Classification Model with 100 params.\n2 Conv+BatchNorm+Relu layers+ Adapt Avg Pool +Linear Layer.\nUltra lean model'),
+        'training': dict(
+            model_training_id='CNN_TS_GEN_BASE_100',
+            model_name='TimeSeries_Generic_100_t',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_CC2755]),
+            },
+        properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+        ),
+    }),
     'ArcFault_model_1400_t': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             task_type=constants.TASK_TYPE_ARC_FAULT,
@@ -500,7 +520,7 @@ _model_descriptions = {
 
 enabled_models_list = [
     # 'TimeSeries_Generic_1k', 'TimeSeries_Generic_4k', 'TimeSeries_Generic_6k', 'TimeSeries_Generic_13k',
-    'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t', 'TimeSeries_Generic_13k_t',
+    'TimeSeries_Generic_100_t', 'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t', 'TimeSeries_Generic_13k_t',
     'Res_Add_TimeSeries_Generic_3k_t', 'Res_Cat_TimeSeries_Generic_3k_t',
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
     'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t', 'PIRDetection_model_1_t',
