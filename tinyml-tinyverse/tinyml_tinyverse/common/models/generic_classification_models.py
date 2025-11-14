@@ -332,24 +332,53 @@ class YOLO_Classifier_8K(GenericModelWithSpec):
         return x
 
 class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
-    def __init__(self, config, input_features=(25,25), variables=1, num_classes=3, with_input_batchnorm=True):  # Change to 3-class classification
+    def __init__(self, config, input_features=(25,25), variables=1, num_classes=3, with_input_batchnorm=True, use_bn: bool = False):  # Change to 3-class classification
         super().__init__(config, input_features=input_features, variables=variables, with_input_batchnorm=with_input_batchnorm, num_classes=num_classes)
         # Define the layers of the CNN
-        self.bn0   = torch.nn.BatchNorm2d(num_features=1) # make sure this works 
+        C_in = variables 
+        H, W = input_features
+        self.input_scale = torch.nn.Parameter(torch.tensor(1/1024.0), requires_grad=False)
+        self.input_clamp = torch.nn.Hardtanh(min_val=-1.0, max_val=1.0)  # or ReLU if you want [0, +]
+        self.bn0   = torch.nn.BatchNorm2d(num_features=1) if use_bn else torch.nn.Identity()# make sure this works 
         self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=8, kernel_size=(3,3), stride=(1,1), padding=(1,1))
-        self.bn1   = torch.nn.BatchNorm2d(num_features=8)
+        self.bn1   = torch.nn.BatchNorm2d(num_features=8) if use_bn else torch.nn.Identity()
         self.relu1 = torch.nn.ReLU()
         self.conv2 = torch.nn.Conv2d(in_channels=8, out_channels=16, kernel_size=(3,3), stride=(1,1), padding=(1,1))
-        self.bn2   = torch.nn.BatchNorm2d(num_features=16)
+        self.bn2   = torch.nn.BatchNorm2d(num_features=16) if use_bn else torch.nn.Identity()
         self.relu2 = torch.nn.ReLU()
         self.pool  = torch.nn.MaxPool2d(kernel_size=(3,3), stride=(2,2), padding=(0,0))
+        # ---- analytic output-size math (no helper calls) ----
+        # conv1 params
+        k1h, k1w = self.conv1.kernel_size
+        s1h, s1w = self.conv1.stride
+        p1h, p1w = self.conv1.padding
+        d1h, d1w = self.conv1.dilation
 
-        conv1_hw = int((self.input_features + 2*self.conv1.padding[0] - self.conv1.kernel_size[0]) / self.conv1.stride[0] + 1)
-        pool1_hw = int((conv1_hw - self.pool.kernel_size) / self.pool.stride + 1)
-        conv2_hw = int((pool1_hw + 2*self.conv2.padding[0] - self.conv2.kernel_size[0]) / self.conv2.stride[0] + 1)
-        pool2_hw = int((conv2_hw - self.pool.kernel_size) / self.pool.stride + 1)
-        fc_input_features = int(pool2_hw * pool2_hw * self.conv2.out_channels)  # total features to fc1 
+        # pool params
+        kph, kpw = self.pool.kernel_size
+        sph, spw = self.pool.stride
+        pph, ppw = self.pool.padding  # (0,0) here
 
+        # conv2 params
+        k2h, k2w = self.conv2.kernel_size
+        s2h, s2w = self.conv2.stride
+        p2h, p2w = self.conv2.padding
+        d2h, d2w = self.conv2.dilation
+
+        # after conv1
+        H1 = (H + 2*p1h - d1h*(k1h - 1) - 1) // s1h + 1
+        W1 = (W + 2*p1w - d1w*(k1w - 1) - 1) // s1w + 1
+        # after pool1  (pool dilation = 1)
+        H2 = (H1 + 2*pph - (kph - 1) - 1) // sph + 1
+        W2 = (W1 + 2*ppw - (kpw - 1) - 1) // spw + 1
+        # after conv2
+        H3 = (H2 + 2*p2h - d2h*(k2h - 1) - 1) // s2h + 1
+        W3 = (W2 + 2*p2w - d2w*(k2w - 1) - 1) // s2w + 1
+        # after pool2
+        H4 = (H3 + 2*pph - (kph - 1) - 1) // sph + 1
+        W4 = (W3 + 2*ppw - (kpw - 1) - 1) // spw + 1
+
+        fc_input_features = H4 * W4 * self.conv2.out_channels  # <- pure ints; no TypeError
         self.flatten = torch.nn.Flatten()
         self.fc1     = torch.nn.Linear(in_features=fc_input_features, out_features=128)
         self.relu3 = torch.nn.ReLU()
@@ -357,9 +386,7 @@ class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
         self.fc2 = torch.nn.Linear(in_features=128, out_features=self.num_classes)  # Change to 3 output classes
 
     def forward(self, x):
-        if x.ndim ==5:
-            x = x.squeeze(1)
-        #x = self.bn0(x.permute(0,2,1,3)).permute(0,2,1,3)
+        x = x.view(x.shape[0], -1, x.shape[-2], x.shape[-1])
         x = self.bn0(x)
         x = self.conv1(x)
         x = self.bn1(x)
@@ -377,4 +404,4 @@ class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
         fe = self.relu3(x)
         x = self.dropout(fe)
         x = self.fc2(x)  # Output layer
-        return x, fe
+        return x

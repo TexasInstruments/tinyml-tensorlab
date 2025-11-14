@@ -44,6 +44,8 @@ from torch.utils.data import Dataset
 from tqdm import tqdm
 import yaml
 import cmsisdsp as dsp
+from scipy.stats import kurtosis
+from scipy.stats import entropy
 
 from ..augmenters import AddNoise, Convolve, Crop, Drift, Dropout, Pool, Quantize, Resize, Reverse, TimeWarp
 from ..transforms import basic_transforms
@@ -409,27 +411,31 @@ class GenericTSDataset(Dataset):
         # Pad the row (4 zeros at the beginning, 3 zeros at the end)
         padded_frame = np.pad(wave_frame, (4, 3), mode='constant', constant_values=0)
         kurtosis_features = []  # List to store kurtosis features
-
-        for i in range(self.window_count):
-            stride_window = int(self.frame_size * self.stride_size)
+        result_wave = []
+        stride_window = int(self.frame_size * self.stride_size)
+        window_length = len(padded_frame) -(self.window_count*stride_window)
+        for i in range(self.window_count):            
             start = i * stride_window 
-            end = start + self.frame_size
-            if end > len(padded_wave_frame):  # Ensure window does not exceed length
+            end = start + window_length
+            if end > len(padded_frame):  # Ensure window does not exceed length
                 break
             window = padded_frame[start:end]  # Extract 32-sample window
 
             window_kurtosis = []  # List to store kurtosis for this window
             # Compute kurtosis for each 8-sample chunk within the 32-sample window
-            chunk_count = self.frame_size//self.chunk_size # DEFAULT: 4
+            chunk_count = window_length//self.chunk_size # DEFAULT: 4
             for j in range(chunk_count): 
                 chunk_start = j * self.chunk_size
                 chunk_end = chunk_start + self.chunk_size
                 chunk = window[chunk_start:chunk_end]
                 # Compute kurtosis of the chunk
-                chunk_kurtosis = kurtosis(chunk, fisher=True, bias=False)  # Fisher=True for normal zero kurtosis
+                eps = 1e-12
+                if np.nanstd(chunk)<eps:
+                    chunk_kurtosis = 0.0
+                else:
+                    chunk_kurtosis = kurtosis(chunk, fisher=True, bias=False)  # Fisher=True for normal zero kurtosis
                 window_kurtosis.append(chunk_kurtosis)
             result_wave.append(window_kurtosis)
-            # print("shape of kurtosis after  iteration:", np.shape(result_wave)) # Store 4 kurtosis values per window
         #result_wave = np.array(result_wave).flatten()
         result_wave = np.array(result_wave)
         return wave_frame, result_wave
@@ -446,23 +452,26 @@ class GenericTSDataset(Dataset):
     def __transform_dominant_frequency(self, wave_frame):
         # Function to calculate top two dominant frequencies in a signal
         num_bins   = self.fft_size // 2 + 1  # Number of frequency bins
-        fft_result = np.abs(fft.fft(signal, n=self.fft_size))[:num_bins]  # Compute FFT magnitude
-        freq_bins = np.linspace(0, self.sampling_rate / 2, num_bins)  # Compute frequency bins
+        fft_result = np.abs(np.fft.fft(wave_frame, n=self.fft_size))[:num_bins]  # Compute FFT magnitude
+        freq_bins = np.linspace(0, float(self.sampling_rate)/2.0, int(num_bins))  # Compute frequency bins
         sorted_indices = np.argsort(fft_result[1:])[-2:] + 1  # Get indices of top 2 frequencies (excluding DC)
         result_wave = freq_bins[sorted_indices] # Return the corresponding frequency values
         return wave_frame, result_wave 
     
     def __transform_spectral_entropy(self, wave_frame):
         num_bins   = self.fft_size // 2 + 1  # Number of frequency bins
-        fft_result = np.abs(fft.fft(signal, n=self.fft_size))[:num_bins]  # Compute FFT magnitude
+        fft_result = np.abs(np.fft.fft(wave_frame, n=self.fft_size))[:num_bins]  # Compute FFT magnitude
         power_spectrum = fft_result ** 2  # Compute power spectrum
         psd_norm = power_spectrum / np.sum(power_spectrum)  # Normalize
         result_wave = entropy(psd_norm)  # Compute entropy
         return wave_frame, result_wave 
 
     def __transform_symmetric_mirror(self, wave_frame):
-        result_wave = np.tile(wave_frame, self.fft_size // len(wave_frame) + 1)
-        result_wave = result_wave[:self.fft_size]
+        if len(wave_frame) ==0:
+            result_wave = np.zeros(self.fft_size,dtype=np.float32)
+        else:
+            result_wave = np.tile(wave_frame, self.fft_size // len(wave_frame) + 1)
+            result_wave = result_wave[:self.fft_size]
         return wave_frame, result_wave 
 
 
@@ -492,9 +501,7 @@ class GenericTSDataset(Dataset):
         bin_count_pool = 16
         pool_size      = self.fft_size//(2*bin_count_pool)
         fft_features = fft_features.reshape(self.window_count, bin_count_pool, pool_size).mean(axis=-1)  # Average Pooling
-
         _,kurt_features = self.__transform_kurtosis(wave_frame)
-
         for i in range(self.window_count):
             start = i * stride_window
             end = start + window_size
@@ -516,19 +523,22 @@ class GenericTSDataset(Dataset):
         zcr_features = zcr_features.reshape(-1, 1)
         slope_features = slope_features.reshape(-1, 1)
         spectral_entropy_features = spectral_entropy_features.reshape(-1, 1)
-        # Combine all features into a single array
         result_wave = np.hstack([fft_features, kurt_features, zcr_features, slope_features, dom_freq_features, spectral_entropy_features])
-        #print("resulting wave shape:", result_wave.shape) #debug statement
         return wave_frame, result_wave
 
 
     # Rearrange the shape from (C,N,W) to (N,C,W,H)
     def __transform_shape(self, concatenated_features, raw_frames):
         # self.logger.debug(f"Transform: Shape input shape: {concatenated_features.shape}")
+        # print(f"Transform: Shape input shape: {concatenated_features.shape}")
         N = concatenated_features.shape[1]
-        x_temp = concatenated_features.transpose(1, 0, 2).reshape(N, self.ch, self.wl, self.hl)
+        if concatenated_features.ndim == 3:  # Most cases have (C,N,W) --> (N,C,W,H)
+            x_temp = concatenated_features.transpose(1, 0, 2).reshape(N, self.ch, self.wl, self.hl)
+        else:
+            x_temp = concatenated_features.transpose(1, 0, 2, 3)  # PIR Detection gives concatenated_features as (N,C,W,H)
         x_temp_raw_out = raw_frames.transpose(1, 0, 2)
         # self.logger.debug(f"Transform: Shape output shape: {x_temp.shape}")
+        # print(f"Transform: Shape output shape: {x_temp.shape}")
         return x_temp, x_temp_raw_out
 
     def __prepare_feature_extraction_variables(self):

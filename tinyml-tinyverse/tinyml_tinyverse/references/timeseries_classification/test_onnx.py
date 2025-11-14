@@ -109,11 +109,11 @@ def get_args_parser():
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
     parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
     # PIR Detection related params
-    parser.add_argument('--window-count', help="Number of windows in each input frame ", type=int, default=[])
+    parser.add_argument('--window-count', help="Number of windows in each input frame ", type=int, default=25)
     # parser.add_argument('--window-overlap', help="stride length for overlapping windows ", type=int, default=[])
     # parser.add_argument('--window-size', help="length of  window in samples ", type=int, default=[])
-    parser.add_argument('--chunk-size', help="length of kurtosis section size within a  window in samples ", type=int, default=[])
-    parser.add_argument('--fft-size', help="dimension of a FFT operation on input frame ", type=int, default=[])
+    parser.add_argument('--chunk-size', help="length of kurtosis section size within a  window in samples ", type=int, default=8)
+    parser.add_argument('--fft-size', help="dimension of a FFT operation on input frame ", type=int, default=64)
     # End of PIR Detection related params
     return parser
 
