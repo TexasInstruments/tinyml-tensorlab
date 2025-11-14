@@ -33,10 +33,14 @@ data_processing_feature_extraction:
     store_feat_ext_data: False
 
 training:
-
+    # enable/disable training
     enable: True #False
-    model_name: 'ArcFault_model_700_t'
-    # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
+    # F28x generic timeseries model names: TimeSeries_Generic_1k_t, TimeSeries_Generic_4k_t, TimeSeries_Generic_6k_t, TimeSeries_Generic_13k_t
+    # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t, ArcFault_model_1400_t
+    model_name: 'TimeSeries_Generic_1k_t'
+#    with_input_batchnorm: False
+#    model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
+    model_config: ''
     batch_size: 30
     training_epochs: 30
     num_gpus: 0

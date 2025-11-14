@@ -650,7 +650,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D=dict(
-        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE'], frame_size=125, window_count=25, chunk_size=8, fft_size=64, sampling_rate=31.25, variables=1),  # ch=3,
+        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=31.25, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),  
 )
 
@@ -681,7 +681,7 @@ DATASET_EXAMPLES = dict(
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('ArcFault_1024Input_FE_RFFT_128Feature_8Frame_1InputChannel_removeDC_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     pir_detection_example_dsk=dict(
-        dataset=dict(input_data_path='/home/a0500425/ti_edge_ai_studio/pir_detection_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/pir_detection_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D'), data_proc_transforms=[], sampling_rate=31.25, variables=1),
     ),
 )
@@ -727,6 +727,16 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # M0SDK_PATH = os.path.abspath(os.getenv('M0SDK_PATH', os.path.join(TOOLS_PATH, M0SDK_VERSION)))
 # M0SDK_INCLUDE = os.path.join(M0SDK_PATH, 'source')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
+
+# CC2755 Compiler
+CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+# CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
+CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
+
+# CC2755 Compiler
+CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+# CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
+CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 # CC2755 Compiler
 CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
@@ -1343,10 +1353,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'pir_detection_classification_dsk',
-            'input_data_path': '/home/a0500425/ti_edge_ai_studio/pir_detection_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/pir_detection_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': '/home/a0500425/ti_edge_ai_studio/pir_detection_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/pir_detection_classification_dsk.zip',
             'dataset_detailed_name': 'PIR Detection Classification Example',
             'dataset_description': 'Example PIR sensor based motion detection timeseries classification dataset with 3 categories - human, dog, background motion',
             'dataset_size': None,

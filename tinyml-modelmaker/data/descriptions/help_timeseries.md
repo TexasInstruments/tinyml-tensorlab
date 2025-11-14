@@ -10,6 +10,7 @@ Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with y
 * ARC Fault
 * Motor Fault
 * Fan Blower Imbalance Fault
+* PIR Detection
 
 ## Supported target devices
 These are the devices that are supported currently. As additional devices are supported, this section will be updated.
