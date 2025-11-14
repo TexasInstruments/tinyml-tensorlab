@@ -7,13 +7,13 @@ common:
 dataset:
     # enable/disable dataset loading
     enable: True #False
-    dataset_name: pir_detection
-    input_data_path: /home/a0500425/ti_edge_ai_studio/pir_detection_classification_dsk.zip # add path here
-
+    dataset_name: pir_detection_classification
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/pir_detection_classification_dsk.zip
+    
 data_processing_feature_extraction: # One or more can be cascaded in the list
     data_proc_transforms: []
     feature_extraction_name: PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D
-    variables: 3
+    variables: 1
 
 training:
     # enable/disable training
@@ -21,9 +21,9 @@ training:
     model_name: 'PIRDetection_model_1_t'
     model_config: ''
     batch_size: 64
-    training_epochs: 50
+    training_epochs: 10
     num_gpus: 0  # 1
-#    learning_rate: 0.001
+    learning_rate: 0.04
 
 testing:
     enable: True

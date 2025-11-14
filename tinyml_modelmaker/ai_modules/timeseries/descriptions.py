@@ -326,6 +326,7 @@ Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with y
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_ARC_FAULT]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_MOTOR_FAULT]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_BLOWER_IMBALANCE]['task_name']}
+* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_PIR_DETECTION]['task_name']}
 
 ## Supported target devices
 These are the devices that are supported currently. As additional devices are supported, this section will be updated.
