@@ -98,11 +98,3 @@ Coming to the main part of the example.
 - Convert the ti_model from pytorch qdq layers to TI NPU int8/int4/int2 layers.
 - Export the ti_model from TI NPU int8 layers to onnx with name as "quant_mnist.onnx"
 
-
-## Example Results
-
-| Model Type | Quantization | Bitwidth (W/A) | Accuracy (%) |
-|-------------|--------------|----------------|---------------|
-| FP32 | None | 32 / 32 | 99.07 | 
-| INT8 | PTQ | 8 / 8 | 99.06 |
-| INT4 | QAT | 4 / 8 | 99.08 | 
