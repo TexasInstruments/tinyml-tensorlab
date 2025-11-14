@@ -539,7 +539,7 @@ def get_live_capture_descriptions(params):
                 'labelName': 'Sine',
                 'samples': 256,
                 'samplingFrequency': 5000,
-                'samplingTime': 4},
+                },
             'propInfo': [
                 {
                     'caption': 'device',
@@ -552,13 +552,6 @@ def get_live_capture_descriptions(params):
                     'id': 'sensor',
                     'infoText': 'Connect hardware to detect sensors',
                     'widgetType': 'select'},
-                {
-                    'caption': 'continuous measurement time (s)',
-                    'format': 'dec',
-                    'id': 'samplingTime',
-                    'minValue': 1,
-                    'precision': 0,
-                    'widgetType': 'input'},
                 {
                     'as': {'kind': 'filename', 'order': 1},
                     'caption': 'label description',
@@ -596,21 +589,21 @@ def get_live_capture_example_descriptions(params):
                 'transport': {'baudRate': 4687500}
             },
             'MSPM0G5187': {
-                'ccsProj': 'ac_arc_fault_data_capture',
+                'ccsProj': 'ac_arc_fault_data_capture_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G5187/ai/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
-                'transport': {'baudRate': 4687500}
+                'transport': {'baudRate': 115200}
             }
         },
         'generic_timeseries_classification': {
             'MSPM0G5187': {
-                'ccsProj': 'time_series_data_capture',
+                'ccsProj': 'timeseries_data_capture_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G5187/ai/time_series_data_capture/ticlang/time_series_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
@@ -627,10 +620,10 @@ def get_live_capture_example_descriptions(params):
                 'transport': {'baudRate': 2343750}
             },
             'MSPM0G5187': {
-                'ccsProj': 'motor_fault_data_capture',
+                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G5187/ai/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
@@ -705,32 +698,30 @@ def get_live_preview_example_descriptions(params):
                 'transport': {'baudRate': 4687500}
             },
             'MSPM0G5187': {
-                'ccsProj': 'ac_arc_fault_detection_live_preview',
+                'ccsProj': 'ac_arc_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
-                'files': [{'from': 'artifacts/',
-                'to': 'arc_model'},
-                {'from': 'golden_vectors/user_input_config.h', 'to': ''},
-                {'from': 'model_aux.h', 'to': ''}],
-                'from': 'examples/nortos/LP_MSPM0G5187/ai/ac_arc_fault_detection_live_preview/ac_arc_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/ac_arc_fault_detection_live_preview/ticlang/ac_arc_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
-                'transport': {'baudRate': 4687500}
+                'transport': {'baudRate': 115200}
             }
         },
         'generic_timeseries_classification': {
             'MSPM0G5187': {
-                'ccsProj': 'time_series_live_preview',
+                'ccsProj': 'timeseries_live_preview_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
-                'files': [{'from': 'artifacts/',
-                'to': 'AI_artifacts'},
-                {'from': 'golden_vectors/user_input_config.h',
-                'to': ''},
-                {'from': 'model_aux.h',
-                'to': ''}],
-                'from': 'examples/nortos/LP_MSPM0G5187/ai/time_series_live_preview/ticlang/time_series_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/timeseries_live_preview/ticlang/timeseries_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
-                'transport': {'baudRate': 2343750}
+                'transport': {'baudRate': 115200}
             }
         },
         'motor_fault': {
@@ -743,18 +734,18 @@ def get_live_preview_example_descriptions(params):
                 'from': 'solutions/edge_ai_fault_detection_with_mc/motor_fault_livepreview_validation_f28p55x/ccs/eAI_mfd_eval_f28p55x.projectspec',
                 'pkgId': 'motor_control_c2000ware_sdk_software_package',
                 'targetCfg': 'targetConfigs/TMS320F28P550SJ9_LaunchPad.ccxml',
-                'transport': {'baudRate': 115200}
+                'transport': {'baudRate': 2343750}
             },
             'MSPM0G5187': {
-                'ccsProj': 'motor_fault_detection_live_preview',
+                'ccsProj': 'motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
-                'files': [{'from': 'artifacts/',
-                    'to': 'AI_artifacts'},
-                   {'from': 'golden_vectors/user_input_config.h', 'to': ''},
-                   {'from': 'model_aux.h', 'to': ''}],
-                'from': 'examples/nortos/LP_MSPM0G5187/ai/motor_fault_detection_live_preview/ticlang/motor_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
-                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml', 
                 'transport': {'baudRate': 115200}
             }
         }
