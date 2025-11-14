@@ -142,11 +142,11 @@ def get_args_parser():
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
     parser.add_argument('--scale', help="Scaling factor to input data")
     # PIR Detection related params
-    parser.add_argument('--window-count', help="Number of windows in each input frame ", type=int, default=1)
+    parser.add_argument('--window-count', help="Number of windows in each input frame ", type=int, default=25)
     # parser.add_argument('--window-overlap', help="stride length for overlapping windows ", type=int, default=[])
     # parser.add_argument('--window-size', help="length of  window in samples ", type=int, default=[])
-    parser.add_argument('--chunk-size', help="length of kurtosis section size within a  window in samples ", type=int, default=[])
-    parser.add_argument('--fft-size', help="dimension of a FFT operation on input frame ", type=int, default=[])
+    parser.add_argument('--chunk-size', help="length of kurtosis section size within a  window in samples ", type=int, default=8)
+    parser.add_argument('--fft-size', help="dimension of a FFT operation on input frame ", type=int, default=64)
     # End of PIR Detection related params
     
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)

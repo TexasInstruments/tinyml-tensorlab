@@ -591,9 +591,9 @@ def main(gpu, args):
             nn_for_feature_extraction=args.nn_for_feature_extraction)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
+        avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(model, criterion, data_loader_test, device=device, transform=transform, phase=phase, num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
         if model_ema:
-            avg_accuracy, avg_f1, auc, avg_conf_matrix = utils.evaluate_classification(model_ema, criterion, data_loader_test, device=device, transform=transform,
+            avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(model_ema, criterion, data_loader_test, device=device, transform=transform,
                                           log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
         if args.output_dir:
             checkpoint = {
@@ -610,6 +610,8 @@ def main(gpu, args):
             if avg_accuracy >= best['accuracy']:
                 logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) >= {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
                 best['accuracy'], best['f1'], best['auc'], best['conf_matrix'], best['epoch'] = avg_accuracy,avg_f1, auc, avg_conf_matrix, epoch
+                best['predictions'] = predictions
+                best['ground_truth'] = ground_truth
                 utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
     logger = getLogger(f"root.main.{phase}.BestEpoch")
