@@ -632,9 +632,9 @@ class GenericTSDataset(Dataset):
                 self.preprocessing_flags.append('FE_BIN')
                 if self.feature_size_per_frame is None:
                     raise ValueError("Error: 'feature_size_per_frame' must be specified when using BINNING transform")
-                self.bin_size = (self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME']) // self.feature_size_per_frame // self.analysis_bandwidth
+                self.bin_size = self.frame_size // 2 // self.feature_size_per_frame // self.analysis_bandwidth
                 self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_size_per_frame
-                self.feature_extraction_params['FE_BIN_SIZE'] = self.frame_size // self.feature_size_per_frame // 2 // self.analysis_bandwidth
+                self.feature_extraction_params['FE_BIN_SIZE'] = self.bin_size
                 self.feature_extraction_params['FE_BIN_OFFSET']= self.min_bin
                 self.feature_extraction_params['FE_BIN_NORMALIZE'] = 1 if self.normalize_bin else 0
             if 'LOG_DB' in self.transforms:
