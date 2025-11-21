@@ -119,11 +119,7 @@ TARGET_SDK_RELEASE_F29H85 = '01_00_00'
 TARGET_SDK_VERSION_MSPM0 = "2.08.00.03"
 TARGET_SDK_RELEASE_MSPM0 = '2_08_00_03'
 
-TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
-# TODO: Once the links are up add this
-'''
-* Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab
-'''
+TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n'
 
 ##### AM263 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_AM263 = \
@@ -303,7 +299,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G5187 = \
 * SDK release: {TARGET_SDK_RELEASE_MSPM0}'''
 
 TARGET_DEVICE_DETAILS_MSPM0G5187= \
-    f'''80MHz Arm® Cortex®-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA
+    f'''80MHz Arm® Cortex®-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, USB, TI-NPU
 * More details : https://www.ti.com/product/MSPM0G5187
 
 Important links:

@@ -6,7 +6,7 @@ This is a tool for collecting data, training and compiling AI models for use on 
 Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.
 
 ## Tasks supported
-* n-Class Time Series Classification
+* Time Series Classification
 * ARC Fault
 * Motor Fault
 * Fan Blower Imbalance Fault
@@ -78,6 +78,7 @@ These are the devices that are supported currently. As additional devices are su
 
 ## Additional information
 
+ * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab 
 
 
 ## Dataset format

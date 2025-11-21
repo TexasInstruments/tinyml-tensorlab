@@ -144,11 +144,7 @@ TARGET_SDK_VERSION_CC2755 = '9.12.00.00'
 TARGET_SDK_RELEASE_CC2755 = '09_12_00_00'
 
 
-TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n'
-# TODO: Once the links are up add this
-'''
-* Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab
-'''
+TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n'
 
 ##### AM263 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_AM263 = \
@@ -328,7 +324,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G5187 = \
 * SDK release: {TARGET_SDK_RELEASE_MSPM0}'''
 
 TARGET_DEVICE_DETAILS_MSPM0G5187= \
-    f'''80MHz Arm® Cortex®-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA
+    f'''80MHz Arm® Cortex®-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, USB, TI-NPU
 * More details : https://www.ti.com/product/MSPM0G5187
 
 Important links:
@@ -504,7 +500,7 @@ TASK_DESCRIPTIONS = {
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
     TASK_TYPE_GENERIC_TS_CLASSIFICATION: {
-        'task_name': 'n-Class Time Series Classification',
+        'task_name': 'Time Series Classification',
         'target_module': 'timeseries',
         'target_devices': [
             TARGET_DEVICE_F280013,
