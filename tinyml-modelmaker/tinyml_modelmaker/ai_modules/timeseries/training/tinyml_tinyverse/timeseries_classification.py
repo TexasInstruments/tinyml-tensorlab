@@ -76,45 +76,54 @@ template_model_description = dict(
 )
 _model_descriptions = {
     'Res_Add_TimeSeries_Generic_3k_t': utils.deep_update_dict(deepcopy(template_model_description), {
-		'common': dict(model_details='Classification Model with 13k params.\nResidual Connection.\nAdds the branches.\n4 Conv+BatchNorm+Relu layers + Linear Layer.'),
+		'common': dict(
+            model_details='Classification Model with 3k params.\nResidual Connection.\nAdds the branches.\n4 Conv+BatchNorm+Relu layers + Linear Layer.', 
+            help_url="file://models/Res_Add_TimeSeries_Generic_3k_t/Res_Add_TimeSeries_Generic_3k_t.md"
+        ),
         'training': dict(
             model_training_id='RES_ADD_CNN_TS_GEN_BASE_3K',
             model_name='Res_Add_TimeSeries_Generic_3k_t',
             target_devices={
-                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280015]),
-                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280013]),
-                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28003]),
-                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28004]),
-                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F2837]),
-                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P65]),
-                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_CC2755]),
             },
         ),
     }),
     'Res_Cat_TimeSeries_Generic_3k_t': utils.deep_update_dict(deepcopy(template_model_description), {
-		'common': dict(model_details='Classification Model with 3k params.\nResidual Connection.\nConcatenates the branches.\n4 Conv+BatchNorm+Relu layers + Linear Layer.'),
+		'common': dict(
+            model_details='Classification Model with 3k params.\nResidual Connection.\nConcatenates the branches.\n4 Conv+BatchNorm+Relu layers + Linear Layer.', 
+            help_url="file://models/Res_Cat_TimeSeries_Generic_3k_t/Res_Cat_TimeSeries_Generic_3k_t.md"
+        ),
         'training': dict(
             model_training_id='RES_CAT_CNN_TS_GEN_BASE_3K',
             model_name='Res_Cat_TimeSeries_Generic_3k_t',
             target_devices={
-                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280013]),
-                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280015]),
-                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28003]),
-                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28004]),
-                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F2837]),
-                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P65]),
-                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None, ) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1, ) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_CC2755]),
             },
         ),
     }),
     'TimeSeries_Generic_13k_t': utils.deep_update_dict(deepcopy(template_model_description), {
-		'common': dict(model_details='Classification Model with 13k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.', help_url="file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t.md"),
+		'common': dict(
+            model_details='Classification Model with 13k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.', 
+            help_url="file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t.md"
+        ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_13K',
             model_name='TimeSeries_Generic_13k_t',
@@ -126,32 +135,35 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0, help_url="file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0, help_url="file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['TimeSeries_Generic_13k_t'][constants.TARGET_DEVICE_CC2755]),
 
             },
-        properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'TimeSeries_Generic_6k_t': utils.deep_update_dict(deepcopy(template_model_description), {
-		'common': dict(model_details='Classification Model with 6k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.\nLean model', help_url="file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t.md"),
+		'common': dict(
+            model_details='Classification Model with 6k params. \n6 Conv+BatchNorm+Relu layers + Linear Layer.\nLean model', 
+            help_url="file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t.md"
+        ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_6K',
             model_name='TimeSeries_Generic_6k_t',
             target_devices={
-                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F280013]),
-                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F280015]),
-                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28003]),
-                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28004]),
-                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F2837]),
-                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28P65]),
-                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1, help_url="file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1, help_url="file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_6k_t'][constants.TARGET_DEVICE_CC2755]),
             },
-        properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'TimeSeries_Generic_4k_t': utils.deep_update_dict(deepcopy(template_model_description), {
@@ -160,42 +172,48 @@ _model_descriptions = {
             model_training_id='CNN_TS_GEN_BASE_4K',
             model_name='TimeSeries_Generic_4k_t',
             target_devices={
-                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F280013]),
-                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F280015]),
-                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28003]),
-                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28004]),
-                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F2837]),
-                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28P65]),
-                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2, help_url="file://models/TimeSeries_Generic_4k_t/TimeSeries_Generic_4k_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2, help_url="file://models/TimeSeries_Generic_4k_t/TimeSeries_Generic_4k_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['TimeSeries_Generic_4k_t'][constants.TARGET_DEVICE_CC2755]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'TimeSeries_Generic_1k_t': utils.deep_update_dict(deepcopy(template_model_description), {
-		'common': dict(model_details='Classification Model with 1k params.\n4 Conv+BatchNorm+Relu layers + Linear Layer.\nVery lean model', help_url="file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t.md"),
+		'common': dict(
+            model_details='Classification Model with 1k params.\n4 Conv+BatchNorm+Relu layers + Linear Layer.\nVery lean model', 
+            help_url="file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t.md"
+        ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_1K',
             model_name='TimeSeries_Generic_1k_t',
             target_devices={
-                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F280013]),
-                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F280015]),
-                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28003]),
-                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28004]),
-                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F2837]),
-                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28P65]),
-                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=3, help_url="file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=3, help_url="file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
-                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['TimeSeries_Generic_1k_t'][constants.TARGET_DEVICE_CC2755]),
             },
-        properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'TimeSeries_Generic_100_t': utils.deep_update_dict(deepcopy(template_model_description), {
-		'common': dict(model_details='Classification Model with 100 params.\n2 Conv+BatchNorm+Relu layers+ Adapt Avg Pool +Linear Layer.\nUltra lean model'),
+		'common': dict(
+            model_details='Classification Model with 100 params.\n2 Conv+BatchNorm+Relu layers+ Adapt Avg Pool +Linear Layer.\nUltra lean model', 
+            help_url="file://models/TimeSeries_Generic_100_t/TimeSeries_Generic_100_t.md"
+        ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_100',
             model_name='TimeSeries_Generic_100_t',
@@ -211,7 +229,7 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['TimeSeries_Generic_100_t'][constants.TARGET_DEVICE_CC2755]),
             },
-        properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'ArcFault_model_1400_t': utils.deep_update_dict(deepcopy(template_model_description), {
@@ -235,8 +253,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0, help_url="file://models/ArcFault_model_1400_t/ArcFault_model_1400_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0, help_url="file://models/ArcFault_model_1400_t/ArcFault_model_1400_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_MSPM0G5187]),
             },
             properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
@@ -262,8 +280,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1, help_url="file://models/ArcFault_model_700_t/ArcFault_model_700_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1, help_url="file://models/ArcFault_model_700_t/ArcFault_model_700_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_MSPM0G5187]),
 
             },
             properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
@@ -290,8 +308,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2, help_url="file://models/ArcFault_model_300_t/ArcFault_model_300_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2, help_url="file://models/ArcFault_model_300_t/ArcFault_model_300_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_MSPM0G5187]),
             },
         properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
@@ -317,10 +335,10 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=3, help_url="file://models/ArcFault_model_200_t/ArcFault_model_200_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=3, help_url="file://models/ArcFault_model_200_t/ArcFault_model_200_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_MSPM0G5187]),
             },
-        properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'MotorFault_model_1_t': utils.deep_update_dict(deepcopy(template_model_description), {
@@ -344,8 +362,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2, help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2, help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G5187]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
@@ -371,8 +389,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0, help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0, help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G5187]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
@@ -398,8 +416,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1, help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G3507.md") | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G3507]),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1, help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G5187.md") | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1)  | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G5187]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
@@ -409,7 +427,7 @@ _model_descriptions = {
             task_type=constants.TASK_TYPE_BLOWER_IMBALANCE,
             generic_model=False,
             model_details='TI\u2122 handcrafted model.\nClassification Model with ~0.6k params.\nSimplest model.',
-            help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t.md"
+            #help_url="file://models/MotorFault_model_1_t/MotorFault_model_1_t.md"
         ),
         'training': dict(
             model_training_id='CNN_MF_1L',
@@ -434,7 +452,7 @@ _model_descriptions = {
             task_type=constants.TASK_TYPE_BLOWER_IMBALANCE,
             generic_model=False,
             model_details='TI\u2122 handcrafted model.\nClassification Model with 3k params.\nBest & largest of the 3 models, hardest to train.',
-            help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t.md"
+            #help_url="file://models/MotorFault_model_2_t/MotorFault_model_2_t.md"
         ),
         'training': dict(
             model_training_id='CNN_MF_2L',
@@ -459,7 +477,7 @@ _model_descriptions = {
             task_type=constants.TASK_TYPE_BLOWER_IMBALANCE,
             generic_model=False,
             model_details='TI\u2122 handcrafted model.\nClassification Model with 1k params.\nMiddle of the 3 CNN based models.',
-            help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t.md"
+            #help_url="file://models/MotorFault_model_3_t/MotorFault_model_3_t.md"
         ),
         'training': dict(
             model_training_id='CNN_MF_3L',
@@ -504,7 +522,8 @@ _model_descriptions = {
         'common': dict(
             task_type=constants.TASK_TYPE_PIR_DETECTION,
             generic_model=False,
-            model_details='TI\u2122 handcrafted model.\nClassification Model with 3k+ params.\n2-D CNN based model for multiple motion source detection.',
+            model_details='TI\u2122 handcrafted model.\nClassification Model with 53k+ params.\n2-D CNN based model for multiple motion source detection.',
+            help_url="file://models/PIRDetection_model_1_t/PIRDetection_model_1_t.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_PIR2D_BASE',
@@ -512,9 +531,17 @@ _model_descriptions = {
             learning_rate=0.04,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_PIR_DETECTION],
             target_devices={
+                #constants.TARGET_DEVICE_F280013: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F280013]),
+                #constants.TARGET_DEVICE_F280015: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F280015]),
+                #constants.TARGET_DEVICE_F28003: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28003]),
+                #constants.TARGET_DEVICE_F28004: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28004]),
+                #constants.TARGET_DEVICE_F2837: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F2837]),
+                #constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28P65]),
+                #constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_CC2755]),
             },
-            properties=[dict(type="group", dynamic=True, script="pirdetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="pirdetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] +
+                       [template_gui_model_properties[0]] + [dict(label="Epochs", name="training_epochs", type="integer", default=50, min=2, max=1000),] + [template_gui_model_properties[2]]
         ),
     }),
 }

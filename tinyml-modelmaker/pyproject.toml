@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "setuptools>=42",
+requires = [ "setuptools>=80",
 	"wheel",]
 build-backend = "setuptools.build_meta"
 
@@ -40,9 +40,7 @@ dependencies = [
 	"onnxoptimizer==0.3.13",
 	"progressbar==2.5",
 	"rich==14.0.0",]
-[[project.authors]]
-name = "Adithya Thonse"
-email = "thonse@ti.com"
+authors = [{name = "Adithya Thonse", email = "thonse@ti.com"}]
 
 [project.license]
 text = "BSD 3-Clause"

@@ -571,7 +571,45 @@ def get_live_capture_descriptions(params):
                     'precision': 0,
                     'widgetType': 'input'}
             ]
-        }
+        },
+        'd': {
+            'context': {'task_type': ['pir_detection']},
+            'defaultValues': {
+                'device': 0,
+                'samples': 125,
+                'samplingFrequency': 33,
+                },
+            'propInfo': [
+                {
+                    'caption': 'device',
+                    'id': 'device',
+                    'infoText': 'Current support is CC2755R10. You can try other device using correct application example and baud rate.',
+                    'options': ['CC2755'],
+                    'widgetType': 'select'},
+                {
+                    'caption': 'sensor',
+                    'id': 'sensor',
+                    'infoText': 'Connect hardware to detect sensors',
+                    'widgetType': 'select'},
+                {
+                    'caption': 'sampling frequency',
+                    'format': 'dec',
+                    'id': 'samplingFrequency',
+                    'minValue': 25,
+                    'precision': 0,
+                    'widgetType': 'input'},
+                {
+                    'caption': 'samples',
+                    'format': 'dec',
+                    'id': 'samples',
+                    'infoText': 'This number will be rounded up to a multiple of 125.',
+                    'minValue': 125,
+                    'multiplesOf': 125,
+                    'precision': 0,
+                    'widgetType': 'input'}
+            ]
+        },
+
     }
     return live_capture_descriptions
 
@@ -628,7 +666,19 @@ def get_live_capture_example_descriptions(params):
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
             }
+        },
+        'pir_detection': {
+            'CC2755': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang',
+                'deviceName': 'CC2745R10',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC2745R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
         }
+        
     }
     return live_capture_example_descriptions
 
@@ -668,7 +718,7 @@ def get_live_preview_descriptions(params):
         },
         'b': {
             'context': {
-                'task_type': [ 'motor_fault', 'blower_imbalance', 'generic_timeseries_classification']},
+                'task_type': [ 'motor_fault', 'blower_imbalance', 'generic_timeseries_classification', 'pir_detection']},
             'defaultValues': {},
             'propInfo': [
                 {
@@ -748,6 +798,17 @@ def get_live_preview_example_descriptions(params):
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml', 
                 'transport': {'baudRate': 115200}
             }
+        },
+        'pir_detection': {
+            'CC2755': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang',
+                'deviceName': 'CC2745R10',
+                'files': [{'from': 'artifacts/', 'to': 'arc_model'}],
+                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC2745R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
         }
     }
     return live_preview_example_descriptions

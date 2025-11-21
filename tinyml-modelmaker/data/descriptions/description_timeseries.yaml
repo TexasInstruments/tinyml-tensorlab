@@ -80,11 +80,11 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ can be deployed on a local development board. A live preview/demo will also be\
   \ provided to inspect the quality of the developed model while it runs on the development\
   \ board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from\
-  \ TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* n-Class\
-  \ Time Series Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance\
-  \ Fault\n* PIR Detection\n\n## Supported target devices\nThese are the devices that\
-  \ are supported currently. As additional devices are supported, this section will\
-  \ be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
+  \ TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Time Series\
+  \ Classification\n* ARC Fault\n* Motor Fault\n* Fan Blower Imbalance Fault\n* PIR\
+  \ Detection\n\n## Supported target devices\nThese are the devices that are supported\
+  \ currently. As additional devices are supported, this section will be updated.\n\
+  \n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
   * SDK release: 06_00_01\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
@@ -104,8 +104,9 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
   * SDK release: 2_08_00_03\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: http://tgrex10.toro.design.ti.com/tirex4-handoff/explore/node?node=A__AEIJm0rwIeU.2P1OBWwlaA__SIMPLELINK-SDK-EDGEAI-PLUGIN__Nz0hc8j__LATEST&placeholder=true\n\
-  * SDK release: 09_12_00_00\n\n\n## Additional information\n\n\n\n## Dataset format\n\
-  - The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
+  * SDK release: 09_12_00_00\n\n\n## Additional information\n\n * Tiny ML model development\
+  \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset\
+  \ format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
   \ dataset, but there are some changes as explained below.\n\n\n####  Dataset format\n\
   The dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n\
   \                             |\n                             |--classes\n     \
@@ -307,6 +308,40 @@ live_capture:
       multiplesOf: 256
       precision: 0
       widgetType: input
+  d:
+    context:
+      task_type:
+      - pir_detection
+    defaultValues:
+      device: 0
+      samples: 125
+      samplingFrequency: 33
+    propInfo:
+    - caption: device
+      id: device
+      infoText: Current support is CC2755R10. You can try other device using correct
+        application example and baud rate.
+      options:
+      - CC2755
+      widgetType: select
+    - caption: sensor
+      id: sensor
+      infoText: Connect hardware to detect sensors
+      widgetType: select
+    - caption: sampling frequency
+      format: dec
+      id: samplingFrequency
+      minValue: 25
+      precision: 0
+      widgetType: input
+    - caption: samples
+      format: dec
+      id: samples
+      infoText: This number will be rounded up to a multiple of 125.
+      minValue: 125
+      multiplesOf: 125
+      precision: 0
+      widgetType: input
 live_capture_example:
   arc_fault:
     F28P55:
@@ -356,6 +391,16 @@ live_capture_example:
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 115200
+  pir_detection:
+    CC2755:
+      ccsProj: edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang
+      deviceName: CC2745R10
+      files: []
+      from: examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC2745R10.ccxml
+      transport:
+        baudRate: 115200
 live_preview:
   a:
     context:
@@ -389,6 +434,7 @@ live_preview:
       - motor_fault
       - blower_imbalance
       - generic_timeseries_classification
+      - pir_detection
     defaultValues: {}
     propInfo:
     - caption: sensor
@@ -472,6 +518,18 @@ live_preview_example:
       from: examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 115200
+  pir_detection:
+    CC2755:
+      ccsProj: edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang
+      deviceName: CC2745R10
+      files:
+      - from: artifacts/
+        to: arc_model
+      from: examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC2745R10.ccxml
       transport:
         baudRate: 115200
 model_descriptions:
@@ -681,13 +739,11 @@ model_descriptions:
           sram: 2280
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/ArcFault_model_1400_t/ArcFault_model_1400_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/ArcFault_model_1400_t/ArcFault_model_1400_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
@@ -911,13 +967,11 @@ model_descriptions:
           sram: 1026
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/ArcFault_model_200_t/ArcFault_model_200_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 3
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/ArcFault_model_200_t/ArcFault_model_200_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 3
           sram: TBD
@@ -1142,13 +1196,11 @@ model_descriptions:
           sram: 1538
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/ArcFault_model_300_t/ArcFault_model_300_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 2
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/ArcFault_model_300_t/ArcFault_model_300_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 2
           sram: TBD
@@ -1372,13 +1424,11 @@ model_descriptions:
           sram: 1538
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/ArcFault_model_700_t/ArcFault_model_700_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/ArcFault_model_700_t/ArcFault_model_700_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
@@ -1400,7 +1450,6 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
-      help_url: file://models/MotorFault_model_1_t/MotorFault_model_1_t.md
       model_details: "TI\u2122 handcrafted model.\nClassification Model with ~0.6k\
         \ params.\nSimplest model."
       project_path: null
@@ -1618,7 +1667,6 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
-      help_url: file://models/MotorFault_model_2_t/MotorFault_model_2_t.md
       model_details: "TI\u2122 handcrafted model.\nClassification Model with 3k params.\n\
         Best & largest of the 3 models, hardest to train."
       project_path: null
@@ -1836,7 +1884,6 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
-      help_url: file://models/MotorFault_model_3_t/MotorFault_model_3_t.md
       model_details: "TI\u2122 handcrafted model.\nClassification Model with 1k params.\n\
         Middle of the 3 CNN based models."
       project_path: null
@@ -2256,13 +2303,11 @@ model_descriptions:
           sram: 1016
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 2
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/MotorFault_model_1_t/MotorFault_model_1_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 2
           sram: TBD
@@ -2486,13 +2531,11 @@ model_descriptions:
           sram: 10872
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/MotorFault_model_2_t/MotorFault_model_2_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
@@ -2716,13 +2759,11 @@ model_descriptions:
           sram: 656
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/MotorFault_model_3_t/MotorFault_model_3_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
@@ -2744,8 +2785,9 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: false
-      model_details: "TI\u2122 handcrafted model.\nClassification Model with 3k+ params.\n\
-        2-D CNN based model for multiple motion source detection."
+      help_url: file://models/PIRDetection_model_1_t/PIRDetection_model_1_t.md
+      model_details: "TI\u2122 handcrafted model.\nClassification Model with 53k+\
+        \ params.\n2-D CNN based model for multiple motion source detection."
       project_path: null
       project_run_path: null
       projects_path: ./data/projects
@@ -2891,7 +2933,7 @@ model_descriptions:
       - default: 50
         label: Epochs
         max: 1000
-        min: 1
+        min: 2
         name: training_epochs
         type: integer
       - decimal_places: 3
@@ -3363,7 +3405,8 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
-      model_details: 'Classification Model with 13k params.
+      help_url: file://models/Res_Add_TimeSeries_Generic_3k_t/Res_Add_TimeSeries_Generic_3k_t.md
+      model_details: 'Classification Model with 3k params.
 
         Residual Connection.
 
@@ -3534,52 +3577,52 @@ model_descriptions:
         CC2755:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         F280015:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         F28003:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         F28004:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         F2837:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         F28P55:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         F28P65:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         MSPM0G3507:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
         MSPM0G5187:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 0
+          model_selection_factor: 6
           sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -3599,6 +3642,7 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      help_url: file://models/Res_Cat_TimeSeries_Generic_3k_t/Res_Cat_TimeSeries_Generic_3k_t.md
       model_details: 'Classification Model with 3k params.
 
         Residual Connection.
@@ -3835,6 +3879,7 @@ model_descriptions:
     common:
       download_path: ./data/downloads
       generic_model: true
+      help_url: file://models/TimeSeries_Generic_100_t/TimeSeries_Generic_100_t.md
       model_details: 'Classification Model with 100 params.
 
         2 Conv+BatchNorm+Relu layers+ Adapt Avg Pool +Linear Layer.
@@ -4277,13 +4322,11 @@ model_descriptions:
           sram: 4160
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t_MSPM0G3507.md
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_13k_t/TimeSeries_Generic_13k_t_MSPM0G5187.md
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
@@ -4476,54 +4519,52 @@ model_descriptions:
         CC2755:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: TBD
         F280013:
           flash: 3242
           inference_time_us: 14463
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: 12320
         F280015:
           flash: 3242
           inference_time_us: 14463
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: 12320
         F28003:
           flash: 3242
           inference_time_us: 14463
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: 12320
         F28004:
           flash: 3242
           inference_time_us: 17356
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: 12320
         F2837:
           flash: 3242
           inference_time_us: 14463
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: 12320
         F28P55:
           flash: 3467
           inference_time_us: 1257
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: 6250
         F28P65:
           flash: 3242
           inference_time_us: 8678
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: 12320
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t_MSPM0G3507.md
           inference_time_us: TBD
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_1k_t/TimeSeries_Generic_1k_t_MSPM0G5187.md
           inference_time_us: TBD
-          model_selection_factor: 3
+          model_selection_factor: 2
           sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -4712,54 +4753,52 @@ model_descriptions:
         CC2755:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: TBD
         F280013:
           flash: 6433
           inference_time_us: 6254
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: 1936
         F280015:
           flash: 6433
           inference_time_us: 6254
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: 1936
         F28003:
           flash: 6433
           inference_time_us: 6254
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: 1936
         F28004:
           flash: 6433
           inference_time_us: 7505
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: 1936
         F2837:
           flash: 6433
           inference_time_us: 6254
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: 1936
         F28P55:
           flash: 5527
           inference_time_us: 751
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: 1690
         F28P65:
           flash: 6433
           inference_time_us: 3752
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: 1936
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_4k_t/TimeSeries_Generic_4k_t_MSPM0G3507.md
           inference_time_us: TBD
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_4k_t/TimeSeries_Generic_4k_t_MSPM0G5187.md
           inference_time_us: TBD
-          model_selection_factor: 2
+          model_selection_factor: 5
           sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -4947,54 +4986,52 @@ model_descriptions:
         CC2755:
           flash: TBD
           inference_time_us: TBD
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: TBD
         F280013:
           flash: 11331
           inference_time_us: 11091
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: 3264
         F280015:
           flash: 11331
           inference_time_us: 11091
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: 3264
         F28003:
           flash: 11331
           inference_time_us: 11091
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: 3264
         F28004:
           flash: 11331
           inference_time_us: 13310
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: 3264
         F2837:
           flash: 11331
           inference_time_us: 11091
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: 3264
         F28P55:
           flash: 6709
           inference_time_us: 2235
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: 8364
         F28P65:
           flash: 11331
           inference_time_us: 6655
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: 3264
         MSPM0G3507:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t_MSPM0G3507.md
           inference_time_us: TBD
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: TBD
         MSPM0G5187:
           flash: TBD
-          help_url: file://models/TimeSeries_Generic_6k_t/TimeSeries_Generic_6k_t_MSPM0G5187.md
           inference_time_us: TBD
-          model_selection_factor: 1
+          model_selection_factor: 3
           sram: TBD
       train_output_path: null
       training_backend: tinyml_tinyverse
@@ -7987,7 +8024,8 @@ target_device_descriptions:
       \ control and security\n* More details : https://www.ti.com/product/AM2634\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/AM2634\n\
       * Development board: https://www.ti.com/tool/LP-AM263\n* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM263
     device_selection_factor: 7
     device_type: MCU
@@ -7998,7 +8036,8 @@ target_device_descriptions:
       \ wireless MCU with 1MB flash, HSM, APU, NPU-CDE\n* More details : https://www.ti.com/product/CC2755R10\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/CC2755R10\n\
       * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: http://tgrex10.toro.design.ti.com/tirex4-handoff/explore/node?node=A__AEIJm0rwIeU.2P1OBWwlaA__SIMPLELINK-SDK-EDGEAI-PLUGIN__Nz0hc8j__LATEST&placeholder=true\n\
-      * SDK release: 09_12_00_00\n\nAdditional information:\n\n"
+      * SDK release: 09_12_00_00\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC2755
     device_selection_factor: 11
     device_type: MCU
@@ -8010,7 +8049,8 @@ target_device_descriptions:
       \ and more\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800137\n\nImportant\
       \ links:\n* Product information: https://www.ti.com/product/TMS320F2800137\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F280013
     device_selection_factor: 0
     device_type: MCU
@@ -8021,7 +8061,8 @@ target_device_descriptions:
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/tool/LAUNCHXL-F2800157\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F2800157\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F280015
     device_selection_factor: 1
     device_type: MCU
@@ -8032,7 +8073,8 @@ target_device_descriptions:
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280039C\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280039C\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28003
     device_selection_factor: 2
     device_type: MCU
@@ -8043,7 +8085,8 @@ target_device_descriptions:
       \ CLB, AES and CAN-FD\n* More details : https://www.ti.com/product/TMS320F280049C\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F280049C\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28004
     device_selection_factor: 3
     device_type: MCU
@@ -8054,7 +8097,8 @@ target_device_descriptions:
       \ 1024 KB flash, EMIF, 16b ADC\n* More details : https://www.ti.com/product/TMS320F28377D\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28377D\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F2837
     device_selection_factor: 4
     device_type: MCU
@@ -8065,7 +8109,8 @@ target_device_descriptions:
       \ 5x ADCs, CLB, AES and NNPU\n* More details : https://www.ti.com/product/TMS320F28P550SJ\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28P55
     device_selection_factor: 6
     device_type: MCU
@@ -8076,7 +8121,8 @@ target_device_descriptions:
       \ 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES\n* More details : https://www.ti.com/product/TMS320F28P650DK\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
-      * SDK release: 06_00_01\n\nAdditional information:\n\n"
+      * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28P65
     device_selection_factor: 5
     device_type: MCU
@@ -8087,7 +8133,8 @@ target_device_descriptions:
       \ safety compliance, 4MB\n* More details : https://www.ti.com/product/F29H850TU\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/F29H850TU\n\
       * SOM EVM: https://www.ti.com/tool/F29H85X-SOM-EVM\n* C2000 SDK: https://www.ti.com/tool/download/F29H85X-SDK/\n\
-      * SDK release: 01_00_00\n\nAdditional information:\n\n"
+      * SDK release: 01_00_00\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F29H85
     device_selection_factor: 8
     device_type: MCU
@@ -8098,7 +8145,8 @@ target_device_descriptions:
       \ ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_08_00_03\n\nAdditional information:\n\n"
+      * SDK release: 2_08_00_03\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G3507
     device_selection_factor: 9
     device_type: MCU
@@ -8106,10 +8154,11 @@ target_device_descriptions:
     sdk_version: 2.08.00.03
   MSPM0G5187:
     device_details: "80MHz Arm\xAE Cortex\xAE-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps\
-      \ ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G5187\n\
+      \ ADC, USB, TI-NPU\n* More details : https://www.ti.com/product/MSPM0G5187\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_08_00_03\n\nAdditional information:\n\n"
+      * SDK release: 2_08_00_03\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G5187
     device_selection_factor: 10
     device_type: MCU
@@ -8168,7 +8217,7 @@ task_descriptions:
     - MSPM0G5187
     - CC2755
     target_module: timeseries
-    task_name: n-Class Time Series Classification
+    task_name: Time Series Classification
   motor_fault:
     stages:
     - dataset
