@@ -203,10 +203,10 @@ To evaluate the performance of generic models for motor fault classification, we
 
 ### Feature Extraction Presets 
 
-1. **MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D**
-2. **MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1**
-3. **MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1**
-4. **MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1**
+1. **Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D**
+2. **Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1**
+3. **Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1**
+4. **Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1**
 
 *You can read more about the definitions of these presets [here](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelmaker/examples/data_processing_and_feature_extraction#predefined-feature-extraction-presets).*
 
@@ -218,10 +218,10 @@ The table below shows the float train accuracy, quant train accuracy, and test e
   <tr>
     <th rowspan="2" style="text-align:center;">Model</th>
     <th rowspan="2" style="text-align:center;">Parameters</th>
-    <th colspan="3" style="text-align:center;">MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D</th>
-    <th colspan="3" style="text-align:center;">MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1</th>
-    <th colspan="3" style="text-align:center;">MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1</th>
-    <th colspan="3" style="text-align:center;">MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1</th>
+    <th colspan="3" style="text-align:center;">Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D</th>
+    <th colspan="3" style="text-align:center;">Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1</th>
+    <th colspan="3" style="text-align:center;">Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1</th>
+    <th colspan="3" style="text-align:center;">Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1</th>
   </tr>
   <tr>
     <th>Float Train Accuracy</th>
@@ -307,13 +307,13 @@ The table below shows the float train accuracy, quant train accuracy, and test e
 
 To help you visualize the above information, bar graphs are provided below for each preset. Each graph compares the **Float Train Accuracy**, **Quant Train Accuracy**, and **Test Evaluation Accuracy** for all models under the respective preset.
 
-| **Preset 1**: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D | **Preset 2**: MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1 |
+| **Preset 1**: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D | **Preset 2**: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1 |
 |-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| ![Preset 1 Bar Graph](./graphs/model_vs_accuracy_plots/MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D_accuracy_comparison.png)                                    | ![Preset 2 Bar Graph](./graphs/model_vs_accuracy_plots/MotorFault_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1_accuracy_comparison.png)                                    |
+| ![Preset 1 Bar Graph](./graphs/model_vs_accuracy_plots/Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D_accuracy_comparison.png)                                    | ![Preset 2 Bar Graph](./graphs/model_vs_accuracy_plots/Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1_accuracy_comparison.png)                                    |
 
-| **Preset 3**: MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1  | **Preset 4**: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1  |
+| **Preset 3**: Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1  | **Preset 4**: Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1  |
 |-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| ![Preset 3 Bar Graph](./graphs/model_vs_accuracy_plots/MotorFault_256Input_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1_accuracy_comparison.png)                                    | ![Preset 4 Bar Graph](./graphs/model_vs_accuracy_plots/MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1_accuracy_comparison.png)                                    |
+| ![Preset 3 Bar Graph](./graphs/model_vs_accuracy_plots/Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1_accuracy_comparison.png)                                    | ![Preset 4 Bar Graph](./graphs/model_vs_accuracy_plots/Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1_accuracy_comparison.png)                                    |
 
 ---
 
