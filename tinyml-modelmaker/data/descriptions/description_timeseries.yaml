@@ -3546,6 +3546,7 @@ model_descriptions:
         dynamic: true
         label: Preprocessing Parameters
         name: preprocessing_group
+        script: generictimeseries.py
         type: group
       - default:
         - training_epochs
@@ -3783,6 +3784,7 @@ model_descriptions:
         dynamic: true
         label: Preprocessing Parameters
         name: preprocessing_group
+        script: generictimeseries.py
         type: group
       - default:
         - training_epochs

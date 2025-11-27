@@ -168,6 +168,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"generictimeseries.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]
@@ -437,6 +438,7 @@
           {
             "type":"group",
             "dynamic":true,
+            "script":"generictimeseries.py",
             "name":"preprocessing_group",
             "label":"Preprocessing Parameters",
             "default":[]

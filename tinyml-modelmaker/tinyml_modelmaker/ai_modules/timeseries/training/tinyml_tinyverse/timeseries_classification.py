@@ -95,6 +95,7 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['Res_Add_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_CC2755]),
             },
+            properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'Res_Cat_TimeSeries_Generic_3k_t': utils.deep_update_dict(deepcopy(template_model_description), {
@@ -117,6 +118,7 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['Res_Cat_TimeSeries_Generic_3k_t'][constants.TARGET_DEVICE_CC2755]),
             },
+            properties=[dict(type="group", dynamic=True, script="generictimeseries.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'TimeSeries_Generic_13k_t': utils.deep_update_dict(deepcopy(template_model_description), {
@@ -715,7 +717,7 @@ class ModelTraining:
                 {'type': 'Confusion Matrix (Test Data)', 'name': 'Confusion Matrix',
                  'description': 'Confusion Matrix (Test Data)', 'unit': 'Confusion Matrix', 'value': None,
                  'regex': [{'op': 'search',
-                            'pattern': r'test_data\s*:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\w\s\:\=\+\-\|]+)(\r\n|\r|\n)^$',
+                            'pattern': r'test_data\s*:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\w\s\:\=\+\-\|]+)(\r\n|\r|\n)',
                             'groupId': 'cm', 'scale_factor': 1}],
                  },
                 {'type': 'Matrix Label', 'name': 'Matrix Label', 'description': 'Matrix Label',

@@ -729,16 +729,6 @@ CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
 # CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
 CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
-# CC2755 Compiler
-CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
-# CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
-CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
-
-# CC2755 Compiler
-CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
-# CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
-CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
-
 
 CROSS_COMPILER_OPTIONS_C28 = f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I{C2000_DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=."
 CROSS_COMPILER_OPTIONS_F29H85 = f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I."
