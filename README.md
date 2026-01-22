@@ -17,7 +17,7 @@
 ## Introduction
 
 The Tiny ML Tensorlab repository is meant to be as a starting point to install and explore TI's AI offering for MCUs.
-It helps to install all the required repositories to get started. Currently, it can handle Time series Classification, Regression and Anomaly Detection tasks. 
+It helps to install all the required repositories to get started. Currently, it can handle Time Series Classification, Regression, Forecasting, Anomaly Detection, and Image Classification tasks. 
 
 
 Once you clone this repository, you will find the following repositories present within the `tinyml-tensorlab` directory:
@@ -159,7 +159,7 @@ To begin with, you can use the repo as a `developer` or `user`.
     5. Now you're ready to go! Run examples from the `tinyml-modelzoo` directory:
     ```bash
     cd tinyml-modelzoo
-    ./run_training.sh examples/dc_arc_fault/config_dsk.yaml
+    ./run_tinyml_modelzoo.sh examples/dc_arc_fault/config_dsk.yaml
     ```
     </details>
     
@@ -205,7 +205,7 @@ To begin with, you can use the repo as a `developer` or `user`.
     * We can run it now! Run examples from the `tinyml-modelzoo` directory:
     ```powershell
     cd ..\tinyml-modelzoo
-    .\run_training.bat examples\dc_arc_fault\config_dsk.yaml
+    .\run_tinyml_modelzoo.bat examples\dc_arc_fault\config_dsk.yaml
     ```
     
 </details>
@@ -236,7 +236,7 @@ To begin with, you can use the repo as a `developer` or `user`.
 </details>
 
 * To empower your solution with TI's AI, you can use the **[Tiny ML ModelZoo](./tinyml-modelzoo)** examples for an advanced set of capabilities.
-  * Run examples: `cd tinyml-modelzoo && ./run_training.sh examples/dc_arc_fault/config_dsk.yaml` (Linux) or `cd tinyml-modelzoo && run_training.bat examples\dc_arc_fault\config_dsk.yaml` (Windows)
+  * Run examples: `cd tinyml-modelzoo && ./run_tinyml_modelzoo.sh examples/dc_arc_fault/config_dsk.yaml` (Linux) or `cd tinyml-modelzoo && run_tinyml_modelzoo.bat examples\dc_arc_fault\config_dsk.yaml` (Windows)
   * Supports any Time series Classification tasks (including Arc Fault and Motor Bearing Fault Classification)
 * You can also use the [Edge AI Studio Model Composer GUI](https://dev.ti.com/modelcomposer/) to quickly train an AI model (No Code Platform)
   * This supports only Arc Fault and Motor Bearing Fault Classification applications currently.
