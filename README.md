@@ -49,6 +49,60 @@ The other repositories are here for a purpose:
 
 <hr>
 
+## Supported Target Devices
+
+The TinyML toolchain supports a wide range of TI MCUs across multiple device families:
+
+<details>
+<summary>Click to expand device list</summary>
+
+### C2000 DSP Family
+| Device | NPU | Description |
+|--------|-----|-------------|
+| F28P55 | Yes | 32-bit MCU - Recommended for complex models |
+| F28P65 | No | 32-bit MCU, 150 MHz |
+| F29H85 | No | 64-bit MCU with C29x core |
+| F29P58 | No | 64-bit MCU with C29x core |
+| F29P32 | No | 64-bit MCU with C29x core |
+| F2837 | No | 32-bit dual-core MCU, 200 MHz |
+| F28003 | No | 32-bit MCU, 100 MHz |
+| F28004 | No | 32-bit MCU, 100 MHz |
+| F280013 | No | 32-bit MCU, 100 MHz |
+| F280015 | No | 32-bit MCU, 120 MHz |
+
+### MSPM0 Family (Arm Cortex-M0+)
+| Device | NPU | Description |
+|--------|-----|-------------|
+| MSPM0G3507 | No | 80 MHz - Ultra-low power |
+| MSPM0G3519 | No | 80 MHz - Ultra-low power |
+| MSPM0G5187 | Yes | 80 MHz - Ultra-low power, NPU-accelerated |
+
+### MSPM33C Family (Arm Cortex-M33)
+| Device | NPU | Description |
+|--------|-----|-------------|
+| MSPM33C32 | No | 160 MHz with TrustZone |
+| MSPM33C34 | No | 160 MHz Arm Cortex-M33 |
+| AM13E2 | Yes | Arm Cortex-M33, NPU-accelerated (CLI only) |
+
+### AM26x Family (Arm Cortex-R5)
+| Device | NPU | Description |
+|--------|-----|-------------|
+| AM263 | No | Quad-core Arm Cortex-R5F, 400 MHz |
+| AM263P | No | Quad-core Arm Cortex-R5F, 400 MHz |
+| AM261 | No | Single-core Arm Cortex-R5F, 400 MHz |
+
+### Connectivity Devices (Wireless)
+| Device | NPU | Description |
+|--------|-----|-------------|
+| CC2755 | No | 96 MHz Arm Cortex-M33 wireless MCU |
+| CC1352 | No | Arm Cortex-M4 wireless MCU |
+
+</details>
+
+For detailed device-task support matrix, see [DEVICE_TASK_SUPPORT.md](./tinyml-modelmaker/DEVICE_TASK_SUPPORT.md).
+
+<hr>
+
 # Using this repository
 
 To begin with, you can use the repo as a `developer` or `user`.
