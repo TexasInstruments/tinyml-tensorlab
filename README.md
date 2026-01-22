@@ -58,7 +58,7 @@ The TinyML toolchain supports a wide range of TI MCUs across multiple device fam
 
 ### C2000 DSP Family
 | Device | NPU | Description |
-|--------|-----|-------------|
+|--------|-----|-------------|``
 | F28P55 | Yes | 32-bit MCU - Recommended for complex models |
 | F28P65 | No | 32-bit MCU, 150 MHz |
 | F29H85 | No | 64-bit MCU with C29x core |

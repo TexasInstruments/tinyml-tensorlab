@@ -1,0 +1,269 @@
+======================
+Understanding Config
+======================
+
+This guide explains the YAML configuration file structure used by Tiny ML Tensorlab.
+
+Configuration Overview
+----------------------
+
+Every training run is controlled by a YAML configuration file with these sections:
+
+.. code-block:: yaml
+
+   common:        # General settings
+   dataset:       # Data source and splitting
+   data_processing_feature_extraction:  # Preprocessing
+   training:      # Model and training parameters
+   testing:       # Test evaluation settings
+   compilation:   # Device compilation settings
+
+Common Section
+--------------
+
+.. code-block:: yaml
+
+   common:
+     target_module: 'timeseries'
+     task_type: 'generic_timeseries_classification'
+     target_device: 'F28P55'
+     run_name: '{date-time}/{model_name}'
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Parameter
+     - Description
+   * - ``target_module``
+     - ``'timeseries'`` or ``'image'``
+   * - ``task_type``
+     - Task type (see valid values below)
+   * - ``target_device``
+     - Target MCU (e.g., ``F28P55``, ``MSPM0G3507``)
+   * - ``run_name``
+     - Output directory name. Supports placeholders: ``{date-time}``, ``{model_name}``
+
+.. _task-types-table:
+
+**Valid task_type Values:**
+
+.. list-table::
+   :widths: 40 60
+
+   * - ``generic_timeseries_classification``
+     - Time series classification
+   * - ``generic_timeseries_regression``
+     - Time series regression
+   * - ``generic_timeseries_forecasting``
+     - Time series forecasting
+   * - ``generic_timeseries_anomalydetection``
+     - Anomaly detection (autoencoder)
+   * - ``image_classification``
+     - Image classification
+
+Dataset Section
+---------------
+
+.. code-block:: yaml
+
+   dataset:
+     enable: True
+     dataset_name: 'my_dataset'
+     input_data_path: '/path/to/data'  # or URL
+     split_type: 'amongst_files'
+     split_factor: [0.6, 0.3, 0.1]
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Parameter
+     - Description
+   * - ``enable``
+     - Set ``False`` to skip dataset loading (for BYOM compilation)
+   * - ``dataset_name``
+     - Name used for output directory
+   * - ``input_data_path``
+     - Local path, zip file, or URL
+   * - ``split_type``
+     - ``'amongst_files'`` (files split) or ``'within_files'`` (rows split)
+   * - ``split_factor``
+     - [train, val, test] ratios (must sum to 1.0)
+
+Data Processing & Feature Extraction Section
+--------------------------------------------
+
+.. code-block:: yaml
+
+   data_processing_feature_extraction:
+     # Data processing
+     data_proc_transforms: ['DownSample', 'SimpleWindow']
+     sampling_rate: 100000
+     new_sr: 10000
+     frame_size: 1024
+     stride_size: 0.5
+
+     # Feature extraction
+     feature_extraction_name: 'Generic_1024Input_FFTBIN_64Feature_8Frame'
+     variables: 1
+
+**Data Processing Parameters:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Parameter
+     - Description
+   * - ``data_proc_transforms``
+     - List of transforms: ``'DownSample'``, ``'SimpleWindow'``, ``'GainVariation'``
+   * - ``sampling_rate``
+     - Original sample rate (for DownSample)
+   * - ``new_sr``
+     - Target sample rate after downsampling
+   * - ``frame_size``
+     - Window size in samples
+   * - ``stride_size``
+     - Overlap fraction (0.5 = 50% overlap)
+
+**Feature Extraction Parameters:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Parameter
+     - Description
+   * - ``feature_extraction_name``
+     - Preset name (see :doc:`/features/feature_extraction`)
+   * - ``variables``
+     - Number of input channels
+   * - ``feat_ext_transform``
+     - Custom transform list if not using preset
+
+Training Section
+----------------
+
+.. code-block:: yaml
+
+   training:
+     enable: True
+     model_name: 'CLS_1k_NPU'
+     batch_size: 256
+     training_epochs: 20
+     num_gpus: 0
+     learning_rate: 0.001
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Parameter
+     - Description
+   * - ``enable``
+     - Set ``False`` to skip training
+   * - ``model_name``
+     - Model architecture name from ModelZoo
+   * - ``batch_size``
+     - Samples per training batch
+   * - ``training_epochs``
+     - Number of training passes
+   * - ``num_gpus``
+     - ``0`` for CPU, ``1`` for single GPU
+   * - ``learning_rate``
+     - Initial learning rate (default varies by task)
+
+**NAS Parameters (Optional):**
+
+.. code-block:: yaml
+
+   training:
+     nas_enabled: True
+     nas_epochs: 10
+     nas_optimization_mode: 'Memory'  # or 'Compute'
+     nas_model_size: 'm'  # s, m, l, xl, xxl
+
+Testing Section
+---------------
+
+.. code-block:: yaml
+
+   testing:
+     enable: True
+
+Usually left empty (``{}``) to use defaults. Testing automatically runs
+on the test set after training.
+
+Compilation Section
+-------------------
+
+.. code-block:: yaml
+
+   compilation:
+     enable: True
+     preset_name: 'default_preset'  # or 'compress_npu_layer_data'
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Parameter
+     - Description
+   * - ``enable``
+     - Set ``False`` to skip compilation
+   * - ``preset_name``
+     - Compilation options preset
+   * - ``model_path``
+     - Path to external ONNX model (for BYOM)
+
+Complete Example
+----------------
+
+.. code-block:: yaml
+
+   common:
+     target_module: 'timeseries'
+     task_type: 'generic_timeseries_classification'
+     target_device: 'F28P55'
+     run_name: '{date-time}/{model_name}'
+
+   dataset:
+     enable: True
+     dataset_name: 'my_vibration_data'
+     input_data_path: '/data/vibration_dataset'
+     split_factor: [0.7, 0.2, 0.1]
+
+   data_processing_feature_extraction:
+     data_proc_transforms: ['SimpleWindow']
+     frame_size: 512
+     stride_size: 0.25
+     feature_extraction_name: 'Generic_512Input_FFTBIN_32Feature_8Frame'
+     variables: 3
+
+   training:
+     enable: True
+     model_name: 'CLS_4k_NPU'
+     batch_size: 128
+     training_epochs: 50
+     num_gpus: 1
+
+   testing:
+     enable: True
+
+   compilation:
+     enable: True
+
+Tips
+----
+
+* Start with a preset ``feature_extraction_name`` before customizing
+* Use smaller ``batch_size`` if you run out of memory
+* Set ``num_gpus: 0`` to force CPU training
+* Use ``enable: False`` to skip stages for debugging
+
+See Also
+--------
+
+* :doc:`/features/feature_extraction` - Feature extraction presets
+* :doc:`/appendix/config_reference` - Complete parameter reference

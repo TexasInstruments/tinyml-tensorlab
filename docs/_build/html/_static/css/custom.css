@@ -1,0 +1,460 @@
+/* Custom CSS for Tiny ML Tensorlab Documentation */
+/* Texas Instruments Official Template Style */
+
+/* ==========================================================================
+   TI Brand Colors
+   ========================================================================== */
+
+:root {
+    --ti-red: #cc0000;
+    --ti-red-dark: #a30000;
+    --ti-red-light: #e60000;
+    --ti-gray-dark: #333333;
+    --ti-gray-medium: #666666;
+    --ti-gray-light: #999999;
+    --ti-white: #ffffff;
+    --ti-link-blue: #c00;
+    /* Sidebar gradient colors - white to progressively darker */
+    --ti-sidebar-l1: #ffffff;
+    --ti-sidebar-l2: #f0f0f0;
+    --ti-sidebar-l3: #e0e0e0;
+    --ti-sidebar-l4: #d0d0d0;
+}
+
+/* ==========================================================================
+   Header Banner - White bar with TI Logo and red line
+   ========================================================================== */
+
+/* Create the red header banner */
+.wy-nav-top {
+    background-color: var(--ti-red) !important;
+}
+
+/* Header banner for desktop - add via custom header */
+body {
+    padding-top: 0 !important;
+}
+
+/* Top white banner with TI logo - LARGER */
+#ti-header-banner {
+    background-color: var(--ti-white);
+    padding: 15px 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    border-bottom: 40px solid var(--ti-red);
+    box-sizing: border-box;
+}
+
+#ti-header-banner img {
+    height: 50px;
+    width: auto;
+}
+
+#ti-header-banner a {
+    text-decoration: none;
+}
+
+/* Adjust content for fixed header (80px banner + 40px red line = 120px) */
+.wy-nav-side {
+    top: 120px !important;
+    height: calc(100% - 120px) !important;
+}
+
+.wy-nav-content-wrap {
+    margin-top: 120px !important;
+}
+
+/* Mobile header adjustment */
+@media screen and (max-width: 768px) {
+    .wy-nav-top {
+        top: 120px !important;
+    }
+
+    .wy-nav-content-wrap {
+        margin-top: 170px !important;
+    }
+}
+
+/* ==========================================================================
+   Sidebar Styling - White to Gray gradient (deeper = darker)
+   ========================================================================== */
+
+/* Sidebar search/title area - Dark grey background */
+.wy-side-nav-search {
+    background-color: #404040 !important;
+    padding: 18px 15px !important;
+    border-bottom: none !important;
+}
+
+.wy-side-nav-search input[type="text"] {
+    border: 1px solid #666 !important;
+    background-color: var(--ti-white) !important;
+    border-radius: 3px !important;
+    margin-top: 10px !important;
+}
+
+/* Sidebar title area - white text on dark grey */
+.wy-side-nav-search > a {
+    color: var(--ti-white) !important;
+    font-size: 15px !important;
+    font-weight: bold !important;
+}
+
+.wy-side-nav-search .wy-dropdown > a {
+    color: var(--ti-white) !important;
+}
+
+.wy-side-nav-search > div.version {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 13px !important;
+    margin-top: 5px !important;
+}
+
+/* Main sidebar scroll area - white background */
+.wy-side-scroll {
+    background-color: var(--ti-sidebar-l1) !important;
+}
+
+.wy-menu-vertical {
+    background-color: var(--ti-sidebar-l1) !important;
+    padding-left: 5px !important;
+}
+
+/* Navigation items - black text */
+.wy-menu-vertical a {
+    color: var(--ti-gray-dark) !important;
+    font-size: 13px !important;
+}
+
+.wy-menu-vertical a:hover {
+    background-color: #e8e8e8 !important;
+    color: #000000 !important;
+}
+
+/* Level 1 navigation - white background */
+.wy-menu-vertical li.toctree-l1 > a {
+    color: #000000 !important;
+    padding: 8px 16px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    background-color: var(--ti-sidebar-l1) !important;
+}
+
+/* Level 2 navigation - slightly darker */
+.wy-menu-vertical li.toctree-l2 > a {
+    padding-left: 24px !important;
+    background-color: var(--ti-sidebar-l2) !important;
+    color: #000000 !important;
+}
+
+/* Level 3 navigation - even darker */
+.wy-menu-vertical li.toctree-l3 > a {
+    padding-left: 36px !important;
+    background-color: var(--ti-sidebar-l3) !important;
+    color: #000000 !important;
+}
+
+/* Level 4 navigation - darkest */
+.wy-menu-vertical li.toctree-l4 > a {
+    padding-left: 48px !important;
+    background-color: var(--ti-sidebar-l4) !important;
+    color: #000000 !important;
+}
+
+/* Current/active page highlighting */
+.wy-menu-vertical li.current > a {
+    border-left: 3px solid var(--ti-red) !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+}
+
+.wy-menu-vertical li.toctree-l1.current > a {
+    background-color: var(--ti-sidebar-l1) !important;
+}
+
+.wy-menu-vertical li.toctree-l2.current > a {
+    background-color: var(--ti-sidebar-l2) !important;
+}
+
+.wy-menu-vertical li.toctree-l3.current > a {
+    background-color: var(--ti-sidebar-l3) !important;
+}
+
+.wy-menu-vertical li.current a:hover {
+    background-color: #d8d8d8 !important;
+}
+
+/* Expanded section styling */
+.wy-menu-vertical li.toctree-l1.current > a {
+    border-bottom: 1px solid var(--ti-red) !important;
+}
+
+/* Remove default carets and use custom styling */
+.wy-menu-vertical li span.toctree-expand {
+    color: var(--ti-gray-medium) !important;
+}
+
+/* Caption styling */
+.wy-menu-vertical p.caption {
+    color: var(--ti-gray-dark) !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    padding: 10px 16px 5px !important;
+    margin-top: 10px !important;
+    font-weight: bold !important;
+}
+
+/* Hide the logo in sidebar since we have header banner */
+.wy-side-nav-search .wy-side-nav-search-logo {
+    display: none !important;
+}
+
+/* Home icon styling */
+.wy-side-nav-search .icon-home::before {
+    content: "\f015" !important;
+    font-family: FontAwesome !important;
+    margin-right: 8px !important;
+}
+
+/* ==========================================================================
+   Content Area Styling
+   ========================================================================== */
+
+/* Main content background */
+.wy-nav-content {
+    background-color: var(--ti-white) !important;
+    max-width: 1200px !important;
+}
+
+/* Breadcrumb styling */
+.wy-breadcrumbs {
+    padding: 10px 0 !important;
+    border-bottom: 1px solid #eee !important;
+    margin-bottom: 20px !important;
+}
+
+.wy-breadcrumbs a {
+    color: var(--ti-red) !important;
+}
+
+.wy-breadcrumbs li {
+    color: var(--ti-gray-medium) !important;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--ti-gray-dark) !important;
+    font-weight: 600 !important;
+}
+
+h1 {
+    border-bottom: 2px solid #ddd !important;
+    padding-bottom: 10px !important;
+}
+
+h2 {
+    border-bottom: 1px solid #eee !important;
+    padding-bottom: 8px !important;
+}
+
+/* Links */
+.wy-nav-content a {
+    color: var(--ti-red) !important;
+}
+
+.wy-nav-content a:hover {
+    color: var(--ti-red-dark) !important;
+    text-decoration: underline !important;
+}
+
+/* ==========================================================================
+   Table Styling
+   ========================================================================== */
+
+/* Table headers - light gray background */
+table.docutils thead th,
+table.docutils th {
+    background-color: #f5f5f5 !important;
+    color: var(--ti-gray-dark) !important;
+    font-weight: 600 !important;
+    border: 1px solid #ddd !important;
+    padding: 10px !important;
+}
+
+table.docutils td {
+    border: 1px solid #ddd !important;
+    padding: 8px 10px !important;
+}
+
+table.docutils tr:nth-child(even) {
+    background-color: #fafafa !important;
+}
+
+/* ==========================================================================
+   Code Block Styling
+   ========================================================================== */
+
+.highlight {
+    background-color: #f8f8f8 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 3px !important;
+}
+
+code {
+    background-color: #f0f0f0 !important;
+    color: var(--ti-red) !important;
+    padding: 2px 5px !important;
+    border-radius: 3px !important;
+    font-size: 90% !important;
+}
+
+pre {
+    background-color: #f8f8f8 !important;
+}
+
+/* ==========================================================================
+   Admonitions
+   ========================================================================== */
+
+.admonition {
+    border-left: 4px solid var(--ti-gray-medium) !important;
+    background-color: #f9f9f9 !important;
+}
+
+.admonition.note {
+    border-left-color: #6ab0de !important;
+}
+
+.admonition.note .admonition-title {
+    background-color: #6ab0de !important;
+}
+
+.admonition.warning {
+    border-left-color: #f0b37e !important;
+}
+
+.admonition.warning .admonition-title {
+    background-color: #f0b37e !important;
+}
+
+.admonition.tip {
+    border-left-color: #1abc9c !important;
+}
+
+.admonition.tip .admonition-title {
+    background-color: #1abc9c !important;
+}
+
+.admonition.important {
+    border-left-color: var(--ti-red) !important;
+}
+
+.admonition.important .admonition-title {
+    background-color: var(--ti-red) !important;
+}
+
+/* ==========================================================================
+   Footer Styling
+   ========================================================================== */
+
+footer {
+    border-top: 1px solid #ddd !important;
+    padding-top: 15px !important;
+    color: var(--ti-gray-medium) !important;
+}
+
+/* ==========================================================================
+   Tabs Styling
+   ========================================================================== */
+
+.sphinx-tabs-tab {
+    background-color: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    color: var(--ti-gray-dark) !important;
+}
+
+.sphinx-tabs-tab[aria-selected="true"] {
+    background-color: var(--ti-white) !important;
+    border-bottom: 2px solid var(--ti-red) !important;
+    color: var(--ti-red) !important;
+}
+
+.sphinx-tabs-panel {
+    border: 1px solid #ddd !important;
+    border-top: none !important;
+}
+
+/* ==========================================================================
+   Cards (sphinx-design)
+   ========================================================================== */
+
+.sd-card {
+    border: 1px solid #ddd !important;
+}
+
+.sd-card-header {
+    background-color: #f5f5f5 !important;
+    color: var(--ti-gray-dark) !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn-neutral {
+    background-color: #f5f5f5 !important;
+    color: var(--ti-gray-dark) !important;
+    border: 1px solid #ddd !important;
+}
+
+.btn-neutral:hover {
+    background-color: #e8e8e8 !important;
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    #ti-header-banner {
+        position: relative !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .wy-nav-side {
+        display: none !important;
+    }
+
+    .wy-nav-content-wrap {
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+    }
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+    #ti-header-banner {
+        padding: 10px 15px;
+        height: 60px;
+        border-bottom: 30px solid var(--ti-red);
+    }
+
+    #ti-header-banner img {
+        height: 40px;
+    }
+
+    .wy-side-nav-search > a {
+        font-size: 13px !important;
+    }
+}

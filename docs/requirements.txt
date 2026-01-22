@@ -1,0 +1,24 @@
+# TinyML Tensorlab Documentation Build Requirements
+
+# Core Sphinx
+sphinx>=7.0.0
+sphinx-rtd-theme>=2.0.0
+
+# Markdown support
+myst-parser>=2.0.0
+
+# Extensions
+sphinx-copybutton>=0.5.0
+sphinx-tabs>=3.4.0
+sphinx-design>=0.5.0
+
+# API documentation
+sphinx-autodoc-typehints>=1.25.0
+
+# Optional: for building
+docutils>=0.20
+
+# Note: For PDF output, ensure LaTeX is installed on your system
+# Ubuntu/Debian: sudo apt-get install texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra latexmk
+# macOS: brew install --cask mactex
+# Windows: Install MiKTeX from https://miktex.org/

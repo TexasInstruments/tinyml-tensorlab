@@ -1,0 +1,127 @@
+/* TinyML Tensorlab Documentation Custom Styles */
+
+/* TI Red color for accents */
+:root {
+    --ti-red: #CC0000;
+    --ti-dark-red: #990000;
+}
+
+/* Header styling */
+.wy-side-nav-search {
+    background-color: var(--ti-red);
+}
+
+.wy-side-nav-search a {
+    color: #fff;
+}
+
+/* Version badge */
+.wy-side-nav-search > div.version {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Link colors */
+a {
+    color: var(--ti-red);
+}
+
+a:hover {
+    color: var(--ti-dark-red);
+}
+
+/* Code block styling */
+.highlight {
+    background: #f8f8f8;
+}
+
+/* Note boxes */
+.admonition.note {
+    border-left-color: var(--ti-red);
+}
+
+.admonition.note .admonition-title {
+    background-color: rgba(204, 0, 0, 0.1);
+}
+
+/* Warning boxes */
+.admonition.warning {
+    border-left-color: #f0ad4e;
+}
+
+/* Important boxes */
+.admonition.important {
+    border-left-color: var(--ti-red);
+}
+
+/* Tip boxes */
+.admonition.tip {
+    border-left-color: #5cb85c;
+}
+
+/* Tables */
+table.docutils {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.docutils th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+table.docutils td, table.docutils th {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+}
+
+/* Card styling for sphinx-design */
+.sd-card {
+    border-radius: 8px;
+}
+
+.sd-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+}
+
+/* Tab styling */
+.sphinx-tabs-tab {
+    border-radius: 4px 4px 0 0;
+}
+
+.sphinx-tabs-tab[aria-selected="true"] {
+    background-color: var(--ti-red);
+    color: white;
+}
+
+/* Copy button styling */
+.copybtn {
+    background-color: #f5f5f5;
+}
+
+.copybtn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Responsive improvements */
+@media screen and (max-width: 768px) {
+    .wy-nav-content {
+        padding: 1em;
+    }
+}
+
+/* Breadcrumb styling */
+.wy-breadcrumbs li a {
+    color: var(--ti-red);
+}
+
+/* Search highlight */
+.highlighted {
+    background-color: rgba(204, 0, 0, 0.2);
+}
+
+/* Version warning banner */
+.rst-versions {
+    background-color: #333;
+}
