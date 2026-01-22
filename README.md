@@ -22,7 +22,7 @@ It helps to install all the required repositories to get started. Currently, it 
 
 Once you clone this repository, you will find the following repositories present within the `tinyml-tensorlab` directory:
 * `tinyml-tensorlab`: This repo, serves as a blank wrapper for customers to clone all the tinyml repos at one shot. 
-![image](./assets/mcu_ai_repo_connection.png)
+
 
 The other repositories are here for a purpose:
 * `tinyml-modelzoo`: Contains all model definitions, example configs, and pre-trained checkpoints. This is the single source of truth for models.
