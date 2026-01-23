@@ -1,0 +1,30 @@
+common:
+  task_type: arc_fault
+  target_device: F28P55
+dataset:
+  dataset_name: arc_fault_example_dsi
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - Downsample
+  - SimpleWindow
+  gain_variations:
+    arc:
+    - 0.9
+    - 1.1
+    normal:
+    - 0.8
+    - 1.2
+  sampling_rate: 313000
+  new_sr: 3130
+  frame_size: 256
+  stride_size: 0.01
+  variables: 1
+  gof_test: false
+training:
+  model_name: CLS_13k_NPU
+  model_config: ''
+  batch_size: 2048
+  training_epochs: 10
+  num_gpus: 0
+testing: {}
+compilation: {}

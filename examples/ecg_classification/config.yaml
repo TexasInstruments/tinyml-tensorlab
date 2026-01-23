@@ -1,0 +1,24 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: F28P55
+dataset:
+  dataset_name: ecg
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_2class.zip
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - Downsample
+  - SimpleWindow
+  sampling_rate: 1
+  new_sr: 1
+  frame_size: 128
+  stride_size: 1
+  feat_ext_transform: []
+  variables: 1
+training:
+  model_name: CLS_4k_NPU
+  model_config: ''
+  batch_size: 256
+  training_epochs: 50
+  num_gpus: 0
+testing: {}
+compilation: {}

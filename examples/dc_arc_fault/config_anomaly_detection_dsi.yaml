@@ -1,0 +1,25 @@
+common:
+  task_type: generic_timeseries_anomalydetection
+  target_device: F28P55
+dataset:
+  dataset_name: arc_fault_example_dsi_ad
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_dsi_anomaly_detection.zip
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - SimpleWindow
+  - Downsample
+  frame_size: 256
+  sampling_rate: 100
+  new_sr: 1
+  variables: 1
+training:
+  model_name: AD_17k
+  model_config: ''
+  batch_size: 256
+  training_epochs: 100
+  num_gpus: 1
+  quantization: 1
+  output_int: false
+testing: {}
+compilation:
+  compile_preset_name: forced_soft_npu_preset

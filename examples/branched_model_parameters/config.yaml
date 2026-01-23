@@ -1,0 +1,21 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: F28P55
+dataset:
+  dataset_name: wisdm_example
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/wisdm_dataset.zip
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - SimpleWindow
+  frame_size: 128
+  stride_size: 0.01
+  variables: 3
+training:
+  model_name: CLS_ResCat_3k
+  model_config: examples/branched_model_parameters/residual_network_config.yaml
+  batch_size: 32
+  training_epochs: 10
+  num_gpus: 0
+testing:
+  skip_train: false
+compilation: {}
