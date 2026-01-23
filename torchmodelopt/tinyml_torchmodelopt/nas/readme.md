@@ -1,6 +1,6 @@
-# Neural Architecture Search (NAS) for TinyML with PyTorch
+# Neural Architecture Search (NAS) for Tiny ML with PyTorch
 
-This module provides a flexible and extensible framework for Neural Architecture Search (NAS) targeting CNN architectures, with a focus on TinyML and resource-constrained environments. It supports differentiable architecture search, resource-aware optimization (memory and compute), and is designed for easy integration into PyTorch projects.
+This module provides a flexible and extensible framework for Neural Architecture Search (NAS) targeting CNN architectures, with a focus on Tiny ML and resource-constrained environments. It supports differentiable architecture search, resource-aware optimization (memory and compute), and is designed for easy integration into PyTorch projects.
 
 ---
 
@@ -152,7 +152,6 @@ model = NetworkCnn(
     layers=8,                # number of layers/cells
     genotype=MY_CUSTOM_GENOTYPE,
     in_channels=1,           # input channels (e.g., 1 for grayscale)
-    with_input_batchnorm=True,
     nodes_per_layer=4,
     multiplier=4,
     stem_multiplier=3
@@ -183,7 +182,6 @@ args = argparse.Namespace(
     num_classes=10,
     nas_layers=8,
     in_channels=1,
-    with_input_batchnorm=True,
     nas_nodes_per_layer=4,
     nas_multiplier=4,
     nas_stem_multiplier=3,
@@ -212,7 +210,6 @@ args = argparse.Namespace(
 | **num_classes**           | int       | Number of output classes for classification. |
 | **nas_layers**            | int       | Number of layers (cells) in the network during search. |
 | **in_channels**           | int       | Number of input channels (e.g., 1 for grayscale, 3 for RGB). |
-| **with_input_batchnorm**  | bool      | Whether to use batch normalization on the input. |
 | **nas_nodes_per_layer**   | int       | Number of intermediate nodes per cell (controls search space complexity). |
 | **nas_multiplier**        | int       | Number of outputs to concatenate per cell (affects output width). |
 | **nas_stem_multiplier**   | int       | Multiplier for the number of channels in the initial stem convolution. |

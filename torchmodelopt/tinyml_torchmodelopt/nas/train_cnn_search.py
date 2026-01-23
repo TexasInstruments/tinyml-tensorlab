@@ -42,7 +42,6 @@ def search_and_get_model(args):
         args.nas_layers,
         criterion,
         args.in_channels,
-        args.with_input_batchnorm,
         args.nas_nodes_per_layer,
         args.nas_multiplier,
         args.nas_stem_multiplier
@@ -108,8 +107,7 @@ def search_and_get_model(args):
         args.num_classes,
         args.nas_layers,
         best_genotype,
-        args.in_channels,
-        args.with_input_batchnorm
+        args.in_channels
     )
 
     return eval_model

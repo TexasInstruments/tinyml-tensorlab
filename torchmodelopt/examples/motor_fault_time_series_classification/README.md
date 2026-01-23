@@ -1,39 +1,69 @@
-# Motor Fault Time Series Classification
+# Motor Fault Time Series Classification (Example)
 
-Motor Fault Dataset is a subset of motor fault dataset prepared by TIs Internal Team. The dataset consists of vibrations received from running motors. The motors can be classified as Normal, Localized Fault, Erosion Fault, Flaking Fault. The dataset has 4800030 samples. Each sample has 4 variables and 1 target.
+1) Purpose
+----------
+Compact, runnable example that trains a small CNN on motor vibration data, demonstrates quantization (QAT/PTQ), exports an ONNX model, and evaluates accuracy.
 
-This example will use a Deep Learning model to train and classify the type of motor fault.
+2) Quickstart
+-------------
+- Prepare a CSV with columns: `Vibx`, `Viby`, `Vibz`, `Target` (see Data format below).
+- Run the example:
 
-## Walkthrough of this Example
-1. Create train and test dataloader from csv
-2. Configure the training and quantization params
-4. Wrap the trained model around `TinyMLFxModule`
-5. Train and test this ti_model for `QAT/PTQ`
-6. Export the quantized model
+```bash
+python motor_fault_classification_tinpu_quant.py
+```
 
-## Let's understand each step
+- To enable quantization, edit the constants at the bottom of the script: `QUANTIZATION_METHOD`, `WEIGHT_BITWIDTH`, `ACTIVATION_BITWIDTH`, `QUANTIZATION_DEVICE_TYPE`.
 
-### Prepare Dataloader
-The MotorFault dataset is derived from a subset of an in-house dataset created by TI. It is structured by segmenting data into windows of data points. The data follows the NCHW format and is divided in a 4:1 ratio for training and testing dataloaders. The samples are shuffled within the dataloader.
+3) Data format
+--------------
+One row per time sample. Required columns (comma-separated):
 
-### Configure Dataloader
-This example comes with various configuration of dataloader
-- **BATCH_SIZE** (N): Creates batches of windows
-- **HIDDEN_CHANNELS** (C): Provide the hidden channels for convolution layers
-- **WINDOW_LENGTH** (H): Decides the length of windows
-- **WINDOW_OFFSET**: Offset of datapoint for each window
+```
+Vibx, Viby, Vibz, Target
+0.12, -0.04, 0.01, 0
+```
 
-### Using Quantization
-- **QUANTIZATION_METHOD**: QAT / PTQ
-- **WEIGHT_BITWIDTH**: Bit width of weights
-- **ACTIVATION_BITWIDTH**: Bit width of activations
-- **QUANTIZATION_DEVICE_TYPE**: Generic quantization or TI-NPU supported quantization
-- **NORMALIZE_INPUT**: Model normalizes the input or not
+The script concatenates rows into sliding windows controlled by `WINDOW_LENGTH` and `WINDOW_OFFSET`.
 
-### Train and Test Quantization on CNN Model
-For lower bitwidth in quantization, the epochs of training or calibration is increased, whereas for high bitwidth the epochs are reduced. This is done due to the ease of learning for high bitwidth. The QAT training occurs in `train_model` and calibration for PTQ is done using `calibrate_model`.
+4) Key configuration (in-script)
+--------------------------------
+- `WINDOW_LENGTH`, `WINDOW_OFFSET`, `BATCH_SIZE` — windowing and batching
+- `WEIGHT_BITWIDTH`, `ACTIVATION_BITWIDTH`, `QUANTIZATION_METHOD` — quantization settings
+- `QUANTIZATION_DEVICE_TYPE` — `'TINPU'` or `'GENERIC'`
+- `NORMALIZE_INPUT` — whether to apply batch normalization to inputs
 
-For the QAT training, the learning rate is lowered to avoid deviations from trained values. The model is tested on the test dataloader using the `validate_model` function
+5) How the script maps to functions (quick developer guide)
+---------------------------------------------------------
+- Data loading and windowing: `get_dataset_from_csv()` and `MotorFaultDataset`
+- Dataloader creation: `get_dataloader()`
+- Model definition: `get_nn_model()` (returns `NeuralNetwork` class instance)
+- Training loop: `train()` and `train_model()`
+- PTQ calibration: `calibrate()` and `calibrate_model()`
+- Quantization wrapper selection: `get_quant_model()` (chooses TINPU/GENERIC and QAT/PTQ)
+- Export: `export_model()` (exports ONNX and optionally converts quant modules)
+- Evaluation: `validate_model()` (PyTorch) and `validate_saved_model()` (ONNX Runtime)
 
-### Exporting the quantized model
-The model is first converted and then exported using the `export_model` function. The accuracy of exported model which is the end-user model is also checked using `validate_saved_model`.
+6) Quantization guidance (practical)
+-----------------------------------
+- Default (safe): use `QUANTIZATION_METHOD = 'PTQ'` with `WEIGHT_BITWIDTH = 8` and `ACTIVATION_BITWIDTH = 8`.
+- If accuracy degrades and you can retrain: switch to `QAT`, use a smaller learning rate and more fine-tuning epochs (recommended for 4-bit/2-bit).
+- For `WEIGHT_BITWIDTH <= 4` or `ACTIVATION_BITWIDTH < 8`: prefer `QAT`, per-channel weight quantization, and careful tuning (calibration, clipping, bias correction).
+- Device-specific: `TINPU` commonly prefers symmetric per-channel weight quantization and power-of-two scales; check device constraints.
+- PTQ calibration: use representative inputs (hundreds to a few thousand windows). Poor calibration causes large activation errors.
+
+7) Output & troubleshooting
+---------------------------
+- Trained models and an ONNX export are written to the current working directory (see `MODEL_NAME`).
+- The script prints training progress, confusion matrix, and final accuracy metrics.
+- Quick tests: reduce `WINDOW_LENGTH`, `BATCH_SIZE`, and `NUM_EPOCHS` to iterate faster.
+- If memory is constrained, run on CPU or reduce `BATCH_SIZE`.
+
+8) Files
+--------
+- `motor_fault_classification_tinpu_quant.py` — runnable example script
+- `motor_fault_dataset.csv` (expected) — input dataset (not included)
+
+9) Notes
+--------
+This is a compact educational example. Adapt preprocessing, augmentation and model size for production or larger datasets.

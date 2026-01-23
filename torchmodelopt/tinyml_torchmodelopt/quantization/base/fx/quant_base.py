@@ -97,7 +97,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         # split if qconfig is a comma separated list of segments
         # (qconfig will change after some epochs if this has comma separated values)
         if isinstance(qconfig_type, dict) or qconfig_type is None:
-            qconfig_mapping = qconfig_types.get_default_qconfig_mapping(qconfig_type)
+            qconfig_mapping = qconfig_types.get_default_qconfig_mapping(model, qconfig_type)
         elif isinstance(qconfig_type, torch.ao.quantization.QConfig):
             qconfig_mapping = QConfigMapping().set_global(qconfig_type)
         elif isinstance(qconfig_type, torch.ao.quantization.QConfigMapping):

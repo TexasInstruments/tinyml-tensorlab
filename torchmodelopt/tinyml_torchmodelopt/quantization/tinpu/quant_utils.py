@@ -4,6 +4,7 @@ from torch.fx import GraphModule, Node
 
 from typing import Dict, List, Tuple
 from .quant_modules import *
+from ...surgery.quant_helper_func import is_both_node_equal, remove_hanging_nodes, simple_chain_searcher, add_node_after_node, replace_call_module, replace_call_function_or_method
 
 class TINPUQuantizedReplacementUtils():
     def __init__(self, model: GraphModule, weight_bw: int, activation_bw: int, power2_scale: bool, float_ops: List):
@@ -64,6 +65,21 @@ class TINPUQuantizedReplacementUtils():
             else:
                 bfs += list(node.users)
         return first_quant_node
+
+    def _get_target_module(self, target_path):
+        parts = []
+        if target_path.startswith('features.'):
+            module = self.module.features
+            parts = target_path.split('.')
+            parts = parts[1:]
+        else:
+            module = self.module
+        for part in parts:
+            if hasattr(module, '_modules') and part in module._modules:
+                module = module._modules[part]
+            else:
+                return None
+        return module
     
     def _check_module_before_quant(self) -> bool:
         nodes = self._get_nodes()
@@ -71,7 +87,9 @@ class TINPUQuantizedReplacementUtils():
         placeholder_node = nodes[0]
         for user in placeholder_node.users:
             if user.op == 'call_module':
-                return True
+                target_module = self._get_target_module(user.target)
+                if isinstance(target_module, torch.nn.Flatten):
+                    return True
         return False
     
     def rename_nodes(self):
@@ -465,6 +483,16 @@ class TINPUQuantizedReplacementUtils():
         replace_call_function_or_method(self.module, start, permute_node, perm_module, self._get_module_num())
         return None
     
+    def from_transpose(self, start: Node, end: Node):
+        # Transpose Node
+        transpose_node = end
+        dims=transpose_node.args[1:]
+        transpose_module = TransposeModule(dims)
+        
+        # Replace transpose operation with TransposeModule
+        replace_call_function_or_method(self.module, start, transpose_node, transpose_module, self._get_module_num())
+        return None
+    
     # Replacement Rules for Flatten
     def from_flatten(self, start: Node, end: Node):
         named_modules = self._get_named_modules()
@@ -568,14 +596,8 @@ class TINPUQuantizedReplacementUtils():
         '''
         # AdaptiveAvgPool2D Module
         pool_module = self._get_named_modules()[start.target]
-        # Calculate the total_kernel_area from pool module output size
-        total_kernel_area = pool_module.output_size[0] * pool_module.output_size[1]
-        if total_kernel_area != 1:
-            #  If output size isn't (1, 1), we will use the generic implementation
-            replace_call_module(self.module, start, end, pool_module, self._get_module_num(), self.rename_nodes_flag)
-            return None
         scale, zero_point = self.get_q_params(start, using='prev')
-        pool_module = AdaptiveAvgPool2d(scale, zero_point, activation_bw=self.activation_bw, num_bits_scale=self.num_bits_scale)
+        pool_module = AdaptiveAvgPool2d(pool_module, scale, zero_point, activation_bw=self.activation_bw, num_bits_scale=self.num_bits_scale)
         # Replace AdaptiveAvgPool2D with Reduce, Round, OSS
         replace_call_module(self.module, start, end, pool_module, self._get_module_num(), self.rename_nodes_flag)
         return None
