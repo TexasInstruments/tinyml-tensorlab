@@ -6,19 +6,10 @@
 import os
 import sys
 import csv
-import numpy as np
-import onnxruntime as ort
-import onnx
-# ------------------------------------------------------------
-# TinyML ONNX inference helper – model‑info dump
-# ------------------------------------------------------------
-import os
-import sys
-import csv
-import numpy as np
-import onnxruntime as ort
-import onnx
 import json
+import numpy as np
+import onnxruntime as ort
+import onnx
 
 def _tensor_num_elements(tensor):
     """Return the total number of elements of an ONNX TensorProto."""

@@ -37,27 +37,42 @@ import yaml
 
 
 def main(config):
+    target_device = config['common']['target_device']
+    task_type = config['common']['task_type']  # Because SDTO-CCS was unwilling to change task_type to application_type
+    config['common']['task_type'] = task_type
+
     import tinyml_modelmaker
+    task_category = tinyml_modelmaker.get_task_category_type_from_task_type(task_type)
+    config['common']['task_category'] = task_category
+
+    # Infer target_module from task_type if not explicitly provided
+    if 'target_module' in config['common']:
+        target_module = config['common']['target_module']
+    else:
+        target_module = tinyml_modelmaker.get_target_module_from_task_type(task_type)
+        if target_module is None:
+            print(f"Error: Could not infer target_module from task_type '{task_type}'. Please specify 'target_module' in config.")
+            return False
+        config['common']['target_module'] = target_module
 
     # get the ai backend module
-    ai_target_module = tinyml_modelmaker.ai_modules.get_target_module(config['common']['target_module'])
-
+    ai_target_module = tinyml_modelmaker.ai_modules.get_target_module(target_module)
+    #################################################
+    ### The below section depends on ai_target_module
+    #################################################
     # get default params
     params = ai_target_module.runner.ModelRunner.init_params()
-
     # get pretrained model for the given model_name
-
     model_name = config['training']['model_name']
     model_description = ai_target_module.runner.ModelRunner.get_model_description(model_name)
-    # model_description = ai_target_module.runner.ModelRunner.get_model_descriptions(params).get(model_name) --> Another way to do the above line
-    if config['training']['enable']:
+    if config.get('training').get('enable', True):
         if model_description is None:
             print(f"please check if the given model_name is a supported one: {model_name}")
             return False
-    #
+
     dataset_preset_descriptions = ai_target_module.runner.ModelRunner.get_dataset_preset_descriptions(params)
     dataset_preset_name = ai_target_module.constants.DATASET_DEFAULT
-    if config['dataset']['enable']:
+    if config.get('dataset').get('enable', True):
         if 'dataset_name' in config['dataset']:
             dataset_preset_name = config['dataset']['dataset_name']
     dataset_preset_description = dataset_preset_descriptions.get(dataset_preset_name) or dict()
@@ -71,15 +86,14 @@ def main(config):
     # get the presets for this device and task
     # applying the default_preset. The values can be changed from config file if needed
     preset_descriptions = ai_target_module.runner.ModelRunner.get_preset_descriptions(params)
-    target_device = config['common']['target_device']
-    task_type = config['common']['task_type']  # Because SDTO-CCS was unwilling to change task_type to application_type
-    config['common']['task_type'] = task_type
-    task_category = tinyml_modelmaker.get_task_category_type_from_task_type(task_type)
-    config['common']['task_category'] = task_category
 
     compilation_preset_name = ai_target_module.constants.COMPILATION_DEFAULT  # 'default_preset'
     if 'compile_preset_name' in config['compilation']:
         compilation_preset_name = config['compilation']['compile_preset_name']
+    if compilation_preset_name not in preset_descriptions[target_device][task_type].keys():
+        print(f'WARNING: Using "default_preset" for compilation since user choice-"{compilation_preset_name}" is unavailable')
+        compilation_preset_name = 'default_preset'
+
     compilation_preset_description = preset_descriptions[target_device][task_type][compilation_preset_name]
 
     # update the params with model_description, preset and config

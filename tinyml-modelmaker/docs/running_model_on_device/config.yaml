@@ -7,7 +7,7 @@ common:
 dataset:
     # enable/disable dataset loading
     enable: True #False
-    dataset_name: arc_fault_example_dsk
+    dataset_name: dc_arc_fault_example_dsk
 #    split_type: within_files
 
 data_processing_feature_extraction:

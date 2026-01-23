@@ -28,8 +28,8 @@ relevant_df = relevant_df.drop(columns=['target_tinie_type', 'code', 'ro', 'rw',
 relevant_df = relevant_df.set_index(['model'])  # 'cycles',
 
 device_list = [constants.TARGET_DEVICE_F280013, constants.TARGET_DEVICE_F280015, constants.TARGET_DEVICE_F28003, constants.TARGET_DEVICE_F28004,
-               constants.TARGET_DEVICE_F2837, constants.TARGET_DEVICE_F28P65,  constants.TARGET_DEVICE_MSPM0G3507,
-    constants.TARGET_DEVICE_MSPM0G5187,constants.TARGET_DEVICE_CC2755]
+               constants.TARGET_DEVICE_F2837, constants.TARGET_DEVICE_F28P65, constants.TARGET_DEVICE_MSPM0G3507,
+               constants.TARGET_DEVICE_MSPM0G3519, constants.TARGET_DEVICE_MSPM0G5187, constants.TARGET_DEVICE_CC2755, constants.TARGET_DEVICE_CC1352]
 freq_MHz_dict  = {
     constants.TARGET_DEVICE_F280013: 120,
     constants.TARGET_DEVICE_F280015: 120,
@@ -38,9 +38,11 @@ freq_MHz_dict  = {
     constants.TARGET_DEVICE_F2837: 120,
     constants.TARGET_DEVICE_F28P65: 200,
     constants.TARGET_DEVICE_F28P55: 150,
-    constants.TARGET_DEVICE_MSPM0G3507: 111,
-    constants.TARGET_DEVICE_MSPM0G5187: 111,
+    constants.TARGET_DEVICE_MSPM0G3507: 80,
+    constants.TARGET_DEVICE_MSPM0G3519: 80,
+    constants.TARGET_DEVICE_MSPM0G5187: 80,
     constants.TARGET_DEVICE_CC2755: 96,
+    constants.TARGET_DEVICE_CC1352: 48,
 }
 
 hard_tinie_df = relevant_df.loc[relevant_df.tinie_type=='hard']

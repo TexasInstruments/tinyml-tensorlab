@@ -6,5 +6,4 @@ num_channel_l1: 4
 num_channel: 4
 kernel: 4
 max_pool: 4
-with_input_batchnorm: True
 dual_op: False

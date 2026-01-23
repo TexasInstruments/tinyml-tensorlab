@@ -5,4 +5,3 @@ stride: 1
 num_channel: 32
 kernel: 4
 max_pool: 4
-with_input_batchnorm: True

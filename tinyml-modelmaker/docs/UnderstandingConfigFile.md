@@ -19,7 +19,7 @@ common:
 ```python
 dataset:                                    # Enable/disable dataset loading
     enable: True                            # True to enable dataset loading, else will directly start from training step
-    dataset_name: arc_fault_example_dsk     # You can give any name you want, for folder naming purpose
+    dataset_name: dc_arc_fault_example_dsk     # You can give any name you want, for folder naming purpose
     input_data_path: 'http://uda0484689.dhcp.ti.com:8100/arc_fault_classification_dsk.zip'  # Can be a url/local folder location to a .zip file or a normal directory 
 ```
 

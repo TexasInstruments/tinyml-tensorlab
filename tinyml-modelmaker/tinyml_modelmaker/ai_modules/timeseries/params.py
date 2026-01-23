@@ -49,10 +49,11 @@ def init_params(*args, **kwargs):
             task_category=None,
             target_machine='evm',
             target_device=None,
+            target_module='timeseries',
             # run_name can be any string, but there are some special cases:
             # {date-time} will be replaced with datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             # {model_name} will be replaced with the name of the model
-            run_name=os.path.join('{date-time}, {model_name}'),
+            run_name=os.path.join('{date-time}', '{model_name}'),
             generic_model=False,
         ),
         download=None,
@@ -67,7 +68,7 @@ def init_params(*args, **kwargs):
             input_data_path=None,  # input images
             input_annotation_path=None,  # annotation file
             data_path_splits=None,
-            data_dir='classes',
+            data_dir=None,  # None = auto-detect based on task_category
             annotation_path_splits=None,
             annotation_dir='annotations',
             annotation_prefix='instances',  # change this if your dataset has a different annotation prefix
@@ -114,15 +115,11 @@ def init_params(*args, **kwargs):
             quantization_method=TinyMLQuantizationMethod.QAT,
             quantization_weight_bitwidth=8,
             quantization_activation_bitwidth=8,
-            output_dequantize=False,
-            with_input_batchnorm=False,
+            output_int=None,  # Dynamic default based on task_category and quantization
             dual_op=False,
             properties=[
                 dict(type="group", dynamic=True, name="preprocessing_group", label="Preprocessing Parameters", default=[]),
-                dict(type="group", dynamic=False, name="train_group", label="Training Parameters", default=["training_epochs", "learning_rate"]),
-                dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=1000),
-                dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1,
-                     decimal_places=3, increment=0.001),
+                dict(type="group", dynamic=True, name="train_group", label="Training Parameters", default=[]),
                 ],
             
             #######################################
@@ -143,6 +140,9 @@ def init_params(*args, **kwargs):
             nas_fanout_concat=4,   # num nodes_per_layer to concat for output of current layer, it should always be less than equal to nodes_per_layer
             
             load_saved_model=None,
+            ondevice_training = False,
+            trainable_layers_from_last = 1,
+            partial_quantization = False
         ),
 
         testing=dict(
@@ -160,7 +160,7 @@ def init_params(*args, **kwargs):
             frame_size=1,
             forecast_horizon=1, #Number of future timesteps to be predicted in Forecasting
             stride_size=0.01,
-            variables=1,
+            variables=1,  # Column selection (after time columns): int (first n columns), list of ints [0,2,4], or list of strings ['col1','col2']
             target_variables=[],
             resampling_factor=1,
             gain_variations=None,  # actually a dict, but can't pass a dictionary in command line

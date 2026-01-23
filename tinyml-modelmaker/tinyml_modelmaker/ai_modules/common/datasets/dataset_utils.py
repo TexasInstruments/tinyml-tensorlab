@@ -39,8 +39,6 @@ import re
 from itertools import accumulate
 from random import seed, shuffle
 
-# import PIL
-# from PIL import ImageOps
 from xml.etree.ElementTree import Element as ET_Element
 
 import numpy as np

@@ -42,10 +42,10 @@ mkdir -p ${TOOLS_PATH}
 #################################################################################
 # F29 clang cgtools
 
-F29_CGT_CLANG_INSTALLER=ti_cgt_c29_2.0.0.STS_linux-x64_installer.bin
+F29_CGT_CLANG_INSTALLER=ti_cgt_c29_2.1.0.STS_linux-x64_installer.bin
 F29_CGT_CLANG_INSTALLER_FILE=${INSTALLER_PATH}/${F29_CGT_CLANG_INSTALLER}
 rm -f ${F29_CGT_CLANG_INSTALLER_FILE}
-wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-CIrrlYTTGZ/2.0.0.STS/${F29_CGT_CLANG_INSTALLER} -O ${F29_CGT_CLANG_INSTALLER_FILE}
+wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-CIrrlYTTGZ/2.1.0.STS/${F29_CGT_CLANG_INSTALLER} -O ${F29_CGT_CLANG_INSTALLER_FILE}
 chmod +x ${F29_CGT_CLANG_INSTALLER_FILE}
 ${F29_CGT_CLANG_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
 rm -f ${F29_CGT_CLANG_INSTALLER_FILE}

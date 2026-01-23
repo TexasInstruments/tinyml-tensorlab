@@ -1,0 +1,109 @@
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+*.log
+test_logs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.pyenv/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Documentation builds
+docs/_build/
+site/
+htmlcov/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Docker
+docker-compose.yml
+docker-compose.override.yml
+Dockerfile*
+.dockerignore
+
+# Data and output directories (adjust based on your needs)
+data/
+output/
+logs/
+*.csv
+*.h5
+*.hdf5
+*.onnx
+*.pt
+*.pth
+checkpoints/
+runs/
+
+# Notebooks
+*.ipynb_checkpoints/
+*.ipynb
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# Large media files (if not needed)
+*.mp4
+*.avi
+*.mkv
+*.mov
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+
+# README and docs (if not needed in container)
+# README.md
+# CLAUDE.md
+# LICENSE

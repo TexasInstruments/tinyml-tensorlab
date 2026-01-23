@@ -8,7 +8,7 @@ dataset:
     # enable/disable dataset loading
     enable: True
     dataset_name: motor_fault_classification_dsk3
-    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_classification_dsk_3inp.zip'
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_classification_dsk_3inp.zip'
 
 data_processing_feature_extraction:
     feature_extraction_name: 'Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'

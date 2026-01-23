@@ -15,10 +15,10 @@ training:
 
 * The contents of the yaml file needs to have the parameters that the model accepts as an input argument
 * For example, the class definition of CNN_TS_GEN_BASE_13K (which is referred to by TimeSeries_Generic_13k_t) contains the following input arguments:
-  * input_features, variables, num_classes, with_input_batchnorm 
+  * input_features, variables, num_classes
 ```python
 class CNN_TS_GEN_BASE_13K(GenericModelWithSpec):
-    def __init__(self, config, input_features=512, variables=1, num_classes=2, with_input_batchnorm=True):
+    def __init__(self, config, input_features=512, variables=1, num_classes=2):
 ```
 
 * So we can have (none or upto) the following arguments in `/home/a/b/tinyml-modelmaker/misc/TimeSeries_Generic_13k_t.yaml`
@@ -26,7 +26,6 @@ class CNN_TS_GEN_BASE_13K(GenericModelWithSpec):
 input_features: 512
 variables: 2
 num_classes: 3
-with_input_batchnorm: False
 ``` 
 
 * This will edit the model properties accordingly

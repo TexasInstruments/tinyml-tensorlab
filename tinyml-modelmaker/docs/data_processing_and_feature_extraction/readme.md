@@ -15,11 +15,11 @@ The dataset consists of measurements from a vibration sensor along _3 axes_ doma
 5. **No Lubrication**<br>
 6. **Localized Fault**<br>
 
-This dataset is already formatted according to TinyML Modelmaker needs. The link to the dataset can be found [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_classification_dsk.zip).
+This dataset is already formatted according to Tiny ML Modelmaker needs. The link to the dataset can be found [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_classification_dsk.zip).
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
-This dataset is designed to work with TinyML ModelMaker, an end-to-end model development tool that provides dataset handling, model training, and compilation.
+This dataset is designed to work with Tiny ML ModelMaker, an end-to-end model development tool that provides dataset handling, model training, and compilation.
 
 ```bash
 ./run_tinyml_modelmaker.sh docs/data_processing_and_feature_extraction/config.yaml
@@ -28,7 +28,7 @@ This dataset is designed to work with TinyML ModelMaker, an end-to-end model dev
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
 
 ## Understanding the YAML Configuration File
-The YAML configuration file sets up the model training process in TinyML ModelMaker. It has several sections:
+The YAML configuration file sets up the model training process in Tiny ML ModelMaker. It has several sections:
 
 - **Common Section**: Defines general settings like the module type, task type, target device, and run name.
 - **Dataset Section**: Provides details about the dataset, including whether to load it, the dataset name, and the path to the data file.

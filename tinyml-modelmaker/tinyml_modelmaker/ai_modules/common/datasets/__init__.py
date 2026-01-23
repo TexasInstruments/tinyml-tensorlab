@@ -31,7 +31,6 @@
 import os
 from os.path import join as opj
 import logging
-# import PIL
 import sys
 import warnings
 from glob import glob
@@ -44,7 +43,7 @@ from ...timeseries.constants import TASK_CATEGORY_TS_ANOMALYDETECTION
 
 def get_datasets_list(task_type=None):
     if task_type == 'timeseries_classification':
-        return ['arc_fault_example_dsi', 'arc_fault_example_dsk']  # ['oxford_flowers102']
+        return ['arc_fault_example_dsi', 'dc_arc_fault_example_dsk']  # ['oxford_flowers102']
     elif task_type == 'audio_classification':
         return ['SpeechCommands']  # ['oxford_flowers102']
     else:

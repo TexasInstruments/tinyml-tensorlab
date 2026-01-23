@@ -313,6 +313,7 @@ Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with y
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_ARC_FAULT]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_MOTOR_FAULT]['task_name']}
+* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_ECG_CLASSIFICATION]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_BLOWER_IMBALANCE]['task_name']}
 
 ## Supported target devices
@@ -372,7 +373,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 

@@ -67,7 +67,7 @@ def init_params(*args, **kwargs):
             input_data_path=None,  # input images
             input_annotation_path=None,  # annotation file
             data_path_splits=None,
-            data_dir='classes',
+            data_dir=None,  # None = auto-detect based on task_category
             annotation_path_splits=None,
             annotation_dir='annotations',
             annotation_prefix='instances',  # change this if your dataset has a different annotation prefix
@@ -114,8 +114,7 @@ def init_params(*args, **kwargs):
             quantization_method=TinyMLQuantizationMethod.QAT,
             quantization_weight_bitwidth=8,
             quantization_activation_bitwidth=8,
-            output_dequantize=False,
-            with_input_batchnorm=False,
+            output_int=None,  # Dynamic default based on task_category and quantization
             dual_op=False,
             properties=[
                 dict(type="group", dynamic=True, name="preprocessing_group", label="Preprocessing Parameters", default=[]),

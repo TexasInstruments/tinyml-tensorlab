@@ -24,7 +24,7 @@ dataset_name/
 
 - _annotations_ folder is **optional**. If the folder is not provided, the Modelmaker tool automatically generates one.
 - _classes_ folder is mandatory.
-- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.
 
 ### Notes
 
@@ -44,7 +44,7 @@ dataset_name/
 There are two accepted formats for how the file can look in the dataset:
 
 * _**Headerless format**_: There is **no header row** and **no index column** in the file.
-  * This is usually suitable for single column files (where only one variable is measured) like the [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) dataset.
+  * This is usually suitable for single column files (where only one variable is measured) like the [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) dataset.
     <pre>
     2078 
     2136 
