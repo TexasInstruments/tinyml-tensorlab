@@ -40,7 +40,6 @@ import pandas as pd
 import torch
 import torcheval
 from tabulate import tabulate
-from tvm.script.ir_builder.tir import float32
 
 from tinyml_tinyverse.common.datasets import GenericImageDataset
 
@@ -90,7 +89,7 @@ def get_args_parser():
 
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
-    parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
+    parser.add_argument("--output-int", default=None, type=misc_utils.str_or_bool, help="Get quantized int8 output from model (False for dequantized float output). If not specified, determined automatically based on task type and quantization level.")
 
     return parser
 

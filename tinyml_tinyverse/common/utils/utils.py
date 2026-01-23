@@ -92,7 +92,7 @@ from cryptography.fernet import Fernet
 from tabulate import tabulate
 from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc, r2_score, mean_squared_error
 
-from ..models.generic_models import FEModel  # , FEModel2
+from tinyml_modelzoo.models.feature_extraction import FEModel
 from tinyml_torchmodelopt.quantization import (
     TinyMLQuantizationVersion, TinyMLQuantizationMethod, TinyMLQConfigType,
     GenericTinyMLQATFxModule, TINPUTinyMLQATFxModule, GenericTinyMLPTQFxModule, TINPUTinyMLPTQFxModule)
@@ -846,26 +846,7 @@ def smape(y_true, y_pred): # y_true and y_pred must be tensors
     denominator = (torch.abs(y_true) + torch.abs(y_pred)) / 2.0
     denominator=np.where(denominator==0,1e-8,denominator)  # Avoid division by zero
     return torch.mean(numerator / denominator) * 100  # Multiply by 100 to get percentage
-    
-def number_of_correct(pred, target):
-    # count number of correct predictions
-    return pred.squeeze().eq(target).sum().item()
 
-
-def get_likely_index(tensor):
-    # find most likely label index for each element in the batch
-    return tensor.argmax(dim=-1)
-
-
-def accuracy1(output, target, topk=(1,)):
-    with torch.no_grad():
-        correct = 0
-        res = []
-        pred = get_likely_index(output)
-        correct += number_of_correct(pred, target)
-        res.append(100. * correct / target.size(0))
-        # print(pred,correct,res)
-        return res
 
 def mkdir(path):
     try:
@@ -1658,8 +1639,10 @@ def init_optimizer(model, opt_name="sgd", lr=0.1, momentum=0.9, weight_decay=4e-
                                         weight_decay=weight_decay, eps=0.0316, alpha=0.9)
     elif opt_name == 'adam':
         optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    elif opt_name == 'adamw':
+        optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
     else:
-        logger.warning("Invalid optimizer {}. Only SGD and RMSprop, Adam are supported. Defaulting to Adam".format(opt_name))
+        logger.warning("Invalid optimizer {}. Only SGD, RMSprop, Adam and AdamW are supported. Defaulting to Adam".format(opt_name))
         optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     return optimizer
 
@@ -1675,6 +1658,9 @@ def init_lr_scheduler(
                                                                        T_max=epochs - lr_warmup_epochs)
     elif lr_scheduler == 'exponentiallr':
         main_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=lr_gamma)
+    elif lr_scheduler=='none':
+        main_lr_scheduler = torch.optim.lr_scheduler.ConstantLR(optimizer, factor=1.0,total_iters=0)
+        return main_lr_scheduler
     else:
         raise RuntimeError("Invalid lr scheduler '{}'. Only StepLR, CosineAnnealingLR and ExponentialLR "
                            "are supported.".format(lr_scheduler))
@@ -1699,18 +1685,18 @@ def init_lr_scheduler(
     return lr_scheduler
 
 
-def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, output_dequantize=False):
+def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, output_int=True, partial_quantization = False):
     logger = getLogger('root.utils.quantization_wrapped_model')
     if quantization == TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = GenericTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+            model = GenericTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs)
+            model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs)
     elif quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=output_dequantize)
+            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs, output_int=output_int)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth).qconfig_type, total_epochs=epochs, output_dequantize=output_dequantize)
+            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs, output_int=output_int)
     if quantization:
         logger.info(f"Proceeding with {quantization_method} quantization")
     return model

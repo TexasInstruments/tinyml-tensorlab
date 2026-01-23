@@ -134,6 +134,36 @@ def gen_artifacts(args):
             os.remove(filename)
     return
 
+def modify_user_input_config(user_input_config: str, target: str):
+    logger = getLogger("root.modify_user_input_config")
+    if user_input_config is None:
+        return 1
+    if not os.path.exists(user_input_config):
+        logger.warning(f"User Input Config file does not exist: {user_input_config}")
+        return 1
+    skip_normalize = True if 'skip_normalize=true' in target else False
+    output_int = True if 'output_int=true' in target else False
+    fe_concat = False
+    with open(user_input_config, 'r') as f:
+        lines = f.readlines()
+    for line in lines:
+        if '#define FE_CONCAT' in line:
+            fe_concat = True
+    compilation_lines = []
+    if skip_normalize:
+        compilation_lines += ["#define SKIP_NORMALIZE\n"]
+        if not fe_concat:
+            compilation_lines += ["#define FE_CONCAT\n"]
+            compilation_lines += ["#define FE_NUM_FRAME_CONCAT 1\n"]
+    if output_int:
+        compilation_lines += ["#define OUTPUT_INT\n"]
+    if len(lines) > 5:
+        lines = lines[:3] + compilation_lines + lines[3:]
+        with open(user_input_config, 'w') as f:
+            f.writelines(lines)
+    else:
+        lines = ["#ifndef INPUT_CONFIG_H_\n", "#define INPUT_CONFIG_H_\n\n"]  + compilation_lines + ["\n\n#endif /* INPUT_CONFIG_H_ */\n"]
+    return 0
 
 def remove_intermittent_files(dir):
     logger = getLogger("root.remove_intermittent_files")
@@ -154,6 +184,22 @@ def main(args):
     logger.info(f"TinyVerse Toolchain Version: {get_version_str()}")
     logger.info("Script: {}".format(os.path.relpath(__file__)))
     logger.debug(args)
+
+    # Parse target argument and log compilation settings
+    target = args.target if args.target else ''
+    skip_normalize = 'skip_normalize=true' in target
+    output_int = 'output_int=true' in target
+    if 'type=hard' in target:
+        ti_npu_type = 'hard'
+    elif 'type=soft' in target:
+        ti_npu_type = 'soft'
+    else:
+        ti_npu_type = 'not specified'
+
+    logger.info(f"Target: {target}")
+    logger.info(f"Compilation settings - skip_normalize: {skip_normalize} ('false' for float models, 'true' otherwise)")
+    logger.info(f"Compilation settings - output_int: {output_int} ('false' for float models, 'true/false' otherwise)")
+    logger.info(f"Compilation settings - ti-npu type: {ti_npu_type} ('soft' for float models/generic quantized models, 'soft/hard' otherwise)")
     # Often we hear of compilation breaking as the compiler/sdk paths provided are invalid
     exit_flag = 0
     if not (os.path.exists(args.cross_compiler) or os.path.exists(args.cross_compiler + ".exe")):
@@ -165,7 +211,7 @@ def main(args):
                 logger.error(f"Compilation will fail as path is invalid: {arg[2:]}")
                 exit_flag = 1
     if exit_flag:
-        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_ROOT/CGT_PATH (C2000), MSPM0_CGT_PATH(MSPM0), C29_CG_ROOT (F29x), CC2755_CGT_PATH (CC2755)")
+        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_ROOT/C2000_CG_ROOT (C2000), CG_TOOL_ROOT (F29x), ARM_LLVM_CGT_PATH (CCxx/AM26x/MSPMx)")
         logger.error("Exiting due to previous errors. Compiled model directory will be empty.")
         return exit_flag
 

@@ -28,73 +28,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import os
-import traceback
-from logging import getLogger
-import yaml
+"""
+Model definitions - now imported from tinyml_modelzoo.
 
-from ..utils import misc_utils
-from .generic_classification_models import *
-from .generic_regression_models import *
-from .generic_feature_extraction_models import *
-from .generic_autoencoder_models import *
-from .generic_forecasting_models import *
-from .generic_image_models import *
+All models have been centralized in tinyml-modelzoo package.
+This module re-exports everything for backward compatibility.
 
-model_dict = {
-    'CNN_TS_GEN_BASE_100': CNN_TS_GEN_BASE_100,
-    'CNN_TS_GEN_BASE_1K': CNN_TS_GEN_BASE_1K,
-    'CNN_TS_GEN_BASE_4K': CNN_TS_GEN_BASE_4K,
-    'CNN_TS_GEN_BASE_6K': CNN_TS_GEN_BASE_6K,
-    'CNN_TS_GEN_BASE_13K': CNN_TS_GEN_BASE_13K,
-    'RES_ADD_CNN_TS_GEN_BASE_3K': RES_ADD_CNN_TS_GEN_BASE_3K,
-    'RES_CAT_CNN_TS_GEN_BASE_3K': RES_CAT_CNN_TS_GEN_BASE_3K,
-    'REG_TS_GEN_BASE_3K': REG_TS_GEN_BASE_3K,
-    'REG_TS_GEN_BASE_10K': REG_TS_GEN_BASE_10K,
-    'REG_TS_CNN_13K' : REG_TS_CNN_13K,
-    'REG_TS_CNN_4K' : REG_TS_CNN_4K,
-    'AE_CNN_TS_GEN_BASE_1K': AE_CNN_TS_GEN_BASE_1K,
-    'AE_CNN_TS_GEN_BASE_4K': AE_CNN_TS_GEN_BASE_4K,
-    'AE_CNN_TS_GEN_BASE_16K': AE_CNN_TS_GEN_BASE_16K,
-    'AD_CNN_TS_17K':AD_CNN_TS_17K,
-    'HAR_TINIE_CNN_2K': HAR_TINIE_CNN_2K,
-    'YOLO_Classifier_8K': YOLO_Classifier_8K,
-    'FC_CNN_TS_GEN_BASE_13K':FC_CNN_TS_GEN_BASE_13K,
-    'CNN_LENET5':  CNN_LENET5,
-    'CNN_TS_PIR2D_BASE': CNN_TS_PIR2D_BASE,
-    'AD_3_LAYER_DEEP_LINEAR_MODEL_TS': AD_3_LAYER_DEEP_LINEAR_MODEL_TS
-    # 'CNN_AF_3L_200': CNN_AF_3L_200,
-    # 'CNN_AF_3L_300': CNN_AF_3L_300,
-    # 'CNN_AF_3L_700': CNN_AF_3L_700,
-    # 'CNN_AF_3L_1400': CNN_AF_3L,
-    # 'CNN_MF_1L': CNN_MF_1L,
-    # 'CNN_MF_2L': CNN_MF_2L,
-    # 'CNN_MF_3L': CNN_MF_3L,
-}
+When new models are added to tinyml-modelzoo, they are automatically
+available here without any changes to this file.
+"""
 
+# Re-export everything from tinyml_modelzoo dynamically
+from tinyml_modelzoo.models import *
+from tinyml_modelzoo.models import __all__ as _modelzoo_all
 
-def get_model(model_name: str, variables, num_classes: int, input_features: int, model_config: str, model_spec: str, with_input_batchnorm: bool, dual_op: bool):
-    logger = getLogger("root.get_model")
-    model_config_dict = {}
-    if model_config and os.path.exists(model_config):
-        logger.info(f"Parsing {model_config} to update {model_name} parameters")
-        with open(model_config) as fp:
-            model_config_dict = yaml.load(fp, Loader=yaml.CLoader)
-    model_config_dict.update(dict(variables=variables, num_classes=num_classes, with_input_batchnorm=with_input_batchnorm, input_features=input_features, dual_op=dual_op))
-    if model_name not in model_dict.keys():
-        try:
-            import tinyml_proprietary_models
-            model_dict.update({model_name: tinyml_proprietary_models.get_model(model_name)})
-        except ImportError:
-            logger.info("tinyml_proprietary_models does not exist. Importing locally")
-            if os.path.exists(model_spec):
-                logger.info(f"Parsing {model_spec} to get {model_name} definition.")
-                model_definition = misc_utils.import_file_or_folder(model_spec, __name__, force_import=True)
-                model_dict.update({model_name: model_definition.get_model(model_name)})
-
-    try:
-       return model_dict[model_name](config=model_config_dict)
-    except KeyError:
-        traceback.print_exc()
-        logger.error(f"{model_name} couldn't be found. If this is a protected model, it will only be available on the GUI version")
-        raise RuntimeError(f"{model_name} couldn't be created.")
+# Re-export the __all__ from modelzoo
+__all__ = _modelzoo_all

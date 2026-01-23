@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_tinyverse"
-version = "1.2.0"
+version = "1.3.0"
 description = "A tiny machine learning project in the tinyverse"
 readme = "README.md"
 requires-python = "==3.10.*"
@@ -18,29 +18,31 @@ keywords = [ "artificial intelligence",
 	"time series classification",
 	"audio classification",
 	"keyword spotting",]
-dependencies = [ "numpy==2.2.6",
+dependencies = [
+	"numpy==2.2.6",
 	"onnx==1.18.0",
-	"onnxruntime==1.22.0",
-	"protobuf==6.31.1",
-	"pandas==2.3.0",
-	"pathlib2==2.3.7.post1",
-	"PyYAML==6.0.2",
+	"onnxruntime==1.23.2",
+	"onnx_graphsurgeon==0.5.8",
+	"pandas==2.3.3",
+	"PyYAML==6.0.3",
 	"scipy==1.15.3",
 	"tabulate==0.9.0",
 	"torcheval==0.0.7",
 	"torchinfo==1.8.0",
-	"cryptography==45.0.4",
-	"matplotlib==3.10.3",
-	"scikit-learn==1.7.0",
+	"cryptography==46.0.3",
+	"matplotlib==3.10.8",
+	"scikit-learn==1.7.2",
 	"torch==2.7.1",
-	"cython",
 	"cmsisdsp==1.10.1",
 	"torchvision==0.22.1",
-	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.2#subdirectory=tinyml-modeloptimization/torchmodelopt",
+	"tinyml_modelzoo @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.3#subdirectory=tinyml-modelzoo",
+	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.3#subdirectory=tinyml-modeloptimization/torchmodelopt",
 	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
 	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
 	"colorama==0.4.6",
-	"PyWavelets==1.8.0",]
+	"PyWavelets==1.8.0",
+	"onnx-graphsurgeon==0.5.8",
+]
 [[project.authors]]
 name = "Adithya Thonse"
 email = "thonse@ti.com"
