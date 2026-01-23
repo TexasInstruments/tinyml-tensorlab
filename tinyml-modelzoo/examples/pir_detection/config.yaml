@@ -1,0 +1,19 @@
+common:
+  task_type: pir_detection
+  target_device: CC2755
+dataset:
+  dataset_name: pir_detection_classification
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip
+data_processing_feature_extraction:
+  data_proc_transforms: []
+  feature_extraction_name: PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D
+  variables: 1
+training:
+  model_name: PIRDetection_model_1_t
+  model_config: ''
+  batch_size: 64
+  training_epochs: 10
+  num_gpus: 0
+  learning_rate: 0.04
+testing: {}
+compilation: {}

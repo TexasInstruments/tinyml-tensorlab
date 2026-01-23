@@ -1,0 +1,35 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: F28P55
+dataset:
+  dataset_name: hello_world_example_dsg
+data_processing_feature_extraction:
+  feature_extraction_name: Generic_1024Input_FFTBIN_64Feature_8Frame
+#    feature_extraction_name: Generic_512Input_FFTBIN_32Feature_8Frame
+#    feature_extraction_name: Generic_256Input_FFTBIN_16Feature_8Frame
+#    feature_extraction_name: Generic_1024Input_FFT_512Feature_1Frame
+#    feature_extraction_name: Generic_512Input_FFT_256Feature_1Frame
+#    feature_extraction_name: Generic_256Input_FFT_128Feature_1Frame
+#    feature_extraction_name: Generic_512Input_RAW_512Feature_1Frame
+#    feature_extraction_name: Generic_256Input_RAW_256Feature_1Frame
+#    feature_extraction_name: Generic_128Input_RAW_128Feature_1Frame
+#    frame_size: 1024
+#    feature_size_per_frame: 64
+#    num_frame_concat: 4
+#    feat_ext_transform: [ 'FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT' ]
+#    offset: 0
+#    scale: 1
+#    frame_skip: 1
+#    log_mul: 20
+#    log_base: 10
+#    log_threshold: 1e-100
+#    store_feat_ext_data: False
+#    nn_for_feature_extraction: False
+  variables: 1
+training:
+  model_name: CLS_1k_NPU
+  batch_size: 256
+  training_epochs: 20
+  num_gpus: 0
+testing: {}
+compilation: {}

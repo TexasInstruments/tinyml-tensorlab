@@ -1,0 +1,25 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: MSPM0G5187
+dataset:
+  dataset_name: hello_world_example_dsg
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hello_world_dsg.zip
+data_processing_feature_extraction:
+  feature_extraction_name: FFT256Input_FE_RFFT_16Feature_8Frame_removeDC_Full_Bandwidth
+# feat_ext_transform: [ 'FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT']
+# frame_size: 256
+# feature_size_per_frame: 16
+# num_frame_concat: 8
+# frame_skip: 1
+# offset: 0
+# scale:1
+# variables: 1
+# q15_scale_factor: 5
+# normalize_bin: True
+training:
+  model_name: CLS_13k_NPU
+  batch_size: 256
+  training_epochs: 20
+  num_gpus: 0
+testing: {}
+compilation: {}

@@ -1,0 +1,28 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: F28P55
+dataset:
+  dataset_name: electrical_fault
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/electrical_fault_dataset.zip
+data_processing_feature_extraction:
+  data_proc_transforms: ['SimpleWindow']
+  frame_size: 256
+  stride_size: 0.01
+  variables: 6
+  feature_extraction_name: Custom_Default
+#FFT without Binning
+  feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'LOG_DB', 'CONCAT']
+  frame_size: 256
+  feature_size_per_frame: 128
+  num_frame_concat: 1
+#FFT with Binning
+#feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']
+#frame_size: 256
+#feature_size_per_frame: 32
+#num_frame_concat: 4
+training:
+  model_name: CLS_ResCat_3k
+  num_gpus: 0
+testing:
+  skip_train: false
+compilation: {}

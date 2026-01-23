@@ -1,0 +1,18 @@
+common:
+  target_module: vision
+  task_type: image_classification
+  target_device: MSPM0G5187
+dataset:
+  dataset_name: mnist_image_classification
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mnist_classes.zip
+data_processing_feature_extraction:
+  feature_extraction_name: Mnist_Default
+training:
+  model_name: Lenet5
+  batch_size: 64
+  training_epochs: 14
+  num_gpus: 0
+  quantization: 2
+  learning_rate: 0.1
+testing: {}
+compilation: {}

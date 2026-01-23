@@ -1,0 +1,20 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: F28P55
+dataset:
+  dataset_name: gas_sensor
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/gas_sensor_dataset.zip
+  split_type: within_files
+data_processing_feature_extraction:
+  data_proc_transforms: ['SimpleWindow']
+  frame_size: 64
+  stride_size: 0.02
+  variables: 10
+  scale: 0.00390625   # 1/256
+training:
+  model_name: CLS_1k_NPU
+  num_gpus: 0
+  epochs: 20
+  output_int: true
+testing: {}
+compilation: {}

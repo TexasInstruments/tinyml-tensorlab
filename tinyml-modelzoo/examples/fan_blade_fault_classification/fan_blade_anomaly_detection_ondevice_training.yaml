@@ -1,0 +1,39 @@
+common:
+    target_module: 'timeseries'
+    task_type: 'generic_timeseries_anomalydetection'
+    target_device: 'F28P55'
+    run_name: '{date-time}/{model_name}'
+dataset:
+    enable: True 
+    dataset_name: fan_blade_ondevice
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_ad_dataset.zip'
+    split_type: 'amongst_files'
+    split_factor: [0.6, 0.1, 0.3]
+
+data_processing_feature_extraction: 
+    data_proc_transforms: []
+    feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+    variables: 3
+    num_frame_concat: 1
+    stride_size: 1
+
+
+training:
+    enable: True 
+    model_name: 'Ondevice_Trainable_AD_Linear'
+    model_config: ''
+    batch_size: 64
+    training_epochs: 200
+    num_gpus: 0
+    learning_rate: 0.001
+    quantization: 0
+    output_int: False
+    ondevice_training: True
+    trainable_layers_from_last: 1
+
+testing:
+    enable: True
+
+compilation:
+    enable: True 
+    compile_preset_name: 'forced_soft_npu_preset'

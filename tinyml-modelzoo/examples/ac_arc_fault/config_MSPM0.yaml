@@ -1,0 +1,36 @@
+common:
+  task_type: arc_fault
+  target_device: MSPM0G5187
+dataset:
+  dataset_name: ac_arc_fault
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault.zip
+  split_type: within_files
+  split_factor:
+  - 0.6
+  - 0.2
+  - 0.2
+data_processing_feature_extraction:
+  feature_extraction_name: ArcFault_1024Input_FE_RFFT_128Feature_8Frame_1InputChannel_removeDC_Full_Bandwidth
+  #feat_ext_transform: [ 'FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT']
+  # frame_size: 1024
+  # feature_size_per_frame: 128
+  # num_frame_concat: 8
+  # frame_skip: 8
+  # scale: 1
+  # offset: 0
+  # normalize_bin: True
+  # variables: 1
+  # q15_scale_factor: 4
+  # gof_test: True
+  store_feat_ext_data: false
+training:
+  model_name: CLS_1k_NPU
+  model_config: ''
+  batch_size: 30
+  training_epochs: 30
+  num_gpus: 0
+  quantization: 2
+  learning_rate: 0.001
+  weight_decay: 1e-5
+testing: {}
+compilation: {}

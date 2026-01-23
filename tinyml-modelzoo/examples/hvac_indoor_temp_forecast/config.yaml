@@ -1,0 +1,31 @@
+common:
+  task_type: generic_timeseries_forecasting
+  target_device: F28P55
+dataset:
+  dataset_name: hvac_indoor_temp_forecast
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hvac_indoor_temp_forecast_dataset.zip
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - SimpleWindow  # 'SimpleWindow' must be specified for forecasting tasks
+  frame_size: 5
+  stride_size: 0.2
+  forecast_horizon: 1  # Number of future timesteps to be predicted
+  variables: 3 # takes the first 'variables' columns after the time columns as input to predict the target variables
+  target_variables:  # Other format for `target_variables` specification: ['pm','torque'] or  [7,11] or ['7','11',]. If numbers which represent indices, are provided in list, assign column number 0 to the first non time column and continue numbering from there
+  - 2
+training:
+  model_name: FCST_LSTM10
+  model_config: ''
+  batch_size: 6
+  training_epochs: 10
+  num_gpus: 0
+  quantization: 2
+  optimizer: adamw
+  learning_rate: 0.003
+  weight_decay: 0.001
+  lr_scheduler: none
+  output_int: false
+testing: {}
+compilation:
+  keep_libc_files: true
+  compile_preset_name: forced_soft_npu_preset
