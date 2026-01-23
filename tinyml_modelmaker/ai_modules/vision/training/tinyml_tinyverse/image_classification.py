@@ -42,12 +42,10 @@ import tinyml_modelmaker
 
 from ..... import utils
 from ... import constants
-from .device_run_info import DEVICE_RUN_INFO
+from tinyml_modelzoo.device_info import DEVICE_RUN_INFO
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..', '..', '..'))
-
-
 
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
 template_model_description = dict(
@@ -60,7 +58,6 @@ template_model_description = dict(
     download=dict(download_url='', download_path=''),
     training=dict(
         quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-        with_input_batchnorm=True,
         training_backend='tinyml_tinyverse',
         dataset_loader='GenericImageDataset',
         model_training_id='',
@@ -69,26 +66,31 @@ template_model_description = dict(
         model_spec=None,
         batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_IMAGE_CLASSIFICATION],
         target_devices={
-     
-                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None),
-                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None),},
-        training_devices={constants.TRAINING_DEVICE_CPU: True, constants.TRAINING_DEVICE_CUDA: True, constants.TRAINING_DEVICE_MPS: True,},
+            constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None),
+            constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=None),
+            constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None),
+        },
+        training_devices={
+            constants.TRAINING_DEVICE_CPU: True,
+            constants.TRAINING_DEVICE_CUDA: True,
+            constants.TRAINING_DEVICE_MPS: True,
+        },
     ),
     compilation=dict()
 )
+
 _model_descriptions = {
     'Lenet5': utils.deep_update_dict(deepcopy(template_model_description), {
-		'common': dict(model_details='Lenet5.\nCNN for image classification. \n2 Conv+BatchNorm+Relu+MaxPool layers + 3Linear Layer.'),
+        'common': dict(model_details='Lenet5.\nCNN for image classification. \n2 Conv+BatchNorm+Relu+MaxPool layers + 3Linear Layer.'),
         'training': dict(
             model_training_id='CNN_LENET5',
             model_name='Lenet5',
             learning_rate=0.04,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_IMAGE_CLASSIFICATION],
             target_devices={
-              
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Lenet5'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Lenet5'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['Lenet5'][constants.TARGET_DEVICE_MSPM0G5187]),
-
             },
         ),
     }),
@@ -96,16 +98,13 @@ _model_descriptions = {
 
 enabled_models_list = ['Lenet5']
 
-
 def get_model_descriptions(task_type=None):
     model_descriptions_selected = {k: v for k, v in _model_descriptions.items() if k in enabled_models_list}
     return model_descriptions_selected
 
-
 def get_model_description(model_name):
     model_descriptions = get_model_descriptions()
     return model_descriptions[model_name] if model_name in model_descriptions else None
-
 
 class ModelTraining:
     @classmethod
@@ -361,11 +360,10 @@ class ModelTraining:
                 '--image-mean', f'{self.params.data_processing_feature_extraction.image_mean}',
                 '--image-scale', f'{self.params.data_processing_feature_extraction.image_scale}',
               
-                '--output-dequantize', f'{self.params.training.output_dequantize}',
+                '--output-int', f'{self.params.training.output_int}',
 
                 #'--tensorboard-logger', 'True',
                 '--variables', f'{self.params.data_processing_feature_extraction.variables}',
-                '--with-input-batchnorm', f'{self.params.training.with_input_batchnorm}',
                 '--lis', f'{self.params.training.log_file_path}',
                 # Do not add newer arguments after this line, it will change the behaviour of the code.
                 '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
@@ -459,8 +457,8 @@ class ModelTraining:
                 '--image-mean', f'{self.params.data_processing_feature_extraction.image_mean}',
                 '--image-scale', f'{self.params.data_processing_feature_extraction.image_scale}',
                 '--nn-for-feature-extraction', f'{self.params.data_processing_feature_extraction.nn_for_feature_extraction}',
-                '--output-dequantize', f'{self.params.training.output_dequantize}',
-                
+                '--output-int', f'{self.params.training.output_int}',
+
                 # '--tensorboard-logger', 'True',
                 '--lis', f'{self.params.training.log_file_path}',
                 '--data-path', f'{data_path}',

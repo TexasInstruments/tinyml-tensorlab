@@ -29,6 +29,7 @@
 #################################################################################
 
 import os
+import re
 
 from tinyml_tinyverse.references.common import compilation as compile_scr
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
@@ -115,17 +116,68 @@ class ModelCompilation():
         '''
         os.makedirs(self.params.compilation.compilation_path, exist_ok=True)
 
-        if self.params.compilation.model_path and os.path.exists(self.params.compilation.model_path):
-            model_file = self.params.compilation.model_path
+        if self.params.training.ondevice_training:
+            model_file = os.path.join(self.params.training.training_path, 'frozen_model', 'model.onnx')
         else:
-            model_file = os.path.join(self.params.training.training_path_quantization, 'model.onnx') if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION else os.path.join(self.params.training.training_path, 'model.onnx')
+            if self.params.compilation.model_path and os.path.exists(self.params.compilation.model_path):
+                model_file = self.params.compilation.model_path
+            else:
+                model_file = os.path.join(self.params.training.training_path_quantization, 'model.onnx') if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION else os.path.join(self.params.training.training_path, 'model.onnx')
+        user_input_config_h = None
+        if self.params.training.training_path and os.path.exists(self.params.training.training_path):
+            user_input_config_h = os.path.join(self.params.training.training_path, 'golden_vectors', 'user_input_config.h')
+        if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+            if self.params.training.training_path_quantization and os.path.exists(self.params.training.training_path_quantization):
+                user_input_config_h = os.path.join(self.params.training.training_path_quantization, 'golden_vectors', 'user_input_config.h')
+
+        # Dynamically set skip_normalize and output_int based on task_category and quantization
+        # using the matrix relationship defined in constants.get_skip_normalize_and_output_int()
+        # Only modify these parameters if they already exist in the target string AND the user hasn't explicitly set them
+        target = self.params.compilation.target
+
+        # Check if skip_normalize and/or output_int are present in the target string
+        has_skip_normalize = re.search(r'skip_normalize=(true|false)', target) is not None
+        has_output_int = re.search(r'output_int=(true|false)', target) is not None
+
+        # Only proceed if at least one of these parameters exists
+        if has_skip_normalize or has_output_int:
+            # Get task_category from task_type
+            task_category = constants.get_task_category(self.params.common.task_type)
+
+            # Convert quantization enum to integer (0, 1, or 2)
+            quantization_level = int(self.params.training.quantization)
+
+            # Compute correct values based on the matrix
+            skip_normalize, output_int = constants.get_skip_normalize_and_output_int(task_category, quantization_level)
+
+            # Replace skip_normalize if it exists in the target string
+            if has_skip_normalize:
+                skip_normalize_str = 'true' if skip_normalize else 'false'
+                target = re.sub(r'skip_normalize=(true|false)', f'skip_normalize={skip_normalize_str}', target)
+
+            # Replace output_int if it exists in the target string
+            # BUT only if the user hasn't explicitly set it in the config (check if it's None, meaning not user-specified)
+            if has_output_int:
+                # Check if user explicitly set output_int in config
+                user_set_output_int = self.params.training.output_int is not None
+                if user_set_output_int:
+                    # User explicitly set it - use their value
+                    output_int_str = 'true' if self.params.training.output_int else 'false'
+                else:
+                    # User didn't set it - use automatic value from matrix
+                    output_int_str = 'true' if output_int else 'false'
+                target = re.sub(r'output_int=(true|false)', f'output_int={output_int_str}', target)
+
+        if self.params.training.quantization != TinyMLQuantizationVersion.QUANTIZATION_TINPU:
+            target = re.sub(r'ti-npu type=hard', 'ti-npu type=soft', target)  # type=hard will fail for Quantization=0/1 as TINPU cant run Floating Point Ops/generic quantization models
+
         argv = [
             '--FILE', f'{model_file}',
             '--output_dir', f'{self.params.compilation.compilation_path}',
             '--config', f'{self.params.compilation.compilation_path}',
             '--cross_compiler', f'{self.params.compilation.cross_compiler}',
             '--cross_compiler_options', f'{self.params.compilation.cross_compiler_options}',
-            '--target', f'{self.params.compilation.target}',
+            '--target', f'{target}',
             '--target_c_mcpu', f'{self.params.compilation.target_c_mcpu}',
             '--keep_libc_files' if self.params.compilation.keep_libc_files else '--no-keep_libc_files',
             '--lis', f'{self.params.compilation.log_file_path}',
@@ -133,6 +185,7 @@ class ModelCompilation():
         ]
         # compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
         args = compile_scr.get_args_parser().parse_args(argv)
+        compile_scr.modify_user_input_config(user_input_config_h, target)
         exit_flag = compile_scr.run(args)
         args.quit_event = self.quit_event
         return exit_flag

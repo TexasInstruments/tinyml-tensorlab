@@ -72,7 +72,7 @@ run_tinyml_modelmaker.sh docs/running_model_on_device/config.yaml
 ```
 This will run the default selected preset *FFT1024Input_256Feature_1Frame_Full_Bandwidth*. Comment out this preset and uncomment the second preset to run the second preset *FFT1024Input_256Feature_1Frame_Half_Bandwidth* with the same command.
 
-You can see the output from running modelmaker in the following folder **tinyml-modelmaker/data/projects/arc_fault_example_dsk/run/running_model_on_device**.
+You can see the output from running modelmaker in the following folder **tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/running_model_on_device**.
 
 ## Requirements
 
@@ -81,19 +81,19 @@ The CCS example *arc_fault_dataset_validation_f28p55x* requires 4 files from mod
 ### Compiled model files
 
 - mod.a: The compiled model is present in this file. 
-  - Path Modelmaker: *tinyml-modelmaker/data/projects/arc_fault_example_dsk/run/running_model_on_device/compilation/artifacts/mod.a*
+  - Path Modelmaker: *tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/running_model_on_device/compilation/artifacts/mod.a*
   - Path CCS Project: *ex_arc_fault_dataset_validation_f28p55x/artifacts/mod.a*
 - tvmgen_default.h: Header file to access the model inference APIs from mod.a 
-  - Path Modelmaker: *tinyml-modelmaker/data/projects/arc_fault_example_dsk/run/running_model_on_device/compilation/artifacts/tvmgen_default.h*
+  - Path Modelmaker: *tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/running_model_on_device/compilation/artifacts/tvmgen_default.h*
   - Path CCS Project: *ex_arc_fault_dataset_validation_f28p55x/artifacts/tvmgen_default.h*
 
 ### Test data for device verification
 
 - test_vector.c: Test cases to check if the model works on device currently
-  - Path Modelmaker: *tinyml-modelmaker/data/projects/arc_fault_example_dsk/run/running_model_on_device/training/quantization/golden_vectors/test_vector.c*
+  - Path Modelmaker: *tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/running_model_on_device/training/quantization/golden_vectors/test_vector.c*
   - Path CCS Project: *ex_arc_fault_dataset_validation_f28p55x/test_vector.c*
 - user_input_config.h: Configuration of feature extraction library in SDK. 
-  - Path Modelmaker: *tinyml-modelmaker/data/projects/arc_fault_example_dsk/run/running_model_on_device/training/quantization/golden_vectors/user_input_config.h*
+  - Path Modelmaker: *tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/running_model_on_device/training/quantization/golden_vectors/user_input_config.h*
   - Path CCS Project: *ex_arc_fault_dataset_validation_f28p55x/user_input_config.h*
 
 ## Final Run

@@ -46,7 +46,6 @@ training:
     quantization_weight_bitwidth: 8
     quantization_activation_bitwidth: 8
     learning_rate: 0.1
-    with_input_batchnorm: False
     quantization: 1
 
     nas_enabled: True

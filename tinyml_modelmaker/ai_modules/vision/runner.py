@@ -32,10 +32,8 @@ import copy
 import datetime
 import os
 
-# import tarfile
 from zipfile import ZipFile
 
-# import torch
 import yaml
 
 from ... import utils
@@ -121,6 +119,17 @@ class ModelRunner():
             print(f'- TargetDevices & Estimated Flash Usage (bytes): {flash_usage_list}')
             print('- This model can be compiled for the above device(s).')
             print('---------------------------------------------------------------------')
+        #
+
+        #####################################################################
+        # Auto-detect data_dir based on task_category if not explicitly set
+        if self.params.dataset.data_dir is None:
+            auto_data_dir = constants.get_default_data_dir_for_task(self.params.common.task_category)
+            self.params.dataset.data_dir = auto_data_dir
+            if verbose:
+                print(f"Auto-detected data_dir='{auto_data_dir}' for task_category='{self.params.common.task_category}'")
+        elif verbose:
+            print(f"Using user-specified data_dir='{self.params.dataset.data_dir}'")
         #
 
     def resolve_run_name(self, run_name, model_name):

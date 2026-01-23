@@ -324,6 +324,7 @@ Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with y
 ## Tasks supported
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_ARC_FAULT]['task_name']}
+* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_ECG_CLASSIFICATION]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_MOTOR_FAULT]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_BLOWER_IMBALANCE]['task_name']}
 * {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_PIR_DETECTION]['task_name']}
@@ -355,11 +356,17 @@ These are the devices that are supported currently. As additional devices are su
 ### {constants.TARGET_DEVICE_MSPM0G3507}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3507}
 
+### {constants.TARGET_DEVICE_MSPM0G3519}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3519}
+
 ### {constants.TARGET_DEVICE_MSPM0G5187}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G5187}
 
 ### {constants.TARGET_DEVICE_CC2755}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2755}
+
+### {constants.TARGET_DEVICE_CC1352}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1352}
 
 
 ## Additional information
@@ -388,7 +395,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 
@@ -545,7 +552,7 @@ def get_live_capture_descriptions(params):
                     'caption': 'device',
                     'id': 'device',
                     'infoText': 'Current support is MSPM0G3507. You can try other device using correct application example and baud rate.',
-                    'options': ['MSPM0G3507', 'MSPM0G5187'],
+                    'options': ['MSPM0G3507', 'MSPM0G3519', 'MSPM0G5187'],
                     'widgetType': 'select'},
                 {
                     'caption': 'sensor',
@@ -583,8 +590,8 @@ def get_live_capture_descriptions(params):
                 {
                     'caption': 'device',
                     'id': 'device',
-                    'infoText': 'Current support is CC2755R10. You can try other device using correct application example and baud rate.',
-                    'options': ['CC2755'],
+                    'infoText': 'Current support is CC2755R10 and CC1352R1. You can try other device using correct application example and baud rate.',
+                    'options': ['CC2755', 'CC1352'],
                     'widgetType': 'select'},
                 {
                     'caption': 'sensor',
@@ -633,7 +640,7 @@ def get_live_capture_example_descriptions(params):
                 'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
-                'transport': {'baudRate': 115200}
+                'transport': {'baudRate': 5820000}
             }
         },
         'generic_timeseries_classification': {
@@ -642,6 +649,17 @@ def get_live_capture_example_descriptions(params):
                 'deviceName': 'MSPM0G5187',
                 'files': [],
                 'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            }
+        },
+        'ecg_classification': {
+            'MSPM0G5187': {
+                'ccsProj': 'ecg_anomaly_detection_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/ecg_anomaly_detection_data_capture/ticlang/ecg_anomaly_detection_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
@@ -677,6 +695,24 @@ def get_live_capture_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'CC1352': {
+                'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'deviceName': 'CC1352R1F3',
+                'files': [],
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+               'MSPM0G5187': {
+                'ccsProj': 'pir_detection_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            }
         }
         
     }
@@ -774,6 +810,20 @@ def get_live_preview_example_descriptions(params):
                 'transport': {'baudRate': 115200}
             }
         },
+        'ecg_classification': {
+            'MSPM0G5187': {
+                'ccsProj': 'ecg_anomaly_detection_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/ecg_anomaly_detection_live_preview/ticlang/ecg_anomaly_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            }
+        },
         'motor_fault': {
             'F28P55': {
                 'ccsProj': 'eAI_mfd_eval_f28p55x',
@@ -809,6 +859,27 @@ def get_live_preview_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'CC1352': {
+                'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'deviceName': 'CC1352R1F3',
+                'files': [{'from': 'artifacts/', 'to': 'arc_model'}],
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM0G5187': {
+                'ccsProj': 'pir_detection_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/pir_detection_live_preview/ticlang/pir_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml', 
+                'transport': {'baudRate': 115200}
+            }
         }
     }
     return live_preview_example_descriptions

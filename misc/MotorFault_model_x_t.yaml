@@ -5,6 +5,5 @@ stride: 4
 num_channel: 8
 kernel: 8
 max_pool: 7
-with_input_batchnorm: True
 height: 1
 dual_op: False

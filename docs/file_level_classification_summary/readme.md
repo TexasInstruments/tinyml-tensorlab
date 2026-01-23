@@ -14,7 +14,7 @@ While the confusion matrix shows overall counts of correct and incorrect classif
 
 ## Example output
 
-Here we have a fan blade fault classification dataset (You can read more about it here: [Link](./../../examples/fan_blade_fault_classification/readme.md) ) consiting of four classes: **Normal**, **Blade Damage**, **Blade Imbalance** and **Blade Obstruction**. To demonstrate the usefulness of this feature, we have intentionally created a misclassified dataset using [this](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/fan_blade_fault_dsi_misclassified.zip) dataset.
+Here we have a fan blade fault classification dataset (You can read more about it here: [Link](./../../examples/fan_blade_fault_classification/readme.md) ) consiting of four classes: **Normal**, **Blade Damage**, **Blade Imbalance** and **Blade Obstruction**. To demonstrate the usefulness of this feature, we have intentionally created a misclassified dataset using [this](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_fault_dsi_misclassified.zip) dataset.
 
 We have created a `config.yaml` file where we define parameters related to dataset, feature extraction transforms, training, etc.
 
@@ -59,4 +59,4 @@ Looking at the File-Level Classification Summary of TestData, we can see that in
 <hr>
 Update history:
 <br>
-[8th October 2025]: Compatible with v1.2 of Tiny ML Modelmaker
+[8th October 2025]: Compatible with v1.3 of Tiny ML Modelmaker

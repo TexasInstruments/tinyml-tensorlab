@@ -36,7 +36,8 @@ RUN if [ ! -z $http_proxy ]; then echo "Acquire::http::proxy \"${http_proxy}\";"
 RUN apt update && \
     apt install -y sudo g++ gcc git curl iputils-ping wget cmake build-essential libgtk-3-0 apt-utils libgl1 llvm llvm-dev \
     libbz2-dev xz-utils libreadline-dev libncurses5-dev libssl-dev libsqlite3-dev liblzma-dev \
-    libffi-dev libjpeg-dev zlib1g-dev graphviz graphviz-dev protobuf-compiler
+    libffi-dev libjpeg-dev zlib1g-dev graphviz graphviz-dev protobuf-compiler && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # ##################################################################
 # change working directory
@@ -48,44 +49,40 @@ RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-instal
 
 # we define PIP_CACHE_DIR here to point to a writable location
 # to enable container user to be different by using the docker run option --user
-RUN echo ' ' >> ${HOME_DIR}/.pyenvrc && \
-    echo "export PIP_CACHE_DIR=${HOME_DIR}/.cache/pip" >> ${HOME_DIR}/.pyenvrc && mkdir -p ${HOME_DIR}/.cache/pip
-
-# set paths and activate env
+# set paths and activate env - combined into single RUN for efficiency
 # .bashrc is not sourced in non interactive mode - so write it to another file
-RUN echo ' ' >> ${HOME_DIR}/.pyenvrc && \
-    echo '# pyenv settings' >> ${HOME_DIR}/.pyenvrc && \
-    echo "command -v pyenv >/dev/null || export PATH=:$PYENV_ROOT/bin:$PATH" >> ${HOME_DIR}/.pyenvrc && \
-    echo 'eval "$(pyenv init -)"' >> ${HOME_DIR}/.pyenvrc && \
-    echo 'eval "$(pyenv virtualenv-init -)"' >> ${HOME_DIR}/.pyenvrc && \
-    echo ' ' >> ${HOME_DIR}/.pyenvrc
-
-# .profile is needed for non-interactive shell spawns
-RUN echo ' ' >> ${HOME_DIR}/.profile && \
+RUN { \
+      echo ' '; \
+      echo "export PIP_CACHE_DIR=${HOME_DIR}/.cache/pip"; \
+      echo '# pyenv settings'; \
+      echo "command -v pyenv >/dev/null || export PATH=:$PYENV_ROOT/bin:$PATH"; \
+      echo 'eval "$(pyenv init -)"'; \
+      echo 'eval "$(pyenv virtualenv-init -)"'; \
+      echo ' '; \
+    } > ${HOME_DIR}/.pyenvrc && \
+    mkdir -p ${HOME_DIR}/.cache/pip && \
+    echo ' ' >> ${HOME_DIR}/.profile && \
     echo "command -v pyenv >/dev/null || source ${HOME_DIR}/.pyenvrc" >> ${HOME_DIR}/.profile && \
-    echo ' ' >> ${HOME_DIR}/.profile
-
-# .bashrc is needed for interactive shell spawns
-RUN echo ' ' >> ${HOME_DIR}/.bashrc && \
+    echo ' ' >> ${HOME_DIR}/.profile && \
+    echo ' ' >> ${HOME_DIR}/.bashrc && \
     echo "command -v pyenv >/dev/null || source ${HOME_DIR}/.pyenvrc" >> ${HOME_DIR}/.bashrc && \
     echo ' ' >> ${HOME_DIR}/.bashrc
 
 # pyenv works with bash, so change shell to bash
 SHELL ["/bin/bash", "--login", "-c"]
 
-# create virtualenv
+# create virtualenv, update pip setuptools, and clean up caches
 RUN source ${HOME_DIR}/.bashrc && \
     pyenv install 3.10 && \
     pyenv virtualenv 3.10 py310 && \
     pyenv rehash && \
     echo 'pyenv activate py310' >> ${HOME_DIR}/.pyenvrc && \
-    echo ' ' >> ${HOME_DIR}/.pyenvrc
-
-# update pip setuptools
-RUN source ${HOME_DIR}/.bashrc && \
+    echo ' ' >> ${HOME_DIR}/.pyenvrc && \
+    pyenv activate py310 && \
     python -m ensurepip --upgrade && \
     python -m pip install --no-input --upgrade pip setuptools && \
-    python -m pip install --no-input --upgrade wheel cython numpy
+    python -m pip install --no-input --upgrade wheel cython numpy && \
+    rm -rf ${HOME_DIR}/.pyenv/cache/* ${HOME_DIR}/.cache/pip/* /tmp/*
 
 #################################################################################
 # Note 1: this can be reversed later as a last step after all installations are done.

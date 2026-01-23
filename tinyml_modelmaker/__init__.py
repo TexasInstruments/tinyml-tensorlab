@@ -32,9 +32,46 @@ from . import ai_modules
 from .run_tinyml_modelmaker import main as get_set_go
 
 
+def get_target_module_from_task_type(task_type):
+    """
+    Get the target AI module (timeseries or vision) from a task_type.
+
+    Args:
+        task_type: One of the TASK_TYPE_* constants from timeseries or vision modules
+
+    Returns:
+        str: 'timeseries' or 'vision', or None if task_type is not recognized
+    """
+    # Timeseries task types
+    timeseries_task_types = [
+        ai_modules.timeseries.constants.TASK_TYPE_ARC_FAULT,
+        ai_modules.timeseries.constants.TASK_TYPE_ECG_CLASSIFICATION,
+        ai_modules.timeseries.constants.TASK_TYPE_MOTOR_FAULT,
+        ai_modules.timeseries.constants.TASK_TYPE_BLOWER_IMBALANCE,
+        ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+        ai_modules.timeseries.constants.TASK_TYPE_PIR_DETECTION,
+        ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_REGRESSION,
+        ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+        ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_FORECASTING,
+    ]
+
+    # Vision task types
+    vision_task_types = [
+        ai_modules.vision.constants.TASK_TYPE_IMAGE_CLASSIFICATION,
+    ]
+
+    if task_type in timeseries_task_types:
+        return 'timeseries'
+    elif task_type in vision_task_types:
+        return 'vision'
+    else:
+        return None
+
+
 def get_task_category_type_from_task_type(task_type):
     task_type_to_task_category_type_map = {
         ai_modules.timeseries.constants.TASK_TYPE_ARC_FAULT: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,
+        ai_modules.timeseries.constants.TASK_TYPE_ECG_CLASSIFICATION: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,
         ai_modules.timeseries.constants.TASK_TYPE_MOTOR_FAULT: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,
         ai_modules.timeseries.constants.TASK_TYPE_BLOWER_IMBALANCE: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,
         ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION: ai_modules.timeseries.constants.TASK_CATEGORY_TS_CLASSIFICATION,

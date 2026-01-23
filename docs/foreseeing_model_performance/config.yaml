@@ -16,7 +16,7 @@ data_processing_feature_extraction:
 dataset:
   dataset_name: model_performance
   enable: true
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/arc_fault_classification_dsi.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsi.zip
 testing:
   enable: true
 training:
