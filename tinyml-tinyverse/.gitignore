@@ -38,6 +38,7 @@ gen.yml
 *.orig
 *-checkpoint.ipynb
 *.venv
+*.pyc
 
 ## Xcode User settings
 xcuserdata/

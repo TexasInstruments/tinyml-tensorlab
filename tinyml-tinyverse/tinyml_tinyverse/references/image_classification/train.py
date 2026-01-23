@@ -90,6 +90,7 @@ from tinyml_tinyverse.common.datasets import GenericImageDataset
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights,gof_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
+from tinyml_tinyverse.references.common.train_base import apply_output_int_default
 
 dataset_loader_dict = {'GenericImageDataset':GenericImageDataset}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
@@ -223,7 +224,8 @@ def get_args_parser():
     parser.add_argument("--weights", default=None, type=str, help="the weights enum name to load")
     parser.add_argument("--weights-state-dict-name", default="model", type=str, help="the weights member name to load from the checkpoint")
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
-    parser.add_argument("--output-dequantize", default=False, type=misc_utils.str2bool, help="Get dequantized output from model")
+    parser.add_argument("--output-int", default=None, type=misc_utils.str_or_bool, help="Get quantized int8 output from model (False for dequantized float output). If not specified, determined automatically based on task type and quantization level.")
+    parser.add_argument("--ondevice-training", default=False, type=misc_utils.str2bool, help="Specified whether the current model can be trained on device or not")
 
     return parser
 
@@ -301,7 +303,7 @@ def generate_golden_vectors(output_dir, dataset, output_int, generic_model=False
             np.savetxt(half_path + f'image_{label}_{index}.txt', arr, fmt='%f,' if arr.dtype.kind == 'f' else '%d,',header=f'//Class: {label} (Index: {index}): Image Data\nfloat raw_input_test[{len(arr)}]= {{',footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'image_{label}_{index}.txt')
             if not nn_for_feature_extraction:
-                np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat32_t model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
+                np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
                 vector_files.append(half_path + f'features_{label}_{index}.txt')
             np.savetxt(half_path + f'output_{label}_{index}.txt', pred.flatten(), fmt='%d,' if output_int else '%f,', header=f'//Class: {label} (Index: {index}): Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{', footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'output_{label}_{index}.txt')
@@ -391,7 +393,6 @@ def get_nas_args(args, data_loader, data_loader_test, num_classes, variables):
         'num_classes': num_classes,
         'train_loader': data_loader,
         'valid_loader': data_loader_test,
-        'with_input_batchnorm': args.with_input_batchnorm,
     }
 
     return Namespace(**nas_args_dict)
@@ -500,7 +501,7 @@ def main(gpu, args):
             # TODO: One solution is to see where exactly variables get used in timeseries_dataset and see if it can be made redundant there
             model = models.get_model(
                 args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
-                model_spec=args.model_spec, with_input_batchnorm=False if args.nn_for_feature_extraction else misc_utils.str2bool(args.with_input_batchnorm),
+                model_spec=args.model_spec,
                 dual_op=args.dual_op)
     else:
         model = torch.load(args.load_saved_model, weights_only=False)       
@@ -557,7 +558,7 @@ def main(gpu, args):
 
     # model = NeuralNetworkWithPreprocess
     if args.nn_for_feature_extraction:
-        fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2], with_input_batchnorm=False if args.quantization==TinyMLQuantizationVersion.QUANTIZATION_GENERIC else True).to(device)  # dataset.X_raw.shape[2],
+        fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2]).to(device)  # dataset.X_raw.shape[2],
         fe_model = NeuralNetworkWithPreprocess(fe_model, None)
         # Feature Extraction Model
         optimizer = utils.init_optimizer(fe_model, args.opt, args.lr, args.momentum, args.weight_decay)
@@ -574,7 +575,7 @@ def main(gpu, args):
     # Does nothing in Floating Point Training
     model = utils.quantization_wrapped_model(
         model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs, args.output_dequantize)
+        args.epochs, args.output_int)
     
     optimizer = utils.init_optimizer(model, args.opt, args.lr, args.momentum, args.weight_decay)
     lr_scheduler = utils.init_lr_scheduler(
@@ -629,9 +630,6 @@ def main(gpu, args):
                   columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
                   index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
                                                          headers="keys", tablefmt='grid')))
-    # if args.nn_for_feature_extraction:
-    #     logger.info("Feature extraction AI model is being combined with AI model")
-    #     model = models.CombinedModel(fe_model, model)
     logger.info('Exporting model after training.')
     if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
         if args.nn_for_feature_extraction:
@@ -650,9 +648,7 @@ def main(gpu, args):
 
     if args.gen_golden_vectors:
         generate_golden_vector_dir(args.output_dir)
-        output_int = False
-        if args.quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU and args.output_dequantize == False:
-            output_int = True
+        output_int = args.quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU and args.output_int
         generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
         
     return
@@ -675,6 +671,8 @@ def run(args):
 
 if __name__ == "__main__":
     arguments = get_args_parser().parse_args()
+    # Apply default output_int if not specified by user
+    apply_output_int_default(arguments, 'image_classification')
 
     # run the training.
     # if args.distributed is True is set, then this will launch distributed training
