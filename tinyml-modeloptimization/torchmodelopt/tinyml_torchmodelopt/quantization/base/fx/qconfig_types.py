@@ -136,8 +136,52 @@ def apply_mixed_precision(qconfig_mapping, qconfig_dict, mixed_precision):
     #
     return qconfig_mapping
 
+def get_layers_to_skip(traced_model):
+    layers_to_skip = []
+    graph_nodes = list(traced_model.graph.nodes)
+    input_bn_name = None
+    first_conv_or_linear_name = None
+    last_linear_name = None
+    input_node = None
+    for node in graph_nodes:
+        if node.op == 'placeholder':
+            input_node = node
+            break
+    if input_node:
+        for node in graph_nodes:
+            if node.op == 'call_module' and input_node in node.args:
+                module = traced_model.get_submodule(node.target)
+                if isinstance(module, (torch.nn.BatchNorm1d, torch.nn.BatchNorm2d, torch.nn.BatchNorm3d)):
+                    input_bn_name = node.target
+                break
+    for node in graph_nodes:
+        if node.op == 'call_module':
+            module = traced_model.get_submodule(node.target)
+            if isinstance(module, (torch.nn.Conv1d, torch.nn.Conv2d, torch.nn.Conv3d, torch.nn.Linear)):
+                first_conv_or_linear_name = node.target
+                break
+    for node in reversed(graph_nodes):
+        if node.op == 'call_module':
+            module = traced_model.get_submodule(node.target)
+            if isinstance(module, torch.nn.Linear):
+                last_linear_name = node.target
+                break
+    if input_bn_name:
+        layers_to_skip.append(input_bn_name)
+    if first_conv_or_linear_name:
+        layers_to_skip.append(first_conv_or_linear_name)
+    if last_linear_name:
+        layers_to_skip.append(last_linear_name)
+    return layers_to_skip
 
-def get_default_qconfig_mapping(qconfig_type=None):
+def apply_partial_quantization(qconfig_mapping, model):
+    traced_model = torch.fx.symbolic_trace(model)
+    layers_to_skip = get_layers_to_skip(traced_model)
+    module_to_qconfig = {name: None for name in layers_to_skip}
+    qconfig_mapping.module_name_qconfigs.update(module_to_qconfig)
+    return qconfig_mapping
+
+def get_default_qconfig_mapping(model, qconfig_type=None):
     qconfig_dict = qconfig_type
     if isinstance(qconfig_dict, dict) or qconfig_dict is None:
         qconfig_type = get_default_qconfig(qconfig_dict=qconfig_dict)
@@ -152,7 +196,9 @@ def get_default_qconfig_mapping(qconfig_type=None):
     weight_mixed_precision = qconfig_dict.get('weight', {}).get('mixed_precision', {})
     if weight_mixed_precision:
         qconfig_mapping = apply_mixed_precision(qconfig_mapping, qconfig_dict, weight_mixed_precision)
-
+    partial_quantization = qconfig_dict.get('partial_quantization')
+    if partial_quantization:
+        qconfig_mapping = apply_partial_quantization(qconfig_mapping, model)
     # activation_mixed_precision = qconfig_dict.get('activation', {}).get('mixed_precision', {})
     # if activation_mixed_precision:
     #     qconfig_mapping = apply_mixed_precision(qconfig_mapping, qconfig_dict, activation_mixed_precision)

@@ -38,10 +38,10 @@ from torch.fx import GraphModule
 from typing import List, Tuple
 
 from .quant_utils import GENERICQuantizedReplacementUtils
-from ... import surgery
+from ...surgery import remove_identity
 
 class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
-    def __init__(self, model, *args, qconfig_type=None,  **kwargs):
+    def __init__(self, model, *args, qconfig_type=None, output_int: bool = True, **kwargs):
         '''
         The QAT wrapper module does the preparation like in:
         qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
@@ -72,12 +72,14 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         self.weight_bw = qconfig_type['weight']['bitwidth']
         self.activation_bw = qconfig_type['activation']['bitwidth']
         self.power2_scale = qconfig_type['weight']['power2_scale']
+        self.output_int = output_int
         self.float_ops = kwargs.get('float_ops', False)
 
         # qconfig_type = None is equivalent to WC8AT8 (or DEFAULT) which uses per_tensor_affine
         # Note: activation qscheme=torch.per_tensor_affine can be converted onnx model with QOperator using onnxruntime optimization
         # but activation qscheme=torch.per_tensor_symmetric stays as QDQ even when using onnxruntime optimization
-        super().__init__(model, *args, qconfig_type=qconfig_type, backend='fbgemm' if platform.system() in ['Windows'] else 'qnnpack', **kwargs)
+        backend = 'fbgemm' if platform.system() in ['Windows'] else 'qnnpack'
+        super().__init__(model, *args, qconfig_type=qconfig_type, backend=backend, **kwargs)
     
     def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.INT_MODEL, **kwargs):
         '''
@@ -92,10 +94,9 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         '''
         # first convert the model to int
         super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
-        _convert_replacement_func = lambda module, pattern, *largs, **lkwargs: self._convert_replacement(module, pattern, *largs, **lkwargs)
         # then apply the transformation to required output format
         if model_qconfig_format == TinyMLModelQConfigFormat.INT_MODEL:
-            self.module = surgery.replace_unsupported_layers(self.module, replacement_dict={'tinyml_modelopt_quant_replace_types': {'quant_replace_types': _convert_replacement_func}})
+            self.module = self._convert_replacement(self.module, self.output_int)
         return self
 
     def export(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
@@ -105,16 +106,21 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
     def measure_stats(self, float_output, quant_output):
         diff_output = (float_output - quant_output)
         diff_output_abs = diff_output.abs()
-        diff_output_sqr = diff_output**2
-        float_output_sqr = float_output**2
+        diff_output_sqr = diff_output ** 2
+        float_output_sqr = float_output ** 2
         quant_error_min = diff_output_abs.min().item()
         quant_error_max = diff_output_abs.max().item()
         quant_error_mean = diff_output_abs.mean().item()
         quant_snr_db = (10 * torch.log10(float_output_sqr.mean() / diff_output_sqr.mean())).item()
         quant_psnr_db = (10 * torch.log10(float_output_sqr.max() / diff_output_sqr.mean())).item()
         quant_absmu_by_sigma = (float_output.abs().mean() / diff_output.std()).item()
-        diff_output_stats = dict(snr_db=quant_snr_db, psnr_db=quant_psnr_db, absmu_by_sigma=quant_absmu_by_sigma,
-                                 mean=quant_error_mean, min=quant_error_min, max=quant_error_max)
+        diff_output_stats = dict(
+            snr_db=quant_snr_db, 
+            psnr_db=quant_psnr_db, 
+            absmu_by_sigma=quant_absmu_by_sigma,
+            mean=quant_error_mean, 
+            min=quant_error_min, 
+            max=quant_error_max)
         return diff_output_stats
 
 
@@ -125,7 +131,9 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         ]
         return replacement_rules
 
-    def _convert_replacement(self, module: GraphModule, pattern, *args, **kwargs) -> GraphModule:
+    def _convert_replacement(self, module: GraphModule, output_int: bool = False) -> GraphModule:
+        module = remove_identity(module)
+        module.delete_all_unused_submodules()
         # Convert the module using symbolic trace
         module = torch.fx.symbolic_trace(module) if not isinstance(module, torch.fx.GraphModule) else module
         # Get the replacement rules to change the pattern

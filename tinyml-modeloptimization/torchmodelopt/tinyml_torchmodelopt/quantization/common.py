@@ -73,7 +73,7 @@ class TinyMLQuantizationMethod():
 
 
 class TinyMLQConfigType:
-    def __init__(self, weight_bitwidth: int=8, activation_bitwidth: int=8):
+    def __init__(self, weight_bitwidth: int=8, activation_bitwidth: int=8, partial_quantization: bool=False):
         self.logger = getLogger("root.main.TinyMLQConfigType")
         self.logger.info(f"Quantization Bitwidths: Weight-{weight_bitwidth} Activation- {activation_bitwidth}")
         self.qconfig_type = None
@@ -113,7 +113,8 @@ class TinyMLQConfigType:
                     'power2_scale': True,
                     'range_max': None,
                     'fixed_range': False
-                }
+                },
+                'partial_quantization' : partial_quantization,
             }
         elif weight_bitwidth == 4:
             self.qconfig_type = {
@@ -132,7 +133,8 @@ class TinyMLQConfigType:
                     'range_max': None,
                     'fixed_range': False,
                     'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
-                }
+                },
+                'partial_quantization' : partial_quantization,
             }
         elif weight_bitwidth == 2:
             self.qconfig_type = {
@@ -153,7 +155,8 @@ class TinyMLQConfigType:
                     'range_max': None,
                     'fixed_range': False,
                     'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
-                }
+                },
+                'partial_quantization' : partial_quantization,
             }
         else:
             raise RuntimeError("unsupported quantization parameters")

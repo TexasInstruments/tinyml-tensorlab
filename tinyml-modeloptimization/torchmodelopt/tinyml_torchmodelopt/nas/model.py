@@ -76,7 +76,7 @@ class Cell(nn.Module):
         return torch.cat([states[i] for i in self._concat], dim=1)
 
 class Network(nn.Module):
-    def __init__(self, C, num_classes, layers, genotype, in_channels, with_input_batchnorm):
+    def __init__(self, C, num_classes, layers, genotype, in_channels):
         """
         Network is the full model, composed of multiple cells.
         Args:
@@ -85,14 +85,13 @@ class Network(nn.Module):
             layers (int): Number of cells in the network.
             genotype: Genotype object specifying the cell structure.
             in_channels (int): Number of input channels.
-            with_input_batchnorm: Whether to use batchnorm on input ('True' or not).
         """
         super(Network, self).__init__()
         self._layers = layers
         self._in_channels = in_channels
 
-        # Optional batchnorm on input
-        self.input_batchnorm = nn.BatchNorm2d(self._in_channels) if with_input_batchnorm == 'True' else nn.Identity()
+        # Input batchnorm
+        self.input_batchnorm = nn.BatchNorm2d(self._in_channels)
         
         stem_multiplier = 3
         C_curr = stem_multiplier * C

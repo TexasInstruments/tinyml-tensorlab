@@ -5,30 +5,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_torchmodelopt"
-version = "1.2.0"
+version = "1.3.0"
 description = "Tiny ML Model Optimization ToolKit For Torch"
 readme = "README.md"
 requires-python = "==3.10.*"
 classifiers = [ "Development Status :: 4 - Beta",
 	"Programming Language :: Python :: 3.10",]
-dependencies = [ "numpy==2.2.6",
-	"Cython==3.1.2",
-	"protobuf==6.31.1",
-	"pillow==11.2.1",
+dependencies = [
+	"numpy==2.2.6",
 	"onnxsim==0.4.36",
 	"onnx==1.18.0",
-	"onnxsim==0.4.36",
-	"onnxoptimizer==0.3.13",
-	"onnxruntime==1.22.0",
-	"progressbar==2.5",
-	"protobuf==6.31.1",
-	"rich==14.0.0",
-	"pandas==2.3.0",
+	"onnxruntime==1.23.2",
 	"colorama==0.4.6",
 	"torch==2.7.1",
-	"torchmetrics==1.8.2",
-    "torchvision==0.22.1",
-	"scikit-learn==1.7.0"
 ]
 [[project.authors]]
 name = "Adithya Thonse"

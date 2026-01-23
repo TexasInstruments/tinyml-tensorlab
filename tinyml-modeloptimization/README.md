@@ -11,7 +11,7 @@ Model optimization toolkit that is necessary for quantization for 2bit/4bit/8bit
 If you want to use the repository as it is, i.e a Python package, then you can simply install this as a pip installable package:
 
 ```commandline
-pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.2#subdirectory=tinyml-modeloptimization/torchmodelopt
+pip install git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.3#subdirectory=tinyml-modeloptimization/torchmodelopt
 ```
 
 To setup the repository for development, this python package and the dependencies can be installed by using the setup file.

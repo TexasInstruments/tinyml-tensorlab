@@ -98,7 +98,7 @@ class Network(nn.Module):
     """
     Network is the full model for architecture search, composed of multiple cells.
     """
-    def __init__(self, C, num_classes, layers, criterion, in_channels, with_input_batchnorm, steps=4, multiplier=4, stem_multiplier=3):
+    def __init__(self, C, num_classes, layers, criterion, in_channels, steps=4, multiplier=4, stem_multiplier=3):
         """
         Args:
             C (int): Initial number of channels.
@@ -106,7 +106,6 @@ class Network(nn.Module):
             layers (int): Number of cells in the network.
             criterion: Loss function.
             in_channels (int): Number of input channels.
-            with_input_batchnorm (bool): Whether to use batchnorm on input.
             steps (int): Number of intermediate nodes per cell.
             multiplier (int): Number of outputs to concatenate per cell.
             stem_multiplier (int): Multiplier for initial stem channels.
@@ -119,11 +118,10 @@ class Network(nn.Module):
         self._steps = steps
         self._multiplier = multiplier
         self._in_channels = in_channels
-        self._with_input_batchnorm = with_input_batchnorm
         self._stem_multiplier = stem_multiplier
 
-        # Optional batchnorm on input
-        self.input_batchnorm = nn.BatchNorm2d(self._in_channels) if self._with_input_batchnorm else nn.Identity()
+        # Input batchnorm
+        self.input_batchnorm = nn.BatchNorm2d(self._in_channels)
         
         # Initial stem convolution to increase channel dimension
         C_curr = stem_multiplier * C
@@ -181,7 +179,7 @@ class Network(nn.Module):
         Returns:
             Network: New network instance with copied architecture parameters.
         """
-        model_new = Network(self._C, self._num_classes, self._layers, self._criterion, self._in_channels, self._with_input_batchnorm, self._steps, self._multiplier, self._stem_multiplier).cuda()
+        model_new = Network(self._C, self._num_classes, self._layers, self._criterion, self._in_channels, self._steps, self._multiplier, self._stem_multiplier).cuda()
         for x, y in zip(model_new.arch_parameters(), self.arch_parameters()):
             x.data.copy_(y.data)
         return model_new

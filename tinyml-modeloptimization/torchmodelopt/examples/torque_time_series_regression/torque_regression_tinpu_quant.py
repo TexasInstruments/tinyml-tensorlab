@@ -304,9 +304,9 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
     #
     if quantization_device_type == 'TINPU':
         if quantization_method == 'QAT':
-            quant_model = TINPUTinyMLQATFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs, output_dequantize=True)
+            quant_model = TINPUTinyMLQATFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs, output_int=False)
         elif quantization_method == 'PTQ':
-            quant_model = TINPUTinyMLPTQFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs, output_dequantize=True)
+            quant_model = TINPUTinyMLPTQFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs, output_int=False)
         else:
             raise RuntimeError(f"Unknown Quantization method: {quantization_method}")
         #
@@ -464,7 +464,7 @@ def validate_saved_model(model_name: str, dataloader: DataLoader) -> float:
 if __name__ == '__main__':
 
     MODEL_NAME = "torque_measurement.onnx"
-    CSV_FILE = "https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/torque_measurement.csv" # torque_measurement.csv
+    CSV_FILE = "https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/torque_measurement.csv" # torque_measurement.csv
     NUM_EPOCHS = 50 #25
     WINDOW_LENGTH = 128 #256 #128 #64
     WINDOW_OFFSET = WINDOW_LENGTH//2  # WINDOW_LENGTH//4
