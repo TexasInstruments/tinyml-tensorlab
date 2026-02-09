@@ -4,7 +4,7 @@ Changelog
 
 Version history and release notes for Tiny ML Tensorlab.
 
-Version 1.2.0
+Version 1.3.0
 -------------
 
 *Current Release*
@@ -135,7 +135,7 @@ Model access changed:
 Deprecation Notices
 -------------------
 
-**Version 1.2.0:**
+**Version 1.3.0:**
 
 * ``feature_extraction`` config section renamed to ``data_processing_feature_extraction``
 * Old preset names deprecated (will be removed in 1.4.0)

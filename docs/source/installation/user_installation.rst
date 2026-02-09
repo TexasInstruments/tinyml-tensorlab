@@ -38,7 +38,7 @@ After installation, you can run the hello world example:
    cd tinyml-tensorlab/tinyml-modelzoo
 
    # Run the example
-   python -m tinyml_modelmaker examples/hello_world/config.yaml
+   python -m tinyml_modelmaker examples/generic_timeseries_classification/config.yaml
 
 Output will be saved to ``../tinyml-modelmaker/data/projects/``.
 

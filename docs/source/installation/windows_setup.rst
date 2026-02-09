@@ -71,7 +71,7 @@ During installation:
 .. code-block:: powershell
 
    cd tinyml-modelzoo
-   run_tinyml_modelzoo.bat examples\hello_world\config.yaml
+   run_tinyml_modelzoo.bat examples\generic_timeseries_classification\config.yaml
 
 Option 2: WSL2 (Recommended for Full Compatibility)
 ---------------------------------------------------
@@ -127,7 +127,7 @@ Launch Ubuntu and set up your username/password.
 .. code-block:: bash
 
    cd ~/tinyml-tensorlab/tinyml-modelzoo
-   ./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+   ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
 Path Configuration
 ------------------

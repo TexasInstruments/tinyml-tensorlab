@@ -52,6 +52,132 @@ Device Families at a Glance
      - Arm Cortex-M33/M4
      - Wireless IoT, connected sensors
 
+Complete Device List
+--------------------
+
+**C2000 Family:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Device
+     - NPU
+     - Description
+   * - **F28P55**
+     - Yes
+     - 32-bit C28x, 150 MHz, NPU-accelerated (recommended for complex models)
+   * - F28P65
+     - No
+     - 32-bit C28x, 150 MHz
+   * - F29H85
+     - No
+     - 64-bit C29x core, high performance
+   * - F29P58
+     - No
+     - 64-bit C29x core
+   * - F29P32
+     - No
+     - 64-bit C29x core
+   * - F2837
+     - No
+     - Dual-core, 200 MHz
+   * - F28003
+     - No
+     - 100 MHz, cost-effective
+   * - F28004
+     - No
+     - 100 MHz, cost-effective
+   * - F280013
+     - No
+     - 100 MHz, entry-level
+   * - F280015
+     - No
+     - 120 MHz, entry-level
+
+**MSPM0 Family:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Device
+     - NPU
+     - Description
+   * - **MSPM0G5187**
+     - Yes
+     - 80 MHz Cortex-M0+, NPU-accelerated, ultra-low power
+   * - MSPM0G3507
+     - No
+     - 80 MHz Cortex-M0+, ultra-low power
+   * - MSPM0G3519
+     - No
+     - 80 MHz Cortex-M0+, ultra-low power
+
+**MSPM33C Family:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Device
+     - NPU
+     - Description
+   * - MSPM33C32
+     - No
+     - 160 MHz Cortex-M33, TrustZone security
+   * - MSPM33C34
+     - No
+     - 160 MHz Cortex-M33, extended peripherals
+
+**AM13 Family:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Device
+     - NPU
+     - Description
+   * - **AM13E2**
+     - Yes
+     - 160 MHz Cortex-M33, NPU-accelerated, TrustZone security
+
+**AM26x Family:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Device
+     - NPU
+     - Description
+   * - AM263
+     - No
+     - Quad-core Cortex-R5F, 400 MHz, industrial Ethernet
+   * - AM263P
+     - No
+     - Quad-core Cortex-R5F, 400 MHz, enhanced peripherals
+   * - AM261
+     - No
+     - Single-core Cortex-R5F, 400 MHz
+
+**Connectivity Devices:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+
+   * - Device
+     - NPU
+     - Description
+   * - CC2755
+     - No
+     - 96 MHz Cortex-M33, Wi-Fi/Bluetooth
+   * - CC1352
+     - No
+     - Cortex-M4, multi-protocol wireless (Sub-GHz, BLE)
+
 NPU vs Non-NPU Devices
 ----------------------
 

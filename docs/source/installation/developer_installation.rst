@@ -120,14 +120,14 @@ Run the hello world example:
       .. code-block:: bash
 
          cd tinyml-modelzoo
-         ./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+         ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
    .. tab:: Windows
 
       .. code-block:: powershell
 
          cd tinyml-modelzoo
-         run_tinyml_modelzoo.bat examples\hello_world\config.yaml
+         run_tinyml_modelzoo.bat examples\generic_timeseries_classification\config.yaml
 
 Directory Structure After Installation
 --------------------------------------

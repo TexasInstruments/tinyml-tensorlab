@@ -27,7 +27,7 @@ List available examples:
    # ecg_classification/
    # fan_fault/
    # grid_stability/
-   # hello_world/
+   # generic_timeseries_classification/
    # hvac_temp_forecast/
    # motor_bearing_fault/
    # motor_speed_regression/
@@ -60,7 +60,7 @@ Running an Example
 .. code-block:: bash
 
    # Hello World (simplest)
-   ./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+   ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
    # DC Arc Fault Detection
    ./run_tinyml_modelzoo.sh examples/dc_arc_fault/config.yaml
@@ -174,7 +174,7 @@ Example Categories
 
 **Classification Examples:**
 
-* ``hello_world`` - Waveform classification (beginner)
+* ``generic_timeseries_classification`` - Waveform classification (beginner)
 * ``dc_arc_fault`` - DC arc fault detection
 * ``ac_arc_fault`` - AC arc fault detection
 * ``motor_bearing_fault`` - 6-class bearing fault
@@ -209,7 +209,7 @@ Create a script to run multiple examples:
    # run_all_examples.sh
 
    examples=(
-     "hello_world"
+     "generic_timeseries_classification"
      "dc_arc_fault"
      "motor_bearing_fault"
    )

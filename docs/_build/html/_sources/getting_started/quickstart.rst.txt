@@ -36,13 +36,13 @@ Step 2: Run Hello World Example
 
       .. code-block:: bash
 
-         ./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+         ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
    .. tab:: Windows
 
       .. code-block:: powershell
 
-         run_tinyml_modelzoo.bat examples\hello_world\config.yaml
+         run_tinyml_modelzoo.bat examples\generic_timeseries_classification\config.yaml
 
 This example:
 
@@ -57,7 +57,7 @@ Step 3: View Results
 
 Training outputs are saved to::
 
-   ../tinyml-modelmaker/data/projects/hello_world_example_dsg/run/<timestamp>/
+   ../tinyml-modelmaker/data/projects/generic_timeseries_classification/run/<timestamp>/
 
 **Directory Contents:**
 
@@ -81,7 +81,7 @@ Training outputs are saved to::
 Step 4: Understand the Config
 -----------------------------
 
-Open ``examples/hello_world/config.yaml``:
+Open ``examples/generic_timeseries_classification/config.yaml``:
 
 .. code-block:: yaml
 
@@ -90,7 +90,7 @@ Open ``examples/hello_world/config.yaml``:
      target_device: F28P55
 
    dataset:
-     dataset_name: hello_world_example_dsg
+     dataset_name: generic_timeseries_classification
 
    data_processing_feature_extraction:
      feature_extraction_name: Generic_1024Input_FFTBIN_64Feature_8Frame

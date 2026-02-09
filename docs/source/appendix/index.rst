@@ -50,7 +50,7 @@ Quick Reference
 
 **Version Information**
 
-* Tiny ML Tensorlab: 1.2.0
+* Tiny ML Tensorlab: 1.3.0
 * Python: 3.10.x required
 * PyTorch: 2.7.1
 * TI Neural Network Compiler: 2.1.0

@@ -26,14 +26,14 @@ After completing the installation, you can train your first model in just a few 
       .. code-block:: bash
 
          cd tinyml-modelzoo
-         ./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+         ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
    .. tab:: Windows
 
       .. code-block:: powershell
 
          cd tinyml-modelzoo
-         run_tinyml_modelzoo.bat examples\hello_world\config.yaml
+         run_tinyml_modelzoo.bat examples\generic_timeseries_classification\config.yaml
 
 This runs the "Hello World" example, which:
 
@@ -43,4 +43,4 @@ This runs the "Hello World" example, which:
 4. Quantizes the model for MCU deployment
 5. Compiles for the target device (F28P55 by default)
 
-Output artifacts are saved to ``../tinyml-modelmaker/data/projects/hello_world_example_dsg/``.
+Output artifacts are saved to ``../tinyml-modelmaker/data/projects/generic_timeseries_classification/``.

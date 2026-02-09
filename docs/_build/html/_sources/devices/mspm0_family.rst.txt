@@ -302,7 +302,7 @@ Getting Started
      target_device: 'MSPM0G5187'
 
    dataset:
-     dataset_name: 'hello_world_example_dsg'
+     dataset_name: 'generic_timeseries_classification'
 
    training:
      model_name: 'CLS_1k_NPU'
@@ -315,5 +315,5 @@ Next Steps
 ----------
 
 * Review :doc:`npu_guidelines` for MSPM0G5187/AM13E2
-* See :doc:`/examples/hello_world` for a simple starting point
+* See :doc:`/examples/generic_classification` for a simple starting point
 * Read :doc:`/deployment/npu_device_deployment` for deployment

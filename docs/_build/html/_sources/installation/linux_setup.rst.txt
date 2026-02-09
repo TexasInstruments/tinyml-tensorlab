@@ -113,7 +113,7 @@ Verification
 
    # Run hello world example
    cd tinyml-modelzoo
-   ./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+   ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
 GPU Setup (Optional)
 --------------------
