@@ -91,20 +91,21 @@ cd tinyml-modelmaker
 
 run_tinyml_modelmaker.sh examples/branched_model_parameters/config.yaml
 ```
+
 ## Comparison of models
 
-| model_name                        | # Parameters  | Accuracy  | AUC-ROC-Score |
-| :---                              | :----------:  | :----:    | :-----------: |
-| CLS_1k_NPU           | 1,316         | 94.92%    |    0.995      |
-| CLS_ResCat_3k   | 3,132         | 93.84%    |    0.965      |
-| CLS_13k_NPU          | 14,124        | 94.45%    |    0.987      |
+|     Model name    | # Parameters  | Accuracy | AUC-ROC-Score |
+|-------------------|---------------|----------|---------------|
+|     CLS_1k_NPU    |     1,316     |  94.92%  |     0.995     |
+|    CLS_ResCat_3k  |     3,132     |  93.84%  |     0.965     |
+|     CLS_13k_NPU   |    14,124     |  94.45%  |     0.987     |
 
 ** The purpose of this example is to demonstrate the support for residual connections and not to showcase that the CLS_ResCat_3k model is better than the rest.
-
 
 <hr>
 
 ### Version History:
 
 [28th Feb 2025]: Compatible with v1.0 of Tiny ML Modelmaker
-[10th June 2025]: Compatible with v1.0 of Tiny ML Modelmaker
+[10th June 2025]: Compatible with v1.1 of Tiny ML Modelmaker
+[1st Feb 2026]: Compatible with v1.3 of Tiny ML Modelmaker

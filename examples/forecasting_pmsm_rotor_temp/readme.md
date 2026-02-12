@@ -68,12 +68,12 @@ Unlike classification tasks, forecasting **always requires annotation files**. T
 
 For this example, we have already prepared the dataset in the required format. You can find the zipped dataset [here.](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip)
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
 You can run this example directly in **TinyML ModelMaker** using the following command:
 
 ```bash
-./run_tinyml_modelmaker.sh examples/forecasting_pmsm_rotor/config.yaml
+./run_tinyml_modelzoo.sh examples/forecasting_pmsm_rotor_temp/config.yaml
 ```
 
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
@@ -86,10 +86,8 @@ Set the task type to `generic_timeseries_forecasting` along with other basic par
 
 ```yaml
 common:
-    target_module: 'timeseries'
-    task_type: 'generic_timeseries_forecasting'
-    target_device: 'F28P55'
-    run_name: '{date-time}/{model_name}'
+    task_type: generic_timeseries_forecasting
+    target_device: F28P55
 ```
 
 ### `dataset` section
@@ -105,8 +103,7 @@ Here is how we configured `dataset` section for our pmsm dataset example case:
 
 ```yaml
 dataset:
-    enable: True
-    dataset_name: pmsm_rotor_temp_prediction_dataset
+    dataset_name: forecasting_pmsm_rotor_temp
     input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip
 ```
 
@@ -114,15 +111,8 @@ dataset:
 
 <b> Under `data_processing_feature_extraction` section, you have to specify the following parameters mandatorily </b>:-
 
-- `variables`: takes the first `variables` columns of the data files (after the time columns) as input to predict the target variables.
-- `target_variables`: Represents variables to be predicted which can be specified in any of these formats:
-    - Column indices: `Eg: [7, 8, 9, 10, 11]`
-
-    - Column names: `Eg: ['pm', 'stator_winding', 'stator_tooth', 'stator_yoke', 'torque']`
-
-    - Column indices as strings: `Eg: ['7', '8', '9', '10', '11']`
-
-    **If numbers which represent indices, are provided in list, assign column number 0 to the first non time column and continue numbering from there.**
+- `variables`: Specifies which columns to use as input features. You can specify either an integer (to use the first N columns) or a list of column indices. In our case, we use `variables: 6` to take the first 6 columns as input features (`i_a`, `u_d`, `u_q`, `ambient`, `coolant`, `pm`).
+- `target_variables`: Specifies which column(s) to predict. In our case, we predict column 5 (`pm` - permanent magnet temperature).
 
 We can use data processing transforms such as Simple Window (which is mandatory to use for forecasting problems) and Downsampling (which is optional to use) before training the dataset. Let's see how to configure those:-
 
@@ -148,57 +138,44 @@ Performing downsampling is optional. If you wish to perform downsampling, includ
 Here is an example on how to configure `data_processing_feature_extraction` in YAML file:-
 
 ```yaml
-
-data_processing_feature_extraction: # One or more can be cascaded in the list
-    # transforms: 'Downsample SimpleWindow'
-    data_proc_transforms: ['SimpleWindow'] # 'SimpleWindow' must be specified for forecasting tasks
-    # Downsample
-    #sampling_rate: 5
-    #new_sr: 2
-    # SimpleWindow
+data_processing_feature_extraction:
+    data_proc_transforms:
+    - SimpleWindow  # 'SimpleWindow' must be specified for forecasting tasks
     frame_size: 3
     stride_size: 0.4
-    forecast_horizon: 1 # Number of future timesteps to be predicted
-    variables: 6 # takes the first 'variables' columns after the time columns as input to predict the target variables
-    target_variables: [5] # Other format for `target_variables` specification: ['pm','torque'] or  [7,11] or ['7','11',]. If numbers which represent indices, are provided in list, assign column number 0 to the first non time column and continue numbering from there
-
+    forecast_horizon: 1  # Number of future timesteps to be predicted
+    variables: 6  # takes the first 6 columns as input features
+    target_variables:
+    - 5
 ```
 
 ## `training` section
 
 You can configure training parameters here like `model_name`,`training_epochs`,`optimizer` etc. **It is important to note that for forecasting problems, `output_int` must be set to `False`.**
 
-Here we are using an LSTM model with just 521 parameters.
+Here we are using an LSTM model with just 393 parameters.
 
 ```yaml
 training:
-    # enable/disable training
-    enable: True #False
-    # F28x generic timeseries model names: CLS_1k_NPU, CLS_4k_NPU, CLS_6k_NPU, CLS_13k_NPU
-    # GUI only model names: ArcFault_model_200_t, ArcFault_model_300_t, ArcFault_model_700_t
-    model_name: 'FCST_LSTM10'
-    # model_spec: '../tinyml-mlbackend/proprietary_models/cnn_af_3l.py'
+    model_name: FCST_LSTM8
     model_config: ''
     batch_size: 256
-    training_epochs: 15
+    training_epochs: 20
     num_gpus: 0
     quantization: 1
     optimizer: adam
     learning_rate: 0.005
-    output_int: False
+    output_int: false
 ```
 
-## `compile` and `test` section
+## `testing` and `compilation` section
 
 You can enable or disable compilation and testing as needed:-
 
 ```yaml
-testing:
-    enable: True #False
+testing: {}
 
-compilation:
-    # enable/disable compilation
-    enable: True #False
+compilation: {}
 ```
 
 ## Results
@@ -236,15 +213,15 @@ Float train best epoch:-
 
 ```
    INFO: root.main.FloatTrain.BestEpoch: Printing statistics of best epoch:
-   INFO: root.main.FloatTrain.BestEpoch: Best epoch:15
-   INFO: root.main.FloatTrain.BestEpoch: Overall SMAPE across all variables:0.13%
+   INFO: root.main.FloatTrain.BestEpoch: Best epoch:19
+   INFO: root.main.FloatTrain.BestEpoch: Overall SMAPE across all variables: 0.09%
    INFO: root.main.FloatTrain.BestEpoch: Per-Variable Metrics:
    INFO: root.main.FloatTrain.BestEpoch:   Variable pm:
-   INFO: root.main.FloatTrain.BestEpoch:       SMAPE of pm across all predicted timesteps: 0.13%
-   INFO: root.main.FloatTrain.BestEpoch:       R² of pm across all predicted timesteps: 0.9999
+   INFO: root.main.FloatTrain.BestEpoch:       SMAPE of pm across all predicted timesteps: 0.09%
+   INFO: root.main.FloatTrain.BestEpoch:       R² of pm across all predicted timesteps: 1.0000
    INFO: root.main.FloatTrain.BestEpoch:       Timestep 1:
-   INFO: root.main.FloatTrain.BestEpoch:           SMAPE: 0.13%
-   INFO: root.main.FloatTrain.BestEpoch:           R²: 0.9999
+   INFO: root.main.FloatTrain.BestEpoch:           SMAPE: 0.09%
+   INFO: root.main.FloatTrain.BestEpoch:           R²: 1.0000
 ```
 
 Quant train best epoch:-
@@ -252,36 +229,36 @@ Quant train best epoch:-
 ```
    INFO: root.main.QuantTrain.BestEpoch: Printing statistics of best epoch:
    INFO: root.main.QuantTrain.BestEpoch: Best epoch:10
-   INFO: root.main.QuantTrain.BestEpoch: Overall SMAPE across all variables: 1.90%
+   INFO: root.main.QuantTrain.BestEpoch: Overall SMAPE across all variables: 0.26%
    INFO: root.main.QuantTrain.BestEpoch: Per-Variable Metrics:
    INFO: root.main.QuantTrain.BestEpoch:   Variable pm:
-   INFO: root.main.QuantTrain.BestEpoch:       SMAPE of pm across all predicted timesteps: 1.90%
-   INFO: root.main.QuantTrain.BestEpoch:       R² of pm across all predicted timesteps: 0.9930
+   INFO: root.main.QuantTrain.BestEpoch:       SMAPE of pm across all predicted timesteps: 0.26%
+   INFO: root.main.QuantTrain.BestEpoch:       R² of pm across all predicted timesteps: 0.9999
    INFO: root.main.QuantTrain.BestEpoch:       Timestep 1:
-   INFO: root.main.QuantTrain.BestEpoch:           SMAPE: 1.90%
-   INFO: root.main.QuantTrain.BestEpoch:           R²: 0.9930
+   INFO: root.main.QuantTrain.BestEpoch:           SMAPE: 0.26%
+   INFO: root.main.QuantTrain.BestEpoch:           R²: 0.9999
 ```
 Test results:-
 
 ```
-INFO: root.main.test_data : Variable pm:
-   INFO: root.main.test_data :   SMAPE of pm across all predicted timesteps: 1.85%
-   INFO: root.main.test_data :   R² of pm across all predicted timesteps: 0.9922
+   INFO: root.main.test_data : Variable pm:
+   INFO: root.main.test_data :   SMAPE of pm across all predicted timesteps: 0.25%
+   INFO: root.main.test_data :   R² of pm across all predicted timesteps: 0.9998
    INFO: root.main.test_data :   Timestep 1:
-   INFO: root.main.test_data :       SMAPE: 1.85%
-   INFO: root.main.test_data :       R²: 0.9922
+   INFO: root.main.test_data :       SMAPE: 0.25%
+   INFO: root.main.test_data :       R²: 0.9998
 ```
 
 ### Viewing Detailed Results
 
 - Float train best epoch results can be found at:-
-`data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/best_epoch_{best_epoch_num}_results`
+`tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/best_epoch_{best_epoch_num}_results`
 
 - Quantized train best epoch results can be found at:-
-`data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/best_epoch_{best_epoch_num}_results`
+`tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/best_epoch_{best_epoch_num}_results`
 
 - Test results can be found at:-
-`data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/test_results`
+`tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/test_results`
 
 In each of these directories, you will find:
 
@@ -310,7 +287,7 @@ Let's see the results for this example:-
 
 They are located under the `predictions_csv` folder. It will contain separate CSV files for each target variable. Each file contains predicted and actual values for each timestep forecasted.
 
-Also you can see the compiled mode at: `data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation`
+Also you can see the compiled model at: `tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation`
 
 
 ## Running on Device
@@ -320,24 +297,24 @@ We have compiled this example using the ti-npu soft preset, which means the soft
 1. **Artifacts**:
    - `mod.a` and `tvmgen_default.h` are generated and stored in:
      ```
-     data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation/artifacts
+     tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation/artifacts
      ```
 
 2. **Golden Vectors**:
    - `user_input_config.h` and `test_vector.c` are stored in:
      ```
-     data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/golden_vectors
+     tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/golden_vectors
      ```
 
 In this example, we will use the following setup:
 
 - **Device**: LAUNCHXL-F28P55X
-- **C2000Ware Version**: 6.00
+- **C2000Ware Version**: 6.0.1
 - **Code Composer Studio (CCS)**: Version 20.2.0
 
 <hr>
 
-Steps to run this example on-device can be found by following this example readme: [Run compiled model on a TI MCU without NPU](https://github.com/TexasInstruments/tinyml-tensorlab/blob/main/tinyml-modelmaker/docs/running_model_on_device_without_npu/readme.md)
+Steps to run this example on-device can be found by following this guide: [Deploying Forecasting Models from ModelMaker to Device](../../docs/deploying_forecasting_models_from_modelmaker_to_device/readme.md)
 
 Upon flashing and running the project we can see the model output matches the golden vectors.
 
@@ -352,19 +329,24 @@ Here are the key performance metrics for the model running on the device:
 
 | Metric               | Value       |
 |----------------------|-------------|
-| **Cycles**           | 111187      |
-| **Inference Time**   | 741.25 µs   |
+| **Cycles**           | 102307      |
+| **Inference Time**   | 682.05 µs   |
 | **Results Match**    | TRUE        |
-| **Code Size**        | 5318 bytes  |
-| **RO Data**          | 5162 bytes  |
-| **RW Data**          | 156 bytes   |
-| **Total Size**       | 235 bytes   |
-| **Flash Usage**      | 233 bytes   |
+| **Code Size**        | 4375 bytes  |
+| **RO Data**          | 4227 bytes  |
+| **RW Data**          | 148 bytes   |
+| **Total Size**       | 201 bytes   |
+| **Flash Usage**      | 199 bytes   |
 | **SRAM Usage**       | 2 bytes     |
+
+<p align="center">
+<img src="performance_metrics_graphs/flash_usage_graph.png" alt="flash_usage_graph" width="45%"/>
+<img src="performance_metrics_graphs/sram_usage_graph.png" alt="sram_usage_graph" width="45%"/>
+</p>
 
 <hr>
 Update history:
-[23rd Dec 2025]: Compatible with v1.3 of Tiny ML Modelmaker
+[5th Feb 2026]: Compatible with v1.3 of Tiny ML Modelmaker
 
 
 

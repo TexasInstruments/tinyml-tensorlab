@@ -1,8 +1,10 @@
 common:
   task_type: motor_fault
-  target_device: MSPM0G3507
+  target_device: MSPM0G5187
 dataset:
-  dataset_name: motor_fault_example_dsk
+  dataset_name: fan_blower_imbalance_dsi
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip
+
 data_processing_feature_extraction:
   feature_extraction_name: MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_2D1
 #   feat_ext_transform: [ 'FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT' ]
@@ -21,6 +23,8 @@ training:
   training_epochs: 30
   num_gpus: 0
   quantization_method: QAT
+  quantization_weight_bitwidth: 4
+  quantization_activation_bitwidth: 8
   quantization: 2
 testing: {}
 compilation: {}

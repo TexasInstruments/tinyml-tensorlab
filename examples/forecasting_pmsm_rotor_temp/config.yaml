@@ -2,7 +2,7 @@ common:
   task_type: generic_timeseries_forecasting
   target_device: F28P55
 dataset:
-  dataset_name: pmsm_rotor_temp_prediction_dataset
+  dataset_name: forecasting_pmsm_rotor_temp
   input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip
 data_processing_feature_extraction:
   data_proc_transforms:
@@ -10,21 +10,18 @@ data_processing_feature_extraction:
   frame_size: 3
   stride_size: 0.4
   forecast_horizon: 1  # Number of future timesteps to be predicted
-  variables:  # takes the first 'variables' columns after the time columns as input to predict the target variables
-  - 0
-  - 5
-  target_variables:  # Other format for `target_variables` specification: ['pm','torque'] or  [7,11] or ['7','11',]. If numbers which represent indices, are provided in list, assign column number 0 to the first non time column and continue numbering from there
+  variables: 6 # takes the first 'variables' columns after the time columns as input to predict the target variables
+  target_variables:
   - 5
 training:
   model_name: FCST_LSTM8
   model_config: ''
   batch_size: 256
-  training_epochs: 2
+  training_epochs: 20
   num_gpus: 0
   quantization: 1
   optimizer: adam
   learning_rate: 0.005
   output_int: false
 testing: {}
-compilation:
-  compile_preset_name: forced_soft_npu_preset
+compilation: {}

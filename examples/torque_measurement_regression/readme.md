@@ -39,12 +39,12 @@ You can find the original dataset and its full description here:  [Electric Moto
 
 In our regression example we’ll use `i_d, i_q, u_d, u_q, motor_speed, ambient, coolant, pm, stator_winding, stator_tooth` as **input features** to predict **target variable**:  **Motor torque (`torque`)**
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
-You can run this example directly in **TinyML ModelMaker** using the following command:
+You can run this example directly in **Tiny ML ModelMaker** using the following command:
 
 ```bash
-./run_tinyml_modelmaker.sh examples/torque_measurement_regression/config.yaml
+./run_tinyml_modelzoo.sh ./examples/torque_measurement_regression/config.yaml
 ```
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
 
@@ -96,6 +96,9 @@ Run the modelmaker from command line. After the run is finished. Copy the 4 file
 - user_input_config.h: Configuration of feature extraction library in SDK. 
   - Path Modelmaker: *tinyml-modelmaker/data/projects/torque_measurement/run/{date-time}/{model}/training/quantization/golden_vectors/user_input_config.h*
   - Path CCS Project: *f28p55x_generic_timseries_regression/user_input_config.h*
+
+
+Steps to run a regression example on-device can be found in the following guide: [Deploying Regression Models from ModelMaker to Device](../../docs/deploying_regression_models_from_modelmaker_to_device/readme.md)
 
 ## Model Metrics
 

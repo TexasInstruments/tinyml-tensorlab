@@ -8,7 +8,7 @@ data_processing_feature_extraction:
   stride_size: 0.1
   data_proc_transforms:
   - SimpleWindow
-  frame_size: 1024
+  frame_size: 512
   variables: 6
 training:
   optimizer: adam

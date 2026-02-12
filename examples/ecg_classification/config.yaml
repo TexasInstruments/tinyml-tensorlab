@@ -1,6 +1,6 @@
 common:
   task_type: generic_timeseries_classification
-  target_device: F28P55
+  target_device: AM13E2
 dataset:
   dataset_name: ecg
   input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_2class.zip

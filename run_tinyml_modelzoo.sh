@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# TinyML ModelZoo Training Wrapper
+# Tiny ML ModelZoo Training Wrapper
 # Delegates training to tinyml-modelmaker
 #
 # Usage:
@@ -32,7 +32,7 @@ fi
 
 # Check arguments
 if [ $# -lt 1 ]; then
-    echo "TinyML ModelZoo Training Wrapper"
+    echo "Tiny ML ModelZoo Training Wrapper"
     echo ""
     echo "Usage: $0 <config_file> [additional_args...]"
     echo ""
@@ -72,7 +72,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
     exit 1
 fi
 
-echo -e "${GREEN}TinyML ModelZoo Training${NC}"
+echo -e "${GREEN}Tiny ML ModelZoo Training${NC}"
 echo "========================================"
 echo "Config:      $CONFIG_FILE"
 echo "ModelMaker:  $RUN_SCRIPT"

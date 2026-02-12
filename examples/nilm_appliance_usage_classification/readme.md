@@ -71,11 +71,11 @@ Additionally, we reduced the number of variables from the original 30 to just 5 
 - **Reactive Power**  
 - **Phase**
 
-From these selected classes, we created the **train**, **validation**, and **test** datasets and structured the data to make it compatible with **TinyML ModelMaker** for classification tasks. You can access the refined dataset as a ZIP file [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip).
+From these selected classes, we created the **train**, **validation**, and **test** datasets and structured the data to make it compatible with **Tiny ML ModelMaker** for classification tasks. You can access the refined dataset as a ZIP file [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip).
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
-Here is the command to use the refined dataset we produced earlier with TinyML ModelMaker:
+Here is the command to use the refined dataset we produced earlier with Tiny ML ModelMaker:
 
 ```bash
 ./run_tinyml_modelmaker.sh examples/nilm_appliance_usage_classification/config.yaml
@@ -85,7 +85,7 @@ Users can configure the model pipeline using a YAML configuration file (like sho
 
 ## Configuring the YAML File
 
-The YAML file is the core configuration file used in TinyML ModelMaker to define the pipeline for tasks such as dataset loading, model training, testing, and compilation. In this configuration, we have enabled dataset loading and correctly set the `input_data_path`. For feature extraction, we applied several transformations to process the data effectively: the dataset is split into smaller windows of size `frame_size` (set to 32) using **WINDOWING**, followed by **FFT_FE** to convert the time-domain data into the frequency domain. The data is then normalized using **NORMALIZE**, and reduced in size with **BINNING**, which groups adjacent data points into bins. **FFT_POS_HALF** selects the DC component and specific FFT samples, while **ABS** computes the absolute value of the signal. The amplitude is converted to a logarithmic scale using **LOG_DB**, and finally, the features are concatenated into a single vector using **CONCAT**, with `num_frame_concat` set to 8. This feature extracted data is then trained using `CLS_13k_NPU` model and `quantization` is set to 2 which means we use TI NPU quantization. Here we are compiling the model using TI NPU hardware acceleration with full INT8 quantization pipeline. This is the default preset in our toolchain and hence we don't have to specify it in YAML file. The compilation uses skip_normalize=true and output_int=true. flags, meaning the hardware accelerator expects pre quantized INT8 inputs and produces quantized INT8 outputs. All operations, weights, activations, and intermediate tensors are processed in INT8 format on the NPU hardware. 
+The YAML file is the core configuration file used in Tiny ML ModelMaker to define the pipeline for tasks such as dataset loading, model training, testing, and compilation. In this configuration, we have enabled dataset loading and correctly set the `input_data_path`. For feature extraction, we applied several transformations to process the data effectively: the dataset is split into smaller windows of size `frame_size` (set to 32) using **WINDOWING**, followed by **FFT_FE** to convert the time-domain data into the frequency domain. The data is then normalized using **NORMALIZE**, and reduced in size with **BINNING**, which groups adjacent data points into bins. **FFT_POS_HALF** selects the DC component and specific FFT samples, while **ABS** computes the absolute value of the signal. The amplitude is converted to a logarithmic scale using **LOG_DB**, and finally, the features are concatenated into a single vector using **CONCAT**, with `num_frame_concat` set to 8. This feature extracted data is then trained using `CLS_13k_NPU` model and `quantization` is set to 2 which means we use TI NPU quantization. Here we are compiling the model using TI NPU hardware acceleration with full INT8 quantization pipeline. This is the default preset in our toolchain and hence we don't have to specify it in YAML file. The compilation uses skip_normalize=true and output_int=true. flags, meaning the hardware accelerator expects pre quantized INT8 inputs and produces quantized INT8 outputs. All operations, weights, activations, and intermediate tensors are processed in INT8 format on the NPU hardware. 
 
 ## Results
 
@@ -169,7 +169,7 @@ In this example, we will use the following setup:
 - **C2000Ware Version**: 6.00
 - **Code Composer Studio (CCS)**: Version 20.3.0
 
-Steps to run this example on-device can be found by following this example readme: [Run compiled model on a TI MCU with NPU](https://github.com/TexasInstruments/tinyml-tensorlab/blob/main/tinyml-modelmaker/docs/running_model_on_device/readme.md)
+Steps to run this example on-device can be found by following this guide: [Deploying Classification Models from ModelMaker to Device](../../docs/deploying_classification_models_from_modelmaker_to_device/readme.md)
 
 Upon flashing and running the project we can see the model output matches the golden vectors.
 

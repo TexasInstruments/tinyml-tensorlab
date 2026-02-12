@@ -1,0 +1,24 @@
+common:
+  task_type: generic_timeseries_regression
+  target_device: MSPM0G5187
+dataset:
+  dataset_name: washing_machine_load_weighing
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/washing_machine_loading_data.zip
+data_processing_feature_extraction:
+  stride_size: 0.1
+  data_proc_transforms:
+  - SimpleWindow
+  frame_size: 1024
+  variables: 6
+training:
+  optimizer: adam
+  lr_scheduler: cosineannealinglr
+  model_name: REGR_13k
+  batch_size: 128
+  training_epochs: 100  # use 500 epochs for a better R2 score, RMSE
+  lambda_reg: 0.01
+  num_gpus: 1
+  quantization: 2
+  partial_quantization : True
+testing: {}
+compilation: {}

@@ -1,0 +1,35 @@
+common:
+    target_module: 'timeseries'
+    task_type: 'generic_timeseries_anomalydetection'
+    target_device: 'F29H85'
+    run_name: '{date-time}/{model_name}'
+
+dataset:
+    enable: True 
+    dataset_name: generic_timeseries_anomalydetection
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_anomalydetection.zip
+    split_factor: [0.5, 0.1, 0.4]
+
+data_processing_feature_extraction: 
+    data_proc_transforms:
+    - SimpleWindow
+    - Downsample
+    frame_size: 100
+    sampling_rate: 100
+    new_sr: 10
+    variables: 1
+
+training:
+    model_name: AD_17k
+    model_config: ''
+    batch_size: 64
+    training_epochs: 50
+    num_gpus: 1
+    quantization: 1
+    output_int: false
+
+testing:
+    enable: True
+
+compilation:
+    enable: True 

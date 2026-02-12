@@ -6,7 +6,7 @@ Indoor temperature forecasting is a critical building block for intelligent HVAC
 
 Machine learning based forecasting enables predictive control, where future indoor temperature trends can be anticipated using historical sensor data and environmental conditions. By accurately forecasting indoor temperature over a short prediction horizon, HVAC systems can plan smoother and more energy-efficient control actions.
 
-**In this example, we demonstrate how a neural network based indoor temperature forecasting model can be trained offline and compiled for deployment using TinyML ModelMaker. The trained model is intended to run fully on-device and can serve as an input to higher-level control or optimization algorithms that determine compressor actuation strategies.**
+**In this example, we demonstrate how a neural network based indoor temperature forecasting model can be trained offline and compiled for deployment using Tiny ML ModelMaker. The trained model is intended to run fully on-device and can serve as an input to higher-level control or optimization algorithms that determine compressor actuation strategies.**
 
 ## About Dataset
 
@@ -32,9 +32,9 @@ The dataset consists of time-series samples collected at uniform timesteps and i
 **`indoorTemperature` at the next timestep** (or over a short future horizon. You can do this by setting forecast_horizon parameter in the YAML file.)
 
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
-Here is the command to use this dataset with TinyML ModelMaker:
+Here is the command to use this dataset with Tiny ML ModelMaker:
 
 ```bash
 ./run_tinyml_modelmaker.sh examples/hvac_indoor_temp_forecast/config.yaml
@@ -44,7 +44,7 @@ Users can configure the model pipeline using a YAML configuration file (like sho
 
 ## Configuring the YAML File
 
-The YAML file is the core configuration file used in TinyML ModelMaker to define the pipeline for tasks such as dataset loading, model training, testing, and compilation. 
+The YAML file is the core configuration file used in Tiny ML ModelMaker to define the pipeline for tasks such as dataset loading, model training, testing, and compilation. 
 
 ### common and dataset section
 
@@ -188,7 +188,7 @@ In this example, we will use the following setup:
 - **C2000Ware Version**: 6.00
 - **Code Composer Studio (CCS)**: Version 20.3.0
 
-Steps to run this example on-device can be found by following this example readme: [Run compiled model on a TI MCU without NPU](https://github.com/TexasInstruments/tinyml-tensorlab/blob/main/tinyml-modelmaker/docs/running_model_on_device_without_npu/readme.md)
+Steps to run this example on-device can be found by following this guide: [Deploying Forecasting Models from ModelMaker to Device](../../docs/deploying_forecasting_models_from_modelmaker_to_device/readme.md)
 
 Upon flashing and running the project we can see the model output matches the golden vectors.
 

@@ -42,10 +42,7 @@ this_dir_path = os.path.dirname(os.path.abspath(__file__))
 repo_parent_path = os.path.abspath(os.path.join(this_dir_path, '..', '..', '..', '..'))
 
 model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
-template_gui_model_properties = [
-    dict(type="group", dynamic=False, name="train_group", label="Training Parameters", default=["training_epochs", "learning_rate"]),
-    dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=1000),
-    dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1, decimal_places=3, increment=0.001)]
+template_gui_model_properties = []
 template_model_description = dict(
     common=dict(
         task_category=constants.TASK_CATEGORY_TS_ANOMALYDETECTION,
@@ -93,7 +90,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'Ondevice_Trainable_AD_Linear': deep_update_dict(deepcopy(template_model_description), {
@@ -120,7 +118,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['AD_16k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['AD_16k'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_Linear': deep_update_dict(deepcopy(template_model_description), {
@@ -147,7 +146,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['AD_16k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['AD_16k'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_16k': deep_update_dict(deepcopy(template_model_description), {
@@ -174,7 +174,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['AD_16k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['AD_16k'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_4k': deep_update_dict(deepcopy(template_model_description), {
@@ -201,7 +202,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['AD_4k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['AD_4k'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_1k': deep_update_dict(deepcopy(template_model_description), {
@@ -228,7 +230,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['AD_1k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['AD_1k'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     # NPU-Optimized Anomaly Detection Models
@@ -256,7 +259,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['AD_500_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['AD_500_NPU'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_2k_NPU': deep_update_dict(deepcopy(template_model_description), {
@@ -283,7 +287,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['AD_2k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['AD_2k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_6k_NPU': deep_update_dict(deepcopy(template_model_description), {
@@ -310,7 +315,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['AD_6k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['AD_6k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_8k_NPU': deep_update_dict(deepcopy(template_model_description), {
@@ -337,7 +343,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['AD_8k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['AD_8k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_10k_NPU': deep_update_dict(deepcopy(template_model_description), {
@@ -364,7 +371,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=10) | (DEVICE_RUN_INFO['AD_10k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=10) | (DEVICE_RUN_INFO['AD_10k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
     'AD_20k_NPU': deep_update_dict(deepcopy(template_model_description), {
@@ -391,7 +399,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=11) | (DEVICE_RUN_INFO['AD_20k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=11) | (DEVICE_RUN_INFO['AD_20k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
 }

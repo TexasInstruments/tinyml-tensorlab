@@ -231,7 +231,7 @@ def main():
     args = parser.parse_args()
 
     print("=" * 80)
-    print(f"TinyML ModelZoo Test Suite")
+    print(f"Tiny ML ModelZoo Test Suite")
     print("=" * 80)
     print()
 
@@ -349,7 +349,7 @@ def main():
     summary_file = LOGS_DIR / f"{start_timestamp}_summary.txt"
     with open(summary_file, 'w') as f:
         f.write("=" * 80 + "\n")
-        f.write("TinyML ModelZoo Test Summary\n")
+        f.write("Tiny ML ModelZoo Test Summary\n")
         f.write("=" * 80 + "\n\n")
         f.write(f"Timestamp:      {start_timestamp}\n")
         f.write(f"Total Configs:  {len(results)}\n")
