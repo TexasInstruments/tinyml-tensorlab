@@ -160,13 +160,17 @@ def main(gpu, args):
                     step_smape = utils.smape(ground_truth[:, step, idx], predicted[:, step, idx])
                     step_r2 = utils.get_r2_score(predicted[:, step, idx], ground_truth[:, step, idx])
 
+                    # Convert to numpy for matplotlib plotting
+                    step_targets_np = step_targets.detach().cpu().numpy() if isinstance(step_targets, torch.Tensor) else step_targets
+                    step_outputs_np = step_outputs.detach().cpu().numpy() if isinstance(step_outputs, torch.Tensor) else step_outputs
+
                     # Scatter plot
                     ax = axes[step]
-                    ax.scatter(step_targets, step_outputs, alpha=0.5, label='Predictions')
+                    ax.scatter(step_targets_np, step_outputs_np, alpha=0.5, label='Predictions')
 
                     # Add perfect prediction line
-                    min_val = min(step_targets.min(), step_outputs.min())
-                    max_val = max(step_targets.max(), step_outputs.max())
+                    min_val = min(step_targets_np.min(), step_outputs_np.min())
+                    max_val = max(step_targets_np.max(), step_outputs_np.max())
                     ax.plot([min_val, max_val], [min_val, max_val], 'k--', label='Perfect Prediction')
 
                     ax.set_xlabel(f"Actual Variable {target_variable_name}")
