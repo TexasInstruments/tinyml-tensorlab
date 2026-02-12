@@ -28,7 +28,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 import os
-import re
 # plugins/additional models
 # see the setup_all.sh file to understand how to set this
 PLUGINS_ENABLE_GPL = False
@@ -315,7 +314,7 @@ Additional information:
 TARGET_DEVICE_SETUP_INSTRUCTIONS_AM261 = \
     f'''* Product information: https://www.ti.com/product/AM2611
 * Development board: https://www.ti.com/tool/LP-AM261
-* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM26X
+* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM261X
 * SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
 TARGET_DEVICE_DETAILS_AM261 = \
@@ -890,16 +889,16 @@ TASK_DESCRIPTIONS = {
         'checkDataEnough': False,
         'task_category': TASK_CATEGORY_TS_REGRESSION
     },
-    # TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
-    #     'task_name': 'Time Series Anomaly Detection',
-    #     'task_group': 'timeseries',
-    #     'target_module': 'timeseries',
-    #     'target_devices': TARGET_DEVICES,
-    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
-    #     'application_specific': False,
-    #     'checkDataEnough': False,
-    #     'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
-    # },
+    TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+        'task_name': 'Time Series Anomaly Detection',
+        'task_group': 'timeseries',
+        'target_module': 'timeseries',
+        'target_devices': TARGET_DEVICES,
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+        'application_specific': False,
+        'checkDataEnough': False,
+        'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
+    },
     TASK_TYPE_GENERIC_TS_FORECASTING: {
         'task_name': 'Time Series Forecasting',
         'task_group': 'timeseries',
@@ -1061,8 +1060,8 @@ DATASET_EXAMPLES = dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsh.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
-    hello_world_example_dsg=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hello_world_dsg.zip'),
+    generic_timeseries_classification=dict(
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_classification.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     ac_arc_fault_log300_example_dsk=dict(
@@ -1169,6 +1168,9 @@ COMPILATION_C28_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu type=hard skip_nor
 # C29
 COMPILATION_C29_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c29', cross_compiler=C29CLANG_CROSS_COMPILER, )
 COMPILATION_C29_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='c29', cross_compiler=C29CLANG_CROSS_COMPILER, )
+COMPILATION_C29_SOFT_TINPU_AD = dict(target="c, ti-npu type=soft", target_c_mcpu='c29', cross_compiler=C29CLANG_CROSS_COMPILER, )
+# Preset for compiling RNN/GRU/LSTM models with quantization. Will be removed in the next TVM NNC release once default preset supports these models.
+COMPILATION_C29_SOFT_TINPU_FORECASTING= dict(target="c, ti-npu type=soft", target_c_mcpu='c29', cross_compiler=C29CLANG_CROSS_COMPILER, )
 # MSPM0
 COMPILATION_MSPM0_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m0plus', cross_compiler=MSPM0_CROSS_COMPILER, )
 COMPILATION_MSPM0_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m0plus', cross_compiler=MSPM0_CROSS_COMPILER, )
@@ -1177,6 +1179,8 @@ COMPILATION_MSPM0_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu type=hard skip_n
 COMPILATION_MSPM33C_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 COMPILATION_MSPM33C_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 COMPILATION_MSPM33C_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
+# MSPM33 Forecasting - Preset for RNN/GRU/LSTM models
+COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 # AM13E2
 COMPILATION_AM13E2_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 COMPILATION_AM13E2_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
@@ -1222,14 +1226,17 @@ _CROSS_COMPILER_OPTIONS = {
 _DEVICE_PROFILES = {
     TARGET_DEVICE_AM263: {
         'compilation_base': COMPILATION_AM263_SOFT_TINPU,
+        'compilation_forecasting': COMPILATION_AM263_SOFT_TINPU,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_AM263P: {
         'compilation_base': COMPILATION_AM263P_SOFT_TINPU,
+        'compilation_forecasting': COMPILATION_AM263P_SOFT_TINPU,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_AM261: {
         'compilation_base': COMPILATION_AM261_SOFT_TINPU,
+        'compilation_forecasting': COMPILATION_AM261_SOFT_TINPU,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_F280013: {
@@ -1282,16 +1289,20 @@ _DEVICE_PROFILES = {
     TARGET_DEVICE_F29H85: {
         'compilation_base': COMPILATION_C29_SOFT_TINPU,
         'compilation_regression': COMPILATION_C29_SOFT_TINPU_REG,
+        'compilation_anomaly': COMPILATION_C29_SOFT_TINPU_AD,
+        'compilation_forecasting': COMPILATION_C29_SOFT_TINPU_FORECASTING,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_F29P58: {
         'compilation_base': COMPILATION_C29_SOFT_TINPU,
         'compilation_regression': COMPILATION_C29_SOFT_TINPU_REG,
+        'compilation_forecasting': COMPILATION_C29_SOFT_TINPU_FORECASTING,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_F29P32: {
         'compilation_base': COMPILATION_C29_SOFT_TINPU,
         'compilation_regression': COMPILATION_C29_SOFT_TINPU_REG,
+        'compilation_forecasting': COMPILATION_C29_SOFT_TINPU_FORECASTING,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_MSPM0G3507: {
@@ -1312,6 +1323,7 @@ _DEVICE_PROFILES = {
     },
     TARGET_DEVICE_MSPM33C32: {
         'compilation_base': COMPILATION_MSPM33C_SOFT_TINPU,
+        'compilation_forecasting': COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_MSPM33C34: {
@@ -1321,8 +1333,8 @@ _DEVICE_PROFILES = {
         'has_hard_npu': True,
     },
     TARGET_DEVICE_AM13E2: {
-        'compilation_base': COMPILATION_AM13E2_SOFT_TINPU,
-        'has_hard_npu': False,
+        'compilation_base': COMPILATION_AM13E2_HARD_TINPU,
+        'has_hard_npu': True,
     },
     TARGET_DEVICE_CC2755: {
         'compilation_base': COMPILATION_CC2755_SOFT_TINPU,
@@ -1369,9 +1381,6 @@ def _build_preset_descriptions():
             is_anomaly = task in (TASK_TYPE_GENERIC_TS_ANOMALYDETECTION, TASK_CATEGORY_TS_ANOMALYDETECTION)
             is_forecasting = task in (TASK_TYPE_GENERIC_TS_FORECASTING, TASK_CATEGORY_TS_FORECASTING)
 
-            # Determine cross-compiler options (special case for F28P55 forecasting)
-            task_cross_opts = re.sub("-O3", "-O1", cross_opts) if is_forecasting and ('F28' in device) else cross_opts  # TODO: @Fasna, once TVM is fixed for this
-
             # Select base compilation config based on task type
             if is_regression and 'compilation_regression' in profile:
                 base_config = profile['compilation_regression']
@@ -1385,7 +1394,7 @@ def _build_preset_descriptions():
             # Build default preset
             result[device][task] = {
                 COMPILATION_DEFAULT: dict(
-                    compilation=dict(**base_config, cross_compiler_options=task_cross_opts)
+                    compilation=dict(**base_config, cross_compiler_options=cross_opts)
                 )
             }
 
@@ -1400,13 +1409,13 @@ def _build_preset_descriptions():
                     soft_config = profile.get('compilation_soft', profile['compilation_base'])
 
                 result[device][task][COMPILATION_FORCED_SOFT_NPU] = dict(
-                    compilation=dict(**soft_config, cross_compiler_options=task_cross_opts)
+                    compilation=dict(**soft_config, cross_compiler_options=cross_opts)
                 )
 
                 # Optimized for space preset
                 if 'compilation_opt_space' in profile:
                     result[device][task][COMPILATION_NPU_OPT_FOR_SPACE] = dict(
-                        compilation=dict(**profile['compilation_opt_space'], cross_compiler_options=task_cross_opts)
+                        compilation=dict(**profile['compilation_opt_space'], cross_compiler_options=cross_opts)
                     )
 
     return result
@@ -1541,17 +1550,17 @@ SAMPLE_DATASET_DESCRIPTIONS = {
             'dataset_license': 'TI Internal License'
         }
     },
-    'hello_world_example_dsg': {
+    'generic_timeseries_classification': {
         'common': {
             'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
             'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
         },
         'dataset': {
-            'dataset_name': 'hello_world_example_dsg',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hello_world_dsg.zip',
+            'dataset_name': 'generic_timeseries_classification',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_classification.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hello_world_dsg.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_classification.zip',
             'dataset_detailed_name': 'Timeseries Classification Example',
             'dataset_description': 'Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth',
             'dataset_size': None,
