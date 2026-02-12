@@ -48,16 +48,16 @@ For regression tasks, the dataset structure is expected to be as follows :
 
 * The dataset can be directly downloaded from https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/washing_machine_loading_data.zip, it's directly downloaded in the example
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
 The example can be run directly using the following command
 
 ```
-./run_tinyml_modelmaker.sh  ./examples/reg_washing_machine/config.yaml
+./run_tinyml_modelzoo.sh  ./examples/reg_washing_machine/config.yaml
 
 ```
 wherein 
-1.  ``` run_tinyml_modelmaker.sh``` is the script to run modelmaker. It takes input of CONFIG_FILE
+1.  ``` run_tinyml_modelzoo.sh``` is the script to run modelmaker. It takes input of CONFIG_FILE
 2. ``` ./examples/reg_washing_machine/config.yaml``` is the location of the CONFIG_FILE
 
 We can change the training configurations, no. of features or variables for input regression (need to change dataset as well), feature extraction, frame size, etc. in the config file.
@@ -84,7 +84,7 @@ In the data_processing_feature_extraction section
 
 ``` 
 data_proc_transforms: 'SimpleWindow'
-frame_size: 1024
+frame_size: 512
 variables: 6
 ``` 
 
@@ -135,21 +135,32 @@ However, for the 4K model, as the number of parameters are too less, it is not a
 
 Partially quantized models show comparable results compared to their float counterparts.
 
+Partial quantization means only the initial batchnorm, initial convolution layer and last fully connected layer are in float, all other layers of the model are in int8.
+
+Float REGR_13k model Results, 512 frame_size
+<p align='center'>
+<img src="./images/float_actual_vs_predicted.png"
+alt="float_train_prediction_plot" width="60%"/>
+</p>
+
+Partially Quantized REGR_13k model Results, 512 frame_size
+<p align='center'>
+<img src="./images/partially_quantized_actual_vs_predicted.png"
+alt="partially_quantized_prediction_plot" width="60%"/>
+</p>
+
 ## Running on Device
 
 It finally generates four files mod.a, tvmgen_default.h, test_vector.c, user_input_config.h 
 
 mod.a, tvmgen_default.h can be found in
 ``` 
-./tinyml-modelmaker/data/projects/<dataset_name>/run/{date-time}/{model_name}/compilation/artifacts/
-
+tinyml-modelmaker/data/projects/<dataset_name>/run/{date-time}/{model_name}/compilation/artifacts/
 ``` 
 
 test_vector.c and user_input_config.h can be found in 
-
 ``` 
-./tinyml-modelmaker/data/projects/<dataset_name>/run/{date-time}/{model_name}/training/quantization/golden_vectors/
-
+tinyml-modelmaker/data/projects/<dataset_name>/run/{date-time}/{model_name}/training/quantization/golden_vectors/
 ``` 
 
-These four files can be used to run the model on the device as illustrated in running_model_on_device example
+These four files can be used to run the model on the device as illustrated in the following guide: [Deploying Regression Models from ModelMaker to Device](../../docs/deploying_regression_models_from_modelmaker_to_device/readme.md)

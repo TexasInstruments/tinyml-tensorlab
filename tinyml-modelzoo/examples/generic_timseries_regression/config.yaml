@@ -1,0 +1,24 @@
+common:
+  task_type: generic_timeseries_regression
+  target_device: F28P55
+dataset:
+  dataset_name: generic_timeseries_regression
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_regression.zip
+data_processing_feature_extraction:
+  stride_size: 1
+  data_proc_transforms:
+  - SimpleWindow
+  frame_size: 10
+  variables: 1
+training:
+  optimizer: adam
+  lr_scheduler: cosineannealinglr
+  model_name: REGR_1k
+  batch_size: 128
+  training_epochs: 100  # use 500 epochs for a better R2 score, RMSE
+  lambda_reg: 0.01
+  num_gpus: 1
+  quantization: 0 # 0 for float model, 2 for 8 bit quantized model
+  partial_quantization: False # input batchnorm, first conv/linear layer and last fc layer are not quantized, default is False
+testing: {}
+compilation: {}

@@ -6,7 +6,7 @@
 
 Fan blade faults such as imbalance, damage, and obstruction can lead to reduced efficiency, increased energy consumption, and potential system failure. Early detection of these anomalies through vibration analysis enables predictive maintenance, preventing costly downtime and extending equipment lifespan.
 
-In this example, we demonstrate how to use **TinyML ModelMaker** to train an autoencoder-based anomaly detection model for fan blade fault detection. The model learns normal vibration patterns from a healthy fan and automatically detects deviations that indicate potential faults—including fault types it has never seen during training.
+In this example, we demonstrate how to use **Tiny ML ModelZoo** to train an autoencoder-based anomaly detection model for fan blade fault detection. The model learns normal vibration patterns from a healthy fan and automatically detects deviations that indicate potential faults—including fault types it has never seen during training.
 
 To learn more about anomaly detection, refer to the **[Anomaly Detection Model Architecture](../../docs/anomaly_detection/Anomaly_Model_Architecture.md)**.
 
@@ -17,7 +17,7 @@ To learn more about the overall strategy to prepare dataset, to train and evalua
 This guide walks through:
 1. Dataset preparation (vibration data from 3-axis accelerometer)
 2. Feature extraction configuration (FFT, binning, log scaling)
-3. Model training with TinyML ModelMaker
+3. Model training with TinyML ModelZoo
 4. Results interpretation
 
 
@@ -46,7 +46,7 @@ This dataset contains vibration measurements from a fan system collected using a
 Each file is a CSV with the following structure:
 
 **Columns:**
-- `Time`: Timestamp (automatically dropped by ModelMaker)
+- `Time`: Timestamp (automatically dropped by ModelZoo)
 - `Vibx`: Vibration measurement along X-axis
 - `Viby`: Vibration measurement along Y-axis
 - `Vibz`: Vibration measurement along Z-axis
@@ -129,7 +129,7 @@ The dataset is pre-packaged and available for download:
 https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_ad_dataset.zip
 ```
 
-You don't need to manually download it—ModelMaker will automatically download and extract the dataset when you run the example.
+You don't need to manually download it, ModelZoo will automatically download and extract the dataset when you run the example.
 
 ---
 
@@ -153,9 +153,9 @@ To understand the detailed setup for data collection, please refer to the **[Fan
 
 ## **Dataset Preparation**
 
-For this example, **the dataset is already prepared** in the required format. You don't need to reorganize files or create annotations—ModelMaker handles everything automatically.
+For this example, **the dataset is already prepared** in the required format. You don't need to reorganize files or create annotations, ModelZoo handles everything automatically.
 
-**What ModelMaker does:**
+**What ModelZoo does:**
 1. Downloads and extracts the zip file
 2. Scans `Normal/` and `Anomaly/` folders
 3. Splits normal data into train/val/test (60%/10%/30%)
@@ -165,12 +165,12 @@ For this example, **the dataset is already prepared** in the required format. Yo
 For detailed information on dataset format and splitting strategy, see: **[Dataset Preparation, Training & Evaluation Strategy for Anomaly Detection](../../docs/anomaly_detection/Dataset_Training_And_Evaluation_For_Anomaly_Detection.md)**.
 
 
-## **Usage in TinyML ModelMaker**
+## **Usage in TinyML ModelZoo**
 
-You can run this example directly in **TinyML ModelMaker** using the following command:
+You can run this example directly in **TinyML ModelZoo** using the following command:
 
 ```bash
-./run_tinyml_modelmaker.sh examples/fan_blade_fault_classification/config_anomaly_detection.yaml
+./run_tinyml_modelzoo.sh examples/fan_blade_fault_classification/config_anomaly_detection.yaml
 ```
 
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
@@ -337,7 +337,7 @@ This section explains the training process and how to interpret the results.
 
 ### **Training Process**
 
-ModelMaker performs the following steps:
+ModelZoo performs the following steps:
 
 1. **Float Training**
    - Trains autoencoder on normal data only
@@ -448,11 +448,11 @@ Actual Anomaly                      0                 13545
 ### **Threshold Performance CSV**
 
 
-ModelMaker generates a CSV file with metrics for different threshold values (k = 0 to 4.5):
+ModelZoo generates a CSV file with metrics for different threshold values (k = 0 to 4.5):
 
 **Location:** 
 ```
-data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_training_analysis/threshold_performance.csv
+tinyml-modelmaker/data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_training_analysis/threshold_performance.csv
 ```
 
 **Complete table:**
@@ -473,7 +473,7 @@ data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_
 
 ### **Reconstruction Error Histogram**
 
-ModelMaker generates histogram plots showing the distribution of reconstruction errors:
+ModelZoo generates histogram plots showing the distribution of reconstruction errors:
 
 **Files generated:**
 - `reconstruction_error_histogram.png` (linear scale)
@@ -481,7 +481,7 @@ ModelMaker generates histogram plots showing the distribution of reconstruction 
 
 **Location:**
 ```
-data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_training_analysis/
+tinyml-modelmaker/data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_training_analysis/
 ```
 
 ![](assets/reconstruction_error_log_scale.png)
@@ -490,7 +490,7 @@ data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_
 After training completes, all results are stored in:
 
 ```
-data/projects/fan_blade_fault/run/{date-time}/AD_17k/
+tinyml-modelmaker/data/projects/fan_blade_fault/run/{date-time}/AD_17k/
 ```
 
 ### **Key Output Directories**
@@ -527,6 +527,12 @@ To run the model on F28P55X, you need:
    └── user_input_config.h      # Feature extraction configuration
    ```
 ---
+
+## **Running on device**
+Steps to run this example on-device can be found by following this guide: [Deploying Anomaly detection Models from ModelZoo to Device](../../docs/deploying_anomaly_detection_models_from_modelzoo_to_device/readme.md)
+
+---
+
 ## **Performance Metrics**
 
 Here are the key performance metrics for the quantized model running on F28P55X:

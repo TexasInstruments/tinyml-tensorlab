@@ -1,5 +1,5 @@
 @echo off
-REM TinyML ModelZoo Training Wrapper for Windows
+REM Tiny ML ModelZoo Training Wrapper for Windows
 REM Delegates training to tinyml-modelmaker
 REM
 REM Usage:
@@ -26,7 +26,7 @@ if not exist "%RUN_SCRIPT%" (
 
 REM Check arguments
 if "%~1"=="" (
-    echo TinyML ModelZoo Training Wrapper
+    echo Tiny ML ModelZoo Training Wrapper
     echo.
     echo Usage: %~nx0 ^<config_file^> [additional_args...]
     echo.
@@ -71,7 +71,7 @@ if not exist "%CONFIG_FILE%" (
     exit /b 1
 )
 
-echo TinyML ModelZoo Training
+echo Tiny ML ModelZoo Training
 echo ========================================
 echo Config:      %CONFIG_FILE%
 echo ModelMaker:  %RUN_SCRIPT%

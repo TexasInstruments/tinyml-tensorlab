@@ -33,11 +33,11 @@ dataset:
     input_data_path: 'examples/grid_stability/grid_stability_dataset.zip'
 ```
 
-This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the [configuration](config.yaml) yaml.
+This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the [configuration](config.yaml) yaml.
 
 ## How ModelMaker helps ?
 
-TinyML ModelMaker is an end-to-end model development tool that provides dataset handling, model training and compilation. You can run the modelmaker for the given configuration yaml by the following command in terminal.
+Tiny ML ModelMaker is an end-to-end model development tool that provides dataset handling, model training and compilation. You can run the modelmaker for the given configuration yaml by the following command in terminal.
 
 - "Feature extraction" refers to any preprocessing applied to raw numerical inputs before training (normalization, PCA, signal transforms). For time-series or dynamic systems, feature extraction often includes sliding-window statistics or spectral transforms.
 - The `training/base` folder stores the float (non-quantized) model and feature data used for baseline experiments. The `training/quantization` folder contains int8 (quantized) model and analysis for the post-training quantized (int8) model.
@@ -83,7 +83,7 @@ tinyml-modelmaker
                 |_ 20250227-111317
         |_ motor_fault_example_dsk
 ```
-TinyML ModelMaker outputs extracted features, pca analysis of extracted features, model, compiled model, analysis of extracted features, test setup for testing model on device in `data/projects/grid_stability/run/date-time/model_name`. Let's look at this folder in depth.
+Tiny ML ModelMaker outputs extracted features, pca analysis of extracted features, model, compiled model, analysis of extracted features, test setup for testing model on device in `data/projects/grid_stability/run/date-time/model_name`. Let's look at this folder in depth.
 ```
 |_ CLS_ResSlice_3k (model_name)
     |_ compilation

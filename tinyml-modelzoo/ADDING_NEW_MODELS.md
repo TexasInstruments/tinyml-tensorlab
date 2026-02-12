@@ -1,6 +1,6 @@
-# How to Add a New Model to TinyML ModelZoo
+# How to Add a New Model to Tiny ML ModelZoo
 
-This guide explains how to add a new model to the TinyML ModelZoo. With the dynamic registration system, you only need to modify files in `tinyml-modelzoo` - **no changes are required in `tinyml-tinyverse` or `tinyml-modelmaker`**.
+This guide explains how to add a new model to the Tiny ML ModelZoo. With the dynamic registration system, you only need to modify files in `tinyml-modelzoo` - **no changes are required in `tinyml-tinyverse` or `tinyml-modelmaker`**.
 
 ## Quick Summary
 
@@ -198,7 +198,7 @@ DEVICE_RUN_INFO = {
 
 ### Step 6 (Optional): Add GUI Model Description
 
-If you want the model to appear in the TinyML Studio GUI, add a description to the appropriate file in `tinyml_modelzoo/model_descriptions/`:
+If you want the model to appear in the Tiny ML Studio GUI, add a description to the appropriate file in `tinyml_modelzoo/model_descriptions/`:
 
 | Task Type | Description File |
 |-----------|------------------|

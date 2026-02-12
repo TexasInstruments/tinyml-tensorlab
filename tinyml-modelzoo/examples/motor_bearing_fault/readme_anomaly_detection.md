@@ -5,7 +5,7 @@
 
 Motor bearing faults such as lack of lubrication, erosion, localized defects, contamination, and flaking can lead to reduced efficiency, increased vibration, overheating, and catastrophic motor failure. Early detection of these bearing anomalies through vibration analysis enables predictive maintenance, preventing costly downtime and extending motor lifespan.
 
-In this example, we demonstrate how to use **TinyML ModelMaker** to train an autoencoder-based anomaly detection model for motor bearing fault detection. The model learns normal vibration patterns from a healthy bearing and automatically detects deviations that indicate potential bearing faults—including fault types it has never seen during training.
+In this example, we demonstrate how to use **Tiny ML ModelZoo** to train an autoencoder-based anomaly detection model for motor bearing fault detection. The model learns normal vibration patterns from a healthy bearing and automatically detects deviations that indicate potential bearing faults—including fault types it has never seen during training.
 
 To learn more about anomaly detection, refer to the **[Anomaly Detection Model Architecture](../../docs/anomaly_detection/Anomaly_Model_Architecture.md)**.
 
@@ -16,7 +16,7 @@ To learn more about the overall strategy to prepare dataset, to train and evalua
 This guide walks through:
 1. Dataset preparation (vibration data from 3-axis accelerometer)
 2. Feature extraction configuration (FFT, binning, log scaling)
-3. Model training with TinyML ModelMaker
+3. Model training with TinyML ModelZoo
 4. Results interpretation
 
 # **About the Dataset**
@@ -47,7 +47,7 @@ Each file is a CSV (Excel format) with the following structure:
 - Column 3: Vibration measurement along Y-axis  
 - Column 4: Vibration measurement along Z-axis
 
-**Note:** If a time column exists with "time" in its header (case-insensitive), it will be automatically dropped by ModelMaker.
+**Note:** If a time column exists with "time" in its header (case-insensitive), it will be automatically dropped by ModelZoo.
 
 **Example data (healthy bearing):**
 ```csv
@@ -131,7 +131,7 @@ The dataset is pre-packaged and available for download:
 https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_anomaly_detection_dataset.zip
 ```
 
-You don't need to manually download it—ModelMaker will automatically download and extract the dataset when you run the example.
+You don't need to manually download it, ModelZoo will automatically download and extract the dataset when you run the example.
 
 ## **Data Collection Setup**
 
@@ -155,9 +155,9 @@ Simulate the following faults and collect the vibration data:
 
 ## **Dataset Preparation**
 
-For this example, **the dataset is already prepared** in the required format. You don't need to reorganize files or create annotations—ModelMaker handles everything automatically.
+For this example, **the dataset is already prepared** in the required format. You don't need to reorganize files or create annotations, ModelZoo handles everything automatically.
 
-**What ModelMaker does:**
+**What ModelZoo does:**
 1. Downloads and extracts the zip file
 2. Scans `Normal/` and `Anomaly/` folders
 3. Splits normal data into train/val/test (60%/30%/10%)
@@ -167,12 +167,12 @@ For this example, **the dataset is already prepared** in the required format. Yo
 For detailed information on dataset format and splitting strategy, see: **[Dataset Preparation, Training & Evaluation Strategy for Anomaly Detection](../../docs/anomaly_detection/Dataset_Training_And_Evaluation_For_Anomaly_Detection.md)**.
 
 
-## **Usage in TinyML ModelMaker**
+## **Usage in TinyML ModelZoo**
 
-You can run this example directly in **TinyML ModelMaker** using the following command:
+You can run this example directly in **TinyML ModelZoo** using the following command:
 
 ```bash
-./run_tinyml_modelmaker.sh examples/motor_fault_detection/config_anomaly_detection.yaml
+./run_tinyml_modelzoo.sh examples/motor_fault_detection/config_anomaly_detection.yaml
 ```
 
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
@@ -325,7 +325,7 @@ This section explains the training process and how to interpret the results.
 
 ### **Training Process**
 
-ModelMaker performs the following steps:
+ModelZoo performs the following steps:
 
 1. **Float Training**
    - Trains autoencoder on normal bearing data only
@@ -438,11 +438,11 @@ Actual Anomaly                     0                 54900
 
 ### **Threshold Performance CSV**
 
-ModelMaker generates a CSV file with metrics for different threshold values (k = 0 to 4.5):
+ModelZoo generates a CSV file with metrics for different threshold values (k = 0 to 4.5):
 
 **Location:** 
 ```
-data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/training/quantization/post_training_analysis/threshold_performance.csv
+tinyml-modelmaker/data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/training/quantization/post_training_analysis/threshold_performance.csv
 ```
 
 
@@ -463,7 +463,7 @@ data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/training/quan
 
 ### **Reconstruction Error Histogram**
 
-ModelMaker generates histogram plots showing the distribution of reconstruction errors:
+ModelZoo generates histogram plots showing the distribution of reconstruction errors:
 
 **Files generated:**
 - `reconstruction_error_histogram.png` (linear scale)
@@ -471,7 +471,7 @@ ModelMaker generates histogram plots showing the distribution of reconstruction 
 
 **Location:**
 ```
-data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/training/quantization/post_training_analysis/
+tinyml-modelmaker/data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/training/quantization/post_training_analysis/
 ```
 
 ![Reconstruction Error Histogram - Log Scale](assets/reconstruction_error_log_scale.png)
@@ -495,7 +495,7 @@ data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/training/quan
 After training completes, all results are stored in:
 
 ```
-data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/
+tinyml-modelmaker/data/projects/motor_fault_example_dsk_ad/run/{date-time}/AD_Linear/
 ```
 
 ### **Key Output Directories**
@@ -539,6 +539,10 @@ To run the model on F28P55X for real-time motor bearing monitoring, you need:
 
 ---
 
+## **Running on device**
+Steps to run this example on-device can be found by following this guide: [Deploying Anomaly detection Models from ModelZoo to Device](../../docs/deploying_anomaly_detection_models_from_modelzoo_to_device/readme.md)
+
+---
 ## **Performance Metrics**
 
 Here are the key performance metrics for the quantized model:

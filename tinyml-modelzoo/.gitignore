@@ -39,7 +39,7 @@ gen.yml
 *-checkpoint.ipynb
 *.venv
 *.pyc
-
+test_logs/
 ## Xcode User settings
 xcuserdata/
 

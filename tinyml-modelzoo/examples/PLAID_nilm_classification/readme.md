@@ -36,7 +36,7 @@ The classes here correspond to **11 different appliance types**:
 
 In this dataset, each class directory contains files corresponding to the voltage and current measurements when only that appliance class is turned on. While the dataset is extensive, we have taken a subset of it to use with ModelMaker. You can find the dataset subset here: [PLAID_submetered_dataset](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/plaid_nilm_submetered_dataset.zip)
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
 Here is the command to run the yaml file with TinyML ModelMaker:
 
@@ -207,7 +207,7 @@ In this example, we will use the following setup:
 - **C2000Ware Version**: 6.00
 - **Code Composer Studio (CCS)**: Version 20.3.0
 
-Steps to run this example on-device can be found by following this example readme: [Run compiled model on a TI MCU with NPU](https://github.com/TexasInstruments/tinyml-tensorlab/blob/main/tinyml-modelmaker/docs/running_model_on_device/readme.md)
+Steps to run this example on-device can be found by following this guide: [Deploying Classification Models from ModelMaker to Device](../../docs/deploying_classification_models_from_modelmaker_to_device/readme.md)
 
 Upon flashing and running the project we can see the model output matches the golden vectors.
 

@@ -18,7 +18,7 @@ data_processing_feature_extraction:
 #   frame_skip: 1
   variables: 1
 training:
-  model_name: ArcFault_model_200_t
+  model_name: CLS_1k_NPU
   model_config: ''
   batch_size: 32
   training_epochs: 10

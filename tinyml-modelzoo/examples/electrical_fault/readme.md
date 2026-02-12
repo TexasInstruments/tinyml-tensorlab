@@ -43,9 +43,9 @@ dataset:
     input_data_path: 'examples/electrical_fault/electrical_fault_dataset.zip'
 ```
 
-## Usage in TinyML ModelMaker
+## Usage in Tiny ML ModelMaker
 
-This zipped dataset is designed to work with TinyML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
+This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
 run_tinyml_modelmaker.sh examples/electrical_fault/config.yaml

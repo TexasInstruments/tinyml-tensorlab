@@ -3,6 +3,7 @@ common:
   target_device: F28P55
 dataset:
   dataset_name: arc_fault_example_dsi
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsi.zip
 data_processing_feature_extraction:
   data_proc_transforms:
   - Downsample

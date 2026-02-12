@@ -1,0 +1,27 @@
+common:
+  task_type: generic_timeseries_forecasting
+  target_device: F28P55
+dataset:
+  dataset_name: generic_timeseries_forecasting
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_forecasting.zip
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - SimpleWindow  # 'SimpleWindow' must be specified for forecasting tasks
+  frame_size: 32 
+  stride_size: 0.1
+  forecast_horizon: 2  # Number of future timesteps to be predicted
+  variables: 1  # Only temperature column (after timestamp)
+  target_variables:  # Predict temperature
+  - 0  # Column index 0 = temperature (first column after timestamp)
+training:
+  model_name: FCST_LSTM10
+  model_config: ''
+  batch_size: 32
+  training_epochs: 50
+  num_gpus: 1
+  quantization: 1
+  optimizer: adam
+  output_int: false
+testing: {}
+compilation:
+  keep_libc_files: true
