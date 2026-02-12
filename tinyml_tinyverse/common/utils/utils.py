@@ -844,7 +844,7 @@ def get_mse(output,target):
 def smape(y_true, y_pred): # y_true and y_pred must be tensors
     numerator = torch.abs(y_pred - y_true)
     denominator = (torch.abs(y_true) + torch.abs(y_pred)) / 2.0
-    denominator=np.where(denominator==0,1e-8,denominator)  # Avoid division by zero
+    denominator = torch.where(denominator == 0, torch.tensor(1e-8, device=denominator.device, dtype=denominator.dtype), denominator)  # Avoid division by zero
     return torch.mean(numerator / denominator) * 100  # Multiply by 100 to get percentage
 
 
@@ -1208,14 +1208,20 @@ def save_forecasting_predictions_csv(true_values, predictions, output_dir,header
     Save predictions in CSV format with alternating ground truth and predicted values.
 
     Args:
-        true_values (np.ndarray): Ground truth values [batch_size,forecast_horizon, n_variables]
-        predictions (np.ndarray): Predicted values [batch_size,forecast_horizon, n_variables]
+        true_values (np.ndarray or torch.Tensor): Ground truth values [batch_size,forecast_horizon, n_variables]
+        predictions (np.ndarray or torch.Tensor): Predicted values [batch_size,forecast_horizon, n_variables]
         output_dir (str): Base directory to save CSV files
         header_row (list): List of variable names: column number in key value pairs
         forecast_horizon (int): Number of time steps to forecast
     """
     csv_dir=os.path.join(output_dir, 'predictions_csv')
     os.makedirs(csv_dir, exist_ok=True)
+
+    # Convert tensors to numpy arrays if needed
+    if isinstance(true_values, torch.Tensor):
+        true_values = true_values.detach().cpu().numpy()
+    if isinstance(predictions, torch.Tensor):
+        predictions = predictions.detach().cpu().numpy()
 
     for idx,item in enumerate(header_row):
         for target_variable_name in item:
