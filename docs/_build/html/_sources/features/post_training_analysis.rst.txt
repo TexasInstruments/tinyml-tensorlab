@@ -367,7 +367,10 @@ Example: Complete Analysis Configuration
    training:
      model_name: 'ArcFault_model_400_t'
      training_epochs: 30
-     quantization_type: 'int8'
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
    testing:
      enable: True

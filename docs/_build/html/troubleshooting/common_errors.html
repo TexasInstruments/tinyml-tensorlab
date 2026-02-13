@@ -731,10 +731,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../features/quantization.html">8.2. Quantization</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#overview">8.2.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#quantization-types">8.2.2. Quantization Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#bit-widths">8.2.3. Bit Widths</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#enabling-quantization">8.2.4. Enabling Quantization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#calibration">8.2.5. Calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#configuration-parameters">8.2.2. Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#quantization-modes">8.2.3. Quantization Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#quantization-methods">8.2.4. Quantization Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#bit-widths">8.2.5. Bit Widths</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#npu-quantization-requirements">8.2.6. NPU Quantization Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#output-files">8.2.7. Output Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#accuracy-comparison">8.2.8. Accuracy Comparison</a></li>
@@ -1264,7 +1264,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <p><strong>Solution:</strong></p>
 <p>Provide calibration data:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">ptq_calibration_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;PTQ&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
 <p><strong>Quantization Accuracy Drop</strong></p>
@@ -1273,15 +1276,17 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </div>
 <p><strong>Solutions:</strong></p>
 <ol class="arabic">
-<li><p>Use QAT:</p>
+<li><p>Use QAT instead of PTQ:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">qat_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
 </li>
-<li><p>Increase calibration samples</p></li>
-<li><p>Use different calibration method</p></li>
-<li><p>Use larger model</p></li>
+<li><p>Try higher bit widths (8-bit instead of 4-bit or 2-bit)</p></li>
+<li><p>Use a larger model</p></li>
 </ol>
 </section>
 <section id="deployment-errors">
@@ -1398,7 +1403,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, Texas Instruments Incorporated. Last updated on Jan 31 2025.
-      <span class="lastupdated">Last updated on Feb 09, 2026.
+      <span class="lastupdated">Last updated on Feb 13, 2026.
       </span></p>
   </div>
 

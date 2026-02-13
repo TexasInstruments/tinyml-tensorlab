@@ -16,8 +16,91 @@ Why quantize?
 * **NPU requirement**: TI's NPU requires quantized models
 * **Lower power**: Reduced memory bandwidth
 
-Quantization Types
+Configuration Parameters
+------------------------
+
+Quantization in Tiny ML Tensorlab is controlled by four parameters in the
+``training`` section of the config YAML:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 15 50
+
+   * - Option
+     - Values
+     - Description
+   * - ``quantization``
+     - ``0``, ``1``, ``2``
+     - Quantization mode. ``0`` = floating point training (no quantization).
+       ``1`` = standard PyTorch Quantization. ``2`` = TI style optimised
+       Quantization.
+   * - ``quantization_method``
+     - ``'PTQ'``, ``'QAT'``
+     - Quantization method. Only applicable when ``quantization`` is ``1``
+       or ``2``.
+   * - ``quantization_weight_bitwidth``
+     - ``8``, ``4``, ``2``
+     - Bit width for weight quantization. Only applicable when
+       ``quantization`` is ``1`` or ``2``.
+   * - ``quantization_activation_bitwidth``
+     - ``8``, ``4``, ``2``
+     - Bit width for activation quantization. Only applicable when
+       ``quantization`` is ``1`` or ``2``.
+
+.. note::
+
+   ``quantization_method``, ``quantization_weight_bitwidth``, and
+   ``quantization_activation_bitwidth`` are only used when ``quantization``
+   is set to ``1`` or ``2``. When ``quantization`` is ``0`` (floating point
+   training), these parameters have no effect.
+
+Quantization Modes
 ------------------
+
+**Floating Point Training (quantization: 0)**
+
+Standard float32 training with no quantization applied:
+
+.. code-block:: yaml
+
+   training:
+     model_name: 'CLS_4k_NPU'
+     quantization: 0
+
+**Standard PyTorch Quantization (quantization: 1)**
+
+Uses standard PyTorch quantization APIs (``GenericTinyMLQATFxModule`` /
+``GenericTinyMLPTQFxModule``). Suitable for general-purpose CPU deployment:
+
+.. code-block:: yaml
+
+   training:
+     model_name: 'CLS_4k'
+     quantization: 1
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
+
+For more details on the underlying wrappers, see the
+`tinyml-modeloptimization documentation <https://bitbucket.itg.ti.com/projects/TINYML-ALGO/repos/tinyml-modeloptimization/browse/torchmodelopt/README.md>`_.
+
+**TI Style Optimised Quantization (quantization: 2)**
+
+Uses TI's NPU-optimised quantization (``TINPUTinyMLQATFxModule`` /
+``TINPUTinyMLPTQFxModule``). This incorporates the constraints of TI NPU
+Hardware accelerator and is required for NPU deployment:
+
+.. code-block:: yaml
+
+   training:
+     model_name: 'CLS_4k_NPU'
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
+
+Quantization Methods
+--------------------
 
 **Post-Training Quantization (PTQ)**
 
@@ -27,23 +110,26 @@ Quantizes a trained float model after training:
 
    training:
      model_name: 'CLS_4k_NPU'
-     quantization_type: 'int8'
-     ptq_calibration_samples: 1000
+     quantization: 2
+     quantization_method: 'PTQ'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
-* Pros: Fast, simple
+* Pros: Fast, simple, no retraining required
 * Cons: May lose accuracy for some models
 
 **Quantization-Aware Training (QAT)**
 
-Simulates quantization during training:
+Simulates quantization during training for better accuracy retention:
 
 .. code-block:: yaml
 
    training:
      model_name: 'CLS_4k_NPU'
-     quantization_type: 'int8'
-     qat_enabled: True
-     training_epochs: 30
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
 * Pros: Better accuracy retention
 * Cons: Longer training time
@@ -51,116 +137,68 @@ Simulates quantization during training:
 Bit Widths
 ----------
 
-**8-bit Quantization (INT8)**
+**8-bit Quantization**
 
 Most common choice, good accuracy retention:
 
 .. code-block:: yaml
 
    training:
-     quantization_type: 'int8'
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
-* Range: -128 to 127 (signed) or 0-255 (unsigned)
 * Model size: 4x smaller than float32
 * Accuracy loss: Usually <1%
 
-**4-bit Quantization (INT4)**
+**4-bit Quantization**
 
 Aggressive compression for size-constrained devices:
 
 .. code-block:: yaml
 
    training:
-     quantization_type: 'int4'
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 4
+     quantization_activation_bitwidth: 4
 
-* Range: -8 to 7 (signed)
 * Model size: 8x smaller than float32
 * Accuracy loss: 1-5% typical
 
-**2-bit Quantization (INT2)**
+**2-bit Quantization**
 
 Maximum compression, limited use cases:
 
 .. code-block:: yaml
 
    training:
-     quantization_type: 'int2'
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 2
+     quantization_activation_bitwidth: 2
 
-* Range: -2 to 1 (signed)
 * Model size: 16x smaller than float32
 * Accuracy loss: Can be significant
 
-Enabling Quantization
----------------------
+.. note::
 
-**Basic INT8 Quantization:**
+   Weight and activation bit widths can be set independently. For example,
+   you can use 8-bit activations with 4-bit weights:
 
-.. code-block:: yaml
+   .. code-block:: yaml
 
-   training:
-     model_name: 'CLS_4k_NPU'
-     quantization_type: 'int8'
-
-**QAT with INT8:**
-
-.. code-block:: yaml
-
-   training:
-     model_name: 'CLS_4k_NPU'
-     quantization_type: 'int8'
-     qat_enabled: True
-     qat_start_epoch: 10  # Start QAT after warmup
-
-**Mixed Precision:**
-
-Different layers can use different precisions:
-
-.. code-block:: yaml
-
-   training:
-     quantization_type: 'mixed'
-     mixed_precision_config:
-       first_layer: 'int8'     # Sensitive layer
-       hidden_layers: 'int4'   # Can tolerate lower precision
-       last_layer: 'int8'      # Output layer
-
-Calibration
------------
-
-PTQ requires calibration data to determine quantization parameters:
-
-.. code-block:: yaml
-
-   training:
-     quantization_type: 'int8'
-     ptq_calibration_samples: 1000
-     ptq_calibration_method: 'minmax'  # or 'histogram', 'entropy'
-
-**Calibration Methods:**
-
-.. list-table::
-   :header-rows: 1
-   :widths: 25 75
-
-   * - Method
-     - Description
-   * - ``minmax``
-     - Uses min/max values (fast, simple)
-   * - ``histogram``
-     - Uses value distribution (better accuracy)
-   * - ``entropy``
-     - Minimizes KL divergence (best accuracy)
-
-**Calibration Best Practices:**
-
-* Use representative data (similar to inference data)
-* Include edge cases and variations
-* More samples = better calibration (up to ~1000)
+      training:
+        quantization: 2
+        quantization_method: 'QAT'
+        quantization_weight_bitwidth: 4
+        quantization_activation_bitwidth: 8
 
 NPU Quantization Requirements
 -----------------------------
 
-TI's NPU requires specific quantization:
+TI's NPU requires TI style optimised quantization (``quantization: 2``):
 
 .. code-block:: yaml
 
@@ -169,11 +207,15 @@ TI's NPU requires specific quantization:
 
    training:
      model_name: 'CLS_4k_NPU'
-     quantization_type: 'int8'  # Required for NPU
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
 **NPU Constraints:**
 
-* Must use INT8 or INT4
+* Must use ``quantization: 2`` (TI style optimised)
+* INT8 or INT4 bit widths recommended
 * Symmetric quantization preferred
 * Per-channel quantization for weights
 * Per-tensor quantization for activations
@@ -190,8 +232,7 @@ After quantization, you'll find:
    │   └── best_model.pt          # Float32 model
    └── quantization/
        ├── best_model.onnx        # Quantized ONNX
-       ├── quantization_config.yaml
-       └── calibration_stats.json
+       └── quantization_config.yaml
 
 Accuracy Comparison
 -------------------
@@ -235,32 +276,32 @@ If quantization hurts accuracy:
 .. code-block:: yaml
 
    training:
-     qat_enabled: True
-     training_epochs: 50
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
-**2. Use more calibration data:**
+**2. Use higher bit widths:**
 
-.. code-block:: yaml
-
-   training:
-     ptq_calibration_samples: 2000
-
-**3. Use histogram or entropy calibration:**
+If using 4-bit or 2-bit, try 8-bit first:
 
 .. code-block:: yaml
 
    training:
-     ptq_calibration_method: 'entropy'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
-**4. Keep sensitive layers at higher precision:**
+**3. Keep activations at higher precision:**
+
+Use higher activation bit width with lower weight bit width:
 
 .. code-block:: yaml
 
    training:
-     quantization_type: 'mixed'
-     sensitive_layers: ['first_conv', 'classifier']
+     quantization_weight_bitwidth: 4
+     quantization_activation_bitwidth: 8
 
-**5. Increase model size:**
+**4. Increase model size:**
 
 A larger model may tolerate quantization better.
 
@@ -269,7 +310,7 @@ Best Practices
 
 1. **Start with INT8**: Best balance of compression and accuracy
 2. **Use QAT for critical applications**: When accuracy is paramount
-3. **Calibrate on representative data**: Match inference conditions
+3. **Use TI optimised quantization for NPU**: Set ``quantization: 2`` for NPU targets
 4. **Compare float vs quantized**: Always measure accuracy drop
 5. **Test on target device**: Verify behavior matches simulation
 
@@ -293,16 +334,13 @@ Example: Full Quantization Workflow
      model_name: 'ArcFault_model_400_t'
      training_epochs: 30
      batch_size: 256
-
-     # Quantization settings
-     quantization_type: 'int8'
-     qat_enabled: True
-     qat_start_epoch: 15
-     ptq_calibration_samples: 500
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
    testing:
      enable: True
-     test_quantized: True  # Also test quantized model
 
    compilation:
      enable: True

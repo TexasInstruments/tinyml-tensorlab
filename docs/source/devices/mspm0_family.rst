@@ -224,7 +224,10 @@ MSPM0 devices have limited memory compared to C2000:
    # Use quantized models
    training:
      model_name: 'CLS_500_NPU'
-     quantization_type: 'int8'
+     quantization: 1
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
 Typical Applications
 --------------------

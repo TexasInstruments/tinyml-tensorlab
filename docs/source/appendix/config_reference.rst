@@ -230,34 +230,34 @@ Training Section
 .. code-block:: yaml
 
    training:
-     quantization_type: 'int8'
-     qat_enabled: True
-     qat_start_epoch: 10
-     ptq_calibration_samples: 500
-     ptq_calibration_method: 'minmax'
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 15 55
+   :widths: 35 15 50
 
    * - Option
      - Default
      - Description
-   * - ``quantization_type``
-     - 'int8'
-     - 'int8', 'int4', 'int2', 'mixed'
-   * - ``qat_enabled``
-     - False
-     - Enable QAT
-   * - ``qat_start_epoch``
-     - 10
-     - Epoch to start QAT
-   * - ``ptq_calibration_samples``
-     - 500
-     - Samples for PTQ calibration
-   * - ``ptq_calibration_method``
-     - 'minmax'
-     - 'minmax', 'histogram', 'entropy'
+   * - ``quantization``
+     - 0
+     - Quantization mode: ``0`` = floating point training, ``1`` = standard
+       PyTorch Quantization, ``2`` = TI style optimised Quantization
+   * - ``quantization_method``
+     - None
+     - ``'PTQ'`` or ``'QAT'``. Only applicable when ``quantization`` is
+       ``1`` or ``2``
+   * - ``quantization_weight_bitwidth``
+     - None
+     - Weight bit width: ``8``, ``4``, or ``2``. Only applicable when
+       ``quantization`` is ``1`` or ``2``
+   * - ``quantization_activation_bitwidth``
+     - None
+     - Activation bit width: ``8``, ``4``, or ``2``. Only applicable when
+       ``quantization`` is ``1`` or ``2``
 
 **Learning Rate Scheduler:**
 
@@ -456,9 +456,10 @@ Complete Example
      batch_size: 256
      learning_rate: 0.001
      num_gpus: 0
-     quantization_type: 'int8'
-     qat_enabled: True
-     qat_start_epoch: 15
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
    testing:
      enable: True

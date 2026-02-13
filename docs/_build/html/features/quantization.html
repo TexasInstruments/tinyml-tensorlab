@@ -731,10 +731,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">8.2. Quantization</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">8.2.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#quantization-types">8.2.2. Quantization Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bit-widths">8.2.3. Bit Widths</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enabling-quantization">8.2.4. Enabling Quantization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#calibration">8.2.5. Calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-parameters">8.2.2. Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quantization-modes">8.2.3. Quantization Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quantization-methods">8.2.4. Quantization Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bit-widths">8.2.5. Bit Widths</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#npu-quantization-requirements">8.2.6. NPU Quantization Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#output-files">8.2.7. Output Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#accuracy-comparison">8.2.8. Accuracy Comparison</a></li>
@@ -1079,27 +1079,113 @@ size and improving inference speed.</p>
 <li><p><strong>Lower power</strong>: Reduced memory bandwidth</p></li>
 </ul>
 </section>
-<section id="quantization-types">
-<h2><span class="section-number">8.2.2. </span>Quantization Types<a class="headerlink" href="#quantization-types" title="Link to this heading"></a></h2>
+<section id="configuration-parameters">
+<h2><span class="section-number">8.2.2. </span>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<p>Quantization in Tiny ML Tensorlab is controlled by four parameters in the
+<code class="docutils literal notranslate"><span class="pre">training</span></code> section of the config YAML:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 15.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Values</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quantization</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Quantization mode. <code class="docutils literal notranslate"><span class="pre">0</span></code> = floating point training (no quantization).
+<code class="docutils literal notranslate"><span class="pre">1</span></code> = standard PyTorch Quantization. <code class="docutils literal notranslate"><span class="pre">2</span></code> = TI style optimised
+Quantization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quantization_method</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'PTQ'</span></code>, <code class="docutils literal notranslate"><span class="pre">'QAT'</span></code></p></td>
+<td><p>Quantization method. Only applicable when <code class="docutils literal notranslate"><span class="pre">quantization</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code>
+or <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">quantization_weight_bitwidth</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code>, <code class="docutils literal notranslate"><span class="pre">4</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Bit width for weight quantization. Only applicable when
+<code class="docutils literal notranslate"><span class="pre">quantization</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">quantization_activation_bitwidth</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code>, <code class="docutils literal notranslate"><span class="pre">4</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Bit width for activation quantization. Only applicable when
+<code class="docutils literal notranslate"><span class="pre">quantization</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">quantization_method</span></code>, <code class="docutils literal notranslate"><span class="pre">quantization_weight_bitwidth</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">quantization_activation_bitwidth</span></code> are only used when <code class="docutils literal notranslate"><span class="pre">quantization</span></code>
+is set to <code class="docutils literal notranslate"><span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>. When <code class="docutils literal notranslate"><span class="pre">quantization</span></code> is <code class="docutils literal notranslate"><span class="pre">0</span></code> (floating point
+training), these parameters have no effect.</p>
+</div>
+</section>
+<section id="quantization-modes">
+<h2><span class="section-number">8.2.3. </span>Quantization Modes<a class="headerlink" href="#quantization-modes" title="Link to this heading"></a></h2>
+<p><strong>Floating Point Training (quantization: 0)</strong></p>
+<p>Standard float32 training with no quantization applied:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k_NPU&#39;</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</pre></div>
+</div>
+<p><strong>Standard PyTorch Quantization (quantization: 1)</strong></p>
+<p>Uses standard PyTorch quantization APIs (<code class="docutils literal notranslate"><span class="pre">GenericTinyMLQATFxModule</span></code> /
+<code class="docutils literal notranslate"><span class="pre">GenericTinyMLPTQFxModule</span></code>). Suitable for general-purpose CPU deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k&#39;</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+</pre></div>
+</div>
+<p>For more details on the underlying wrappers, see the
+<a class="reference external" href="https://bitbucket.itg.ti.com/projects/TINYML-ALGO/repos/tinyml-modeloptimization/browse/torchmodelopt/README.md">tinyml-modeloptimization documentation</a>.</p>
+<p><strong>TI Style Optimised Quantization (quantization: 2)</strong></p>
+<p>Uses TI’s NPU-optimised quantization (<code class="docutils literal notranslate"><span class="pre">TINPUTinyMLQATFxModule</span></code> /
+<code class="docutils literal notranslate"><span class="pre">TINPUTinyMLPTQFxModule</span></code>). This incorporates the constraints of TI NPU
+Hardware accelerator and is required for NPU deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k_NPU&#39;</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+</pre></div>
+</div>
+</section>
+<section id="quantization-methods">
+<h2><span class="section-number">8.2.4. </span>Quantization Methods<a class="headerlink" href="#quantization-methods" title="Link to this heading"></a></h2>
 <p><strong>Post-Training Quantization (PTQ)</strong></p>
 <p>Quantizes a trained float model after training:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k_NPU&#39;</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span>
-<span class="w">  </span><span class="nt">ptq_calibration_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;PTQ&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Pros: Fast, simple</p></li>
+<li><p>Pros: Fast, simple, no retraining required</p></li>
 <li><p>Cons: May lose accuracy for some models</p></li>
 </ul>
 <p><strong>Quantization-Aware Training (QAT)</strong></p>
-<p>Simulates quantization during training:</p>
+<p>Simulates quantization during training for better accuracy retention:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k_NPU&#39;</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span>
-<span class="w">  </span><span class="nt">qat_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -1108,121 +1194,77 @@ size and improving inference speed.</p>
 </ul>
 </section>
 <section id="bit-widths">
-<h2><span class="section-number">8.2.3. </span>Bit Widths<a class="headerlink" href="#bit-widths" title="Link to this heading"></a></h2>
-<p><strong>8-bit Quantization (INT8)</strong></p>
+<h2><span class="section-number">8.2.5. </span>Bit Widths<a class="headerlink" href="#bit-widths" title="Link to this heading"></a></h2>
+<p><strong>8-bit Quantization</strong></p>
 <p>Most common choice, good accuracy retention:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Range: -128 to 127 (signed) or 0-255 (unsigned)</p></li>
 <li><p>Model size: 4x smaller than float32</p></li>
 <li><p>Accuracy loss: Usually &lt;1%</p></li>
 </ul>
-<p><strong>4-bit Quantization (INT4)</strong></p>
+<p><strong>4-bit Quantization</strong></p>
 <p>Aggressive compression for size-constrained devices:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int4&#39;</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Range: -8 to 7 (signed)</p></li>
 <li><p>Model size: 8x smaller than float32</p></li>
 <li><p>Accuracy loss: 1-5% typical</p></li>
 </ul>
-<p><strong>2-bit Quantization (INT2)</strong></p>
+<p><strong>2-bit Quantization</strong></p>
 <p>Maximum compression, limited use cases:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int2&#39;</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>Range: -2 to 1 (signed)</p></li>
 <li><p>Model size: 16x smaller than float32</p></li>
 <li><p>Accuracy loss: Can be significant</p></li>
 </ul>
-</section>
-<section id="enabling-quantization">
-<h2><span class="section-number">8.2.4. </span>Enabling Quantization<a class="headerlink" href="#enabling-quantization" title="Link to this heading"></a></h2>
-<p><strong>Basic INT8 Quantization:</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Weight and activation bit widths can be set independently. For example,
+you can use 8-bit activations with 4-bit weights:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k_NPU&#39;</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
-<p><strong>QAT with INT8:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k_NPU&#39;</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span>
-<span class="w">  </span><span class="nt">qat_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">  </span><span class="nt">qat_start_epoch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">  </span><span class="c1"># Start QAT after warmup</span>
-</pre></div>
 </div>
-<p><strong>Mixed Precision:</strong></p>
-<p>Different layers can use different precisions:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;mixed&#39;</span>
-<span class="w">  </span><span class="nt">mixed_precision_config</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">first_layer</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span><span class="w">     </span><span class="c1"># Sensitive layer</span>
-<span class="w">    </span><span class="nt">hidden_layers</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int4&#39;</span><span class="w">   </span><span class="c1"># Can tolerate lower precision</span>
-<span class="w">    </span><span class="nt">last_layer</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span><span class="w">      </span><span class="c1"># Output layer</span>
-</pre></div>
-</div>
-</section>
-<section id="calibration">
-<h2><span class="section-number">8.2.5. </span>Calibration<a class="headerlink" href="#calibration" title="Link to this heading"></a></h2>
-<p>PTQ requires calibration data to determine quantization parameters:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span>
-<span class="w">  </span><span class="nt">ptq_calibration_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
-<span class="w">  </span><span class="nt">ptq_calibration_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;minmax&#39;</span><span class="w">  </span><span class="c1"># or &#39;histogram&#39;, &#39;entropy&#39;</span>
-</pre></div>
-</div>
-<p><strong>Calibration Methods:</strong></p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 75.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Method</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">minmax</span></code></p></td>
-<td><p>Uses min/max values (fast, simple)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">histogram</span></code></p></td>
-<td><p>Uses value distribution (better accuracy)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">entropy</span></code></p></td>
-<td><p>Minimizes KL divergence (best accuracy)</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Calibration Best Practices:</strong></p>
-<ul class="simple">
-<li><p>Use representative data (similar to inference data)</p></li>
-<li><p>Include edge cases and variations</p></li>
-<li><p>More samples = better calibration (up to ~1000)</p></li>
-</ul>
 </section>
 <section id="npu-quantization-requirements">
 <h2><span class="section-number">8.2.6. </span>NPU Quantization Requirements<a class="headerlink" href="#npu-quantization-requirements" title="Link to this heading"></a></h2>
-<p>TI’s NPU requires specific quantization:</p>
+<p>TI’s NPU requires TI style optimised quantization (<code class="docutils literal notranslate"><span class="pre">quantization:</span> <span class="pre">2</span></code>):</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">target_device</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;F28P55&#39;</span>
 
 <span class="nt">training</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CLS_4k_NPU&#39;</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span><span class="w">  </span><span class="c1"># Required for NPU</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
 <p><strong>NPU Constraints:</strong></p>
 <ul class="simple">
-<li><p>Must use INT8 or INT4</p></li>
+<li><p>Must use <code class="docutils literal notranslate"><span class="pre">quantization:</span> <span class="pre">2</span></code> (TI style optimised)</p></li>
+<li><p>INT8 or INT4 bit widths recommended</p></li>
 <li><p>Symmetric quantization preferred</p></li>
 <li><p>Per-channel quantization for weights</p></li>
 <li><p>Per-tensor quantization for activations</p></li>
@@ -1236,8 +1278,7 @@ size and improving inference speed.</p>
 │   └── best_model.pt          # Float32 model
 └── quantization/
     ├── best_model.onnx        # Quantized ONNX
-    ├── quantization_config.yaml
-    └── calibration_stats.json
+    └── quantization_config.yaml
 </pre></div>
 </div>
 </section>
@@ -1288,27 +1329,27 @@ size and improving inference speed.</p>
 <p>If quantization hurts accuracy:</p>
 <p><strong>1. Try QAT instead of PTQ:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">qat_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
-<p><strong>2. Use more calibration data:</strong></p>
+<p><strong>2. Use higher bit widths:</strong></p>
+<p>If using 4-bit or 2-bit, try 8-bit first:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">ptq_calibration_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2000</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
-<p><strong>3. Use histogram or entropy calibration:</strong></p>
+<p><strong>3. Keep activations at higher precision:</strong></p>
+<p>Use higher activation bit width with lower weight bit width:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">ptq_calibration_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;entropy&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 </pre></div>
 </div>
-<p><strong>4. Keep sensitive layers at higher precision:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;mixed&#39;</span>
-<span class="w">  </span><span class="nt">sensitive_layers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;first_conv&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;classifier&#39;</span><span class="p p-Indicator">]</span>
-</pre></div>
-</div>
-<p><strong>5. Increase model size:</strong></p>
+<p><strong>4. Increase model size:</strong></p>
 <p>A larger model may tolerate quantization better.</p>
 </section>
 <section id="best-practices">
@@ -1316,7 +1357,7 @@ size and improving inference speed.</p>
 <ol class="arabic simple">
 <li><p><strong>Start with INT8</strong>: Best balance of compression and accuracy</p></li>
 <li><p><strong>Use QAT for critical applications</strong>: When accuracy is paramount</p></li>
-<li><p><strong>Calibrate on representative data</strong>: Match inference conditions</p></li>
+<li><p><strong>Use TI optimised quantization for NPU</strong>: Set <code class="docutils literal notranslate"><span class="pre">quantization:</span> <span class="pre">2</span></code> for NPU targets</p></li>
 <li><p><strong>Compare float vs quantized</strong>: Always measure accuracy drop</p></li>
 <li><p><strong>Test on target device</strong>: Verify behavior matches simulation</p></li>
 </ol>
@@ -1338,16 +1379,13 @@ size and improving inference speed.</p>
 <span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;ArcFault_model_400_t&#39;</span>
 <span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
 <span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
-
-<span class="w">  </span><span class="c1"># Quantization settings</span>
-<span class="w">  </span><span class="nt">quantization_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int8&#39;</span>
-<span class="w">  </span><span class="nt">qat_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">  </span><span class="nt">qat_start_epoch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15</span>
-<span class="w">  </span><span class="nt">ptq_calibration_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">quantization_method</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;QAT&#39;</span>
+<span class="w">  </span><span class="nt">quantization_weight_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">quantization_activation_bitwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
 
 <span class="nt">testing</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">  </span><span class="nt">test_quantized</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># Also test quantized model</span>
 
 <span class="nt">compilation</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
@@ -1427,7 +1465,7 @@ INT8:    ~2000 µs
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, Texas Instruments Incorporated. Last updated on Jan 31 2025.
-      <span class="lastupdated">Last updated on Feb 09, 2026.
+      <span class="lastupdated">Last updated on Feb 13, 2026.
       </span></p>
   </div>
 

@@ -284,7 +284,10 @@ Provide calibration data:
 .. code-block:: yaml
 
    training:
-     ptq_calibration_samples: 500
+     quantization: 2
+     quantization_method: 'PTQ'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
 **Quantization Accuracy Drop**
 
@@ -294,16 +297,18 @@ Provide calibration data:
 
 **Solutions:**
 
-1. Use QAT:
+1. Use QAT instead of PTQ:
 
    .. code-block:: yaml
 
       training:
-        qat_enabled: True
+        quantization: 2
+        quantization_method: 'QAT'
+        quantization_weight_bitwidth: 8
+        quantization_activation_bitwidth: 8
 
-2. Increase calibration samples
-3. Use different calibration method
-4. Use larger model
+2. Try higher bit widths (8-bit instead of 4-bit or 2-bit)
+3. Use a larger model
 
 Deployment Errors
 -----------------

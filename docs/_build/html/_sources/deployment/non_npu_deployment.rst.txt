@@ -202,7 +202,10 @@ If your model supports fixed-point:
 .. code-block:: yaml
 
    training:
-     quantization_type: 'int8'
+     quantization: 1
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
 INT8 operations are faster than float on many MCUs.
 
@@ -358,7 +361,10 @@ Device-Specific Notes
 
    training:
      model_name: 'CLS_500'
-     quantization_type: 'int8'
+     quantization: 1
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
 **AM26x (Cortex-R5):**
 
@@ -394,7 +400,10 @@ Example: Vibration Monitoring on MSPM0G3507
 
    training:
      model_name: 'AD_500'  # Small model for M0+
-     quantization_type: 'int8'
+     quantization: 1
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
 
    compilation:
      enable: True
