@@ -731,10 +731,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l2"><a class="reference internal" href="quantization.html">8.2. Quantization</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="quantization.html#overview">8.2.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quantization.html#quantization-types">8.2.2. Quantization Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quantization.html#bit-widths">8.2.3. Bit Widths</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quantization.html#enabling-quantization">8.2.4. Enabling Quantization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quantization.html#calibration">8.2.5. Calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#configuration-parameters">8.2.2. Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#quantization-modes">8.2.3. Quantization Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#quantization-methods">8.2.4. Quantization Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#bit-widths">8.2.5. Bit Widths</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quantization.html#npu-quantization-requirements">8.2.6. NPU Quantization Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quantization.html#output-files">8.2.7. Output Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quantization.html#accuracy-comparison">8.2.8. Accuracy Comparison</a></li>
@@ -749,19 +749,19 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l2 current"><a class="current reference internal" href="#">8.3. Feature Extraction</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">8.3.1. Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#feature-extraction-pipeline">8.3.2. Feature Extraction Pipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#preset-system">8.3.3. Preset System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#available-presets">8.3.4. Available Presets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#transform-types">8.3.5. Transform Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#multi-frame-configuration">8.3.6. Multi-Frame Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#multi-channel-data">8.3.7. Multi-Channel Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dc-removal">8.3.8. DC Removal</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#normalization">8.3.9. Normalization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#custom-feature-extraction">8.3.10. Custom Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#choosing-the-right-preset">8.3.11. Choosing the Right Preset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#performance-impact">8.3.12. Performance Impact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#on-device-feature-extraction">8.3.13. On-Device Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example-configuration">8.3.14. Example Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#debugging-feature-extraction">8.3.15. Debugging Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-parameters">8.3.3. Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preset-system">8.3.4. Preset System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#available-presets">8.3.5. Available Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-processing-transforms">8.3.6. Data Processing Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-extraction-transforms">8.3.7. Feature Extraction Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-feature-extraction">8.3.8. Custom Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-channel-data">8.3.9. Multi-Channel Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#forecasting-configuration">8.3.10. Forecasting Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-augmentation">8.3.11. Data Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-the-right-preset">8.3.12. Choosing the Right Preset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-impact">8.3.13. Performance Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-device-feature-extraction">8.3.14. On-Device Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-configurations">8.3.15. Example Configurations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#best-practices">8.3.16. Best Practices</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#next-steps">8.3.17. Next Steps</a></li>
 </ul>
@@ -1080,18 +1080,226 @@ helps the neural network learn patterns more effectively.</p>
 </section>
 <section id="feature-extraction-pipeline">
 <h2><span class="section-number">8.3.2. </span>Feature Extraction Pipeline<a class="headerlink" href="#feature-extraction-pipeline" title="Link to this heading"></a></h2>
-<p>Raw data flows through these stages:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Raw Signal → Framing → Transform → Binning → Concatenation → Model Input
-     │           │         │          │            │
-  1024 samples   │      FFT/Raw     64 bins    8 frames = 512 features
-              128 samples
-              per frame
+<p>Raw data flows through two stages: data processing transforms, then
+feature extraction transforms:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Raw Signal → Data Processing → Feature Extraction → Model Input
+             (data_proc_transforms)   (feat_ext_transform)
+             e.g. SimpleWindow,       e.g. FFT_FE, BINNING,
+                  Downsample               ABS, LOG_DB, CONCAT
 </pre></div>
 </div>
 </section>
+<section id="configuration-parameters">
+<h2><span class="section-number">8.3.3. </span>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">data_processing_feature_extraction</span></code> section supports the following
+parameters. There are two usage modes: using a <strong>preset</strong> name, or defining
+a <strong>custom</strong> pipeline.</p>
+<p><strong>Core Parameters:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">feature_extraction_name</span></code></p></td>
+<td><p>Preset name (e.g., <code class="docutils literal notranslate"><span class="pre">'Generic_1024Input_FFTBIN_64Feature_8Frame'</span></code>)
+or a custom name starting with <code class="docutils literal notranslate"><span class="pre">'Custom_'</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">'Custom_Default'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'Custom_ArcFault'</span></code>). When using a preset, the transform pipeline is
+predefined. When using a <code class="docutils literal notranslate"><span class="pre">Custom_*</span></code> name, you must specify
+<code class="docutils literal notranslate"><span class="pre">feat_ext_transform</span></code> and related parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">data_proc_transforms</span></code></p></td>
+<td><p>List of data processing transforms applied before feature extraction.
+Common values: <code class="docutils literal notranslate"><span class="pre">['SimpleWindow']</span></code>, <code class="docutils literal notranslate"><span class="pre">['Downsample']</span></code>,
+<code class="docutils literal notranslate"><span class="pre">['SimpleWindow',</span> <span class="pre">'Downsample']</span></code>, <code class="docutils literal notranslate"><span class="pre">['Downsample',</span> <span class="pre">'SimpleWindow']</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">[]</span></code> (empty).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">feat_ext_transform</span></code></p></td>
+<td><p>List of feature extraction transforms applied in order. Common values
+include: <code class="docutils literal notranslate"><span class="pre">'FFT_FE'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FFT_POS_HALF'</span></code>, <code class="docutils literal notranslate"><span class="pre">'WINDOWING'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'BINNING'</span></code>, <code class="docutils literal notranslate"><span class="pre">'NORMALIZE'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ABS'</span></code>, <code class="docutils literal notranslate"><span class="pre">'LOG_DB'</span></code>, <code class="docutils literal notranslate"><span class="pre">'DC_REMOVE'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'CONCAT'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FFT_Q15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Q15_SCALE'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Q15_MAG'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'BIN_Q15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ECG_NORMALIZE'</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">variables</span></code></p></td>
+<td><p>Number of input channels/variables. Supports three formats:
+an integer (select first N columns), a list of column indices
+(e.g., <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">2,</span> <span class="pre">4]</span></code>), or a list of column names
+(e.g., <code class="docutils literal notranslate"><span class="pre">['accel_x',</span> <span class="pre">'accel_y',</span> <span class="pre">'accel_z']</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">frame_size</span></code></p></td>
+<td><p>Number of samples per frame (e.g., <code class="docutils literal notranslate"><span class="pre">128</span></code>, <code class="docutils literal notranslate"><span class="pre">256</span></code>, <code class="docutils literal notranslate"><span class="pre">512</span></code>, <code class="docutils literal notranslate"><span class="pre">1024</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">feature_size_per_frame</span></code></p></td>
+<td><p>Number of output features per frame after transform
+(e.g., <code class="docutils literal notranslate"><span class="pre">8</span></code>, <code class="docutils literal notranslate"><span class="pre">16</span></code>, <code class="docutils literal notranslate"><span class="pre">32</span></code>, <code class="docutils literal notranslate"><span class="pre">64</span></code>, <code class="docutils literal notranslate"><span class="pre">128</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num_frame_concat</span></code></p></td>
+<td><p>Number of frames to concatenate (e.g., <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">4</span></code>, <code class="docutils literal notranslate"><span class="pre">8</span></code>).
+Total features = <code class="docutils literal notranslate"><span class="pre">feature_size_per_frame</span></code> x <code class="docutils literal notranslate"><span class="pre">num_frame_concat</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stride_size</span></code></p></td>
+<td><p>Stride between frames as a fraction (e.g., <code class="docutils literal notranslate"><span class="pre">0.01</span></code>, <code class="docutils literal notranslate"><span class="pre">0.1</span></code>, <code class="docutils literal notranslate"><span class="pre">0.25</span></code>,
+<code class="docutils literal notranslate"><span class="pre">0.5</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Signal Processing Parameters:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sampling_rate</span></code></p></td>
+<td><p>Original sampling rate of the input signal. Used with the
+<code class="docutils literal notranslate"><span class="pre">Downsample</span></code> data processing transform.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">new_sr</span></code></p></td>
+<td><p>Target sampling rate after downsampling. Used with the
+<code class="docutils literal notranslate"><span class="pre">Downsample</span></code> data processing transform.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scale</span></code></p></td>
+<td><p>Scaling factor applied to input data (e.g., <code class="docutils literal notranslate"><span class="pre">0.00390625</span></code> for 1/256).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
+<td><p>Offset added to input data.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">frame_skip</span></code></p></td>
+<td><p>Number of frames to skip between selected frames (e.g., <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">8</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">normalize_bin</span></code></p></td>
+<td><p>Enable bin normalization (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">1</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">stacking</span></code></p></td>
+<td><p>Feature stacking mode: <code class="docutils literal notranslate"><span class="pre">'2D1'</span></code> or <code class="docutils literal notranslate"><span class="pre">'1D'</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">min_bin</span></code></p></td>
+<td><p>Minimum frequency bin index to include.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">analysis_bandwidth</span></code></p></td>
+<td><p>Fraction of bandwidth to analyse (e.g., <code class="docutils literal notranslate"><span class="pre">1</span></code> for full bandwidth).</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Logarithmic Transform Parameters:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">log_mul</span></code></p></td>
+<td><p>Multiplier for logarithmic scaling (e.g., <code class="docutils literal notranslate"><span class="pre">20</span></code> for dB).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">log_base</span></code></p></td>
+<td><p>Base for logarithm (e.g., <code class="docutils literal notranslate"><span class="pre">10</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">log_threshold</span></code></p></td>
+<td><p>Minimum threshold to avoid log(0) (e.g., <code class="docutils literal notranslate"><span class="pre">1e-100</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fixed-Point (Q15) Parameters:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">q15_scale_factor</span></code></p></td>
+<td><p>Scale factor for Q15 fixed-point quantization (e.g., <code class="docutils literal notranslate"><span class="pre">4</span></code>, <code class="docutils literal notranslate"><span class="pre">5</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Data Augmentation and Testing:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gain_variations</span></code></p></td>
+<td><p>Dictionary mapping class names to <code class="docutils literal notranslate"><span class="pre">[min_gain,</span> <span class="pre">max_gain]</span></code> ranges for
+data augmentation. Example:
+<code class="docutils literal notranslate"><span class="pre">{arc:</span> <span class="pre">[0.9,</span> <span class="pre">1.1],</span> <span class="pre">normal:</span> <span class="pre">[0.8,</span> <span class="pre">1.2]}</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gof_test</span></code></p></td>
+<td><p>Run Goodness of Fit test on extracted features (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output Control:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">store_feat_ext_data</span></code></p></td>
+<td><p>Store extracted feature data to disk (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nn_for_feature_extraction</span></code></p></td>
+<td><p>Use neural network for feature extraction (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Forecasting-Specific Parameters:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">forecast_horizon</span></code></p></td>
+<td><p>Number of future timesteps to predict (e.g., <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">target_variables</span></code></p></td>
+<td><p>List of column indices or names for the target variable(s) to forecast
+(e.g., <code class="docutils literal notranslate"><span class="pre">[0]</span></code>, <code class="docutils literal notranslate"><span class="pre">[5]</span></code>, <code class="docutils literal notranslate"><span class="pre">['temperature']</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="preset-system">
-<h2><span class="section-number">8.3.3. </span>Preset System<a class="headerlink" href="#preset-system" title="Link to this heading"></a></h2>
-<p>Tiny ML Tensorlab provides predefined feature extraction presets:</p>
+<h2><span class="section-number">8.3.4. </span>Preset System<a class="headerlink" href="#preset-system" title="Link to this heading"></a></h2>
+<p>Tiny ML Tensorlab provides predefined feature extraction presets. When using
+a preset, simply specify the <code class="docutils literal notranslate"><span class="pre">feature_extraction_name</span></code> and <code class="docutils literal notranslate"><span class="pre">variables</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Generic_1024Input_FFTBIN_64Feature_8Frame&#39;</span>
 <span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
@@ -1105,12 +1313,12 @@ Example: Generic_1024Input_FFTBIN_64Feature_8Frame
 - Transform: FFT with binning
 - Features: 64 frequency bins
 - Frames: 8 temporal frames
-- Total: 64 × 8 = 512 features to model
+- Total: 64 x 8 = 512 features to model
 </pre></div>
 </div>
 </section>
 <section id="available-presets">
-<h2><span class="section-number">8.3.4. </span>Available Presets<a class="headerlink" href="#available-presets" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.3.5. </span>Available Presets<a class="headerlink" href="#available-presets" title="Link to this heading"></a></h2>
 <p><strong>FFT-Based Presets:</strong></p>
 <p>Best for frequency-domain patterns (vibration, arc faults):</p>
 <table class="docutils align-default">
@@ -1163,9 +1371,9 @@ Example: Generic_1024Input_FFTBIN_64Feature_8Frame
 <td><p>256</p></td>
 <td><p>Shorter window</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Generic_128Input_RAW_128Feature_4Frame</span></code></p></td>
-<td><p>512</p></td>
-<td><p>Temporal context</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Generic_128Input_RAW_128Feature_1Frame</span></code></p></td>
+<td><p>128</p></td>
+<td><p>Compact input</p></td>
 </tr>
 </tbody>
 </table>
@@ -1187,159 +1395,237 @@ Example: Generic_1024Input_FFTBIN_64Feature_8Frame
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FFT1024Input_256Feature_1Frame_Full_Bandwidth</span></code></p></td>
 <td><p>Arc fault detection</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D</span></code></p></td>
+<td><p>PIR detection</p></td>
+</tr>
 </tbody>
 </table>
 </section>
-<section id="transform-types">
-<h2><span class="section-number">8.3.5. </span>Transform Types<a class="headerlink" href="#transform-types" title="Link to this heading"></a></h2>
-<p><strong>FFT (Fast Fourier Transform)</strong></p>
-<p>Converts time domain to frequency domain:</p>
+<section id="data-processing-transforms">
+<h2><span class="section-number">8.3.6. </span>Data Processing Transforms<a class="headerlink" href="#data-processing-transforms" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">data_proc_transforms</span></code> parameter specifies preprocessing steps applied
+to raw data before feature extraction:</p>
+<p><strong>SimpleWindow</strong></p>
+<p>Segments continuous data into fixed-size windows:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">transform_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;fft&#39;</span>
-<span class="w">  </span><span class="nt">fft_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;SimpleWindow&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">stride_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
-<p>Use when:</p>
-<ul class="simple">
-<li><p>Patterns are in frequency content</p></li>
-<li><p>Signal is periodic</p></li>
-<li><p>Looking for harmonic signatures</p></li>
-</ul>
-<p><strong>FFT with Binning</strong></p>
-<p>Groups FFT bins for reduced feature count:</p>
+<p><strong>Downsample</strong></p>
+<p>Reduces the sampling rate of input data:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">transform_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;fft_bin&#39;</span>
-<span class="w">  </span><span class="nt">fft_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
-<span class="w">  </span><span class="nt">num_bins</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;Downsample&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;SimpleWindow&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">sampling_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">313000</span>
+<span class="w">  </span><span class="nt">new_sr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3130</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">stride_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
-<p>Benefits:</p>
-<ul class="simple">
-<li><p>Reduces feature count</p></li>
-<li><p>Smooths frequency representation</p></li>
-<li><p>More robust to frequency shifts</p></li>
-</ul>
-<p><strong>Raw (No Transform)</strong></p>
-<p>Uses time-domain samples directly:</p>
+<p>Multiple transforms can be chained in order:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">transform_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;raw&#39;</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimpleWindow</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Downsample</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">sampling_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">  </span><span class="nt">new_sr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
-<p>Use when:</p>
-<ul class="simple">
-<li><p>Waveform shape is important</p></li>
-<li><p>Transient patterns</p></li>
-<li><p>Phase information matters</p></li>
-</ul>
-<p><strong>Wavelet Transforms</strong></p>
-<p>Time-frequency representation:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">transform_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;haar&#39;</span><span class="w">  </span><span class="c1"># or &#39;hadamard&#39;</span>
-</pre></div>
-</div>
-<p>Use when:</p>
-<ul class="simple">
-<li><p>Need both time and frequency info</p></li>
-<li><p>Transient events</p></li>
-<li><p>Multi-scale analysis</p></li>
-</ul>
 </section>
-<section id="multi-frame-configuration">
-<h2><span class="section-number">8.3.6. </span>Multi-Frame Configuration<a class="headerlink" href="#multi-frame-configuration" title="Link to this heading"></a></h2>
-<p>Multiple frames provide temporal context:</p>
+<section id="feature-extraction-transforms">
+<h2><span class="section-number">8.3.7. </span>Feature Extraction Transforms<a class="headerlink" href="#feature-extraction-transforms" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">feat_ext_transform</span></code> parameter defines the feature extraction pipeline
+as an ordered list of transforms. Each step processes the output of the
+previous step.</p>
+<p><strong>Common Transform Steps:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Transform</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FFT_FE</span></code></p></td>
+<td><p>Compute FFT (Fast Fourier Transform)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FFT_POS_HALF</span></code></p></td>
+<td><p>Keep only positive frequency half of FFT</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WINDOWING</span></code></p></td>
+<td><p>Apply windowing function</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BINNING</span></code></p></td>
+<td><p>Group frequency bins to reduce feature count</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NORMALIZE</span></code></p></td>
+<td><p>Normalize features</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ABS</span></code></p></td>
+<td><p>Take absolute value</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LOG_DB</span></code></p></td>
+<td><p>Convert to logarithmic (dB) scale</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DC_REMOVE</span></code></p></td>
+<td><p>Remove DC component</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONCAT</span></code></p></td>
+<td><p>Concatenate frames into final feature vector</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FFT_Q15</span></code></p></td>
+<td><p>Fixed-point Q15 FFT (for MCU deployment)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Q15_SCALE</span></code></p></td>
+<td><p>Q15 scaling</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Q15_MAG</span></code></p></td>
+<td><p>Q15 magnitude computation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BIN_Q15</span></code></p></td>
+<td><p>Q15 binning</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ECG_NORMALIZE</span></code></p></td>
+<td><p>ECG-specific normalization</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example: FFT with Binning Pipeline:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
-<span class="w">  </span><span class="nt">num_frames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
-<span class="w">  </span><span class="nt">frame_stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span><span class="w">  </span><span class="c1"># 50% overlap</span>
+<span class="w">  </span><span class="nt">feat_ext_transform</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;FFT_FE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;FFT_POS_HALF&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;DC_REMOVE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;ABS&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;BINNING&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;LOG_DB&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;CONCAT&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
+<span class="w">  </span><span class="nt">feature_size_per_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">  </span><span class="nt">num_frame_concat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
-<p><strong>How it works:</strong></p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Signal: [==========================================]
-                                1024 samples
-
-Frame 1: [====]
-Frame 2:    [====]
-Frame 3:       [====]
-...
-Frame 8:                                      [====]
-
-Each frame: 128 samples → transform → 64 features
-Total: 64 × 8 = 512 features
+<p><strong>Example: FFT without Binning Pipeline:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">feat_ext_transform</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;FFT_FE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;FFT_POS_HALF&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;DC_REMOVE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;ABS&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;LOG_DB&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;CONCAT&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">feature_size_per_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
+<span class="w">  </span><span class="nt">num_frame_concat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+</pre></div>
+</div>
+<p><strong>Example: Fixed-Point Q15 Pipeline (for MCU deployment):</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">feat_ext_transform</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;FFT_Q15&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;Q15_SCALE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;Q15_MAG&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;DC_REMOVE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;BIN_Q15&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;CONCAT&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">feature_size_per_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">  </span><span class="nt">num_frame_concat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">q15_scale_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">normalize_bin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-feature-extraction">
+<h2><span class="section-number">8.3.8. </span>Custom Feature Extraction<a class="headerlink" href="#custom-feature-extraction" title="Link to this heading"></a></h2>
+<p>For advanced use cases, use a <code class="docutils literal notranslate"><span class="pre">Custom_*</span></code> feature extraction name and specify
+the transform pipeline manually:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;SimpleWindow&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Custom_Default&#39;</span>
+<span class="w">  </span><span class="nt">feat_ext_transform</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;FFT_FE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;FFT_POS_HALF&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;WINDOWING&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;BINNING&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;NORMALIZE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;ABS&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;LOG_DB&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;CONCAT&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">feature_size_per_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">num_frame_concat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</pre></div>
+</div>
+<p>You can also configure additional parameters for fine-grained control:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Custom_MotorFault&#39;</span>
+<span class="w">  </span><span class="nt">feat_ext_transform</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;FFT_FE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;FFT_POS_HALF&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;DC_REMOVE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;ABS&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;BINNING&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;LOG_DB&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;CONCAT&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
+<span class="w">  </span><span class="nt">feature_size_per_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">  </span><span class="nt">num_frame_concat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">  </span><span class="nt">normalize_bin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">stacking</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1D&#39;</span>
+<span class="w">  </span><span class="nt">offset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">frame_skip</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">log_mul</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">  </span><span class="nt">log_base</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="nt">log_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e-100</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
 </pre></div>
 </div>
 </section>
 <section id="multi-channel-data">
-<h2><span class="section-number">8.3.7. </span>Multi-Channel Data<a class="headerlink" href="#multi-channel-data" title="Link to this heading"></a></h2>
-<p>For sensors with multiple axes (e.g., 3-axis accelerometer):</p>
+<h2><span class="section-number">8.3.9. </span>Multi-Channel Data<a class="headerlink" href="#multi-channel-data" title="Link to this heading"></a></h2>
+<p>For sensors with multiple axes (e.g., 3-axis accelerometer), set
+<code class="docutils literal notranslate"><span class="pre">variables</span></code> to the number of channels:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1&#39;</span>
 <span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
 </pre></div>
 </div>
-<p><strong>Processing:</strong></p>
-<p>Each channel is processed independently, then concatenated:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>X-axis: 128 features
-Y-axis: 128 features
-Z-axis: 128 features
-Total:  384 features
-</pre></div>
-</div>
-</section>
-<section id="dc-removal">
-<h2><span class="section-number">8.3.8. </span>DC Removal<a class="headerlink" href="#dc-removal" title="Link to this heading"></a></h2>
-<p>Remove DC offset for cleaner frequency analysis:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">remove_dc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-</pre></div>
-</div>
-<p>This is important for:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">variables</span></code> parameter supports three formats:</p>
 <ul class="simple">
-<li><p>AC-coupled signals</p></li>
-<li><p>Vibration data</p></li>
-<li><p>When absolute level doesn’t matter</p></li>
+<li><p><strong>Integer</strong>: Select first N columns (e.g., <code class="docutils literal notranslate"><span class="pre">variables:</span> <span class="pre">3</span></code>)</p></li>
+<li><p><strong>List of indices</strong>: Select specific columns (e.g., <code class="docutils literal notranslate"><span class="pre">variables:</span> <span class="pre">[0,</span> <span class="pre">2,</span> <span class="pre">4]</span></code>)</p></li>
+<li><p><strong>List of names</strong>: Select columns by name (e.g., <code class="docutils literal notranslate"><span class="pre">variables:</span> <span class="pre">['accel_x',</span> <span class="pre">'accel_y',</span> <span class="pre">'accel_z']</span></code>)</p></li>
 </ul>
 </section>
-<section id="normalization">
-<h2><span class="section-number">8.3.9. </span>Normalization<a class="headerlink" href="#normalization" title="Link to this heading"></a></h2>
-<p>Normalize features for consistent model input:</p>
+<section id="forecasting-configuration">
+<h2><span class="section-number">8.3.10. </span>Forecasting Configuration<a class="headerlink" href="#forecasting-configuration" title="Link to this heading"></a></h2>
+<p>Forecasting tasks require specific additional parameters:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">normalization</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;standard&#39;</span><span class="w">  </span><span class="c1"># or &#39;minmax&#39;, &#39;none&#39;</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimpleWindow</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
+<span class="w">  </span><span class="nt">stride_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">  </span><span class="nt">forecast_horizon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">target_variables</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 </pre></div>
 </div>
-<p><strong>Options:</strong></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">standard</span></code>: Zero mean, unit variance</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">minmax</span></code>: Scale to [0, 1]</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code>: No normalization</p></li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">SimpleWindow</span></code> must be specified in <code class="docutils literal notranslate"><span class="pre">data_proc_transforms</span></code> for
+forecasting tasks.</p>
+</div>
 </section>
-<section id="custom-feature-extraction">
-<h2><span class="section-number">8.3.10. </span>Custom Feature Extraction<a class="headerlink" href="#custom-feature-extraction" title="Link to this heading"></a></h2>
-<p>For advanced use cases, define custom extraction:</p>
+<section id="data-augmentation">
+<h2><span class="section-number">8.3.11. </span>Data Augmentation<a class="headerlink" href="#data-augmentation" title="Link to this heading"></a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">gain_variations</span></code> to augment training data with gain variations per class:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;custom&#39;</span>
-<span class="w">  </span><span class="nt">custom_config</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
-<span class="w">    </span><span class="nt">frame_stride</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128</span>
-<span class="w">    </span><span class="nt">num_frames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
-<span class="w">    </span><span class="nt">transform</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;fft&#39;</span>
-<span class="w">    </span><span class="nt">fft_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
-<span class="w">    </span><span class="nt">num_bins</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
-<span class="w">    </span><span class="nt">remove_dc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">    </span><span class="nt">normalization</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;standard&#39;</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Downsample</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimpleWindow</span>
+<span class="w">  </span><span class="nt">gain_variations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">arc</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.1</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">normal</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.2</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">sampling_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">313000</span>
+<span class="w">  </span><span class="nt">new_sr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3130</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">stride_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
 </section>
 <section id="choosing-the-right-preset">
-<h2><span class="section-number">8.3.11. </span>Choosing the Right Preset<a class="headerlink" href="#choosing-the-right-preset" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.3.12. </span>Choosing the Right Preset<a class="headerlink" href="#choosing-the-right-preset" title="Link to this heading"></a></h2>
 <p><strong>Decision Tree:</strong></p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Is the pattern in frequency content?
-├── Yes → Use FFT-based preset
-│   └── Need full spectrum? → FFT_FullBandwidth
-│   └── Reduce features? → FFTBIN
-└── No → Use RAW preset
-    └── Need temporal context? → Multi-frame
-    └── Single snapshot? → 1Frame
+|-- Yes --&gt; Use FFT-based preset
+|   |-- Need full spectrum? --&gt; FFT_FullBandwidth
+|   |-- Reduce features? --&gt; FFTBIN
+|-- No --&gt; Use RAW preset
+    |-- Need temporal context? --&gt; Multi-frame
+    |-- Single snapshot? --&gt; 1Frame
 </pre></div>
 </div>
 <p><strong>Common Choices by Application:</strong></p>
@@ -1361,7 +1647,7 @@ Total:  384 features
 <td><p><code class="docutils literal notranslate"><span class="pre">Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>ECG classification</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">Generic_512Input_RAW_512Feature_1Frame</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ECG2500Input_Roundoff_1Frame</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Vibration anomaly</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Generic_1024Input_FFTBIN_64Feature_8Frame</span></code></p></td>
@@ -1369,11 +1655,14 @@ Total:  384 features
 <tr class="row-even"><td><p>Simple waveforms</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">Generic_512Input_FFTBIN_32Feature_8Frame</span></code></p></td>
 </tr>
+<tr class="row-odd"><td><p>PIR detection</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D</span></code></p></td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="performance-impact">
-<h2><span class="section-number">8.3.12. </span>Performance Impact<a class="headerlink" href="#performance-impact" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.3.13. </span>Performance Impact<a class="headerlink" href="#performance-impact" title="Link to this heading"></a></h2>
 <p>Feature extraction affects model size and speed:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -1414,62 +1703,74 @@ Total:  384 features
 </ul>
 </section>
 <section id="on-device-feature-extraction">
-<h2><span class="section-number">8.3.13. </span>On-Device Feature Extraction<a class="headerlink" href="#on-device-feature-extraction" title="Link to this heading"></a></h2>
-<p>Feature extraction runs on the MCU before inference:</p>
-<p><strong>Code Generated:</strong></p>
-<p>The compilation process generates C code for feature extraction:</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Generated feature extraction</span>
-<span class="kt">void</span><span class="w"> </span><span class="nf">extract_features</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">features</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// FFT</span>
-<span class="w">    </span><span class="c1">// Binning</span>
-<span class="w">    </span><span class="c1">// Normalization</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<h2><span class="section-number">8.3.14. </span>On-Device Feature Extraction<a class="headerlink" href="#on-device-feature-extraction" title="Link to this heading"></a></h2>
+<p>Feature extraction runs on the MCU before inference. The compilation
+process generates C code for the feature extraction pipeline configured
+in your YAML.</p>
 <p><strong>Memory Usage:</strong></p>
 <p>Feature extraction buffers add to memory requirements:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Input buffer:  frame_size × variables × 4 bytes
-FFT buffer:    fft_size × 4 bytes
-Output buffer: num_features × 4 bytes
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Input buffer:  frame_size x variables x sizeof(data_type)
+FFT buffer:    frame_size x sizeof(data_type)
+Output buffer: feature_size_per_frame x num_frame_concat x sizeof(data_type)
 </pre></div>
 </div>
 </section>
-<section id="example-configuration">
-<h2><span class="section-number">8.3.14. </span>Example Configuration<a class="headerlink" href="#example-configuration" title="Link to this heading"></a></h2>
-<p><strong>Complete feature extraction setup:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;generic_timeseries_classification&#39;</span>
-<span class="w">  </span><span class="nt">target_device</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;F28P55&#39;</span>
-
-<span class="nt">dataset</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;motor_fault_classification_dsk&#39;</span>
-
-<span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<section id="example-configurations">
+<h2><span class="section-number">8.3.15. </span>Example Configurations<a class="headerlink" href="#example-configurations" title="Link to this heading"></a></h2>
+<p><strong>Arc Fault Classification (using preset):</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;FFT1024Input_256Feature_1Frame_Full_Bandwidth&#39;</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<p><strong>Motor Bearing Fault (using preset with override):</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1&#39;</span>
 <span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="w">  </span><span class="nt">remove_dc</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">  </span><span class="nt">normalization</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;standard&#39;</span>
-
-<span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;MotorFault_model_1_t&#39;</span>
-<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">  </span><span class="nt">feature_size_per_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
 </pre></div>
 </div>
-</section>
-<section id="debugging-feature-extraction">
-<h2><span class="section-number">8.3.15. </span>Debugging Feature Extraction<a class="headerlink" href="#debugging-feature-extraction" title="Link to this heading"></a></h2>
-<p>To visualize extracted features:</p>
+<p><strong>Anomaly Detection with Downsampling:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">visualize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">  </span><span class="nt">save_examples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">  </span><span class="c1"># Save first 10 samples</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimpleWindow</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Downsample</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
+<span class="w">  </span><span class="nt">sampling_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">  </span><span class="nt">new_sr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 </pre></div>
 </div>
-<p>This generates:</p>
-<ul class="simple">
-<li><p>Feature visualizations</p></li>
-<li><p>Before/after transform comparisons</p></li>
-<li><p>Statistics about feature distributions</p></li>
-</ul>
+<p><strong>Regression with Simple Windowing:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimpleWindow</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">512</span>
+<span class="w">  </span><span class="nt">stride_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+</pre></div>
+</div>
+<p><strong>Forecasting (PMSM Rotor Temperature):</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimpleWindow</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">stride_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.4</span>
+<span class="w">  </span><span class="nt">forecast_horizon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<span class="w">  </span><span class="nt">target_variables</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</pre></div>
+</div>
+<p><strong>Goodness of Fit Testing:</strong></p>
+<p>Enable the <code class="docutils literal notranslate"><span class="pre">gof_test</span></code> parameter to run Goodness of Fit analysis on
+extracted features:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1&#39;</span>
+<span class="w">  </span><span class="nt">gof_test</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
 <p><strong>PCA Visualization of Extracted Features:</strong></p>
 <p>PCA (Principal Component Analysis) helps visualize how well the extracted features
 separate your classes. Well-separated clusters indicate good feature extraction.</p>
@@ -1527,7 +1828,7 @@ separate your classes. Well-separated clusters indicate good feature extraction.
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, Texas Instruments Incorporated. Last updated on Jan 31 2025.
-      <span class="lastupdated">Last updated on Feb 09, 2026.
+      <span class="lastupdated">Last updated on Feb 13, 2026.
       </span></p>
   </div>
 

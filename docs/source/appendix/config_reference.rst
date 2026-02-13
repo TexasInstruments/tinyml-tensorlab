@@ -116,63 +116,91 @@ Feature Extraction Section
 .. code-block:: yaml
 
    data_processing_feature_extraction:
-     enable: True
      feature_extraction_name: 'Generic_1024Input_FFTBIN_64Feature_8Frame'
      variables: 1
-     frame_size: 1024
      gof_test: False
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 15 55
+   :widths: 35 15 50
 
    * - Option
      - Default
      - Description
-   * - ``enable``
-     - True
-     - Enable feature extraction
    * - ``feature_extraction_name``
-     - Required
-     - Preset name or 'custom'
+     - None
+     - Preset name (e.g., ``'Generic_1024Input_FFTBIN_64Feature_8Frame'``)
+       or custom name starting with ``'Custom_'``
+   * - ``data_proc_transforms``
+     - None
+     - List of data processing transforms: ``['SimpleWindow']``,
+       ``['Downsample']``, ``['SimpleWindow', 'Downsample']``, or ``[]``
+   * - ``feat_ext_transform``
+     - None
+     - List of feature extraction transforms (e.g., ``['FFT_FE',
+       'FFT_POS_HALF', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']``)
    * - ``variables``
      - 1
-     - Number of input channels/variables
+     - Number of input channels, or list of column indices/names
    * - ``frame_size``
-     - 1024
+     - None
      - Samples per frame
-   * - ``num_frames``
-     - 8
-     - Number of temporal frames
-   * - ``frame_stride``
-     - frame_size/2
-     - Stride between frames
-   * - ``transform_type``
-     - 'fft'
-     - 'fft', 'fft_bin', 'raw', 'haar', 'hadamard'
-   * - ``fft_size``
-     - 1024
-     - FFT size (if using FFT)
-   * - ``num_bins``
-     - 64
-     - Number of frequency bins
-   * - ``remove_dc``
-     - False
-     - Remove DC component
-   * - ``normalization``
-     - 'standard'
-     - 'standard', 'minmax', 'none'
+   * - ``feature_size_per_frame``
+     - None
+     - Output features per frame after transform
+   * - ``num_frame_concat``
+     - None
+     - Number of frames to concatenate
+   * - ``stride_size``
+     - None
+     - Stride between frames as a fraction
+   * - ``sampling_rate``
+     - None
+     - Original sampling rate (used with ``Downsample``)
+   * - ``new_sr``
+     - None
+     - Target sampling rate (used with ``Downsample``)
+   * - ``scale``
+     - None
+     - Scaling factor applied to input data
+   * - ``offset``
+     - None
+     - Offset added to input data
+   * - ``frame_skip``
+     - None
+     - Frames to skip between selected frames
+   * - ``normalize_bin``
+     - None
+     - Enable bin normalization
+   * - ``stacking``
+     - None
+     - Feature stacking mode: ``'2D1'`` or ``'1D'``
    * - ``gof_test``
      - False
      - Run Goodness of Fit test
+   * - ``gain_variations``
+     - None
+     - Dict of class-to-gain-range for data augmentation
+   * - ``store_feat_ext_data``
+     - False
+     - Store extracted feature data to disk
+   * - ``nn_for_feature_extraction``
+     - False
+     - Use neural network for feature extraction
 
 **Forecasting-Specific:**
 
 .. code-block:: yaml
 
    data_processing_feature_extraction:
-     target_column: 0      # Column index to forecast
-     forecast_horizon: 10  # Steps ahead to predict
+     data_proc_transforms:
+     - SimpleWindow
+     frame_size: 32
+     stride_size: 0.1
+     forecast_horizon: 2
+     variables: 1
+     target_variables:
+     - 0
 
 Training Section
 ----------------
