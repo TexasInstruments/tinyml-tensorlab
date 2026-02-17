@@ -127,6 +127,10 @@ Classification Examples
      - :doc:`pir_detection` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/pir_detection>`__)
      - Multivariate
      - Detect presence/motion using PIR sensor data.
+   * - 13
+     - :doc:`grid_fault_detection` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/grid_fault_detection>`__)
+     - Univariate
+     - Detect AC grid faults in EV on-board chargers using current measurements.
 
 ----
 
@@ -153,6 +157,10 @@ Regression Examples
      - :doc:`washing_machine_regression` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/reg_washing_machine>`__)
      - Multivariate
      - Predict washing machine load weight.
+   * - 4
+     - :doc:`mosfet_temp_prediction` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/mosfet_temp_prediction>`__)
+     - Multivariate
+     - Predict MOSFET junction temperature for thermal management in power converters.
 
 ----
 
@@ -246,9 +254,11 @@ Image Classification Examples
    ecg_classification
    nilm_classification
    pir_detection
+   grid_fault_detection
    torque_measurement_regression
    induction_motor_speed_prediction
    washing_machine_regression
+   mosfet_temp_prediction
    forecasting_pmsm_rotor
    hvac_indoor_temp_forecast
    anomaly_detection_example
