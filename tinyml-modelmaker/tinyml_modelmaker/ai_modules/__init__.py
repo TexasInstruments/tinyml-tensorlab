@@ -29,6 +29,7 @@
 #################################################################################
 
 import sys
+from . import protocols
 from . import timeseries
 from . import vision
 
