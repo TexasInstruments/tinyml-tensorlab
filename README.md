@@ -96,6 +96,8 @@ The TinyML toolchain supports a wide range of TI MCUs across multiple device fam
 |--------|-----|-------------|
 | CC2755 | No | 96 MHz Arm Cortex-M33 wireless MCU |
 | CC1352 | No | Arm Cortex-M4 wireless MCU |
+| CC1354 | No | Arm Cortex-M33 wireless MCU |
+| CC35X1 | No | Arm Cortex-M33 wireless MCU |
 
 </details>
 
