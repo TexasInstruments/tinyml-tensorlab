@@ -2,6 +2,9 @@
 
 <hr>
 
+Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
+<hr>
+
 ##### Table of Contents
 
 - [Introduction](#introduction)
@@ -303,6 +306,30 @@ To begin with, you can use the repo as a `developer` or `user`.
 
 ## What is New
 
+- [2026-Feb] Release version 1.3.0 of the software
+  <details>
+
+  - Device Support: 22 MCU devices supported: 
+    - AM1x: AM13E2
+    - C2000 F28: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65
+    - C2000 F29: F29H85, F29P58, F29P32
+    - MSP M0: MSPM0G3507, MSPM0G3519, MSPM0G5187
+    - MSP M33: MSPM33C32,
+    - Connectivity: CC2755, CC1352, CC1354, CC35X1, 
+    - AM26x: AM263, AM263P, AM261
+  - Flows:
+    - Timeseries Anomaly Detection flow supported
+    - On Device Learning Mode Enabled
+  - Applications Supported
+    - 22 (4 generic + 18 specific applications)
+  - Models:
+    - 50+ generic models added over classification, regression, forecasting and anomaly detection tasks.
+  - Model Optimization:
+    - Partial Quantization Supported to enable best of precision and latency for regression models.
+  - Compilation:
+      - Upgraded TI MCU Neural Network Compiler for MCUs to 2.1.1 LTS
+
+  </details>
 - [2025-Nov] Release version 1.2.0 of the software
 
     <details>
