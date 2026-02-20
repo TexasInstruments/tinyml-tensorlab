@@ -23,6 +23,10 @@ Welcome to the **Tiny ML ModelZoo** - Texas Instruments' central repository for 
 ### Texas Instruments MCU AI Toolchain
 
 Texas Instruments provides a comprehensive toolchain for developing, training, and deploying machine learning models on resource-constrained microcontrollers. The toolchain consists of three main components:
+<hr>
+
+Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
+<hr>
 
 | Component                       | Purpose                                | Who Should Use It                               |
 |---------------------------------|----------------------------------------|-------------------------------------------------|
