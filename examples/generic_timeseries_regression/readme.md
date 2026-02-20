@@ -125,19 +125,19 @@ data_processing_feature_extraction:
 ### `training` section
 
 You can configure training parameters here like `model_name`, `training_epochs`, `optimizer` etc. 
-Here we are using an simple CNN model with 1k parameters model:
+Here we are using an simple CNN model with 2k parameters model:
 
 ```yaml
 training:
   optimizer: adam
   lr_scheduler: cosineannealinglr
-  model_name: REGR_1k
+  model_name: REGR_2k
   batch_size: 128
-  training_epochs: 100  # use 500 epochs for a better R2 score, RMSE
+  training_epochs: 45 
   lambda_reg: 0.01
   num_gpus: 1 # 1 when using gpu if using cpu use 0
-  quantization: 0 # 0 for float model, 2 for 8 bit quantized model
-  partial_quantization: False # input batchnorm, first conv/linear layer and last fc layer are not quantized, default is False
+  quantization: 2 # 0 for float model, 2 for 8 bit quantized model
+  partial_quantization: True # input batchnorm, first conv/linear layer and last fc layer are not quantized, default is False
 ```
 
 ### `compile` and `test` section
@@ -180,7 +180,7 @@ The model computes loss for each of the epochs. The epoch where the Mean squared
 
 **1. Prediction Plots**
 
-Can be found at `data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/post_training_analysis/`
+Can be found at `data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/post_training_analysis/`
 
 We plot the prediction by the model vs the actual value, i.e. predicted vs actual plot for the dataset. Also, we plot histogram of Error (actual - predicted) plot along with metrics such as mean, standard deviation, etc.
 
@@ -191,7 +191,7 @@ alt="float_train_prediction_plot" width="60%"/>
 
 **2. Output vs Input File for Test Data**
 
-They are located at `data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/post_training_analysis/`
+They are located at `data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/post_training_analysis/`
 
  With filename results_on_test_set.csv. The file consists of two columns ground_truth, predicted. where ground truth is the true value and predicted is the predicted value by the model on the test data
 
@@ -200,10 +200,28 @@ Also you can see the compiled model at: `data/projects/{dataset_name}/run/{date-
 
 For the generic_timeseries_regression dataset the results on the test set are 
 
-| Metric | Value |
-|----------|----------|
-| RMSE   | 0.13  |
-| R2 score  | 0.99   |
+| Model | RMSE | R2 Score  |
+|----------|----------|----------|
+| Float Model   | 0.15  | 0.95  | 
+| Partially Quantized Model  | 0.11   | 0.98 |
+| Fully Quantized Model  | 0.11   | 0.97 |
+
+For Float Model Configuration is :
+```yaml
+  quantization: 0 
+  partial_quantization: False
+```
+For Partially Quantized Model configuration is:
+```yaml
+  quantization: 2
+  partial_quantization: True
+```
+
+For Fully Quantized Model configuration is:
+```yaml
+  quantization: 2
+  partial_quantization: False
+```
 
 ## Running on Device
 
@@ -218,7 +236,7 @@ After successfully running ModelMaker, you will get the compiled model artifacts
 2. **Golden Vectors**:
    - `user_input_config.h` and `test_vector.c` are stored in:
      ```
-     data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/golden_vectors
+     data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/golden_vectors
      ```
 
 Steps to run this example on-device can be found by following this guide: [Deploying Regression Models from ModelMaker to Device](../../docs/deploying_regression_models_from_modelmaker_to_device/readme.md)
