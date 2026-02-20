@@ -7,7 +7,7 @@ common:
 
 dataset:
     dataset_name: hello_world_example_dsg
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/hello_world_dsg.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/generic_timeseries_classification.zip
 
 data_processing_feature_extraction:
     feature_extraction_name: FFT256Input_FE_RFFT_16Feature_8Frame_removeDC_Full_Bandwidth
