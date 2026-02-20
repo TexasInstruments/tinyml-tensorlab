@@ -4,7 +4,7 @@ This repository helps you to quantize your model to formats that can run optimal
 
 **Note**: Please consult the device and SDK documentation to understand whether Hardware based TI NPU acceleration is supported in that device. 
 
-### 1. C2000 / ARM devices with Hardware based TI NPU acceleration (TINPUTinyMLQATFxModule / TINPUTinyMLPTQFxModule )
+### 1. TI optimised acceleration - C2000 / ARM core devices with Hardware based TI NPU or even without it! (TINPUTinyMLQATFxModule / TINPUTinyMLPTQFxModule )
 
 - TINPUTinyMLQATFxModule / TINPUTinyMLPTQFxModule is a PyTorch module that incorporates the constraints of TI NPU Hardware accelerator. We call this a wrapper as it wraps your PyTorch module and induces the constraints of the hardware.
 - It can be imported as follows.
@@ -47,7 +47,7 @@ model.export(dummy_input, os.path.join(save_path,'model_int8.onnx'), input_names
 ```
 
 
-### 2. C2000 / ARM MCUs without using Hardware based TI NPU acceleration (GenericTinyMLQATFxModule / GenericTinyMLPTQFxModule)
+### 2. Wrapper for standard Generic Pytorch style quantization (GenericTinyMLQATFxModule / GenericTinyMLPTQFxModule)
 
 - GenericTinyMLQATFxModule / GenericTinyMLPTQFxModule is a PyTorch module that incorporates the constraints of typical INT8 quantization in PyTorch. This makes use of the PyTorch quantization APIs, but makes it easy to do QAT with minimal code changes. For more details of [PyTorch quantization, see its documentation](https://pytorch.org/docs/stable/quantization.html)
 - The wrapper module can be imported as follows.
