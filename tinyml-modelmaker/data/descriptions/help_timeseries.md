@@ -88,6 +88,18 @@ These are the devices that are supported currently. As additional devices are su
 * CC1352 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK
 * SDK release: 08_31_00_11
 
+### CC1354
+* Product information: https://www.ti.com/product/CC1354P10
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10
+* CC1354 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK
+* SDK release: 08_31_00_11
+
+### CC35X1
+* Product information: https://www.ti.com/product/CC3551E
+* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1
+* CC35X1 SDK: https://www.ti.com/tool/SIMPLELINK-WIFI-SDK
+* SDK release: 09_21_00_15
+
 
 ## Additional information
 

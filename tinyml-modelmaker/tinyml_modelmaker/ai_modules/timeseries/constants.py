@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -81,9 +81,11 @@ TASK_TYPE_TO_CATEGORY = {
 }
 
 
-def get_skip_normalize_and_output_int(task_category, quantization):
+def get_skip_normalize_and_output_int(task_category, quantization, partial_quantization):
     """
     Compute skip_normalize and output_int based on task_category and quantization level.
+    For partial quantization, skip_normalize will fail during compilation, set it 
+    skip_normalize False.
 
     Matrix relationship:
     task_category                   | quantization | skip_normalize | output_int
@@ -120,6 +122,8 @@ def get_skip_normalize_and_output_int(task_category, quantization):
         skip_normalize = True
         # output_int is True only for classification tasks (both timeseries and image)
         output_int = (task_category == TASK_CATEGORY_TS_CLASSIFICATION or task_category == 'image_classification')
+        if partial_quantization and task_category == TASK_CATEGORY_TS_REGRESSION:
+            skip_normalize = False
         return skip_normalize, output_int
 
     # Fallback for unexpected quantization values
@@ -187,6 +191,9 @@ TARGET_DEVICE_MSPM33C34 = 'MSPM33C34'
 TARGET_DEVICE_AM13E2 = 'AM13E2'
 TARGET_DEVICE_CC2755 = 'CC2755'
 TARGET_DEVICE_CC1352 = 'CC1352'
+TARGET_DEVICE_CC1354 = 'CC1354'
+TARGET_DEVICE_CC35X1 = 'CC35X1'
+
 
 TARGET_DEVICES = [
     TARGET_DEVICE_F280013,
@@ -205,6 +212,8 @@ TARGET_DEVICES = [
     TARGET_DEVICE_F29P32,
     TARGET_DEVICE_CC2755,
     TARGET_DEVICE_CC1352,
+    TARGET_DEVICE_CC1354,
+    TARGET_DEVICE_CC35X1,
     TARGET_DEVICE_AM263,
     TARGET_DEVICE_AM263P,
     TARGET_DEVICE_AM261,
@@ -214,6 +223,8 @@ TARGET_DEVICES = [
 # will not be listed in the GUI, but can be used in command line
 TARGET_DEVICES_ADDITIONAL = [
     TARGET_DEVICE_MSPM33C34,
+    TARGET_DEVICE_F29P58,
+    TARGET_DEVICE_F29P32,
 ]
 
 # include additional devices that are not currently supported in release.
@@ -272,6 +283,12 @@ TARGET_SDK_RELEASE_CC2755 = '09_12_00_00'
 
 TARGET_SDK_VERSION_CC1352 = '8.31.00.11'
 TARGET_SDK_RELEASE_CC1352 = '08_31_00_11'
+
+TARGET_SDK_VERSION_CC1354 = '8.31.00.11'
+TARGET_SDK_RELEASE_CC1354 = '08_31_00_11'
+
+TARGET_SDK_VERSION_CC35X1 = '9.21.00.15'
+TARGET_SDK_RELEASE_CC35X1 = '09_21_00_15'
 
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n'
@@ -629,6 +646,40 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
+##### CC1354 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354 = \
+    f'''* Product information: https://www.ti.com/product/CC1354P10
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10
+* CC1354 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK
+* SDK release: {TARGET_SDK_RELEASE_CC1354}'''
+
+TARGET_DEVICE_DETAILS_CC1354 = \
+    f'''SimpleLink™ 32-bit Arm® Cortex®-M33 multiprotocol wireless MCU
+* More details : https://www.ti.com/product/CC1354P10
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### CC35X1 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_CC35X1 = \
+    f'''* Product information: https://www.ti.com/product/CC3551E
+* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1
+* CC35X1 SDK: https://www.ti.com/tool/SIMPLELINK-WIFI-SDK
+* SDK release: {TARGET_SDK_RELEASE_CC35X1}'''
+
+TARGET_DEVICE_DETAILS_CC35X1 = \
+    f'''SimpleLink™ 32-bit Arm® Cortex®-M33 Wi-Fi wireless MCU
+* More details : https://www.ti.com/product/CC3551E
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_CC35X1}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
 
 # higher device_selection_factor indicates higher performance device.
 TARGET_DEVICE_DESCRIPTIONS = {
@@ -800,6 +851,22 @@ TARGET_DEVICE_DESCRIPTIONS = {
         'sdk_version': TARGET_SDK_VERSION_CC1352,
         'sdk_release': TARGET_SDK_RELEASE_CC1352,
     },
+    TARGET_DEVICE_CC1354: {
+        'device_name': TARGET_DEVICE_CC1354,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 19,
+        'device_details': TARGET_DEVICE_DETAILS_CC1354,
+        'sdk_version': TARGET_SDK_VERSION_CC1354,
+        'sdk_release': TARGET_SDK_RELEASE_CC1354,
+    },
+    TARGET_DEVICE_CC35X1: {
+        'device_name': TARGET_DEVICE_CC35X1,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 20,
+        'device_details': TARGET_DEVICE_DETAILS_CC35X1,
+        'sdk_version': TARGET_SDK_VERSION_CC35X1,
+        'sdk_release': TARGET_SDK_RELEASE_CC35X1,
+    },
 }
 
 TASK_DESCRIPTIONS = {
@@ -818,6 +885,10 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_MSPM33C32,
+            TARGET_DEVICE_F29H85,
+            TARGET_DEVICE_AM13E2,
+            TARGET_DEVICE_AM263,
         ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'task_category': TASK_CATEGORY_TS_CLASSIFICATION
@@ -849,6 +920,10 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_MSPM33C32,
+            TARGET_DEVICE_F29H85,
+            TARGET_DEVICE_AM13E2,
+            TARGET_DEVICE_AM263,
         ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'task_category': TASK_CATEGORY_TS_CLASSIFICATION
@@ -865,6 +940,10 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F29H85,
+            TARGET_DEVICE_MSPM33C32,
+            TARGET_DEVICE_AM13E2,
+            TARGET_DEVICE_AM263,
         ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'task_category': TASK_CATEGORY_TS_CLASSIFICATION
@@ -916,7 +995,13 @@ TASK_DESCRIPTIONS = {
         'target_devices': [
             TARGET_DEVICE_CC2755,
             TARGET_DEVICE_CC1352,
-            TARGET_DEVICE_MSPM0G5187],
+            TARGET_DEVICE_CC1354,
+            TARGET_DEVICE_CC35X1,
+            TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G3519,
+            TARGET_DEVICE_MSPM33C32,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'task_category': TASK_CATEGORY_TS_CLASSIFICATION
     },
@@ -1031,10 +1116,10 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D=dict(
-        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=31.25, variables=1),  # ch=3,
+        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=33, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),
     PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D_FixedPoint=dict(
-        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE_Q15'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=31.25, variables=1),  # ch=3,
+        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE_Q15'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=33, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),  
 )
 
@@ -1074,7 +1159,7 @@ DATASET_EXAMPLES = dict(
     ),
     pir_detection_example_dsk=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip'),
-        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D'), data_proc_transforms=[], sampling_rate=31.25, variables=1),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D'), data_proc_transforms=[], sampling_rate=33, variables=1),
     ),
     ecg_classification_4class=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_4class.zip'),
@@ -1099,7 +1184,7 @@ C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PA
 CL2000_CROSS_COMPILER = os.path.join(C2000_CG_ROOT, 'bin', 'cl2000')
 C2000_CGT_INCLUDE = os.path.join(C2000_CG_ROOT, 'include')
 # C2000 F28 SDK
-C2000WARE_VERSION = 'C2000Ware_6_00_01_00'
+C2000WARE_VERSION = 'C2000Ware_6_01_00_00'
 C2000WARE_ROOT = os.path.abspath(os.getenv('C2000WARE_ROOT', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
 C2000WARE_INCLUDE = os.path.join(C2000WARE_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
 C2000_DRIVERLIB_INCLUDE = os.path.join(C2000WARE_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
@@ -1128,24 +1213,28 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
 # CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
 CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
+CC35X1_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 AM263_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 AM263P_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 AM261_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 MSPM33C_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 AM13E2_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 CC1352_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
+CC1354_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 
-CROSS_COMPILER_OPTIONS_C28 = f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I{C2000_DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=."
+CROSS_COMPILER_OPTIONS_C28 = f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I{C2000_DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I."
 CROSS_COMPILER_OPTIONS_C29 = f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I."
 CROSS_COMPILER_OPTIONS_MSPM0 = f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_CC2755 = f"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_AM263 = f"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-CROSS_COMPILER_OPTIONS_AM263P = f"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-CROSS_COMPILER_OPTIONS_AM261 = f"-O3 -mcpu=cortex-r5 -march=armv7-r -mthumb -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -Iartifacts -Wno-return-type"
-CROSS_COMPILER_OPTIONS_MSPM33C = f"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_AM13E2 = f"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_CC1352 = f"-O3 -mcpu=cortex-m4 -march=armv7e-m -mfpu=fpv4-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_AM263 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_AM263P = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_AM261 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_MSPM33C = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_AM13E2 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_CC1352 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_CC1354 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_CC2755 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_CC35X1 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
 
 
 CROSS_COMPILER_OPTIONS_F280013 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280013.lower() + 'x')
@@ -1178,18 +1267,31 @@ COMPILATION_MSPM0_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu type=hard skip_n
 # MSPM33
 COMPILATION_MSPM33C_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 COMPILATION_MSPM33C_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
-COMPILATION_MSPM33C_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
+COMPILATION_MSPM33C_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
+COMPILATION_MSPM33C_SOFT_TINPU_AD = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
+COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
+COMPILATION_MSPM33C_SOFT_TINPU_OPT_SPACE = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
+COMPILATION_MSPM33C_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 # MSPM33 Forecasting - Preset for RNN/GRU/LSTM models
 COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 # AM13E2
 COMPILATION_AM13E2_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 COMPILATION_AM13E2_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_SOFT_TINPU_AD = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 COMPILATION_AM13E2_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 # MSPM33 - Connectivity
 COMPILATION_CC2755_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC2755_CROSS_COMPILER, )
 COMPILATION_CC1352_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m4', cross_compiler=CC1352_CROSS_COMPILER, )
+COMPILATION_CC1354_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC1354_CROSS_COMPILER, )
+COMPILATION_CC35X1_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC35X1_CROSS_COMPILER, )
 # AM263
-COMPILATION_AM263_SOFT_TINPU = dict(target="c", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
+COMPILATION_AM263_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
+COMPILATION_AM263_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
+COMPILATION_AM263_SOFT_TINPU_AD = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
+COMPILATION_AM263_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
+COMPILATION_AM263_SOFT_TINPU_OPT_SPACE = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
 COMPILATION_AM263P_SOFT_TINPU = dict(target="c", target_c_mcpu='cortex-r5', cross_compiler=AM263P_CROSS_COMPILER, )
 COMPILATION_AM261_SOFT_TINPU = dict(target="c", target_c_mcpu='cortex-r5', cross_compiler=AM261_CROSS_COMPILER, )
 
@@ -1217,6 +1319,8 @@ _CROSS_COMPILER_OPTIONS = {
     TARGET_DEVICE_AM13E2: CROSS_COMPILER_OPTIONS_AM13E2,
     TARGET_DEVICE_CC2755: CROSS_COMPILER_OPTIONS_CC2755,
     TARGET_DEVICE_CC1352: CROSS_COMPILER_OPTIONS_CC1352,
+    TARGET_DEVICE_CC1354: CROSS_COMPILER_OPTIONS_CC1354,
+    TARGET_DEVICE_CC35X1: CROSS_COMPILER_OPTIONS_CC35X1,
     TARGET_DEVICE_AM263: CROSS_COMPILER_OPTIONS_AM263,
     TARGET_DEVICE_AM263P: CROSS_COMPILER_OPTIONS_AM263P,
     TARGET_DEVICE_AM261: CROSS_COMPILER_OPTIONS_AM261,
@@ -1226,7 +1330,10 @@ _CROSS_COMPILER_OPTIONS = {
 _DEVICE_PROFILES = {
     TARGET_DEVICE_AM263: {
         'compilation_base': COMPILATION_AM263_SOFT_TINPU,
-        'compilation_forecasting': COMPILATION_AM263_SOFT_TINPU,
+        'compilation_soft': COMPILATION_AM263_SOFT_TINPU,
+        'compilation_regression': COMPILATION_AM263_SOFT_TINPU_REG,
+        'compilation_anomaly': COMPILATION_AM263_SOFT_TINPU_AD,
+        'compilation_forecasting': COMPILATION_AM263_SOFT_TINPU_FORECASTING,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_AM263P: {
@@ -1308,32 +1415,45 @@ _DEVICE_PROFILES = {
     TARGET_DEVICE_MSPM0G3507: {
         'compilation_base': COMPILATION_MSPM0_SOFT_TINPU,
         'has_hard_npu': False,
-        'task_types': [TASK_TYPE_ARC_FAULT, TASK_TYPE_ECG_CLASSIFICATION, TASK_TYPE_GENERIC_TS_CLASSIFICATION, TASK_TYPE_MOTOR_FAULT],
+        'task_types': [TASK_TYPE_ARC_FAULT, TASK_TYPE_ECG_CLASSIFICATION, TASK_TYPE_GENERIC_TS_CLASSIFICATION, TASK_TYPE_MOTOR_FAULT, TASK_TYPE_PIR_DETECTION],
     },
     TARGET_DEVICE_MSPM0G3519: {
         'compilation_base': COMPILATION_MSPM0_SOFT_TINPU,
         'has_hard_npu': False,
+        'task_types': [TASK_TYPE_ARC_FAULT, TASK_TYPE_ECG_CLASSIFICATION, TASK_TYPE_GENERIC_TS_CLASSIFICATION, TASK_TYPE_MOTOR_FAULT, TASK_TYPE_PIR_DETECTION],
     },
     TARGET_DEVICE_MSPM0G5187: {
         'compilation_base': COMPILATION_MSPM0_HARD_TINPU,
         'compilation_soft': COMPILATION_MSPM0_SOFT_TINPU,
         'compilation_opt_space': COMPILATION_MSPM0_HARD_TINPU_OPT_SPACE,
         'has_hard_npu': True,
-        'task_types': [TASK_TYPE_ARC_FAULT, TASK_TYPE_ECG_CLASSIFICATION, TASK_TYPE_GENERIC_TS_CLASSIFICATION, TASK_TYPE_MOTOR_FAULT,TASK_TYPE_PIR_DETECTION],
+        'task_types': [TASK_TYPE_ARC_FAULT, TASK_TYPE_ECG_CLASSIFICATION, TASK_TYPE_GENERIC_TS_CLASSIFICATION, TASK_TYPE_MOTOR_FAULT, TASK_TYPE_PIR_DETECTION],
     },
     TARGET_DEVICE_MSPM33C32: {
         'compilation_base': COMPILATION_MSPM33C_SOFT_TINPU,
+        'compilation_soft': COMPILATION_MSPM33C_SOFT_TINPU,
+        'compilation_regression': COMPILATION_MSPM33C_SOFT_TINPU_REG,
+        'compilation_anomaly': COMPILATION_MSPM33C_SOFT_TINPU_AD,
         'compilation_forecasting': COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING,
+        'compilation_opt_space': COMPILATION_MSPM33C_SOFT_TINPU_OPT_SPACE,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_MSPM33C34: {
         'compilation_base': COMPILATION_MSPM33C_HARD_TINPU,
         'compilation_soft': COMPILATION_MSPM33C_SOFT_TINPU,
+        'compilation_regression': COMPILATION_MSPM33C_SOFT_TINPU_REG,
+        'compilation_anomaly': COMPILATION_MSPM33C_SOFT_TINPU_AD,
+        'compilation_forecasting': COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING,
         'compilation_opt_space': COMPILATION_MSPM33C_HARD_TINPU_OPT_SPACE,
         'has_hard_npu': True,
     },
     TARGET_DEVICE_AM13E2: {
         'compilation_base': COMPILATION_AM13E2_HARD_TINPU,
+        'compilation_soft': COMPILATION_AM13E2_SOFT_TINPU,
+        'compilation_regression': COMPILATION_AM13E2_SOFT_TINPU_REG,
+        'compilation_anomaly': COMPILATION_AM13E2_SOFT_TINPU_AD,
+        'compilation_forecasting': COMPILATION_AM13E2_SOFT_TINPU_FORECASTING,
+        'compilation_opt_space': COMPILATION_AM13E2_HARD_TINPU_OPT_SPACE,
         'has_hard_npu': True,
     },
     TARGET_DEVICE_CC2755: {
@@ -1342,6 +1462,14 @@ _DEVICE_PROFILES = {
     },
     TARGET_DEVICE_CC1352: {
         'compilation_base': COMPILATION_CC1352_SOFT_TINPU,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_CC1354: {
+        'compilation_base': COMPILATION_CC1354_SOFT_TINPU,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_CC35X1: {
+        'compilation_base': COMPILATION_CC35X1_SOFT_TINPU,
         'has_hard_npu': False,
     },
 }
@@ -1563,6 +1691,42 @@ SAMPLE_DATASET_DESCRIPTIONS = {
             'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_classification.zip',
             'dataset_detailed_name': 'Timeseries Classification Example',
             'dataset_description': 'Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'grid_fault_detection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'grid_fault_detection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/grid_fault_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/grid_fault_dataset.zip',
+            'dataset_detailed_name': 'Grid Fault Detection',
+            'dataset_description': 'Protect the OBC against adverse grid events, log abnormal events, and potentially safe the OBC',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'mosfet_temp_prediction': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'mosfet_temp_prediction',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mosfet_temp_prediction.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mosfet_temp_prediction.zip',
+            'dataset_detailed_name': 'MOSFET Temperature Prediction',
+            'dataset_description': 'Predicting switch temperature based on the power loss of a switch and indirect temperature measurement from a temperature sensor in the vicinity of the switch.',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
             'dataset_license': 'TI Internal License'

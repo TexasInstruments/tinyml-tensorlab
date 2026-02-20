@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -170,6 +170,42 @@ def get_training_module_descriptions(params):
     return training_module_descriptions
 
 
+def filter_model_target_devices_by_task_support(model_descriptions, task_type):
+    """
+    Filter model target devices to only include devices that support training for the given task type.
+
+    This ensures that only devices that can train for a specific task are available for compilation
+    of models for that same task type, maintaining consistency between training and compilation support.
+    """
+    # Get the task description for the given task type
+    task_descriptions = constants.TASK_DESCRIPTIONS
+
+    if task_type not in task_descriptions:
+        # If task type is not found, return models unchanged
+        return model_descriptions
+
+    # Get the list of devices that support training for this task type
+    supported_training_devices = set(task_descriptions[task_type].get('target_devices', []))
+
+    if not supported_training_devices:
+        # If no training devices specified, return models unchanged
+        return model_descriptions
+
+    # Filter each model's target_devices to only include training-supported devices
+    for model_name, model_desc in model_descriptions.items():
+        if 'training' in model_desc and 'target_devices' in model_desc['training']:
+            original_devices = model_desc['training']['target_devices']
+            # Keep only devices that are supported for training this task type
+            filtered_devices = {
+                device: device_info
+                for device, device_info in original_devices.items()
+                if device in supported_training_devices
+            }
+            model_desc['training']['target_devices'] = filtered_devices
+
+    return model_descriptions
+
+
 def get_model_descriptions(params):
     # populate a good pretrained model for the given task
     model_descriptions = training.get_model_descriptions(task_type=params.common.task_type,
@@ -178,6 +214,10 @@ def get_model_descriptions(params):
 
     #
     model_descriptions = utils.ConfigDict(model_descriptions)
+
+    # Filter model target devices to only include devices that support training for this task type
+    model_descriptions = filter_model_target_devices_by_task_support(model_descriptions, params.common.task_type)
+
     set_default_inference_time_us(model_descriptions)
     set_default_sram(model_descriptions)
     set_default_flash(model_descriptions)
@@ -367,6 +407,12 @@ These are the devices that are supported currently. As additional devices are su
 
 ### {constants.TARGET_DEVICE_CC1352}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1352}
+
+### {constants.TARGET_DEVICE_CC1354}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354}
+
+### {constants.TARGET_DEVICE_CC35X1}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC35X1}
 
 
 ## Additional information
@@ -590,8 +636,8 @@ def get_live_capture_descriptions(params):
                 {
                     'caption': 'device',
                     'id': 'device',
-                    'infoText': 'Current support is CC2755R10 and CC1352R1. You can try other device using correct application example and baud rate.',
-                    'options': ['CC2755', 'CC1352'],
+                    'infoText': 'Current support is CC2755R10, CC1352R1, CC1352P7, CC1354P10 and CC35X1. You can try other device using correct application example and baud rate.',
+                    'options': ['CC2755', 'CC1352', 'CC1354', 'CC35X1'],
                     'widgetType': 'select'},
                 {
                     'caption': 'sensor',
@@ -702,6 +748,24 @@ def get_live_capture_example_descriptions(params):
                 'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1354': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang',
+                'deviceName': 'CC1354P10',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1354P10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1354P10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC35X1': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang',
+                'deviceName': 'CC3551E',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-WIFI-SDK',
+                'targetCfg': 'targetConfigs/CC3551E.ccxml',
                 'transport': {'baudRate': 115200}
             },
                'MSPM0G5187': {
@@ -853,7 +917,7 @@ def get_live_preview_example_descriptions(params):
             'CC2755': {
                 'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang',
                 'deviceName': 'CC2745R10',
-                'files': [{'from': 'artifacts/', 'to': 'arc_model'}],
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
                 'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
@@ -862,10 +926,28 @@ def get_live_preview_example_descriptions(params):
             'CC1352': {
                 'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1F3',
-                'files': [{'from': 'artifacts/', 'to': 'arc_model'}],
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
                 'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1354': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang',
+                'deviceName': 'CC1354P10',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
+                'from': 'examples/rtos/LP_EM_CC1354P10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1354P10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC35X1': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang',
+                'deviceName': 'CC3551E',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
+                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-WIFI-SDK',
+                'targetCfg': 'targetConfigs/CC3551E.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'MSPM0G5187': {

@@ -17,7 +17,7 @@ cd ./tinyml-modelmaker
 ./run_tests.sh
 
 # Or test specific configs
-./run_tests.sh --filter hello_world
+./run_tests.sh --filter generic_timeseries_classification
 ```
 
 ## Usage Options
@@ -34,7 +34,7 @@ cd ./tinyml-modelmaker
 # Test specific configs by name pattern
 ./run_tests.sh --filter motor
 ./run_tests.sh --filter arc_fault
-./run_tests.sh --filter hello_world
+./run_tests.sh --filter generic_timeseries_classification
 ```
 
 ### Advanced Options
@@ -131,7 +131,7 @@ The script automatically tests all 32 configs across these categories:
 
 ```bash
 # Test by example type
-./run_tests.sh --filter hello_world     # All hello_world variants
+./run_tests.sh --filter generic_timeseries_classification     # All generic_timeseries_classification variants
 ./run_tests.sh --filter motor           # All motor-related configs
 ./run_tests.sh --filter arc             # All arc fault configs
 ./run_tests.sh --filter anomaly         # All anomaly detection configs
@@ -160,7 +160,7 @@ The script automatically tests all 32 configs across these categories:
 ### 1. Quick Validation After Code Changes
 ```bash
 # Test a representative subset
-./run_tests.sh --filter hello_world --timeout 300
+./run_tests.sh --filter generic_timeseries_classification --timeout 300
 ```
 
 ### 2. Full Regression Test
@@ -215,7 +215,7 @@ chmod +x run_tests.sh test_all_configs.py
 ./run_tests.sh --timeout 900
 
 # Or test a single config manually
-python tinyml_modelmaker/run_tinyml_modelmaker.py examples/hello_world/config.yaml
+python tinyml_modelmaker/run_tinyml_modelmaker.py examples/generic_timeseries_classification/config.yaml
 ```
 
 ### Test Logs Not Found
@@ -241,10 +241,10 @@ The test script complements the existing workflow:
 
 ```bash
 # Normal training (existing method)
-./run_tinyml_modelmaker.sh examples/hello_world/config.yaml
+./run_tinyml_modelmaker.sh examples/generic_timeseries_classification/config.yaml
 
 # Automated testing (new method)
-./run_tests.sh --filter hello_world
+./run_tests.sh --filter generic_timeseries_classification
 
 # Manual config run (existing method)
 python tinyml_modelmaker/run_tinyml_modelmaker.py examples/motor_bearing_fault/config.yaml
@@ -259,11 +259,11 @@ Example CI pipeline:
 
 ```bash
 #!/bin/bash
-# Quick smoke test for CI (test hello_world variants)
+# Quick smoke test for CI (test generic_timeseries_classification variants)
 cd ./tinyml-modelmaker
 source ~/.pyenv/versions/py310_tinyml/bin/activate
 
-./run_tests.sh --filter hello_world --timeout 300 --stop-on-error
+./run_tests.sh --filter generic_timeseries_classification --timeout 300 --stop-on-error
 exit_code=$?
 
 # Upload logs if failed
@@ -308,7 +308,7 @@ exit $exit_code
 1. **Run First Test**:
    ```bash
    cd ./tinyml-modelmaker
-   ./run_tests.sh --filter hello_world
+   ./run_tests.sh --filter generic_timeseries_classification
    ```
 
 2. **Check Results**:

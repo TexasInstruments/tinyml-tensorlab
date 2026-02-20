@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -67,7 +67,7 @@ def get_base_log_summary_regex():
             {'type': 'Training Loss (FloatTrain)', 'name': 'Loss (FloatTrain)',
              'description': 'Training Loss (FloatTrain)', 'unit': 'Loss', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'FloatTrain: Epoch:\s\[\d+\]\sTotal\stime:[\s\S]*?loss\:\s+(?<loss>\d+\.\d+)',
+                        'pattern': r'FloatTrain: Epoch:.*?loss:\s+(?<loss>[0-9\.]+)',
                         'groupId': 'loss'}],
              },
             {'type': 'Validation Accuracy (FloatTrain)', 'name': 'Accuracy (FloatTrain)',
@@ -83,7 +83,7 @@ def get_base_log_summary_regex():
             {'type': 'Confusion Matrix (FloatTrain)', 'name': 'Confusion Matrix (FloatTrain)',
              'description': 'Confusion Matrix (FloatTrain)', 'unit': 'Confusion Matrix', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'FloatTrain:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\w\s\:\=\+\-\|]+)\s*INFO',
+                        'pattern': r'FloatTrain:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\s\S]+?)INFO',
                         'groupId': 'cm', 'scale_factor': 1}],
              },
             # Quantized Training
@@ -95,7 +95,7 @@ def get_base_log_summary_regex():
             {'type': 'Training Loss (QuantTrain)', 'name': 'Loss (QuantTrain)',
              'description': 'Training Loss (QuantTrain)', 'unit': 'Loss', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'QuantTrain: Epoch:\s\[\d+\]\sTotal\stime:[\s\S]*?loss\:\s+(?<loss>\d+\.\d+)',
+                        'pattern': r'QuantTrain: Epoch:.*?loss:\s+(?<loss>[0-9\.]+)',
                         'groupId': 'loss'}],
              },
             {'type': 'F1-Score (QuantTrain)', 'name': 'F1-Score (QuantTrain)',
@@ -106,7 +106,7 @@ def get_base_log_summary_regex():
             {'type': 'Confusion Matrix (QuantTrain)', 'name': 'Confusion Matrix (QuantTrain)',
              'description': 'Confusion Matrix (QuantTrain)', 'unit': 'Confusion Matrix', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'QuantTrain:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\w\s\:\=\+\-\|]+)\s*INFO',
+                        'pattern': r'QuantTrain:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\s\S]+?)INFO',
                         'groupId': 'cm', 'scale_factor': 1}],
              },
             {'type': 'Validation Accuracy (QuantTrain)', 'name': 'Accuracy (QuantTrain)',
@@ -118,7 +118,7 @@ def get_base_log_summary_regex():
             {'type': 'Epoch (QuantTrain, BestEpoch)', 'name': 'Epoch (QuantTrain, BestEpoch)', 'description': 'Epochs (QuantTrain, BestEpoch)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'QuantTrain.BestEpoch: Best Epoch:\s+(?<eid>\d+)\s+', 'groupId': 'eid'}],
+                 {'op': 'search', 'pattern': r'QuantTrain.BestEpoch: Best Epoch:\s+(?<eid>\d+)\s*', 'groupId': 'eid'}],
              },
             {'type': 'F1-Score (QuantTrain, BestEpoch)', 'name': 'F1-Score (QuantTrain, BestEpoch)',
              'description': 'F1-Score (QuantTrain, BestEpoch)', 'unit': 'F1-Score', 'value': None,
@@ -128,7 +128,7 @@ def get_base_log_summary_regex():
             {'type': 'Confusion Matrix (QuantTrain, BestEpoch)', 'name': 'Confusion Matrix (QuantTrain, BestEpoch)',
              'description': 'Confusion Matrix (QuantTrain, BestEpoch)', 'unit': 'Confusion Matrix', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'QuantTrain.BestEpoch:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\w\s\:\=\+\-\|]+)\s*INFO',
+                        'pattern': r'QuantTrain.BestEpoch:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\s\S]+?)INFO',
                         'groupId': 'cm', 'scale_factor': 1}],
              },
             {'type': 'Validation Accuracy (QuantTrain, BestEpoch)', 'name': 'Accuracy (QuantTrain, BestEpoch)',
@@ -141,7 +141,7 @@ def get_base_log_summary_regex():
              'description': 'Epochs (FloatTrain, BestEpoch)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'FloatTrain.BestEpoch\s*: Best Epoch:\s+(?<eid>\d+)\s+',
+                 {'op': 'search', 'pattern': r'FloatTrain.BestEpoch\s*: Best Epoch:\s+(?<eid>\d+)\s*',
                   'groupId': 'eid'}],
              },
             {'type': 'F1-Score (FloatTrain, BestEpoch)', 'name': 'F1-Score (FloatTrain, BestEpoch)',
@@ -153,7 +153,7 @@ def get_base_log_summary_regex():
             {'type': 'Confusion Matrix (FloatTrain, BestEpoch)', 'name': 'Confusion Matrix (FloatTrain, BestEpoch)',
              'description': 'Confusion Matrix (FloatTrain, BestEpoch)', 'unit': 'Confusion Matrix', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'FloatTrain.BestEpoch\s*:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\w\s\:\=\+\-\|]+)\s*INFO',
+                        'pattern': r'FloatTrain.BestEpoch\s*:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\s\S]+?)INFO',
                         'groupId': 'cm', 'scale_factor': 1}],
              },
             {'type': 'Validation Accuracy (FloatTrain, BestEpoch)', 'name': 'Accuracy (FloatTrain, BestEpoch)',
@@ -170,7 +170,7 @@ def get_base_log_summary_regex():
             {'type': 'Confusion Matrix (Test Data)', 'name': 'Confusion Matrix',
              'description': 'Confusion Matrix (Test Data)', 'unit': 'Confusion Matrix', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'test_data\s*:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\w\s\:\=\+\-\|]+)(\r\n|\r|\n)',
+                        'pattern': r'test_data\s*:\s*Confusion Matrix:(\r\n|\r|\n)(?<cm>[\s\S]+?)INFO',
                         'groupId': 'cm', 'scale_factor': 1}],
              },
             {'type': 'Matrix Label', 'name': 'Matrix Label', 'description': 'Matrix Label',
@@ -200,6 +200,18 @@ def get_regression_log_summary_regex():
     """
     return {
         'js': [
+            # Floating Point Training Metrics
+            {'type': 'Epoch (FloatTrain)', 'name': 'Epoch (FloatTrain)', 'description': 'Epochs (FloatTrain)',
+             'unit': 'Epoch', 'value': None,
+             'regex': [
+                 {'op': 'search', 'pattern': r'FloatTrain: Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
+             },
+            {'type': 'Training Loss (FloatTrain)', 'name': 'Loss (FloatTrain)',
+             'description': 'Training Loss (FloatTrain)', 'unit': 'Loss', 'value': None,
+             'regex': [{'op': 'search',
+                        'pattern': r'FloatTrain: Epoch:.*?loss:\s+(?<loss>[0-9\.]+)',
+                        'groupId': 'loss'}],
+             },
             # Floating Point Validation Metrics (per epoch)
             {'type': 'Validation MSE (FloatTrain)', 'name': 'MSE (FloatTrain)',
              'description': 'Validation MSE (FloatTrain)', 'unit': 'MSE', 'value': None,
@@ -210,6 +222,18 @@ def get_regression_log_summary_regex():
              'description': 'Validation R2-Score (FloatTrain)', 'unit': 'R2-Score', 'value': None,
              'regex': [{'op': 'search', 'pattern': r'FloatTrain: Test:\s+R2-Score\s+(?<r2>[-+e\d+\.\d+]+)',
                         'groupId': 'r2', 'scale_factor': 1}],
+             },
+            # Quantized Training
+            {'type': 'Epoch (QuantTrain)', 'name': 'Epoch (QuantTrain)', 'description': 'Epochs (QuantTrain)',
+             'unit': 'Epoch', 'value': None,
+             'regex': [
+                 {'op': 'search', 'pattern': r'QuantTrain: Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
+             },
+            {'type': 'Training Loss (QuantTrain)', 'name': 'Loss (QuantTrain)',
+             'description': 'Training Loss (QuantTrain)', 'unit': 'Loss', 'value': None,
+             'regex': [{'op': 'search',
+                        'pattern': r'QuantTrain: Epoch:.*?loss:\s+(?<loss>[0-9\.]+)',
+                        'groupId': 'loss'}],
              },
             # Quantized Validation Metrics (per epoch)
             {'type': 'Validation MSE (QuantTrain)', 'name': 'MSE (QuantTrain)',
@@ -262,6 +286,17 @@ def get_regression_log_summary_regex():
                  {'op': 'search', 'pattern': r'QuantTrain\.BestEpoch: R2-Score\s+(?<r2>[-+e\d+\.\d+]+)',
                   'groupId': 'r2', 'scale_factor': 1}],
              },
+             # Test data
+            {'type': 'Test RMSE (Test Data)', 'name': 'RMSE (Test Data)',
+             'description': 'Test RMSE (Test Data)', 'unit': 'RMSE', 'value': None,
+             'regex': [{'op': 'search', 'pattern': r'test_data\s*:\s*Test Data Evaluation RMSE:\s+(?<rmse>[-+e\d+\.\d+]+)',
+                        'groupId': 'rmse', 'scale_factor': 1}],
+             },
+            {'type': 'R2-Score (Test Data)', 'name': 'R2-Score (Test Data)',
+             'description': 'R2-Score (Test Data)', 'unit': 'R2-Score', 'value': None,
+             'regex': [{'op': 'search', 'pattern': r'test_data\s*:\s*Test Data Evaluation R2-Score:\s+(?<r2>[-+e\d+\.\d+]+)',
+                        'groupId': 'r2', 'scale_factor': 1}],
+             },
         ]
     }
 
@@ -269,16 +304,47 @@ def get_regression_log_summary_regex():
 def get_forecasting_log_summary_regex():
     """
     Returns the log summary regex patterns for forecasting tasks.
-    Extracts SMAPE metrics from training logs, including overall and per-variable metrics.
+    Includes common patterns (epoch tracking, training loss) from the base regex
+    plus forecasting-specific metrics (SMAPE, R2).
     Log format example:
+    - INFO: root.utils.MetricLogger.FloatTrain: Epoch: [0] Total time: 0:00:03
+    - INFO: root.utils.MetricLogger.FloatTrain: Test:   [  0/314]  ... loss: 1.8408 (1.8408)  smape: 9.6656 (9.6656)
     - INFO: root.train_utils.evaluate.FloatTrain: Current SMAPE across all target variables and across all predicted timesteps: 8.54%
     - INFO: root.main.FloatTrain.BestEpoch: Best epoch:10
     - INFO: root.main.FloatTrain.BestEpoch: Overall SMAPE across all variables: 0.36%
     - INFO: root.main.FloatTrain.BestEpoch:       SMAPE of indoorTemperature across all predicted timesteps: 0.36%
     - INFO: root.main.FloatTrain.BestEpoch:       R² of indoorTemperature across all predicted timesteps: 0.9967
+    - INFO: root.main.test_data :   SMAPE of indoorTemperature across all predicted timesteps: 0.95%
+    - INFO: root.main.test_data :   R² of indoorTemperature across all predicted timesteps: 0.9833
     """
     return {
         'js': [
+            # ---- Common patterns (epoch tracking and training loss) ----
+            # Floating Point Epoch Tracking
+            {'type': 'Epoch (FloatTrain)', 'name': 'Epoch (FloatTrain)', 'description': 'Epochs (FloatTrain)',
+             'unit': 'Epoch', 'value': None,
+             'regex': [
+                 {'op': 'search', 'pattern': r'FloatTrain: Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
+             },
+            {'type': 'Training Loss (FloatTrain)', 'name': 'Loss (FloatTrain)',
+             'description': 'Training Loss (FloatTrain)', 'unit': 'Loss', 'value': None,
+             'regex': [{'op': 'search',
+                        'pattern': r'FloatTrain: Epoch:\s\[\d+\]\sTotal\stime:[\s\S]*?loss\:\s+(?<loss>\d+\.\d+)',
+                        'groupId': 'loss'}],
+             },
+            # Quantized Epoch Tracking
+            {'type': 'Epoch (QuantTrain)', 'name': 'Epoch (QuantTrain)', 'description': 'Epochs (QuantTrain)',
+             'unit': 'Epoch', 'value': None,
+             'regex': [
+                 {'op': 'search', 'pattern': r'QuantTrain: Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
+             },
+            {'type': 'Training Loss (QuantTrain)', 'name': 'Loss (QuantTrain)',
+             'description': 'Training Loss (QuantTrain)', 'unit': 'Loss', 'value': None,
+             'regex': [{'op': 'search',
+                        'pattern': r'QuantTrain: Epoch:\s\[\d+\]\sTotal\stime:[\s\S]*?loss\:\s+(?<loss>\d+\.\d+)',
+                        'groupId': 'loss'}],
+             },
+            # ---- Forecasting-specific patterns ----
             # Floating Point Validation Metrics (per epoch)
             {'type': 'Overall SMAPE (FloatTrain)', 'name': 'Overall SMAPE (FloatTrain)',
              'description': 'Overall SMAPE across all variables and timesteps (FloatTrain)', 'unit': 'SMAPE%', 'value': None,
@@ -341,6 +407,19 @@ def get_forecasting_log_summary_regex():
              'description': 'R² for each variable across all timesteps (QuantTrain, BestEpoch)', 'unit': 'R2-Score', 'value': None,
              'regex': [
                  {'op': 'search', 'pattern': r'QuantTrain\.BestEpoch:.*?R² of [\w\s]+ across all predicted timesteps:\s+(?<r2>[-+e\d+\.\d+]+)',
+                  'groupId': 'r2', 'scale_factor': 1}],
+             },
+            # ---- Test Data Evaluation Metrics ----
+            {'type': 'Per-Variable SMAPE (Test Data)', 'name': 'Per-Variable SMAPE (Test Data)',
+             'description': 'SMAPE for each variable across all timesteps (Test Data)', 'unit': 'SMAPE%', 'value': None,
+             'regex': [
+                 {'op': 'search', 'pattern': r'test_data\s*:.*?SMAPE of [\w\s]+ across all predicted timesteps:\s+(?<smape>[-+e\d+\.\d+]+)%',
+                  'groupId': 'smape', 'scale_factor': 1}],
+             },
+            {'type': 'Per-Variable R2 (Test Data)', 'name': 'Per-Variable R2 (Test Data)',
+             'description': 'R² for each variable across all timesteps (Test Data)', 'unit': 'R2-Score', 'value': None,
+             'regex': [
+                 {'op': 'search', 'pattern': r'test_data\s*:.*?R² of [\w\s]+ across all predicted timesteps:\s+(?<r2>[-+e\d+\.\d+]+)',
                   'groupId': 'r2', 'scale_factor': 1}],
              },
         ]

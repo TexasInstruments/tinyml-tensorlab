@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -83,6 +83,8 @@ TARGET_DEVICE_MSPM33C32 = 'MSPM33C32'
 TARGET_DEVICE_MSPM33C34 = 'MSPM33C34'
 TARGET_DEVICE_CC2755 = 'CC2755'
 TARGET_DEVICE_CC1352 = 'CC1352'
+TARGET_DEVICE_CC1354 = 'CC1354'
+TARGET_DEVICE_CC35X1 = 'CC35X1'
 
 TARGET_DEVICES = [
     TARGET_DEVICE_F280013,
@@ -99,7 +101,9 @@ TARGET_DEVICES = [
     TARGET_DEVICE_MSPM33C32,
     TARGET_DEVICE_MSPM33C34,
     TARGET_DEVICE_CC2755,
-    TARGET_DEVICE_CC1352
+    TARGET_DEVICE_CC1352,
+    TARGET_DEVICE_CC35X1,
+    TARGET_DEVICE_CC1354
 ]
 
 # will not be listed in the GUI, but can be used in command line
