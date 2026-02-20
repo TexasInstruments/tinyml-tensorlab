@@ -28,8 +28,8 @@ def read_csv_numeric_matrix(file_path: Path) -> np.ndarray:
 def process_arc_csv(csv_file, FRAME_SIZE, WINDOW_FRAMES, V_MIN, V_MAX, FRAME_ARC_THRESHOLD):
     df = pd.read_csv(csv_file)
 
-    voltage = df["adc_2"].values.astype(float) - (2**11)
-    current = (df["adc_1"].values.astype(int) - 2048) << 4
+    voltage = df["y"].values.astype(float) - (2**11)
+    current = (df["x"].values.astype(int) - 2048) << 4
     current = np.clip(current, -32768, 32767).astype(np.int16)
 
     num_frames = len(voltage) // FRAME_SIZE
@@ -67,7 +67,7 @@ def process_arc_csv(csv_file, FRAME_SIZE, WINDOW_FRAMES, V_MIN, V_MAX, FRAME_ARC
 def process_normal_csv(csv_file, FRAME_SIZE, WINDOW_FRAMES):
     df = pd.read_csv(csv_file)
 
-    current = (df["adc_1"].values.astype(int) - 2048) << 4
+    current = (df["x"].values.astype(int) - 2048) << 4
     current = np.clip(current, -32768, 32767).astype(np.int16)
 
     num_frames = len(current) // FRAME_SIZE

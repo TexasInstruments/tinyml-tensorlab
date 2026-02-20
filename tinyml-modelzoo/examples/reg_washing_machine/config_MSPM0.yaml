@@ -17,7 +17,7 @@ training:
   batch_size: 128
   training_epochs: 100  # use 500 epochs for a better R2 score, RMSE
   lambda_reg: 0.01
-  num_gpus: 1
+  num_gpus: 0
   quantization: 2
   partial_quantization : True
 testing: {}

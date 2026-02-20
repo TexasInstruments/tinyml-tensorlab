@@ -110,7 +110,7 @@ These devices use **C2000Ware SDK**.
 | **F28P65x** | [LAUNCHXL-F28P65X](https://www.ti.com/tool/LAUNCHXL-F28P65X) | [TMS320F28P650DK](https://www.ti.com/product/TMS320F28P650DK) | [C2000Ware](https://www.ti.com/tool/C2000WARE) |
 | **F2837x** | [LAUNCHXL-F28379D](https://www.ti.com/tool/LAUNCHXL-F28379D) | [TMS320F28377D](https://www.ti.com/product/TMS320F28377D) | [C2000Ware](https://www.ti.com/tool/C2000WARE) |
 
-**SDK Version**: 6.0.1 (Release: 06_00_01)
+**SDK Version**: 6.01.00.00
 
 ### C2000 Family (F29x)
 
@@ -122,7 +122,7 @@ These devices use **F29H85x SDK**.
 | **F29P58x** | - | - | [F29H85X-SDK](https://www.ti.com/tool/download/F29H85X-SDK/) |
 | **F29P32x** | - | - | [F29H85X-SDK](https://www.ti.com/tool/download/F29H85X-SDK/) |
 
-**SDK Version**: 1.00 (Release: 01_00_00)
+**SDK Version**: 1.04.00.00
 
 ### MSPM33 Family
 
@@ -132,7 +132,7 @@ These devices use **MSPM33 SDK**.
 |--------|---------------|--------------|--------------|
 | **MSPM33C321Ax** | [LP-MSPM33C321A](https://www.ti.com/tool/LP-MSPM33C321A) | [MSPM33C321A](https://www.ti.com/product/MSPM33C321A) | [MSPM33-SDK](https://www.ti.com/tool/download/MSPM33-SDK) |
 
-**SDK Version**: 1.02.00.00 (Release: 1_02_00_00)
+**SDK Version**: 1.03.00.00
 
 ### Sitara MCU Family (AM26x)
 
@@ -144,7 +144,7 @@ These devices use **MCU-PLUS-SDK**.
 | **AM263P** | [LP-AM263P](https://www.ti.com/tool/LP-AM263P) | [AM263P4](https://www.ti.com/product/AM263P4) | [MCU-PLUS-SDK-AM263PX](https://www.ti.com/tool/MCU-PLUS-SDK-AM263PX) |
 | **AM261** | [LP-AM261](https://www.ti.com/tool/LP-AM261) | - | [MCU-PLUS-SDK-AM261X](https://www.ti.com/tool/MCU-PLUS-SDK-AM261X) |
 
-**SDK Version**: 6.0.1 (Release: 06_00_01)
+**SDK Version**: 11.02.00.00
 
 ---
 

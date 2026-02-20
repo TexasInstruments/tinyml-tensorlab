@@ -10,6 +10,8 @@ Welcome to the **Tiny ML ModelZoo** - Texas Instruments' central repository for 
 - [Quick Start](#quick-start)
 - [Supported Task Categories](#supported-task-categories)
 - [Example Applications](#example-applications)
+  - [Generic Timeseries Applications](#generic-timeseries-applications)
+  - [Application-Specific Examples](#application-specific-examples)
 - [Available Models](#available-models)
 - [Adding New Models](#adding-new-models)
 - [Additional Resources](#additional-resources)
@@ -63,8 +65,8 @@ tinyml-modelzoo/
 # Navigate to modelzoo
 cd tinyml-modelzoo
 
-# Run an example (e.g., hello_world)
-./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+# Run an example (e.g., generic_timeseries_classification)
+./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 ```
 
 **Windows:**
@@ -73,7 +75,7 @@ cd tinyml-modelzoo
 cd tinyml-modelzoo
 
 # Run an example
-run_tinyml_modelzoo.bat examples\hello_world\config.yaml
+run_tinyml_modelzoo.bat examples\generic_timeseries_classification\config.yaml
 ```
 
 ### What Happens When You Run an Example?
@@ -137,18 +139,77 @@ There are two ways to proceed using this toolchain.
 2. However, if you do not find any applications that are of your direct interest, you may as well use the toolchain to do either of the [Supported Task Categories](#supported-task-categories) as mentioned above referring to the generic example for each of them:
 
 
-| Generic Example Type         | Example                              | Description                                                                     |
-|------------------------------|--------------------------------------|---------------------------------------------------------------------------------|
-| Timeseries Classification    | [hello_world](examples/hello_world/) | Classify sine/square/sawtooth waveforms. **Start here** to learn the toolchain. |
-| Timeseries Regression        | Coming Soon                          |                                                                                 |
-| Timeseries Forecasting       | Coming Soon                          |                                                                                 |
-| Timeseries Anomaly Detection | Coming Soon                          |                                                                                 |
+| Generic Example Type         | Example                                                                              | Description                                                                     |
+|------------------------------|--------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| Timeseries Classification    | [generic_timeseries_classification](examples/generic_timeseries_classification/)     | Classify sine/square/sawtooth waveforms. **Start here** to learn the toolchain. |
+| Timeseries Regression        | [generic_timeseries_regression](examples/generic_timeseries_regression/)             | Generic regression example for continuous value prediction.                     |
+| Timeseries Forecasting       | [generic_timeseries_forecasting](examples/generic_timeseries_forecasting/)           | Generic forecasting example for time series prediction.                         |
+| Timeseries Anomaly Detection | [generic_timeseries_anomalydetection](examples/generic_timeseries_anomalydetection/) | Generic anomaly detection example using autoencoders.                           |
 
 ---
 
 ## Example Applications
 
 The following ready-to-use examples demonstrate various AI applications for MCUs, organized by task type.
+
+### Generic Timeseries Applications
+
+These applications use generic task types that can be adapted to your custom datasets. All generic timeseries applications support **all 22 target devices.**
+> **All 22 generic timeseries applications support all 22 devices:** F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, CC2755, CC1352, CC1354, CC35X1, AM263, AM263P, AM261, AM13E2
+
+| Example Name                                                                 | Task Type | Description |
+|------------------------------------------------------------------------------|-----------|-------------|
+| **generic_timeseries_classification**                                        | generic_timeseries_classification | Classify sine/square/sawtooth waveforms - **Start here** to learn the toolchain |
+| **generic_timeseries_regression**                                            | generic_timeseries_regression | Generic regression example for continuous value prediction |
+| **generic_timeseries_forecasting**                                           | generic_timeseries_forecasting | Generic forecasting example for time series prediction |
+| **generic_timeseries_anomalydetection**                                      | generic_timeseries_anomalydetection | Generic anomaly detection example using autoencoders |
+| The below examples demonstrate the above AI task types with real world data: |                                     |                                                      |
+| **branched_model_parameters**                                                | generic_timeseries_classification | Human Activity Recognition from accelerometer/gyroscope data |
+| **electrical_fault**                                                         | generic_timeseries_classification | Classify transmission line faults using voltage and current |
+| **gas_sensor**                                                               | generic_timeseries_classification | Identify gas type and concentration from sensor array data |
+| **grid_fault_detection**                                                     | generic_timeseries_classification | Detect electrical grid faults from sensor data |
+| **grid_stability**                                                           | generic_timeseries_classification | Predict power grid stability from node parameters |
+| **nilm_appliance_usage_classification**                                      | generic_timeseries_classification | Non-Intrusive Load Monitoring - identify active appliances |
+| **PLAID_nilm_classification**                                                | generic_timeseries_classification | Appliance identification using the PLAID dataset |
+| **induction_motor_speed_prediction**                                         | generic_timeseries_regression | Predict induction motor speed from electrical signals |
+| **mosfet_temp_prediction**                                                   | generic_timeseries_regression | Predict MOSFET temperature from electrical parameters |
+| **reg_washing_machine**                                                      | generic_timeseries_regression | Predict washing machine load weight |
+| **torque_measurement_regression**                                            | generic_timeseries_regression | Predict PMSM motor torque from current measurements |
+| **forecasting_pmsm_rotor_temp**                                              | generic_timeseries_forecasting | Forecast PMSM rotor winding temperature |
+| **hvac_indoor_temp_forecast**                                                | generic_timeseries_forecasting | Predict indoor temperature for HVAC control |
+| **dc_arc_fault** (anomaly detection - DSI)                                   | generic_timeseries_anomalydetection | Detect anomalous DC arc patterns using autoencoder (DSI dataset) |
+| **dc_arc_fault** (anomaly detection - DSK)                                   | generic_timeseries_anomalydetection | Detect anomalous DC arc patterns using autoencoder (DSK dataset) |
+| **ecg_classification** (anomaly detection)                                   | generic_timeseries_anomalydetection | Detect anomalous heartbeat patterns from ECG signals |
+| **fan_blade_fault_classification** (anomaly detection)                       | generic_timeseries_anomalydetection | Detect anomalous fan blade behavior from accelerometer data |
+| **motor_bearing_fault** (anomaly detection)                                  | generic_timeseries_anomalydetection | Detect anomalous bearing behavior from vibration data |
+
+
+### Application-Specific Examples
+
+These applications are designed for specific use cases with optimized models and datasets.
+
+| Example Name | Task Type | Supported Devices | Description |
+|-------------|-----------|-------------------|-------------|
+| **ac_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect AC arc faults in electrical systems |
+| **dc_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect DC arc faults from current waveforms for electrical safety |
+| **ecg_classification** | ecg_classification | MSPM0G3507, MSPM0G5187, MSPM0G3519 | Classify normal vs anomalous heartbeats from ECG signals |
+| **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
+| **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect faults in BLDC fans from accelerometer data |
+| **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
+| **pir_detection** | pir_detection | CC2755, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
+| **MNIST_image_classification** | image_classification | MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | Handwritten digit recognition (MNIST dataset) |
+
+### Summary by Task Type:
+- **Generic Timeseries Tasks** (22 examples): Support all target devices and can be adapted to your custom datasets
+  - Classification: 8 examples (1 base + 7 real-world applications)
+  - Regression: 5 examples (1 base + 4 real-world applications)
+  - Forecasting: 3 examples (1 base + 2 real-world applications)
+  - Anomaly Detection: 6 examples (1 base + 5 application variants)
+- **Application-Specific Tasks** (8 examples): arc_fault (2), motor_fault (3), pir_detection (1), ecg_classification (1), image_classification (1)
+
+---
+
+### Detailed Examples by Task Type
 
 ### Classification Examples
 
@@ -379,6 +440,8 @@ Key steps:
 |--------|-----|-------------|-------|
 | CC2755 | No | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
 | CC1352 | No | Arm Cortex-M4 wireless MCU | Sub-1GHz and 2.4GHz |
+| CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz and 2.4GHz |
+| CC35X1 | No | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
 
 ---
 

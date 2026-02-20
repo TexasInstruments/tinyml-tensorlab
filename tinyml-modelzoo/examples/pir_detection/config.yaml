@@ -12,8 +12,8 @@ training:
   model_name: PIRDetection_model_1_t
   model_config: ''
   batch_size: 64
-  training_epochs: 10
+  training_epochs: 50
   num_gpus: 0
-  learning_rate: 0.04
+  learning_rate: 0.001
 testing: {}
 compilation: {}

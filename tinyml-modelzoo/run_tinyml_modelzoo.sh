@@ -4,7 +4,7 @@
 # Delegates training to tinyml-modelmaker
 #
 # Usage:
-#   ./run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+#   ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 #   ./run_tinyml_modelzoo.sh /absolute/path/to/config.yaml
 #
 
@@ -43,7 +43,7 @@ if [ $# -lt 1 ]; then
     echo "Available example configs:"
     if [ -d "$SCRIPT_DIR/examples" ]; then
         find "$SCRIPT_DIR/examples" -name "*.yaml" -type f | sort | while read -r cfg; do
-            echo "  $(realpath --relative-to="$SCRIPT_DIR" "$cfg")"
+            echo "  $(realpath --relative-to=\"$SCRIPT_DIR\" \"$cfg\")"
         done
     fi
     exit 1

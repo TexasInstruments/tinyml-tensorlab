@@ -28,7 +28,7 @@ data_processing_feature_extraction:
 training:
     # enable/disable training
     enable: True #False
-    model_name: CLS_55k_NPU
+    model_name: ECG_55k_NPU
 #    model_spec: ''
     batch_size: 12
     learning_rate: 0.001
