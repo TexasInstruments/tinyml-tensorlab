@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -1065,13 +1065,13 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
-
+    print_freq = print_freq if print_freq else len(data_loader)
     header = f"Epoch: [{epoch}]"
     # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
-    for _, data, target in data_loader:
+    for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
+    # for _, data, target in data_loader:
         start_time = timeit.default_timer()
         data = data.to(device).float()
         target = target.to(device).float()
@@ -1242,13 +1242,11 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     target_array = torch.Tensor([]).to(device, non_blocking=True)
     predictions_array = torch.Tensor([]).to(device, non_blocking=True)
     with torch.no_grad():
-        # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         val_loss = 0
         target_list = []
         predictions_list = []
+        # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         for _, data, target in data_loader:
-
-
             data = data.to(device, non_blocking=True).float()
             target = target.to(device, non_blocking=True).float()
 

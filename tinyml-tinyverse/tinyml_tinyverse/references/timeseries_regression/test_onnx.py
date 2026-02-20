@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -136,8 +136,8 @@ def main(gpu, args):
     r2_score.update(predicted.to('cpu'), ground_truth.to('cpu'))
 
     logger = getLogger("root.main.test_data")
-    logger.info(f"Test Data Evaluation RMSE: {torch.sqrt(metric.compute()):.2f}")
-    logger.info(f"Test Data Evaluation R2-Score: {r2_score.compute():.2f}")
+    logger.info(f"{logger.name}: Test Data Evaluation RMSE: {torch.sqrt(metric.compute()):.2f}")
+    logger.info(f"{logger.name}: Test Data Evaluation R2-Score: {r2_score.compute():.2f}")
     return
 
 
