@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -205,7 +205,6 @@ def main(gpu, args):
             is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        logger.info(f"Epoch : {epoch}")
         avg_mse, avg_r2_score = utils.evaluate_regression(model, criterion, data_loader_test, device=device,
                                                            transform=None, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
         if model_ema:
