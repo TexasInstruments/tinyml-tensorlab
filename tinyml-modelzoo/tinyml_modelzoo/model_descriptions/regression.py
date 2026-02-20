@@ -136,6 +136,41 @@ _model_descriptions = {
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
+    'REGR_2k': deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            model_details='Regression Model with 2k params. 3 Conv+BatchNorm+Relu layers + 2 Linear Layer.',
+        ),
+        'training': dict(
+            model_training_id='REG_TS_GEN_BASE_2K',
+            model_name='REGR_2k',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F29H85]),
+                constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F29P58]),
+                constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_AM261]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_2k'][constants.TARGET_DEVICE_CC35X1]),
+            },
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
+        ),
+    }),
     'REGR_3k': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='Regression Model with 3k params. 4 layers of MLPs (Fully Connected Layers)',
@@ -428,6 +463,7 @@ enabled_models_list = [
     # Existing models
     'REGR_10k',
     'REGR_1k',
+    'REGR_2k',
     'REGR_3k',
     'REGR_13k',
     'REGR_4k',
