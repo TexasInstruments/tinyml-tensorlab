@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -92,6 +92,10 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['REGR_10k'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['REGR_10k'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['REGR_10k'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['REGR_10k'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['REGR_10k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['REGR_10k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['REGR_10k'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -123,6 +127,10 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_1k'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_1k'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_1k'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_1k'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_1k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_1k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['REGR_1k'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -154,6 +162,10 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['REGR_3k'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['REGR_3k'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['REGR_3k'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['REGR_3k'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['REGR_3k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['REGR_3k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['REGR_3k'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -185,6 +197,10 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['REGR_13k'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['REGR_13k'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['REGR_13k'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['REGR_13k'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['REGR_13k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['REGR_13k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['REGR_13k'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -216,6 +232,10 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['REGR_4k'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['REGR_4k'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['REGR_4k'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['REGR_4k'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['REGR_4k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['REGR_4k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['REGR_4k'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -225,7 +245,7 @@ _model_descriptions = {
     'REGR_500_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Regression Model with ~500 params.\n2 Conv+BatchNorm+Relu layers + Linear Layer.\nUltra-compact model. Fully NPU compliant with m4 channels and FC input>=16.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='REG_TS_GEN_BASE_500_NPU',
@@ -246,7 +266,13 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_AM261]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['REGR_500_NPU'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -255,7 +281,7 @@ _model_descriptions = {
     'REGR_2k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Regression Model with ~2K params.\n3 Conv+BatchNorm+Relu layers + 2 Linear Layers.\nFills gap between 1K and 3K. Fully NPU compliant with m4 channels.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='REG_TS_GEN_BASE_2K_NPU',
@@ -276,7 +302,13 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_AM261]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['REGR_2k_NPU'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -285,7 +317,7 @@ _model_descriptions = {
     'REGR_6k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Regression Model with ~6K params.\nDepthwise separable convolutions + Linear Layers.\nFills gap between 4K and 10K. Fully NPU compliant with DWCONV+PWCONV pattern.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='REG_TS_GEN_BASE_6K_NPU',
@@ -306,7 +338,13 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_AM261]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['REGR_6k_NPU'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -315,7 +353,7 @@ _model_descriptions = {
     'REGR_8k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Regression Model with ~8K params.\n4 Conv+BatchNorm+Relu layers + 2 Linear Layers.\nFills gap between 6K and 10K. Fully NPU compliant with m4 channels.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='REG_TS_GEN_BASE_8K_NPU',
@@ -336,7 +374,13 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_AM261]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['REGR_8k_NPU'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]
@@ -345,7 +389,7 @@ _model_descriptions = {
     'REGR_20k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Regression Model with ~20K params.\n4 Conv+BatchNorm+Relu layers + MaxPool + 2 Linear Layers.\nHigh capacity model. Fully NPU compliant with m4 channels and MaxPool<=4.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='REG_TS_GEN_BASE_20K_NPU',
@@ -366,7 +410,13 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_AM261]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['REGR_20k_NPU'][constants.TARGET_DEVICE_CC35X1]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesregression.py", name="train_group", label="Training Parameters", default=[])]

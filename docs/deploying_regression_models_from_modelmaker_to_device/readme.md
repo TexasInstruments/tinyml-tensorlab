@@ -15,7 +15,7 @@
 
 This guide walks you through the process of taking a timeseries regression model trained in **TinyML Modelzoo** and running it on a Texas Instruments (TI) microcontroller. Timeseries regression predicts target variable based on independent variables, and previous context.
 
-To learn more about running timeseries regression examples on ModelMaker, refer to the [Generic TimeSeries Regression Example](../../examples/generic_timseries_regression/readme.md), which demonstrates how to run regression examples using a synthetically generated dataset.
+To learn more about running timeseries regression examples on ModelMaker, refer to the [Generic TimeSeries Regression Example](../../examples/generic_timeseries_regression/readme.md), which demonstrates how to run regression examples using a synthetically generated dataset.
 
 ---
 
@@ -40,7 +40,7 @@ Ensure you have a TI LaunchPad for your target device. The following devices are
 
 1. **TinyML ModelMaker**: Latest version from [TinyML Tensorlab GitHub Repository](https://github.com/TexasInstruments/tinyml-tensorlab) Current version: 1.3.0.
 
-After running a regression example, ModelMaker generates the following files required for deploying the model on MCUs (Refer to the [Generic Timeseries Regression Example](../../examples/generic_timseries_regression/readme.md)).
+After running a regression example, ModelMaker generates the following files required for deploying the model on MCUs (Refer to the [Generic Timeseries Regression Example](../../examples/generic_timeseries_regression/readme.md)).
 
 | File | Description |
 |------|-------------|

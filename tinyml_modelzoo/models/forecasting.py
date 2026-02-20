@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -323,9 +323,9 @@ class FC_CNN_TS_GEN_BASE_20K_NPU(GenericModelWithSpec):
         layers = py_utils.DictPlus()
         layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
-        layers += {'2': dict(type='MaxPoolLayer', kernel_size=(2,1))}
+        layers += {'2': dict(type='MaxPoolLayer', kernel_size=(3,1))}
         layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
-        layers += {'4': dict(type='MaxPoolLayer', kernel_size=(2,1))}
+        layers += {'4': dict(type='MaxPoolLayer', kernel_size=(3,1))}
         layers += {'5': dict(type='ConvBNReLULayer', in_channels=32, out_channels=64, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'6': dict(type='ConvBNReLULayer', in_channels=64, out_channels=64, kernel_size=(self.kernel,1), stride=(1,1), padding=(1,0))}
         layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}

@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -91,6 +91,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_AM13E2]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_CC2755]),
                 constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_CC35X1]),
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_ResAdd_3k'][constants.TARGET_DEVICE_AM261]),
@@ -119,11 +121,14 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_F29P32]),
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1, ) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_MSPM33C32]),
                 constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_AM13E2]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_CC2755]),
                 constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_CC35X1]),
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_ResCat_3k'][constants.TARGET_DEVICE_AM261]),
@@ -136,7 +141,7 @@ _model_descriptions = {
     'CLS_6k_NPU': deep_update_dict(deepcopy(template_model_description), {
 		'common': dict(
             model_details='NPU-Compliant Classification Model with 6k params.\nDepthwise separable convolutions + Linear Layer.\nLean model. Fully NPU compliant with m4 channels, kH<=7, and DWCONV+PWCONV pattern.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_6K_NPU',
@@ -159,6 +164,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_AM13E2]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_CC2755]),
                 constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_CC35X1]),
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_6k_NPU'][constants.TARGET_DEVICE_AM261]),
@@ -170,7 +177,7 @@ _model_descriptions = {
     'CLS_1k_NPU': deep_update_dict(deepcopy(template_model_description), {
 		'common': dict(
             model_details='NPU-Compliant Classification Model with 1k params.\n4 Conv+BatchNorm+Relu layers + Linear Layer.\nVery lean model. Fully NPU compliant with m4 channels and kH<=7.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_1K_NPU',
@@ -193,6 +200,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_AM13E2]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_CC2755]),
                 constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_CC35X1]),
                 constants.TARGET_DEVICE_AM263: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_AM263]),
                 constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_AM263P]),
                 constants.TARGET_DEVICE_AM261: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_1k_NPU'][constants.TARGET_DEVICE_AM261]),
@@ -205,17 +214,34 @@ _model_descriptions = {
     'CLS_100_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Classification Model with ~100 params.\n2 Conv+BatchNorm+Relu layers + Adapt Avg Pool + Linear Layer.\nOptimized for TI NPU acceleration with m4 channels and compliant FC input.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_100_NPU',
             model_name='CLS_100_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_100_NPU'][constants.TARGET_DEVICE_AM261]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
@@ -224,17 +250,34 @@ _model_descriptions = {
     'CLS_500_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Classification Model with ~500 params.\n3 Conv+BatchNorm+Relu layers + Adapt Avg Pool + Linear Layer.\nFills gap between 100 and 1k. Optimized for TI NPU acceleration.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_500_NPU',
             model_name='CLS_500_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_500_NPU'][constants.TARGET_DEVICE_AM261]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
@@ -243,17 +286,34 @@ _model_descriptions = {
     'CLS_2k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Classification Model with ~2k params.\n4 Conv+BatchNorm+Relu layers + Adapt Avg Pool + Linear Layer.\nFills gap between 1k and 4k. Optimized for TI NPU acceleration.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_2K_NPU',
             model_name='CLS_2k_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_2k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
@@ -262,17 +322,34 @@ _model_descriptions = {
     'CLS_4k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Classification Model with ~4k params.\n3 Conv+BatchNorm+Relu layers + Linear Layer.\nKernel sizes within NPU limits (kH<=7). Optimized for TI NPU acceleration.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_4K_NPU',
             model_name='CLS_4k_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=4) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_4k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
@@ -281,17 +358,34 @@ _model_descriptions = {
     'CLS_8k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Classification Model with ~8k params.\nDepthwise separable convolutions for efficiency.\nFills gap between 6k and 13k. Optimized for TI NPU acceleration.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_8K_NPU',
             model_name='CLS_8k_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=5) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_8k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
@@ -300,17 +394,34 @@ _model_descriptions = {
     'CLS_13k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Classification Model with ~13k params.\n6 Conv+BatchNorm+Relu layers + Linear Layer.\nKernel sizes within NPU limits (kH<=7). Optimized for TI NPU acceleration.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_13K_NPU',
             model_name='CLS_13k_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=6) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_13k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
@@ -319,17 +430,34 @@ _model_descriptions = {
     'CLS_20k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='NPU-Optimized Classification Model with ~20k params.\n8 Conv+BatchNorm+Relu layers + Linear Layer.\nFills gap between 13k and 55k. Optimized for TI NPU acceleration.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_20K_NPU',
             model_name='CLS_20k_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=7) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F29P58]),
                 constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_20k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
             properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
@@ -337,14 +465,18 @@ _model_descriptions = {
     }),
     'CLS_55k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
-            task_type=constants.TASK_TYPE_ECG_CLASSIFICATION,
             model_details='NPU-Optimized Classification Model with ~55k params.\n12 Conv+BatchNorm+Relu layers + MaxPool + Linear Layer.\nLarge kernels decomposed into smaller compliant kernels. Optimized for TI NPU acceleration.',
-            help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
         ),
         'training': dict(
             model_training_id='CNN_TS_GEN_BASE_55K_NPU',
             model_name='CLS_55k_NPU',
             target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=8) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F2837]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_F29H85]),
@@ -353,8 +485,40 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['CLS_55k_NPU'][constants.TARGET_DEVICE_AM261]),
             },
-            properties=[dict(type="group", dynamic=True, script="ecgclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]), dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])] + template_gui_model_properties
+        ),
+    }),
+    'ECG_55k_NPU': deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            task_type=constants.TASK_TYPE_ECG_CLASSIFICATION,
+            generic_model=False,
+            model_details='NPU-Optimized Classification Model with ~55k params.\n12 Conv+BatchNorm+Relu layers + MaxPool + Linear Layer.\nLarge kernels decomposed into smaller compliant kernels. Optimized for TI NPU acceleration.',
+            # help_url="file://docs/NPU_CONFIGURATION_GUIDELINES.md"
+        ),
+        'training': dict(
+            model_training_id='CNN_TS_GEN_BASE_55K_NPU',
+            model_name='ECG_55k_NPU',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=9) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ECG_55k_NPU'][constants.TARGET_DEVICE_MSPM0G5187]),
+            },
+            properties=[dict(type="group", dynamic=True, script="ecgclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]), dict(type="group", dynamic=True, script="ecgclassification.py", name="train_group", label="Training Parameters", default=[])] + template_gui_model_properties
         ),
     }),
     'ArcFault_model_1400_t': deep_update_dict(deepcopy(template_model_description), {
@@ -383,6 +547,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['ArcFault_model_1400_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="arcfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -414,6 +580,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['ArcFault_model_700_t'][constants.TARGET_DEVICE_AM263]),
 
             },
             properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
@@ -446,6 +614,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['ArcFault_model_300_t'][constants.TARGET_DEVICE_AM263]),
             },
         properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="arcfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -477,6 +647,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=3) | (DEVICE_RUN_INFO['ArcFault_model_200_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="arcfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="arcfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -508,6 +680,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['MotorFault_model_1_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="motorfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -539,6 +713,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['MotorFault_model_2_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="motorfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -570,6 +746,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=1)  | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM0G5187]),
                 constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['MotorFault_model_3_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="motorfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -596,6 +774,9 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_F29H85]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=2) | (DEVICE_RUN_INFO['FanImbalance_model_1_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="motorfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -622,6 +803,9 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_F29H85]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['FanImbalance_model_2_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="motorfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -648,6 +832,9 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F28P65]),
                 constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_F29H85]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['FanImbalance_model_3_t'][constants.TARGET_DEVICE_AM263]),
             },
             properties=[dict(type="group", dynamic=True, script="motorfault.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="motorfault.py", name="train_group", label="Training Parameters", default=[])]
@@ -672,6 +859,8 @@ _model_descriptions = {
                 constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['NAS'][constants.TARGET_DEVICE_F29H85]),
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['NAS'][constants.TARGET_DEVICE_CC2755]),
                 constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['NAS'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['NAS'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=1) | (DEVICE_RUN_INFO['NAS'][constants.TARGET_DEVICE_CC35X1]),
             },
         ),
     }),
@@ -690,9 +879,12 @@ _model_descriptions = {
             target_devices={
                 constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_CC2755]),
                 constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_CC35X1]),
                 constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_MSPM0G3507]),
                 constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_MSPM0G3519]),
                 constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['PIRDetection_model_1_t'][constants.TARGET_DEVICE_MSPM33C32]),
             },
             properties=[dict(type="group", dynamic=True, script="pirdetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                         dict(type="group", dynamic=True, script="pirdetection.py", name="train_group", label="Training Parameters", default=[])]
@@ -711,7 +903,7 @@ enabled_models_list = [
     'CLS_6k_NPU',
     'CLS_8k_NPU',
     'CLS_13k_NPU',
-    'CLS_20k_NPU', 'CLS_55k_NPU',
+    'CLS_20k_NPU', 'CLS_55k_NPU', 'ECG_55k_NPU',
     # Application-specific models
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
     'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t', 'PIRDetection_model_1_t',

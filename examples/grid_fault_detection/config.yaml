@@ -1,0 +1,18 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: F29H85
+dataset:
+  dataset_name: grid_fault_detection
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/grid_fault_dataset.zip
+data_processing_feature_extraction:
+  data_proc_transforms: ['SimpleWindow']
+  frame_size: 16
+  stride_size: 1
+  variables: 1
+training:
+  model_name: CLS_1k_NPU
+  num_gpus: 0
+  batch_size: 512
+  training_epochs: 250
+testing: {}
+compilation: {}

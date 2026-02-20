@@ -1,0 +1,21 @@
+common:
+  task_type: generic_timeseries_regression
+  target_device: F29H85
+dataset:
+  dataset_name: mosfet_temp_prediction
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mosfet_temp_prediction.zip
+data_processing_feature_extraction:
+  data_proc_transforms: ['SimpleWindow']
+  variables: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43]
+  stride_size: 1
+  frame_size: 1
+training:
+  model_name: REGR_3k
+  batch_size: 128
+  training_epochs: 100
+  num_gpus: 0
+  learning_rate: 0.01
+  quantization: 0
+  output_int: false
+testing: {}
+compilation: {}

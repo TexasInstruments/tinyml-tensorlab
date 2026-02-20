@@ -2,7 +2,7 @@
 common:
     target_module: 'timeseries'
     task_type: 'pir_detection'
-    target_device: 'CC1352'
+    target_device: 'CC1354'
     run_name: '{date-time}/{model_name}'
 
 dataset:
@@ -15,8 +15,6 @@ data_processing_feature_extraction: # One or more can be cascaded in the list
     variables: 1
 
 training:
-    # enable/disable training
-    enable: True #False
     model_name: 'PIRDetection_model_1_t'
     model_config: ''
     batch_size: 64
@@ -25,5 +23,4 @@ training:
     learning_rate: 0.001
 
 testing: {}
-
 compilation: {}

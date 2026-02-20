@@ -66,11 +66,11 @@ Try tweaking the frame size and stride size to see how it affects the model trai
 
 ### CCS Studio
 
-Code Composer Studio (CCS) is a free integrated development environment (IDE) provided by Texas Instruments (TI) for developing and debugging applications for TI's micro-controllers and processors. It offers various examples for users to get started with their problem statement. One of the application is f28p55x_generic_timseries_regression. We will use this example to run on device.
+Code Composer Studio (CCS) is a free integrated development environment (IDE) provided by Texas Instruments (TI) for developing and debugging applications for TI's micro-controllers and processors. It offers various examples for users to get started with their problem statement. One of the application is f28p55x_generic_timeseries_regression. We will use this example to run on device.
 
 ### Requirements
 
-The CCS example *f28p55x_generic_timseries_regression* requires 4 files from modelmaker. We will copy the files from modelmaker run to the CCS example project. 
+The CCS example *f28p55x_generic_timeseries_regression* requires 4 files from modelmaker. We will copy the files from modelmaker run to the CCS example project. 
 
 1. C2000Ware 6.01.00.00
 2. Location of example: *C:\ti\c2000\C2000Ware_6_01_00_00\libraries\ai\examples\generic_timeseries_regression\f28p55x*
@@ -83,19 +83,19 @@ Run the modelmaker from command line. After the run is finished. Copy the 4 file
 
 - mod.a: The compiled model is present in this file. 
   - Path Modelmaker: *tinyml-modelmaker/data/projects/torque_measurement/run/{date-time}/{model}/compilation/artifacts/mod.a*
-  - Path CCS Project: *f28p55x_generic_timseries_regression/artifacts/mod.a*
+  - Path CCS Project: *f28p55x_generic_timeseries_regression/artifacts/mod.a*
 - tvmgen_default.h: Header file to access the model inference APIs from mod.a 
   - Path Modelmaker: *tinyml-modelmaker/data/projects/torque_measurement/run/{date-time}/{model}/compilation/artifacts/tvmgen_default.h*
-  - Path CCS Project: *f28p55x_generic_timseries_regression/artifacts/tvmgen_default.h*
+  - Path CCS Project: *f28p55x_generic_timeseries_regression/artifacts/tvmgen_default.h*
 
 ### Test data for device verification
 
 - test_vector.c: Test cases to check if the model works on device currently
   - Path Modelmaker: *tinyml-modelmaker/data/projects/torque_measurement/run/{date-time}/{model}/training/quantization/golden_vectors/test_vector.c*
-  - Path CCS Project: *f28p55x_generic_timseries_regression/test_vector.c*
+  - Path CCS Project: *f28p55x_generic_timeseries_regression/test_vector.c*
 - user_input_config.h: Configuration of feature extraction library in SDK. 
   - Path Modelmaker: *tinyml-modelmaker/data/projects/torque_measurement/run/{date-time}/{model}/training/quantization/golden_vectors/user_input_config.h*
-  - Path CCS Project: *f28p55x_generic_timseries_regression/user_input_config.h*
+  - Path CCS Project: *f28p55x_generic_timeseries_regression/user_input_config.h*
 
 
 Steps to run a regression example on-device can be found in the following guide: [Deploying Regression Models from ModelMaker to Device](../../docs/deploying_regression_models_from_modelmaker_to_device/readme.md)

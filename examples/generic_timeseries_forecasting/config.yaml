@@ -23,5 +23,4 @@ training:
   optimizer: adam
   output_int: false
 testing: {}
-compilation:
-  keep_libc_files: true
+compilation: {}

@@ -78,7 +78,7 @@ Modelzoo will start by loading the dataset, train the model, test the model, com
 
 ```bash
 cd tinyml-Modelzoo
-run_tinyml_modelzoo.sh examples/hello_world/config.yaml
+run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 ```
 
 ### Understanding the outputs
@@ -233,7 +233,7 @@ With this workflow, you can create your own generic time series classification a
 
 To explore more classification use cases, refer to the following examples:
 
-- [Hello World](../../examples/hello_world/readme.md) - Prediction of the type of waveform of signal
+- [Hello World](../../examples/generic_timeseries_classification/readme.md) - Prediction of the type of waveform of signal
 - [AC Arc Fault](../../examples/ac_arc_fault/readme.md) - Predict whether an arc is present in circuit or not
 - [Blower Imbalance](../../examples/blower_imbalance/readme.md) - Prediction of imbalance present in fan blowers
 - [ECG Classification](../../examples/ecg_classification/readme.md) - Classifying ECG Signals
