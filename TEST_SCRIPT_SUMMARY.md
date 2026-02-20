@@ -57,7 +57,7 @@
 
 # Test only specific configs
 ./run_tests.sh --filter motor
-./run_tests.sh --filter hello_world
+./run_tests.sh --filter generic_timeseries_classification
 ./run_tests.sh --filter forecast
 ```
 
@@ -163,7 +163,7 @@ For each config, the script:
 
 ```bash
 # Test by example type
-./run_tests.sh --filter hello_world     # All 4 hello_world variants
+./run_tests.sh --filter generic_timeseries_classification     # All 4 generic_timeseries_classification variants
 ./run_tests.sh --filter motor           # All motor-related (3 configs)
 ./run_tests.sh --filter arc             # All arc fault (5 configs)
 
@@ -181,8 +181,8 @@ For each config, the script:
 
 ### 1. Quick Validation After Changes
 ```bash
-# Test representative hello_world configs (fastest)
-./run_tests.sh --filter hello_world --timeout 300
+# Test representative generic_timeseries_classification configs (fastest)
+./run_tests.sh --filter generic_timeseries_classification --timeout 300
 ```
 
 ### 2. Full Regression Test
@@ -207,7 +207,7 @@ For each config, the script:
 cd ./tinyml-modelmaker
 source ~/.pyenv/versions/py310_tinyml/bin/activate
 
-./run_tests.sh --filter hello_world --timeout 300
+./run_tests.sh --filter generic_timeseries_classification --timeout 300
 exit_code=$?
 
 # Upload logs if failed
@@ -251,7 +251,7 @@ python -c "import torch; print('OK')"
 ./run_tests.sh --timeout 900
 
 # Or test individual config manually
-python tinyml_modelmaker/run_tinyml_modelmaker.py examples/hello_world/config.yaml
+python tinyml_modelmaker/run_tinyml_modelmaker.py examples/generic_timeseries_classification/config.yaml
 ```
 
 ### PYTHONPATH Errors
@@ -267,10 +267,10 @@ The test script works alongside your existing tools:
 
 ```bash
 # Normal training (existing method)
-./run_tinyml_modelmaker.sh examples/hello_world/config.yaml
+./run_tinyml_modelmaker.sh examples/generic_timeseries_classification/config.yaml
 
 # Automated testing (new method)
-./run_tests.sh --filter hello_world
+./run_tests.sh --filter generic_timeseries_classification
 
 # Manual run (existing method)
 python tinyml_modelmaker/run_tinyml_modelmaker.py examples/motor_bearing_fault/config.yaml
@@ -295,7 +295,7 @@ python tinyml_modelmaker/run_tinyml_modelmaker.py examples/motor_bearing_fault/c
 1. **Run First Test**:
    ```bash
    cd ./tinyml-modelmaker
-   ./run_tests.sh --filter hello_world
+   ./run_tests.sh --filter generic_timeseries_classification
    ```
 
 2. **Check Results**:

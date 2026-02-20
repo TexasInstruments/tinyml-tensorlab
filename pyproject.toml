@@ -21,8 +21,8 @@ dependencies = [
 	"tinyml_modelzoo @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.3#subdirectory=tinyml-modelzoo",
 	"tinyml_tinyverse @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.3#subdirectory=tinyml-tinyverse",
 	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.3#subdirectory=tinyml-modeloptimization/torchmodelopt",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.0-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.1-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.1-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
 ]
 authors = [{name = "Adithya Thonse", email = "thonse@ti.com"}]
 

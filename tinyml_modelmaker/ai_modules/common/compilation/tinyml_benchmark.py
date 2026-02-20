@@ -1,5 +1,5 @@
 #################################################################################
-# Copyright (c) 2023-2024, Texas Instruments
+# Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -147,8 +147,11 @@ class ModelCompilation():
             # Convert quantization enum to integer (0, 1, or 2)
             quantization_level = int(self.params.training.quantization)
 
+            # get partial quantization value
+            partial_quantization = self.params.training.partial_quantization
+
             # Compute correct values based on the matrix
-            skip_normalize, output_int = constants.get_skip_normalize_and_output_int(task_category, quantization_level)
+            skip_normalize, output_int = constants.get_skip_normalize_and_output_int(task_category, quantization_level, partial_quantization)
 
             # Replace skip_normalize if it exists in the target string
             if has_skip_normalize:
