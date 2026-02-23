@@ -20,7 +20,7 @@ Install dependencies using pip:
 pip install numpy pandas
 ```
 ## 3. Input CSV Format (Required)
-### 1.  Frame Mode CSVs (4 columns)
+### 1.  Frame Mode CSVs (4 columns)( RECOMMENDED)
 Frame mode expects CSV files with exactly 4 columns in the following order:
 
 
@@ -33,6 +33,8 @@ Frame mode expects CSV files with exactly 4 columns in the following order:
 
 ✔ Column names are not required
 ✔ Non-numeric rows are automatically ignored
+
+NOTE: This is the recommended labelling method as it yielded higher accuracy and precision as compared to the Window Mode mentioned in the following sections.
 ### 2. Window Mode CSVs (Expected layout)
 Window mode expects a directory structure such as:
 ```text
@@ -76,8 +78,8 @@ Per-frame voltage analysis
 A frame is marked as arc-like if:
 ```
 Vmax ≥ V_MIN, and Vrms ≤ V_MAX
-MIN_V = 110.0
-MAX_V = (2**11) * (0.2) / 0.707
+MIN_V = 150.0
+MAX_V = (2**11) * (0.24) / 0.707
 NORM_V = 110.0
 ```
 3. **Initial frame classification**: Based on the voltage conditions:
@@ -124,13 +126,13 @@ Each file represents one labeled training example.
 ## How to run (Frame Mode)
 
 ```python 
-python label_tool.py \
+python AFCI_LabellingScript.py \
   --mode frame \
   --dataset_path <output_dataset_path> \
   --csv_folder <csv_input_path> \
   --frame_size 512 \
   --frame_thresh 4 \
-  --frame_smooth_frames 6
+  --frame_smooth_frames 6 \
   --frame_save_col 4
   ```
   # 5. Window Mode
@@ -180,7 +182,7 @@ Application-level folders are automatically merged and flattened.
 ## How to run (Window Mode)
 
 ```python
-python label_tool.py \
+python AFCI_LabellingScript.py \
   --mode window \
   --dataset_path <output_dataset_path> \
   --csv_folder <csv_input_path> \

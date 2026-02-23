@@ -228,8 +228,8 @@ def run_frame_mode(args):
     FRAME_SMOOTH_FRAMES = args.frame_smooth_frames
     FRAME_THRESH = args.frame_thresh
 
-    MIN_V = 110.0
-    MAX_V = (2**11) * (0.2) / 0.707
+    MIN_V = 150.0
+    MAX_V = (2**11) * (0.24) / 0.707
     NORM_V = 110.0
 
     for file_path in csvs:
@@ -237,9 +237,9 @@ def run_frame_mode(args):
         arc_ivl = read_csv_numeric_matrix(file_path)
         if arc_ivl.shape[0] == 0:
             continue
-
-        arc_ivl[:, 1:3] = arc_ivl[:, 1:3] - (2**11) + 60
-
+        arc_ivl[:, 1:3] = arc_ivl[:, 1:3] - (2**11) + 60 #The bandpass and voltage are both centered at 1.6 V , hence -2**11
+        arc_ivl[:, 3] = arc_ivl[:, 3] * 8 #multiply raw log300 value by 8
+    
         new_size = (arc_ivl.shape[0] // FRAME_SIZE) * FRAME_SIZE
         if new_size == 0:
             continue

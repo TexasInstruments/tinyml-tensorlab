@@ -4,7 +4,7 @@ common:
 dataset:
   dataset_name: ac_arc_fault_log300_example_dsk
   input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault_log300.zip
-  
+
   # input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault.zip
   # split_type: within_files
   # split_factor:
@@ -42,12 +42,11 @@ data_processing_feature_extraction:
   store_feat_ext_data: false
 training:
   model_name: CLS_1k_NPU
-  model_config: ''
   batch_size: 30
   training_epochs: 30
   num_gpus: 0
   quantization: 2
-  learning_rate: 0.001
+  learning_rate: 1e-5
   weight_decay: 1e-5
 testing: {}
 compilation: {}
