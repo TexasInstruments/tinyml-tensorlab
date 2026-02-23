@@ -43,6 +43,8 @@ import timeit
 from logging import getLogger
 
 import numpy as np
+import matplotlib
+matplotlib.use('Agg') # Force non-interactive backend
 import matplotlib.pyplot as plt
 
 import torch

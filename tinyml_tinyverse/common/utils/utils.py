@@ -77,6 +77,8 @@ from glob import glob
 from logging import getLogger
 from os.path import basename as opb
 
+import matplotlib
+matplotlib.use('Agg') # Force non-interactive backend
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
