@@ -879,6 +879,15 @@ class BaseGenericTSDataset(Dataset):
                 self.preprocessing_flags.append('FE_RAW')
             if 'PIR_FE' in self.transforms:
                 self.preprocessing_flags.append('FE_PIR')
+            if 'PIR_FE_Q15' in self.transforms:
+                self.preprocessing_flags.append('FE_PIR_Q15')
+                self.feature_extraction_params['FE_FRAME_SIZE'] = int(self.frame_size + 7)
+                self.feature_extraction_params['FEATURE_SIZE_PER_WINDOW'] = int(self.window_count)
+                self.feature_extraction_params['FE_RFFT_SIZE'] = int(self.fft_size)
+                self.feature_extraction_params['SLIDING_WINDOW_SIZE'] = int(self.frame_size * self.stride_size)
+                self.feature_extraction_params['WINDOW_SIZE'] = int((self.frame_size + 7) - self.window_count * self.frame_size * self.stride_size)
+                sr = float(self.sampling_rate)          # handles "31.25" safely
+                self.feature_extraction_params['SAMPLING_RATE'] = int(sr * 1000)
             if 'KURT_FE' in self.transforms:
                 self.preprocessing_flags.append('FE_KURT')
             if 'ENT_FE' in self.transforms:
