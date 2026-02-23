@@ -25,7 +25,7 @@ Welcome to the **Tiny ML ModelZoo** - Texas Instruments' central repository for 
 Texas Instruments provides a comprehensive toolchain for developing, training, and deploying machine learning models on resource-constrained microcontrollers. The toolchain consists of three main components:
 <hr>
 
-Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
+Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/user_guide/index.html)
 <hr>
 
 | Component                       | Purpose                                | Who Should Use It                               |
@@ -428,7 +428,13 @@ Key steps:
 |--------|-----|-------------|-------|
 | MSPM33C32 | No | 160 MHz Arm Cortex-M33, TrustZone | 1MB flash, 256kB SRAM |
 | MSPM33C34 | No | 160 MHz Arm Cortex-M33 | High performance |
-| AM13E2 | Yes | Arm Cortex-M33 MCU | NPU-accelerated, CLI only |
+
+
+### AM13 Family (Arm Cortex-M33)
+
+| Device | NPU | Description        | Notes                     |
+|--------|-----|--------------------|---------------------------|
+| AM13E2 | Yes | Arm Cortex-M33 MCU | NPU-accelerated |
 
 ### AM26x Family (Arm Cortex-R5)
 
