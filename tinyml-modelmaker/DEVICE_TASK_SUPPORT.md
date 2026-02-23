@@ -54,7 +54,9 @@ The Tiny ML framework supports the following task categories:
 ### MSPM33C Family (Arm Cortex-M33)
 - **MSPM33C32** - 160 MHz Arm Cortex-M33 MCU with TrustZone, 1MB flash, 256kB SRAM
 - **MSPM33C34** - 160 MHz Arm Cortex-M33 MCU with hardware NPU
-- **AM13E2** - Arm Cortex-M33 MCU (additional device, CLI only)
+
+### AM13 Family (Arm Cortex-M33)
+- **AM13E2** - Arm Cortex-M33 MCU
 
 ### AM26x Family (Arm Cortex-R5)
 - **AM263** - Quad-core Arm Cortex-R5F MCU up to 400 MHz
@@ -336,8 +338,8 @@ Models are sized to fit different MCU memory constraints:
 ## Notes
 
 1. **GUI vs CLI Devices:**
-   - All listed devices except MSPM33C34 and AM13E2 are available in the GUI
-   - MSPM33C34 and AM13E2 are in `TARGET_DEVICES_ADDITIONAL` (CLI only)
+   - All listed devices except MSPM33C34 are available in the GUI
+   - MSPM33C34 is in `TARGET_DEVICES_ADDITIONAL` (CLI only)
 
 2. **Compilation Profiles:**
    - Each device has optimized compilation profiles
