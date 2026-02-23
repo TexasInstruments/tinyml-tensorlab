@@ -35,6 +35,8 @@ Time series forecasting ONNX model testing script.
 import os
 from logging import getLogger
 
+import matplotlib
+matplotlib.use('Agg') # Force non-interactive backend
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
