@@ -14651,6 +14651,285 @@ model_descriptions:
       training_path_quantization: null
       warmup_epochs: 1
       weight_decay: 0.0001
+  REGR_2k:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: Regression Model with 2k params. 3 Conv+BatchNorm+Relu layers
+        + 2 Linear Layer.
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_regression
+      task_type: generic_timeseries_regression
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDatasetReg
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: REGR_2k
+      model_spec: null
+      model_training_id: REG_TS_GEN_BASE_2K
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesregression.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesregression.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
   REGR_2k_NPU:
     common:
       download_path: ./data/downloads
@@ -16383,28 +16662,6 @@ preset_descriptions:
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
-    generic_timeseries_anomalydetection:
-      compress_npu_layer_data:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
-          target_c_mcpu: cortex-m33
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft skip_normalize=true output_int=false
-          target_c_mcpu: cortex-m33
-      forced_soft_npu_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: cortex-m33
     generic_timeseries_classification:
       compress_npu_layer_data:
         compilation:
@@ -16494,14 +16751,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
   AM261:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type
-          target: c
-          target_c_mcpu: cortex-r5
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16543,14 +16792,6 @@ preset_descriptions:
             -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-r5
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type
-          target: c, ti-npu type=soft skip_normalize=true output_int=false
-          target_c_mcpu: cortex-r5
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16584,14 +16825,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-r5
   AM263P:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard
-            -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type
-          target: c
-          target_c_mcpu: cortex-r5
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16617,14 +16850,6 @@ preset_descriptions:
           target: c
           target_c_mcpu: cortex-r5
   CC1352:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
-          target_c_mcpu: cortex-m4
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16658,14 +16883,6 @@ preset_descriptions:
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m4
   CC1354:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
-          target_c_mcpu: cortex-m33
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16699,14 +16916,6 @@ preset_descriptions:
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
   CC2755:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
-          target_c_mcpu: cortex-m33
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16740,14 +16949,6 @@ preset_descriptions:
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
   CC35X1:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
-          target_c_mcpu: cortex-m33
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16793,17 +16994,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     blower_imbalance:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c28
-    generic_timeseries_anomalydetection:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -16881,17 +17071,6 @@ preset_descriptions:
             -I.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -16949,17 +17128,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     blower_imbalance:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c28
-    generic_timeseries_anomalydetection:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -17037,17 +17205,6 @@ preset_descriptions:
             -I.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -17105,17 +17262,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
     blower_imbalance:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c28
-    generic_timeseries_anomalydetection:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
@@ -17232,37 +17378,6 @@ preset_descriptions:
             -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c28
-    generic_timeseries_anomalydetection:
-      compress_npu_layer_data:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
-          target_c_mcpu: c28
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu
-          target_c_mcpu: c28
-      forced_soft_npu_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft
           target_c_mcpu: c28
     generic_timeseries_classification:
       compress_npu_layer_data:
@@ -17411,17 +17526,6 @@ preset_descriptions:
             -I.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c28
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/cl2000
-          cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
-            -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/driverlib
-            -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c28
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -17483,14 +17587,6 @@ preset_descriptions:
             -I.
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c29
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
-          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft
-          target_c_mcpu: c29
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -17524,14 +17620,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: c29
   F29P32:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
-          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c29
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -17557,14 +17645,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=false
           target_c_mcpu: c29
   F29P58:
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/c29clang
-          cross_compiler_options: -O3 -ffast-math -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
-            -I.
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: c29
     generic_timeseries_classification:
       default_preset:
         compilation:
@@ -17599,14 +17679,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m0plus
     ecg_classification:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
-            -mthumb -mfloat-abi=soft -I. -Wno-return-type
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: cortex-m0plus
-    generic_timeseries_anomalydetection:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
@@ -17664,14 +17736,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m0plus
     ecg_classification:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
-            -mthumb -mfloat-abi=soft -I. -Wno-return-type
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: cortex-m0plus
-    generic_timeseries_anomalydetection:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
@@ -17743,28 +17807,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m0plus
     ecg_classification:
-      compress_npu_layer_data:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
-            -mthumb -mfloat-abi=soft -I. -Wno-return-type
-          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
-          target_c_mcpu: cortex-m0plus
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
-            -mthumb -mfloat-abi=soft -I. -Wno-return-type
-          target: c, ti-npu type=hard skip_normalize=true output_int=true
-          target_c_mcpu: cortex-m0plus
-      forced_soft_npu_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
-            -mthumb -mfloat-abi=soft -I. -Wno-return-type
-          target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: cortex-m0plus
-    generic_timeseries_anomalydetection:
       compress_npu_layer_data:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
@@ -17912,14 +17954,6 @@ preset_descriptions:
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
-          target_c_mcpu: cortex-m33
-    generic_timeseries_anomalydetection:
-      default_preset:
-        compilation:
-          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft skip_normalize=true output_int=false
           target_c_mcpu: cortex-m33
     generic_timeseries_classification:
       default_preset:
@@ -18497,7 +18531,7 @@ task_descriptions:
     task_category: timeseries_classification
     task_group: timeseries
     task_name: ECG Classification
-  generic_timeseries_anomalydetection:
+  generic_timeseries_classification:
     application_specific: false
     checkDataEnough: false
     stages:
@@ -18528,19 +18562,6 @@ task_descriptions:
     - AM263P
     - AM261
     - AM13E2
-    target_module: timeseries
-    task_category: timeseries_anomalydetection
-    task_group: timeseries
-    task_name: Time Series Anomaly Detection
-  generic_timeseries_classification:
-    application_specific: false
-    checkDataEnough: false
-    stages:
-    - dataset
-    - data_processing_feature_extraction
-    - training
-    - compilation
-    target_devices: *id001
     target_module: timeseries
     task_category: timeseries_classification
     task_group: timeseries

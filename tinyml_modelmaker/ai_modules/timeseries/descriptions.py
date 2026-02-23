@@ -698,6 +698,15 @@ def get_live_capture_example_descriptions(params):
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
+            },
+            'MSPM0G3507': {
+                'ccsProj': 'timeseries_data_capture_LP_MSPM0G3507_nortos_ticlang',
+                'deviceName': 'MSPM0G3507',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G3507.ccxml',
+                'transport': {'baudRate': 115200}
             }
         },
         'ecg_classification': {
@@ -708,6 +717,24 @@ def get_live_capture_example_descriptions(params):
                 'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/ecg_anomaly_detection_data_capture/ticlang/ecg_anomaly_detection_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM0G3507': {
+                'ccsProj': 'ecg_anomaly_detection_data_capture_LP_MSPM0G3507_nortos_ticlang',
+                'deviceName': 'MSPM0G3507',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/ecg_anomaly_detection_data_capture/ticlang/ecg_anomaly_detection_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G3507.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM0G3519': {
+                'ccsProj': 'ecg_anomaly_detection_data_capture_LP_MSPM0G3519_nortos_ticlang',
+                'deviceName': 'MSPM0G3519',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G3519/edgeAI/ecg_anomaly_detection_data_capture/ticlang/ecg_anomaly_detection_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G3519.ccxml',
                 'transport': {'baudRate': 115200}
             }
         },
@@ -729,7 +756,25 @@ def get_live_capture_example_descriptions(params):
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
-            }
+            },
+            'MSPM0G3507': {
+                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang',
+                'deviceName': 'MSPM0G3507',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G3507.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM0G3519': {
+                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang',
+                'deviceName': 'MSPM0G3519',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G3519/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G3519.ccxml',
+                'transport': {'baudRate': 115200}
+            },
         },
         'pir_detection': {
             'CC2755': {
@@ -768,7 +813,7 @@ def get_live_capture_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC3551E.ccxml',
                 'transport': {'baudRate': 115200}
             },
-               'MSPM0G5187': {
+            'MSPM0G5187': {
                 'ccsProj': 'pir_detection_data_capture_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [],
@@ -776,7 +821,25 @@ def get_live_capture_example_descriptions(params):
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
-            }
+            },
+            'MSPM0G3507': {
+                'ccsProj': 'pir_detection_data_capture_LP_MSPM0G3507_nortos_ticlang',
+                'deviceName': 'MSPM0G3507',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G3507.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM0G3519': {
+                'ccsProj': 'pir_detection_data_capture_LP_MSPM0G3519_nortos_ticlang',
+                'deviceName': 'MSPM0G3519',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G3519/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G3519.ccxml',
+                'transport': {'baudRate': 115200}
+            },
         }
         
     }
@@ -857,7 +920,7 @@ def get_live_preview_example_descriptions(params):
                 'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/ac_arc_fault_detection_live_preview/ticlang/ac_arc_fault_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
-                'transport': {'baudRate': 115200}
+                'transport': {'baudRate': 5820000}
             }
         },
         'generic_timeseries_classification': {

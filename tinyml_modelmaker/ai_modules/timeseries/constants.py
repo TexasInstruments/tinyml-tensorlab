@@ -968,16 +968,16 @@ TASK_DESCRIPTIONS = {
         'checkDataEnough': False,
         'task_category': TASK_CATEGORY_TS_REGRESSION
     },
-    TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
-        'task_name': 'Time Series Anomaly Detection',
-        'task_group': 'timeseries',
-        'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
-        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
-        'application_specific': False,
-        'checkDataEnough': False,
-        'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
-    },
+    # TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+    #     'task_name': 'Time Series Anomaly Detection',
+    #     'task_group': 'timeseries',
+    #     'target_module': 'timeseries',
+    #     'target_devices': TARGET_DEVICES,
+    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+    #     'application_specific': False,
+    #     'checkDataEnough': False,
+    #     'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
+    # },
     TASK_TYPE_GENERIC_TS_FORECASTING: {
         'task_name': 'Time Series Forecasting',
         'task_group': 'timeseries',
@@ -1119,7 +1119,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=33, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),
     PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D_FixedPoint=dict(
-        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE_Q15'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=33, variables=1),  # ch=3,
+        data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE_Q15'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=31.25, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),  
 )
 
