@@ -2,8 +2,6 @@
 
 <hr>
 
-Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
-<hr>
 
 ##### Table of Contents
 
@@ -12,7 +10,7 @@ Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.co
 - [Using this repository](#using-this-repository)
     - [I'm a user](#im-a-user)
     - [I'm a developer](#im-a-developer)
-- [Productized Applications](#productized-applications)
+- [Supported Devices](#supported-target-devices)
 - [Release History](#what-is-new)
 
 <hr>
@@ -22,6 +20,12 @@ Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.co
 The Tiny ML Tensorlab repository is meant to be as a starting point to install and explore TI's AI offering for MCUs.
 It helps to install all the required repositories to get started. Currently, it can handle Time Series Classification, Regression, Forecasting, Anomaly Detection, and Image Classification tasks. 
 
+
+Detailed User Guide: [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
+<hr>
+
+TI Tiny ML Model Zoo: [TI Tiny ML Model Zoo](./tinyml-modelzoo/)
+<hr>
 
 Once you clone this repository, you will find the following repositories present within the `tinyml-tensorlab` directory:
 * `tinyml-tensorlab`: This repo, serves as a blank wrapper for customers to clone all the tinyml repos at one shot. 
@@ -54,14 +58,14 @@ The other repositories are here for a purpose:
 
 ## Supported Target Devices
 
-The TinyML toolchain supports a wide range of TI MCUs across multiple device families:
+The Tiny ML toolchain supports a wide range of TI MCUs across multiple device families:
 
 <details>
 <summary>Click to expand device list</summary>
 
 ### C2000 DSP Family
 | Device | NPU | Description |
-|--------|-----|-------------|``
+|--------|-----|-------------|
 | F28P55 | Yes | 32-bit MCU - Recommended for complex models |
 | F28P65 | No | 32-bit MCU, 150 MHz |
 | F29H85 | No | 64-bit MCU with C29x core |
@@ -85,7 +89,11 @@ The TinyML toolchain supports a wide range of TI MCUs across multiple device fam
 |--------|-----|-------------|
 | MSPM33C32 | No | 160 MHz with TrustZone |
 | MSPM33C34 | No | 160 MHz Arm Cortex-M33 |
-| AM13E2 | Yes | Arm Cortex-M33, NPU-accelerated (CLI only) |
+
+### AM13 Family (Arm Cortex-M33)
+| Device | NPU | Description |
+|--------|-----|-------------|
+| AM13E2 | Yes | Arm Cortex-M33, NPU-accelerated |
 
 ### AM26x Family (Arm Cortex-R5)
 | Device | NPU | Description |
@@ -278,29 +286,6 @@ To begin with, you can use the repo as a `developer` or `user`.
   git_pull_all.sh
   ```
     
-
-<hr>
-
-## Productized applications:
-<details>
-
-| Application (Title)           | Select sector (Industrial, automotive, personal electronics) | Technology  | Application Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Features / advantages                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-|-------------------------------|--------------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Arc fault detection           | Industrial                                                   | Time series | An arc fault is an electrical discharge that occurs when an electrical current flows through an unintended path, often due to damaged, frayed, or improperly installed wiring. This can produce heat and sparks, which can ignite surrounding materials, leading to fires.<br><br>Due to the ability of AI to analyze complex patterns, continuously learn and improve from new data, address a wide range of faults, it is advantageous to use AI. Using AI at the edge empowers the customer with reduced latency, enhanced privacy and scalability while saving bandwidth.<br><br>TI provides UL-1699B tested AI models which have impeccable accuracy and ultra low latency.                                                     | By utilising benefits of AI such as its ability to analyze patterns in signals and ability to handle larger volumes of data, TI's solution allows for immediate detection response to arc faults.<br><br>Coupled with an NPU that provides enhanced AI performance, TI's� brings additional benefits in terms of speed, reliability, and scalability, making it a powerful approach for enhancing electrical safety.<br><br>With TI's complete solution, AFD will never be a showstopper for you.                               |
-| Motor Bearing Fault Detection | Industrial                                                   | Time series | Motor bearing faults are often seen in HVAC systems with rotating parts. It occurs due to the wear and tear of moving parts, lack of lubrication, and due to overloading of equipment. It adversely affects the motor lifespan and increases energy consumption, potentially even can cause a failure of the system.<br><br>By using AI, these faults can be detected early by monitoring signs such as subtle changes in vibration patterns. Processing such data locally at the HVAC system can provide real time fault detection and immediate response, which is crucial for preventing damage and ensuring continuous operation.<br><br>TI provides handcrafted AI models which have impeccable accuracy and ultra low latency. | TI's AI solution addresses these by monitoring the vibration and temperature of the motor through sensors and provides a reliable solution by combining the strengths of advanced analytics and real-time processing, leading to more reliable, efficient, and cost-effective maintenance and operation.<br><br>Put together with an NPU for advanced AI performance capabilities, this prevents unexpected failures as the algorithms can detect early signs of faults that might not be noticeable through manual inspections |
-| Blower Imbalance Detection    | Industrial                                                   | Time series | Often seen in blowers over time, the blades accumulate dust and particulate matter which clogs and causes some of the blades to be heavier than the other and ultimately resulting in increased energy consumption that is undesirable.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | TI's AI solution addresses these by monitoring the current passing to the blower.                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-
-* To empower your solution with TIs AI, you can use the Model Composer GUI to quickly train an AI model or use the Tiny ML Modelmaker for an advanced set of capabilities. To customers who rely on their own AI training framework, TIs Neural Network Compiler can help you get your AI model compatible with MCUs (P55x,P66x or any other F28 device).
-
-</details>
-
-* To empower your solution with TI's AI, you can use the **[Tiny ML ModelZoo](./tinyml-modelzoo)** examples for an advanced set of capabilities.
-  * Run examples: `cd tinyml-modelzoo && ./run_tinyml_modelzoo.sh examples/dc_arc_fault/config_dsk.yaml` (Linux) or `cd tinyml-modelzoo && run_tinyml_modelzoo.bat examples\dc_arc_fault\config_dsk.yaml` (Windows)
-  * Supports any Time series Classification tasks (including Arc Fault and Motor Bearing Fault Classification)
-* You can also use the [Edge AI Studio Model Composer GUI](https://dev.ti.com/modelcomposer/) to quickly train an AI model (No Code Platform)
-  * This supports only Arc Fault and Motor Bearing Fault Classification applications currently.
-* To customers who rely on their own AI training framework, [TIs Neural Network Compiler](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/) can help you get your AI model compatible with MCUs (P55x,P66x or any other F28 device).
-* For a full-fledged reference solution on Arc Fault and Motor Bearing Fault, find the comprehensive project in [Digital Power SDK](https://www.ti.com/tool/C2000WARE-DIGITALPOWER-SDK) and [Motor Control SDK](https://www.ti.com/tool/C2000WARE-MOTORCONTROL-SDK).
 
 <hr>
 
