@@ -81,7 +81,7 @@ html_show_sourcelink = False
 html_show_sphinx = False
 
 # Custom footer with copyright
-html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = None
 
 # -- Options for LaTeX/PDF output --------------------------------------------
 latex_engine = 'pdflatex'
