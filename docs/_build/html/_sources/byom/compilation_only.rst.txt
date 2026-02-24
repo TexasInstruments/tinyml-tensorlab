@@ -49,29 +49,36 @@ Your ONNX model must meet these requirements:
 Compilation Configuration
 -------------------------
 
-Create a YAML configuration for compilation:
+Create a YAML configuration for compilation. The key points are disabling
+dataset loading and training, and providing the path to your ONNX model
+under the ``compilation`` section:
 
 .. code-block:: yaml
 
    common:
-     task_type: 'byom_compilation'  # Compilation-only mode
-     target_device: 'F28P55'        # Your target device
+     target_module: 'timeseries'
+     task_type: 'generic_timeseries_classification'
+     target_device: 'F28P55'
+     run_name: '{date-time}/{model_name}'
 
-   byom:
-     enable: True
-     onnx_model_path: '/path/to/your/model.onnx'
-     input_shape: [1, 1, 512, 1]    # Your model's input shape
+   dataset:
+     enable: False          # Important: disable dataset loading
+     dataset_name: my_model # Can be anything, used for directory naming
+
+   feature_extraction:
+     feature_extraction_name: None
+
+   training:
+     enable: False          # Important: disable training
+     model_name: 'a'       # Can be anything, used for directory naming
 
    compilation:
      enable: True
-     preset_name: 'compress_npu_layer_data'  # or 'default_preset'
+     model_path: "/path/to/your/model.onnx"  # Path to the model to compile
 
-   # Quantization (if model is float)
-   quantization:
-     enable: True
-     type: 'ptq'  # Post-training quantization
-     calibration_data: '/path/to/calibration/data.npy'
-     num_samples: 500
+The most important line is ``model_path`` under ``compilation``, which tells
+the tool where to find your pre-trained ONNX model. Both ``dataset`` and
+``training`` must have ``enable: False`` since you are only compiling.
 
 Running Compilation
 -------------------
@@ -92,53 +99,12 @@ Running Compilation
          cd tinyml-modelmaker
          python tinyml_modelmaker\run_tinyml_modelmaker.py byom_config.yaml
 
-Calibration Data
-----------------
+Model Formats
+-------------
 
-For PTQ, provide calibration data:
-
-**Format:**
-
-NumPy array file (.npy) containing representative inputs:
-
-.. code-block:: python
-
-   import numpy as np
-
-   # Generate calibration data
-   # Shape: [num_samples, channels, height, width]
-   calibration_data = np.random.randn(500, 1, 512, 1).astype(np.float32)
-
-   # Or load from your actual data
-   calibration_data = np.load('my_data.npy')
-
-   # Save for compilation
-   np.save('calibration_data.npy', calibration_data)
-
-**Configuration:**
-
-.. code-block:: yaml
-
-   quantization:
-     calibration_data: 'calibration_data.npy'
-     num_samples: 500
-     calibration_method: 'minmax'  # or 'histogram', 'entropy'
-
-Pre-Quantized Models
---------------------
-
-If your model is already INT8 quantized:
-
-.. code-block:: yaml
-
-   byom:
-     enable: True
-     onnx_model_path: '/path/to/quantized_model.onnx'
-     input_shape: [1, 1, 512, 1]
-     already_quantized: True
-
-   quantization:
-     enable: False  # Skip quantization
+The compilation workflow accepts models in ONNX or TFLite format. Provide
+the path to your model file using ``model_path`` in the ``compilation``
+section of the config.
 
 Output Artifacts
 ----------------
@@ -239,41 +205,33 @@ Example: External PyTorch Model
        opset_version=11
    )
 
-**Step 3: Create calibration data**
-
-.. code-block:: python
-
-   import numpy as np
-
-   # Use samples from your training data
-   calibration = train_data[:500]  # First 500 samples
-   np.save('calibration.npy', calibration)
-
-**Step 4: Configure and compile**
+**Step 3: Configure and compile**
 
 .. code-block:: yaml
 
    # byom_config.yaml
    common:
-     task_type: 'byom_compilation'
+     target_module: 'timeseries'
+     task_type: 'generic_timeseries_classification'
      target_device: 'F28P55'
+     run_name: '{date-time}/{model_name}'
 
-   byom:
-     enable: True
-     onnx_model_path: 'my_model.onnx'
-     input_shape: [1, 1, 512, 1]
+   dataset:
+     enable: False
+     dataset_name: my_pytorch_model
 
-   quantization:
-     enable: True
-     type: 'ptq'
-     calibration_data: 'calibration.npy'
-     num_samples: 500
+   feature_extraction:
+     feature_extraction_name: None
+
+   training:
+     enable: False
+     model_name: 'my_model'
 
    compilation:
      enable: True
-     preset_name: 'compress_npu_layer_data'
+     model_path: 'my_model.onnx'
 
-**Step 5: Run compilation**
+**Step 4: Run compilation**
 
 .. code-block:: bash
 
@@ -323,19 +281,7 @@ Solution: Replace with supported operations or simplify model.
 
    Error: Input shape mismatch
 
-Solution: Verify ``input_shape`` in config matches ONNX model.
-
-**Quantization Error:**
-
-.. code-block:: text
-
-   Error: Quantization failed
-
-Solutions:
-
-* Provide more calibration data
-* Use different calibration method
-* Check for unsupported dynamic shapes
+Solution: Verify that the model at ``model_path`` has the expected input shape.
 
 **NPU Constraint Violation:**
 

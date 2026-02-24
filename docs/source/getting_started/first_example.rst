@@ -37,7 +37,7 @@ Open ``examples/dc_arc_fault/config.yaml``:
 
    training:
      enable: True
-     model_name: 'ArcFault_model_200_t'
+     model_name: 'CLS_1k_NPU'
      batch_size: 256
      training_epochs: 20
 
@@ -127,7 +127,7 @@ Step 4: Examine Output Files
 
 Navigate to the output directory::
 
-   ../tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/<timestamp>/ArcFault_model_200_t/
+   ../tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/<timestamp>/CLS_1k_NPU/
 
 **Training Outputs** (``training/base/``):
 
@@ -202,7 +202,7 @@ Edit the config to use a larger model:
 .. code-block:: yaml
 
    training:
-     model_name: 'ArcFault_model_1400_t'  # ~1400 parameters
+     model_name: 'CLS_4k_NPU'  # ~4000 parameters
 
 **Try a Different Device**
 

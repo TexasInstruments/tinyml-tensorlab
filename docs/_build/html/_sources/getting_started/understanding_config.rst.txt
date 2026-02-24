@@ -262,6 +262,15 @@ Tips
 * Set ``num_gpus: 0`` to force CPU training
 * Use ``enable: False`` to skip stages for debugging
 
+.. note::
+
+   The full list of possible configuration options is defined in ``params.py`` within the
+   modelmaker source. For each target module, refer to
+   ``tinyml_modelmaker/ai_modules/<module>/params.py`` (e.g.,
+   ``tinyml_modelmaker/ai_modules/timeseries/params.py``). The documentation here covers
+   the most commonly used options; ``params.py`` is the definitive source for all
+   available parameters and their defaults.
+
 See Also
 --------
 

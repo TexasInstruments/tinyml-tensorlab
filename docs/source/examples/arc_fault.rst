@@ -105,7 +105,16 @@ high-frequency components.
 Available Models
 ----------------
 
-Multiple arc fault models are available:
+.. important::
+
+   The ``ArcFault_model_*`` models listed below are only available in
+   TI's **Edge AI Studio** (GUI) and are not included in the Tensorlab
+   package. In Tensorlab, use the generic ``CLS_*`` or ``CLS_*_NPU``
+   models instead -- they offer similar or better performance. For
+   example, ``CLS_500_NPU`` (~500 params) or ``CLS_1k_NPU`` (~1,000
+   params) are suitable replacements.
+
+**Edge AI Studio models:**
 
 .. list-table::
    :header-rows: 1
@@ -126,6 +135,28 @@ Multiple arc fault models are available:
    * - ``ArcFault_model_1400_t``
      - ~1,400
      - Maximum accuracy
+
+**Tensorlab alternatives:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 20 45
+
+   * - Model
+     - Parameters
+     - Description
+   * - ``CLS_500_NPU``
+     - ~500
+     - Small, NPU-optimized
+   * - ``CLS_1k_NPU``
+     - ~1,000
+     - Baseline NPU model
+   * - ``CLS_2k_NPU``
+     - ~2,000
+     - Medium NPU model
+   * - ``CLS_4k_NPU``
+     - ~4,000
+     - Recommended NPU model
 
 Expected Results
 ----------------

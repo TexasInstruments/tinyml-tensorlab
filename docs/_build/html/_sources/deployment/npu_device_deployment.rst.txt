@@ -317,7 +317,7 @@ Complete deployment example:
      dataset_name: 'dc_arc_fault_example_dsk'
 
    training:
-     model_name: 'ArcFault_model_400_t'
+     model_name: 'CLS_4k_NPU'
      quantization: 2
      quantization_method: 'QAT'
      quantization_weight_bitwidth: 8
@@ -416,6 +416,376 @@ Troubleshooting NPU Issues
 * Check for memory conflicts
 * Verify buffer alignments
 * Reset NPU and retry
+
+CCS Studio Walkthrough: F28P55x
+--------------------------------
+
+This section provides a complete step-by-step walkthrough for deploying an
+arc fault classification model to the LAUNCHXL-F28P55X board using Code
+Composer Studio. The F28P55x device includes TI's TINPU, so this example
+exercises the full NPU inference path.
+
+**Requirements**
+
+.. list-table::
+   :widths: 30 70
+
+   * - LaunchPad
+     - LAUNCHXL-F28P55X
+   * - SDK
+     - C2000Ware 6.00
+   * - IDE
+     - CCS Studio 20.2.0 or later
+
+Step 1 -- Load the Example from Resource Explorer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The F28P55x arc fault example is available directly through the CCS Resource
+Explorer.
+
+1. Open Code Composer Studio.
+2. Navigate to **View** |rarr| **Resource Explorer**.
+
+.. figure:: /_static/img/deployment/npu/resource_explorer.png
+   :width: 700px
+   :align: center
+   :alt: CCS Resource Explorer
+
+   Opening Resource Explorer from the View menu.
+
+3. In the Resource Explorer, set the **Board or Device** filter to
+   ``LAUNCHXL-F28P55X``.
+4. In the search bar, type ``arc_fault_dataset_validation_f28p55x``.
+
+.. figure:: /_static/img/deployment/npu/resource_explorer_with_filled_fields.png
+   :width: 700px
+   :align: center
+   :alt: Resource Explorer with search filters applied
+
+   Resource Explorer with board and keyword filters filled in.
+
+5. Select the folder **arc_fault_dataset_validation_f28p55x** and click
+   **Import**.
+
+.. figure:: /_static/img/deployment/npu/import_project.png
+   :width: 600px
+   :align: center
+   :alt: Import arc fault project
+
+   Importing the arc fault project from Resource Explorer.
+
+6. Download and install any required dependencies when prompted.
+
+.. figure:: /_static/img/deployment/npu/download_dependencies.png
+   :width: 600px
+   :align: center
+   :alt: Download dependencies dialog
+
+   Downloading required SDK dependencies.
+
+7. After all packages are installed the final import dialog appears. Click
+   **Finish** to import the project into your workspace.
+
+.. figure:: /_static/img/deployment/npu/import_installed_project.png
+   :width: 600px
+   :align: center
+   :alt: Import installed project
+
+   Final import dialog after dependencies are resolved.
+
+Step 2 -- Build the Project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+8. Go to **Project** |rarr| **Build Project(s)** (or press ``Ctrl+B``).
+
+.. figure:: /_static/img/deployment/npu/build_project.png
+   :width: 600px
+   :align: center
+   :alt: Build Project menu
+
+   Building the project from the Project menu.
+
+Verify that the build completes without errors in the Console view.
+
+Step 3 -- Set Target Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+9. Switch the active target configuration from
+   ``TMS320F28P550SJ9.ccxml`` to ``TMS320F28P550SJ9_LaunchPad.ccxml``.
+   Right-click the ``.ccxml`` file in Project Explorer and select
+   **Set as Active Target Configuration**.
+
+.. figure:: /_static/img/deployment/npu/active_target.png
+   :width: 500px
+   :align: center
+   :alt: Active Target Configuration
+
+   Selecting the LaunchPad target configuration.
+
+Step 4 -- Flash the Device
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+10. Connect the LAUNCHXL-F28P55X LaunchPad to your PC via USB.
+11. Go to **Run** |rarr| **Flash Project**.
+
+.. figure:: /_static/img/deployment/npu/flash_application.png
+   :width: 600px
+   :align: center
+   :alt: Flash Project
+
+   Flashing the built project to the device.
+
+12. *(Optional)* If a firmware update prompt appears, click **Update**.
+
+.. figure:: /_static/img/deployment/npu/update_error.png
+   :width: 500px
+   :align: center
+   :alt: Firmware update dialog
+
+   Firmware update dialog -- click Update if it appears.
+
+Step 5 -- Debug and Verify
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+13. After flashing, the Debug perspective opens. Click the **Debug** icon
+    to start a debug session.
+
+.. figure:: /_static/img/deployment/npu/debug_screen.png
+   :width: 700px
+   :align: center
+   :alt: Debug screen
+
+   CCS Debug perspective after flashing.
+
+14. Place a breakpoint on the line that follows the inference call in
+    ``application_main.c``.
+
+.. figure:: /_static/img/deployment/npu/breakpoint.png
+   :width: 700px
+   :align: center
+   :alt: Setting breakpoint
+
+   Setting a breakpoint after the inference call.
+
+15. Click **Resume** (F8) to run the program. When the breakpoint is hit,
+    add the variable ``test_result`` to the **Watch** window.
+
+.. figure:: /_static/img/deployment/npu/variable_test_result.png
+   :width: 600px
+   :align: center
+   :alt: Watch variable test_result
+
+   Adding test_result to the Watch window.
+
+16. Inspect the value:
+
+    * ``test_result == 1`` -- model inference passed (output matches golden
+      vector).
+    * ``test_result == 0`` -- model inference failed.
+
+.. figure:: /_static/img/deployment/npu/test_result_value.png
+   :width: 600px
+   :align: center
+   :alt: test_result value
+
+   Verifying the test_result value in the Watch window.
+
+Required Files from ModelMaker
+------------------------------
+
+The CCS example ``arc_fault_dataset_validation_f28p55x`` requires four files
+generated by a ModelMaker run. After ModelMaker finishes, copy each file
+from its ModelMaker output path to the corresponding CCS project path.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 20 45 40
+
+   * - File
+     - Purpose
+     - ModelMaker Source Path
+     - CCS Project Destination
+   * - ``mod.a``
+     - Compiled model library
+     - ``.../compilation/artifacts/mod.a``
+     - ``ex_arc_fault_dataset_validation_f28p55x/artifacts/mod.a``
+   * - ``tvmgen_default.h``
+     - Model inference API header
+     - ``.../compilation/artifacts/tvmgen_default.h``
+     - ``ex_arc_fault_dataset_validation_f28p55x/artifacts/tvmgen_default.h``
+   * - ``test_vector.c``
+     - Golden-vector test data
+     - ``.../training/quantization/golden_vectors/test_vector.c``
+     - ``ex_arc_fault_dataset_validation_f28p55x/test_vector.c``
+   * - ``user_input_config.h``
+     - Feature extraction config
+     - ``.../training/quantization/golden_vectors/user_input_config.h``
+     - ``ex_arc_fault_dataset_validation_f28p55x/user_input_config.h``
+
+The ``...`` prefix in the source paths expands to your ModelMaker data
+directory, for example::
+
+   tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/<run_name>/
+
+After copying the four files, rebuild the CCS project, flash, and verify
+``test_result`` in the debugger as described above.
+
+.. |rarr| unicode:: U+2192 .. right arrow
+
+Model Performance Profiling
+---------------------------
+
+Understanding inference performance is critical when deploying models to
+resource-constrained MCUs. This section describes how to measure inference cycle
+counts on the F28P55x device so you can evaluate the tradeoff between model
+accuracy and inference latency. Developers typically want to minimize cycles
+(faster inference), but reducing computation can also reduce model accuracy.
+
+By profiling different model and input-size combinations, you can select the
+configuration that meets your latency budget while maintaining acceptable
+accuracy.
+
+**Requirements**
+
+* Device: LAUNCHXL-F28P55X
+* C2000Ware 6.00.00.00
+* Code Composer Studio 20.2.0
+
+**Importing the Profiling Project**
+
+The example project ``ex_model_performance_f28p55x`` is **not** available
+through CCS Resource Explorer. You must manually copy it into the C2000Ware AI
+examples directory and import it:
+
+1. Copy the ``ex_model_performance_f28p55x`` project folder.
+
+2. Paste it into the C2000Ware AI examples path:
+
+   .. code-block:: text
+
+      C2000Ware_6_00_00_00/libraries/ai/feature_extract/c28/examples/
+
+3. In CCS, go to **File** -> **Import Projects(s)**.
+
+4. Browse to the ``ex_model_performance_f28p55x`` folder and click
+   **Select Folder**.
+
+5. Click **Finish** to import the project.
+
+**Running the Profiling Example**
+
+1. Build the project: **Project** -> **Build Project(s)**.
+
+2. Set the active target configuration to
+   ``TMS320F28P550SJ9_LaunchPad.ccxml`` (matching your LAUNCHXL-F28P55X).
+
+3. Connect the launchpad to your system.
+
+4. Flash the project: **Run** -> **Flash Project**.
+
+5. After flashing, click the Debug icon to enter debug mode.
+
+6. Click **Continue** in the Debug Window to let the example run.
+
+7. Read the inference cycle count from the **GEL Output** window.
+
+**Required Files from ModelMaker**
+
+The CCS project ``ex_model_performance_f28p55x`` requires three files generated
+by ModelMaker after a training and compilation run:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 40 35
+
+   * - File
+     - Description
+     - Destination in CCS Project
+   * - ``mod.a``
+     - Compiled model library
+     - ``ex_model_performance_f28p55x/artifacts/``
+   * - ``tvmgen_default.h``
+     - Header for model inference APIs
+     - ``ex_model_performance_f28p55x/artifacts/``
+   * - ``user_input_config.h``
+     - Model input/output size configuration
+     - ``ex_model_performance_f28p55x/``
+
+After each ModelMaker run, copy these three files from the ModelMaker output
+into the corresponding CCS project locations, rebuild the project, flash, and
+debug to obtain the cycle count.
+
+**Configuring Different Models and Frame Sizes**
+
+To sweep across different configurations, edit the ModelMaker YAML
+configuration. The two key parameters are ``frame_size`` (which controls the
+input tensor dimension) and ``model_name`` (which selects the neural network
+architecture):
+
+.. code-block:: yaml
+
+   data_processing_feature_extraction:
+       feature_extraction_name: 'Custom_Default'
+       data_proc_transforms: ['SimpleWindow']
+       frame_size: 128   # Input to the model (N,C,H,W) -> (1,1,128,1)
+
+   training:
+       enable: True
+       model_name: 'TimeSeries_Generic_1k_t'   # Select the model
+
+By sweeping ``frame_size`` over values such as 128, 256, 512, and 1024 and
+choosing among ``TimeSeries_Generic_1k_t``, ``TimeSeries_Generic_4k_t``,
+``TimeSeries_Generic_6k_t``, and ``TimeSeries_Generic_13k_t``, you can
+characterize the full accuracy-vs-cycles landscape for your application.
+
+**Profiling Results**
+
+The table below shows measured inference cycle counts and corresponding
+accuracies on the arc fault dataset. Input size is
+``(N,C,H,W) = (1, 1, frame_size, 1)`` and the output size is 2 (binary
+classification).
+
+.. list-table:: Inference Cycles and Accuracy by Model and Frame Size
+   :header-rows: 1
+   :widths: 28 18 18 18 18
+
+   * - Model
+     - 128
+     - 256
+     - 512
+     - 1024
+   * - TimeSeries_Generic_1k_t
+     - 103,882 cycles (80.32%)
+     - 188,397 cycles (85.83%)
+     - 372,242 cycles (87.33%)
+     - 692,220 cycles (94.43%)
+   * - TimeSeries_Generic_4k_t
+     - 71,595 cycles (86.45%)
+     - 109,534 cycles (89.29%)
+     - 184,981 cycles (91.79%)
+     - 326,782 cycles (94.85%)
+   * - TimeSeries_Generic_6k_t
+     - 107,982 cycles (89.97%)
+     - 164,676 cycles (90.05%)
+     - 261,792 cycles (92.62%)
+     - 462,680 cycles (95.68%)
+   * - TimeSeries_Generic_13k_t
+     - 199,691 cycles (91.83%)
+     - 312,406 cycles (92.60%)
+     - 535,437 cycles (93.21%)
+     - 985,529 cycles (95.54%)
+
+**Key Takeaways**
+
+* Larger models (higher parameter count) generally deliver better accuracy but
+  consume more inference cycles.
+* Larger frame sizes improve accuracy at the cost of proportionally more cycles.
+* ``TimeSeries_Generic_4k_t`` offers the best cycles-per-accuracy ratio for
+  smaller input sizes, making it a strong default choice when latency is
+  constrained.
+* Use this profiling workflow to select the right model and frame size
+  combination that fits within your application's latency budget while meeting
+  accuracy requirements.
 
 Next Steps
 ----------

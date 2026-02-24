@@ -47,6 +47,13 @@ In this example:
 Key Difference from Regression
 ------------------------------
 
+.. note::
+   In **regression**, the target is the current value of the last column, averaged
+   across the window. In **forecasting**, the target is a **future value** of the
+   specified variable at ``forecast_horizon`` steps ahead. This means regression
+   answers "what is the target value right now?" while forecasting answers "what
+   will this variable be in the future?"
+
 **Regression**: Target is a separate value for each window (in last column)
 
 **Forecasting**: Target is a future value of an existing variable
@@ -55,6 +62,10 @@ Key Difference from Regression
 
    Regression: Input [t0...t3] → Predict separate_target_avg
    Forecasting: Input [t0, t1, t2] → Predict variable[t3]
+
+Unlike regression where the target column is always the last column, forecasting
+requires you to explicitly specify which variable(s) to predict via the
+``target_variables`` configuration parameter.
 
 Configuration
 -------------
@@ -82,6 +93,13 @@ Configuration
 
 Variable Specification Options
 ------------------------------
+
+.. note::
+   ``target_variables`` can be specified by **column index** (0-based, after any
+   time column is removed) or by **column name** (if the CSV has a header row).
+   You can also mix indices and names, though using one form consistently is
+   recommended. When using indices, remember that any column containing "time"
+   is dropped first, so indices refer to the columns *after* that removal.
 
 **By Column Index** (0-based, after time column removal):
 

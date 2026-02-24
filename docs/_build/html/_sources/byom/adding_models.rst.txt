@@ -405,6 +405,137 @@ Best Practices
 4. **Consider NPU constraints**: If targeting NPU devices
 5. **Start from existing models**: Modify rather than create from scratch
 
+Adding Custom Feature Extractors
+---------------------------------
+
+You can add custom feature extractors to the TinyVerse repository for use
+during data preprocessing. The feature extractor is added to TinyVerse and
+then imported into the data loading pipeline.
+
+**Step 1: Create the feature extractor file**
+
+Add a new Python file in the transforms directory:
+
+.. code-block:: text
+
+   tinyml-tinyverse/
+   └── tinyml_tinyverse/
+       └── common/
+           └── transforms/
+               └── your_feature_extractor.py
+
+**Step 2: Import into the data loader**
+
+Import the feature extractor in ``common/datasets/timeseries_dataset.py`` and
+use it in the data loading pipeline:
+
+.. code-block:: python
+
+   from tinyml_tinyverse.common.transforms.your_feature_extractor import YourFeatureExtractor
+
+At this stage, the TinyVerse package can function independently with the new
+feature extractor.
+
+Adding New Modalities
+---------------------
+
+A modality (also referred to as an ``ai_module``) represents a distinct data
+domain such as ``audio``, ``timeseries``, or ``vision``. Adding a new modality
+requires changes in both tinyml-modelmaker and tinyml-tinyverse.
+
+**ModelMaker Directory Structure**
+
+Each modality must have three mandatory subparts: ``datasets``, ``training``,
+and ``compilation``. The directory structure under
+``tinyml-modelmaker/tinyml_modelmaker/ai_modules/`` is as follows:
+
+.. code-block:: text
+
+   tinyml_modelmaker/ai_modules/your_modality/
+   ├── __init__.py              # Imports from subsequent files
+   ├── constants.py             # Modality-specific constants
+   ├── descriptions.py          # Human-readable descriptions
+   ├── params.py                # Parameters for dataset, training, compilation
+   ├── runner.py                # Core engine that runs the flow from config
+   ├── datasets/
+   │   └── __init__.py
+   ├── training/
+   │   ├── __init__.py
+   │   └── tinyml_tinyverse/
+   │       ├── __init__.py
+   │       └── task_name.py     # e.g., classification.py, regression.py
+   └── compilation/
+       └── __init__.py
+
+**Key files:**
+
+* ``constants.py`` -- Defines constants specific to the modality.
+* ``descriptions.py`` -- Provides human-readable descriptions of tasks and
+  parameters.
+* ``params.py`` -- Contains the parameters required for dataset, training, and
+  compilation tasks from the configuration YAML file.
+* ``runner.py`` -- The core engine that runs the processing flow based on the
+  configuration file.
+
+.. note::
+
+   Unless necessary, the ``__init__.py`` files under ``datasets``, ``training``,
+   and ``compilation`` can contain the same contents as other modalities such as
+   ``audio`` or ``timeseries``.
+
+**TinyVerse Changes**
+
+An equivalent update in the tinyml-tinyverse repository is also required. Add
+the corresponding folders and files as needed for any combination of
+``transforms``, ``datasets``, ``models``, ``compilations``, or ``utils``.
+
+Configuring Model Layer Parameters
+-----------------------------------
+
+You can override a model's ``__init__`` arguments at runtime using a
+``model_config`` YAML file. This allows you to change parameters such as
+``input_features``, ``variables``, and ``num_classes`` without modifying the
+model source code.
+
+**Creating a model_config file**
+
+Example model_config files can be found in the ``misc/`` folder of the
+tinyml-modelmaker repository. The YAML file should contain the parameters that
+the model class accepts as ``__init__`` arguments.
+
+For example, the class ``CNN_TS_GEN_BASE_13K`` (referred to by the model name
+``TimeSeries_Generic_13k_t``) accepts the following arguments:
+
+.. code-block:: python
+
+   class CNN_TS_GEN_BASE_13K(GenericModelWithSpec):
+       def __init__(self, config, input_features=512, variables=1, num_classes=2):
+
+A corresponding ``model_config`` YAML file can override any of these arguments:
+
+.. code-block:: yaml
+
+   input_features: 512
+   variables: 2
+   num_classes: 3
+
+**Using the model_config in your configuration**
+
+Specify the path to the ``model_config`` file in the ``training`` section of
+your project configuration YAML:
+
+.. code-block:: yaml
+
+   training:
+     enable: True
+     model_name: 'TimeSeries_Generic_13k_t'
+     model_config: '/path/to/tinyml-modelmaker/misc/TimeSeries_Generic_x_t.yaml'
+
+This will override the model's default ``__init__`` arguments with the values
+specified in the ``model_config`` file. You can provide none, some, or all of
+the supported arguments -- any arguments not specified will retain their default
+values.
+
 Next Steps
 ----------
 

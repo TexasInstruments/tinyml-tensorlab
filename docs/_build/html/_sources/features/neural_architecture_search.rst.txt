@@ -12,11 +12,17 @@ NAS eliminates manual architecture design by:
 
 * Searching through possible layer configurations
 * Evaluating accuracy vs size trade-offs
-* Finding Pareto-optimal models
-* Respecting device memory and latency constraints
+* Optimizing for memory (parameters) or compute (MACs/FLOPs)
+* Generating TINPU-compatible models directly from your dataset
 
 This is especially valuable for MCUs where architecture choices
 significantly impact whether a model fits in memory.
+
+.. warning::
+
+   NAS is very compute-intensive. A GPU is required for practical use.
+   Each NAS epoch can take several minutes. Choose the number of epochs
+   wisely to avoid excessive runtimes.
 
 When to Use NAS
 ---------------
@@ -30,150 +36,180 @@ Use NAS when:
 
 Don't use NAS when:
 
-* You have tight time constraints
+* You have tight time constraints (NAS is slow)
 * A standard model already works well
-* You need reproducible results quickly
+* You don't have GPU access
 
-Enabling NAS
-------------
+Code Flow
+---------
 
-Add the NAS section to your configuration:
+1. **Config Parsing**: The YAML config is parsed at runtime. NAS parameters
+   are read from the ``training`` section.
+2. **NAS Activation**: If ``nas_enabled: True``, the NAS module is invoked
+   instead of using a static model architecture.
+3. **NAS Search**: The NAS engine runs for the specified number of epochs
+   (``nas_epochs``), optimizing for memory or compute as per
+   ``nas_optimization_mode``.
+4. **Model Selection**: The best architecture found during search is
+   selected and trained according to the rest of the training configuration.
+5. **Model Export**: The trained model can be tested and optionally compiled
+   for deployment.
 
-.. code-block:: yaml
+Configuration
+-------------
 
-   common:
-     task_type: 'generic_timeseries_classification'
-     target_device: 'F28P55'
+All NAS parameters are specified under the ``training`` section of the
+YAML configuration file.
 
-   dataset:
-     dataset_name: 'your_dataset'
-
-   nas:
-     enable: True
-     search_type: 'multi_trial'
-     num_trials: 20
-     param_range: [500, 5000]
-     accuracy_target: 0.95
-
-   training:
-     model_name: 'auto'  # NAS will find the model
-     training_epochs: 20
-
-   compilation:
-     enable: True
-
-Configuration Options
----------------------
-
-**Basic Options:**
+**Required Parameters:**
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 30 10 40 20
 
-   * - Option
+   * - Parameter
+     - Type
      - Description
-   * - ``enable``
-     - Set to ``True`` to enable NAS
-   * - ``search_type``
-     - ``'single_trial'`` or ``'multi_trial'``
-   * - ``num_trials``
-     - Number of architectures to evaluate
-   * - ``param_range``
-     - ``[min_params, max_params]`` constraint
+     - Example Values
+   * - ``nas_enabled``
+     - bool
+     - Enable or disable NAS
+     - ``True``, ``False``
+   * - ``nas_epochs``
+     - int
+     - Number of epochs for the NAS search
+     - ``10``, ``20``
+   * - ``nas_optimization_mode``
+     - str
+     - Optimization target. ``'Memory'`` optimizes for parameters
+       (read-only data on MCU). ``'Compute'`` optimizes for MACs/FLOPs
+       (peak SRAM usage).
+     - ``'Memory'``, ``'Compute'``
+   * - ``nas_model_size``
+     - str
+     - Preset model size that determines search space complexity
+     - ``'s'``, ``'m'``, ``'l'``, ``'xl'``, ``'xxl'``
 
-**Accuracy Constraints:**
+**Customization Parameters (Optional):**
+
+Use these instead of ``nas_model_size`` for fine-grained control over the
+search space:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 10 40 15
+
+   * - Parameter
+     - Type
+     - Description
+     - Example Values
+   * - ``nas_nodes_per_layer``
+     - int
+     - Number of nodes (operations) per layer in the DAG
+     - ``4``
+   * - ``nas_layers``
+     - int
+     - Number of layers in the architecture. Minimum is 3.
+     - ``3``, ``5``
+   * - ``nas_init_channels``
+     - int
+     - Initial feature map channels for the first conv layer
+     - ``1``, ``8``
+   * - ``nas_init_channel_multiplier``
+     - int
+     - Channel multiplier for subsequent layers
+     - ``3``
+   * - ``nas_fanout_concat``
+     - int
+     - Number of nodes per layer to concatenate for output
+     - ``4``
+
+.. note::
+
+   Only ``nas_enabled``, ``nas_epochs``, ``nas_optimization_mode``, and
+   ``nas_model_size`` are required for preset mode. The customization
+   parameters are optional and allow advanced users to define the NAS
+   search space in detail.
+
+Model Size Presets
+------------------
+
+When using NAS in preset mode, the ``nas_model_size`` parameter selects
+a predefined search space configuration. Each preset controls the
+complexity and size of architectures explored:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 15 20 18 22 15
+
+   * - Preset
+     - Layers
+     - Nodes/Layer
+     - Init Channels
+     - Channel Multiplier
+     - Fanout Concat
+   * - ``s``
+     - 3
+     - 4
+     - 1
+     - 3
+     - 4
+   * - ``m``
+     - 10
+     - 4
+     - 1
+     - 3
+     - 4
+   * - ``l``
+     - 12
+     - 4
+     - 4
+     - 3
+     - 4
+   * - ``xl``
+     - 20
+     - 4
+     - 4
+     - 3
+     - 4
+   * - ``xxl``
+     - 20
+     - 6
+     - 8
+     - 3
+     - 4
+
+These values are set automatically when you specify the preset via
+``nas_model_size``. For more control, use customization mode and set
+these parameters manually.
+
+Usage
+-----
+
+**Preset Mode (Recommended):**
 
 .. code-block:: yaml
 
-   nas:
-     accuracy_target: 0.95    # Minimum acceptable accuracy
-     accuracy_weight: 1.0     # Weight for accuracy in optimization
+   training:
+     nas_enabled: True
+     nas_epochs: 10
+     nas_optimization_mode: 'Memory'
+     nas_model_size: 'm'
 
-**Size Constraints:**
-
-.. code-block:: yaml
-
-   nas:
-     param_range: [500, 5000]  # Parameter count bounds
-     size_weight: 0.5          # Weight for model size
-
-**Latency Constraints:**
+**Customization Mode:**
 
 .. code-block:: yaml
 
-   nas:
-     latency_target: 1000     # Target inference time (µs)
-     latency_weight: 0.3      # Weight for latency
-
-Search Types
-------------
-
-**Single Trial Search:**
-
-Evaluates one architecture at a time:
-
-.. code-block:: yaml
-
-   nas:
-     search_type: 'single_trial'
-     num_trials: 10
-
-* Pros: Lower memory usage, simpler
-* Cons: Slower, less exploration
-
-**Multi-Trial Search:**
-
-Evaluates multiple architectures in parallel:
-
-.. code-block:: yaml
-
-   nas:
-     search_type: 'multi_trial'
-     num_trials: 20
-     parallel_trials: 4
-
-* Pros: Faster, better exploration
-* Cons: Higher memory usage
-
-Search Space
-------------
-
-NAS searches over these architectural dimensions:
-
-**Layer Types:**
-
-* Convolutional layers
-* Pooling layers (max, average)
-* Fully connected layers
-* Batch normalization
-* Activation functions
-
-**Hyperparameters:**
-
-* Number of layers
-* Channel counts (multiples of 4 for NPU)
-* Kernel sizes
-* Stride values
-
-**NPU-Aware Search:**
-
-For NPU devices, NAS automatically respects constraints:
-
-.. code-block:: yaml
-
-   common:
-     target_device: 'F28P55'  # NPU device
-
-   nas:
-     enable: True
-     npu_compatible: True     # Enforces NPU constraints
-
-NAS ensures:
-
-* Channels are multiples of 4
-* Kernel heights ≤ 7
-* Valid stride combinations
+   training:
+     nas_enabled: True
+     nas_epochs: 20
+     nas_optimization_mode: 'Compute'
+     # Customization mode parameters
+     nas_nodes_per_layer: 4
+     nas_layers: 5
+     nas_init_channels: 8
+     nas_init_channel_multiplier: 2
+     nas_fanout_concat: 3
 
 Running NAS
 -----------
@@ -194,118 +230,8 @@ Running NAS
          cd tinyml-modelzoo
          run_tinyml_modelzoo.bat examples\\your_example\\config_nas.yaml
 
-NAS takes longer than single model training (proportional to num_trials).
-
-Output Files
-------------
-
-After NAS completes, you'll find:
-
-.. code-block:: text
-
-   .../run/<timestamp>/NAS/
-   ├── search_results.csv        # All evaluated architectures
-   ├── pareto_frontier.csv       # Optimal trade-off models
-   ├── best_model_spec.yaml      # Best model specification
-   ├── pareto_plot.png           # Accuracy vs size plot
-   └── best_model/
-       └── best_model.pt         # Trained best model
-
-**search_results.csv:**
-
-.. code-block:: text
-
-   trial,params,accuracy,latency,architecture
-   0,1200,0.92,450,"[conv(4,8,5),conv(8,16,3),fc(16,3)]"
-   1,2400,0.96,720,"[conv(4,16,5),conv(16,32,3),fc(32,3)]"
-   ...
-
-**pareto_frontier.csv:**
-
-Contains only Pareto-optimal models (best accuracy at each size).
-
-Interpreting Results
---------------------
-
-**Pareto Frontier Plot:**
-
-Shows trade-off between model size and accuracy:
-
-.. code-block:: text
-
-        Accuracy
-        ^
-   1.0  |          * * *
-        |        *
-   0.9  |      *
-        |    *
-   0.8  |  *
-        +----------------> Model Size
-          1k  2k  3k  4k
-
-Points on the frontier are optimal choices.
-
-**Selecting a Model:**
-
-1. Find your accuracy requirement on the frontier
-2. Choose the smallest model meeting that requirement
-3. Use the architecture specification from ``best_model_spec.yaml``
-
-Using NAS Results
------------------
-
-After NAS finds a good architecture, use it for final training:
-
-.. code-block:: yaml
-
-   # Final training with NAS-discovered architecture
-   training:
-     model_name: 'NAS_result'
-     model_spec_path: 'path/to/best_model_spec.yaml'
-     training_epochs: 50  # More epochs for final model
-
-Or incorporate the discovered architecture into your model zoo.
-
-Advanced Configuration
-----------------------
-
-**Custom Search Space:**
-
-Define specific layers to search:
-
-.. code-block:: yaml
-
-   nas:
-     enable: True
-     search_space:
-       conv_channels: [4, 8, 16, 32]
-       conv_kernels: [3, 5, 7]
-       num_conv_layers: [2, 3, 4]
-       fc_features: [16, 32, 64]
-
-**Early Stopping:**
-
-Stop search when target is met:
-
-.. code-block:: yaml
-
-   nas:
-     early_stopping: True
-     accuracy_threshold: 0.98
-     patience: 5  # Stop if no improvement for 5 trials
-
-**Warm Starting:**
-
-Start from a known good architecture:
-
-.. code-block:: yaml
-
-   nas:
-     warm_start: True
-     initial_architecture: 'CLS_2k_NPU'
-
-Example: Finding Optimal Arc Fault Model
-----------------------------------------
+Example: Full NAS Configuration
+--------------------------------
 
 .. code-block:: yaml
 
@@ -320,75 +246,167 @@ Example: Finding Optimal Arc Fault Model
      feature_extraction_name: 'FFT1024Input_256Feature_1Frame_Full_Bandwidth'
      variables: 1
 
-   nas:
-     enable: True
-     search_type: 'multi_trial'
-     num_trials: 30
-     param_range: [200, 2000]
-     accuracy_target: 0.98
-     npu_compatible: True
-
    training:
-     model_name: 'auto'
+     enable: True
      training_epochs: 15
      batch_size: 256
+     nas_enabled: True
+     nas_epochs: 10
+     nas_optimization_mode: 'Memory'
+     nas_model_size: 'm'
 
    compilation:
      enable: True
 
-**Expected Results:**
+Tips
+----
 
-NAS might find an architecture like:
-
-.. code-block:: text
-
-   Best Model: 650 parameters
-   Accuracy: 98.5%
-   Latency: 180 µs (F28P55 NPU)
-
-   Architecture:
-   - Conv: 1 → 4 channels, kernel 5
-   - Conv: 4 → 8 channels, kernel 3
-   - MaxPool: 2x2
-   - FC: 64 → 2 (binary classification)
-
-Computational Cost
-------------------
-
-NAS requires training multiple models:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 30 35 35
-
-   * - Trials
-     - Time (20 epochs each)
-     - GPU Recommended
-   * - 10
-     - ~1-2 hours
-     - Optional
-   * - 30
-     - ~3-6 hours
-     - Yes
-   * - 100
-     - ~10-20 hours
-     - Yes
-
-**Reducing NAS Time:**
-
-* Fewer training epochs per trial
-* Smaller search space
-* Early stopping
-* Use GPU if available
+* **Preset mode** is recommended for most users and provides a good
+  balance between search space and ease of use.
+* **Customization mode** is for advanced users who want fine-grained
+  control over the architecture search space.
+* Increasing ``nas_epochs`` can improve search results but increases
+  runtime.
+* Choose ``nas_optimization_mode`` based on deployment constraints:
+  use ``'Memory'`` for devices with limited flash/RAM, ``'Compute'``
+  for latency-sensitive applications.
+* All NAS parameters can be adjusted in the YAML config without
+  modifying code.
+* All other training parameters (batch size, learning rate, etc.) are
+  compatible with NAS.
 
 Best Practices
 --------------
 
-1. **Start Simple**: Try standard models first, use NAS if needed
-2. **Set Realistic Targets**: Don't aim for 100% accuracy
-3. **Constrain Search Space**: Narrow bounds speed up search
-4. **Use Appropriate Trials**: 20-50 trials usually sufficient
-5. **Validate Results**: Test best model thoroughly before deployment
+1. **Start Simple**: Try standard models first, use NAS only if needed
+2. **Use Preset Mode**: Start with ``'s'`` or ``'m'`` before trying larger presets
+3. **GPU Required**: NAS without a GPU is impractical
+4. **Validate Results**: Test the NAS-discovered model thoroughly before deployment
+5. **Compare with Standard Models**: NAS results may not always beat hand-designed models
+
+Search Algorithm
+----------------
+
+The NAS implementation uses a **Differentiable Architecture Search (DARTS)**
+approach based on gradient-based optimization. Instead of evaluating
+architectures individually, DARTS relaxes the discrete architecture choices
+into continuous parameters (called ``alphas``) that are optimized jointly
+with model weights.
+
+**How DARTS works:**
+
+1. **Architecture Parameterization**: Each edge in the search DAG has a
+   set of ``alpha`` parameters, one per candidate operation. A softmax
+   over these alphas determines the mixture of operations.
+2. **Bilevel Optimization**: Model weights and architecture parameters are
+   optimized alternately — weights on training data, alphas on validation
+   data.
+3. **Genotype Extraction**: After search, the highest-alpha operation for
+   each edge is selected, producing a discrete architecture (genotype).
+4. **Final Training**: The selected architecture is retrained from scratch
+   using standard training parameters.
+
+**Unrolled Optimization** (advanced): Setting ``unrolled=True`` in the NAS
+engine uses second-order gradient approximation for architecture parameters,
+which can improve search quality at the cost of increased computation and
+memory.
+
+**Resource-Aware Penalties**: The search includes penalties for model
+complexity. ``nas_optimization_mode: 'Memory'`` penalizes parameter count
+(flash/RAM usage on MCU), while ``'Compute'`` penalizes MACs/FLOPs
+(inference latency).
+
+Search Space
+------------
+
+The NAS search space defines the candidate operations available at each
+edge in the architecture DAG. The default CNN search space
+(``PRIMITIVES_CNN``) includes:
+
+.. code-block:: python
+
+   PRIMITIVES_CNN = [
+       'none',              # Zero operation (drop connection)
+       'avg_pool_3x1',      # 3x1 average pooling
+       'max_pool_3x1',      # 3x1 max pooling
+       'skip_connect',      # Identity/skip connection
+       'conv_bn_relu_3x1',  # 3x1 convolution + BatchNorm + ReLU
+       'conv_bn_relu_5x1',  # 5x1 convolution + BatchNorm + ReLU
+       'conv_bn_relu_7x1',  # 7x1 convolution + BatchNorm + ReLU
+   ]
+
+These 1D convolution primitives are designed for time series data processed
+by TI MCUs. The search finds the best combination of these operations for
+each layer of the network.
+
+**Architecture Structure:**
+
+Each NAS-discovered architecture consists of:
+
+* **Normal cells**: Preserve spatial dimensions, repeated throughout the
+  network
+* **Reduction cells**: Downsample spatial dimensions between stages
+* **Genotype**: A named tuple describing the selected operations and their
+  connections for both cell types
+
+A genotype specifies, for each node in a cell, which operation to apply
+and which previous node to use as input. The outputs of selected nodes
+are concatenated to form the cell's output (controlled by
+``nas_fanout_concat``).
+
+NAS Framework Internals
+-----------------------
+
+For advanced users and developers, the NAS module is organized as follows:
+
+.. code-block:: text
+
+   tinyml_torchmodelopt/nas/
+       ├── architect.py         # Bilevel optimization (Architect class)
+       ├── genotypes.py         # Search space primitives and genotype defs
+       ├── model.py             # Final model (fixed genotype)
+       ├── model_search_cnn.py  # Search-phase model (with alpha params)
+       ├── operations.py        # Primitive operation implementations
+       ├── train_cnn_search.py  # NAS search training loop
+       └── utils.py             # Metrics, parameter counting, checkpointing
+
+**Key Components:**
+
+* **Architect** (``architect.py``): Manages bilevel optimization of
+  architecture parameters. Supports standard and unrolled optimization
+  with resource-aware penalties.
+* **Search Model** (``model_search_cnn.py``): The supernet with
+  differentiable architecture parameters (``alphas``). Supports parsing
+  of learned architecture into a discrete genotype.
+* **Final Model** (``model.py``): Instantiated with a fixed genotype for
+  evaluation and deployment.
+* **Operations** (``operations.py``): Implements all primitive operations
+  (convolutions, pooling, skip connections) used in the search space.
+
+**Direct API Usage** (advanced):
+
+.. code-block:: python
+
+   from tinyml_torchmodelopt.nas.train_cnn_search import search_and_get_model
+
+   # Run NAS search and get the best model
+   final_model = search_and_get_model(args)
+
+   # Save for deployment
+   torch.save(final_model.state_dict(), 'nas_model.pth')
+
+References
+----------
+
+The NAS implementation is based on the following research:
+
+* Liu, H., Simonyan, K., & Yang, Y. (2019). `DARTS: Differentiable
+  Architecture Search <https://arxiv.org/abs/1806.09055>`_. ICLR 2019.
+* Ye, P., et al. (2022). `β-DARTS: Beta-Decay Regularization for
+  Differentiable Architecture Search <https://arxiv.org/abs/2203.01665>`_.
+* Bender, G., Liu, H., Chen, B., Chu, G., Cheng, S., Kindermans, P.-J.,
+  & Le, Q. V. (2020). `Balanced One-shot Neural Architecture Optimization
+  <https://arxiv.org/abs/1909.10815>`_.
 
 Next Steps
 ----------

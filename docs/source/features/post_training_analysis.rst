@@ -247,6 +247,94 @@ Compare quantized model to float baseline:
 
    Degradation: 0.4%
 
+File-Level Classification Summary
+----------------------------------
+
+The File-Level Classification Summary provides an overview of how samples from
+each input file are classified into different classes. It helps users quickly
+identify if any particular file contains misclassified samples.
+
+While the confusion matrix shows overall counts of correct and incorrect
+classifications, it does not reveal which specific files contain those
+misclassified samples. For example, even if the total misclassification count
+is small, it might come entirely from one problematic file. This feature helps
+pinpoint such cases instantly.
+
+**Output Location:**
+
+The summary is written to ``file_level_classification_summary.log`` inside the
+``training/base/`` directory of your project run:
+
+.. code-block:: text
+
+   .../data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/
+   └── file_level_classification_summary.log
+
+The log file contains tables for float train, quantized train, and test data,
+depending on which stages are enabled in the configuration. Each table shows
+each file, its true class, and the count of samples from that file classified
+into each class.
+
+**Example: Fan Blade Fault Classification**
+
+Consider a fan blade fault classification dataset with four classes: **Normal**,
+**BladeDamage**, **BladeImbalance**, and **BladeObstruction**. The confusion
+matrix for float train best epoch might look like this:
+
+.. list-table:: Confusion Matrix (Float Train)
+   :header-rows: 1
+   :widths: 25 18 18 20 18
+
+   * - Ground Truth
+     - BladeDamage
+     - BladeImbalance
+     - BladeObstruction
+     - Normal
+   * - **BladeDamage**
+     - 1159
+     - 339
+     - 0
+     - 0
+   * - **BladeImbalance**
+     - 0
+     - 1301
+     - 0
+     - 0
+   * - **BladeObstruction**
+     - 0
+     - 0
+     - 962
+     - 0
+   * - **Normal**
+     - 0
+     - 0
+     - 0
+     - 2114
+
+From this confusion matrix, we can see that while all classes other than
+BladeDamage are correctly classified, some BladeDamage samples are incorrectly
+classified as BladeImbalance. However, from the confusion matrix alone, we
+cannot determine which specific files contain these misclassified samples.
+
+When we inspect the File-Level Classification Summary of FloatTrain, we discover
+that in file numbers 0, 1, 2, 20, and 21, **all** samples were classified as
+BladeImbalance even though their true class is BladeDamage. Similarly, in the
+test data, file numbers 7 and 8 have all samples misclassified.
+
+.. tip::
+
+   A higher count of samples in the wrong class column for a specific file
+   indicates potential data or labeling issues in that file.
+
+**Use Cases:**
+
+* **Identifying labeling issues**: Files where all samples are misclassified
+  may have been assigned the wrong label during data collection.
+* **Data quality assessment**: Pinpoint specific recordings or data files that
+  contain noisy, corrupted, or otherwise problematic data.
+* **Targeted investigation**: Rather than reviewing the entire dataset, focus
+  review efforts on the specific files flagged by this summary.
+
 Regression Analysis
 -------------------
 
@@ -365,7 +453,7 @@ Example: Complete Analysis Configuration
      variables: 1
 
    training:
-     model_name: 'ArcFault_model_400_t'
+     model_name: 'CLS_4k_NPU'
      training_epochs: 30
      quantization: 2
      quantization_method: 'QAT'

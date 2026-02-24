@@ -117,7 +117,7 @@ Most examples have a similar structure. Here's how to read them:
 .. code-block:: yaml
 
    training:
-     model_name: 'ArcFault_model_200_t'  # Model architecture
+     model_name: 'CLS_1k_NPU'  # Model architecture
      training_epochs: 20
 
 **5. Verify Target Device**
@@ -167,7 +167,7 @@ All outputs go to::
 
 For example, running ``dc_arc_fault`` example produces::
 
-   ../tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/2024-01-15_14-30-00/ArcFault_model_200_t/
+   ../tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/2024-01-15_14-30-00/CLS_1k_NPU/
 
 Example Categories
 ------------------

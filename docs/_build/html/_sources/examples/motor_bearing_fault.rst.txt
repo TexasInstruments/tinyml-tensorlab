@@ -109,6 +109,15 @@ bearing faults.
 Available Models
 ----------------
 
+.. important::
+
+   The ``MotorFault_model_*`` models listed below are only available in
+   TI's **Edge AI Studio** (GUI) and are not included in Tensorlab.
+   Use the generic ``CLS_*_NPU`` models as equivalent alternatives
+   in Tensorlab.
+
+**Edge AI Studio models:**
+
 .. list-table::
    :header-rows: 1
    :widths: 35 20 45
@@ -125,9 +134,25 @@ Available Models
    * - ``MotorFault_model_3_t``
      - ~4,000
      - Best accuracy
+
+**Tensorlab alternatives:**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 20 45
+
+   * - Model
+     - Parameters
+     - Description
+   * - ``CLS_1k_NPU``
+     - ~1,000
+     - Baseline NPU model
+   * - ``CLS_2k_NPU``
+     - ~2,000
+     - Medium NPU model
    * - ``CLS_4k_NPU``
      - ~4,000
-     - Generic NPU model
+     - Recommended NPU model
 
 Expected Results
 ----------------

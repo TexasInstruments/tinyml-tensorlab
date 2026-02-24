@@ -173,6 +173,77 @@ Complete Example
      model_name: 'REGR_1k_NPU'
      training_epochs: 100
 
+Troubleshooting
+---------------
+
+**"Target column not found" error**
+
+The target variable must be in the **last column** of every CSV file. If your target
+is not the last column, either reorder the columns or specify ``target_variables``
+explicitly in the configuration. Double-check that no extra trailing delimiter is
+creating a phantom empty column after your intended target.
+
+**"Insufficient sequence length" error**
+
+Each data file must contain enough rows to produce at least one window. The minimum
+row count per file is::
+
+   frame_size + (stride as absolute rows)
+
+For example, with ``frame_size=128`` and ``stride_size=0.25`` (which translates to a
+stride of 32 rows), you need at least 128 rows per file. If files are shorter, either
+increase their length or reduce ``frame_size``.
+
+**"Annotation file missing" error**
+
+Unlike classification (where annotations are optional), regression **requires** an
+``annotations/`` directory containing at least ``instances_train_list.txt`` and
+``instances_val_list.txt``. If you omit the annotations folder entirely, ModelMaker
+will attempt to auto-generate splits, but providing explicit splits is recommended
+for reproducibility.
+
+**"Data dimension mismatch" error**
+
+All CSV files in the ``files/`` directory must have the **same number of columns**.
+Verify that:
+
+* No files have extra or missing columns
+* The ``variables`` parameter in the config matches the actual number of input
+  feature columns (i.e., total columns minus the target column, minus any
+  auto-dropped time column)
+* Delimiters are consistent across all files
+
+**"Time column" gotcha**
+
+.. warning::
+   Do **not** name any feature column with the word "time" (case-insensitive).
+   Any column whose header contains "time" (e.g., ``Time``, ``Timestamp``,
+   ``TIME (microsec)``) is **automatically dropped** during data loading. If you
+   need a temporal feature, use a name like ``elapsed_sec`` or ``sample_index``
+   instead.
+
+Best Practices
+--------------
+
+* **Use consistent column ordering** across all files in the dataset. Every CSV
+  should have the same columns in the same order.
+* **Avoid naming columns "time"**. Use ``timestamp``, ``elapsed_sec``, or
+  ``sample_index`` if you need a temporal reference column, since any column
+  with "time" in its name is silently dropped.
+* **Ensure numerical-only data**. All values (except the optional header row)
+  must be numeric (integers or floats). String values, NaN entries, or missing
+  fields will cause errors during data loading.
+* **Include enough variety in the target range** for the model to generalize.
+  If all target values cluster in a narrow range, the model may fail to learn
+  meaningful regression. Aim for training data that covers the full expected
+  operating range of the target variable.
+* **Remove outliers and NaN values** before preparing the dataset. Extreme
+  outliers can disproportionately affect MSE-based training.
+* **Use descriptive filenames** (e.g., ``motor_test_001.csv``) to make
+  annotation files easier to manage.
+* **Test with a small subset first** to validate the dataset format before
+  launching a full training run.
+
 Common Issues
 -------------
 

@@ -78,30 +78,61 @@ Option 2: WSL2 (Recommended for Full Compatibility)
 
 Windows Subsystem for Linux provides better compatibility with the toolchain.
 
-**Step 1: Enable WSL2**
+.. seealso::
 
-Open PowerShell as Administrator:
+   `Official WSL Documentation <https://learn.microsoft.com/en-us/windows/wsl/about>`_
+
+**Step 1: Install WSL2 with Ubuntu 22.04**
+
+Open PowerShell as Administrator (right-click and choose "Run as Administrator"):
 
 .. code-block:: powershell
 
-   wsl --install
+   wsl --install --web-download --distribution Ubuntu-22.04
 
 Restart your computer when prompted.
 
-**Step 2: Install Ubuntu**
+.. note::
 
-Open Microsoft Store and install "Ubuntu 22.04 LTS".
+   The above command performs multiple internal steps. If it errors partway through,
+   simply run the same command again after rebooting. It is safe to run multiple times.
 
-Launch Ubuntu and set up your username/password.
+**Step 2: Create a UNIX User Account**
 
-**Step 3: Install in Ubuntu**
+After the reboot, reopen PowerShell and run the install command once more. This time
+it will detect that Ubuntu 22.04 is already installed and will launch it, prompting you
+to create a default UNIX user account:
+
+.. code-block:: text
+
+   Please create a default UNIX user account. The username does not need to match your Windows username.
+   Enter new UNIX username: your_username
+   New password:
+   Retype new password:
+
+Choose any username and password you like. These do not need to match your Windows
+or enterprise credentials.
+
+**Accessing Files Between WSL and Windows**
+
+* **From Windows**: Open File Explorer and type ``\\wsl.localhost\Ubuntu-22.04`` in the
+  address bar to browse your WSL filesystem.
+* **From WSL**: Your Windows drives are automatically mounted under ``/mnt/``. For
+  example, access the C: drive with ``ls /mnt/c/``.
+
+.. tip::
+
+   For best performance, keep project files inside the WSL filesystem (e.g., under
+   your ``/home/<username>`` directory) rather than on a Windows-mounted drive.
+
+**Step 3: Update System and Install Dependencies**
 
 .. code-block:: bash
 
    # Update packages
    sudo apt update && sudo apt upgrade -y
 
-   # Install dependencies
+   # Install build tools and other dependencies
    sudo apt install -y build-essential git curl
 
    # Install pyenv
@@ -128,6 +159,144 @@ Launch Ubuntu and set up your username/password.
 
    cd ~/tinyml-tensorlab/tinyml-modelzoo
    ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
+
+Network and Proxy Configuration in WSL (Optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. note::
+
+   This section is relevant if you are behind a corporate firewall, VPN, or proxy.
+   If your WSL instance can already reach the internet (e.g., ``sudo apt update``
+   works), you can skip this.
+
+**DNS Configuration**
+
+If DNS resolution fails inside WSL, you may need to configure ``/etc/resolv.conf``
+manually:
+
+.. code-block:: bash
+
+   sudo nano /etc/resolv.conf
+
+Add a public DNS nameserver (or your corporate DNS server):
+
+.. code-block:: text
+
+   nameserver 8.8.8.8
+
+To prevent WSL from overwriting this file on each startup, edit ``/etc/wsl.conf``:
+
+.. code-block:: bash
+
+   sudo nano /etc/wsl.conf
+
+Add the following:
+
+.. code-block:: ini
+
+   [network]
+   generateResolvConf = false
+
+Then make ``resolv.conf`` immutable so it persists:
+
+.. code-block:: bash
+
+   sudo chattr +i /etc/resolv.conf
+
+**APT Proxy Configuration**
+
+If ``apt`` cannot connect to package repositories, configure a proxy. Replace
+``your.proxy.address:port`` with your actual proxy settings:
+
+1. Create or edit ``/etc/apt/apt.conf``:
+
+   .. code-block:: text
+
+      Acquire::http::proxy "http://your.proxy.address:port";
+      Acquire::https::proxy "http://your.proxy.address:port";
+
+2. Create ``/etc/profile.d/proxy.sh`` to set environment-wide proxy variables:
+
+   .. code-block:: bash
+
+      export http_proxy="http://your.proxy.address:port"
+      export https_proxy="http://your.proxy.address:port"
+      export no_proxy="localhost,127.0.0.1"
+      export HTTP_PROXY="http://your.proxy.address:port"
+      export HTTPS_PROXY="http://your.proxy.address:port"
+      export NO_PROXY="localhost,127.0.0.1"
+
+3. Shut down and restart WSL for changes to take effect:
+
+   .. code-block:: powershell
+
+      wsl --shutdown
+
+4. Reopen your WSL terminal and verify with ``env | grep -i proxy``.
+
+Docker in WSL (Optional)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you prefer to use Docker for an isolated build and run environment, you can install
+it directly inside WSL:
+
+.. code-block:: bash
+
+   sudo apt update
+   sudo apt install -y docker.io
+   sudo usermod -aG docker ${USER}
+   sudo systemctl start docker
+   sudo systemctl enable docker
+
+Log out and log back in for the group change to take effect, then verify:
+
+.. code-block:: bash
+
+   docker --version
+
+.. note::
+
+   Docker is not required if you are using a Python virtual environment for
+   development. It is an alternative approach, useful when a pre-built Docker image
+   is available.
+
+USB Device Access from WSL
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To connect USB devices (such as TI LaunchPads) to your WSL instance, you need
+`usbipd-win <https://github.com/dorssel/usbipd-win>`_.
+
+1. In a Windows PowerShell running as Administrator, install usbipd-win:
+
+   .. code-block:: powershell
+
+      winget install --interactive --exact dorssel.usbipd-win
+
+2. Restart PowerShell after installation.
+
+3. Follow the Microsoft guide to attach a USB device to WSL:
+   `Connect USB devices <https://learn.microsoft.com/en-us/windows/wsl/connect-usb#attach-a-usb-device>`_
+
+VS Code with WSL
+^^^^^^^^^^^^^^^^
+
+Visual Studio Code can connect directly to your WSL instance, giving you a full
+GUI editor for files inside WSL.
+
+1. Install `Visual Studio Code <https://code.visualstudio.com/>`_ on Windows.
+2. Install the **WSL** extension (also called "Remote - WSL") from the VS Code
+   marketplace.
+3. Open a WSL terminal and run:
+
+   .. code-block:: bash
+
+      code .
+
+   This launches VS Code on Windows, connected to the WSL filesystem.
+
+.. seealso::
+
+   `Developing in WSL with VS Code <https://code.visualstudio.com/docs/remote/wsl>`_
 
 Path Configuration
 ------------------

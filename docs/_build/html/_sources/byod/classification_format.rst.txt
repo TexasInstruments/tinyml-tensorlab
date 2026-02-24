@@ -135,6 +135,49 @@ Configuration
    data_processing_feature_extraction:
      variables: 3                     # Number of data columns
 
+.. note::
+   **Zip file structure requirement**: When using a zip file as
+   ``input_data_path``, the zip must contain the ``classes/`` directory
+   **immediately inside it** (at the top level). Do not add an extra directory
+   level such as ``dataset_name/classes/`` inside the zip. The same applies to
+   the optional ``annotations/`` directory.
+
+Dataset Splitting Modes
+-----------------------
+
+The ``split_type`` parameter controls how ModelMaker divides data into train,
+validation, and test sets when the ``annotations/`` folder is not provided.
+
+**amongst_files** (default)
+
+Entire files are assigned to train, validation, or test sets. For example, with
+10 files (each having 100 rows) and the default ``split_factor: [0.6, 0.3, 0.1]``:
+
+* 6 files go to training (each retains all 100 rows)
+* 3 files go to validation
+* 1 file goes to test
+
+Use this mode when each file represents a distinct experiment or recording session.
+
+**within_files**
+
+Each file is split internally into train, validation, and test portions. For
+example, with 10 files (each having 100 rows):
+
+* All 10 files appear in every split
+* Training portion: first 60 rows of each file
+* Validation portion: next 30 rows of each file
+* Test portion: last 10 rows of each file
+
+Use this mode when files contain long continuous sequences that can be safely
+split at arbitrary points.
+
+.. code-block:: yaml
+
+   dataset:
+     split_type: 'within_files'       # or 'amongst_files' (default)
+     split_factor: [0.6, 0.3, 0.1]    # train, val, test proportions
+
 Example: 3-Class Vibration Data
 -------------------------------
 
@@ -212,3 +255,58 @@ Ensure files contain actual data, not just headers.
 * Check folder names don't contain special characters
 * Ensure files exist in class folders
 * Verify file extensions are supported
+
+Key Differences: Classification vs Regression vs Forecasting
+------------------------------------------------------------
+
+The following table summarizes the key structural and behavioral differences
+across the three time series task types.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 27 27 26
+
+   * - Aspect
+     - Classification
+     - Regression
+     - Forecasting
+   * - Folder Structure
+     - ``classes/{class_name}/``
+     - ``files/``
+     - ``files/``
+   * - Target Location
+     - Folder name (implicit)
+     - Last column of each file
+     - Specified via ``target_variables``
+   * - Target Type
+     - Discrete class label
+     - Continuous value (averaged over window)
+     - Future value at ``forecast_horizon`` steps
+   * - Annotations
+     - Optional (auto-generated)
+     - Required
+     - Required
+   * - Feature Extraction
+     - Supported (FFT, wavelets, etc.)
+     - Supported (``SimpleWindow`` required)
+     - Not supported (raw time series only)
+   * - Loss Function
+     - CrossEntropyLoss
+     - MSELoss
+     - HuberLoss
+   * - Evaluation Metrics
+     - Accuracy, F1-score
+     - MSE, R-squared
+     - SMAPE, R-squared
+   * - ``output_int``
+     - Can be True
+     - Can be True
+     - Must be False
+   * - ``SimpleWindow``
+     - Optional
+     - Mandatory
+     - Mandatory
+   * - ``forecast_horizon``
+     - N/A
+     - N/A
+     - Required parameter

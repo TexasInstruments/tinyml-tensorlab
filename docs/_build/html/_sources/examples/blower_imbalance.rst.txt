@@ -74,6 +74,15 @@ Dataset Details
 Recommended Models
 ------------------
 
+.. important::
+
+   The ``FanImbalance_model_*`` models listed below are only available in
+   TI's **Edge AI Studio** (GUI) and are not included in Tensorlab.
+   Use the generic ``CLS_*_NPU`` models (e.g., ``CLS_1k_NPU``,
+   ``CLS_4k_NPU``) as equivalent alternatives in Tensorlab.
+
+**Edge AI Studio models:**
+
 .. list-table::
    :header-rows: 1
    :widths: 30 20 50
@@ -90,6 +99,9 @@ Recommended Models
    * - ``FanImbalance_model_3_t``
      - Varies
      - Maximum accuracy
+
+**Tensorlab alternatives**: Use ``CLS_1k_NPU``, ``CLS_2k_NPU``, or
+``CLS_4k_NPU`` for equivalent performance.
 
 See Also
 --------

@@ -1,0 +1,511 @@
+=========================
+Configuration Reference
+=========================
+
+Complete reference for all YAML configuration options in Tiny ML Tensorlab.
+
+Configuration File Structure
+----------------------------
+
+.. code-block:: yaml
+
+   common:
+     # General settings
+   dataset:
+     # Dataset configuration
+   data_processing_feature_extraction:
+     # Feature extraction settings
+   training:
+     # Training parameters
+   testing:
+     # Testing configuration
+   compilation:
+     # Compilation settings
+
+Common Section
+--------------
+
+General project settings.
+
+.. code-block:: yaml
+
+   common:
+     target_module: 'timeseries'    # 'timeseries' or 'image'
+     task_type: 'generic_timeseries_classification'
+     target_device: 'F28P55'
+     run_name: '{date-time}/{model_name}'
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Option
+     - Required
+     - Description
+   * - ``target_module``
+     - Yes
+     - Module type: ``timeseries`` or ``image``
+   * - ``task_type``
+     - Yes
+     - Task type (see below)
+   * - ``target_device``
+     - Yes
+     - Target MCU device name
+   * - ``run_name``
+     - No
+     - Output directory name pattern
+
+**Task Types:**
+
+* ``generic_timeseries_classification``
+* ``generic_timeseries_regression``
+* ``generic_timeseries_forecasting``
+* ``generic_timeseries_anomalydetection``
+* ``generic_image_classification``
+* ``byom_compilation``
+
+**Target Devices:**
+
+* C2000: F28P55, F28P65, F29H85, F29P58, F29P32, F2837, F28004, F28003, F280013, F280015
+* MSPM0: MSPM0G3507, MSPM0G3519, MSPM0G5187
+* MSPM33C: MSPM33C32, MSPM33C34
+* AM13: AM13E2
+* AM26x: AM263, AM263P, AM261
+* Connectivity: CC2755, CC1352
+
+Dataset Section
+---------------
+
+.. code-block:: yaml
+
+   dataset:
+     enable: True
+     dataset_name: 'my_dataset'
+     input_data_path: '/path/to/dataset'
+     data_split_type: 'random'
+     data_split_ratio: [0.8, 0.1, 0.1]
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Option
+     - Default
+     - Description
+   * - ``enable``
+     - True
+     - Enable dataset processing
+   * - ``dataset_name``
+     - Required
+     - Dataset identifier
+   * - ``input_data_path``
+     - None
+     - Path to custom dataset
+   * - ``data_split_type``
+     - 'random'
+     - Split method: 'random', 'sequential', 'predefined'
+   * - ``data_split_ratio``
+     - [0.8, 0.1, 0.1]
+     - Train/val/test split ratios
+   * - ``input_data_split_type``
+     - 'amongst_files'
+     - 'amongst_files' or 'within_files'
+
+Feature Extraction Section
+--------------------------
+
+.. code-block:: yaml
+
+   data_processing_feature_extraction:
+     feature_extraction_name: 'Generic_1024Input_FFTBIN_64Feature_8Frame'
+     variables: 1
+     gof_test: False
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 15 50
+
+   * - Option
+     - Default
+     - Description
+   * - ``feature_extraction_name``
+     - None
+     - Preset name (e.g., ``'Generic_1024Input_FFTBIN_64Feature_8Frame'``)
+       or custom name starting with ``'Custom_'``
+   * - ``data_proc_transforms``
+     - None
+     - List of data processing transforms: ``['SimpleWindow']``,
+       ``['Downsample']``, ``['SimpleWindow', 'Downsample']``, or ``[]``
+   * - ``feat_ext_transform``
+     - None
+     - List of feature extraction transforms (e.g., ``['FFT_FE',
+       'FFT_POS_HALF', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT']``)
+   * - ``variables``
+     - 1
+     - Number of input channels, or list of column indices/names
+   * - ``frame_size``
+     - None
+     - Samples per frame
+   * - ``feature_size_per_frame``
+     - None
+     - Output features per frame after transform
+   * - ``num_frame_concat``
+     - None
+     - Number of frames to concatenate
+   * - ``stride_size``
+     - None
+     - Stride between frames as a fraction
+   * - ``sampling_rate``
+     - None
+     - Original sampling rate (used with ``Downsample``)
+   * - ``new_sr``
+     - None
+     - Target sampling rate (used with ``Downsample``)
+   * - ``scale``
+     - None
+     - Scaling factor applied to input data
+   * - ``offset``
+     - None
+     - Offset added to input data
+   * - ``frame_skip``
+     - None
+     - Frames to skip between selected frames
+   * - ``normalize_bin``
+     - None
+     - Enable bin normalization
+   * - ``stacking``
+     - None
+     - Feature stacking mode: ``'2D1'`` or ``'1D'``
+   * - ``gof_test``
+     - False
+     - Run Goodness of Fit test
+   * - ``gain_variations``
+     - None
+     - Dict of class-to-gain-range for data augmentation
+   * - ``store_feat_ext_data``
+     - False
+     - Store extracted feature data to disk
+   * - ``nn_for_feature_extraction``
+     - False
+     - Use neural network for feature extraction
+
+**Forecasting-Specific:**
+
+.. code-block:: yaml
+
+   data_processing_feature_extraction:
+     data_proc_transforms:
+     - SimpleWindow
+     frame_size: 32
+     stride_size: 0.1
+     forecast_horizon: 2
+     variables: 1
+     target_variables:
+     - 0
+
+Training Section
+----------------
+
+.. code-block:: yaml
+
+   training:
+     enable: True
+     model_name: 'CLS_4k_NPU'
+     training_epochs: 30
+     batch_size: 256
+     learning_rate: 0.001
+     num_gpus: 0
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Option
+     - Default
+     - Description
+   * - ``enable``
+     - True
+     - Enable training
+   * - ``model_name``
+     - Required
+     - Model name from registry
+   * - ``training_epochs``
+     - 20
+     - Number of training epochs
+   * - ``batch_size``
+     - 256
+     - Batch size for training
+   * - ``learning_rate``
+     - 0.001
+     - Initial learning rate
+   * - ``optimizer``
+     - 'adam'
+     - 'adam', 'sgd', 'adamw'
+   * - ``weight_decay``
+     - 0.0001
+     - Weight decay (L2 regularization)
+   * - ``num_gpus``
+     - 0
+     - Number of GPUs (0 for CPU)
+   * - ``num_workers``
+     - 4
+     - Data loader workers
+   * - ``seed``
+     - 42
+     - Random seed
+
+**Quantization Options:**
+
+.. code-block:: yaml
+
+   training:
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 15 50
+
+   * - Option
+     - Default
+     - Description
+   * - ``quantization``
+     - 0
+     - Quantization mode: ``0`` = floating point training, ``1`` = standard
+       PyTorch Quantization, ``2`` = TI style optimised Quantization
+   * - ``quantization_method``
+     - None
+     - ``'PTQ'`` or ``'QAT'``. Only applicable when ``quantization`` is
+       ``1`` or ``2``
+   * - ``quantization_weight_bitwidth``
+     - None
+     - Weight bit width: ``8``, ``4``, or ``2``. Only applicable when
+       ``quantization`` is ``1`` or ``2``
+   * - ``quantization_activation_bitwidth``
+     - None
+     - Activation bit width: ``8``, ``4``, or ``2``. Only applicable when
+       ``quantization`` is ``1`` or ``2``
+
+**Learning Rate Scheduler:**
+
+.. code-block:: yaml
+
+   training:
+     lr_scheduler: 'cosine'
+     lr_warmup_epochs: 5
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Option
+     - Default
+     - Description
+   * - ``lr_scheduler``
+     - None
+     - 'cosine', 'step', 'exponential'
+   * - ``lr_warmup_epochs``
+     - 0
+     - Warmup epochs
+   * - ``lr_step_size``
+     - 10
+     - Epochs per step (step scheduler)
+   * - ``lr_gamma``
+     - 0.1
+     - LR decay factor
+
+Testing Section
+---------------
+
+.. code-block:: yaml
+
+   testing:
+     enable: True
+     test_float: True
+     test_quantized: True
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Option
+     - Default
+     - Description
+   * - ``enable``
+     - True
+     - Enable testing
+   * - ``test_float``
+     - True
+     - Test float32 model
+   * - ``test_quantized``
+     - True
+     - Test quantized model
+   * - ``save_predictions``
+     - False
+     - Save prediction results
+   * - ``error_analysis``
+     - False
+     - Save misclassified samples
+
+NAS Options (under ``training`` section)
+-----------------------------------------
+
+NAS parameters are specified within the ``training`` section, not as a
+separate section.
+
+.. code-block:: yaml
+
+   training:
+     nas_enabled: True
+     nas_epochs: 10
+     nas_optimization_mode: 'Memory'
+     nas_model_size: 'm'
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
+
+   * - Option
+     - Default
+     - Description
+   * - ``nas_enabled``
+     - False
+     - Enable Neural Architecture Search
+   * - ``nas_epochs``
+     - 10
+     - Number of NAS search epochs
+   * - ``nas_optimization_mode``
+     - 'Memory'
+     - ``'Memory'`` (optimize parameters) or ``'Compute'`` (optimize MACs/FLOPs)
+   * - ``nas_model_size``
+     - 'm'
+     - Preset: ``'s'``, ``'m'``, ``'l'``, ``'xl'``, ``'xxl'``
+   * - ``nas_nodes_per_layer``
+     - (set by preset)
+     - Nodes per layer in DAG (customization mode)
+   * - ``nas_layers``
+     - (set by preset)
+     - Number of layers, minimum 3 (customization mode)
+   * - ``nas_init_channels``
+     - (set by preset)
+     - Initial conv layer channels (customization mode)
+   * - ``nas_init_channel_multiplier``
+     - (set by preset)
+     - Channel multiplier for subsequent layers (customization mode)
+   * - ``nas_fanout_concat``
+     - (set by preset)
+     - Nodes per layer concatenated for output (customization mode)
+
+Compilation Section
+-------------------
+
+.. code-block:: yaml
+
+   compilation:
+     enable: True
+     preset_name: 'compress_npu_layer_data'
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Option
+     - Default
+     - Description
+   * - ``enable``
+     - True
+     - Enable compilation
+   * - ``preset_name``
+     - 'default_preset'
+     - Compilation preset
+   * - ``optimize_memory``
+     - True
+     - Memory optimization
+   * - ``debug_info``
+     - False
+     - Include debug symbols
+
+**Compilation Presets:**
+
+* ``default_preset`` - Standard compilation
+* ``compress_npu_layer_data`` - NPU-optimized
+
+BYOM Section
+------------
+
+For compilation-only mode:
+
+.. code-block:: yaml
+
+   byom:
+     enable: True
+     onnx_model_path: '/path/to/model.onnx'
+     input_shape: [1, 1, 512, 1]
+     already_quantized: False
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Option
+     - Default
+     - Description
+   * - ``enable``
+     - False
+     - Enable BYOM mode
+   * - ``onnx_model_path``
+     - Required
+     - Path to ONNX model
+   * - ``input_shape``
+     - Required
+     - Model input shape
+   * - ``already_quantized``
+     - False
+     - True if model is quantized
+
+Complete Example
+----------------
+
+.. code-block:: yaml
+
+   common:
+     target_module: 'timeseries'
+     task_type: 'generic_timeseries_classification'
+     target_device: 'F28P55'
+     run_name: '{date-time}/{model_name}'
+
+   dataset:
+     enable: True
+     dataset_name: 'dc_arc_fault_example_dsk'
+     input_data_path: 'https://software-dl.ti.com/...'
+     data_split_type: 'random'
+     data_split_ratio: [0.8, 0.1, 0.1]
+
+   data_processing_feature_extraction:
+     enable: True
+     feature_extraction_name: 'FFT1024Input_256Feature_1Frame_Full_Bandwidth'
+     variables: 1
+     gof_test: False
+
+   training:
+     enable: True
+     model_name: 'ArcFault_model_400_t'
+     training_epochs: 30
+     batch_size: 256
+     learning_rate: 0.001
+     num_gpus: 0
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
+
+   testing:
+     enable: True
+     test_float: True
+     test_quantized: True
+
+   compilation:
+     enable: True
+     preset_name: 'compress_npu_layer_data'

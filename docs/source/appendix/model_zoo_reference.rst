@@ -81,10 +81,22 @@ For NPU-enabled devices (F28P55, AM13E2, MSPM0G5187):
      - ~55,000
      - Maximum NPU model
 
-Application-Specific Classification
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Application-Specific Classification (Edge AI Studio Only)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Arc Fault Models:**
+.. important::
+
+   The application-specific models listed below (``ArcFault_model_*``,
+   ``MotorFault_model_*``, ``FanImbalance_model_*``) are **only available
+   in TI's Edge AI Studio** (GUI tool) and are **not included** in the
+   Tiny ML Tensorlab open-source package.
+
+   For Tensorlab users, the generic ``CLS_*`` and ``CLS_*_NPU`` models
+   listed above offer similar or better performance for the same tasks.
+   For example, use ``CLS_500_NPU`` instead of ``ArcFault_model_200_t``,
+   or ``CLS_4k_NPU`` instead of ``MotorFault_model_3_t``.
+
+**Arc Fault Models (Edge AI Studio only):**
 
 .. list-table::
    :header-rows: 1
@@ -106,7 +118,7 @@ Application-Specific Classification
      - ~1,400
      - Maximum arc fault accuracy
 
-**Motor Fault Models:**
+**Motor Fault Models (Edge AI Studio only):**
 
 .. list-table::
    :header-rows: 1
@@ -124,6 +136,25 @@ Application-Specific Classification
    * - ``MotorFault_model_3_t``
      - ~4,000
      - Best motor fault accuracy
+
+**Fan Imbalance Models (Edge AI Studio only):**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
+
+   * - Model Name
+     - Parameters
+     - Description
+   * - ``FanImbalance_model_1_t``
+     - Varies
+     - Baseline fan imbalance detection
+   * - ``FanImbalance_model_2_t``
+     - Varies
+     - Improved accuracy
+   * - ``FanImbalance_model_3_t``
+     - Varies
+     - Maximum accuracy
 
 Regression Models
 -----------------

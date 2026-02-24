@@ -101,7 +101,14 @@ Available Models
      - ~55,000
      - Very large
 
-**Specialized Models:**
+**Application-Specific Models (Edge AI Studio only):**
+
+.. note::
+
+   The following application-specific models are only available in TI's
+   Edge AI Studio (GUI) and are not included in Tensorlab. Use the
+   generic ``CLS_*`` / ``CLS_*_NPU`` models above for equivalent or
+   better performance.
 
 * ``ArcFault_model_200_t`` to ``ArcFault_model_1400_t`` - Arc fault detection
 * ``MotorFault_model_1_t`` to ``MotorFault_model_3_t`` - Motor bearing fault
@@ -152,7 +159,7 @@ Example: Arc Fault Detection
      variables: 1
 
    training:
-     model_name: 'ArcFault_model_200_t'
+     model_name: 'CLS_1k_NPU'
      training_epochs: 20
 
 Run with:

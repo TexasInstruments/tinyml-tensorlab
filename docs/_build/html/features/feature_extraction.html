@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>8.3. Feature Extraction &mdash; TI Tiny ML Tensorlab 1.3.0 documentation</title>
+  <title>8.4. Feature Extraction &mdash; TI Tiny ML Tensorlab 1.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -25,8 +25,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="8.4. Goodness of Fit" href="goodness_of_fit.html" />
-    <link rel="prev" title="8.2. Quantization" href="quantization.html" />
+    <link rel="next" title="8.5. Goodness of Fit" href="goodness_of_fit.html" />
+    <link rel="prev" title="8.3. Standalone Quantization Examples" href="quantization_examples.html" />
  
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -77,9 +77,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l4"><a class="reference internal" href="../introduction/architecture.html#tinyml-modeloptimization">1.2.2.4. tinyml-modeloptimization</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#data-flow">1.2.3. Data Flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#configuration-system">1.2.4. Configuration System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#integration-points">1.2.5. Integration Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#which-repository-do-i-need">1.2.3. Which Repository Do I Need?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#data-flow">1.2.4. Data Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#configuration-system">1.2.5. Configuration System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#integration-points">1.2.6. Integration Points</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/terminology.html">1.3. Terminology</a><ul>
@@ -130,7 +131,13 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/windows_setup.html">2.4. Windows Setup</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#option-1-native-windows-installation">2.4.1. Option 1: Native Windows Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#option-2-wsl2-recommended-for-full-compatibility">2.4.2. Option 2: WSL2 (Recommended for Full Compatibility)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#option-2-wsl2-recommended-for-full-compatibility">2.4.2. Option 2: WSL2 (Recommended for Full Compatibility)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#network-and-proxy-configuration-in-wsl-optional">2.4.2.1. Network and Proxy Configuration in WSL (Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#docker-in-wsl-optional">2.4.2.2. Docker in WSL (Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#usb-device-access-from-wsl">2.4.2.3. USB Device Access from WSL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#vs-code-with-wsl">2.4.2.4. VS Code with WSL</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#path-configuration">2.4.3. Path Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#common-windows-issues">2.4.4. Common Windows Issues</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#gpu-support-on-windows">2.4.5. GPU Support on Windows</a></li>
@@ -263,15 +270,56 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l2"><a class="reference internal" href="../task_types/anomaly_detection.html">4.4. Anomaly Detection</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#overview">4.4.1. Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#how-it-works">4.4.2. How It Works</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#configuration">4.4.3. Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#dataset-format">4.4.4. Dataset Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#available-models">4.4.5. Available Models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#threshold-selection">4.4.6. Threshold Selection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#metrics">4.4.7. Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#semi-supervised-vs-supervised">4.4.8. Semi-Supervised vs Supervised</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#example-motor-bearing-anomaly">4.4.9. Example: Motor Bearing Anomaly</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#tips">4.4.10. Tips</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#see-also">4.4.11. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#autoencoder-architecture">4.4.3. Autoencoder Architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#what-is-an-autoencoder">4.4.3.1. What is an Autoencoder?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#architecture-diagram">4.4.3.2. Architecture Diagram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#dimensionality-flow">4.4.3.3. Dimensionality Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#key-components">4.4.3.4. Key Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#training-with-mse-loss">4.4.3.5. Training with MSE Loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#semi-supervised-learning-normal-data-only">4.4.3.6. Semi-Supervised Learning: Normal Data Only</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#advantages-and-limitations">4.4.3.7. Advantages and Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#configuration">4.4.4. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#dataset-format-for-anomaly-detection">4.4.5. Dataset Format for Anomaly Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#folder-structure">4.4.5.1. Folder Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#concrete-example">4.4.5.2. Concrete Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#data-splitting-strategy">4.4.5.3. Data Splitting Strategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#datafile-format-csv">4.4.5.4. Datafile Format (CSV)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#dataset-format">4.4.6. Dataset Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#available-models">4.4.7. Available Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#training-workflow">4.4.8. Training Workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#id1">4.4.8.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#pipeline-steps-in-detail">4.4.8.2. Pipeline Steps in Detail</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#running-the-pipeline">4.4.8.3. Running the Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#output-files">4.4.8.4. Output Files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#understanding-training-logs">4.4.8.5. Understanding Training Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#threshold-selection">4.4.9. Threshold Selection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#formula">4.4.9.1. Formula</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#k-value-impact">4.4.9.2. k-Value Impact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#threshold-performance-csv">4.4.9.3. threshold_performance.csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#how-to-choose-k-based-on-application">4.4.9.4. How to Choose k Based on Application</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#evaluation-metrics">4.4.10. Evaluation Metrics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#confusion-matrix">4.4.10.1. Confusion Matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#metric-definitions">4.4.10.2. Metric Definitions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#metric-summary">4.4.10.3. Metric Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#what-if-you-don-t-have-anomaly-data">4.4.11. What If You Don’t Have Anomaly Data?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#what-you-can-do">4.4.11.1. What You CAN Do</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../task_types/anomaly_detection.html#what-you-cannot-do">4.4.11.2. What You CANNOT Do</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#semi-supervised-vs-supervised">4.4.12. Semi-Supervised vs Supervised</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#example-motor-bearing-anomaly">4.4.13. Example: Motor Bearing Anomaly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#tips">4.4.14. Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../task_types/anomaly_detection.html#see-also">4.4.15. See Also</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../task_types/image_classification.html">4.5. Image Classification</a><ul>
@@ -297,9 +345,11 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#supported-file-types">5.1.3. Supported File Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#annotations-optional">5.1.4. Annotations (Optional)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#configuration">5.1.5. Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#example-3-class-vibration-data">5.1.6. Example: 3-Class Vibration Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#class-balancing">5.1.7. Class Balancing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#common-issues">5.1.8. Common Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#dataset-splitting-modes">5.1.6. Dataset Splitting Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#example-3-class-vibration-data">5.1.7. Example: 3-Class Vibration Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#class-balancing">5.1.8. Class Balancing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#common-issues">5.1.9. Common Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#key-differences-classification-vs-regression-vs-forecasting">5.1.10. Key Differences: Classification vs Regression vs Forecasting</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byod/regression_format.html">5.2. Regression Dataset Format</a><ul>
@@ -310,7 +360,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#configuration">5.2.5. Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#target-processing">5.2.6. Target Processing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#complete-example">5.2.7. Complete Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#common-issues">5.2.8. Common Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#troubleshooting">5.2.8. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#best-practices">5.2.9. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#common-issues">5.2.10. Common Issues</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byod/forecasting_format.html">5.3. Forecasting Dataset Format</a><ul>
@@ -731,18 +783,18 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l2"><a class="reference internal" href="neural_architecture_search.html">8.1. Neural Architecture Search</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#overview">8.1.1. Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#when-to-use-nas">8.1.2. When to Use NAS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#enabling-nas">8.1.3. Enabling NAS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#configuration-options">8.1.4. Configuration Options</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#search-types">8.1.5. Search Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#search-space">8.1.6. Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#code-flow">8.1.3. Code Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#configuration">8.1.4. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#model-size-presets">8.1.5. Model Size Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#usage">8.1.6. Usage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#running-nas">8.1.7. Running NAS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#output-files">8.1.8. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#interpreting-results">8.1.9. Interpreting Results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#using-nas-results">8.1.10. Using NAS Results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#advanced-configuration">8.1.11. Advanced Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#example-finding-optimal-arc-fault-model">8.1.12. Example: Finding Optimal Arc Fault Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#computational-cost">8.1.13. Computational Cost</a></li>
-<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#best-practices">8.1.14. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#example-full-nas-configuration">8.1.8. Example: Full NAS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#tips">8.1.9. Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#best-practices">8.1.10. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#search-algorithm">8.1.11. Search Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#search-space">8.1.12. Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#nas-framework-internals">8.1.13. NAS Framework Internals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#references">8.1.14. References</a></li>
 <li class="toctree-l3"><a class="reference internal" href="neural_architecture_search.html#next-steps">8.1.15. Next Steps</a></li>
 </ul>
 </li>
@@ -760,69 +812,95 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="quantization.html#example-full-quantization-workflow">8.2.11. Example: Full Quantization Workflow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quantization.html#memory-savings">8.2.12. Memory Savings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="quantization.html#performance-impact">8.2.13. Performance Impact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quantization.html#next-steps">8.2.14. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#quantization-wrapper-architecture">8.2.14. Quantization Wrapper Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#npu-hardware-constraints">8.2.15. NPU Hardware Constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#using-quantization-wrappers-directly">8.2.16. Using Quantization Wrappers Directly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#wrapper-api-reference">8.2.17. Wrapper API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#model-surgery">8.2.18. Model Surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization.html#next-steps">8.2.19. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">8.3. Feature Extraction</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#overview">8.3.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#feature-extraction-pipeline">8.3.2. Feature Extraction Pipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuration-parameters">8.3.3. Configuration Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#preset-system">8.3.4. Preset System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#available-presets">8.3.5. Available Presets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#data-processing-transforms">8.3.6. Data Processing Transforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#feature-extraction-transforms">8.3.7. Feature Extraction Transforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#custom-feature-extraction">8.3.8. Custom Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#multi-channel-data">8.3.9. Multi-Channel Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#forecasting-configuration">8.3.10. Forecasting Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#data-augmentation">8.3.11. Data Augmentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#choosing-the-right-preset">8.3.12. Choosing the Right Preset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#performance-impact">8.3.13. Performance Impact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#on-device-feature-extraction">8.3.14. On-Device Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example-configurations">8.3.15. Example Configurations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#best-practices">8.3.16. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#next-steps">8.3.17. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization_examples.html">8.3. Standalone Quantization Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#overview">8.3.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#fmnist-image-classification">8.3.2. FMNIST Image Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#audio-keyword-spotting">8.3.3. Audio Keyword Spotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#motor-fault-time-series-classification">8.3.4. Motor Fault Time Series Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#mnist-digit-classification">8.3.5. MNIST Digit Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#torque-time-series-regression">8.3.6. Torque Time Series Regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#quantization-guidance">8.3.7. Quantization Guidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quantization_examples.html#next-steps">8.3.8. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="goodness_of_fit.html">8.4. Goodness of Fit</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#overview">8.4.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#enabling-gof-test">8.4.2. Enabling GoF Test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#running-the-test">8.4.3. Running the Test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#output-files">8.4.4. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#understanding-the-visualizations">8.4.5. Understanding the Visualizations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#interpreting-results">8.4.6. Interpreting Results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#plot-analysis">8.4.7. 8-Plot Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#common-patterns">8.4.8. Common Patterns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#actionable-insights">8.4.9. Actionable Insights</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#example-motor-fault-gof-analysis">8.4.10. Example: Motor Fault GoF Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#gof-without-training">8.4.11. GoF Without Training</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#comparing-feature-extraction">8.4.12. Comparing Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#best-practices">8.4.13. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#limitations">8.4.14. Limitations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#next-steps">8.4.15. Next Steps</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">8.4. Feature Extraction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">8.4.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-extraction-pipeline">8.4.2. Feature Extraction Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-parameters">8.4.3. Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preset-system">8.4.4. Preset System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#available-presets">8.4.5. Available Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-processing-transforms">8.4.6. Data Processing Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-extraction-transforms">8.4.7. Feature Extraction Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#custom-feature-extraction">8.4.8. Custom Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-channel-data">8.4.9. Multi-Channel Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#forecasting-configuration">8.4.10. Forecasting Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-augmentation">8.4.11. Data Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-the-right-preset">8.4.12. Choosing the Right Preset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-impact">8.4.13. Performance Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-device-feature-extraction">8.4.14. On-Device Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-configurations">8.4.15. Example Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stacking-modes">8.4.16. Stacking Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gain-variation-augmentation">8.4.17. Gain Variation Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#q15-fixed-point-transforms">8.4.18. Q15 Fixed-Point Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#frame-offset-overlap-control">8.4.19. Frame Offset (Overlap Control)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-bandwidth">8.4.20. Analysis Bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-extraction-only-mode">8.4.21. Feature Extraction Only Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluating-feature-extraction-quality">8.4.22. Evaluating Feature Extraction Quality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#best-practices">8.4.23. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">8.4.24. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="post_training_analysis.html">8.5. Post-Training Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#overview">8.5.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#enabling-analysis">8.5.2. Enabling Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#output-files">8.5.3. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#confusion-matrix">8.5.4. Confusion Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#roc-curves">8.5.5. ROC Curves</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#class-score-histograms">8.5.6. Class Score Histograms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#fpr-tpr-thresholds">8.5.7. FPR/TPR Thresholds</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#classification-report">8.5.8. Classification Report</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#error-analysis">8.5.9. Error Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#quantized-vs-float-comparison">8.5.10. Quantized vs Float Comparison</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#regression-analysis">8.5.11. Regression Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#anomaly-detection-analysis">8.5.12. Anomaly Detection Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#custom-analysis-scripts">8.5.13. Custom Analysis Scripts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#generating-reports">8.5.14. Generating Reports</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#example-complete-analysis-configuration">8.5.15. Example: Complete Analysis Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#best-practices">8.5.16. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#troubleshooting-low-accuracy">8.5.17. Troubleshooting Low Accuracy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#next-steps">8.5.18. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="goodness_of_fit.html">8.5. Goodness of Fit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#overview">8.5.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#enabling-gof-test">8.5.2. Enabling GoF Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#running-the-test">8.5.3. Running the Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#output-files">8.5.4. Output Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#understanding-the-visualizations">8.5.5. Understanding the Visualizations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#interpreting-results">8.5.6. Interpreting Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#plot-analysis">8.5.7. 8-Plot Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#common-patterns">8.5.8. Common Patterns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#actionable-insights">8.5.9. Actionable Insights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#frame-size-sweeping">8.5.10. Frame Size Sweeping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#multi-cluster-analysis">8.5.11. Multi-Cluster Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#example-motor-fault-gof-analysis">8.5.12. Example: Motor Fault GoF Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#gof-without-training">8.5.13. GoF Without Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#comparing-feature-extraction">8.5.14. Comparing Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#best-practices">8.5.15. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#limitations">8.5.16. Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="goodness_of_fit.html#next-steps">8.5.17. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#feature-overview">8.6. Feature Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post_training_analysis.html">8.6. Post-Training Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#overview">8.6.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#enabling-analysis">8.6.2. Enabling Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#output-files">8.6.3. Output Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#confusion-matrix">8.6.4. Confusion Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#roc-curves">8.6.5. ROC Curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#class-score-histograms">8.6.6. Class Score Histograms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#fpr-tpr-thresholds">8.6.7. FPR/TPR Thresholds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#classification-report">8.6.8. Classification Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#error-analysis">8.6.9. Error Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#quantized-vs-float-comparison">8.6.10. Quantized vs Float Comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#file-level-classification-summary">8.6.11. File-Level Classification Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#regression-analysis">8.6.12. Regression Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#anomaly-detection-analysis">8.6.13. Anomaly Detection Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#custom-analysis-scripts">8.6.14. Custom Analysis Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#generating-reports">8.6.15. Generating Reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#example-complete-analysis-configuration">8.6.16. Example: Complete Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#best-practices">8.6.17. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#troubleshooting-low-accuracy">8.6.18. Troubleshooting Low Accuracy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="post_training_analysis.html#next-steps">8.6.19. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#feature-overview">8.7. Feature Overview</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../deployment/index.html">9. Device Deployment</a><ul>
@@ -858,7 +936,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#ccs-project-setup-for-npu">9.2.12. CCS Project Setup for NPU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#example-arc-fault-on-f28p55-npu">9.2.13. Example: Arc Fault on F28P55 NPU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#troubleshooting-npu-issues">9.2.14. Troubleshooting NPU Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#next-steps">9.2.15. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#ccs-studio-walkthrough-f28p55x">9.2.15. CCS Studio Walkthrough: F28P55x</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-1-load-the-example-from-resource-explorer">9.2.15.1. Step 1 – Load the Example from Resource Explorer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-2-build-the-project">9.2.15.2. Step 2 – Build the Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-3-set-target-configuration">9.2.15.3. Step 3 – Set Target Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-4-flash-the-device">9.2.15.4. Step 4 – Flash the Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-5-debug-and-verify">9.2.15.5. Step 5 – Debug and Verify</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#required-files-from-modelmaker">9.2.16. Required Files from ModelMaker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#model-performance-profiling">9.2.17. Model Performance Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#next-steps">9.2.18. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../deployment/non_npu_deployment.html">9.3. Non-NPU Deployment</a><ul>
@@ -875,8 +963,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#real-time-considerations">9.3.11. Real-Time Considerations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#device-specific-notes">9.3.12. Device-Specific Notes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#example-vibration-monitoring-on-mspm0g3507">9.3.13. Example: Vibration Monitoring on MSPM0G3507</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#comparison-npu-vs-non-npu">9.3.14. Comparison: NPU vs Non-NPU</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#next-steps">9.3.15. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#ccs-studio-walkthrough-f28004x">9.3.14. CCS Studio Walkthrough: F28004x</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-1-import-the-project-manually">9.3.14.1. Step 1 – Import the Project Manually</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-2-build-the-project">9.3.14.2. Step 2 – Build the Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-3-set-target-configuration">9.3.14.3. Step 3 – Set Target Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-4-flash-the-device">9.3.14.4. Step 4 – Flash the Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-5-debug-and-verify">9.3.14.5. Step 5 – Debug and Verify</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#required-files-from-modelmaker">9.3.15. Required Files from ModelMaker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#comparison-npu-vs-non-npu">9.3.16. Comparison: NPU vs Non-NPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#next-steps">9.3.17. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../deployment/index.html#deployment-overview">9.4. Deployment Overview</a></li>
@@ -944,7 +1041,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#using-your-custom-model">11.1.8. Using Your Custom Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#testing-your-model">11.1.9. Testing Your Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#best-practices">11.1.10. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#next-steps">11.1.11. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#adding-custom-feature-extractors">11.1.11. Adding Custom Feature Extractors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#adding-new-modalities">11.1.12. Adding New Modalities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#configuring-model-layer-parameters">11.1.13. Configuring Model Layer Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#next-steps">11.1.14. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byom/compilation_only.html">11.2. Compilation Only</a><ul>
@@ -952,15 +1052,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#onnx-model-requirements">11.2.2. ONNX Model Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#compilation-configuration">11.2.3. Compilation Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#running-compilation">11.2.4. Running Compilation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#calibration-data">11.2.5. Calibration Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#pre-quantized-models">11.2.6. Pre-Quantized Models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#output-artifacts">11.2.7. Output Artifacts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#npu-compilation">11.2.8. NPU Compilation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-external-pytorch-model">11.2.9. Example: External PyTorch Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-tensorflow-model">11.2.10. Example: TensorFlow Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#troubleshooting">11.2.11. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#best-practices">11.2.12. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#next-steps">11.2.13. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#model-formats">11.2.5. Model Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#output-artifacts">11.2.6. Output Artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#npu-compilation">11.2.7. NPU Compilation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-external-pytorch-model">11.2.8. Example: External PyTorch Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-tensorflow-model">11.2.9. Example: TensorFlow Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#troubleshooting">11.2.10. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#best-practices">11.2.11. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#next-steps">11.2.12. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byom/index.html#two-approaches">11.3. Two Approaches</a></li>
@@ -1003,7 +1102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#feature-extraction-section">13.1.4. Feature Extraction Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#training-section">13.1.5. Training Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#testing-section">13.1.6. Testing Section</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#nas-section">13.1.7. NAS Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#nas-options-under-training-section">13.1.7. NAS Options (under <code class="docutils literal notranslate"><span class="pre">training</span></code> section)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#compilation-section">13.1.8. Compilation Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#byom-section">13.1.9. BYOM Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#complete-example">13.1.10. Complete Example</a></li>
@@ -1013,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../appendix/model_zoo_reference.html#classification-models">13.2.1. Classification Models</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#standard-classification">13.2.1.1. Standard Classification</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#npu-classification">13.2.1.2. NPU Classification</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#application-specific-classification">13.2.1.3. Application-Specific Classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#application-specific-classification-edge-ai-studio-only">13.2.1.3. Application-Specific Classification (Edge AI Studio Only)</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/model_zoo_reference.html#regression-models">13.2.2. Regression Models</a><ul>
@@ -1072,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html"><span class="section-number">8. </span>Advanced Features</a></li>
-      <li class="breadcrumb-item active"><span class="section-number">8.3. </span>Feature Extraction</li>
+      <li class="breadcrumb-item active"><span class="section-number">8.4. </span>Feature Extraction</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -1082,11 +1181,11 @@ document.addEventListener('DOMContentLoaded', function() {
            <div itemprop="articleBody">
              
   <section id="feature-extraction">
-<h1><span class="section-number">8.3. </span>Feature Extraction<a class="headerlink" href="#feature-extraction" title="Link to this heading"></a></h1>
+<h1><span class="section-number">8.4. </span>Feature Extraction<a class="headerlink" href="#feature-extraction" title="Link to this heading"></a></h1>
 <p>Feature extraction transforms raw sensor data into a representation that
 helps the neural network learn patterns more effectively.</p>
 <section id="overview">
-<h2><span class="section-number">8.3.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>Why use feature extraction?</p>
 <ul class="simple">
 <li><p><strong>Reduced input size</strong>: Compress long time series</p></li>
@@ -1096,7 +1195,7 @@ helps the neural network learn patterns more effectively.</p>
 </ul>
 </section>
 <section id="feature-extraction-pipeline">
-<h2><span class="section-number">8.3.2. </span>Feature Extraction Pipeline<a class="headerlink" href="#feature-extraction-pipeline" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.2. </span>Feature Extraction Pipeline<a class="headerlink" href="#feature-extraction-pipeline" title="Link to this heading"></a></h2>
 <p>Raw data flows through two stages: data processing transforms, then
 feature extraction transforms:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Raw Signal → Data Processing → Feature Extraction → Model Input
@@ -1107,7 +1206,7 @@ feature extraction transforms:</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2><span class="section-number">8.3.3. </span>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.3. </span>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">data_processing_feature_extraction</span></code> section supports the following
 parameters. There are two usage modes: using a <strong>preset</strong> name, or defining
 a <strong>custom</strong> pipeline.</p>
@@ -1140,8 +1239,8 @@ or <code class="docutils literal notranslate"><span class="pre">[]</span></code>
 <td><p>List of feature extraction transforms applied in order. Common values
 include: <code class="docutils literal notranslate"><span class="pre">'FFT_FE'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FFT_POS_HALF'</span></code>, <code class="docutils literal notranslate"><span class="pre">'WINDOWING'</span></code>,
 <code class="docutils literal notranslate"><span class="pre">'BINNING'</span></code>, <code class="docutils literal notranslate"><span class="pre">'NORMALIZE'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ABS'</span></code>, <code class="docutils literal notranslate"><span class="pre">'LOG_DB'</span></code>, <code class="docutils literal notranslate"><span class="pre">'DC_REMOVE'</span></code>,
-<code class="docutils literal notranslate"><span class="pre">'CONCAT'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FFT_Q15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Q15_SCALE'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Q15_MAG'</span></code>,
-<code class="docutils literal notranslate"><span class="pre">'BIN_Q15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ECG_NORMALIZE'</span></code>.</p></td>
+<code class="docutils literal notranslate"><span class="pre">'CONCAT'</span></code>, <code class="docutils literal notranslate"><span class="pre">'RAW_FE'</span></code>, <code class="docutils literal notranslate"><span class="pre">'TO_Q15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FFT_Q15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'Q15_SCALE'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'Q15_MAG'</span></code>, <code class="docutils literal notranslate"><span class="pre">'BIN_Q15'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ECG_NORMALIZE'</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">variables</span></code></p></td>
 <td><p>Number of input channels/variables. Supports three formats:
@@ -1190,7 +1289,11 @@ Total features = <code class="docutils literal notranslate"><span class="pre">fe
 <td><p>Scaling factor applied to input data (e.g., <code class="docutils literal notranslate"><span class="pre">0.00390625</span></code> for 1/256).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
-<td><p>Offset added to input data.</p></td>
+<td><p>Controls the overlap between consecutive frames of data. Without
+offset (value <code class="docutils literal notranslate"><span class="pre">0</span></code>): frames are created consecutively with no overlap
+(step size of 1). With offset: frames overlap by adding a fractional
+step size <code class="docutils literal notranslate"><span class="pre">1/n</span></code> where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the offset value. For example,
+<code class="docutils literal notranslate"><span class="pre">offset:</span> <span class="pre">2</span></code> means each frame overlaps by 50%.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">frame_skip</span></code></p></td>
 <td><p>Number of frames to skip between selected frames (e.g., <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">8</span></code>).</p></td>
@@ -1205,7 +1308,9 @@ Total features = <code class="docutils literal notranslate"><span class="pre">fe
 <td><p>Minimum frequency bin index to include.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">analysis_bandwidth</span></code></p></td>
-<td><p>Fraction of bandwidth to analyse (e.g., <code class="docutils literal notranslate"><span class="pre">1</span></code> for full bandwidth).</p></td>
+<td><p>Fraction of the signal bandwidth to analyse (e.g., <code class="docutils literal notranslate"><span class="pre">1</span></code> for full
+bandwidth). Useful when only a portion of the frequency spectrum is
+relevant to the task.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1286,7 +1391,14 @@ data augmentation. Example:
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">store_feat_ext_data</span></code></p></td>
 <td><p>Store extracted feature data to disk (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nn_for_feature_extraction</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dont_train_just_feat_ext</span></code></p></td>
+<td><p>When set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the pipeline will only perform data processing
+and feature extraction without proceeding to model training. This is
+useful for inspecting extracted features, generating PCA plots, and
+iterating on the feature extraction configuration before committing
+to a full training run (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nn_for_feature_extraction</span></code></p></td>
 <td><p>Use neural network for feature extraction (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></td>
 </tr>
 </tbody>
@@ -1314,7 +1426,7 @@ data augmentation. Example:
 </table>
 </section>
 <section id="preset-system">
-<h2><span class="section-number">8.3.4. </span>Preset System<a class="headerlink" href="#preset-system" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.4. </span>Preset System<a class="headerlink" href="#preset-system" title="Link to this heading"></a></h2>
 <p>Tiny ML Tensorlab provides predefined feature extraction presets. When using
 a preset, simply specify the <code class="docutils literal notranslate"><span class="pre">feature_extraction_name</span></code> and <code class="docutils literal notranslate"><span class="pre">variables</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
@@ -1335,7 +1447,7 @@ Example: Generic_1024Input_FFTBIN_64Feature_8Frame
 </div>
 </section>
 <section id="available-presets">
-<h2><span class="section-number">8.3.5. </span>Available Presets<a class="headerlink" href="#available-presets" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.5. </span>Available Presets<a class="headerlink" href="#available-presets" title="Link to this heading"></a></h2>
 <p><strong>FFT-Based Presets:</strong></p>
 <p>Best for frequency-domain patterns (vibration, arc faults):</p>
 <table class="docutils align-default">
@@ -1419,9 +1531,16 @@ Example: Generic_1024Input_FFTBIN_64Feature_8Frame
 </table>
 </section>
 <section id="data-processing-transforms">
-<h2><span class="section-number">8.3.6. </span>Data Processing Transforms<a class="headerlink" href="#data-processing-transforms" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.6. </span>Data Processing Transforms<a class="headerlink" href="#data-processing-transforms" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">data_proc_transforms</span></code> parameter specifies preprocessing steps applied
-to raw data before feature extraction:</p>
+to raw data before feature extraction.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Data processing transforms (<code class="docutils literal notranslate"><span class="pre">data_proc_transforms</span></code>) are only applied on
+the training side (on PC), whereas feature extraction transforms
+(<code class="docutils literal notranslate"><span class="pre">feat_ext_transform</span></code>) are applied on both the training side (on PC) and
+the inference side (on device).</p>
+</div>
 <p><strong>SimpleWindow</strong></p>
 <p>Segments continuous data into fixed-size windows:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
@@ -1455,7 +1574,7 @@ to raw data before feature extraction:</p>
 </div>
 </section>
 <section id="feature-extraction-transforms">
-<h2><span class="section-number">8.3.7. </span>Feature Extraction Transforms<a class="headerlink" href="#feature-extraction-transforms" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.7. </span>Feature Extraction Transforms<a class="headerlink" href="#feature-extraction-transforms" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">feat_ext_transform</span></code> parameter defines the feature extraction pipeline
 as an ordered list of transforms. Each step processes the output of the
 previous step.</p>
@@ -1498,17 +1617,24 @@ previous step.</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONCAT</span></code></p></td>
 <td><p>Concatenate frames into final feature vector</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RAW_FE</span></code></p></td>
+<td><p>Takes the mean of the wave within each frame; optionally removes the
+DC component if <code class="docutils literal notranslate"><span class="pre">dc_remove</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TO_Q15</span></code></p></td>
+<td><p>Convert floating-point to fixed-point Q15 format with saturation</p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FFT_Q15</span></code></p></td>
 <td><p>Fixed-point Q15 FFT (for MCU deployment)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Q15_SCALE</span></code></p></td>
-<td><p>Q15 scaling</p></td>
+<td><p>Q15 bit-shift scaling (amplify or attenuate)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Q15_MAG</span></code></p></td>
-<td><p>Q15 magnitude computation</p></td>
+<td><p>Q15 magnitude of complex FFT output</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BIN_Q15</span></code></p></td>
-<td><p>Q15 binning</p></td>
+<td><p>Q15 binning with optional normalization</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ECG_NORMALIZE</span></code></p></td>
 <td><p>ECG-specific normalization</p></td>
@@ -1546,7 +1672,7 @@ previous step.</p>
 </div>
 </section>
 <section id="custom-feature-extraction">
-<h2><span class="section-number">8.3.8. </span>Custom Feature Extraction<a class="headerlink" href="#custom-feature-extraction" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.8. </span>Custom Feature Extraction<a class="headerlink" href="#custom-feature-extraction" title="Link to this heading"></a></h2>
 <p>For advanced use cases, use a <code class="docutils literal notranslate"><span class="pre">Custom_*</span></code> feature extraction name and specify
 the transform pipeline manually:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
@@ -1580,7 +1706,7 @@ the transform pipeline manually:</p>
 </div>
 </section>
 <section id="multi-channel-data">
-<h2><span class="section-number">8.3.9. </span>Multi-Channel Data<a class="headerlink" href="#multi-channel-data" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.9. </span>Multi-Channel Data<a class="headerlink" href="#multi-channel-data" title="Link to this heading"></a></h2>
 <p>For sensors with multiple axes (e.g., 3-axis accelerometer), set
 <code class="docutils literal notranslate"><span class="pre">variables</span></code> to the number of channels:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
@@ -1596,7 +1722,7 @@ the transform pipeline manually:</p>
 </ul>
 </section>
 <section id="forecasting-configuration">
-<h2><span class="section-number">8.3.10. </span>Forecasting Configuration<a class="headerlink" href="#forecasting-configuration" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.10. </span>Forecasting Configuration<a class="headerlink" href="#forecasting-configuration" title="Link to this heading"></a></h2>
 <p>Forecasting tasks require specific additional parameters:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
@@ -1616,7 +1742,7 @@ forecasting tasks.</p>
 </div>
 </section>
 <section id="data-augmentation">
-<h2><span class="section-number">8.3.11. </span>Data Augmentation<a class="headerlink" href="#data-augmentation" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.11. </span>Data Augmentation<a class="headerlink" href="#data-augmentation" title="Link to this heading"></a></h2>
 <p>Use <code class="docutils literal notranslate"><span class="pre">gain_variations</span></code> to augment training data with gain variations per class:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
@@ -1634,7 +1760,7 @@ forecasting tasks.</p>
 </div>
 </section>
 <section id="choosing-the-right-preset">
-<h2><span class="section-number">8.3.12. </span>Choosing the Right Preset<a class="headerlink" href="#choosing-the-right-preset" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.12. </span>Choosing the Right Preset<a class="headerlink" href="#choosing-the-right-preset" title="Link to this heading"></a></h2>
 <p><strong>Decision Tree:</strong></p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Is the pattern in frequency content?
 |-- Yes --&gt; Use FFT-based preset
@@ -1679,7 +1805,7 @@ forecasting tasks.</p>
 </table>
 </section>
 <section id="performance-impact">
-<h2><span class="section-number">8.3.13. </span>Performance Impact<a class="headerlink" href="#performance-impact" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.13. </span>Performance Impact<a class="headerlink" href="#performance-impact" title="Link to this heading"></a></h2>
 <p>Feature extraction affects model size and speed:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -1720,7 +1846,7 @@ forecasting tasks.</p>
 </ul>
 </section>
 <section id="on-device-feature-extraction">
-<h2><span class="section-number">8.3.14. </span>On-Device Feature Extraction<a class="headerlink" href="#on-device-feature-extraction" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.14. </span>On-Device Feature Extraction<a class="headerlink" href="#on-device-feature-extraction" title="Link to this heading"></a></h2>
 <p>Feature extraction runs on the MCU before inference. The compilation
 process generates C code for the feature extraction pipeline configured
 in your YAML.</p>
@@ -1733,7 +1859,7 @@ Output buffer: feature_size_per_frame x num_frame_concat x sizeof(data_type)
 </div>
 </section>
 <section id="example-configurations">
-<h2><span class="section-number">8.3.15. </span>Example Configurations<a class="headerlink" href="#example-configurations" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.15. </span>Example Configurations<a class="headerlink" href="#example-configurations" title="Link to this heading"></a></h2>
 <p><strong>Arc Fault Classification (using preset):</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;FFT1024Input_256Feature_1Frame_Full_Bandwidth&#39;</span>
@@ -1791,18 +1917,18 @@ extracted features:</p>
 <p><strong>PCA Visualization of Extracted Features:</strong></p>
 <p>PCA (Principal Component Analysis) helps visualize how well the extracted features
 separate your classes. Well-separated clusters indicate good feature extraction.</p>
-<figure class="align-center" id="id1">
+<figure class="align-center" id="id7">
 <a class="reference internal image-reference" href="../_images/pca_on_feature_extracted_train_data1.png"><img alt="PCA on Training Data" src="../_images/pca_on_feature_extracted_train_data1.png" style="width: 600px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">PCA visualization of extracted features on training data</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+<p><span class="caption-text">PCA visualization of extracted features on training data</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id8">
 <a class="reference internal image-reference" href="../_images/pca_on_feature_extracted_validation_data.png"><img alt="PCA on Validation Data" src="../_images/pca_on_feature_extracted_validation_data.png" style="width: 600px;" />
 </a>
 <figcaption>
-<p><span class="caption-text">PCA visualization of extracted features on validation data</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+<p><span class="caption-text">PCA visualization of extracted features on validation data</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p><strong>Interpreting PCA plots:</strong></p>
@@ -1813,8 +1939,294 @@ separate your classes. Well-separated clusters indicate good feature extraction.
 <li><p><strong>Scattered points</strong>: High variance, potentially noisy data</p></li>
 </ul>
 </section>
+<section id="stacking-modes">
+<span id="id1"></span><h2><span class="section-number">8.4.16. </span>Stacking Modes<a class="headerlink" href="#stacking-modes" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">stacking</span></code> parameter controls how extracted features from multiple input
+channels are organized before being fed to the model. This is particularly
+relevant for multi-channel sensors (e.g., 3-axis accelerometer).</p>
+<p><strong>1D Stacking</strong> (<code class="docutils literal notranslate"><span class="pre">stacking:</span> <span class="pre">'1D'</span></code>)</p>
+<p>Features from all channels are concatenated into a single flat sequence.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Channel 1: [a1, a2, a3]
+Channel 2: [b1, b2, b3]
+Channel 3: [c1, c2, c3]
+
+1D result: [a1, a2, a3, b1, b2, b3, c1, c2, c3]
+</pre></div>
+</div>
+<p><strong>2D1 Stacking</strong> (<code class="docutils literal notranslate"><span class="pre">stacking:</span> <span class="pre">'2D1'</span></code>) – Default</p>
+<p>Features are arranged in a 2D matrix with one row per channel.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Channel 1: [a1, a2, a3]
+Channel 2: [b1, b2, b3]
+Channel 3: [c1, c2, c3]
+
+2D1 result:
+[
+  [a1, a2, a3],
+  [b1, b2, b3],
+  [c1, c2, c3]
+]
+</pre></div>
+</div>
+<p>The default stacking mode is <code class="docutils literal notranslate"><span class="pre">'2D1'</span></code>. Choose <code class="docutils literal notranslate"><span class="pre">'1D'</span></code> when you want a flat
+feature vector (e.g., for fully-connected models), and <code class="docutils literal notranslate"><span class="pre">'2D1'</span></code> when you want
+to preserve the per-channel structure (e.g., for convolutional models).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stacking</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;2D1&#39;</span><span class="w">   </span><span class="c1"># or &#39;1D&#39;</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
+</section>
+<section id="gain-variation-augmentation">
+<span id="id2"></span><h2><span class="section-number">8.4.17. </span>Gain Variation Augmentation<a class="headerlink" href="#gain-variation-augmentation" title="Link to this heading"></a></h2>
+<p>Gain variation is a data augmentation technique that multiplies the raw data
+of each class by a random gain factor drawn from a uniform distribution. This
+helps the model become robust to amplitude variations in the input signal.</p>
+<p><strong>How it works:</strong></p>
+<ol class="arabic simple">
+<li><p>For each class, you specify a <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> gain range.</p></li>
+<li><p>During data processing, a random number is drawn from the uniform
+distribution <code class="docutils literal notranslate"><span class="pre">U(min,</span> <span class="pre">max)</span></code> for each sample.</p></li>
+<li><p>The raw data of the corresponding class is multiplied by this random gain
+factor.</p></li>
+</ol>
+<p><strong>Format:</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>gain_variations: {class1_name: [min, max], class2_name: [min, max], ...}
+</pre></div>
+</div>
+<p><strong>Example – Gain variation with Downsample and SimpleWindow:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_proc_transforms</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Downsample</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SimpleWindow</span>
+<span class="w">  </span><span class="nt">gain_variations</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">arc</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.9</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.1</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">normal</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1.2</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">sampling_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">313000</span>
+<span class="w">  </span><span class="nt">new_sr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3130</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">stride_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Gain variation can be used alongside <code class="docutils literal notranslate"><span class="pre">Downsample</span></code> or <code class="docutils literal notranslate"><span class="pre">SimpleWindow</span></code>
+data processing transforms. The gain is applied to the raw data before
+the feature extraction stage.</p>
+</div>
+</section>
+<section id="q15-fixed-point-transforms">
+<span id="id3"></span><h2><span class="section-number">8.4.18. </span>Q15 Fixed-Point Transforms<a class="headerlink" href="#q15-fixed-point-transforms" title="Link to this heading"></a></h2>
+<p>The Q15 transform family enables fixed-point feature extraction suitable for
+on-device (MCU) deployment where floating-point operations may be expensive or
+unavailable. These transforms operate in Q15 fixed-point format, a 16-bit
+signed integer representation where the range <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">+1]</span></code> maps to
+<code class="docutils literal notranslate"><span class="pre">[-32768,</span> <span class="pre">+32767]</span></code>.</p>
+<p><strong>Available Q15 Transforms:</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Transform</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TO_Q15</span></code></p></td>
+<td><p>Converts the input waveform from floating-point to fixed-point Q15
+format (<code class="docutils literal notranslate"><span class="pre">-1</span></code> maps to <code class="docutils literal notranslate"><span class="pre">-32768</span></code>, <code class="docutils literal notranslate"><span class="pre">+1</span></code> maps to <code class="docutils literal notranslate"><span class="pre">+32767</span></code>). Values
+outside this range are saturated (clipped) to the Q15 bounds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FFT_Q15</span></code></p></td>
+<td><p>Performs a fixed-point Real FFT (RFFT) on the Q15 input frame to
+obtain its frequency-domain representation. This is the fixed-point
+equivalent of <code class="docutils literal notranslate"><span class="pre">FFT_FE</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Q15_SCALE</span></code></p></td>
+<td><p>Applies bit-shift-based scaling on the Q15 signal using the
+<code class="docutils literal notranslate"><span class="pre">q15_scale_factor</span></code> parameter. Positive values left-shift (amplify)
+the signal, while negative values right-shift (attenuate) it. This
+is a power-of-two multiplication or division.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Q15_MAG</span></code></p></td>
+<td><p>Computes the magnitude of complex Q15 FFT output samples to obtain
+the real-valued amplitude spectrum. This is the fixed-point
+equivalent of computing <code class="docutils literal notranslate"><span class="pre">ABS</span></code> on complex FFT output.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BIN_Q15</span></code></p></td>
+<td><p>Groups adjacent Q15 samples into fixed-size bins and computes the
+average per bin (optionally normalized when <code class="docutils literal notranslate"><span class="pre">normalize_bin</span></code> is set).
+Results are clipped to the 16-bit range. This is the fixed-point
+equivalent of <code class="docutils literal notranslate"><span class="pre">BINNING</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Typical Q15 Pipeline:</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Custom_Q15_Pipeline&#39;</span>
+<span class="w">  </span><span class="nt">feat_ext_transform</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;FFT_Q15&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;Q15_SCALE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;Q15_MAG&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;DC_REMOVE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;BIN_Q15&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;CONCAT&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">feature_size_per_frame</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">16</span>
+<span class="w">  </span><span class="nt">num_frame_concat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">q15_scale_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="nt">normalize_bin</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Q15 transforms are designed to mirror the floating-point pipeline on
+the MCU. When using Q15 feature extraction during training, the same
+fixed-point operations will be replicated on the target device, ensuring
+consistent behavior between training and inference.</p>
+</div>
+</section>
+<section id="frame-offset-overlap-control">
+<span id="frame-offset-overlap"></span><h2><span class="section-number">8.4.19. </span>Frame Offset (Overlap Control)<a class="headerlink" href="#frame-offset-overlap-control" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">offset</span></code> parameter controls the overlap between consecutive frames
+during data windowing.</p>
+<p><strong>Without offset</strong> (<code class="docutils literal notranslate"><span class="pre">offset:</span> <span class="pre">0</span></code>):</p>
+<p>Frames are created consecutively with no overlap. Each frame starts
+immediately after the previous frame ends (step size of 1 frame).</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Frame 1: [sample_0 ... sample_N]
+Frame 2: [sample_N+1 ... sample_2N]
+Frame 3: [sample_2N+1 ... sample_3N]
+</pre></div>
+</div>
+<p><strong>With offset</strong> (<code class="docutils literal notranslate"><span class="pre">offset:</span> <span class="pre">n</span></code>):</p>
+<p>Frames overlap by adding a fractional step size of <code class="docutils literal notranslate"><span class="pre">1/n</span></code> where <code class="docutils literal notranslate"><span class="pre">n</span></code> is
+the offset value. This creates more training samples from the same data.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>offset: 2  --&gt;  step = 1/2  --&gt;  50% overlap
+offset: 4  --&gt;  step = 1/4  --&gt;  75% overlap
+</pre></div>
+</div>
+<p>For example, with <code class="docutils literal notranslate"><span class="pre">offset:</span> <span class="pre">2</span></code> and <code class="docutils literal notranslate"><span class="pre">frame_size:</span> <span class="pre">256</span></code>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Frame 1: [sample_0   ... sample_255]
+Frame 2: [sample_128 ... sample_383]   (50% overlap)
+Frame 3: [sample_256 ... sample_511]
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">offset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
+</section>
+<section id="analysis-bandwidth">
+<span id="id4"></span><h2><span class="section-number">8.4.20. </span>Analysis Bandwidth<a class="headerlink" href="#analysis-bandwidth" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">analysis_bandwidth</span></code> parameter specifies the fraction of the signal
+bandwidth to analyse during feature extraction.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">analysis_bandwidth:</span> <span class="pre">1</span></code> – analyse the full bandwidth (default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">analysis_bandwidth:</span> <span class="pre">0.5</span></code> – analyse only the lower half of the spectrum.</p></li>
+</ul>
+<p>This is useful when only a specific portion of the frequency spectrum contains
+relevant information for the task.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">analysis_bandwidth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">frame_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1024</span>
+<span class="w">  </span><span class="nt">feat_ext_transform</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;FFT_FE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;FFT_POS_HALF&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;DC_REMOVE&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;ABS&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;BINNING&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;LOG_DB&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;CONCAT&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+<section id="feature-extraction-only-mode">
+<span id="id5"></span><h2><span class="section-number">8.4.21. </span>Feature Extraction Only Mode<a class="headerlink" href="#feature-extraction-only-mode" title="Link to this heading"></a></h2>
+<p>Set <code class="docutils literal notranslate"><span class="pre">dont_train_just_feat_ext:</span> <span class="pre">True</span></code> to run only the data processing and
+feature extraction stages without proceeding to model training. This is useful
+for:</p>
+<ul class="simple">
+<li><p>Inspecting extracted features and PCA plots before committing to training.</p></li>
+<li><p>Iterating quickly on the feature extraction configuration.</p></li>
+<li><p>Exporting extracted feature data (combine with <code class="docutils literal notranslate"><span class="pre">store_feat_ext_data:</span> <span class="pre">True</span></code>).</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">dont_train_just_feat_ext</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">store_feat_ext_data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1&#39;</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
+</section>
+<section id="evaluating-feature-extraction-quality">
+<span id="id6"></span><h2><span class="section-number">8.4.22. </span>Evaluating Feature Extraction Quality<a class="headerlink" href="#evaluating-feature-extraction-quality" title="Link to this heading"></a></h2>
+<p>Choosing the right feature extraction pipeline is critical for model
+performance. Tiny ML Tensorlab generates PCA (Principal Component Analysis)
+plots on the processed data before feeding it to model training. These plots
+provide a visual indication of how well the chosen feature extraction
+separates the data classes.</p>
+<p><strong>Key Principle:</strong></p>
+<p>If the clusters in the PCA plot are visually separable for a classification
+task, it will be a relatively easier job for the AI model to learn the
+decision boundaries. Conversely, overlapping clusters indicate that the model
+will have a harder time distinguishing between classes.</p>
+<p><strong>Different feature extractions work differently per dataset.</strong> There is no
+single best feature extraction – it depends on the nature of the data.</p>
+<p><strong>Example – Motor Fault Dataset Comparison:</strong></p>
+<p>The following table compares four feature extraction presets on the same motor
+bearing fault classification dataset (6 classes, 3-axis vibration sensor),
+trained with the same model and hyperparameters:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature Extraction Preset</p></th>
+<th class="head"><p>Method</p></th>
+<th class="head"><p>Accuracy</p></th>
+<th class="head"><p>F1-Score</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1</span></code></p></td>
+<td><p>FFTBIN</p></td>
+<td><p><strong>100.0%</strong></p></td>
+<td><p>1.000</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D</span></code></p></td>
+<td><p>FFTBIN (1D)</p></td>
+<td><p><strong>99.995%</strong></p></td>
+<td><p>1.000</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1</span></code></p></td>
+<td><p>FFT</p></td>
+<td><p><strong>97.9%</strong></p></td>
+<td><p>0.979</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1</span></code></p></td>
+<td><p>RAW</p></td>
+<td><p><strong>92.3%</strong></p></td>
+<td><p>0.922</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observations:</strong></p>
+<ul class="simple">
+<li><p><strong>FFTBIN</strong> (FFT with binning) achieved 100% accuracy – the PCA clusters
+were clearly separable.</p></li>
+<li><p><strong>FFT</strong> without binning achieved 97.9% – clusters had some overlap.</p></li>
+<li><p><strong>RAW</strong> time-domain features achieved 92.3% – the model had a harder time
+distinguishing classes without frequency-domain transformation.</p></li>
+</ul>
+<p>This demonstrates that the same dataset can respond very differently to
+different feature extraction methods. Always compare multiple feature
+extraction approaches and inspect the PCA plots to find the best configuration
+for your specific dataset.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">dont_train_just_feat_ext:</span> <span class="pre">True</span></code> to quickly iterate through different
+feature extraction configurations and compare PCA plots before running full
+training.</p>
+</div>
+</section>
 <section id="best-practices">
-<h2><span class="section-number">8.3.16. </span>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.23. </span>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><strong>Match to signal characteristics</strong>: FFT for periodic, raw for transient</p></li>
 <li><p><strong>Start with standard presets</strong>: Customize only if needed</p></li>
@@ -1824,7 +2236,7 @@ separate your classes. Well-separated clusters indicate good feature extraction.
 </ol>
 </section>
 <section id="next-steps">
-<h2><span class="section-number">8.3.17. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.24. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>See <a class="reference internal" href="goodness_of_fit.html"><span class="doc">Goodness of Fit</span></a> to analyze dataset quality</p></li>
 <li><p>Learn about <a class="reference internal" href="quantization.html"><span class="doc">Quantization</span></a> for model compression</p></li>
@@ -1837,8 +2249,8 @@ separate your classes. Well-separated clusters indicate good feature extraction.
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="quantization.html" class="btn btn-neutral float-left" title="8.2. Quantization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="goodness_of_fit.html" class="btn btn-neutral float-right" title="8.4. Goodness of Fit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quantization_examples.html" class="btn btn-neutral float-left" title="8.3. Standalone Quantization Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="goodness_of_fit.html" class="btn btn-neutral float-right" title="8.5. Goodness of Fit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

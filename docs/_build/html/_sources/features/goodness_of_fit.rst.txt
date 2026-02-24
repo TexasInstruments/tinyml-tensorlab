@@ -167,24 +167,54 @@ Identifies which classes are most likely to be confused.
 8-Plot Analysis
 ---------------
 
-GoF generates 8 different visualizations using combinations of:
+GoF generates 8 different visualizations by combining three processing stages:
+**2 Transforms x 2 Scalings x 2 Dimensionality Reductions = 8 plots**.
 
-* **Transforms**: PCA, LDA, t-SNE
-* **Scalings**: Standard, MinMax
-* **Feature sets**: All features, top features
+**Transforms**
+
+* **FFT + Abs + Log**: Converts the time-series data from the time domain into the
+  frequency domain using a Fast Fourier Transform. Only the positive half of the
+  symmetric FFT output is retained. The absolute value is taken, followed by a log
+  transform to compress large magnitudes.
+* **Wavelet Transform (WT)**: Analyzes the data in both the time and frequency
+  domains simultaneously. This makes it especially effective at capturing localized
+  events in time-series data, such as sudden spikes or anomalies.
+
+**Scalings**
+
+* **Standard Scaler (Z-score normalization)**: Standardizes the data by subtracting
+  the mean and dividing by the standard deviation, producing features with mean=0
+  and standard deviation=1.
+* **Min-Max Scaler**: Scales each feature to the [0, 1] range. Useful when you want
+  to preserve the relative distances between data points.
+
+**Dimensionality Reduction**
+
+* **PCA (Principal Component Analysis)**: A linear method that projects the data into
+  fewer dimensions while preserving as much variance as possible.
+* **t-SNE (t-Distributed Stochastic Neighbor Embedding)**: A non-linear method that
+  maps high-dimensional data into 2D by preserving local neighborhood relationships.
+  Especially good at revealing cluster structures.
+
+**The 8 Combinations**
 
 .. code-block:: text
 
-   Plot 1: PCA + Standard scaling + All features
-   Plot 2: PCA + MinMax scaling + All features
-   Plot 3: LDA + Standard scaling + All features
-   Plot 4: LDA + MinMax scaling + All features
-   Plot 5: t-SNE + Standard scaling + All features
-   Plot 6: t-SNE + MinMax scaling + All features
-   Plot 7: PCA + Standard scaling + Top 50 features
-   Plot 8: LDA + Standard scaling + Top 50 features
+   Plot 1: FFT+Abs+Log  +  Standard Scaler  +  PCA
+   Plot 2: FFT+Abs+Log  +  Standard Scaler  +  t-SNE
+   Plot 3: FFT+Abs+Log  +  MinMax Scaler    +  PCA
+   Plot 4: FFT+Abs+Log  +  MinMax Scaler    +  t-SNE
+   Plot 5: WT           +  Standard Scaler  +  PCA
+   Plot 6: WT           +  Standard Scaler  +  t-SNE
+   Plot 7: WT           +  MinMax Scaler    +  PCA
+   Plot 8: WT           +  MinMax Scaler    +  t-SNE
 
-Examining all 8 helps identify the best analysis approach.
+.. important::
+
+   Not all 8 plots need to show separable clusters. Each plot represents a different
+   method of analyzing the time-series data. If **any one** of the 8 plots shows
+   separable clusters, it is a strong sign that the dataset is suitable for
+   classification.
 
 Common Patterns
 ---------------
@@ -246,6 +276,84 @@ Actionable Insights
 1. Feature extraction may be inappropriate
 2. Data might not contain discriminative information
 3. Consider domain expertise for better features
+
+Frame Size Sweeping
+-------------------
+
+Sometimes the default ``frame_size`` does not capture enough of the signal to produce
+meaningful GoF plots. In such cases, sweeping across multiple frame sizes can reveal
+the right setting.
+
+**Arc Fault Classification Example**
+
+The Arc Fault dataset (two classes: *Arc* and *Normal*) demonstrates this clearly.
+Starting with a small frame size and progressively increasing it:
+
+.. code-block:: text
+
+   frame_size=256   --> Poor: clusters lack purity, no class separation
+   frame_size=512   --> Still poor: significant overlap persists
+   frame_size=1024  --> Improving: WT-based plots (5-8) begin showing less overlap
+   frame_size=2048  --> Better: continued improvement in WT plots
+   frame_size=4096  --> Good: clear, well-separated clusters visible in
+                        Plot 7 (WT + MinMax Scaler + PCA)
+
+**Why Larger Frame Sizes Help**
+
+The Arc Fault dataset has a high sampling frequency, meaning many data points are
+recorded per second. With a small frame size, each frame captures only a tiny slice
+of the signal and misses the broader pattern. Increasing the frame size allows more
+data points per frame, revealing the true structure of the data.
+
+**Recommendation**: Start with a ``frame_size`` that matches the intended model input
+size. If plots are inconclusive, try 2x and 4x larger frame sizes. The frame size
+that produces the clearest separation in the GoF plots is a good indicator of the
+minimum signal length needed for reliable classification.
+
+.. code-block:: yaml
+
+   # Sweep example: run GoF at multiple frame sizes
+   data_processing_feature_extraction:
+     gof_test: True
+     frame_size: 1024   # Try 256, 512, 1024, 2048, 4096
+
+Multi-Cluster Analysis
+----------------------
+
+When a single class appears as multiple separate clusters in the GoF plots, it does
+not necessarily mean the data is bad. Multiple clusters per class can arise from
+real variations within the data collection process.
+
+**Motor Fault Four-Class Example: Sampling Frequency**
+
+Running GoF on the Motor Fault Four-Class Dataset (``frame_size=256``) revealed that
+each class formed roughly **10 separate clusters**. Investigation showed that the
+dataset contained samples collected at 10 different sampling frequencies (10 Hz to
+100 Hz). Filtering the dataset to a single frequency (40 Hz) reduced the cluster
+count from 10 per class to **4 clusters** -- one per actual class. The sampling
+frequency variation had introduced unwanted structure.
+
+**Motor Fault Six-Class Example: Equipment Variation**
+
+The Motor Fault Six-Class Dataset showed a similar multi-cluster pattern. However,
+filtering to a single sampling frequency (40 Hz) still left roughly **3 clusters per
+class**. A deeper look revealed that the data had been collected from **3 different
+motors**. Filtering to a single motor finally produced exactly **6 clusters**,
+matching the actual number of classes.
+
+**Common Causes of Multi-Cluster Patterns**
+
+* Different sampling frequencies in the dataset
+* Different environmental conditions during data collection
+* Different equipment or sensors used across collection sessions
+* Varying operational states within the same nominal class
+
+**What To Do**
+
+1. Examine metadata (frequency, sensor ID, conditions) for systematic variation.
+2. Filter or stratify the data by the suspected variable and re-run GoF.
+3. If filtering resolves the multi-cluster pattern, consider whether the model should
+   be trained on the full mixed dataset or on a controlled subset.
 
 Example: Motor Fault GoF Analysis
 ---------------------------------

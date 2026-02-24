@@ -187,7 +187,7 @@ Receive config file:
      variables: 1
 
    training:
-     model_name: 'ArcFault_model_400_t'
+     model_name: 'CLS_4k_NPU'
      training_epochs: 30
      batch_size: 256
      quantization: 2

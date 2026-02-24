@@ -44,6 +44,15 @@ Step 2: Run Hello World Example
 
          run_tinyml_modelzoo.bat examples\generic_timeseries_classification\config.yaml
 
+.. tip::
+
+   For MSPM0 devices, use ``config_MSPM0.yaml`` instead of ``config.yaml``
+   wherever it exists in the example directories. For example:
+
+   .. code-block:: bash
+
+      ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config_MSPM0.yaml
+
 This example:
 
 1. Downloads a simple waveform dataset (sine, square, sawtooth waves)

@@ -1,0 +1,795 @@
+======================
+NPU Device Deployment
+======================
+
+This guide covers deployment to TI devices with Neural Processing Unit (NPU)
+hardware acceleration.
+
+NPU-Enabled Devices
+-------------------
+
+The following devices include TI's TINPU:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 25 50
+
+   * - Device
+     - Family
+     - NPU Features
+   * - F28P55
+     - C2000
+     - 8-bit/4-bit inference, up to 60k params
+   * - AM13E2
+     - AM13
+     - 8-bit inference, Cortex-M33 + NPU
+   * - MSPM0G5187
+     - MSPM0
+     - 8-bit inference, ultra-low power
+
+NPU Compilation
+---------------
+
+To compile for NPU, use the correct preset:
+
+.. code-block:: yaml
+
+   common:
+     target_device: 'F28P55'  # NPU device
+
+   training:
+     model_name: 'CLS_4k_NPU'  # NPU-compatible model
+
+   compilation:
+     enable: True
+     preset_name: 'compress_npu_layer_data'  # NPU optimization
+
+The ``compress_npu_layer_data`` preset:
+
+* Optimizes memory layout for NPU
+* Compresses weight data
+* Generates NPU-specific code
+
+NPU Model Requirements
+----------------------
+
+Models must follow NPU constraints (see :doc:`/devices/npu_guidelines`):
+
+* Use model names ending in ``_NPU``
+* Channel counts must be multiples of 4
+* Kernel heights ≤ 7
+* Must use INT8 or INT4 quantization
+
+NPU Compilation Artifacts
+-------------------------
+
+After compilation:
+
+.. code-block:: text
+
+   .../compilation/artifacts/
+   ├── mod.a                       # Compiled library (includes NPU code)
+   ├── mod.h                       # Model interface
+   ├── model_config.h              # NPU configuration
+   ├── npu_layer_data.bin          # NPU weight data
+   ├── feature_extraction.c        # Feature extraction
+   └── inference_example.c         # Example code
+
+NPU Initialization
+------------------
+
+NPU requires initialization before inference:
+
+.. code-block:: c
+
+   #include "mod.h"
+   #include "npu.h"
+
+   void main(void) {
+       // Initialize system
+       System_Init();
+
+       // Initialize NPU hardware
+       NPU_Init();
+
+       // Initialize model (loads weights to NPU)
+       mod_init();
+
+       // Now ready for inference
+       while (1) {
+           if (data_ready) {
+               run_npu_inference();
+           }
+       }
+   }
+
+NPU Inference Code
+------------------
+
+.. code-block:: c
+
+   #include "mod.h"
+   #include "feature_extraction.h"
+
+   // Buffers
+   float input_buffer[INPUT_SIZE];
+   float feature_buffer[FEATURE_SIZE];
+   float output_buffer[NUM_CLASSES];
+
+   void run_npu_inference(void) {
+       // 1. Collect sensor data
+       collect_sensor_data(input_buffer);
+
+       // 2. Extract features (runs on CPU)
+       extract_features(input_buffer, feature_buffer);
+
+       // 3. Run NPU inference
+       // NPU handles quantization internally
+       mod_inference(feature_buffer, output_buffer);
+
+       // 4. Get prediction
+       int prediction = argmax(output_buffer, NUM_CLASSES);
+
+       // 5. Act on result
+       handle_prediction(prediction);
+   }
+
+NPU Memory Management
+---------------------
+
+NPU requires specific memory regions:
+
+**Weight Memory:**
+
+NPU weights are stored in dedicated memory:
+
+.. code-block:: c
+
+   // Linker command file
+   MEMORY
+   {
+       NPU_WEIGHTS : origin = 0x00080000, length = 0x00010000
+   }
+
+   SECTIONS
+   {
+       .npu_weights : > NPU_WEIGHTS
+   }
+
+**Activation Memory:**
+
+NPU uses scratch memory for intermediate results:
+
+.. code-block:: c
+
+   // Allocate NPU scratch buffer
+   #pragma DATA_SECTION(npu_scratch, ".npu_scratch")
+   uint8_t npu_scratch[NPU_SCRATCH_SIZE];
+
+NPU Performance
+---------------
+
+Typical NPU performance on F28P55:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 25 25 25
+
+   * - Model
+     - CPU Time
+     - NPU Time
+     - Speedup
+   * - CLS_1k_NPU
+     - 2000 µs
+     - 150 µs
+     - 13x
+   * - CLS_4k_NPU
+     - 5000 µs
+     - 300 µs
+     - 17x
+   * - CLS_13k_NPU
+     - 15000 µs
+     - 600 µs
+     - 25x
+
+**Note:** Actual performance depends on model architecture and input size.
+
+NPU Power Considerations
+------------------------
+
+NPU can be power-managed:
+
+.. code-block:: c
+
+   // Disable NPU when not in use
+   void enter_low_power(void) {
+       NPU_Disable();  // Saves power
+   }
+
+   // Re-enable before inference
+   void prepare_inference(void) {
+       NPU_Enable();
+       // May need small delay for NPU to stabilize
+       delay_us(10);
+   }
+
+NPU Debugging
+-------------
+
+**Verify NPU Initialization:**
+
+.. code-block:: c
+
+   if (NPU_GetStatus() != NPU_STATUS_READY) {
+       // NPU initialization failed
+       handle_error();
+   }
+
+**Check Inference Results:**
+
+Compare NPU results with expected values from training:
+
+.. code-block:: c
+
+   // Known test input
+   float test_input[] = {...};
+   float expected_output[] = {...};
+
+   mod_inference(test_input, output_buffer);
+
+   // Compare
+   float max_error = 0;
+   for (int i = 0; i < NUM_CLASSES; i++) {
+       float error = fabs(output_buffer[i] - expected_output[i]);
+       if (error > max_error) max_error = error;
+   }
+
+   // Quantization error should be small
+   if (max_error > 0.1) {
+       // Unexpected deviation
+       debug_print("Max error: %f\n", max_error);
+   }
+
+NPU Error Handling
+------------------
+
+Handle NPU errors gracefully:
+
+.. code-block:: c
+
+   int run_safe_inference(float* features, float* output) {
+       // Check NPU status
+       if (NPU_GetStatus() != NPU_STATUS_READY) {
+           NPU_Reset();
+           if (NPU_GetStatus() != NPU_STATUS_READY) {
+               return -1;  // NPU unavailable
+           }
+       }
+
+       // Run inference
+       int result = mod_inference(features, output);
+
+       if (result != 0) {
+           // Inference error
+           NPU_Reset();
+           return -2;
+       }
+
+       return 0;  // Success
+   }
+
+CCS Project Setup for NPU
+-------------------------
+
+**1. Include NPU Support Files:**
+
+From your device SDK, add:
+
+* NPU driver files
+* NPU header files
+* NPU configuration files
+
+**2. Configure Linker:**
+
+Ensure linker command file includes NPU memory regions.
+
+**3. Add Compiler Defines:**
+
+.. code-block:: text
+
+   Project Properties → Build → Compiler → Predefined Symbols
+   Add: NPU_ENABLED=1
+
+Example: Arc Fault on F28P55 NPU
+--------------------------------
+
+Complete deployment example:
+
+**Configuration:**
+
+.. code-block:: yaml
+
+   common:
+     task_type: 'generic_timeseries_classification'
+     target_device: 'F28P55'
+
+   dataset:
+     dataset_name: 'dc_arc_fault_example_dsk'
+
+   training:
+     model_name: 'ArcFault_model_400_t'
+     quantization: 2
+     quantization_method: 'QAT'
+     quantization_weight_bitwidth: 8
+     quantization_activation_bitwidth: 8
+
+   compilation:
+     enable: True
+     preset_name: 'compress_npu_layer_data'
+
+**Main Application:**
+
+.. code-block:: c
+
+   #include "device.h"
+   #include "mod.h"
+   #include "feature_extraction.h"
+   #include "npu.h"
+
+   #define SAMPLE_SIZE 1024
+   #define FEATURE_SIZE 256
+   #define NUM_CLASSES 2  // Normal, Arc
+
+   float adc_buffer[SAMPLE_SIZE];
+   float feature_buffer[FEATURE_SIZE];
+   float output_buffer[NUM_CLASSES];
+
+   volatile uint8_t inference_flag = 0;
+
+   void main(void) {
+       // System initialization
+       Device_init();
+       Device_initGPIO();
+
+       // Initialize ADC for current sensing
+       ADC_Init();
+
+       // Initialize NPU
+       NPU_Init();
+
+       // Initialize model
+       mod_init();
+
+       // Enable interrupts
+       EINT;
+
+       while (1) {
+           if (inference_flag) {
+               // Extract features
+               extract_features(adc_buffer, feature_buffer);
+
+               // Run NPU inference
+               mod_inference(feature_buffer, output_buffer);
+
+               // Check for arc fault
+               if (output_buffer[1] > output_buffer[0]) {
+                   // Arc detected!
+                   GPIO_writePin(ALERT_PIN, 1);
+                   trigger_protection();
+               }
+
+               inference_flag = 0;
+           }
+       }
+   }
+
+   __interrupt void ADC_ISR(void) {
+       static uint16_t sample_idx = 0;
+
+       adc_buffer[sample_idx++] = ADC_readResult();
+
+       if (sample_idx >= SAMPLE_SIZE) {
+           sample_idx = 0;
+           inference_flag = 1;
+       }
+
+       ADC_clearInterruptStatus();
+   }
+
+Troubleshooting NPU Issues
+--------------------------
+
+**NPU Initialization Fails:**
+
+* Check device is NPU-enabled
+* Verify NPU clock is enabled
+* Ensure NPU memory regions are defined
+
+**Incorrect Results:**
+
+* Verify model is NPU-compatible
+* Check quantization settings match
+* Compare with float model on same input
+
+**NPU Hangs:**
+
+* Check for memory conflicts
+* Verify buffer alignments
+* Reset NPU and retry
+
+CCS Studio Walkthrough: F28P55x
+--------------------------------
+
+This section provides a complete step-by-step walkthrough for deploying an
+arc fault classification model to the LAUNCHXL-F28P55X board using Code
+Composer Studio. The F28P55x device includes TI's TINPU, so this example
+exercises the full NPU inference path.
+
+**Requirements**
+
+.. list-table::
+   :widths: 30 70
+
+   * - LaunchPad
+     - LAUNCHXL-F28P55X
+   * - SDK
+     - C2000Ware 6.00
+   * - IDE
+     - CCS Studio 20.2.0 or later
+
+Step 1 -- Load the Example from Resource Explorer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The F28P55x arc fault example is available directly through the CCS Resource
+Explorer.
+
+1. Open Code Composer Studio.
+2. Navigate to **View** |rarr| **Resource Explorer**.
+
+.. figure:: /_static/img/deployment/npu/resource_explorer.png
+   :width: 700px
+   :align: center
+   :alt: CCS Resource Explorer
+
+   Opening Resource Explorer from the View menu.
+
+3. In the Resource Explorer, set the **Board or Device** filter to
+   ``LAUNCHXL-F28P55X``.
+4. In the search bar, type ``arc_fault_dataset_validation_f28p55x``.
+
+.. figure:: /_static/img/deployment/npu/resource_explorer_with_filled_fields.png
+   :width: 700px
+   :align: center
+   :alt: Resource Explorer with search filters applied
+
+   Resource Explorer with board and keyword filters filled in.
+
+5. Select the folder **arc_fault_dataset_validation_f28p55x** and click
+   **Import**.
+
+.. figure:: /_static/img/deployment/npu/import_project.png
+   :width: 600px
+   :align: center
+   :alt: Import arc fault project
+
+   Importing the arc fault project from Resource Explorer.
+
+6. Download and install any required dependencies when prompted.
+
+.. figure:: /_static/img/deployment/npu/download_dependencies.png
+   :width: 600px
+   :align: center
+   :alt: Download dependencies dialog
+
+   Downloading required SDK dependencies.
+
+7. After all packages are installed the final import dialog appears. Click
+   **Finish** to import the project into your workspace.
+
+.. figure:: /_static/img/deployment/npu/import_installed_project.png
+   :width: 600px
+   :align: center
+   :alt: Import installed project
+
+   Final import dialog after dependencies are resolved.
+
+Step 2 -- Build the Project
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+8. Go to **Project** |rarr| **Build Project(s)** (or press ``Ctrl+B``).
+
+.. figure:: /_static/img/deployment/npu/build_project.png
+   :width: 600px
+   :align: center
+   :alt: Build Project menu
+
+   Building the project from the Project menu.
+
+Verify that the build completes without errors in the Console view.
+
+Step 3 -- Set Target Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+9. Switch the active target configuration from
+   ``TMS320F28P550SJ9.ccxml`` to ``TMS320F28P550SJ9_LaunchPad.ccxml``.
+   Right-click the ``.ccxml`` file in Project Explorer and select
+   **Set as Active Target Configuration**.
+
+.. figure:: /_static/img/deployment/npu/active_target.png
+   :width: 500px
+   :align: center
+   :alt: Active Target Configuration
+
+   Selecting the LaunchPad target configuration.
+
+Step 4 -- Flash the Device
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+10. Connect the LAUNCHXL-F28P55X LaunchPad to your PC via USB.
+11. Go to **Run** |rarr| **Flash Project**.
+
+.. figure:: /_static/img/deployment/npu/flash_application.png
+   :width: 600px
+   :align: center
+   :alt: Flash Project
+
+   Flashing the built project to the device.
+
+12. *(Optional)* If a firmware update prompt appears, click **Update**.
+
+.. figure:: /_static/img/deployment/npu/update_error.png
+   :width: 500px
+   :align: center
+   :alt: Firmware update dialog
+
+   Firmware update dialog -- click Update if it appears.
+
+Step 5 -- Debug and Verify
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+13. After flashing, the Debug perspective opens. Click the **Debug** icon
+    to start a debug session.
+
+.. figure:: /_static/img/deployment/npu/debug_screen.png
+   :width: 700px
+   :align: center
+   :alt: Debug screen
+
+   CCS Debug perspective after flashing.
+
+14. Place a breakpoint on the line that follows the inference call in
+    ``application_main.c``.
+
+.. figure:: /_static/img/deployment/npu/breakpoint.png
+   :width: 700px
+   :align: center
+   :alt: Setting breakpoint
+
+   Setting a breakpoint after the inference call.
+
+15. Click **Resume** (F8) to run the program. When the breakpoint is hit,
+    add the variable ``test_result`` to the **Watch** window.
+
+.. figure:: /_static/img/deployment/npu/variable_test_result.png
+   :width: 600px
+   :align: center
+   :alt: Watch variable test_result
+
+   Adding test_result to the Watch window.
+
+16. Inspect the value:
+
+    * ``test_result == 1`` -- model inference passed (output matches golden
+      vector).
+    * ``test_result == 0`` -- model inference failed.
+
+.. figure:: /_static/img/deployment/npu/test_result_value.png
+   :width: 600px
+   :align: center
+   :alt: test_result value
+
+   Verifying the test_result value in the Watch window.
+
+Required Files from ModelMaker
+------------------------------
+
+The CCS example ``arc_fault_dataset_validation_f28p55x`` requires four files
+generated by a ModelMaker run. After ModelMaker finishes, copy each file
+from its ModelMaker output path to the corresponding CCS project path.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 20 45 40
+
+   * - File
+     - Purpose
+     - ModelMaker Source Path
+     - CCS Project Destination
+   * - ``mod.a``
+     - Compiled model library
+     - ``.../compilation/artifacts/mod.a``
+     - ``ex_arc_fault_dataset_validation_f28p55x/artifacts/mod.a``
+   * - ``tvmgen_default.h``
+     - Model inference API header
+     - ``.../compilation/artifacts/tvmgen_default.h``
+     - ``ex_arc_fault_dataset_validation_f28p55x/artifacts/tvmgen_default.h``
+   * - ``test_vector.c``
+     - Golden-vector test data
+     - ``.../training/quantization/golden_vectors/test_vector.c``
+     - ``ex_arc_fault_dataset_validation_f28p55x/test_vector.c``
+   * - ``user_input_config.h``
+     - Feature extraction config
+     - ``.../training/quantization/golden_vectors/user_input_config.h``
+     - ``ex_arc_fault_dataset_validation_f28p55x/user_input_config.h``
+
+The ``...`` prefix in the source paths expands to your ModelMaker data
+directory, for example::
+
+   tinyml-modelmaker/data/projects/dc_arc_fault_example_dsk/run/<run_name>/
+
+After copying the four files, rebuild the CCS project, flash, and verify
+``test_result`` in the debugger as described above.
+
+.. |rarr| unicode:: U+2192 .. right arrow
+
+Model Performance Profiling
+---------------------------
+
+Understanding inference performance is critical when deploying models to
+resource-constrained MCUs. This section describes how to measure inference cycle
+counts on the F28P55x device so you can evaluate the tradeoff between model
+accuracy and inference latency. Developers typically want to minimize cycles
+(faster inference), but reducing computation can also reduce model accuracy.
+
+By profiling different model and input-size combinations, you can select the
+configuration that meets your latency budget while maintaining acceptable
+accuracy.
+
+**Requirements**
+
+* Device: LAUNCHXL-F28P55X
+* C2000Ware 6.00.00.00
+* Code Composer Studio 20.2.0
+
+**Importing the Profiling Project**
+
+The example project ``ex_model_performance_f28p55x`` is **not** available
+through CCS Resource Explorer. You must manually copy it into the C2000Ware AI
+examples directory and import it:
+
+1. Copy the ``ex_model_performance_f28p55x`` project folder.
+
+2. Paste it into the C2000Ware AI examples path:
+
+   .. code-block:: text
+
+      C2000Ware_6_00_00_00/libraries/ai/feature_extract/c28/examples/
+
+3. In CCS, go to **File** -> **Import Projects(s)**.
+
+4. Browse to the ``ex_model_performance_f28p55x`` folder and click
+   **Select Folder**.
+
+5. Click **Finish** to import the project.
+
+**Running the Profiling Example**
+
+1. Build the project: **Project** -> **Build Project(s)**.
+
+2. Set the active target configuration to
+   ``TMS320F28P550SJ9_LaunchPad.ccxml`` (matching your LAUNCHXL-F28P55X).
+
+3. Connect the launchpad to your system.
+
+4. Flash the project: **Run** -> **Flash Project**.
+
+5. After flashing, click the Debug icon to enter debug mode.
+
+6. Click **Continue** in the Debug Window to let the example run.
+
+7. Read the inference cycle count from the **GEL Output** window.
+
+**Required Files from ModelMaker**
+
+The CCS project ``ex_model_performance_f28p55x`` requires three files generated
+by ModelMaker after a training and compilation run:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 40 35
+
+   * - File
+     - Description
+     - Destination in CCS Project
+   * - ``mod.a``
+     - Compiled model library
+     - ``ex_model_performance_f28p55x/artifacts/``
+   * - ``tvmgen_default.h``
+     - Header for model inference APIs
+     - ``ex_model_performance_f28p55x/artifacts/``
+   * - ``user_input_config.h``
+     - Model input/output size configuration
+     - ``ex_model_performance_f28p55x/``
+
+After each ModelMaker run, copy these three files from the ModelMaker output
+into the corresponding CCS project locations, rebuild the project, flash, and
+debug to obtain the cycle count.
+
+**Configuring Different Models and Frame Sizes**
+
+To sweep across different configurations, edit the ModelMaker YAML
+configuration. The two key parameters are ``frame_size`` (which controls the
+input tensor dimension) and ``model_name`` (which selects the neural network
+architecture):
+
+.. code-block:: yaml
+
+   data_processing_feature_extraction:
+       feature_extraction_name: 'Custom_Default'
+       data_proc_transforms: ['SimpleWindow']
+       frame_size: 128   # Input to the model (N,C,H,W) -> (1,1,128,1)
+
+   training:
+       enable: True
+       model_name: 'TimeSeries_Generic_1k_t'   # Select the model
+
+By sweeping ``frame_size`` over values such as 128, 256, 512, and 1024 and
+choosing among ``TimeSeries_Generic_1k_t``, ``TimeSeries_Generic_4k_t``,
+``TimeSeries_Generic_6k_t``, and ``TimeSeries_Generic_13k_t``, you can
+characterize the full accuracy-vs-cycles landscape for your application.
+
+**Profiling Results**
+
+The table below shows measured inference cycle counts and corresponding
+accuracies on the arc fault dataset. Input size is
+``(N,C,H,W) = (1, 1, frame_size, 1)`` and the output size is 2 (binary
+classification).
+
+.. list-table:: Inference Cycles and Accuracy by Model and Frame Size
+   :header-rows: 1
+   :widths: 28 18 18 18 18
+
+   * - Model
+     - 128
+     - 256
+     - 512
+     - 1024
+   * - TimeSeries_Generic_1k_t
+     - 103,882 cycles (80.32%)
+     - 188,397 cycles (85.83%)
+     - 372,242 cycles (87.33%)
+     - 692,220 cycles (94.43%)
+   * - TimeSeries_Generic_4k_t
+     - 71,595 cycles (86.45%)
+     - 109,534 cycles (89.29%)
+     - 184,981 cycles (91.79%)
+     - 326,782 cycles (94.85%)
+   * - TimeSeries_Generic_6k_t
+     - 107,982 cycles (89.97%)
+     - 164,676 cycles (90.05%)
+     - 261,792 cycles (92.62%)
+     - 462,680 cycles (95.68%)
+   * - TimeSeries_Generic_13k_t
+     - 199,691 cycles (91.83%)
+     - 312,406 cycles (92.60%)
+     - 535,437 cycles (93.21%)
+     - 985,529 cycles (95.54%)
+
+**Key Takeaways**
+
+* Larger models (higher parameter count) generally deliver better accuracy but
+  consume more inference cycles.
+* Larger frame sizes improve accuracy at the cost of proportionally more cycles.
+* ``TimeSeries_Generic_4k_t`` offers the best cycles-per-accuracy ratio for
+  smaller input sizes, making it a strong default choice when latency is
+  constrained.
+* Use this profiling workflow to select the right model and frame size
+  combination that fits within your application's latency budget while meeting
+  accuracy requirements.
+
+Next Steps
+----------
+
+* Review :doc:`/devices/npu_guidelines` for model constraints
+* See :doc:`ccs_integration` for general CCS setup
+* Check :doc:`/troubleshooting/common_errors` for issues

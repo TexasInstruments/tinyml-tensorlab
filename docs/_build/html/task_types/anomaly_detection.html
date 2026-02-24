@@ -77,9 +77,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l4"><a class="reference internal" href="../introduction/architecture.html#tinyml-modeloptimization">1.2.2.4. tinyml-modeloptimization</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#data-flow">1.2.3. Data Flow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#configuration-system">1.2.4. Configuration System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#integration-points">1.2.5. Integration Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#which-repository-do-i-need">1.2.3. Which Repository Do I Need?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#data-flow">1.2.4. Data Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#configuration-system">1.2.5. Configuration System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../introduction/architecture.html#integration-points">1.2.6. Integration Points</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../introduction/terminology.html">1.3. Terminology</a><ul>
@@ -130,7 +131,13 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/windows_setup.html">2.4. Windows Setup</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#option-1-native-windows-installation">2.4.1. Option 1: Native Windows Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#option-2-wsl2-recommended-for-full-compatibility">2.4.2. Option 2: WSL2 (Recommended for Full Compatibility)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#option-2-wsl2-recommended-for-full-compatibility">2.4.2. Option 2: WSL2 (Recommended for Full Compatibility)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#network-and-proxy-configuration-in-wsl-optional">2.4.2.1. Network and Proxy Configuration in WSL (Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#docker-in-wsl-optional">2.4.2.2. Docker in WSL (Optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#usb-device-access-from-wsl">2.4.2.3. USB Device Access from WSL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/windows_setup.html#vs-code-with-wsl">2.4.2.4. VS Code with WSL</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#path-configuration">2.4.3. Path Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#common-windows-issues">2.4.4. Common Windows Issues</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/windows_setup.html#gpu-support-on-windows">2.4.5. GPU Support on Windows</a></li>
@@ -263,15 +270,56 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l2 current"><a class="current reference internal" href="#">4.4. Anomaly Detection</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">4.4.1. Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-it-works">4.4.2. How It Works</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuration">4.4.3. Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dataset-format">4.4.4. Dataset Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#available-models">4.4.5. Available Models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#threshold-selection">4.4.6. Threshold Selection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#metrics">4.4.7. Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#semi-supervised-vs-supervised">4.4.8. Semi-Supervised vs Supervised</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example-motor-bearing-anomaly">4.4.9. Example: Motor Bearing Anomaly</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tips">4.4.10. Tips</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#see-also">4.4.11. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#autoencoder-architecture">4.4.3. Autoencoder Architecture</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-is-an-autoencoder">4.4.3.1. What is an Autoencoder?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#architecture-diagram">4.4.3.2. Architecture Diagram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dimensionality-flow">4.4.3.3. Dimensionality Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#key-components">4.4.3.4. Key Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#training-with-mse-loss">4.4.3.5. Training with MSE Loss</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semi-supervised-learning-normal-data-only">4.4.3.6. Semi-Supervised Learning: Normal Data Only</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#advantages-and-limitations">4.4.3.7. Advantages and Limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">4.4.4. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dataset-format-for-anomaly-detection">4.4.5. Dataset Format for Anomaly Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#folder-structure">4.4.5.1. Folder Structure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#concrete-example">4.4.5.2. Concrete Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data-splitting-strategy">4.4.5.3. Data Splitting Strategy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datafile-format-csv">4.4.5.4. Datafile Format (CSV)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#dataset-format">4.4.6. Dataset Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#available-models">4.4.7. Available Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#training-workflow">4.4.8. Training Workflow</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">4.4.8.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pipeline-steps-in-detail">4.4.8.2. Pipeline Steps in Detail</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-the-pipeline">4.4.8.3. Running the Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#output-files">4.4.8.4. Output Files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#understanding-training-logs">4.4.8.5. Understanding Training Logs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#threshold-selection">4.4.9. Threshold Selection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#formula">4.4.9.1. Formula</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#k-value-impact">4.4.9.2. k-Value Impact</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#threshold-performance-csv">4.4.9.3. threshold_performance.csv</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-choose-k-based-on-application">4.4.9.4. How to Choose k Based on Application</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluation-metrics">4.4.10. Evaluation Metrics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#confusion-matrix">4.4.10.1. Confusion Matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metric-definitions">4.4.10.2. Metric Definitions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metric-summary">4.4.10.3. Metric Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#what-if-you-don-t-have-anomaly-data">4.4.11. What If You Don’t Have Anomaly Data?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-you-can-do">4.4.11.1. What You CAN Do</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-you-cannot-do">4.4.11.2. What You CANNOT Do</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#semi-supervised-vs-supervised">4.4.12. Semi-Supervised vs Supervised</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-motor-bearing-anomaly">4.4.13. Example: Motor Bearing Anomaly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tips">4.4.14. Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-also">4.4.15. See Also</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="image_classification.html">4.5. Image Classification</a><ul>
@@ -297,9 +345,11 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#supported-file-types">5.1.3. Supported File Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#annotations-optional">5.1.4. Annotations (Optional)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#configuration">5.1.5. Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#example-3-class-vibration-data">5.1.6. Example: 3-Class Vibration Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#class-balancing">5.1.7. Class Balancing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#common-issues">5.1.8. Common Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#dataset-splitting-modes">5.1.6. Dataset Splitting Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#example-3-class-vibration-data">5.1.7. Example: 3-Class Vibration Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#class-balancing">5.1.8. Class Balancing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#common-issues">5.1.9. Common Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/classification_format.html#key-differences-classification-vs-regression-vs-forecasting">5.1.10. Key Differences: Classification vs Regression vs Forecasting</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byod/regression_format.html">5.2. Regression Dataset Format</a><ul>
@@ -310,7 +360,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#configuration">5.2.5. Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#target-processing">5.2.6. Target Processing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#complete-example">5.2.7. Complete Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#common-issues">5.2.8. Common Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#troubleshooting">5.2.8. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#best-practices">5.2.9. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/regression_format.html#common-issues">5.2.10. Common Issues</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byod/forecasting_format.html">5.3. Forecasting Dataset Format</a><ul>
@@ -731,18 +783,18 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l2"><a class="reference internal" href="../features/neural_architecture_search.html">8.1. Neural Architecture Search</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#overview">8.1.1. Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#when-to-use-nas">8.1.2. When to Use NAS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#enabling-nas">8.1.3. Enabling NAS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#configuration-options">8.1.4. Configuration Options</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#search-types">8.1.5. Search Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#search-space">8.1.6. Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#code-flow">8.1.3. Code Flow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#configuration">8.1.4. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#model-size-presets">8.1.5. Model Size Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#usage">8.1.6. Usage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#running-nas">8.1.7. Running NAS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#output-files">8.1.8. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#interpreting-results">8.1.9. Interpreting Results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#using-nas-results">8.1.10. Using NAS Results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#advanced-configuration">8.1.11. Advanced Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#example-finding-optimal-arc-fault-model">8.1.12. Example: Finding Optimal Arc Fault Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#computational-cost">8.1.13. Computational Cost</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#best-practices">8.1.14. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#example-full-nas-configuration">8.1.8. Example: Full NAS Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#tips">8.1.9. Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#best-practices">8.1.10. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#search-algorithm">8.1.11. Search Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#search-space">8.1.12. Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#nas-framework-internals">8.1.13. NAS Framework Internals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#references">8.1.14. References</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/neural_architecture_search.html#next-steps">8.1.15. Next Steps</a></li>
 </ul>
 </li>
@@ -760,69 +812,95 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#example-full-quantization-workflow">8.2.11. Example: Full Quantization Workflow</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#memory-savings">8.2.12. Memory Savings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#performance-impact">8.2.13. Performance Impact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#next-steps">8.2.14. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#quantization-wrapper-architecture">8.2.14. Quantization Wrapper Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#npu-hardware-constraints">8.2.15. NPU Hardware Constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#using-quantization-wrappers-directly">8.2.16. Using Quantization Wrappers Directly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#wrapper-api-reference">8.2.17. Wrapper API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#model-surgery">8.2.18. Model Surgery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#next-steps">8.2.19. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/feature_extraction.html">8.3. Feature Extraction</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#overview">8.3.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-pipeline">8.3.2. Feature Extraction Pipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#configuration-parameters">8.3.3. Configuration Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#preset-system">8.3.4. Preset System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#available-presets">8.3.5. Available Presets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-processing-transforms">8.3.6. Data Processing Transforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-transforms">8.3.7. Feature Extraction Transforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#custom-feature-extraction">8.3.8. Custom Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#multi-channel-data">8.3.9. Multi-Channel Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#forecasting-configuration">8.3.10. Forecasting Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-augmentation">8.3.11. Data Augmentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#choosing-the-right-preset">8.3.12. Choosing the Right Preset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#performance-impact">8.3.13. Performance Impact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#on-device-feature-extraction">8.3.14. On-Device Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#example-configurations">8.3.15. Example Configurations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#best-practices">8.3.16. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#next-steps">8.3.17. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/quantization_examples.html">8.3. Standalone Quantization Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#overview">8.3.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#fmnist-image-classification">8.3.2. FMNIST Image Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#audio-keyword-spotting">8.3.3. Audio Keyword Spotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#motor-fault-time-series-classification">8.3.4. Motor Fault Time Series Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#mnist-digit-classification">8.3.5. MNIST Digit Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#torque-time-series-regression">8.3.6. Torque Time Series Regression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#quantization-guidance">8.3.7. Quantization Guidance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#next-steps">8.3.8. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/goodness_of_fit.html">8.4. Goodness of Fit</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#overview">8.4.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#enabling-gof-test">8.4.2. Enabling GoF Test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#running-the-test">8.4.3. Running the Test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#output-files">8.4.4. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#understanding-the-visualizations">8.4.5. Understanding the Visualizations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#interpreting-results">8.4.6. Interpreting Results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#plot-analysis">8.4.7. 8-Plot Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#common-patterns">8.4.8. Common Patterns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#actionable-insights">8.4.9. Actionable Insights</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#example-motor-fault-gof-analysis">8.4.10. Example: Motor Fault GoF Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#gof-without-training">8.4.11. GoF Without Training</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#comparing-feature-extraction">8.4.12. Comparing Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#best-practices">8.4.13. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#limitations">8.4.14. Limitations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#next-steps">8.4.15. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/feature_extraction.html">8.4. Feature Extraction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#overview">8.4.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-pipeline">8.4.2. Feature Extraction Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#configuration-parameters">8.4.3. Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#preset-system">8.4.4. Preset System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#available-presets">8.4.5. Available Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-processing-transforms">8.4.6. Data Processing Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-transforms">8.4.7. Feature Extraction Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#custom-feature-extraction">8.4.8. Custom Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#multi-channel-data">8.4.9. Multi-Channel Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#forecasting-configuration">8.4.10. Forecasting Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-augmentation">8.4.11. Data Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#choosing-the-right-preset">8.4.12. Choosing the Right Preset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#performance-impact">8.4.13. Performance Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#on-device-feature-extraction">8.4.14. On-Device Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#example-configurations">8.4.15. Example Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#stacking-modes">8.4.16. Stacking Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#gain-variation-augmentation">8.4.17. Gain Variation Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#q15-fixed-point-transforms">8.4.18. Q15 Fixed-Point Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#frame-offset-overlap-control">8.4.19. Frame Offset (Overlap Control)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#analysis-bandwidth">8.4.20. Analysis Bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-only-mode">8.4.21. Feature Extraction Only Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#evaluating-feature-extraction-quality">8.4.22. Evaluating Feature Extraction Quality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#best-practices">8.4.23. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#next-steps">8.4.24. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/post_training_analysis.html">8.5. Post-Training Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#overview">8.5.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#enabling-analysis">8.5.2. Enabling Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#output-files">8.5.3. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#confusion-matrix">8.5.4. Confusion Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#roc-curves">8.5.5. ROC Curves</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#class-score-histograms">8.5.6. Class Score Histograms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#fpr-tpr-thresholds">8.5.7. FPR/TPR Thresholds</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#classification-report">8.5.8. Classification Report</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#error-analysis">8.5.9. Error Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#quantized-vs-float-comparison">8.5.10. Quantized vs Float Comparison</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#regression-analysis">8.5.11. Regression Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#anomaly-detection-analysis">8.5.12. Anomaly Detection Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#custom-analysis-scripts">8.5.13. Custom Analysis Scripts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#generating-reports">8.5.14. Generating Reports</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#example-complete-analysis-configuration">8.5.15. Example: Complete Analysis Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#best-practices">8.5.16. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#troubleshooting-low-accuracy">8.5.17. Troubleshooting Low Accuracy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#next-steps">8.5.18. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/goodness_of_fit.html">8.5. Goodness of Fit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#overview">8.5.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#enabling-gof-test">8.5.2. Enabling GoF Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#running-the-test">8.5.3. Running the Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#output-files">8.5.4. Output Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#understanding-the-visualizations">8.5.5. Understanding the Visualizations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#interpreting-results">8.5.6. Interpreting Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#plot-analysis">8.5.7. 8-Plot Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#common-patterns">8.5.8. Common Patterns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#actionable-insights">8.5.9. Actionable Insights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#frame-size-sweeping">8.5.10. Frame Size Sweeping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#multi-cluster-analysis">8.5.11. Multi-Cluster Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#example-motor-fault-gof-analysis">8.5.12. Example: Motor Fault GoF Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#gof-without-training">8.5.13. GoF Without Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#comparing-feature-extraction">8.5.14. Comparing Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#best-practices">8.5.15. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#limitations">8.5.16. Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#next-steps">8.5.17. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/index.html#feature-overview">8.6. Feature Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/post_training_analysis.html">8.6. Post-Training Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#overview">8.6.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#enabling-analysis">8.6.2. Enabling Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#output-files">8.6.3. Output Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#confusion-matrix">8.6.4. Confusion Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#roc-curves">8.6.5. ROC Curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#class-score-histograms">8.6.6. Class Score Histograms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#fpr-tpr-thresholds">8.6.7. FPR/TPR Thresholds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#classification-report">8.6.8. Classification Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#error-analysis">8.6.9. Error Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#quantized-vs-float-comparison">8.6.10. Quantized vs Float Comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#file-level-classification-summary">8.6.11. File-Level Classification Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#regression-analysis">8.6.12. Regression Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#anomaly-detection-analysis">8.6.13. Anomaly Detection Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#custom-analysis-scripts">8.6.14. Custom Analysis Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#generating-reports">8.6.15. Generating Reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#example-complete-analysis-configuration">8.6.16. Example: Complete Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#best-practices">8.6.17. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#troubleshooting-low-accuracy">8.6.18. Troubleshooting Low Accuracy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#next-steps">8.6.19. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../features/index.html#feature-overview">8.7. Feature Overview</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../deployment/index.html">9. Device Deployment</a><ul>
@@ -858,7 +936,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#ccs-project-setup-for-npu">9.2.12. CCS Project Setup for NPU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#example-arc-fault-on-f28p55-npu">9.2.13. Example: Arc Fault on F28P55 NPU</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#troubleshooting-npu-issues">9.2.14. Troubleshooting NPU Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#next-steps">9.2.15. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#ccs-studio-walkthrough-f28p55x">9.2.15. CCS Studio Walkthrough: F28P55x</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-1-load-the-example-from-resource-explorer">9.2.15.1. Step 1 – Load the Example from Resource Explorer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-2-build-the-project">9.2.15.2. Step 2 – Build the Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-3-set-target-configuration">9.2.15.3. Step 3 – Set Target Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-4-flash-the-device">9.2.15.4. Step 4 – Flash the Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/npu_device_deployment.html#step-5-debug-and-verify">9.2.15.5. Step 5 – Debug and Verify</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#required-files-from-modelmaker">9.2.16. Required Files from ModelMaker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#model-performance-profiling">9.2.17. Model Performance Profiling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/npu_device_deployment.html#next-steps">9.2.18. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../deployment/non_npu_deployment.html">9.3. Non-NPU Deployment</a><ul>
@@ -875,8 +963,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#real-time-considerations">9.3.11. Real-Time Considerations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#device-specific-notes">9.3.12. Device-Specific Notes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#example-vibration-monitoring-on-mspm0g3507">9.3.13. Example: Vibration Monitoring on MSPM0G3507</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#comparison-npu-vs-non-npu">9.3.14. Comparison: NPU vs Non-NPU</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#next-steps">9.3.15. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#ccs-studio-walkthrough-f28004x">9.3.14. CCS Studio Walkthrough: F28004x</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-1-import-the-project-manually">9.3.14.1. Step 1 – Import the Project Manually</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-2-build-the-project">9.3.14.2. Step 2 – Build the Project</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-3-set-target-configuration">9.3.14.3. Step 3 – Set Target Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-4-flash-the-device">9.3.14.4. Step 4 – Flash the Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deployment/non_npu_deployment.html#step-5-debug-and-verify">9.3.14.5. Step 5 – Debug and Verify</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#required-files-from-modelmaker">9.3.15. Required Files from ModelMaker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#comparison-npu-vs-non-npu">9.3.16. Comparison: NPU vs Non-NPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../deployment/non_npu_deployment.html#next-steps">9.3.17. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../deployment/index.html#deployment-overview">9.4. Deployment Overview</a></li>
@@ -944,7 +1041,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#using-your-custom-model">11.1.8. Using Your Custom Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#testing-your-model">11.1.9. Testing Your Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#best-practices">11.1.10. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#next-steps">11.1.11. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#adding-custom-feature-extractors">11.1.11. Adding Custom Feature Extractors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#adding-new-modalities">11.1.12. Adding New Modalities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#configuring-model-layer-parameters">11.1.13. Configuring Model Layer Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#next-steps">11.1.14. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byom/compilation_only.html">11.2. Compilation Only</a><ul>
@@ -952,15 +1052,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#onnx-model-requirements">11.2.2. ONNX Model Requirements</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#compilation-configuration">11.2.3. Compilation Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#running-compilation">11.2.4. Running Compilation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#calibration-data">11.2.5. Calibration Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#pre-quantized-models">11.2.6. Pre-Quantized Models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#output-artifacts">11.2.7. Output Artifacts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#npu-compilation">11.2.8. NPU Compilation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-external-pytorch-model">11.2.9. Example: External PyTorch Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-tensorflow-model">11.2.10. Example: TensorFlow Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#troubleshooting">11.2.11. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#best-practices">11.2.12. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#next-steps">11.2.13. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#model-formats">11.2.5. Model Formats</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#output-artifacts">11.2.6. Output Artifacts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#npu-compilation">11.2.7. NPU Compilation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-external-pytorch-model">11.2.8. Example: External PyTorch Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#example-tensorflow-model">11.2.9. Example: TensorFlow Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#troubleshooting">11.2.10. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#best-practices">11.2.11. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/compilation_only.html#next-steps">11.2.12. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byom/index.html#two-approaches">11.3. Two Approaches</a></li>
@@ -1003,7 +1102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#feature-extraction-section">13.1.4. Feature Extraction Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#training-section">13.1.5. Training Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#testing-section">13.1.6. Testing Section</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#nas-section">13.1.7. NAS Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#nas-options-under-training-section">13.1.7. NAS Options (under <code class="docutils literal notranslate"><span class="pre">training</span></code> section)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#compilation-section">13.1.8. Compilation Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#byom-section">13.1.9. BYOM Section</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/config_reference.html#complete-example">13.1.10. Complete Example</a></li>
@@ -1013,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../appendix/model_zoo_reference.html#classification-models">13.2.1. Classification Models</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#standard-classification">13.2.1.1. Standard Classification</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#npu-classification">13.2.1.2. NPU Classification</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#application-specific-classification">13.2.1.3. Application-Specific Classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../appendix/model_zoo_reference.html#application-specific-classification-edge-ai-studio-only">13.2.1.3. Application-Specific Classification (Edge AI Studio Only)</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../appendix/model_zoo_reference.html#regression-models">13.2.2. Regression Models</a><ul>
@@ -1097,6 +1196,38 @@ of all possible faults.</p>
 <li><p>Fault detection when fault examples are scarce</p></li>
 <li><p>Detecting novel/unknown failures</p></li>
 </ul>
+<p><strong>Real-world applications</strong>:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 35.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Domain</p></th>
+<th class="head"><p>Normal Behavior</p></th>
+<th class="head"><p>Anomalies</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Predictive Maintenance</p></td>
+<td><p>Healthy motor vibration</p></td>
+<td><p>Bearing wear, imbalance, misalignment</p></td>
+</tr>
+<tr class="row-odd"><td><p>Manufacturing</p></td>
+<td><p>Defect-free products</p></td>
+<td><p>Cracks, scratches, dimensional errors</p></td>
+</tr>
+<tr class="row-even"><td><p>Medical Diagnosis</p></td>
+<td><p>Healthy vital signs</p></td>
+<td><p>Arrhythmia, abnormal glucose levels</p></td>
+</tr>
+<tr class="row-odd"><td><p>IoT Sensors</p></td>
+<td><p>Expected sensor readings</p></td>
+<td><p>Sensor drift, hardware failure</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="how-it-works">
 <h2><span class="section-number">4.4.2. </span>How It Works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h2>
@@ -1110,8 +1241,243 @@ Anomaly input → High reconstruction error → &quot;Anomaly&quot;
 </pre></div>
 </div>
 </section>
+<section id="autoencoder-architecture">
+<h2><span class="section-number">4.4.3. </span>Autoencoder Architecture<a class="headerlink" href="#autoencoder-architecture" title="Link to this heading"></a></h2>
+<section id="what-is-an-autoencoder">
+<h3><span class="section-number">4.4.3.1. </span>What is an Autoencoder?<a class="headerlink" href="#what-is-an-autoencoder" title="Link to this heading"></a></h3>
+<p>An <strong>autoencoder</strong> is a type of neural network designed to learn an efficient
+compressed representation of input data. It consists of two main parts:</p>
+<ol class="arabic simple">
+<li><p><strong>Encoder</strong>: Compresses the input into a lower-dimensional representation
+called the <em>latent space</em>.</p></li>
+<li><p><strong>Decoder</strong>: Reconstructs the original input from the compressed
+representation.</p></li>
+</ol>
+<p>The training objective is to make the output as similar to the input as possible.
+In other words, the autoencoder learns to capture the <strong>essential patterns</strong> in
+the data while discarding noise and irrelevant details.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Input --&gt; Encoder --&gt; Latent Space --&gt; Decoder --&gt; Output
+  X         f             z              g          X_hat
+
+Goal: Minimize ||X - X_hat||^2 (reconstruction error)
+</pre></div>
+</div>
+</section>
+<section id="architecture-diagram">
+<h3><span class="section-number">4.4.3.2. </span>Architecture Diagram<a class="headerlink" href="#architecture-diagram" title="Link to this heading"></a></h3>
+<p>The autoencoder used in ModelMaker is composed of stacked <strong>Linear (fully
+connected) layers</strong> with <strong>ReLU activations</strong>. The encoder progressively
+compresses the input, and the decoder mirrors this structure to expand back
+to the original dimensionality.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>+-----------------------------------------------------+
+|                      INPUT                           |
+|        (e.g., 256 samples x 3 channels)              |
+|                   = 768 features                     |
++-----------------------------------------------------+
+                        |
+                        v
++-----------------------------------------------------+
+|                     ENCODER                          |
+|            (Dimensionality Reduction)                |
+|                                                     |
+|  Layer 1: 768 --&gt; 512 features  (Linear + ReLU)     |
+|  Layer 2: 512 --&gt; 256 features  (Linear + ReLU)     |
+|  Layer 3: 256 --&gt; 128 features  (Linear + ReLU)     |
+|  Layer 4: 128 --&gt;  64 features  (Linear + ReLU)     |
++-----------------------------------------------------+
+                        |
+                        v
++-----------------------------------------------------+
+|                  LATENT SPACE                        |
+|       (Compressed representation: 64 features)      |
+|                                                     |
+|    Contains essential patterns from input           |
+|    Compression ratio: 768 / 64 = 12x               |
++-----------------------------------------------------+
+                        |
+                        v
++-----------------------------------------------------+
+|                     DECODER                          |
+|            (Dimensionality Expansion)                |
+|                                                     |
+|  Layer 1:  64 --&gt; 128 features  (Linear + ReLU)     |
+|  Layer 2: 128 --&gt; 256 features  (Linear + ReLU)     |
+|  Layer 3: 256 --&gt; 512 features  (Linear + ReLU)     |
+|  Layer 4: 512 --&gt; 768 features  (Linear, no act.)   |
++-----------------------------------------------------+
+                        |
+                        v
++-----------------------------------------------------+
+|               RECONSTRUCTED OUTPUT                   |
+|                  768 features                        |
+|        (reshaped to 256 samples x 3 channels)       |
++-----------------------------------------------------+
+</pre></div>
+</div>
+</section>
+<section id="dimensionality-flow">
+<h3><span class="section-number">4.4.3.3. </span>Dimensionality Flow<a class="headerlink" href="#dimensionality-flow" title="Link to this heading"></a></h3>
+<p>The encoder progressively <strong>compresses</strong> the input:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Input:            768 features  (256 samples x 3 channels)
+                   |
+Encoder Layer 1:  512 features
+                   |
+Encoder Layer 2:  256 features
+                   |
+Encoder Layer 3:  128 features
+                   |
+Encoder Layer 4:   64 features
+                   |
+LATENT SPACE:      64 features  (8.3% of original size)
+</pre></div>
+</div>
+<p>The decoder then <strong>expands</strong> back to original dimensions:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LATENT SPACE:      64 features
+                   |
+Decoder Layer 1:  128 features
+                   |
+Decoder Layer 2:  256 features
+                   |
+Decoder Layer 3:  512 features
+                   |
+Decoder Layer 4:  768 features
+                   |
+Output:           768 features  (same as input)
+</pre></div>
+</div>
+<p>The bottleneck at the latent space (64 features) forces the network to learn
+compressed representations. The network cannot simply memorize the input – it
+must extract the most important patterns.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The encoder and decoder have a <strong>mirror structure</strong>. Each encoder layer
+has a corresponding decoder layer to “undo” the compression. This symmetry
+ensures balanced architecture and smooth gradient flow during training.</p>
+</div>
+</section>
+<section id="key-components">
+<h3><span class="section-number">4.4.3.4. </span>Key Components<a class="headerlink" href="#key-components" title="Link to this heading"></a></h3>
+<p><strong>Linear (Fully Connected) Layers</strong> transform features from one dimensional
+space to another:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>y = W * x + b
+
+Where:
+  x = Input features
+  W = Weight matrix (learned during training)
+  b = Bias vector (learned during training)
+  y = Output features
+</pre></div>
+</div>
+<p>Each output feature is a weighted combination of all input features, allowing
+the network to learn complex relationships.</p>
+<p><strong>ReLU Activation</strong> introduces non-linearity (enables learning of complex
+patterns):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ReLU(x) = max(0, x)
+
+If x &gt; 0: output = x
+If x &lt;= 0: output = 0
+</pre></div>
+</div>
+<p>ReLU is simple and fast to compute, and avoids the vanishing gradient problem.
+Without activation functions, the network would be purely linear (just matrix
+multiplications).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The final decoder layer has <strong>no activation function</strong>, allowing the output
+to take on negative values and match the full range of the input data.</p>
+<p>Convolutional layers may also be used in place of linear layers. Convolution
+layers capture the local structure of the input and learn to extract features
+across channels.</p>
+</div>
+</section>
+<section id="training-with-mse-loss">
+<h3><span class="section-number">4.4.3.5. </span>Training with MSE Loss<a class="headerlink" href="#training-with-mse-loss" title="Link to this heading"></a></h3>
+<p>The autoencoder is trained to minimize the <strong>Mean Squared Error (MSE)</strong> between
+the input and the reconstructed output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>MSE = (1/N) * sum( (input[i] - output[i])^2 )
+
+Where:
+  N         = Total number of elements in the input
+  input[i]  = Original value at position i
+  output[i] = Reconstructed value at position i
+</pre></div>
+</div>
+<p>For a 256-sample, 3-channel input: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">256</span> <span class="pre">x</span> <span class="pre">3</span> <span class="pre">=</span> <span class="pre">768</span> <span class="pre">elements</span></code>.</p>
+</section>
+<section id="semi-supervised-learning-normal-data-only">
+<h3><span class="section-number">4.4.3.6. </span>Semi-Supervised Learning: Normal Data Only<a class="headerlink" href="#semi-supervised-learning-normal-data-only" title="Link to this heading"></a></h3>
+<p>The autoencoder is trained <strong>exclusively on normal data</strong>. This is the core
+principle that enables anomaly detection:</p>
+<ul class="simple">
+<li><p><strong>During training</strong>: The model learns to compress and reconstruct normal
+patterns with low error. It learns what “normal” looks like.</p></li>
+<li><p><strong>During inference on normal data</strong>: The model has seen similar patterns
+before, so reconstruction error is <strong>low</strong>.</p></li>
+<li><p><strong>During inference on anomaly data</strong>: The model has never seen these patterns,
+so reconstruction error is <strong>high</strong>. The decoder tries to “force fit” the
+unfamiliar latent representation using normal patterns it knows, resulting in
+a distorted output.</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>+-----------------------------------------------------+
+|            TRAINING (Normal Data Only)               |
++-----------------------------------------------------+
+                     |
+                     v
++-----------------------------------------------------+
+| Model learns: &quot;What do normal patterns look like?&quot;   |
+|                                                     |
+| Normal vibration --&gt; Encode --&gt; Decode --&gt; ~ Input   |
+| Reconstruction Error: LOW                           |
++-----------------------------------------------------+
+                     |
+                     v
++-----------------------------------------------------+
+|              INFERENCE (Test Data)                   |
++-----------------------------------------------------+
+                     |
+         +-----------+-----------+
+         |                       |
+    Normal sample          Anomaly sample
+         |                       |
+         v                       v
+  Encode --&gt; Decode       Encode --&gt; Decode
+         |                       |
+         v                       v
+  Output ~ Input          Output != Input
+         |                       |
+         v                       v
+  Error: LOW              Error: HIGH
+         |                       |
+         v                       v
+Prediction: Normal     Prediction: Anomaly
+</pre></div>
+</div>
+</section>
+<section id="advantages-and-limitations">
+<h3><span class="section-number">4.4.3.7. </span>Advantages and Limitations<a class="headerlink" href="#advantages-and-limitations" title="Link to this heading"></a></h3>
+<p><strong>Advantages</strong>:</p>
+<ul class="simple">
+<li><p>No need to label anomaly types – only need normal data</p></li>
+<li><p>Generalizes to unseen anomalies – any deviation from normal triggers high error</p></li>
+<li><p>Learns complex, non-linear patterns across multi-dimensional sensor data</p></li>
+<li><p>Scalable: fast inference, deployable on edge devices (MCUs)</p></li>
+</ul>
+<p><strong>Limitations</strong>:</p>
+<ul class="simple">
+<li><p>Requires good normal data that covers the full range of normal operating
+conditions. If training data is narrow, valid conditions may be flagged as
+anomalies.</p></li>
+<li><p>Threshold selection is critical – trade-off between false positives and false
+negatives.</p></li>
+<li><p>Cannot distinguish anomaly types – only outputs “normal” vs “anomaly”. For
+fault classification, use a supervised approach.</p></li>
+<li><p>Subtle anomalies very similar to normal patterns may be missed if reconstruction
+error does not exceed the threshold.</p></li>
+</ul>
+</section>
+</section>
 <section id="configuration">
-<h2><span class="section-number">4.4.3. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<h2><span class="section-number">4.4.4. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;generic_timeseries_anomalydetection&#39;</span>
 <span class="w">  </span><span class="nt">target_device</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;F28P55&#39;</span>
@@ -1133,8 +1499,179 @@ Anomaly input → High reconstruction error → &quot;Anomaly&quot;
 </pre></div>
 </div>
 </section>
+<section id="dataset-format-for-anomaly-detection">
+<h2><span class="section-number">4.4.5. </span>Dataset Format for Anomaly Detection<a class="headerlink" href="#dataset-format-for-anomaly-detection" title="Link to this heading"></a></h2>
+<section id="folder-structure">
+<h3><span class="section-number">4.4.5.1. </span>Folder Structure<a class="headerlink" href="#folder-structure" title="Link to this heading"></a></h3>
+<p>For anomaly detection tasks, ModelMaker expects the dataset to be organized with
+separate folders for <strong>Normal</strong> and <strong>Anomaly</strong> data:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>dataset_name/
+|
++-- classes/
+|   +-- Normal/
+|   |   +-- file1.csv
+|   |   +-- file2.csv
+|   |   +-- ...
+|   +-- Anomaly/
+|       +-- file1.csv
+|       +-- file2.csv
+|       +-- ...
+|
++-- annotations/                          # Optional
+    +-- file_list.txt                     # List of all files
+    +-- instances_train_list.txt          # Training files (Normal only)
+    +-- instances_val_list.txt            # Validation files (Normal only)
+    +-- instances_test_list.txt           # Test files (Normal + Anomaly)
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Training uses ONLY normal data.</strong> The <code class="docutils literal notranslate"><span class="pre">Anomaly/</span></code> folder is excluded
+from training entirely. Anomaly data is used <strong>only for testing</strong> to
+evaluate detection performance.</p>
+</div>
+<p>Key points:</p>
+<ul class="simple">
+<li><p><strong>Normal/ folder</strong>: Contains all samples representing normal operating
+conditions. All training and validation data comes from this folder.</p></li>
+<li><p><strong>Anomaly/ folder</strong>: Contains samples representing anomalous behavior
+(faults, failures, defects). Used ONLY for testing, never for training.</p></li>
+<li><p><strong>annotations/ folder</strong>: Optional. If not provided, ModelMaker automatically
+generates the annotation files based on your <code class="docutils literal notranslate"><span class="pre">split_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">split_factor</span></code> settings.</p></li>
+<li><p>Multiple anomaly types (e.g., imbalance, damage, bearing wear) all go in
+the same <code class="docutils literal notranslate"><span class="pre">Anomaly/</span></code> folder. The model treats them all as “not normal” and
+does not distinguish between different anomaly types.</p></li>
+</ul>
+</section>
+<section id="concrete-example">
+<h3><span class="section-number">4.4.5.2. </span>Concrete Example<a class="headerlink" href="#concrete-example" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>fan_blade_ad_dataset.zip/
+|
++-- classes/
+|   +-- Normal/
+|   |   +-- normal_001.csv
+|   |   +-- normal_002.csv
+|   |   +-- ...
+|   |   +-- normal_100.csv              # 100 normal samples
+|   |
+|   +-- Anomaly/
+|       +-- imbalance_001.csv
+|       +-- imbalance_002.csv
+|       +-- damage_001.csv
+|       +-- obstruction_001.csv
+|       +-- ...
+|       +-- obstruction_005.csv         # 20 anomaly samples (mixed types)
+|
++-- annotations/                         # Optional - auto-generated if missing
+    +-- file_list.txt
+    +-- instances_train_list.txt
+    +-- instances_val_list.txt
+    +-- instances_test_list.txt
+</pre></div>
+</div>
+</section>
+<section id="data-splitting-strategy">
+<h3><span class="section-number">4.4.5.3. </span>Data Splitting Strategy<a class="headerlink" href="#data-splitting-strategy" title="Link to this heading"></a></h3>
+<p>Normal data is split into train, validation, and test sets. Anomaly data is
+used <strong>only</strong> in the test set.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Split</p></th>
+<th class="head"><p>Normal Data</p></th>
+<th class="head"><p>Anomaly Data</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Training</strong></p></td>
+<td><p>60% of Normal files</p></td>
+<td><p><strong>None</strong></p></td>
+<td><p>Learn what “normal” looks like</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Validation</strong></p></td>
+<td><p>10% of Normal files</p></td>
+<td><p><strong>None</strong></p></td>
+<td><p>Monitor overfitting on normal patterns</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Test</strong></p></td>
+<td><p>30% of Normal files</p></td>
+<td><p><strong>All Anomaly files</strong></p></td>
+<td><p>Evaluate detection performance</p></td>
+</tr>
+</tbody>
+</table>
+<p>Configure splitting in your YAML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dataset</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">split_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;amongst_files&#39;</span><span class="w">        </span><span class="c1"># or &#39;within_files&#39;</span>
+<span class="w">  </span><span class="nt">split_factor</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.6</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">0.3</span><span class="p p-Indicator">]</span><span class="w">      </span><span class="c1"># [train, val, test]</span>
+</pre></div>
+</div>
+<p>Two split methods are available:</p>
+<ul class="simple">
+<li><p><strong>amongst_files</strong> (default): Files are divided into train, validation, and
+test sets. For example, with 100 normal files and <code class="docutils literal notranslate"><span class="pre">split_factor:</span> <span class="pre">[0.6,</span> <span class="pre">0.1,</span> <span class="pre">0.3]</span></code>,
+you get 60 files for training, 10 for validation, and 30 for testing.</p></li>
+<li><p><strong>within_files</strong>: Each file is split internally. All files appear in all
+splits with different portions. For example, each file contributes its first
+60% of samples to training, next 10% to validation, and last 30% to testing.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you do not provide an <code class="docutils literal notranslate"><span class="pre">annotations/</span></code> folder, ModelMaker automatically
+generates annotation files. For <code class="docutils literal notranslate"><span class="pre">amongst_files</span></code>, it randomly splits
+normal files according to the split factor and adds all anomaly files to
+the test list. For <code class="docutils literal notranslate"><span class="pre">within_files</span></code>, it creates new files for each split
+portion.</p>
+</div>
+</section>
+<section id="datafile-format-csv">
+<h3><span class="section-number">4.4.5.4. </span>Datafile Format (CSV)<a class="headerlink" href="#datafile-format-csv" title="Link to this heading"></a></h3>
+<p>ModelMaker supports <code class="docutils literal notranslate"><span class="pre">.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.npy</span></code>, and <code class="docutils literal notranslate"><span class="pre">.pkl</span></code> file formats.
+Within CSV files, two layouts are accepted:</p>
+<p><strong>Headerless format</strong> (no header row, no index column):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2078
+2136
+2117
+2077
+2029
+1989
+2056
+</pre></div>
+</div>
+<p><strong>Headered format</strong> (with column names, optionally with a time/index column):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Time,Vibration_X,Vibration_Y,Vibration_Z
+0.0000,-2753,-558,64376
+0.0001,-2551,-468,63910
+0.0002,-424,-427,64032
+0.0003,1429,-763,64132
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Any column with the text <code class="docutils literal notranslate"><span class="pre">time</span></code> in its header (case-insensitive) is
+<strong>automatically dropped</strong> by ModelMaker. If you have a useful column that
+contains “time” in its name, rename it before using the dataset (e.g.,
+<code class="docutils literal notranslate"><span class="pre">uptime_hours</span></code> to <code class="docutils literal notranslate"><span class="pre">operation_hours</span></code>).</p>
+</div>
+<p>For multi-channel data (e.g., 3-axis accelerometer), specify the number of
+variables in your configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w">   </span><span class="c1"># X, Y, Z axes</span>
+</pre></div>
+</div>
+<p>ModelMaker will automatically use the first <code class="docutils literal notranslate"><span class="pre">variables</span></code> columns (after
+dropping time columns) as input.</p>
+</section>
+</section>
 <section id="dataset-format">
-<h2><span class="section-number">4.4.4. </span>Dataset Format<a class="headerlink" href="#dataset-format" title="Link to this heading"></a></h2>
+<h2><span class="section-number">4.4.6. </span>Dataset Format<a class="headerlink" href="#dataset-format" title="Link to this heading"></a></h2>
 <p>Same as classification but with specific requirements:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>my_dataset/
 └── classes/
@@ -1154,7 +1691,7 @@ Anomaly input → High reconstruction error → &quot;Anomaly&quot;
 </ul>
 </section>
 <section id="available-models">
-<h2><span class="section-number">4.4.5. </span>Available Models<a class="headerlink" href="#available-models" title="Link to this heading"></a></h2>
+<h2><span class="section-number">4.4.7. </span>Available Models<a class="headerlink" href="#available-models" title="Link to this heading"></a></h2>
 <p><strong>NPU-Optimized Models</strong>:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -1193,46 +1730,513 @@ Anomaly input → High reconstruction error → &quot;Anomaly&quot;
 <li><p><code class="docutils literal notranslate"><span class="pre">Ondevice_Trainable_AD_Linear</span></code> - On-device training capable</p></li>
 </ul>
 </section>
-<section id="threshold-selection">
-<h2><span class="section-number">4.4.6. </span>Threshold Selection<a class="headerlink" href="#threshold-selection" title="Link to this heading"></a></h2>
-<p>The threshold determines when reconstruction error indicates an anomaly:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>threshold = mean_train + k × std_train
+<section id="training-workflow">
+<h2><span class="section-number">4.4.8. </span>Training Workflow<a class="headerlink" href="#training-workflow" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3><span class="section-number">4.4.8.1. </span>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>The typical workflow for training an anomaly detection model consists of:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. Prepare Dataset
+       |
+       v
+2. Configure YAML
+       |
+       v
+3. Run ModelMaker
+       |
+       v
+4. Review Results
+       |
+       v
+5. Deploy
 </pre></div>
 </div>
-<p>Where <code class="docutils literal notranslate"><span class="pre">k</span></code> controls sensitivity:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">k=1</span></code>: High sensitivity (catches more anomalies, more false alarms)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">k=3</span></code>: Balanced (typical choice)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">k=4</span></code>: High specificity (fewer false alarms, may miss subtle anomalies)</p></li>
-</ul>
-<p>ModelMaker tests multiple k values and reports results.</p>
 </section>
-<section id="metrics">
-<h2><span class="section-number">4.4.7. </span>Metrics<a class="headerlink" href="#metrics" title="Link to this heading"></a></h2>
+<section id="pipeline-steps-in-detail">
+<h3><span class="section-number">4.4.8.2. </span>Pipeline Steps in Detail<a class="headerlink" href="#pipeline-steps-in-detail" title="Link to this heading"></a></h3>
+<p>When you run ModelMaker, the following steps are executed in order:</p>
+<ol class="arabic simple">
+<li><p><strong>Load Configuration</strong> – Reads the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file specifying dataset
+paths, model selection, training hyperparameters, and target device.</p></li>
+<li><p><strong>Load Dataset (Normal data only)</strong> – Downloads or extracts the dataset if
+needed. Creates train/val/test splits (if annotation files are not provided).
+Loads only Normal data for training and validation.</p></li>
+<li><p><strong>Data Processing and Feature Extraction</strong> – Applies windowing
+(e.g., SimpleWindow). Optionally applies feature extraction transforms such
+as FFT or binning. Normalizes data.</p></li>
+<li><p><strong>Train Autoencoder</strong> – Trains the autoencoder on normal training data using
+MSE loss. Monitors validation loss (on normal validation data). Selects the
+best epoch (lowest validation loss).</p></li>
+<li><p><strong>Quantization</strong> (if <code class="docutils literal notranslate"><span class="pre">quantization:</span> <span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code>) – Fine-tunes with
+Quantization-Aware Training (QAT) or Post-Training Quantization (PTQ).
+Prepares model for MCU deployment.</p></li>
+<li><p><strong>Threshold Calculation</strong> – Computes reconstruction errors on training data.
+Calculates <code class="docutils literal notranslate"><span class="pre">mean_train</span></code> and <code class="docutils literal notranslate"><span class="pre">std_train</span></code>. Generates thresholds for
+k = 0 to 4.5.</p></li>
+<li><p><strong>Testing</strong> – Evaluates model on test set (normal + anomaly). Calculates
+metrics (precision, recall, F1) for each threshold value. Generates
+<code class="docutils literal notranslate"><span class="pre">threshold_performance.csv</span></code> with results.</p></li>
+<li><p><strong>Compilation</strong> – Exports model for target device (e.g., F28P55). Generates
+artifacts (<code class="docutils literal notranslate"><span class="pre">mod.a</span></code>, header files). Creates golden vectors for on-device
+validation.</p></li>
+</ol>
+</section>
+<section id="running-the-pipeline">
+<h3><span class="section-number">4.4.8.3. </span>Running the Pipeline<a class="headerlink" href="#running-the-pipeline" title="Link to this heading"></a></h3>
+<p>Execute the training pipeline with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./run_tinyml_modelmaker.sh<span class="w"> </span>path/to/your/config.yaml
+</pre></div>
+</div>
+</section>
+<section id="output-files">
+<h3><span class="section-number">4.4.8.4. </span>Output Files<a class="headerlink" href="#output-files" title="Link to this heading"></a></h3>
+<p>After training completes, ModelMaker generates outputs in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>data/projects/{dataset_name}/run/{date-time}/{model_name}/
+</pre></div>
+</div>
+<p>Key output files:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 45.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>File/Folder</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">training/base/</span></code></p></td>
+<td><p>Float model training results</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">training/quantization/</span></code></p></td>
+<td><p>Quantized model results</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">training/quantization/post_training_analysis/</span></code></p></td>
+<td><p>Threshold performance analysis</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">training/quantization/post_training_analysis/threshold_performance.csv</span></code></p></td>
+<td><p>Metrics for k=0 to 4.5</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">training/quantization/post_training_analysis/reconstruction_error_histogram.png</span></code></p></td>
+<td><p>Error distribution plot</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">training/quantization/golden_vectors/</span></code></p></td>
+<td><p>Test vectors and config for on-device validation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">compilation/artifacts/</span></code></p></td>
+<td><p>Compiled model (<code class="docutils literal notranslate"><span class="pre">mod.a</span></code>, <code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="understanding-training-logs">
+<h3><span class="section-number">4.4.8.5. </span>Understanding Training Logs<a class="headerlink" href="#understanding-training-logs" title="Link to this heading"></a></h3>
+<p>A typical training log output looks like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO: Best epoch: 39
+INFO: MSE: 1.773
+
+INFO: Reconstruction Error Statistics:
+INFO: Normal training data - Mean: 1.662490, Std: 1.968127
+INFO: Anomaly test data - Mean: 141.985321, Std: 112.756683
+INFO: Normal test data - Mean: 2.849831, Std: 1.343052
+
+INFO: Threshold for K = 4.5: 10.519060
+INFO: False positive rate: 0.00%
+INFO: Anomaly detection rate (recall): 100.00%
+INFO: Accuracy: 100.00%
+INFO: Precision: 100.00%
+INFO: F1 Score: 100.00%
+
+Confusion Matrix:
+                     Predicted Normal    Predicted Anomaly
+Actual Normal                    899                     0
+Actual Anomaly                     0                 54900
+</pre></div>
+</div>
+<p><strong>What to look for</strong>:</p>
 <ul class="simple">
-<li><p><strong>Precision</strong> - Of detected anomalies, how many are real</p></li>
-<li><p><strong>Recall</strong> - Of real anomalies, how many are detected</p></li>
-<li><p><strong>F1-Score</strong> - Balance of precision and recall</p></li>
-<li><p><strong>AUC-ROC</strong> - Overall discrimination ability</p></li>
+<li><p><strong>Good training</strong>: Validation loss decreases over epochs; training and
+validation loss converge.</p></li>
+<li><p><strong>Good separation</strong>: A large gap between normal mean error and anomaly mean
+error (e.g., <code class="docutils literal notranslate"><span class="pre">mean_anomaly</span> <span class="pre">&gt;&gt;</span> <span class="pre">mean_normal</span></code>). This indicates the model can
+distinguish anomalies effectively. Check the
+<code class="docutils literal notranslate"><span class="pre">reconstruction_error_histogram.png</span></code> for visual confirmation.</p></li>
+<li><p><strong>Warning signs</strong>: Large gap between training and validation loss (overfitting);
+<code class="docutils literal notranslate"><span class="pre">mean_test_normal</span></code> much higher than <code class="docutils literal notranslate"><span class="pre">mean_train</span></code> (poor generalization);
+high false positive rate or low recall (threshold tuning needed).</p></li>
 </ul>
+</section>
+</section>
+<section id="threshold-selection">
+<h2><span class="section-number">4.4.9. </span>Threshold Selection<a class="headerlink" href="#threshold-selection" title="Link to this heading"></a></h2>
+<p>The threshold determines when reconstruction error indicates an anomaly.</p>
+<section id="formula">
+<h3><span class="section-number">4.4.9.1. </span>Formula<a class="headerlink" href="#formula" title="Link to this heading"></a></h3>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>threshold = mean_train + k * std_train
+
+Where:
+  mean_train = Average reconstruction error on normal training data
+  std_train  = Standard deviation of reconstruction errors on normal training data
+  k          = Multiplier (ranges from 0 to 4.5)
+</pre></div>
+</div>
+<p>The formula is based on the assumption that reconstruction errors on normal data
+approximately follow a Gaussian distribution. The value of <code class="docutils literal notranslate"><span class="pre">k</span></code> represents how
+many standard deviations away from the mean the threshold is set.</p>
+</section>
+<section id="k-value-impact">
+<h3><span class="section-number">4.4.9.2. </span>k-Value Impact<a class="headerlink" href="#k-value-impact" title="Link to this heading"></a></h3>
+<p>The choice of <code class="docutils literal notranslate"><span class="pre">k</span></code> determines the <strong>trade-off between false positives and
+false negatives</strong>:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>k</p></th>
+<th class="head"><p>Threshold Level</p></th>
+<th class="head"><p>Normal Coverage (Gaussian)</p></th>
+<th class="head"><p>Sensitivity</p></th>
+<th class="head"><p>Typical Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>mean + 1 * std</p></td>
+<td><p>~84% below threshold</p></td>
+<td><p><strong>High sensitivity</strong>, many false alarms</p></td>
+<td><p>Safety-critical (aircraft, medical)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>mean + 2 * std</p></td>
+<td><p>~97.5% below threshold</p></td>
+<td><p>High sensitivity, some false alarms</p></td>
+<td><p>High-risk industrial monitoring</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>mean + 3 * std</p></td>
+<td><p>~99.7% below threshold</p></td>
+<td><p><strong>Balanced</strong> detection and false alarms</p></td>
+<td><p>General industrial monitoring (typical choice)</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>mean + 4 * std</p></td>
+<td><p>~99.99% below threshold</p></td>
+<td><p><strong>High specificity</strong>, may miss subtle anomalies</p></td>
+<td><p>Cost-sensitive (avoid unnecessary maintenance)</p></td>
+</tr>
+<tr class="row-even"><td><p>4.5</p></td>
+<td><p>mean + 4.5 * std</p></td>
+<td><p>&gt;99.99% below threshold</p></td>
+<td><p>Very high specificity, rare false alarms</p></td>
+<td><p>Extreme cost-of-false-alarm scenarios</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lower k (e.g., k=1)</strong>:</p>
+<ul class="simple">
+<li><p>High recall – catches almost all anomalies</p></li>
+<li><p>Low precision – many false positives (normal samples flagged)</p></li>
+<li><p><strong>When to use</strong>: Safety-critical applications where missing an anomaly is
+very costly. Can tolerate false alarms.</p></li>
+</ul>
+<p><strong>Balanced k (e.g., k=2.5 to 3.0)</strong>:</p>
+<ul class="simple">
+<li><p>Balanced recall and precision</p></li>
+<li><p>Good F1 score</p></li>
+<li><p><strong>When to use</strong>: Most general applications. Need to optimize both detection
+rate and false alarm rate.</p></li>
+</ul>
+<p><strong>Higher k (e.g., k=4)</strong>:</p>
+<ul class="simple">
+<li><p>High precision – few false positives</p></li>
+<li><p>Lower recall – may miss subtle anomalies</p></li>
+<li><p><strong>When to use</strong>: Cost-sensitive applications where false alarms are expensive
+(e.g., unnecessary production shutdowns).</p></li>
+</ul>
+</section>
+<section id="threshold-performance-csv">
+<h3><span class="section-number">4.4.9.3. </span>threshold_performance.csv<a class="headerlink" href="#threshold-performance-csv" title="Link to this heading"></a></h3>
+<p>ModelMaker tests multiple <code class="docutils literal notranslate"><span class="pre">k</span></code> values and reports the results in a CSV file
+called <code class="docutils literal notranslate"><span class="pre">threshold_performance.csv</span></code>. This is the most important output for
+selecting your deployment threshold.</p>
+<p>Example contents:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>k_value,threshold,accuracy,precision,recall,f1_score,false_positive_rate,true_positives,true_negatives,false_positives,false_negatives
+0.0,1.662,98.65,98.65,100.0,99.32,83.54,54900,148,751,0
+1.0,3.631,99.71,99.70,100.0,99.85,18.13,54900,736,163,0
+2.0,5.599,99.92,99.92,100.0,99.96,4.78,54900,856,43,0
+3.0,7.567,99.98,99.98,100.0,99.99,1.11,54900,889,10,0
+4.0,9.535,100.0,100.0,100.0,100.0,0.22,54900,897,2,0
+4.5,10.519,100.0,100.0,100.0,100.0,0.0,54900,899,0,0
+</pre></div>
+</div>
+<p><strong>How to use this file</strong>:</p>
+<ol class="arabic simple">
+<li><p>Identify your priority metric (recall, precision, or F1).</p></li>
+<li><p>Find the row with acceptable performance for your application.</p></li>
+<li><p>Note the <code class="docutils literal notranslate"><span class="pre">threshold</span></code> value from that row.</p></li>
+<li><p>Use this threshold value in your deployed application code.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Gaussian assumption is approximate. In practice, reconstruction error
+distributions may be skewed or have heavy tails. ModelMaker tests multiple
+<code class="docutils literal notranslate"><span class="pre">k</span></code> values so you can select based on actual metrics (precision/recall)
+rather than relying strictly on the Gaussian interpretation.</p>
+</div>
+</section>
+<section id="how-to-choose-k-based-on-application">
+<h3><span class="section-number">4.4.9.4. </span>How to Choose k Based on Application<a class="headerlink" href="#how-to-choose-k-based-on-application" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Safety-critical systems</strong> (aircraft engines, medical devices, nuclear
+sensors): Use a <strong>lower k</strong> (e.g., k=1 or k=2). Prioritize recall – catch
+every anomaly, even at the cost of some false alarms.</p></li>
+<li><p><strong>Cost-sensitive systems</strong> (predictive maintenance, manufacturing quality
+control): Use a <strong>higher k</strong> (e.g., k=3 or k=4). Prioritize precision –
+only flag true anomalies to avoid costly false alarms.</p></li>
+<li><p><strong>Balanced systems</strong> (general industrial monitoring, IoT sensor networks):
+Use the k that gives the <strong>best F1 score</strong> (typically k=2.5 to 3.0).</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If training data contains <strong>mislabeled anomalies</strong> (anomalous samples
+incorrectly placed in the Normal/ folder), the computed mean and standard
+deviation will be inflated, resulting in a threshold that is too high. This
+can cause the model to miss real anomalies. Always ensure training data
+is clean and truly normal.</p>
+</div>
+</section>
+</section>
+<section id="evaluation-metrics">
+<h2><span class="section-number">4.4.10. </span>Evaluation Metrics<a class="headerlink" href="#evaluation-metrics" title="Link to this heading"></a></h2>
+<p>Evaluating anomaly detection models requires different considerations than
+standard classification. Due to class imbalance (normal samples vastly
+outnumber anomalies), accuracy alone can be highly misleading.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Accuracy is misleading for anomaly detection.</strong> Consider a test set with
+950 normal samples and 50 anomaly samples. A naive model that always predicts
+“Normal” achieves 95% accuracy while detecting zero anomalies. Always use
+recall, precision, and F1 alongside accuracy.</p>
+</div>
+<section id="confusion-matrix">
+<h3><span class="section-number">4.4.10.1. </span>Confusion Matrix<a class="headerlink" href="#confusion-matrix" title="Link to this heading"></a></h3>
+<p>The four possible outcomes for any prediction:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>                     Predicted Normal    Predicted Anomaly
+
+Actual Normal            TN                    FP
+                    (True Negative)      (False Positive)
+
+Actual Anomaly           FN                    TP
+                    (False Negative)     (True Positive)
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>True Positive (TP)</strong>: Anomaly correctly detected as anomaly.</p></li>
+<li><p><strong>True Negative (TN)</strong>: Normal sample correctly identified as normal.</p></li>
+<li><p><strong>False Positive (FP)</strong>: Normal sample incorrectly flagged as anomaly
+(false alarm).</p></li>
+<li><p><strong>False Negative (FN)</strong>: Anomaly missed – not detected (the most
+dangerous outcome in safety-critical applications).</p></li>
+</ul>
+</section>
+<section id="metric-definitions">
+<h3><span class="section-number">4.4.10.2. </span>Metric Definitions<a class="headerlink" href="#metric-definitions" title="Link to this heading"></a></h3>
+<p><strong>Precision</strong> (Positive Predictive Value):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Precision = TP / (TP + FP)
+</pre></div>
+</div>
+<p>Of all samples flagged as anomalies, what fraction were actually anomalous?
+High precision means few false alarms.</p>
+<p><strong>Recall</strong> (Sensitivity / True Positive Rate / Detection Rate):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Recall = TP / (TP + FN)
+</pre></div>
+</div>
+<p>Of all actual anomalies, what fraction did we detect? High recall means few
+missed anomalies.</p>
+<p><strong>F1-Score</strong> (Harmonic Mean of Precision and Recall):</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>F1 = 2 * (Precision * Recall) / (Precision + Recall)
+</pre></div>
+</div>
+<p>A balanced metric that accounts for both precision and recall. A high F1
+requires both precision and recall to be high.</p>
+<p><strong>False Positive Rate (FPR)</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>FPR = FP / (FP + TN)
+</pre></div>
+</div>
+<p>What fraction of normal samples were incorrectly flagged as anomalies?</p>
+<p><strong>Accuracy</strong>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Accuracy = (TP + TN) / (TP + TN + FP + FN)
+</pre></div>
+</div>
+<p>Overall correctness across all samples. Use as a supplementary metric only,
+not as the primary metric for anomaly detection.</p>
+</section>
+<section id="metric-summary">
+<h3><span class="section-number">4.4.10.3. </span>Metric Summary<a class="headerlink" href="#metric-summary" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18.0%" />
+<col style="width: 22.0%" />
+<col style="width: 30.0%" />
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Formula</p></th>
+<th class="head"><p>What It Measures</p></th>
+<th class="head"><p>Ideal</p></th>
+<th class="head"><p>Priority For</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Recall</strong></p></td>
+<td><p>TP / (TP + FN)</p></td>
+<td><p>Percentage of anomalies detected</p></td>
+<td><p>High</p></td>
+<td><p>Safety-critical (catch all faults)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Precision</strong></p></td>
+<td><p>TP / (TP + FP)</p></td>
+<td><p>Percentage of flagged anomalies that are real</p></td>
+<td><p>High</p></td>
+<td><p>Cost-sensitive (avoid false alarms)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>F1 Score</strong></p></td>
+<td><p>2*(P*R)/(P+R)</p></td>
+<td><p>Balance of precision and recall</p></td>
+<td><p>High</p></td>
+<td><p>Balanced applications</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>FPR</strong></p></td>
+<td><p>FP / (FP + TN)</p></td>
+<td><p>Percentage of normals incorrectly flagged</p></td>
+<td><p>Low</p></td>
+<td><p>Production deployment</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Accuracy</strong></p></td>
+<td><p>(TP+TN) / Total</p></td>
+<td><p>Overall correctness</p></td>
+<td><p>High</p></td>
+<td><p>Supplementary only</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>For anomaly detection, Recall is often more important than Precision.</strong>
+In many industrial applications, the cost of missing a real anomaly (e.g.,
+an undetected bearing failure leading to equipment damage) far exceeds the
+cost of a false alarm (e.g., an unnecessary inspection). When in doubt,
+prioritize recall and choose a lower <code class="docutils literal notranslate"><span class="pre">k</span></code> value for the threshold.</p>
+</div>
+</section>
+</section>
+<section id="what-if-you-don-t-have-anomaly-data">
+<h2><span class="section-number">4.4.11. </span>What If You Don’t Have Anomaly Data?<a class="headerlink" href="#what-if-you-don-t-have-anomaly-data" title="Link to this heading"></a></h2>
+<p>It is common, especially early in a project, to have collected normal operating
+data but no examples of anomalies. This section explains what you can and
+cannot do in this scenario.</p>
+<section id="what-you-can-do">
+<h3><span class="section-number">4.4.11.1. </span>What You CAN Do<a class="headerlink" href="#what-you-can-do" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Train the model</strong>: Training only requires normal data. The autoencoder
+will learn to compress and reconstruct normal patterns with low error.</p></li>
+<li><p><strong>Evaluate on normal test data</strong>: You can calculate the reconstruction error
+distribution on held-out normal data and measure the false positive rate
+(i.e., how many normal samples are incorrectly flagged as anomalies).</p></li>
+<li><p><strong>Set a conservative threshold</strong>: Use the standard statistical threshold
+<code class="docutils literal notranslate"><span class="pre">mean_train</span> <span class="pre">+</span> <span class="pre">3</span> <span class="pre">*</span> <span class="pre">std_train</span></code> as a reasonable starting point. This covers
+approximately 99.7% of normal data under a Gaussian assumption.</p></li>
+<li><p><strong>Deploy and monitor</strong>: Deploy the model in production and monitor the
+reconstruction error in real time. Samples with error exceeding the
+threshold can be flagged for human review or further investigation.</p></li>
+</ul>
+</section>
+<section id="what-you-cannot-do">
+<h3><span class="section-number">4.4.11.2. </span>What You CANNOT Do<a class="headerlink" href="#what-you-cannot-do" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Measure anomaly detection performance</strong>: Without anomaly samples, you
+cannot calculate recall (there are no anomalies to detect), precision
+(no true positives), or F1 score.</p></li>
+<li><p><strong>Validate that the model actually detects faults</strong>: You can only verify
+that it does not produce false alarms on normal data – you cannot confirm
+it will catch real anomalies until anomaly data becomes available.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Even without anomaly data, the model is still useful. Once deployed, you
+can collect anomaly samples as they naturally occur in production. These
+can then be used to retroactively evaluate and fine-tune the threshold.
+As anomaly data becomes available, re-run the testing step in ModelMaker
+to get proper metrics and adjust <code class="docutils literal notranslate"><span class="pre">k</span></code> accordingly.</p>
+</div>
+</section>
 </section>
 <section id="semi-supervised-vs-supervised">
-<h2><span class="section-number">4.4.8. </span>Semi-Supervised vs Supervised<a class="headerlink" href="#semi-supervised-vs-supervised" title="Link to this heading"></a></h2>
+<h2><span class="section-number">4.4.12. </span>Semi-Supervised vs Supervised<a class="headerlink" href="#semi-supervised-vs-supervised" title="Link to this heading"></a></h2>
 <p><strong>Use Anomaly Detection (Semi-Supervised) when</strong>:</p>
 <ul class="simple">
 <li><p>You only have normal data available</p></li>
 <li><p>Faults are rare and hard to collect</p></li>
 <li><p>You want to detect unknown failure modes</p></li>
+<li><p>New failure modes may emerge over time</p></li>
+<li><p>You need fast time-to-deployment without waiting for faults to occur</p></li>
 </ul>
 <p><strong>Use Classification (Supervised) when</strong>:</p>
 <ul class="simple">
 <li><p>You have labeled examples of all fault types</p></li>
-<li><p>You need to identify specific fault types</p></li>
+<li><p>You need to identify specific fault types (not just “something is wrong”)</p></li>
 <li><p>Faults are well-defined and documented</p></li>
+<li><p>You have abundant labeled anomaly data (100+ samples per fault type)</p></li>
 </ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 35.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Semi-Supervised (Anomaly Detection)</p></th>
+<th class="head"><p>Supervised (Classification)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Training data</p></td>
+<td><p>Normal only</p></td>
+<td><p>Normal + all anomaly types (labeled)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Labeling effort</p></td>
+<td><p>Low</p></td>
+<td><p>High</p></td>
+</tr>
+<tr class="row-even"><td><p>Detects unseen anomalies</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Identifies fault type</p></td>
+<td><p>No (just “normal” vs “anomaly”)</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Accuracy</p></td>
+<td><p>High (if good normal data)</p></td>
+<td><p>High (for known types)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Use case</p></td>
+<td><p>Unknown or evolving faults</p></td>
+<td><p>Known, fixed fault types</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="example-motor-bearing-anomaly">
-<h2><span class="section-number">4.4.9. </span>Example: Motor Bearing Anomaly<a class="headerlink" href="#example-motor-bearing-anomaly" title="Link to this heading"></a></h2>
+<h2><span class="section-number">4.4.13. </span>Example: Motor Bearing Anomaly<a class="headerlink" href="#example-motor-bearing-anomaly" title="Link to this heading"></a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;generic_timeseries_anomalydetection&#39;</span>
 <span class="w">  </span><span class="nt">target_device</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;F28P55&#39;</span>
@@ -1252,16 +2256,22 @@ Anomaly input → High reconstruction error → &quot;Anomaly&quot;
 </div>
 </section>
 <section id="tips">
-<h2><span class="section-number">4.4.10. </span>Tips<a class="headerlink" href="#tips" title="Link to this heading"></a></h2>
+<h2><span class="section-number">4.4.14. </span>Tips<a class="headerlink" href="#tips" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>Include diverse normal conditions</strong> in training data (different loads, speeds)</p></li>
 <li><p><strong>Feature extraction</strong> can help or hurt - try both raw and FFT-based</p></li>
 <li><p><strong>Start with k=3</strong> for threshold, adjust based on false positive rate</p></li>
 <li><p><strong>Monitor reconstruction error distribution</strong> during testing</p></li>
+<li><p><strong>Clean your training data</strong> - mislabeled anomalies in the Normal/ folder
+will distort the threshold calculation</p></li>
+<li><p><strong>Check the histogram</strong> - <code class="docutils literal notranslate"><span class="pre">reconstruction_error_histogram.png</span></code> should show
+clear separation between normal and anomaly distributions</p></li>
+<li><p><strong>Use the threshold_performance.csv</strong> to select the optimal threshold for
+your specific application requirements</p></li>
 </ul>
 </section>
 <section id="see-also">
-<h2><span class="section-number">4.4.11. </span>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<h2><span class="section-number">4.4.15. </span>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="timeseries_classification.html"><span class="doc">Time Series Classification</span></a> - Alternative supervised approach</p></li>
 <li><p><a class="reference internal" href="../features/post_training_analysis.html"><span class="doc">Post-Training Analysis</span></a> - Understanding results</p></li>
