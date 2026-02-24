@@ -21,7 +21,7 @@ The following devices include TI's TINPU:
      - C2000
      - 8-bit/4-bit inference, up to 60k params
    * - AM13E2
-     - MSPM33C
+     - AM13
      - 8-bit inference, Cortex-M33 + NPU
    * - MSPM0G5187
      - MSPM0

@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 project = 'TI Tiny ML Tensorlab'
-copyright = '2025, Texas Instruments Incorporated. Last updated on Jan 31 2025'
+copyright = '2026, Texas Instruments Incorporated'
 author = 'Texas Instruments'
 release = '1.3.0'
 version = 'v1.3.0'

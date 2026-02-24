@@ -154,7 +154,19 @@ Directory Structure After Installation
 Updating
 --------
 
-To update your local copy:
+**Using git_pull_all.sh (Recommended)**
+
+The simplest way to keep all repositories up to date:
+
+.. code-block:: bash
+
+   ./git_pull_all.sh
+
+This script pulls the latest changes for all sub-repositories in one step.
+
+**Manual Update**
+
+Alternatively, update each component manually:
 
 .. code-block:: bash
 

@@ -102,6 +102,10 @@ Device & Hardware Terms
    MSPM33C
       A family of TI Arm Cortex-M33 microcontrollers with TrustZone security.
 
+   AM13
+      A family of TI Arm Cortex-M33 microcontrollers with NPU acceleration.
+      Includes AM13E2.
+
    CCS
       **Code Composer Studio**. TI's integrated development environment (IDE)
       for programming TI microcontrollers.

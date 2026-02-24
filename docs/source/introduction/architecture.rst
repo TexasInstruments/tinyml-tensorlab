@@ -141,6 +141,57 @@ tinyml-modeloptimization
 * **QAT Support** - Quantization-aware training
 * **PTQ Support** - Post-training quantization
 
+Which Repository Do I Need?
+----------------------------
+
+Use the following table to determine which repositories you need to work with
+based on your use case:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 35 20 15 15
+
+   * - Mode
+     - Use Case
+     - tinyml-modelzoo
+     - tinyml-modelmaker
+     - tinyml-modeloptimization
+   * - BYOD
+     - Bring your own data, use TI-provided models as-is.
+     - Config only
+     - Config only
+     - Not needed
+   * - BYOD
+     - Bring your own data, modify TI model parameters
+       (channels, layers, etc.).
+     - Config only
+     - Config only
+     - Not needed
+   * - BYOM
+     - Design your own models or modify TI models, train
+       end-to-end.
+     - Edit models
+     - Config only
+     - Not needed
+   * - BYOM
+     - Already have a trained ONNX model, need to compile
+       for a TI device.
+     - Not needed
+     - Config only
+     - Not needed
+   * - BYOM
+     - Have your own training framework, need NPU-aware
+       quantization only.
+     - Not needed
+     - Not needed
+     - Use directly
+
+.. note::
+
+   **BYOD** = Bring Your Own Data. **BYOM** = Bring Your Own Model.
+   In most cases, you only need to edit YAML configuration files. See
+   :doc:`/getting_started/understanding_config` for details.
+
 Data Flow
 ---------
 
@@ -148,9 +199,13 @@ Data Flow
 
 .. code-block:: text
 
-   Raw Data → Data Loading → Augmentation → Feature Extraction → Model → Loss → Optimizer
-                                                                  ↑
-                                                          (model.pt saved)
+   (Raw Data + Config) → Data Loading → Augmentation → Feature Extraction → AI Model Training → AI Model Training → AI Model Compilation
+                                                              │                (Floating Point)     (Quantization)          │
+                                                              │                      │                    │                 │
+                                                              ▼                      ▼                    ▼                 ▼
+                                                      user_input_config.h       model.onnx           model.onnx      artifacts/
+                                                                                                                     ├── mod.a
+                                                                                                                     └── tvmgen_default.h
 
 **Inference Pipeline**:
 

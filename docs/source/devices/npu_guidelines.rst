@@ -9,7 +9,7 @@ NPU-Enabled Devices
 -------------------
 
 * **F28P55** - C2000 family
-* **AM13E2** - MSPM33C family
+* **AM13E2** - AM13 family
 * **MSPM0G5187** - MSPM0 family
 
 Layer Constraints
