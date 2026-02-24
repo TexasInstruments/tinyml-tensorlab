@@ -161,7 +161,7 @@ Check model name spelling. List available models:
 
 .. code-block:: bash
 
-   python -c "from tinyml_tinyverse.common.models import MODEL_REGISTRY; print(list(MODEL_REGISTRY.keys()))"
+   python -c "from tinyml_modelzoo.models import list_models; print(list_models())"
 
 **Feature Extraction Preset Not Found**
 

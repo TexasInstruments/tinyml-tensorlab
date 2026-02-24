@@ -449,16 +449,15 @@ Using Models
 
 .. code-block:: python
 
-   from tinyml_tinyverse.common.models import MODEL_REGISTRY
-   print(list(MODEL_REGISTRY.keys()))
+   from tinyml_modelzoo.models import list_models
+   print(list_models())
 
 **Model Information:**
 
 .. code-block:: python
 
-   from tinyml_tinyverse.common.models import MODEL_REGISTRY
+   from tinyml_modelzoo.models import get_model
 
-   model_class = MODEL_REGISTRY['CLS_4k_NPU']
-   model = model_class(config={}, input_features=512, variables=1, num_classes=2)
+   model = get_model('CLS_4k_NPU', input_features=512, variables=1, num_classes=2)
    params = sum(p.numel() for p in model.parameters())
    print(f"Parameters: {params}")

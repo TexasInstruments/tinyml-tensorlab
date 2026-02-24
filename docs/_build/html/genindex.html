@@ -975,6 +975,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l2"><a class="reference internal" href="deployment/index.html#deployment-overview">9.4. Deployment Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deployment/index.html#prerequisites">9.5. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment/index.html#output-file-locations">9.6. Output File Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment/index.html#ccs-example-project-locations">9.7. CCS Example Project Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment/index.html#task-type-specific-deployment-notes">9.8. Task-Type-Specific Deployment Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment/index.html#testing-multiple-cases">9.9. Testing Multiple Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment/index.html#model-compilation-details">9.10. Model Compilation Details</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="model_composer/index.html">10. Edge AI Studio Model Composer</a><ul>
@@ -1029,19 +1034,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l1"><a class="reference internal" href="byom/index.html">11. Bring Your Own Model</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="byom/adding_models.html">11.1. Adding Custom Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#overview">11.1.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#model-definition-structure">11.1.2. Model Definition Structure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#base-class-genericmodelwithspec">11.1.3. Base Class: GenericModelWithSpec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#layer-types">11.1.4. Layer Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#complete-model-example">11.1.5. Complete Model Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#npu-compatible-model">11.1.6. NPU-Compatible Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#registering-your-model">11.1.7. Registering Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#using-your-custom-model">11.1.8. Using Your Custom Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#testing-your-model">11.1.9. Testing Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#best-practices">11.1.10. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#adding-custom-feature-extractors">11.1.11. Adding Custom Feature Extractors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#adding-new-modalities">11.1.12. Adding New Modalities</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#configuring-model-layer-parameters">11.1.13. Configuring Model Layer Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#next-steps">11.1.14. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#quick-summary">11.1.2. Quick Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#step-1-choose-the-right-model-file">11.1.3. Step 1: Choose the Right Model File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#step-2-create-your-model-class">11.1.4. Step 2: Create Your Model Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="byom/adding_models.html#option-a-spec-based-model-recommended">11.1.4.1. Option A: Spec-Based Model (Recommended)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="byom/adding_models.html#option-b-custom-pytorch-model">11.1.4.2. Option B: Custom PyTorch Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="byom/adding_models.html#npu-compatible-model">11.1.4.3. NPU-Compatible Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#available-layer-types">11.1.5. Available Layer Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#step-5-optional-add-device-performance-info">11.1.8. Step 5 (Optional): Add Device Performance Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#naming-conventions">11.1.11. Naming Conventions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#configuring-model-layer-parameters">11.1.12. Configuring Model Layer Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#troubleshooting">11.1.13. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#summary-checklist">11.1.14. Summary Checklist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="byom/adding_models.html#next-steps">11.1.15. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="byom/compilation_only.html">11.2. Compilation Only</a><ul>

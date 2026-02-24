@@ -978,6 +978,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#deployment-overview">9.4. Deployment Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">9.5. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-file-locations">9.6. Output File Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ccs-example-project-locations">9.7. CCS Example Project Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-type-specific-deployment-notes">9.8. Task-Type-Specific Deployment Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-multiple-cases">9.9. Testing Multiple Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-compilation-details">9.10. Model Compilation Details</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../model_composer/index.html">10. Edge AI Studio Model Composer</a><ul>
@@ -1032,19 +1037,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l1"><a class="reference internal" href="../byom/index.html">11. Bring Your Own Model</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../byom/adding_models.html">11.1. Adding Custom Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#overview">11.1.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#model-definition-structure">11.1.2. Model Definition Structure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#base-class-genericmodelwithspec">11.1.3. Base Class: GenericModelWithSpec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#layer-types">11.1.4. Layer Types</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#complete-model-example">11.1.5. Complete Model Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#npu-compatible-model">11.1.6. NPU-Compatible Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#registering-your-model">11.1.7. Registering Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#using-your-custom-model">11.1.8. Using Your Custom Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#testing-your-model">11.1.9. Testing Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#best-practices">11.1.10. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#adding-custom-feature-extractors">11.1.11. Adding Custom Feature Extractors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#adding-new-modalities">11.1.12. Adding New Modalities</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#configuring-model-layer-parameters">11.1.13. Configuring Model Layer Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#next-steps">11.1.14. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#quick-summary">11.1.2. Quick Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-1-choose-the-right-model-file">11.1.3. Step 1: Choose the Right Model File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-2-create-your-model-class">11.1.4. Step 2: Create Your Model Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../byom/adding_models.html#option-a-spec-based-model-recommended">11.1.4.1. Option A: Spec-Based Model (Recommended)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../byom/adding_models.html#option-b-custom-pytorch-model">11.1.4.2. Option B: Custom PyTorch Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../byom/adding_models.html#npu-compatible-model">11.1.4.3. NPU-Compatible Model</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#available-layer-types">11.1.5. Available Layer Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-5-optional-add-device-performance-info">11.1.8. Step 5 (Optional): Add Device Performance Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#naming-conventions">11.1.11. Naming Conventions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#configuring-model-layer-parameters">11.1.12. Configuring Model Layer Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#troubleshooting">11.1.13. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#summary-checklist">11.1.14. Summary Checklist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#next-steps">11.1.15. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../byom/compilation_only.html">11.2. Compilation Only</a><ul>
@@ -1263,16 +1274,17 @@ can integrate into your CCS project:</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mod.a</span></code></p></td>
-<td><p>Compiled model library</p></td>
+<td><p>Compiled model library (ONNX model compiled by TI MCU NNC into C code,
+packaged as a static library)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code></p></td>
-<td><p>Header file with model inference API</p></td>
+<td><p>Header file with model inference API exposed by <code class="docutils literal notranslate"><span class="pre">mod.a</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_vector.c</span></code></p></td>
-<td><p>Test vectors for device validation</p></td>
+<td><p>Golden test vectors (input + expected output) for on-device validation</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_input_config.h</span></code></p></td>
-<td><p>Feature extraction configuration for device</p></td>
+<td><p>Feature extraction configuration (preprocessing flags and parameters)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1280,28 +1292,267 @@ can integrate into your CCS project:</p>
 <ol class="arabic simple">
 <li><p>Train and compile your model using Tiny ML Tensorlab</p></li>
 <li><p>Open Code Composer Studio</p></li>
-<li><p>Import or create a project for your target device</p></li>
-<li><p>Copy the compiled artifacts to your project</p></li>
+<li><p>Import the SDK example project for your target device and task type</p></li>
+<li><p>Copy the four output files from ModelMaker to the CCS project</p></li>
 <li><p>Build, flash, and debug</p></li>
 </ol>
 <p>The specific steps vary depending on whether your device has an NPU:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="npu_device_deployment.html"><span class="doc">NPU Device Deployment</span></a> - For F28P55, AM13E2, MSPM0G5187</p></li>
+<li><p><a class="reference internal" href="npu_device_deployment.html"><span class="doc">NPU Device Deployment</span></a> - For F28P55x, AM13E2x, MSPM0G5187</p></li>
 <li><p><a class="reference internal" href="non_npu_deployment.html"><span class="doc">Non-NPU Deployment</span></a> - For all other devices</p></li>
 </ul>
 </section>
 <section id="prerequisites">
 <h2><span class="section-number">9.5. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p><strong>Code Composer Studio (CCS)</strong></p>
+<p>Download from <a class="reference external" href="https://www.ti.com/tool/CCSTUDIO">https://www.ti.com/tool/CCSTUDIO</a>. Version 20.2.0 or later
+is recommended.</p>
+<p><strong>Device-Specific SDKs</strong></p>
+<p>After installing CCS, install the appropriate SDK for your target device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Device Family</p></th>
+<th class="head"><p>Devices</p></th>
+<th class="head"><p>SDK</p></th>
+<th class="head"><p>SDK Version</p></th>
+<th class="head"><p>Download</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C2000 (F28x)</p></td>
+<td><p>F28003x, F28004x, F28P55x, F28P65x</p></td>
+<td><p>C2000Ware</p></td>
+<td><p>6.01.00.00</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/C2000WARE">C2000Ware</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>C2000 (F29x)</p></td>
+<td><p>F29H85x, F29P58x, F29P32x</p></td>
+<td><p>F29H85X SDK</p></td>
+<td><p>01.04.00.00</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/download/F29H85X-SDK/">F29H85X-SDK</a></p></td>
+</tr>
+<tr class="row-even"><td><p>MSPM33</p></td>
+<td><p>MSPM33C321Ax</p></td>
+<td><p>MSPM33 SDK</p></td>
+<td><p>1.03.00.00</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/download/MSPM33-SDK">MSPM33-SDK</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Sitara MCU (AM13x)</p></td>
+<td><p>AM13E2x</p></td>
+<td><p>MCU SDK</p></td>
+<td><p>1.00.00.00</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/download/MCU-SDK-AM13E2X">MCU-SDK-AM13E2X</a></p></td>
+</tr>
+<tr class="row-even"><td><p>Sitara MCU (AM26x)</p></td>
+<td><p>AM263, AM263P, AM261</p></td>
+<td><p>MCU-PLUS-SDK</p></td>
+<td><p>11.03.00.00</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/MCU-PLUS-SDK-AM263X">MCU-PLUS-SDK-AM263X</a></p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Supported LaunchPads/EVMs</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 30.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Device</p></th>
+<th class="head"><p>LaunchPad/EVM</p></th>
+<th class="head"><p>Product Page</p></th>
+<th class="head"><p>NPU</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>F28003x</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/LAUNCHXL-F280039C">LAUNCHXL-F280039C</a></p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/TMS320F280039C">TMS320F280039C</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>F28004x</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/LAUNCHXL-F280049C">LAUNCHXL-F280049C</a></p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/TMS320F280049C">TMS320F280049C</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>F28P55x</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/LAUNCHXL-F28P55X">LAUNCHXL-F28P55X</a></p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/TMS320F28P550SJ">TMS320F28P550SJ</a></p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>F28P65x</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/LAUNCHXL-F28P65X">LAUNCHXL-F28P65X</a></p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/TMS320F28P650DK">TMS320F28P650DK</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>F29H85x</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/F29H85X-SOM-EVM">F29H85X-SOM-EVM</a></p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/F29H850TU">F29H850TU</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>MSPM33C321Ax</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/LP-MSPM33C321A">LP-MSPM33C321A</a></p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/MSPM33C321A">MSPM33C321A</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>AM13E2x</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/AM13E2">AM13E2</a></p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>AM263x</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/LP-AM263">LP-AM263</a></p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/AM2634">AM2634</a></p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="output-file-locations">
+<h2><span class="section-number">9.6. </span>Output File Locations<a class="headerlink" href="#output-file-locations" title="Link to this heading"></a></h2>
+<p>After ModelMaker runs, the four deployment files are located in:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/
+├── compilation/
+│   └── artifacts/
+│       ├── mod.a                     &lt;-- Compiled model
+│       └── tvmgen_default.h          &lt;-- Model API header
+│
+└── training/
+    ├── base/                         &lt;-- For float (non-quantized) models
+    │   └── golden_vectors/
+    │       ├── test_vector.c
+    │       └── user_input_config.h
+    │
+    └── quantization/                 &lt;-- For quantized models
+        └── golden_vectors/
+            ├── test_vector.c
+            └── user_input_config.h
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Choose the golden vectors based on the model type you compiled:</p>
 <ul class="simple">
-<li><p>Code Composer Studio installed (version 20.x or later recommended)</p></li>
-<li><p>Appropriate SDK installed:</p>
+<li><p><strong>Float model (non-quantized):</strong> Use golden vectors from
+<code class="docutils literal notranslate"><span class="pre">training/base/golden_vectors/</span></code></p></li>
+<li><p><strong>Quantized model:</strong> Use golden vectors from
+<code class="docutils literal notranslate"><span class="pre">training/quantization/golden_vectors/</span></code></p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">mod.a</span></code> and <code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code> are always from
+<code class="docutils literal notranslate"><span class="pre">compilation/artifacts/</span></code> regardless of quantization setting.</p>
+</div>
+</section>
+<section id="ccs-example-project-locations">
+<h2><span class="section-number">9.7. </span>CCS Example Project Locations<a class="headerlink" href="#ccs-example-project-locations" title="Link to this heading"></a></h2>
+<p>TI provides ready-to-use CCS example projects for each task type. The example
+project location depends on your device family:</p>
+<p><strong>C2000Ware (F28x devices):</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{C2000WARE_INSTALL_PATH}/libraries/ai/examples/
+├── generic_timeseries_classification/
+├── generic_timeseries_regression/
+├── generic_timeseries_forecasting/
+└── generic_timeseries_anomalydetection/
+</pre></div>
+</div>
+<p><strong>F29H85X SDK (F29x devices):</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{F29H85X_SDK_INSTALL_PATH}/examples/rtlibs/ai/examples/
+├── generic_timeseries_classification/
+├── generic_timeseries_regression/
+├── generic_timeseries_forecasting/
+└── generic_timeseries_anomalydetection/
+</pre></div>
+</div>
+<p>Inside each task-type folder, select the subfolder matching your target device
+(e.g., <code class="docutils literal notranslate"><span class="pre">f28p55x/</span></code>, <code class="docutils literal notranslate"><span class="pre">f28004x/</span></code>, <code class="docutils literal notranslate"><span class="pre">f29h85x/</span></code>).</p>
+</section>
+<section id="task-type-specific-deployment-notes">
+<h2><span class="section-number">9.8. </span>Task-Type-Specific Deployment Notes<a class="headerlink" href="#task-type-specific-deployment-notes" title="Link to this heading"></a></h2>
+<p>The deployment workflow is the same for all task types, but the CCS example
+project names and verification differ:</p>
+<p><strong>Classification</strong></p>
+<ul class="simple">
+<li><p>CCS example: <code class="docutils literal notranslate"><span class="pre">generic_timeseries_classification</span></code></p></li>
+<li><p>Verification: Check <code class="docutils literal notranslate"><span class="pre">test_result</span></code> variable (1 = pass, 0 = fail)</p></li>
+<li><p>The model outputs class scores; <code class="docutils literal notranslate"><span class="pre">argmax</span></code> gives the predicted class</p></li>
+</ul>
+<p><strong>Regression</strong></p>
+<ul class="simple">
+<li><p>CCS example: <code class="docutils literal notranslate"><span class="pre">generic_timeseries_regression</span></code></p></li>
+<li><p>Verification: Check <code class="docutils literal notranslate"><span class="pre">test_result</span></code> variable (1 = pass, 0 = fail)</p></li>
+<li><p>The model outputs a continuous value</p></li>
+</ul>
+<p><strong>Forecasting</strong></p>
+<ul class="simple">
+<li><p>CCS example: <code class="docutils literal notranslate"><span class="pre">generic_timeseries_forecasting</span></code></p></li>
+<li><p>Verification: Check <code class="docutils literal notranslate"><span class="pre">test_result</span></code> variable (1 = pass, 0 = fail)</p></li>
+<li><p>The model predicts future values from historical data</p></li>
+</ul>
+<p><strong>Anomaly Detection</strong></p>
 <ul>
-<li><p><strong>C2000 devices</strong>: C2000Ware SDK</p></li>
-<li><p><strong>MSPM0 devices</strong>: MSPM0 SDK</p></li>
-</ul>
+<li><p>CCS example: <code class="docutils literal notranslate"><span class="pre">generic_timeseries_anomalydetection</span></code></p></li>
+<li><p>Verification: The application computes reconstruction error (MSE between
+input and autoencoder output) and compares to a threshold</p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">user_input_config.h</span></code>, the anomaly threshold is defined:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define ANOMALY_THRESHOLD 0.014  </span><span class="c1">// Threshold for k=4.5</span>
+</pre></div>
+</div>
+<p>This was calculated during training as:
+<code class="docutils literal notranslate"><span class="pre">threshold</span> <span class="pre">=</span> <span class="pre">mean_normal_error</span> <span class="pre">+</span> <span class="pre">k</span> <span class="pre">*</span> <span class="pre">std_normal_error</span></code></p>
 </li>
-<li><p>TI compiler tools configured (environment variables set)</p></li>
+<li><p><strong>Adjusting the threshold:</strong></p>
+<ul class="simple">
+<li><p>Increase threshold (higher k): fewer false alarms, may miss subtle anomalies</p></li>
+<li><p>Decrease threshold (lower k): catches more anomalies, more false alarms</p></li>
 </ul>
+<p>Refer to the <code class="docutils literal notranslate"><span class="pre">threshold_performance.csv</span></code> file from ModelMaker to choose the
+optimal k value for your application.</p>
+</li>
+</ul>
+</section>
+<section id="testing-multiple-cases">
+<h2><span class="section-number">9.9. </span>Testing Multiple Cases<a class="headerlink" href="#testing-multiple-cases" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">test_vector.c</span></code> file contains multiple test cases (SET 0, SET 1, etc.).
+To test different cases:</p>
+<ol class="arabic simple">
+<li><p>Open <code class="docutils literal notranslate"><span class="pre">test_vector.c</span></code> in the CCS editor</p></li>
+<li><p>Comment out the current test set (SET 0)</p></li>
+<li><p>Uncomment another test set (e.g., SET 1)</p></li>
+<li><p>Rebuild and reflash the project</p></li>
+<li><p>Verify that <code class="docutils literal notranslate"><span class="pre">test_result</span></code> matches expected output</p></li>
+</ol>
+</section>
+<section id="model-compilation-details">
+<h2><span class="section-number">9.10. </span>Model Compilation Details<a class="headerlink" href="#model-compilation-details" title="Link to this heading"></a></h2>
+<p>The ONNX model produced by training is compiled using
+<a class="reference external" href="https://software-dl.ti.com/mctools/nnc/mcu/users_guide/">TI MCU NNC</a>
+to generate <code class="docutils literal notranslate"><span class="pre">mod.a</span></code> and <code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code>. The compilation command
+used internally is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tvmc<span class="w"> </span>compile<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--target<span class="o">=</span><span class="s2">&quot;c, ti-npu type=hard skip_normalize=true output_int=true&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--target-c-mcpu<span class="o">=</span>c28<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>./model.onnx<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span>artifacts_c28/mod.a<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--cross-compiler<span class="o">=</span><span class="s2">&quot;cl2000&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--cross-compiler-options<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CL2000_OPTIONS</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Different task types use different compilation flags:</p>
+<ul class="simple">
+<li><p><strong>Classification:</strong> <code class="docutils literal notranslate"><span class="pre">skip_normalize=true</span> <span class="pre">output_int=true</span></code></p></li>
+<li><p><strong>Regression/Forecasting:</strong> Output is float (no <code class="docutils literal notranslate"><span class="pre">output_int</span></code>)</p></li>
+<li><p><strong>Anomaly Detection:</strong> Output is reconstruction error</p></li>
+</ul>
+<p>See the <a class="reference external" href="https://software-dl.ti.com/mctools/nnc/mcu/users_guide/compiling.html">TI MCU NNC documentation</a>
+for all compilation options.</p>
 </section>
 </section>
 

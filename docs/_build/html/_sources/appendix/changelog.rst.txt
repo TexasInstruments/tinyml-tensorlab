@@ -129,8 +129,8 @@ Model access changed:
    model = get_model('CLS_1k')
 
    # New
-   from tinyml_tinyverse.common.models import MODEL_REGISTRY
-   model_class = MODEL_REGISTRY['CLS_1k']
+   from tinyml_modelzoo.models import get_model
+   model = get_model('CLS_1k', variables=1, num_classes=2, input_features=128)
 
 Deprecation Notices
 -------------------

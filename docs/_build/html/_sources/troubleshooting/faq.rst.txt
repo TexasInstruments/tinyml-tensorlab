@@ -229,8 +229,8 @@ for your specific task and constraints.
 
 **Can I customize the training pipeline?**
 
-Yes, TinyVerse provides the training infrastructure.
-See the TinyVerse documentation for customization options.
+Yes, you can add custom models to ``tinyml-modelzoo``.
+See :doc:`/byom/adding_models` for step-by-step instructions.
 
 **Is there an API for integration?**
 

@@ -10,27 +10,26 @@ Non-NPU Devices
 
 Devices without NPU include:
 
-**C2000 Family:**
+**C2000 Family (F28x):**
 
-* F28P65, F29H85, F29P58, F29P32
-* F2837, F28004, F28003
-* F280013, F280015
+* F28003x, F28004x, F28P65x
+* F280013x, F280015x, F2837x
+
+**C2000 Family (F29x):**
+
+* F29H85x, F29P58x, F29P32x
 
 **MSPM0 Family:**
 
 * MSPM0G3507, MSPM0G3519
 
-**MSPM33C Family:**
+**MSPM33 Family:**
 
-* MSPM33C32, MSPM33C34
+* MSPM33C321Ax
 
-**AM26x Family:**
+**Sitara MCU Family (AM26x):**
 
 * AM263, AM263P, AM261
-
-**Connectivity:**
-
-* CC2755, CC1352
 
 Configuration
 -------------
