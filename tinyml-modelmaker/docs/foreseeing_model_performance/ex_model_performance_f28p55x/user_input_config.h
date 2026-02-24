@@ -1,9 +1,0 @@
-#ifndef INPUT_CONFIG_H_
-#define INPUT_CONFIG_H_
-
-#define FE_STACKING_CHANNELS 1
-#define FE_STACKING_FRAME_WIDTH 256
-#define FE_HL 1
-#define FE_NN_OUT_SIZE 2
-
-#endif /* INPUT_CONFIG_H_ */
