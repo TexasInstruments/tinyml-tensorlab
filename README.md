@@ -7,7 +7,11 @@ It supports Time Series Classification, Regression, Forecasting, Anomaly Detecti
 
 <hr>
 
-## What is New
+The [TI Tiny ML ModelZoo](./tinyml-modelzoo): Contains the devices supported, a variety of models and all the applications worth exploring 
+
+<hr>
+
+### Release History
 
 - [2026-Feb] Release version 1.3.0 of the software
   <details>

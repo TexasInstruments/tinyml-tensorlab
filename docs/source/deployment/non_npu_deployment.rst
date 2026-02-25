@@ -31,6 +31,10 @@ Devices without NPU include:
 
 * AM263, AM263P, AM261
 
+**Connectivity:**
+
+* CC2755, CC1352, CC1354, CC35X1
+
 Configuration
 -------------
 
@@ -376,8 +380,9 @@ Device-Specific Notes
    training:
      model_name: 'CLS_6k'  # or larger
 
-**CC27xx/CC13xx (Connectivity):**
+**CC27xx/CC13xx/CC35xx (Connectivity):**
 
+* Supported devices: CC2755, CC1352, CC1354, CC35X1
 * Balance model vs wireless stack memory
 * Consider inference frequency vs RF activity
 

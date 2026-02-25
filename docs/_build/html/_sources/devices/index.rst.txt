@@ -177,6 +177,12 @@ Complete Device List
    * - CC1352
      - No
      - Cortex-M4, multi-protocol wireless (Sub-GHz, BLE)
+   * - CC1354
+     - No
+     - Cortex-M33, Sub-GHz + Bluetooth 5.2 LE
+   * - CC35X1
+     - No
+     - Cortex-M4, Wi-Fi
 
 NPU vs Non-NPU Devices
 ----------------------

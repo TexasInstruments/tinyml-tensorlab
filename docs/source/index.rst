@@ -19,6 +19,16 @@ Quick Links
 .. grid:: 2
    :gutter: 3
 
+   .. grid-item-card:: Tiny ML ModelZoo on GitHub
+      :link: https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo
+      :link-type: url
+      :class-card: sd-border-0 sd-shadow-sm
+
+      Models, examples, and configurations — your starting point for MCU AI development.
+
+      +++
+      :bdg-dark:`GitHub`
+
    .. grid-item-card:: Getting Started
       :link: getting_started/index
       :link-type: doc

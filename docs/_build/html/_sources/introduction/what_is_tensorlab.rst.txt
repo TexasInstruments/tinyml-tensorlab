@@ -73,7 +73,7 @@ Over 20 TI microcontrollers are supported, including:
 * **MSPM33C family** - MSPM33C32, MSPM33C34
 * **AM13 family** - AM13E2 (with NPU)
 * **AM26x family** - AM263, AM263P, AM261
-* **Connectivity devices** - CC2755, CC1352
+* **Connectivity devices** - CC2755, CC1352, CC1354, CC35X1
 
 **Model Optimization**
 

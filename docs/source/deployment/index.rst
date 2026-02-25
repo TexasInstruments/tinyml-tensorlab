@@ -13,6 +13,110 @@ using Code Composer Studio (CCS).
    npu_device_deployment
    non_npu_deployment
 
+Supported Devices
+-----------------
+
+**Device-Specific SDKs**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20 20
+
+   * - Device Family
+     - Devices
+     - SDK
+     - SDK Version
+     - Download
+   * - C2000 (F28x)
+     - F28003x, F28004x, F28P55x, F28P65x
+     - C2000Ware
+     - 6.01.00.00
+     - `C2000Ware <https://www.ti.com/tool/C2000WARE>`__
+   * - C2000 (F29x)
+     - F29H85x, F29P58x, F29P32x
+     - F29H85X SDK
+     - 01.04.00.00
+     - `F29H85X-SDK <https://www.ti.com/tool/download/F29H85X-SDK/>`__
+   * - MSPM33
+     - MSPM33C321Ax
+     - MSPM33 SDK
+     - 1.03.00.00
+     - `MSPM33-SDK <https://www.ti.com/tool/download/MSPM33-SDK>`__
+   * - Sitara MCU (AM13x)
+     - AM13E2x
+     - MCU SDK
+     - 1.00.00.00
+     - `MCU-SDK-AM13E2X <https://www.ti.com/tool/download/MCU-SDK-AM13E2X>`__
+   * - Sitara MCU (AM26x)
+     - AM263, AM263P, AM261
+     - MCU-PLUS-SDK
+     - 11.03.00.00
+     - `MCU-PLUS-SDK-AM263X <https://www.ti.com/tool/MCU-PLUS-SDK-AM263X>`__
+   * - Connectivity
+     - CC2755, CC1352, CC1354, CC35X1
+     - SimpleLink SDK
+     - --
+     - `SimpleLink <https://www.ti.com/tool/SIMPLELINK-LOWPOWER-F3-SDK>`__
+
+**Supported LaunchPads/EVMs**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 25 25
+
+   * - Device
+     - LaunchPad/EVM
+     - Product Page
+     - NPU
+   * - F28003x
+     - `LAUNCHXL-F280039C <https://www.ti.com/tool/LAUNCHXL-F280039C>`__
+     - `TMS320F280039C <https://www.ti.com/product/TMS320F280039C>`__
+     - No
+   * - F28004x
+     - `LAUNCHXL-F280049C <https://www.ti.com/tool/LAUNCHXL-F280049C>`__
+     - `TMS320F280049C <https://www.ti.com/product/TMS320F280049C>`__
+     - No
+   * - F28P55x
+     - `LAUNCHXL-F28P55X <https://www.ti.com/tool/LAUNCHXL-F28P55X>`__
+     - `TMS320F28P550SJ <https://www.ti.com/product/TMS320F28P550SJ>`__
+     - Yes
+   * - F28P65x
+     - `LAUNCHXL-F28P65X <https://www.ti.com/tool/LAUNCHXL-F28P65X>`__
+     - `TMS320F28P650DK <https://www.ti.com/product/TMS320F28P650DK>`__
+     - No
+   * - F29H85x
+     - `F29H85X-SOM-EVM <https://www.ti.com/tool/F29H85X-SOM-EVM>`__
+     - `F29H850TU <https://www.ti.com/product/F29H850TU>`__
+     - No
+   * - MSPM33C321Ax
+     - `LP-MSPM33C321A <https://www.ti.com/tool/LP-MSPM33C321A>`__
+     - `MSPM33C321A <https://www.ti.com/product/MSPM33C321A>`__
+     - No
+   * - AM13E2x
+     - --
+     - `AM13E2 <https://www.ti.com/product/AM13E2>`__
+     - Yes
+   * - AM263x
+     - `LP-AM263 <https://www.ti.com/tool/LP-AM263>`__
+     - `AM2634 <https://www.ti.com/product/AM2634>`__
+     - No
+   * - CC2755
+     - --
+     - `CC2755 <https://www.ti.com/product/CC2755>`__
+     - No
+   * - CC1352
+     - --
+     - `CC1352 <https://www.ti.com/product/CC1352R>`__
+     - No
+   * - CC1354
+     - --
+     - `CC1354 <https://www.ti.com/product/CC1354R7>`__
+     - No
+   * - CC35X1
+     - --
+     - `CC35X1 <https://www.ti.com/product/CC3511>`__
+     - No
+
 Deployment Overview
 -------------------
 
@@ -58,87 +162,8 @@ Prerequisites
 Download from https://www.ti.com/tool/CCSTUDIO. Version 20.2.0 or later
 is recommended.
 
-**Device-Specific SDKs**
-
-After installing CCS, install the appropriate SDK for your target device:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 20 20 20 20
-
-   * - Device Family
-     - Devices
-     - SDK
-     - SDK Version
-     - Download
-   * - C2000 (F28x)
-     - F28003x, F28004x, F28P55x, F28P65x
-     - C2000Ware
-     - 6.01.00.00
-     - `C2000Ware <https://www.ti.com/tool/C2000WARE>`__
-   * - C2000 (F29x)
-     - F29H85x, F29P58x, F29P32x
-     - F29H85X SDK
-     - 01.04.00.00
-     - `F29H85X-SDK <https://www.ti.com/tool/download/F29H85X-SDK/>`__
-   * - MSPM33
-     - MSPM33C321Ax
-     - MSPM33 SDK
-     - 1.03.00.00
-     - `MSPM33-SDK <https://www.ti.com/tool/download/MSPM33-SDK>`__
-   * - Sitara MCU (AM13x)
-     - AM13E2x
-     - MCU SDK
-     - 1.00.00.00
-     - `MCU-SDK-AM13E2X <https://www.ti.com/tool/download/MCU-SDK-AM13E2X>`__
-   * - Sitara MCU (AM26x)
-     - AM263, AM263P, AM261
-     - MCU-PLUS-SDK
-     - 11.03.00.00
-     - `MCU-PLUS-SDK-AM263X <https://www.ti.com/tool/MCU-PLUS-SDK-AM263X>`__
-
-**Supported LaunchPads/EVMs**
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 30 25 25
-
-   * - Device
-     - LaunchPad/EVM
-     - Product Page
-     - NPU
-   * - F28003x
-     - `LAUNCHXL-F280039C <https://www.ti.com/tool/LAUNCHXL-F280039C>`__
-     - `TMS320F280039C <https://www.ti.com/product/TMS320F280039C>`__
-     - No
-   * - F28004x
-     - `LAUNCHXL-F280049C <https://www.ti.com/tool/LAUNCHXL-F280049C>`__
-     - `TMS320F280049C <https://www.ti.com/product/TMS320F280049C>`__
-     - No
-   * - F28P55x
-     - `LAUNCHXL-F28P55X <https://www.ti.com/tool/LAUNCHXL-F28P55X>`__
-     - `TMS320F28P550SJ <https://www.ti.com/product/TMS320F28P550SJ>`__
-     - Yes
-   * - F28P65x
-     - `LAUNCHXL-F28P65X <https://www.ti.com/tool/LAUNCHXL-F28P65X>`__
-     - `TMS320F28P650DK <https://www.ti.com/product/TMS320F28P650DK>`__
-     - No
-   * - F29H85x
-     - `F29H85X-SOM-EVM <https://www.ti.com/tool/F29H85X-SOM-EVM>`__
-     - `F29H850TU <https://www.ti.com/product/F29H850TU>`__
-     - No
-   * - MSPM33C321Ax
-     - `LP-MSPM33C321A <https://www.ti.com/tool/LP-MSPM33C321A>`__
-     - `MSPM33C321A <https://www.ti.com/product/MSPM33C321A>`__
-     - No
-   * - AM13E2x
-     - --
-     - `AM13E2 <https://www.ti.com/product/AM13E2>`__
-     - Yes
-   * - AM263x
-     - `LP-AM263 <https://www.ti.com/tool/LP-AM263>`__
-     - `AM2634 <https://www.ti.com/product/AM2634>`__
-     - No
+Install support for your target device family during CCS setup, and then
+install the appropriate SDK listed in the `Supported Devices`_ table above.
 
 Output File Locations
 ---------------------

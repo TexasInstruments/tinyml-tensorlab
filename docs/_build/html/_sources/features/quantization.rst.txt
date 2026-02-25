@@ -81,8 +81,8 @@ Uses standard PyTorch quantization APIs (``GenericTinyMLQATFxModule`` /
      quantization_weight_bitwidth: 8
      quantization_activation_bitwidth: 8
 
-For more details on the underlying wrappers, see the
-`tinyml-modeloptimization documentation <https://bitbucket.itg.ti.com/projects/TINYML-ALGO/repos/tinyml-modeloptimization/browse/torchmodelopt/README.md>`_.
+For more details on the underlying wrappers, see
+:ref:`quantization-wrapper-architecture` below.
 
 **TI Style Optimised Quantization (quantization: 2)**
 
@@ -409,6 +409,8 @@ Even without NPU, integer operations are faster:
 
    Float32: ~5000 µs
    INT8:    ~2000 µs
+
+.. _quantization-wrapper-architecture:
 
 Quantization Wrapper Architecture
 ----------------------------------

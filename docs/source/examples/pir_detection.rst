@@ -78,6 +78,8 @@ This example is optimized for TI's connectivity devices:
 
 * **CC2755**: Wireless MCU with Cortex-M33
 * **CC1352**: Multi-protocol wireless MCU
+* **CC1354**: Sub-GHz + Bluetooth 5.2 LE MCU
+* **CC35X1**: Wi-Fi MCU
 
 See Also
 --------

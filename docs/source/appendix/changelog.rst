@@ -78,7 +78,7 @@ Version 1.0.0
 * C2000 family (F28P55, F28P65, F2837, etc.)
 * MSPM0 family (MSPM0G3507, MSPM0G3519)
 * AM26x family (AM263, AM263P, AM261)
-* Connectivity devices (CC2755, CC1352)
+* Connectivity devices (CC2755, CC1352, CC1354, CC35X1)
 
 **Models:**
 

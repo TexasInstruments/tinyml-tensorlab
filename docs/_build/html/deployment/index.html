@@ -448,14 +448,16 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#supported-devices">6.5.2. Supported Devices</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#cc2755">6.5.3. CC2755</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#cc1352">6.5.4. CC1352</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#am26x-family">6.5.5. AM26x Family</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#typical-applications">6.5.6. Typical Applications</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#power-optimization">6.5.7. Power Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#memory-constraints">6.5.8. Memory Constraints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#development-tools">6.5.9. Development Tools</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#wireless-protocol-considerations">6.5.10. Wireless Protocol Considerations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#getting-started">6.5.11. Getting Started</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#next-steps">6.5.12. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#cc1354">6.5.5. CC1354</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#cc35x1">6.5.6. CC35X1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#am26x-family">6.5.7. AM26x Family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#typical-applications">6.5.8. Typical Applications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#power-optimization">6.5.9. Power Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#memory-constraints">6.5.10. Memory Constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#development-tools">6.5.11. Development Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#wireless-protocol-considerations">6.5.12. Wireless Protocol Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#getting-started">6.5.13. Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../devices/connectivity_devices.html#next-steps">6.5.14. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../devices/index.html#device-families-at-a-glance">6.6. Device Families at a Glance</a></li>
@@ -976,13 +978,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="non_npu_deployment.html#next-steps">9.3.17. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#deployment-overview">9.4. Deployment Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#prerequisites">9.5. Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#output-file-locations">9.6. Output File Locations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ccs-example-project-locations">9.7. CCS Example Project Locations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#task-type-specific-deployment-notes">9.8. Task-Type-Specific Deployment Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-multiple-cases">9.9. Testing Multiple Cases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#model-compilation-details">9.10. Model Compilation Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-devices">9.4. Supported Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deployment-overview">9.5. Deployment Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">9.6. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-file-locations">9.7. Output File Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ccs-example-project-locations">9.8. CCS Example Project Locations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-type-specific-deployment-notes">9.9. Task-Type-Specific Deployment Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing-multiple-cases">9.10. Testing Multiple Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-compilation-details">9.11. Model Compilation Details</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../model_composer/index.html">10. Edge AI Studio Model Composer</a><ul>
@@ -1257,58 +1260,9 @@ using Code Composer Studio (CCS).</p>
 </li>
 </ul>
 </div>
-<section id="deployment-overview">
-<h2><span class="section-number">9.4. </span>Deployment Overview<a class="headerlink" href="#deployment-overview" title="Link to this heading"></a></h2>
-<p>After training and compilation, Tiny ML Tensorlab produces artifacts that you
-can integrate into your CCS project:</p>
-<p><strong>Output Artifacts</strong></p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 30.0%" />
-<col style="width: 70.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>File</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mod.a</span></code></p></td>
-<td><p>Compiled model library (ONNX model compiled by TI MCU NNC into C code,
-packaged as a static library)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code></p></td>
-<td><p>Header file with model inference API exposed by <code class="docutils literal notranslate"><span class="pre">mod.a</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_vector.c</span></code></p></td>
-<td><p>Golden test vectors (input + expected output) for on-device validation</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_input_config.h</span></code></p></td>
-<td><p>Feature extraction configuration (preprocessing flags and parameters)</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Deployment Steps</strong></p>
-<ol class="arabic simple">
-<li><p>Train and compile your model using Tiny ML Tensorlab</p></li>
-<li><p>Open Code Composer Studio</p></li>
-<li><p>Import the SDK example project for your target device and task type</p></li>
-<li><p>Copy the four output files from ModelMaker to the CCS project</p></li>
-<li><p>Build, flash, and debug</p></li>
-</ol>
-<p>The specific steps vary depending on whether your device has an NPU:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="npu_device_deployment.html"><span class="doc">NPU Device Deployment</span></a> - For F28P55x, AM13E2x, MSPM0G5187</p></li>
-<li><p><a class="reference internal" href="non_npu_deployment.html"><span class="doc">Non-NPU Deployment</span></a> - For all other devices</p></li>
-</ul>
-</section>
-<section id="prerequisites">
-<h2><span class="section-number">9.5. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
-<p><strong>Code Composer Studio (CCS)</strong></p>
-<p>Download from <a class="reference external" href="https://www.ti.com/tool/CCSTUDIO">https://www.ti.com/tool/CCSTUDIO</a>. Version 20.2.0 or later
-is recommended.</p>
+<section id="supported-devices">
+<h2><span class="section-number">9.4. </span>Supported Devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <p><strong>Device-Specific SDKs</strong></p>
-<p>After installing CCS, install the appropriate SDK for your target device:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 20.0%" />
@@ -1355,6 +1309,12 @@ is recommended.</p>
 <td><p>MCU-PLUS-SDK</p></td>
 <td><p>11.03.00.00</p></td>
 <td><p><a class="reference external" href="https://www.ti.com/tool/MCU-PLUS-SDK-AM263X">MCU-PLUS-SDK-AM263X</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Connectivity</p></td>
+<td><p>CC2755, CC1352, CC1354, CC35X1</p></td>
+<td><p>SimpleLink SDK</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/tool/SIMPLELINK-LOWPOWER-F3-SDK">SimpleLink</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1414,11 +1374,84 @@ is recommended.</p>
 <td><p><a class="reference external" href="https://www.ti.com/product/AM2634">AM2634</a></p></td>
 <td><p>No</p></td>
 </tr>
+<tr class="row-even"><td><p>CC2755</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/CC2755">CC2755</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>CC1352</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/CC1352R">CC1352</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>CC1354</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/CC1354R7">CC1354</a></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>CC35X1</p></td>
+<td><p>–</p></td>
+<td><p><a class="reference external" href="https://www.ti.com/product/CC3511">CC35X1</a></p></td>
+<td><p>No</p></td>
+</tr>
 </tbody>
 </table>
 </section>
+<section id="deployment-overview">
+<h2><span class="section-number">9.5. </span>Deployment Overview<a class="headerlink" href="#deployment-overview" title="Link to this heading"></a></h2>
+<p>After training and compilation, Tiny ML Tensorlab produces artifacts that you
+can integrate into your CCS project:</p>
+<p><strong>Output Artifacts</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mod.a</span></code></p></td>
+<td><p>Compiled model library (ONNX model compiled by TI MCU NNC into C code,
+packaged as a static library)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code></p></td>
+<td><p>Header file with model inference API exposed by <code class="docutils literal notranslate"><span class="pre">mod.a</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_vector.c</span></code></p></td>
+<td><p>Golden test vectors (input + expected output) for on-device validation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_input_config.h</span></code></p></td>
+<td><p>Feature extraction configuration (preprocessing flags and parameters)</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Deployment Steps</strong></p>
+<ol class="arabic simple">
+<li><p>Train and compile your model using Tiny ML Tensorlab</p></li>
+<li><p>Open Code Composer Studio</p></li>
+<li><p>Import the SDK example project for your target device and task type</p></li>
+<li><p>Copy the four output files from ModelMaker to the CCS project</p></li>
+<li><p>Build, flash, and debug</p></li>
+</ol>
+<p>The specific steps vary depending on whether your device has an NPU:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="npu_device_deployment.html"><span class="doc">NPU Device Deployment</span></a> - For F28P55x, AM13E2x, MSPM0G5187</p></li>
+<li><p><a class="reference internal" href="non_npu_deployment.html"><span class="doc">Non-NPU Deployment</span></a> - For all other devices</p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<h2><span class="section-number">9.6. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p><strong>Code Composer Studio (CCS)</strong></p>
+<p>Download from <a class="reference external" href="https://www.ti.com/tool/CCSTUDIO">https://www.ti.com/tool/CCSTUDIO</a>. Version 20.2.0 or later
+is recommended.</p>
+<p>Install support for your target device family during CCS setup, and then
+install the appropriate SDK listed in the <a class="reference internal" href="#supported-devices">Supported Devices</a> table above.</p>
+</section>
 <section id="output-file-locations">
-<h2><span class="section-number">9.6. </span>Output File Locations<a class="headerlink" href="#output-file-locations" title="Link to this heading"></a></h2>
+<h2><span class="section-number">9.7. </span>Output File Locations<a class="headerlink" href="#output-file-locations" title="Link to this heading"></a></h2>
 <p>After ModelMaker runs, the four deployment files are located in:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/
 ├── compilation/
@@ -1452,7 +1485,7 @@ is recommended.</p>
 </div>
 </section>
 <section id="ccs-example-project-locations">
-<h2><span class="section-number">9.7. </span>CCS Example Project Locations<a class="headerlink" href="#ccs-example-project-locations" title="Link to this heading"></a></h2>
+<h2><span class="section-number">9.8. </span>CCS Example Project Locations<a class="headerlink" href="#ccs-example-project-locations" title="Link to this heading"></a></h2>
 <p>TI provides ready-to-use CCS example projects for each task type. The example
 project location depends on your device family:</p>
 <p><strong>C2000Ware (F28x devices):</strong></p>
@@ -1475,7 +1508,7 @@ project location depends on your device family:</p>
 (e.g., <code class="docutils literal notranslate"><span class="pre">f28p55x/</span></code>, <code class="docutils literal notranslate"><span class="pre">f28004x/</span></code>, <code class="docutils literal notranslate"><span class="pre">f29h85x/</span></code>).</p>
 </section>
 <section id="task-type-specific-deployment-notes">
-<h2><span class="section-number">9.8. </span>Task-Type-Specific Deployment Notes<a class="headerlink" href="#task-type-specific-deployment-notes" title="Link to this heading"></a></h2>
+<h2><span class="section-number">9.9. </span>Task-Type-Specific Deployment Notes<a class="headerlink" href="#task-type-specific-deployment-notes" title="Link to this heading"></a></h2>
 <p>The deployment workflow is the same for all task types, but the CCS example
 project names and verification differ:</p>
 <p><strong>Classification</strong></p>
@@ -1519,7 +1552,7 @@ optimal k value for your application.</p>
 </ul>
 </section>
 <section id="testing-multiple-cases">
-<h2><span class="section-number">9.9. </span>Testing Multiple Cases<a class="headerlink" href="#testing-multiple-cases" title="Link to this heading"></a></h2>
+<h2><span class="section-number">9.10. </span>Testing Multiple Cases<a class="headerlink" href="#testing-multiple-cases" title="Link to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">test_vector.c</span></code> file contains multiple test cases (SET 0, SET 1, etc.).
 To test different cases:</p>
 <ol class="arabic simple">
@@ -1531,7 +1564,7 @@ To test different cases:</p>
 </ol>
 </section>
 <section id="model-compilation-details">
-<h2><span class="section-number">9.10. </span>Model Compilation Details<a class="headerlink" href="#model-compilation-details" title="Link to this heading"></a></h2>
+<h2><span class="section-number">9.11. </span>Model Compilation Details<a class="headerlink" href="#model-compilation-details" title="Link to this heading"></a></h2>
 <p>The ONNX model produced by training is compiled using
 <a class="reference external" href="https://software-dl.ti.com/mctools/nnc/mcu/users_guide/">TI MCU NNC</a>
 to generate <code class="docutils literal notranslate"><span class="pre">mod.a</span></code> and <code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code>. The compilation command
@@ -1568,7 +1601,7 @@ for all compilation options.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Feb 24, 2026.
+      <span class="lastupdated">Last updated on Feb 25, 2026.
       </span></p>
   </div>
 

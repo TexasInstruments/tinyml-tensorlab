@@ -71,7 +71,7 @@ General project settings.
 * MSPM33C: MSPM33C32, MSPM33C34
 * AM13: AM13E2
 * AM26x: AM263, AM263P, AM261
-* Connectivity: CC2755, CC1352
+* Connectivity: CC2755, CC1352, CC1354, CC35X1
 
 Dataset Section
 ---------------

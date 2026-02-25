@@ -46,6 +46,22 @@ Supported Devices
    * - CC1352
      - Cortex-M4 (48 MHz)
      - Sub-GHz, Bluetooth 5.0 LE, multi-protocol
+   * - CC1354
+     - Cortex-M33
+     - Sub-GHz, Bluetooth 5.2 LE
+
+**SimpleLink CC35xx Family**
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Device
+     - Core
+     - Features
+   * - CC35X1
+     - Cortex-M4
+     - Wi-Fi
 
 CC2755
 ------
@@ -107,6 +123,58 @@ Multi-band wireless MCU for Sub-GHz and Bluetooth applications.
 
    training:
      model_name: 'CLS_1k'  # Small models
+
+CC1354
+------
+
+Sub-GHz and Bluetooth wireless MCU with Cortex-M33 core.
+
+**Key Features:**
+
+* Arm Cortex-M33 core
+* Sub-GHz radio
+* Bluetooth 5.2 LE
+* Low power operation
+
+**ML Capabilities:**
+
+* CPU-based inference (no NPU)
+* Suitable for small to medium models
+
+**Configuration:**
+
+.. code-block:: yaml
+
+   common:
+     target_device: 'CC1354'
+
+   training:
+     model_name: 'CLS_2k'
+
+CC35X1
+------
+
+Wi-Fi enabled wireless MCU.
+
+**Key Features:**
+
+* Arm Cortex-M4 core
+* Wi-Fi connectivity
+
+**ML Capabilities:**
+
+* CPU-based inference (no NPU)
+* Suitable for small models
+
+**Configuration:**
+
+.. code-block:: yaml
+
+   common:
+     target_device: 'CC35X1'
+
+   training:
+     model_name: 'CLS_2k'
 
 AM26x Family
 ------------
@@ -290,6 +358,14 @@ Connectivity devices have varying memory:
      - 352 KB
      - 80 KB
      - Up to CLS_2k
+   * - CC1354
+     - 1 MB
+     - 256 KB
+     - Up to CLS_4k
+   * - CC35X1
+     - 512 KB
+     - 128 KB
+     - Up to CLS_2k
    * - AM263
      - 2 MB
      - 512 KB
@@ -334,14 +410,17 @@ Choose protocol based on application needs:
      - Device
      - Best For
    * - Bluetooth LE
-     - CC2755, CC1352
+     - CC2755, CC1352, CC1354
      - Short range, smartphone integration
    * - Thread/Zigbee
      - CC2755
      - Home automation mesh
    * - Sub-GHz
-     - CC1352
+     - CC1352, CC1354
      - Long range, building penetration
+   * - Wi-Fi
+     - CC35X1
+     - IP connectivity, cloud integration
    * - Industrial Ethernet
      - AM26x
      - Factory automation, real-time
