@@ -7,14 +7,17 @@ Welcome to the **Tiny ML ModelZoo** - Texas Instruments' central repository for 
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Supported Target Devices](#supported-target-devices)
 - [Quick Start](#quick-start)
 - [Supported Task Categories](#supported-task-categories)
 - [Example Applications](#example-applications)
   - [Generic Timeseries Applications](#generic-timeseries-applications)
   - [Application-Specific Examples](#application-specific-examples)
+  - [Detailed Examples by Task Type](#detailed-examples-by-task-type)
 - [Available Models](#available-models)
 - [Adding New Models](#adding-new-models)
 - [Additional Resources](#additional-resources)
+- [License](#license)
 
 ---
 
@@ -50,6 +53,64 @@ tinyml-modelzoo/
 ├── run_tinyml_modelzoo.bat       # Training wrapper (Windows)
 └── ADDING_NEW_MODELS.md   # Guide for adding custom models
 ```
+
+---
+
+## Supported Target Devices
+
+### C2000 DSP Family (Texas Instruments)
+
+| Device | NPU | Description | Notes |
+|--------|-----|-------------|-------|
+| F28P55 | Yes | C2000 32-bit MCU | Recommended for complex models |
+| F28P65 | No | C2000 32-bit MCU, 150 MHz | High performance |
+| F29H85 | No | C2000 64-bit MCU with C29x core | High capacity |
+| F29P58 | No | C2000 64-bit MCU with C29x core | High capacity |
+| F29P32 | No | C2000 64-bit MCU with C29x core | High capacity |
+| F2837 | No | C2000 32-bit dual-core MCU, 200 MHz | General purpose |
+| F28003 | No | C2000 32-bit MCU, 100 MHz | Cost-optimized |
+| F28004 | No | C2000 32-bit MCU, 100 MHz | Cost-optimized |
+| F280013 | No | C2000 32-bit MCU, 100 MHz | Entry-level |
+| F280015 | No | C2000 32-bit MCU, 120 MHz | Entry-level |
+
+### MSPM0 Family (Arm Cortex-M0+)
+
+| Device | NPU | Description | Notes |
+|--------|-----|-------------|-------|
+| MSPM0G3507 | No | 80 MHz Arm Cortex-M0+ | Ultra-low power, classification only |
+| MSPM0G3519 | No | 80 MHz Arm Cortex-M0+ | Ultra-low power |
+| MSPM0G5187 | Yes | 80 MHz Arm Cortex-M0+ | Ultra-low power, NPU-accelerated |
+
+### MSPM33C Family (Arm Cortex-M33)
+
+| Device | NPU | Description | Notes |
+|--------|-----|-------------|-------|
+| MSPM33C32 | No | 160 MHz Arm Cortex-M33, TrustZone | 1MB flash, 256kB SRAM |
+| MSPM33C34 | No | 160 MHz Arm Cortex-M33 | High performance |
+
+
+### AM13 Family (Arm Cortex-M33)
+
+| Device | NPU | Description        | Notes                     |
+|--------|-----|--------------------|---------------------------|
+| AM13E2 | Yes | Arm Cortex-M33 MCU | NPU-accelerated |
+
+### AM26x Family (Arm Cortex-R5)
+
+| Device | NPU | Description | Notes |
+|--------|-----|-------------|-------|
+| AM263 | No | Quad-core Arm Cortex-R5F, 400 MHz | High performance |
+| AM263P | No | Quad-core Arm Cortex-R5F, 400 MHz | High performance |
+| AM261 | No | Single-core Arm Cortex-R5F, 400 MHz | Cost-optimized |
+
+### Connectivity Devices (Wireless)
+
+| Device | NPU | Description | Notes |
+|--------|-----|-------------|-------|
+| CC2755 | No | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
+| CC1352 | No | Arm Cortex-M4 wireless MCU | Sub-1GHz and 2.4GHz |
+| CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz and 2.4GHz |
+| CC35X1 | No | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
 
 ---
 
@@ -394,64 +455,6 @@ Key steps:
 - [Edge AI Studio Model Composer](https://dev.ti.com/modelcomposer/) - No-code GUI for model development
 - [Understanding the Config File](../tinyml-modelmaker/docs/UnderstandingConfigFile.md)
 - [Dataset Format Guide](../tinyml-modelmaker/docs/DatasetFormat_Timeseries_Classification.md)
-
----
-
-## Supported Target Devices
-
-### C2000 DSP Family (Texas Instruments)
-
-| Device | NPU | Description | Notes |
-|--------|-----|-------------|-------|
-| F28P55 | Yes | C2000 32-bit MCU | Recommended for complex models |
-| F28P65 | No | C2000 32-bit MCU, 150 MHz | High performance |
-| F29H85 | No | C2000 64-bit MCU with C29x core | High capacity |
-| F29P58 | No | C2000 64-bit MCU with C29x core | High capacity |
-| F29P32 | No | C2000 64-bit MCU with C29x core | High capacity |
-| F2837 | No | C2000 32-bit dual-core MCU, 200 MHz | General purpose |
-| F28003 | No | C2000 32-bit MCU, 100 MHz | Cost-optimized |
-| F28004 | No | C2000 32-bit MCU, 100 MHz | Cost-optimized |
-| F280013 | No | C2000 32-bit MCU, 100 MHz | Entry-level |
-| F280015 | No | C2000 32-bit MCU, 120 MHz | Entry-level |
-
-### MSPM0 Family (Arm Cortex-M0+)
-
-| Device | NPU | Description | Notes |
-|--------|-----|-------------|-------|
-| MSPM0G3507 | No | 80 MHz Arm Cortex-M0+ | Ultra-low power, classification only |
-| MSPM0G3519 | No | 80 MHz Arm Cortex-M0+ | Ultra-low power |
-| MSPM0G5187 | Yes | 80 MHz Arm Cortex-M0+ | Ultra-low power, NPU-accelerated |
-
-### MSPM33C Family (Arm Cortex-M33)
-
-| Device | NPU | Description | Notes |
-|--------|-----|-------------|-------|
-| MSPM33C32 | No | 160 MHz Arm Cortex-M33, TrustZone | 1MB flash, 256kB SRAM |
-| MSPM33C34 | No | 160 MHz Arm Cortex-M33 | High performance |
-
-
-### AM13 Family (Arm Cortex-M33)
-
-| Device | NPU | Description        | Notes                     |
-|--------|-----|--------------------|---------------------------|
-| AM13E2 | Yes | Arm Cortex-M33 MCU | NPU-accelerated |
-
-### AM26x Family (Arm Cortex-R5)
-
-| Device | NPU | Description | Notes |
-|--------|-----|-------------|-------|
-| AM263 | No | Quad-core Arm Cortex-R5F, 400 MHz | High performance |
-| AM263P | No | Quad-core Arm Cortex-R5F, 400 MHz | High performance |
-| AM261 | No | Single-core Arm Cortex-R5F, 400 MHz | Cost-optimized |
-
-### Connectivity Devices (Wireless)
-
-| Device | NPU | Description | Notes |
-|--------|-----|-------------|-------|
-| CC2755 | No | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
-| CC1352 | No | Arm Cortex-M4 wireless MCU | Sub-1GHz and 2.4GHz |
-| CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz and 2.4GHz |
-| CC35X1 | No | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
 
 ---
 
