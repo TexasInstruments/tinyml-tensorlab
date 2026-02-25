@@ -162,7 +162,7 @@ The table below summarizes the resource usage for each model across various targ
   <p>
     Below is the <b>Cycles vs. Total Memory Usage</b> plot for all generic models across <b>C28 (soft and hard)</b>:
   </p>
-  <img src="./graphs/cycles_vs_memory_usage_plots/generic_c28_total_memory_vs_cycles.png" alt="generic_c28_total_memory_vs_cycles" style="width: 80vw;">
+  <img src="graphs/cycles_vs_memory_usage_plots/generic_c28_total_memory_vs_cycles.png" alt="generic_c28_total_memory_vs_cycles" style="width: 80vw;">
   <p>
   <br>
     <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/misc/generic_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Generic Models Across All Target Devices</a></b>
@@ -390,7 +390,7 @@ The table below summarizes the resource usage for each model across various targ
   <p>
     Below is the <b>Cycles vs. Total Memory Usage</b> plot for all generic models across <b>C28 (soft and hard)</b>:
   </p>
-  <img src="./graphs/cycles_vs_memory_usage_plots/motorfault_c28_total_memory_vs_cycles.png" alt="motorfault_c28_total_memory_vs_cycles" style="width: 80vw;">
+  <img src="graphs/cycles_vs_memory_usage_plots/motorfault_c28_total_memory_vs_cycles.png" alt="motorfault_c28_total_memory_vs_cycles" style="width: 80vw;">
   <p>
   <br>
     <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/misc/motor_fault_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Motor Fault GUI Models Across All Target Devices</a></b>
@@ -492,7 +492,7 @@ The table below summarizes the resource usage for each model across various targ
   <p>
     Below is the <b>Cycles vs. Total Memory Usage</b> plot for all generic models across <b>C28 (soft and hard)</b>:
   </p>
-  <img src="./graphs/cycles_vs_memory_usage_plots/arcFault_c28_total_memory_vs_cycles.png" alt="arcFault_c28_total_memory_vs_cycles" style="width: 80vw;">
+  <img src="graphs/cycles_vs_memory_usage_plots/arcFault_c28_total_memory_vs_cycles.png" alt="arcFault_c28_total_memory_vs_cycles" style="width: 80vw;">
   <p>
   <br>
     <b> If you need similar graphs for other target devices, you can click this link here: <a href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/misc/arc_fault_cycles_vs_mem_usage.html">Cycles vs. Total Memory Usage of Arc Fault GUI Models Across All Target Devices</a></b>
