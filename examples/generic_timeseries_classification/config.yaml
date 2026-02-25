@@ -2,7 +2,7 @@ common:
   task_type: generic_timeseries_classification
   target_device: F28P55
 dataset:
-  dataset_name: hello_world_example_dsg
+  dataset_name: generic_timeseries_classification
 data_processing_feature_extraction:
   feature_extraction_name: Generic_1024Input_FFTBIN_64Feature_8Frame
 #    feature_extraction_name: Generic_512Input_FFTBIN_32Feature_8Frame
