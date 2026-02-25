@@ -375,6 +375,24 @@ live_capture_example:
       transport:
         baudRate: 5820000
   ecg_classification:
+    MSPM0G3507:
+      ccsProj: ecg_anomaly_detection_data_capture_LP_MSPM0G3507_nortos_ticlang
+      deviceName: MSPM0G3507
+      files: []
+      from: examples/nortos/LP_MSPM0G3507/edgeAI/ecg_anomaly_detection_data_capture/ticlang/ecg_anomaly_detection_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G3507.ccxml
+      transport:
+        baudRate: 115200
+    MSPM0G3519:
+      ccsProj: ecg_anomaly_detection_data_capture_LP_MSPM0G3519_nortos_ticlang
+      deviceName: MSPM0G3519
+      files: []
+      from: examples/nortos/LP_MSPM0G3519/edgeAI/ecg_anomaly_detection_data_capture/ticlang/ecg_anomaly_detection_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G3519.ccxml
+      transport:
+        baudRate: 115200
     MSPM0G5187:
       ccsProj: ecg_anomaly_detection_data_capture_LP_MSPM0G5187_nortos_ticlang
       deviceName: MSPM0G5187
@@ -385,6 +403,15 @@ live_capture_example:
       transport:
         baudRate: 115200
   generic_timeseries_classification:
+    MSPM0G3507:
+      ccsProj: timeseries_data_capture_LP_MSPM0G3507_nortos_ticlang
+      deviceName: MSPM0G3507
+      files: []
+      from: examples/nortos/LP_MSPM0G3507/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G3507.ccxml
+      transport:
+        baudRate: 115200
     MSPM0G5187:
       ccsProj: timeseries_data_capture_LP_MSPM0G5187_nortos_ticlang
       deviceName: MSPM0G5187
@@ -404,6 +431,24 @@ live_capture_example:
       targetCfg: targetConfigs/TMS320F28P550SJ9_LaunchPad.ccxml
       transport:
         baudRate: 2343750
+    MSPM0G3507:
+      ccsProj: motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang
+      deviceName: MSPM0G3507
+      files: []
+      from: examples/nortos/LP_MSPM0G3507/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G3507.ccxml
+      transport:
+        baudRate: 115200
+    MSPM0G3519:
+      ccsProj: motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang
+      deviceName: MSPM0G3519
+      files: []
+      from: examples/nortos/LP_MSPM0G3519/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G3519.ccxml
+      transport:
+        baudRate: 115200
     MSPM0G5187:
       ccsProj: motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang
       deviceName: MSPM0G5187
@@ -448,6 +493,24 @@ live_capture_example:
       from: examples/rtos/LP_EM_CC35X1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang.projectspec
       pkgId: SIMPLELINK-WIFI-SDK
       targetCfg: targetConfigs/CC3551E.ccxml
+      transport:
+        baudRate: 115200
+    MSPM0G3507:
+      ccsProj: pir_detection_data_capture_LP_MSPM0G3507_nortos_ticlang
+      deviceName: MSPM0G3507
+      files: []
+      from: examples/nortos/LP_MSPM0G3507/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G3507.ccxml
+      transport:
+        baudRate: 115200
+    MSPM0G3519:
+      ccsProj: pir_detection_data_capture_LP_MSPM0G3519_nortos_ticlang
+      deviceName: MSPM0G3519
+      files: []
+      from: examples/nortos/LP_MSPM0G3519/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G3519.ccxml
       transport:
         baudRate: 115200
     MSPM0G5187:
@@ -530,7 +593,7 @@ live_preview_example:
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
-        baudRate: 115200
+        baudRate: 5820000
   ecg_classification:
     MSPM0G5187:
       ccsProj: ecg_anomaly_detection_live_preview_LP_MSPM0G5187_nortos_ticlang
