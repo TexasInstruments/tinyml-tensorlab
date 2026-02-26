@@ -43,7 +43,8 @@ class ConfigDict(dict):
         settings_file = None
         if isinstance(input, str):
             ext = os.path.splitext(input)[1]
-            assert ext == '.yaml', f'unrecognized file type for: {input}'
+            if ext != '.yaml':
+                raise ValueError(f'unrecognized file type for: {input}')
             with open(input) as fp:
                 input_dict = yaml.safe_load(fp)
             #
@@ -51,7 +52,7 @@ class ConfigDict(dict):
         elif isinstance(input, dict):
             input_dict = input
         elif input is not None:
-            assert False, 'got invalid input'
+            raise TypeError('got invalid input')
         #
         # override the entries with args
         for value in args:
