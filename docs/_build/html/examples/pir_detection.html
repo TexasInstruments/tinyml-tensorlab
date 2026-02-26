@@ -623,10 +623,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="ecg_classification.html">7.7.14. ECG Classification</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#overview">7.7.14.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#configuration">7.7.14.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#running-the-example">7.7.14.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#key-performance-targets">7.7.14.2. Key Performance Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#system-components">7.7.14.3. System Components</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#dataset-details">7.7.14.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#see-also">7.7.14.5. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#feature-extraction">7.7.14.5. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#model">7.7.14.6. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#training-configuration">7.7.14.7. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#configuration-mspm0">7.7.14.8. Configuration (MSPM0)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#running-the-example">7.7.14.9. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#available-configurations">7.7.14.10. Available Configurations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#anomaly-detection-mode">7.7.14.11. Anomaly Detection Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#references">7.7.14.12. References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#see-also">7.7.14.13. See Also</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="nilm_classification.html">7.7.15. NILM Appliance Usage Classification</a><ul>
@@ -641,11 +649,15 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">7.7.16. PIR Detection</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#overview">7.7.16.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#configuration">7.7.16.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#running-the-example">7.7.16.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#dataset-details">7.7.16.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#recommended-devices">7.7.16.5. Recommended Devices</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#see-also">7.7.16.6. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#device-support">7.7.16.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#system-components">7.7.16.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-the-example">7.7.16.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dataset-description">7.7.16.5. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#feature-extraction-pipeline">7.7.16.6. Feature Extraction Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#model">7.7.16.7. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#expected-results">7.7.16.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#training-configuration">7.7.16.9. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#references">7.7.16.10. References</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="grid_fault_detection.html">7.7.17. Grid Fault Detection</a><ul>
@@ -771,12 +783,16 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="mnist_image_classification.html">7.7.27. MNIST Image Classification</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#overview">7.7.27.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#configuration">7.7.27.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#running-the-example">7.7.27.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#dataset-details">7.7.27.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#model-architecture">7.7.27.5. Model Architecture</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#memory-requirements">7.7.27.6. Memory Requirements</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#see-also">7.7.27.7. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#key-targets">7.7.27.2. Key Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#system-components">7.7.27.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#running-the-example">7.7.27.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#dataset">7.7.27.5. Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#feature-extraction">7.7.27.6. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#model-architecture">7.7.27.7. Model Architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#training-configuration">7.7.27.8. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#expected-results">7.7.27.9. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#supported-devices">7.7.27.10. Supported Devices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#references">7.7.27.11. References</a></li>
 </ul>
 </li>
 </ul>
@@ -1198,77 +1214,220 @@ document.addEventListener('DOMContentLoaded', function() {
              
   <section id="pir-detection">
 <h1><span class="section-number">7.7.16. </span>PIR Detection<a class="headerlink" href="#pir-detection" title="Link to this heading"></a></h1>
-<p>Detect presence and motion using PIR sensor data.</p>
+<p>Edge AI solution for PIR sensor-based motion classification on the MSPM0G5187
+with NPU acceleration.</p>
 <section id="overview">
 <h2><span class="section-number">7.7.16.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
-<p>This example demonstrates presence and motion detection using Passive Infrared
-(PIR) sensor data. Unlike simple threshold-based detection, this ML approach
-can distinguish between different types of motion and reduce false positives.</p>
-<p><strong>Application</strong>: Security systems, occupancy sensing, smart lighting, IoT</p>
+<p>This example demonstrates an Edge AI solution for classifying Passive Infrared
+(PIR) sensor signals into motion categories. By leveraging machine learning on
+the MSPM0G5187 with its integrated NPU, the system can distinguish between
+different types of motion, significantly reducing false positives caused by
+pets and environmental factors.</p>
+<p><strong>Application</strong>: Security systems, smart home automation, occupancy sensing</p>
 <p><strong>Task Type</strong>: Time Series Classification</p>
-<p><strong>Data Type</strong>: Multivariate (PIR sensor readings)</p>
+<p><strong>Data Type</strong>: Multivariate (PIR sensor signals)</p>
 </section>
-<section id="configuration">
-<h2><span class="section-number">7.7.16.2. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">target_module</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;timeseries&#39;</span>
-<span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;generic_timeseries_classification&#39;</span>
-<span class="w">  </span><span class="nt">target_device</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CC2755&#39;</span><span class="w">  </span><span class="c1"># Optimized for wireless PIR applications</span>
-
-<span class="nt">dataset</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pir_detection&#39;</span>
-
-<span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;PIRDetection_model_1_t&#39;</span>
-<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
-<span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span>
-
-<span class="nt">testing</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="nt">compilation</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-</pre></div>
-</div>
+<section id="device-support">
+<h2><span class="section-number">7.7.16.2. </span>Device Support<a class="headerlink" href="#device-support" title="Link to this heading"></a></h2>
+<p>The primary target device is the <strong>MSPM0G5187</strong>. The following devices are also
+fully supported:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Device</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Configuration File</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MSPM0G5187</span></code></p></td>
+<td><p>MSPM0 with NPU (primary)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config_MSPM0.yaml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CC2755</span></code></p></td>
+<td><p>Wireless MCU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config.yaml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CC1352</span></code></p></td>
+<td><p>Multi-protocol wireless MCU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config_CC1352.yaml</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CC1354</span></code></p></td>
+<td><p>Sub-GHz + BLE MCU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config_CC1354.yaml</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CC35X1</span></code></p></td>
+<td><p>Wi-Fi MCU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">config_CC35X1.yaml</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Check the <code class="docutils literal notranslate"><span class="pre">config_&lt;device&gt;.yaml</span></code> files for device-specific configurations.</p>
+</section>
+<section id="system-components">
+<h2><span class="section-number">7.7.16.3. </span>System Components<a class="headerlink" href="#system-components" title="Link to this heading"></a></h2>
+<p><strong>Hardware</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.ti.com/product/MSPM0G5187">MSPM0G5187</a> with integrated NPU</p></li>
+<li><p>EdgeAI Sensor Boosterpack (<a class="reference external" href="https://www.ti.com/tool/TIDA-010997">TIDA-010997</a>) with PIR sensor</p></li>
+</ul>
+<p><strong>Software</strong></p>
+<ul class="simple">
+<li><p>Code Composer Studio (CCS) 12.x or later</p></li>
+<li><p>MSPM0 SDK 2.08.00 or later (<a class="reference external" href="https://www.ti.com/tool/MSPM0-SDK">MSPM0-SDK</a>)</p></li>
+<li><p>TI Edge AI Studio</p></li>
+</ul>
 </section>
 <section id="running-the-example">
-<h2><span class="section-number">7.7.16.3. </span>Running the Example<a class="headerlink" href="#running-the-example" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.16.4. </span>Running the Example<a class="headerlink" href="#running-the-example" title="Link to this heading"></a></h2>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>tinyml-modelzoo
+<span class="c1"># Run with MSPM0 configuration (primary)</span>
+./run_tinyml_modelzoo.sh<span class="w"> </span>examples/pir_detection/config_MSPM0.yaml
+
+<span class="c1"># Run with other device configurations</span>
 ./run_tinyml_modelzoo.sh<span class="w"> </span>examples/pir_detection/config.yaml
+./run_tinyml_modelzoo.sh<span class="w"> </span>examples/pir_detection/config_CC1352.yaml
+./run_tinyml_modelzoo.sh<span class="w"> </span>examples/pir_detection/config_CC1354.yaml
+./run_tinyml_modelzoo.sh<span class="w"> </span>examples/pir_detection/config_CC35X1.yaml
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd </span><span class="n">tinyml-modelzoo</span>
-<span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">pir_detection</span><span class="p">\</span><span class="n">config</span><span class="p">.</span><span class="n">yaml</span>
+<span class="c"># Run with MSPM0 configuration (primary)</span>
+<span class="p">.\</span><span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">pir_detection</span><span class="p">\</span><span class="n">config_MSPM0</span><span class="p">.</span><span class="n">yaml</span>
+
+<span class="c"># Run with other device configurations</span>
+<span class="p">.\</span><span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">pir_detection</span><span class="p">\</span><span class="n">config</span><span class="p">.</span><span class="n">yaml</span>
+<span class="p">.\</span><span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">pir_detection</span><span class="p">\</span><span class="n">config_CC1352</span><span class="p">.</span><span class="n">yaml</span>
+<span class="p">.\</span><span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">pir_detection</span><span class="p">\</span><span class="n">config_CC1354</span><span class="p">.</span><span class="n">yaml</span>
+<span class="p">.\</span><span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">pir_detection</span><span class="p">\</span><span class="n">config_CC35X1</span><span class="p">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
 </div></div>
 </section>
-<section id="dataset-details">
-<h2><span class="section-number">7.7.16.4. </span>Dataset Details<a class="headerlink" href="#dataset-details" title="Link to this heading"></a></h2>
-<p><strong>Input Variables</strong>:</p>
-<ul class="simple">
-<li><p>PIR sensor analog readings</p></li>
-<li><p>Multiple PIR channels (if available)</p></li>
-</ul>
-<p><strong>Classes</strong>:</p>
-<ul class="simple">
-<li><p>No presence</p></li>
-<li><p>Presence detected</p></li>
-<li><p>Motion detected (optional sub-classes)</p></li>
-</ul>
+<section id="dataset-description">
+<h2><span class="section-number">7.7.16.5. </span>Dataset Description<a class="headerlink" href="#dataset-description" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">pir_detection_classification</span></code> dataset contains PIR sensor data captured
+using the EdgeAI Sensor Boosterpack from a range of 6-8 meters.</p>
+<p><strong>Download</strong>: <a class="reference external" href="https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip">pir_detection_classification_dsk.zip</a></p>
+<p><strong>Classes</strong> (3):</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Human Motion</p></td>
+<td><p>Motion patterns produced by humans</p></td>
+</tr>
+<tr class="row-odd"><td><p>Background Motion</p></td>
+<td><p>Environmental and non-living motion sources</p></td>
+</tr>
+<tr class="row-even"><td><p>Dog Motion</p></td>
+<td><p>Motion patterns produced by dogs</p></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="recommended-devices">
-<h2><span class="section-number">7.7.16.5. </span>Recommended Devices<a class="headerlink" href="#recommended-devices" title="Link to this heading"></a></h2>
-<p>This example is optimized for TI’s connectivity devices:</p>
+<section id="feature-extraction-pipeline">
+<h2><span class="section-number">7.7.16.6. </span>Feature Extraction Pipeline<a class="headerlink" href="#feature-extraction-pipeline" title="Link to this heading"></a></h2>
+<p>The feature extraction pipeline processes raw PIR sensor data through the
+following stages:</p>
+<ol class="arabic simple">
+<li><p><strong>ADC Sampling</strong> – Raw sensor data acquisition</p></li>
+<li><p><strong>DC Offset Removal</strong> – Removes baseline drift from the signal</p></li>
+<li><p><strong>Windowed Processing</strong> – Segments the signal into analysis windows</p></li>
+<li><p><strong>Symmetric Mirroring</strong> – Prepares the signal for FFT computation</p></li>
+<li><p><strong>FFT Computation</strong> – Transforms signal to frequency domain</p></li>
+<li><p><strong>Magnitude Calculation</strong> – Computes spectral magnitudes</p></li>
+<li><p><strong>Average Pooling</strong> – Reduces dimensionality of frequency features</p></li>
+<li><p><strong>Additional Features</strong> – Extracts supplementary features:</p>
 <ul class="simple">
-<li><p><strong>CC2755</strong>: Wireless MCU with Cortex-M33</p></li>
-<li><p><strong>CC1352</strong>: Multi-protocol wireless MCU</p></li>
-<li><p><strong>CC1354</strong>: Sub-GHz + Bluetooth 5.2 LE MCU</p></li>
-<li><p><strong>CC35X1</strong>: Wi-Fi MCU</p></li>
+<li><p>Zero Crossing Rate (ZCR)</p></li>
+<li><p>Slope Changes</p></li>
+<li><p>Dominant Frequency</p></li>
 </ul>
+</li>
+<li><p><strong>Feature Concatenation</strong> – Combines all features into the final input vector</p></li>
+</ol>
 </section>
-<section id="see-also">
-<h2><span class="section-number">7.7.16.6. </span>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<section id="model">
+<h2><span class="section-number">7.7.16.7. </span>Model<a class="headerlink" href="#model" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 20.0%" />
+<col style="width: 45.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Parameters</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PIRDetection_model_1_t</span></code> (Default)</p></td>
+<td><p>~53K+</p></td>
+<td><p>Compact CNN, NPU compatible, optimized for multivariate input signals</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="expected-results">
+<h2><span class="section-number">7.7.16.8. </span>Expected Results<a class="headerlink" href="#expected-results" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Configuration</p></th>
+<th class="head"><p>Accuracy</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CC1352 with floating point feature extraction</p></td>
+<td><p>~98%</p></td>
+</tr>
+<tr class="row-odd"><td><p>MSPM0 with fixed point feature extraction</p></td>
+<td><p>~92.46%</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="training-configuration">
+<h2><span class="section-number">7.7.16.9. </span>Training Configuration<a class="headerlink" href="#training-configuration" title="Link to this heading"></a></h2>
+<p>The default training hyperparameters are:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>batch_size:    64
+lr:            0.00001
+optimizer:     Adam
+weight_decay:  1e-20
+epochs:        100
+</pre></div>
+</div>
+<p><strong>Quantization</strong>: INT8 quantization is applied for NPU compatibility on the
+MSPM0G5187.</p>
+<p><strong>Compilation</strong>: The TI Neural Network Compiler (<a class="reference external" href="https://software-dl.ti.com/mctools/nnc/mcu/users_guide/">TI NNC</a>)
+generates the compiled artifacts <code class="docutils literal notranslate"><span class="pre">model.a</span></code> and <code class="docutils literal notranslate"><span class="pre">tvmgen_default.h</span></code> for
+on-device deployment.</p>
+</section>
+<section id="references">
+<h2><span class="section-number">7.7.16.10. </span>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/pir_detection">Example on GitHub</a></p></li>
+<li><p><a class="reference external" href="https://www.ti.com/product/MSPM0G5187">MSPM0G5187 Product Page</a></p></li>
+<li><p><a class="reference external" href="https://www.ti.com/tool/TIDA-010997">TIDA-010997 EdgeAI Sensor Boosterpack</a></p></li>
+<li><p><a class="reference external" href="https://software-dl.ti.com/mctools/nnc/mcu/users_guide/">TI Neural Network Compiler (NNC) User Guide</a></p></li>
+<li><p><a class="reference external" href="https://www.ti.com/tool/MSPM0-SDK">MSPM0 SDK</a></p></li>
+<li><p><a class="reference external" href="https://github.com/TexasInstruments/tinyml-tensorlab/tree/main">Example on GitHub</a></p></li>
 </ul>
 </section>
 </section>

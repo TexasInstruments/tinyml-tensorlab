@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>7.7.24. Anomaly Detection Example &mdash; TI Tiny ML Tensorlab 1.3.0 documentation</title>
+  <title>7.7.24. Arc Fault Anomaly Detection Example &mdash; TI Tiny ML Tensorlab 1.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -380,20 +380,29 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byod/forecasting_format.html#common-issues">5.3.10. Common Issues</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../byod/data_splitting.html">5.4. Data Splitting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#split-methods">5.4.1. Split Methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#configuration">5.4.2. Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#annotation-file-format">5.4.3. Annotation File Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#split-examples">5.4.4. Split Examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#when-to-use-each-method">5.4.5. When to Use Each Method</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#best-practices">5.4.6. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#creating-annotation-files">5.4.7. Creating Annotation Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#verifying-splits">5.4.8. Verifying Splits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../byod/anomaly_detection_format.html">5.4. Anomaly Detection Dataset Format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../byod/anomaly_detection_format.html#folder-structure">5.4.1. Folder Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/anomaly_detection_format.html#concrete-example">5.4.2. Concrete Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/anomaly_detection_format.html#data-splitting-strategy">5.4.3. Data Splitting Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/anomaly_detection_format.html#what-if-you-don-t-have-anomaly-data">5.4.4. What If You Don’t Have Anomaly Data?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/anomaly_detection_format.html#datafile-format-csv">5.4.5. Datafile Format (CSV)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/anomaly_detection_format.html#see-also">5.4.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../byod/index.html#dataset-format-overview">5.5. Dataset Format Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../byod/index.html#supported-file-formats">5.6. Supported File Formats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../byod/index.html#data-sources">5.7. Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../byod/data_splitting.html">5.5. Data Splitting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#split-methods">5.5.1. Split Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#configuration">5.5.2. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#annotation-file-format">5.5.3. Annotation File Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#split-examples">5.5.4. Split Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#when-to-use-each-method">5.5.5. When to Use Each Method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#best-practices">5.5.6. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#creating-annotation-files">5.5.7. Creating Annotation Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byod/data_splitting.html#verifying-splits">5.5.8. Verifying Splits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../byod/index.html#dataset-format-overview">5.6. Dataset Format Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../byod/index.html#supported-file-formats">5.7. Supported File Formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../byod/index.html#data-sources">5.8. Data Sources</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../devices/index.html">6. Supported Devices</a><ul>
@@ -623,10 +632,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="ecg_classification.html">7.7.14. ECG Classification</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#overview">7.7.14.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#configuration">7.7.14.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#running-the-example">7.7.14.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#key-performance-targets">7.7.14.2. Key Performance Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#system-components">7.7.14.3. System Components</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#dataset-details">7.7.14.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#see-also">7.7.14.5. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#feature-extraction">7.7.14.5. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#model">7.7.14.6. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#training-configuration">7.7.14.7. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#configuration-mspm0">7.7.14.8. Configuration (MSPM0)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#running-the-example">7.7.14.9. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#available-configurations">7.7.14.10. Available Configurations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#anomaly-detection-mode">7.7.14.11. Anomaly Detection Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#references">7.7.14.12. References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ecg_classification.html#see-also">7.7.14.13. See Also</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="nilm_classification.html">7.7.15. NILM Appliance Usage Classification</a><ul>
@@ -641,11 +658,15 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="pir_detection.html">7.7.16. PIR Detection</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="pir_detection.html#overview">7.7.16.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#configuration">7.7.16.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#running-the-example">7.7.16.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#dataset-details">7.7.16.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#recommended-devices">7.7.16.5. Recommended Devices</a></li>
-<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#see-also">7.7.16.6. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#device-support">7.7.16.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#system-components">7.7.16.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#running-the-example">7.7.16.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#dataset-description">7.7.16.5. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#feature-extraction-pipeline">7.7.16.6. Feature Extraction Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#model">7.7.16.7. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#expected-results">7.7.16.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#training-configuration">7.7.16.9. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pir_detection.html#references">7.7.16.10. References</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="grid_fault_detection.html">7.7.17. Grid Fault Detection</a><ul>
@@ -710,22 +731,20 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l4"><a class="reference internal" href="hvac_indoor_temp_forecast.html#see-also">7.7.23.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">7.7.24. Anomaly Detection Example</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">7.7.24. Arc Fault Anomaly Detection Example</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#overview">7.7.24.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#when-to-use-anomaly-detection">7.7.24.2. When to Use Anomaly Detection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#running-the-example">7.7.24.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#configuration">7.7.24.4. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#how-anomaly-detection-works">7.7.24.5. How Anomaly Detection Works</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#dataset-format">7.7.24.6. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#available-models">7.7.24.7. Available Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#expected-results">7.7.24.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#threshold-selection">7.7.24.9. Threshold Selection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#interpreting-outputs">7.7.24.10. Interpreting Outputs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#advanced-configuration">7.7.24.11. Advanced Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#practical-applications">7.7.24.12. Practical Applications</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#comparison-with-classification">7.7.24.13. Comparison with Classification</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#troubleshooting">7.7.24.14. Troubleshooting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#next-steps">7.7.24.15. Next Steps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-the-example">7.7.24.2. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration">7.7.24.3. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dataset-format">7.7.24.4. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#available-models">7.7.24.5. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#expected-results">7.7.24.6. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#threshold-selection">7.7.24.7. Threshold Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interpreting-outputs">7.7.24.8. Interpreting Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#advanced-configuration">7.7.24.9. Advanced Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#practical-applications">7.7.24.10. Practical Applications</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#comparison-with-classification">7.7.24.11. Comparison with Classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#troubleshooting">7.7.24.12. Troubleshooting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#next-steps">7.7.24.13. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="forecasting_example.html">7.7.25. Forecasting Example</a><ul>
@@ -771,12 +790,16 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="mnist_image_classification.html">7.7.27. MNIST Image Classification</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#overview">7.7.27.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#configuration">7.7.27.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#running-the-example">7.7.27.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#dataset-details">7.7.27.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#model-architecture">7.7.27.5. Model Architecture</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#memory-requirements">7.7.27.6. Memory Requirements</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#see-also">7.7.27.7. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#key-targets">7.7.27.2. Key Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#system-components">7.7.27.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#running-the-example">7.7.27.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#dataset">7.7.27.5. Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#feature-extraction">7.7.27.6. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#model-architecture">7.7.27.7. Model Architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#training-configuration">7.7.27.8. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#expected-results">7.7.27.9. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#supported-devices">7.7.27.10. Supported Devices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mnist_image_classification.html#references">7.7.27.11. References</a></li>
 </ul>
 </li>
 </ul>
@@ -1187,7 +1210,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html"><span class="section-number">7. </span>Examples &amp; Applications</a></li>
-      <li class="breadcrumb-item active"><span class="section-number">7.7.24. </span>Anomaly Detection Example</li>
+      <li class="breadcrumb-item active"><span class="section-number">7.7.24. </span>Arc Fault Anomaly Detection Example</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -1196,61 +1219,65 @@ document.addEventListener('DOMContentLoaded', function() {
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="anomaly-detection-example">
-<h1><span class="section-number">7.7.24. </span>Anomaly Detection Example<a class="headerlink" href="#anomaly-detection-example" title="Link to this heading"></a></h1>
+  <section id="arc-fault-anomaly-detection-example">
+<h1><span class="section-number">7.7.24. </span>Arc Fault Anomaly Detection Example<a class="headerlink" href="#arc-fault-anomaly-detection-example" title="Link to this heading"></a></h1>
 <p>This example demonstrates using autoencoder-based anomaly detection
-to identify abnormal patterns in time series data.</p>
+to identify DC arc fault patterns in current waveform data.</p>
 <section id="overview">
 <h2><span class="section-number">7.7.24.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><strong>Task</strong>: Anomaly detection (binary: normal vs anomaly)</p></li>
-<li><p><strong>Model</strong>: Autoencoder architecture</p></li>
+<li><p><strong>Application</strong>: DC arc fault detection</p></li>
+<li><p><strong>Model</strong>: Autoencoder architecture (<code class="docutils literal notranslate"><span class="pre">AD_2k_NPU</span></code>)</p></li>
 <li><p><strong>Training</strong>: Uses only normal data</p></li>
 <li><p><strong>Detection</strong>: High reconstruction error indicates anomaly</p></li>
+<li><p><strong>Dataset</strong>: DC arc fault current waveforms (DSK variant)</p></li>
 </ul>
-</section>
-<section id="when-to-use-anomaly-detection">
-<h2><span class="section-number">7.7.24.2. </span>When to Use Anomaly Detection<a class="headerlink" href="#when-to-use-anomaly-detection" title="Link to this heading"></a></h2>
-<p>Anomaly detection is ideal when:</p>
-<ul class="simple">
-<li><p>You only have “normal” data for training</p></li>
-<li><p>Fault conditions are rare or unknown</p></li>
-<li><p>You want to detect any deviation from normal</p></li>
-<li><p>Labeling fault data is difficult or expensive</p></li>
-</ul>
-<p>This contrasts with classification, which requires labeled examples
-of each fault type.</p>
+<p>This example uses the same DC arc fault dataset as the classification example,
+but approaches it as an anomaly detection problem. The autoencoder learns to
+reconstruct normal current waveforms and flags arc fault patterns as anomalies
+based on high reconstruction error.</p>
 </section>
 <section id="running-the-example">
-<h2><span class="section-number">7.7.24.3. </span>Running the Example<a class="headerlink" href="#running-the-example" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.2. </span>Running the Example<a class="headerlink" href="#running-the-example" title="Link to this heading"></a></h2>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>tinyml-modelzoo
-./run_tinyml_modelzoo.sh<span class="w"> </span>examples/anomaly_detection/config.yaml
+
+<span class="c1"># DSK dataset variant</span>
+./run_tinyml_modelzoo.sh<span class="w"> </span>examples/dc_arc_fault/config_anomaly_detection_dsk.yaml
+
+<span class="c1"># DSI dataset variant</span>
+./run_tinyml_modelzoo.sh<span class="w"> </span>examples/dc_arc_fault/config_anomaly_detection_dsi.yaml
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd </span><span class="n">tinyml-modelzoo</span>
-<span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\\</span><span class="n">anomaly_detection</span><span class="p">\\</span><span class="n">config</span><span class="p">.</span><span class="n">yaml</span>
+
+<span class="c"># DSK dataset variant</span>
+<span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">dc_arc_fault</span><span class="p">\</span><span class="n">config_anomaly_detection_dsk</span><span class="p">.</span><span class="n">yaml</span>
+
+<span class="c"># DSI dataset variant</span>
+<span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">dc_arc_fault</span><span class="p">\</span><span class="n">config_anomaly_detection_dsi</span><span class="p">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
 </div></div>
 </section>
 <section id="configuration">
-<h2><span class="section-number">7.7.24.4. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.3. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;generic_timeseries_anomalydetection&#39;</span>
 <span class="w">  </span><span class="nt">target_device</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;F28P55&#39;</span>
 
 <span class="nt">dataset</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;your_anomaly_dataset&#39;</span>
-<span class="w">  </span><span class="nt">input_data_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/path/to/dataset&#39;</span>
+<span class="w">  </span><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;dc_arc_fault_example_dsk&#39;</span>
+<span class="w">  </span><span class="nt">input_data_path</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/dc_arc_fault_example_dsk.zip&#39;</span>
 
 <span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Generic_1024Input_FFTBIN_64Feature_8Frame&#39;</span>
+<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;FFT1024Input_256Feature_1Frame_Full_Bandwidth&#39;</span>
 <span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
 
 <span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;AD_4k_NPU&#39;</span>
-<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;AD_2k_NPU&#39;</span>
+<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">200</span>
 <span class="w">  </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
 
 <span class="nt">testing</span><span class="p">:</span>
@@ -1261,59 +1288,25 @@ of each fault type.</p>
 </pre></div>
 </div>
 </section>
-<section id="how-anomaly-detection-works">
-<h2><span class="section-number">7.7.24.5. </span>How Anomaly Detection Works<a class="headerlink" href="#how-anomaly-detection-works" title="Link to this heading"></a></h2>
-<p><strong>Autoencoder Architecture:</strong></p>
-<figure class="align-center" id="id1">
-<a class="reference internal image-reference" href="../_images/autoencoder_architecture.png"><img alt="Autoencoder Architecture" src="../_images/autoencoder_architecture.png" style="width: 700px;" />
-</a>
-<figcaption>
-<p><span class="caption-text">Autoencoder architecture for anomaly detection</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
-</figcaption>
-</figure>
-<p><strong>Training Phase:</strong></p>
-<ol class="arabic simple">
-<li><p>Train autoencoder on normal data only</p></li>
-<li><p>Encoder compresses input to latent representation</p></li>
-<li><p>Decoder reconstructs original input</p></li>
-<li><p>Model learns to accurately reconstruct normal patterns</p></li>
-</ol>
-<p><strong>Inference Phase:</strong></p>
-<ol class="arabic simple">
-<li><p>Input new data sample</p></li>
-<li><p>Autoencoder attempts reconstruction</p></li>
-<li><p>Calculate reconstruction error</p></li>
-<li><p>High error = anomaly (pattern not seen during training)</p></li>
-</ol>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Normal data:     Input → Encoder → Decoder → Good reconstruction (low error)
-Anomaly data:    Input → Encoder → Decoder → Poor reconstruction (high error)
-</pre></div>
-</div>
-</section>
 <section id="dataset-format">
-<h2><span class="section-number">7.7.24.6. </span>Dataset Format<a class="headerlink" href="#dataset-format" title="Link to this heading"></a></h2>
-<p>For anomaly detection, your dataset should contain:</p>
-<ul class="simple">
-<li><p><strong>Normal samples</strong>: Many examples of normal operation</p></li>
-<li><p><strong>Anomaly samples</strong> (optional): For evaluation only</p></li>
-</ul>
-<p>Directory structure:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>my_anomaly_dataset/
-├── annotations.yaml
+<h2><span class="section-number">7.7.24.4. </span>Dataset Format<a class="headerlink" href="#dataset-format" title="Link to this heading"></a></h2>
+<p>The dataset follows the anomaly detection folder structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>dc_arc_fault_example_dsk/
 └── classes/
-    ├── normal/           # Training data (many samples)
-    │   ├── sample_001.csv
-    │   ├── sample_002.csv
+    ├── Normal/           # Normal current waveforms (training data)
+    │   ├── file1.csv
     │   └── ...
-    └── anomaly/          # Test data only (few samples OK)
-        ├── anomaly_001.csv
+    └── Anomaly/          # Arc fault waveforms (test-only data)
+        ├── file1.csv
         └── ...
 </pre></div>
 </div>
-<p>The model trains only on “normal” class but evaluates against both.</p>
+<p>The model trains only on “Normal” class data. Anomaly data is used exclusively
+for testing and threshold evaluation.</p>
+<p>See <a class="reference internal" href="../byod/anomaly_detection_format.html"><span class="doc">Anomaly Detection Dataset Format</span></a> for full dataset format details.</p>
 </section>
 <section id="available-models">
-<h2><span class="section-number">7.7.24.7. </span>Available Models<a class="headerlink" href="#available-models" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.5. </span>Available Models<a class="headerlink" href="#available-models" title="Link to this heading"></a></h2>
 <p>Anomaly detection models use autoencoder architecture:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -1332,98 +1325,110 @@ Anomaly data:    Input → Encoder → Decoder → Poor reconstruction (high err
 <td><p>~500</p></td>
 <td><p>Minimal, simple patterns</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AD_1k_NPU</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AD_1k</span></code></p></td>
 <td><p>~1,000</p></td>
-<td><p>Small, common choice</p></td>
+<td><p>Compact autoencoder</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AD_2k_NPU</span></code></p></td>
 <td><p>~2,000</p></td>
-<td><p>Balanced</p></td>
+<td><p>Balanced (used in this example)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AD_4k_NPU</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AD_4k</span></code></p></td>
 <td><p>~4,000</p></td>
 <td><p>Complex patterns</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AD_8k_NPU</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AD_6k_NPU</span></code></p></td>
+<td><p>~6,000</p></td>
+<td><p>Depthwise separable encoder</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AD_8k_NPU</span></code></p></td>
 <td><p>~8,000</p></td>
 <td><p>High complexity</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AD_Linear</span></code></p></td>
+<td><p>Varies</p></td>
+<td><p>Deep linear autoencoder</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Ondevice_Trainable_AD_Linear</span></code></p></td>
+<td><p>Varies</p></td>
+<td><p>On-device trainable variant</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Model Selection:</strong></p>
 <ul class="simple">
-<li><p>Simple, repetitive patterns: <code class="docutils literal notranslate"><span class="pre">AD_500_NPU</span></code> or <code class="docutils literal notranslate"><span class="pre">AD_1k_NPU</span></code></p></li>
-<li><p>Moderate complexity: <code class="docutils literal notranslate"><span class="pre">AD_2k_NPU</span></code> or <code class="docutils literal notranslate"><span class="pre">AD_4k_NPU</span></code></p></li>
-<li><p>Complex, variable patterns: <code class="docutils literal notranslate"><span class="pre">AD_8k_NPU</span></code> or larger</p></li>
+<li><p>Simple, repetitive patterns: <code class="docutils literal notranslate"><span class="pre">AD_500_NPU</span></code> or <code class="docutils literal notranslate"><span class="pre">AD_1k</span></code></p></li>
+<li><p>Moderate complexity: <code class="docutils literal notranslate"><span class="pre">AD_2k_NPU</span></code> or <code class="docutils literal notranslate"><span class="pre">AD_4k</span></code></p></li>
+<li><p>Complex, variable patterns: <code class="docutils literal notranslate"><span class="pre">AD_6k_NPU</span></code> or <code class="docutils literal notranslate"><span class="pre">AD_8k_NPU</span></code></p></li>
 </ul>
 </section>
 <section id="expected-results">
-<h2><span class="section-number">7.7.24.8. </span>Expected Results<a class="headerlink" href="#expected-results" title="Link to this heading"></a></h2>
-<p>After training, you should see:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Training complete.
+<h2><span class="section-number">7.7.24.6. </span>Expected Results<a class="headerlink" href="#expected-results" title="Link to this heading"></a></h2>
+<p>After training, you should see output similar to:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO: Best epoch: 39
+INFO: MSE: 1.773
 
-Reconstruction Error Statistics:
-Normal data mean error: 0.05
-Normal data std error: 0.02
+INFO: Reconstruction Error Statistics:
+INFO: Normal training data - Mean: 1.662490, Std: 1.968127
+INFO: Anomaly test data - Mean: 141.985321, Std: 112.756683
+INFO: Normal test data - Mean: 2.849831, Std: 1.343052
 
-Anomaly Detection Results:
-AUC-ROC: 0.95+
-Best threshold: 0.15
-
-At threshold 0.15:
-True Positive Rate: 0.92
-False Positive Rate: 0.05
+INFO: Threshold for K = 4.5: 10.519060
+INFO: False positive rate: 0.00%
+INFO: Anomaly detection rate (recall): 100.00%
 </pre></div>
 </div>
+<p><strong>Key indicators of good training:</strong></p>
+<ul class="simple">
+<li><p>Large gap between normal mean error and anomaly mean error</p></li>
+<li><p>Low false positive rate</p></li>
+<li><p>High recall (anomaly detection rate)</p></li>
+</ul>
 </section>
 <section id="threshold-selection">
-<h2><span class="section-number">7.7.24.9. </span>Threshold Selection<a class="headerlink" href="#threshold-selection" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.7. </span>Threshold Selection<a class="headerlink" href="#threshold-selection" title="Link to this heading"></a></h2>
 <p>The threshold determines the sensitivity:</p>
-<p><strong>Lower threshold:</strong></p>
-<ul class="simple">
-<li><p>More anomalies detected (higher TPR)</p></li>
-<li><p>More false alarms (higher FPR)</p></li>
-<li><p>Use when missing anomalies is costly</p></li>
-</ul>
-<p><strong>Higher threshold:</strong></p>
-<ul class="simple">
-<li><p>Fewer false alarms (lower FPR)</p></li>
-<li><p>May miss subtle anomalies (lower TPR)</p></li>
-<li><p>Use when false alarms are disruptive</p></li>
-</ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure threshold in deployment</span>
-<span class="c1"># Use fpr_tpr_thresholds.csv to select optimal point</span>
-<span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.15</span><span class="w">  </span><span class="c1"># Adjust based on ROC analysis</span>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>threshold = mean_train + k * std_train
 </pre></div>
 </div>
+<ul class="simple">
+<li><p><strong>Lower k</strong>: More anomalies detected, but more false alarms</p></li>
+<li><p><strong>Higher k</strong>: Fewer false alarms, but may miss subtle anomalies</p></li>
+<li><p><strong>Typical starting point</strong>: k=3 (covers ~99.7% of normal data)</p></li>
+</ul>
+<p>Refer to the <code class="docutils literal notranslate"><span class="pre">threshold_performance.csv</span></code> output file to select the optimal
+k value for your application. It contains precision, recall, F1, and false
+positive rate for each k value from 0 to 4.5.</p>
 </section>
 <section id="interpreting-outputs">
-<h2><span class="section-number">7.7.24.10. </span>Interpreting Outputs<a class="headerlink" href="#interpreting-outputs" title="Link to this heading"></a></h2>
-<p><strong>Reconstruction Error Histogram:</strong></p>
-<p>Shows distribution of errors for normal vs anomaly data:</p>
+<h2><span class="section-number">7.7.24.8. </span>Interpreting Outputs<a class="headerlink" href="#interpreting-outputs" title="Link to this heading"></a></h2>
+<p>After training, ModelMaker generates the following analysis outputs in the
+<code class="docutils literal notranslate"><span class="pre">post_training_analysis/</span></code> folder:</p>
+<p><strong>Reconstruction Error Histogram</strong> (<code class="docutils literal notranslate"><span class="pre">reconstruction_error_histogram.png</span></code>):</p>
+<p>Shows distribution of reconstruction errors for normal vs anomaly data:</p>
 <ul class="simple">
-<li><p>Separated distributions = good detection</p></li>
+<li><p>Separated distributions = good detection capability</p></li>
 <li><p>Overlapping distributions = may need different features or model</p></li>
 </ul>
-<p><strong>ROC Curve:</strong></p>
-<ul class="simple">
-<li><p>AUC close to 1.0 = excellent separation</p></li>
-<li><p>AUC around 0.5 = no better than random</p></li>
-<li><p>Use to select operating threshold</p></li>
-</ul>
-<p><strong>Latent Space Visualization:</strong></p>
-<ul class="simple">
-<li><p>Normal samples should cluster tightly</p></li>
-<li><p>Anomalies should be outside normal cluster</p></li>
-</ul>
+<p><strong>Threshold Performance CSV</strong> (<code class="docutils literal notranslate"><span class="pre">threshold_performance.csv</span></code>):</p>
+<p>Contains detection metrics for each k value:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>k_value,threshold,accuracy,precision,recall,f1_score,false_positive_rate,...
+0.0,1.662,98.65,98.65,100.0,99.32,83.54,...
+1.0,3.631,99.71,99.70,100.0,99.85,18.13,...
+...
+4.5,10.519,100.0,100.0,100.0,100.0,0.0,...
+</pre></div>
+</div>
+<p>Use this file to select the threshold that best balances precision and recall
+for your deployment requirements.</p>
 </section>
 <section id="advanced-configuration">
-<h2><span class="section-number">7.7.24.11. </span>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Link to this heading"></a></h2>
-<p><strong>Adjust Bottleneck Size:</strong></p>
-<p>Smaller bottleneck = stronger compression, may miss subtle anomalies:</p>
+<h2><span class="section-number">7.7.24.9. </span>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Link to this heading"></a></h2>
+<p><strong>Adjust Model Size:</strong></p>
+<p>Smaller models compress more aggressively, which may miss subtle anomalies:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;AD_2k_NPU&#39;</span>
-<span class="w">  </span><span class="c1"># Model architecture defines bottleneck size</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;AD_500_NPU&#39;</span><span class="w">   </span><span class="c1"># Smaller, simpler patterns</span>
+<span class="w">  </span><span class="c1"># model_name: &#39;AD_8k_NPU&#39;  # Larger, complex patterns</span>
 </pre></div>
 </div>
 <p><strong>Feature Engineering:</strong></p>
@@ -1436,17 +1441,9 @@ False Positive Rate: 0.05
 <span class="w">  </span><span class="c1"># feature_extraction_name: &#39;Generic_512Input_RAW_512Feature_1Frame&#39;</span>
 </pre></div>
 </div>
-<p><strong>Data Augmentation:</strong></p>
-<p>Add variety to normal data:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">augmentation</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">noise</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-<span class="w">    </span><span class="nt">scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
-</pre></div>
-</div>
 </section>
 <section id="practical-applications">
-<h2><span class="section-number">7.7.24.12. </span>Practical Applications<a class="headerlink" href="#practical-applications" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.10. </span>Practical Applications<a class="headerlink" href="#practical-applications" title="Link to this heading"></a></h2>
 <p><strong>Vibration Monitoring:</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;generic_timeseries_anomalydetection&#39;</span>
@@ -1471,21 +1468,9 @@ False Positive Rate: 0.05
 <span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;AD_2k_NPU&#39;</span>
 </pre></div>
 </div>
-<p><strong>Temperature Profile Monitoring:</strong></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;generic_timeseries_anomalydetection&#39;</span>
-
-<span class="nt">data_processing_feature_extraction</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">feature_extraction_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Generic_256Input_RAW_256Feature_1Frame&#39;</span>
-<span class="w">  </span><span class="nt">variables</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w">  </span><span class="c1"># Multiple temperature sensors</span>
-
-<span class="nt">training</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;AD_4k_NPU&#39;</span>
-</pre></div>
-</div>
 </section>
 <section id="comparison-with-classification">
-<h2><span class="section-number">7.7.24.13. </span>Comparison with Classification<a class="headerlink" href="#comparison-with-classification" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.11. </span>Comparison with Classification<a class="headerlink" href="#comparison-with-classification" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 25.0%" />
@@ -1519,17 +1504,17 @@ False Positive Rate: 0.05
 </table>
 </section>
 <section id="troubleshooting">
-<h2><span class="section-number">7.7.24.14. </span>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.12. </span>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
 <p><strong>High false positive rate:</strong></p>
 <ul class="simple">
-<li><p>Threshold too low</p></li>
-<li><p>Normal data not representative</p></li>
-<li><p>Need more normal training data</p></li>
+<li><p>Threshold too low – increase k value</p></li>
+<li><p>Normal data not representative of all operating conditions</p></li>
+<li><p>Need more diverse normal training data</p></li>
 </ul>
 <p><strong>Missing anomalies:</strong></p>
 <ul class="simple">
-<li><p>Threshold too high</p></li>
-<li><p>Model too simple (increase size)</p></li>
+<li><p>Threshold too high – decrease k value</p></li>
+<li><p>Model too simple – increase size</p></li>
 <li><p>Feature extraction missing relevant patterns</p></li>
 </ul>
 <p><strong>Unstable reconstruction error:</strong></p>
@@ -1540,9 +1525,9 @@ False Positive Rate: 0.05
 </ul>
 </section>
 <section id="next-steps">
-<h2><span class="section-number">7.7.24.15. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<h2><span class="section-number">7.7.24.13. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Compare with <a class="reference internal" href="../task_types/anomaly_detection.html"><span class="doc">Anomaly Detection</span></a> guide</p></li>
+<li><p>Review the <a class="reference internal" href="../task_types/anomaly_detection.html"><span class="doc">Anomaly Detection</span></a> guide for threshold theory</p></li>
 <li><p>Learn about <a class="reference internal" href="../features/feature_extraction.html"><span class="doc">Feature Extraction</span></a></p></li>
 <li><p>Deploy to device: <a class="reference internal" href="../deployment/npu_device_deployment.html"><span class="doc">NPU Device Deployment</span></a></p></li>
 </ul>
@@ -1561,7 +1546,7 @@ False Positive Rate: 0.05
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Feb 25, 2026.
+      <span class="lastupdated">Last updated on Feb 26, 2026.
       </span></p>
   </div>
 

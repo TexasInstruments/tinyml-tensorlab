@@ -90,49 +90,49 @@ to the original dimensionality.
 
 .. code-block:: text
 
-   +-----------------------------------------------------+
-   |                      INPUT                           |
-   |        (e.g., 256 samples x 3 channels)              |
-   |                   = 768 features                     |
-   +-----------------------------------------------------+
-                           |
-                           v
-   +-----------------------------------------------------+
-   |                     ENCODER                          |
-   |            (Dimensionality Reduction)                |
-   |                                                     |
-   |  Layer 1: 768 --> 512 features  (Linear + ReLU)     |
-   |  Layer 2: 512 --> 256 features  (Linear + ReLU)     |
-   |  Layer 3: 256 --> 128 features  (Linear + ReLU)     |
-   |  Layer 4: 128 -->  64 features  (Linear + ReLU)     |
-   +-----------------------------------------------------+
-                           |
-                           v
-   +-----------------------------------------------------+
-   |                  LATENT SPACE                        |
-   |       (Compressed representation: 64 features)      |
-   |                                                     |
-   |    Contains essential patterns from input           |
-   |    Compression ratio: 768 / 64 = 12x               |
-   +-----------------------------------------------------+
-                           |
-                           v
-   +-----------------------------------------------------+
-   |                     DECODER                          |
-   |            (Dimensionality Expansion)                |
-   |                                                     |
-   |  Layer 1:  64 --> 128 features  (Linear + ReLU)     |
-   |  Layer 2: 128 --> 256 features  (Linear + ReLU)     |
-   |  Layer 3: 256 --> 512 features  (Linear + ReLU)     |
-   |  Layer 4: 512 --> 768 features  (Linear, no act.)   |
-   +-----------------------------------------------------+
-                           |
-                           v
-   +-----------------------------------------------------+
-   |               RECONSTRUCTED OUTPUT                   |
-   |                  768 features                        |
-   |        (reshaped to 256 samples x 3 channels)       |
-   +-----------------------------------------------------+
+   +-------------------------------------------------------+
+   |                        INPUT                          |
+   |          (e.g., 256 samples x 3 channels)             |
+   |                    = 768 features                     |
+   +-------------------------------------------------------+
+                            |
+                            v
+   +-------------------------------------------------------+
+   |                       ENCODER                         |
+   |              (Dimensionality Reduction)               |
+   |                                                       |
+   |    Layer 1: 768 --> 512 features  (Linear + ReLU)     |
+   |    Layer 2: 512 --> 256 features  (Linear + ReLU)     |
+   |    Layer 3: 256 --> 128 features  (Linear + ReLU)     |
+   |    Layer 4: 128 -->  64 features  (Linear + ReLU)     |
+   +-------------------------------------------------------+
+                            |
+                            v
+   +-------------------------------------------------------+
+   |                    LATENT SPACE                        |
+   |        (Compressed representation: 64 features)       |
+   |                                                       |
+   |      Contains essential patterns from input           |
+   |      Compression ratio: 768 / 64 = 12x               |
+   +-------------------------------------------------------+
+                            |
+                            v
+   +-------------------------------------------------------+
+   |                       DECODER                         |
+   |              (Dimensionality Expansion)               |
+   |                                                       |
+   |    Layer 1:  64 --> 128 features  (Linear + ReLU)     |
+   |    Layer 2: 128 --> 256 features  (Linear + ReLU)     |
+   |    Layer 3: 256 --> 512 features  (Linear + ReLU)     |
+   |    Layer 4: 512 --> 768 features  (Linear, no act.)   |
+   +-------------------------------------------------------+
+                            |
+                            v
+   +-------------------------------------------------------+
+   |                 RECONSTRUCTED OUTPUT                   |
+   |                    768 features                        |
+   |          (reshaped to 256 samples x 3 channels)       |
+   +-------------------------------------------------------+
 
 Dimensionality Flow
 ^^^^^^^^^^^^^^^^^^^
@@ -255,38 +255,38 @@ principle that enables anomaly detection:
 
 .. code-block:: text
 
-   +-----------------------------------------------------+
-   |            TRAINING (Normal Data Only)               |
-   +-----------------------------------------------------+
-                        |
-                        v
-   +-----------------------------------------------------+
-   | Model learns: "What do normal patterns look like?"   |
-   |                                                     |
-   | Normal vibration --> Encode --> Decode --> ~ Input   |
-   | Reconstruction Error: LOW                           |
-   +-----------------------------------------------------+
-                        |
-                        v
-   +-----------------------------------------------------+
-   |              INFERENCE (Test Data)                   |
-   +-----------------------------------------------------+
-                        |
-            +-----------+-----------+
-            |                       |
-       Normal sample          Anomaly sample
-            |                       |
-            v                       v
-     Encode --> Decode       Encode --> Decode
-            |                       |
-            v                       v
-     Output ~ Input          Output != Input
-            |                       |
-            v                       v
-     Error: LOW              Error: HIGH
-            |                       |
-            v                       v
-   Prediction: Normal     Prediction: Anomaly
+   +-------------------------------------------------------+
+   |              TRAINING (Normal Data Only)               |
+   +-------------------------------------------------------+
+                           |
+                           v
+   +-------------------------------------------------------+
+   |  Model learns: "What do normal patterns look like?"   |
+   |                                                       |
+   |  Normal vibration --> Encode --> Decode --> ~ Input    |
+   |  Reconstruction Error: LOW                            |
+   +-------------------------------------------------------+
+                           |
+                           v
+   +-------------------------------------------------------+
+   |                INFERENCE (Test Data)                   |
+   +-------------------------------------------------------+
+                           |
+               +-----------+-----------+
+               |                       |
+          Normal sample          Anomaly sample
+               |                       |
+               v                       v
+        Encode --> Decode       Encode --> Decode
+               |                       |
+               v                       v
+        Output ~ Input          Output != Input
+               |                       |
+               v                       v
+        Error: LOW              Error: HIGH
+               |                       |
+               v                       v
+      Prediction: Normal     Prediction: Anomaly
 
 
 Advantages and Limitations

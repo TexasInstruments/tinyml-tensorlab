@@ -19,17 +19,12 @@ Post-training analysis helps you:
 Enabling Analysis
 -----------------
 
-Analysis is enabled through the testing section:
+Post-training analysis is generated automatically when testing is enabled:
 
 .. code-block:: yaml
 
    testing:
      enable: True
-     analysis:
-       confusion_matrix: True
-       roc_curve: True
-       class_histograms: True
-       error_analysis: True
 
 Output Files
 ------------
@@ -338,19 +333,10 @@ test data, file numbers 7 and 8 have all samples misclassified.
 Regression Analysis
 -------------------
 
-For regression tasks, different metrics apply:
+For regression tasks, post-training analysis is generated automatically when
+testing is enabled. The following metrics are reported:
 
-.. code-block:: yaml
-
-   testing:
-     enable: True
-     regression_metrics:
-       mse: True
-       mae: True
-       r2: True
-       scatter_plot: True
-
-**Output:**
+**Example output:**
 
 .. code-block:: text
 
@@ -362,32 +348,51 @@ For regression tasks, different metrics apply:
 Anomaly Detection Analysis
 --------------------------
 
-For anomaly detection:
+For anomaly detection tasks, post-training analysis is generated automatically
+for all runs. No additional configuration options are needed beyond enabling
+testing:
 
 .. code-block:: yaml
 
    testing:
      enable: True
-     anomaly_metrics:
-       reconstruction_error: True
-       threshold_analysis: True
 
-**Output:**
+**Output Files:**
+
+The following analysis outputs are generated in the ``post_training_analysis/``
+folder:
+
+* **``reconstruction_error_histogram.png``** -- Histogram showing the
+  distribution of reconstruction errors for normal and anomaly test data.
+  Good separation between the two distributions indicates the model can
+  distinguish anomalies effectively.
+
+* **``threshold_performance.csv``** -- Contains detection metrics (accuracy,
+  precision, recall, F1 score, false positive rate) for each k value from
+  0 to 4.5. Use this file to select the optimal threshold for your
+  deployment.
+
+**Example training log output:**
 
 .. code-block:: text
 
-   Normal Data:
-   Mean reconstruction error: 0.05
-   Std reconstruction error: 0.02
+   Reconstruction Error Statistics:
+   Normal training data - Mean: 1.662490, Std: 1.968127
+   Anomaly test data   - Mean: 141.985321, Std: 112.756683
+   Normal test data    - Mean: 2.849831, Std: 1.343052
 
-   Anomaly Data:
-   Mean reconstruction error: 0.35
-   Std reconstruction error: 0.15
+   Threshold for K = 4.5: 10.519060
+   False positive rate: 0.00%
+   Anomaly detection rate (recall): 100.00%
 
-   Recommended threshold: 0.15
-   At threshold 0.15:
-   TPR: 0.92
-   FPR: 0.05
+**Key indicators:**
+
+* A large gap between normal mean error and anomaly mean error indicates
+  good detection capability.
+* Check the ``reconstruction_error_histogram.png`` for visual confirmation
+  of distribution separation.
+* Use ``threshold_performance.csv`` to find the k value that gives the
+  best trade-off between precision and recall for your application.
 
 Custom Analysis Scripts
 -----------------------

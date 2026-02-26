@@ -263,7 +263,7 @@ project names and verification differ:
 
   .. code-block:: c
 
-     #define ANOMALY_THRESHOLD 0.014  // Threshold for k=4.5
+     #define RECONSTRUCTION_ERROR_THRESHOLD 0.014  // Threshold for k=4.5
 
   This was calculated during training as:
   ``threshold = mean_normal_error + k * std_normal_error``

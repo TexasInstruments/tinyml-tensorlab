@@ -12,6 +12,7 @@ The toolchain supports various data formats and automatically handles preprocess
    classification_format
    regression_format
    forecasting_format
+   anomaly_detection_format
    data_splitting
 
 Dataset Format Overview
@@ -34,6 +35,22 @@ Tiny ML Tensorlab uses different folder structures depending on the task type:
    └── annotations/          # Optional - auto-generated if missing
        ├── instances_train_list.txt
        └── instances_val_list.txt
+
+**Anomaly Detection Tasks**
+
+.. code-block:: text
+
+   dataset_name/
+   ├── classes/
+   │   ├── Normal/           # Training data (normal operation only)
+   │   │   ├── file1.csv
+   │   │   └── file2.csv
+   │   └── Anomaly/          # Test-only data (fault/anomaly samples)
+   │       ├── file1.csv
+   │       └── file2.csv
+   └── annotations/          # Optional - auto-generated if missing
+
+See :doc:`anomaly_detection_format` for full details.
 
 **Regression & Forecasting Tasks**
 

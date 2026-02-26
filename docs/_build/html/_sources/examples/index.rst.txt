@@ -200,7 +200,7 @@ Anomaly Detection Examples
    * - 1
      - :doc:`anomaly_detection_example` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/dc_arc_fault>`__)
      - Univariate
-     - Detect anomalous DC arc patterns using autoencoder.
+     - Arc fault anomaly detection using autoencoder.
    * - 2
      - :doc:`ecg_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/ecg_classification>`__)
      - Multivariate

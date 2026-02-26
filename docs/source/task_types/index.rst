@@ -51,7 +51,12 @@ Choosing the Right Task
 
 **Anomaly Detection vs. Classification**
 
-* Use **Anomaly Detection** when you only have "normal" data for training
+* Use **Anomaly Detection** when you primarily have "normal" data for training.
+  Although only normal data is used to train the autoencoder, some anomaly data
+  is still needed for testing and threshold evaluation. If anomaly data is not
+  yet available, you can still train and deploy the model, then collect anomaly
+  data over time to evaluate performance later. See
+  :doc:`anomaly_detection` for details on the different scenarios.
 * Use **Classification** when you have labeled examples of all conditions (including faults)
 
 **Regression vs. Forecasting**

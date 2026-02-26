@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>5.4. Data Splitting &mdash; TI Tiny ML Tensorlab 1.3.0 documentation</title>
+  <title>5.5. Data Splitting &mdash; TI Tiny ML Tensorlab 1.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="6. Supported Devices" href="../devices/index.html" />
-    <link rel="prev" title="5.3. Forecasting Dataset Format" href="forecasting_format.html" />
+    <link rel="prev" title="5.4. Anomaly Detection Dataset Format" href="anomaly_detection_format.html" />
  
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -378,20 +378,29 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="forecasting_format.html#common-issues">5.3.10. Common Issues</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">5.4. Data Splitting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#split-methods">5.4.1. Split Methods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuration">5.4.2. Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#annotation-file-format">5.4.3. Annotation File Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#split-examples">5.4.4. Split Examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#when-to-use-each-method">5.4.5. When to Use Each Method</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#best-practices">5.4.6. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#creating-annotation-files">5.4.7. Creating Annotation Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#verifying-splits">5.4.8. Verifying Splits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anomaly_detection_format.html">5.4. Anomaly Detection Dataset Format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="anomaly_detection_format.html#folder-structure">5.4.1. Folder Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="anomaly_detection_format.html#concrete-example">5.4.2. Concrete Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="anomaly_detection_format.html#data-splitting-strategy">5.4.3. Data Splitting Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="anomaly_detection_format.html#what-if-you-don-t-have-anomaly-data">5.4.4. What If You Don’t Have Anomaly Data?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="anomaly_detection_format.html#datafile-format-csv">5.4.5. Datafile Format (CSV)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="anomaly_detection_format.html#see-also">5.4.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#dataset-format-overview">5.5. Dataset Format Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#supported-file-formats">5.6. Supported File Formats</a></li>
-<li class="toctree-l2"><a class="reference internal" href="index.html#data-sources">5.7. Data Sources</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5.5. Data Splitting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#split-methods">5.5.1. Split Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">5.5.2. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#annotation-file-format">5.5.3. Annotation File Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#split-examples">5.5.4. Split Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-to-use-each-method">5.5.5. When to Use Each Method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#best-practices">5.5.6. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-annotation-files">5.5.7. Creating Annotation Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verifying-splits">5.5.8. Verifying Splits</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#dataset-format-overview">5.6. Dataset Format Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#supported-file-formats">5.7. Supported File Formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#data-sources">5.8. Data Sources</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../devices/index.html">6. Supported Devices</a><ul>
@@ -621,10 +630,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/ecg_classification.html">7.7.14. ECG Classification</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#overview">7.7.14.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#configuration">7.7.14.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#running-the-example">7.7.14.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#key-performance-targets">7.7.14.2. Key Performance Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#system-components">7.7.14.3. System Components</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#dataset-details">7.7.14.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#see-also">7.7.14.5. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#feature-extraction">7.7.14.5. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#model">7.7.14.6. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#training-configuration">7.7.14.7. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#configuration-mspm0">7.7.14.8. Configuration (MSPM0)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#running-the-example">7.7.14.9. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#available-configurations">7.7.14.10. Available Configurations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#anomaly-detection-mode">7.7.14.11. Anomaly Detection Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#references">7.7.14.12. References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#see-also">7.7.14.13. See Also</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/nilm_classification.html">7.7.15. NILM Appliance Usage Classification</a><ul>
@@ -639,11 +656,15 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/pir_detection.html">7.7.16. PIR Detection</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#overview">7.7.16.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#configuration">7.7.16.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#running-the-example">7.7.16.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#dataset-details">7.7.16.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#recommended-devices">7.7.16.5. Recommended Devices</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#see-also">7.7.16.6. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#device-support">7.7.16.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#system-components">7.7.16.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#running-the-example">7.7.16.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#dataset-description">7.7.16.5. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#feature-extraction-pipeline">7.7.16.6. Feature Extraction Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#model">7.7.16.7. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#expected-results">7.7.16.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#training-configuration">7.7.16.9. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#references">7.7.16.10. References</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/grid_fault_detection.html">7.7.17. Grid Fault Detection</a><ul>
@@ -708,22 +729,20 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#see-also">7.7.23.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/anomaly_detection_example.html">7.7.24. Anomaly Detection Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/anomaly_detection_example.html">7.7.24. Arc Fault Anomaly Detection Example</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#overview">7.7.24.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#when-to-use-anomaly-detection">7.7.24.2. When to Use Anomaly Detection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#running-the-example">7.7.24.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#configuration">7.7.24.4. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#how-anomaly-detection-works">7.7.24.5. How Anomaly Detection Works</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#dataset-format">7.7.24.6. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#available-models">7.7.24.7. Available Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#expected-results">7.7.24.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#threshold-selection">7.7.24.9. Threshold Selection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#interpreting-outputs">7.7.24.10. Interpreting Outputs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#advanced-configuration">7.7.24.11. Advanced Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#practical-applications">7.7.24.12. Practical Applications</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#comparison-with-classification">7.7.24.13. Comparison with Classification</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#troubleshooting">7.7.24.14. Troubleshooting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#next-steps">7.7.24.15. Next Steps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#running-the-example">7.7.24.2. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#configuration">7.7.24.3. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#dataset-format">7.7.24.4. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#available-models">7.7.24.5. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#expected-results">7.7.24.6. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#threshold-selection">7.7.24.7. Threshold Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#interpreting-outputs">7.7.24.8. Interpreting Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#advanced-configuration">7.7.24.9. Advanced Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#practical-applications">7.7.24.10. Practical Applications</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#comparison-with-classification">7.7.24.11. Comparison with Classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#troubleshooting">7.7.24.12. Troubleshooting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#next-steps">7.7.24.13. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/forecasting_example.html">7.7.25. Forecasting Example</a><ul>
@@ -769,12 +788,16 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/mnist_image_classification.html">7.7.27. MNIST Image Classification</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#overview">7.7.27.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#configuration">7.7.27.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#running-the-example">7.7.27.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#dataset-details">7.7.27.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#model-architecture">7.7.27.5. Model Architecture</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#memory-requirements">7.7.27.6. Memory Requirements</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#see-also">7.7.27.7. See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#key-targets">7.7.27.2. Key Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#system-components">7.7.27.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#running-the-example">7.7.27.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#dataset">7.7.27.5. Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#feature-extraction">7.7.27.6. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#model-architecture">7.7.27.7. Model Architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#training-configuration">7.7.27.8. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#expected-results">7.7.27.9. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#supported-devices">7.7.27.10. Supported Devices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#references">7.7.27.11. References</a></li>
 </ul>
 </li>
 </ul>
@@ -1185,7 +1208,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html"><span class="section-number">5. </span>Bring Your Own Data</a></li>
-      <li class="breadcrumb-item active"><span class="section-number">5.4. </span>Data Splitting</li>
+      <li class="breadcrumb-item active"><span class="section-number">5.5. </span>Data Splitting</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -1195,11 +1218,11 @@ document.addEventListener('DOMContentLoaded', function() {
            <div itemprop="articleBody">
              
   <section id="data-splitting">
-<h1><span class="section-number">5.4. </span>Data Splitting<a class="headerlink" href="#data-splitting" title="Link to this heading"></a></h1>
+<h1><span class="section-number">5.5. </span>Data Splitting<a class="headerlink" href="#data-splitting" title="Link to this heading"></a></h1>
 <p>This guide explains how Tiny ML Tensorlab splits data into training, validation,
 and test sets.</p>
 <section id="split-methods">
-<h2><span class="section-number">5.4.1. </span>Split Methods<a class="headerlink" href="#split-methods" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.1. </span>Split Methods<a class="headerlink" href="#split-methods" title="Link to this heading"></a></h2>
 <p>There are two methods for splitting data:</p>
 <p><strong>1. amongst_files (Default)</strong></p>
 <p>Files are divided into different sets:</p>
@@ -1219,7 +1242,7 @@ and test sets.</p>
 <p>Good when files contain long continuous sequences.</p>
 </section>
 <section id="configuration">
-<h2><span class="section-number">5.4.2. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.2. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
 <p><strong>Using split_factor (Auto-split)</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dataset</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;my_data&#39;</span>
@@ -1243,7 +1266,7 @@ and test sets.</p>
 <p>If annotations exist, they override <code class="docutils literal notranslate"><span class="pre">split_factor</span></code>.</p>
 </section>
 <section id="annotation-file-format">
-<h2><span class="section-number">5.4.3. </span>Annotation File Format<a class="headerlink" href="#annotation-file-format" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.3. </span>Annotation File Format<a class="headerlink" href="#annotation-file-format" title="Link to this heading"></a></h2>
 <p>List file paths relative to the data directory, one per line:</p>
 <p><strong>instances_train_list.txt:</strong></p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>class_A/sample1.csv
@@ -1259,7 +1282,7 @@ class_B/sample3.csv
 </div>
 </section>
 <section id="split-examples">
-<h2><span class="section-number">5.4.4. </span>Split Examples<a class="headerlink" href="#split-examples" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.4. </span>Split Examples<a class="headerlink" href="#split-examples" title="Link to this heading"></a></h2>
 <p><strong>Example 1: 10 Files, amongst_files, [0.6, 0.3, 0.1]</strong></p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Files: file1.csv through file10.csv
 
@@ -1280,7 +1303,7 @@ Testing:    Rows 90-99 from all 10 files
 <p>All files appear in all sets, but different portions.</p>
 </section>
 <section id="when-to-use-each-method">
-<h2><span class="section-number">5.4.5. </span>When to Use Each Method<a class="headerlink" href="#when-to-use-each-method" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.5. </span>When to Use Each Method<a class="headerlink" href="#when-to-use-each-method" title="Link to this heading"></a></h2>
 <p><strong>Use amongst_files when:</strong></p>
 <ul class="simple">
 <li><p>Each file is a separate experiment</p></li>
@@ -1295,7 +1318,7 @@ Testing:    Rows 90-99 from all 10 files
 </ul>
 </section>
 <section id="best-practices">
-<h2><span class="section-number">5.4.6. </span>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.6. </span>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h2>
 <p><strong>1. Keep Test Data Truly Held-Out</strong></p>
 <p>Never use test data during model development. Only evaluate on test set
 when you’ve finalized your model.</p>
@@ -1309,7 +1332,7 @@ Sometimes you want earlier data for training, later data for testing.</p>
 <p>Manual annotation files ensure the same splits across runs.</p>
 </section>
 <section id="creating-annotation-files">
-<h2><span class="section-number">5.4.7. </span>Creating Annotation Files<a class="headerlink" href="#creating-annotation-files" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.7. </span>Creating Annotation Files<a class="headerlink" href="#creating-annotation-files" title="Link to this heading"></a></h2>
 <p><strong>Automatically Generated</strong></p>
 <p>Run training once without annotations, then find generated files in the
 output directory.</p>
@@ -1354,7 +1377,7 @@ output directory.</p>
 </div>
 </section>
 <section id="verifying-splits">
-<h2><span class="section-number">5.4.8. </span>Verifying Splits<a class="headerlink" href="#verifying-splits" title="Link to this heading"></a></h2>
+<h2><span class="section-number">5.5.8. </span>Verifying Splits<a class="headerlink" href="#verifying-splits" title="Link to this heading"></a></h2>
 <p>After training, check the log for split information:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dataset loaded:
 - Training samples: 1200
@@ -1369,7 +1392,7 @@ output directory.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="forecasting_format.html" class="btn btn-neutral float-left" title="5.3. Forecasting Dataset Format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="anomaly_detection_format.html" class="btn btn-neutral float-left" title="5.4. Anomaly Detection Dataset Format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../devices/index.html" class="btn btn-neutral float-right" title="6. Supported Devices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -1377,7 +1400,7 @@ output directory.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Feb 25, 2026.
+      <span class="lastupdated">Last updated on Feb 26, 2026.
       </span></p>
   </div>
 
