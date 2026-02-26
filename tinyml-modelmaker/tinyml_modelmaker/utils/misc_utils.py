@@ -246,7 +246,8 @@ def simplify_dict(in_dict):
     '''
     simplify dict so that it can be written using yaml(pyyaml) package
     '''
-    assert isinstance(in_dict, (dict, config_dict.ConfigDict)), 'input must of type dict or ConfigDict'
+    if not isinstance(in_dict, (dict, config_dict.ConfigDict)):
+        raise TypeError('input must be of type dict or ConfigDict')
     d = dict()
     for k, v in in_dict.items():
         if isinstance(v, (dict,config_dict.ConfigDict)):

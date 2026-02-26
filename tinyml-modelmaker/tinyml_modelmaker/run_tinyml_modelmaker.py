@@ -139,7 +139,7 @@ if __name__ == '__main__':
         elif args.config_file.endswith('.json'):
             config = json.load(fp)
         else:
-            assert False, f'unrecognized config file extension for {args.config_file}'
+            raise ValueError(f'unrecognized config file extension for {args.config_file}')
         #
     #
 
