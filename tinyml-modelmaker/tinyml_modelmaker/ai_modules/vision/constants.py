@@ -120,6 +120,12 @@ TARGET_DEVICE_TYPES = [
     TARGET_DEVICE_TYPE_MCU
 ]
 
+# training backend
+TRAINING_BACKEND_TINYML_TINYVERSE = 'tinyml_tinyverse'
+
+# data directory names
+DATA_DIR_IMAGES = 'images'
+
 # training_device
 TRAINING_DEVICE_CPU = 'cpu'
 TRAINING_DEVICE_CUDA = 'cuda'
