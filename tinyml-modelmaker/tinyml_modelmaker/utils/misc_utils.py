@@ -37,12 +37,15 @@ import re
 import shutil
 import subprocess
 import sys
+import logging
 from logging import getLogger
 
 import tqdm
 import yaml
 
 from . import config_dict
+
+logger = logging.getLogger(__name__)
 
 
 def _absolute_path(relpath):
@@ -85,7 +88,7 @@ def remove_if_exists(path):
 
 def make_symlink(source, dest):
     if source is None or (not os.path.exists(source)):
-        print(f'make_symlink failed - source: {source} is invalid')
+        logger.error(f'make_symlink failed - source: {source} is invalid')
         return
     #
     remove_if_exists(dest)
