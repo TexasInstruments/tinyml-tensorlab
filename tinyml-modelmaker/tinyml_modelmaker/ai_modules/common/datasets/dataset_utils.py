@@ -33,6 +33,7 @@ import collections
 import copy
 import glob
 import json
+import logging
 import os
 import random
 import re
@@ -51,6 +52,8 @@ except ImportError:
 from typing import Any, Dict
 
 from .... import utils
+
+logger = logging.getLogger(__name__)
 
 
 def create_filelist(input_data_path: str, output_dir: str, ignore_str_list=None) -> str:
@@ -492,7 +495,7 @@ def dataset_split(dataset, split_factor, split_names, random_seed=1):
         dataset_splits[split_name]['annotations'].extend(annotations)
         image_count_split[split_name] += 1
     #
-    print('dataset split sizes', image_count_split)
+    logger.info('dataset split sizes %s', image_count_split)
     return dataset_splits
 
 

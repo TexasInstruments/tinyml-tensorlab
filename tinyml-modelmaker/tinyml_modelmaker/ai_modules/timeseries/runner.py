@@ -30,6 +30,7 @@
 
 import copy
 import datetime
+import logging
 import os
 
 from zipfile import ZipFile
@@ -41,6 +42,7 @@ from . import constants, datasets, descriptions
 from .params import init_params
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 
+logger = logging.getLogger(__name__)
 
 
 class ModelRunner():
@@ -55,9 +57,10 @@ class ModelRunner():
     def __init__(self, *args, verbose=True, **kwargs):
         self.params = self.init_params(*args, **kwargs)
 
-        # print the runner params
+        # log the runner params
         if verbose:
-            [print(key, ':', value) for key, value in vars(self.params).items()]
+            for key, value in vars(self.params).items():
+                logger.info('%s : %s', key, value)
         #
         # normalize the paths
         if not self.params.dataset.dataset_name:
@@ -111,14 +114,14 @@ class ModelRunner():
             inference_time_us_list = {k:v.get('inference_time_us') for k,v in self.params.training.target_devices.items()}
             sram_usage_list = {k: v.get('sram') for k, v in self.params.training.target_devices.items()}
             flash_usage_list = {k: v.get('flash') for k, v in self.params.training.target_devices.items()}
-            print('---------------------------------------------------------------------')
-            print(f'Run Name: {self.params.common.run_name}')
-            print(f'- Model: {self.params.training.model_name}')
-            print(f'- TargetDevices & Estimated Inference Times (us): {inference_time_us_list}')
-            print(f'- TargetDevices & Estimated SRAM Usage (bytes): {sram_usage_list}')
-            print(f'- TargetDevices & Estimated Flash Usage (bytes): {flash_usage_list}')
-            print('- This model can be compiled for the above device(s).')
-            print('---------------------------------------------------------------------')
+            logger.info('---------------------------------------------------------------------')
+            logger.info(f'Run Name: {self.params.common.run_name}')
+            logger.info(f'- Model: {self.params.training.model_name}')
+            logger.info(f'- TargetDevices & Estimated Inference Times (us): {inference_time_us_list}')
+            logger.info(f'- TargetDevices & Estimated SRAM Usage (bytes): {sram_usage_list}')
+            logger.info(f'- TargetDevices & Estimated Flash Usage (bytes): {flash_usage_list}')
+            logger.info('- This model can be compiled for the above device(s).')
+            logger.info('---------------------------------------------------------------------')
         #
 
         #####################################################################
@@ -127,9 +130,9 @@ class ModelRunner():
             auto_data_dir = constants.get_default_data_dir_for_task(self.params.common.task_category)
             self.params.dataset.data_dir = auto_data_dir
             if verbose:
-                print(f"Auto-detected data_dir='{auto_data_dir}' for task_category='{self.params.common.task_category}'")
+                logger.info(f"Auto-detected data_dir='{auto_data_dir}' for task_category='{self.params.common.task_category}'")
         elif verbose:
-            print(f"Using user-specified data_dir='{self.params.dataset.data_dir}'")
+            logger.info(f"Using user-specified data_dir='{self.params.dataset.data_dir}'")
         #
 
     def resolve_run_name(self, run_name, model_name):
@@ -234,9 +237,9 @@ class ModelRunner():
             self.package_trained_model(model_training_package_files, self.params.training.model_packaged_path)
             if not utils.misc_utils.str2bool(self.params.testing.skip_train):
                 if self.params.training.training_path_quantization:
-                    print(f'\nTrained model is at: {self.params.training.training_path_quantization}\n')
+                    logger.info(f'Trained model is at: {self.params.training.training_path_quantization}')
                 else:
-                    print(f'\nTrained model is at: {self.params.training.training_path}\n')
+                    logger.info(f'Trained model is at: {self.params.training.training_path}')
             # we are done with training
             with open(self.params.training.log_file_path, 'a') as lfp:
                 lfp.write('\nSUCCESS: ModelMaker - Training completed.')
@@ -252,7 +255,7 @@ class ModelRunner():
             self.model_compilation.clear()
             exit_flag = self.model_compilation.run()
             if exit_flag:
-                print(f'Compilation failed')
+                logger.error('Compilation failed')
                 with open(self.params.compilation.log_file_path, 'a') as lfp:
                     lfp.write('FAILURE: ModelMaker - Compilation failed.')
                 return self.params
@@ -278,7 +281,7 @@ class ModelRunner():
 
 
             self.package_trained_model(model_compilation_package_files, self.params.compilation.model_packaged_path)
-            print(f'Compiled model is at: {self.params.compilation.compilation_path}')
+            logger.info(f'Compiled model is at: {self.params.compilation.compilation_path}')
             with open(self.params.compilation.log_file_path, 'a') as lfp:
                 lfp.write('\nSUCCESS: ModelMaker - Compilation completed.')
             if self.params.testing.device_inference:
@@ -287,7 +290,7 @@ class ModelRunner():
                     run_params_file = os.path.join(self.params.common.project_run_path, 'run.yaml')
                     test_golden_vector(run_params_file, True)
                 except ImportError as e:
-                    print(f"Device Inference cannot be done due to an exception: {e}")
+                    logger.error(f"Device Inference cannot be done due to an exception: {e}")
 
 
         return self.params
