@@ -58,7 +58,7 @@ def get_target_module(backend_name):
 
 class DatasetHandling:
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = dict(
             dataset=dict(
             )
