@@ -29,7 +29,6 @@
 #################################################################################
 
 import copy
-import datetime
 import logging
 import os
 
@@ -40,7 +39,6 @@ import yaml
 from ... import utils
 from . import constants, datasets, descriptions
 from .params import init_params
-from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 
 logger = logging.getLogger(__name__)
 
@@ -62,53 +60,8 @@ class ModelRunner():
             for key, value in vars(self.params).items():
                 logger.info('%s : %s', key, value)
         #
-        # normalize the paths
-        if not self.params.dataset.dataset_name:
-            self.params.dataset.dataset_name = os.path.splitext(os.path.basename(self.params.dataset.input_data_path))[0]
-        self.params.dataset.input_data_path = utils.absolute_path(self.params.dataset.input_data_path)
-        self.params.dataset.input_annotation_path = utils.absolute_path(self.params.dataset.input_annotation_path)
-
-        self.params.common.run_name = self.resolve_run_name(self.params.common.run_name, self.params.training.model_name)
-        self.params.dataset.extract_path = self.params.dataset.dataset_path
-
-        if self.params.training.train_output_path:
-            self.params.common.projects_path = utils.absolute_path(self.params.training.train_output_path)
-            self.params.common.project_path = os.path.join(self.params.common.projects_path)# , self.params.dataset.dataset_name)
-            self.params.dataset.dataset_path = os.path.join(self.params.common.project_path, 'dataset')
-            self.params.common.project_run_path = self.params.common.projects_path
-            self.params.training.training_path = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_base'))
-            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
-                self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_quantization'))
-            self.params.training.model_packaged_path = os.path.join(self.params.training.train_output_path,
-                                    '_'.join(os.path.split(self.params.common.run_name))+'.zip')
-        else:
-            self.params.common.projects_path = utils.absolute_path(self.params.common.projects_path)
-            self.params.common.project_path = os.path.join(self.params.common.projects_path, self.params.dataset.dataset_name)
-            self.params.common.project_run_path = os.path.join(self.params.common.project_path, 'run', self.params.common.run_name)
-            self.params.dataset.dataset_path = os.path.join(self.params.common.project_path, 'dataset')
-            self.params.training.training_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'base'))
-            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
-                self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'quantization'))
-            self.params.training.model_packaged_path = os.path.join(self.params.training.training_path,
-                                    '_'.join(os.path.split(self.params.common.run_name))+'.zip')
-
-        assert self.params.common.target_device in constants.TARGET_DEVICES_ALL, f'common.target_device must be set to one of: {constants.TARGET_DEVICES_ALL}'
-        # target_device_compilation_folder = self.params.common.target_device
-
-        if self.params.compilation.compile_output_path:
-            if self.params.training.enable == False and self.params.compilation.enable == True:
-                self.params.common.projects_path = utils.absolute_path(self.params.compilation.compile_output_path)
-                self.params.common.project_run_path = self.params.common.projects_path
-            self.params.compilation.compilation_path = utils.absolute_path(self.params.compilation.compile_output_path)
-            self.params.compilation.model_packaged_path = os.path.join(self.params.compilation.compile_output_path,
-                                                                    '_'.join(os.path.split(
-                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
-        else:
-            # self.params.compilation.compilation_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'compilation', target_device_compilation_folder))
-            self.params.compilation.compilation_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'compilation'))
-            self.params.compilation.model_packaged_path = os.path.join(self.params.compilation.compilation_path,
-                                                                    '_'.join(os.path.split(
-                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
+        # resolve and normalize all paths
+        utils.misc_utils.resolve_paths(self.params, constants.TARGET_DEVICES_ALL)
 
         if self.params.common.target_device in self.params.training.target_devices:
             inference_time_us_list = {k:v['inference_time_us'] for k,v in self.params.training.target_devices.items()}
@@ -134,19 +87,6 @@ class ModelRunner():
         elif verbose:
             logger.info(f"Using user-specified data_dir='{self.params.dataset.data_dir}'")
         #
-
-    def resolve_run_name(self, run_name, model_name):
-        if not run_name:
-            return ''
-        #
-        # modify or set any parameters here as required.
-        if '{date-time}' in run_name:
-            run_name = run_name.replace('{date-time}', datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-        #
-        if '{model_name}' in run_name:
-            run_name = run_name.replace('{model_name}', model_name)
-        #
-        return run_name
 
     def clear(self):
         pass
