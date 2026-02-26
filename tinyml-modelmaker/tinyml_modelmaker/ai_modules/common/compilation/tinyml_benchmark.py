@@ -46,7 +46,7 @@ from ...timeseries import constants
 
 class ModelCompilation():
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = dict(
             compilation=dict(
             )
