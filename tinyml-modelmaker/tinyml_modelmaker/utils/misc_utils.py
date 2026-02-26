@@ -64,6 +64,107 @@ def absolute_path(relpath):
         return _absolute_path(relpath)
 
 
+def resolve_run_name(run_name, model_name):
+    """Expand {date-time} and {model_name} placeholders in *run_name*."""
+    import datetime
+    if not run_name:
+        return ''
+    if '{date-time}' in run_name:
+        run_name = run_name.replace('{date-time}', datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    if '{model_name}' in run_name:
+        run_name = run_name.replace('{model_name}', model_name)
+    return run_name
+
+
+def resolve_paths(params, target_devices_all):
+    """Resolve and normalize all paths in the runner params.
+
+    Computes absolute paths for dataset, training, and compilation directories
+    based on whether custom output paths are provided.  Modifies params in-place.
+
+    Args:
+        params: ConfigDict with common, dataset, training, compilation sections.
+        target_devices_all: Collection of valid target device identifiers.
+
+    Returns:
+        The params object (modified in-place).
+
+    Raises:
+        ValueError: If target_device is not in target_devices_all.
+    """
+    from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+
+    # --- dataset name fallback ---
+    if not params.dataset.dataset_name:
+        params.dataset.dataset_name = os.path.splitext(
+            os.path.basename(params.dataset.input_data_path))[0]
+
+    # --- normalize input paths ---
+    params.dataset.input_data_path = absolute_path(params.dataset.input_data_path)
+    params.dataset.input_annotation_path = absolute_path(params.dataset.input_annotation_path)
+
+    # --- resolve run name templates ---
+    params.common.run_name = resolve_run_name(params.common.run_name, params.training.model_name)
+    params.dataset.extract_path = params.dataset.dataset_path
+
+    # --- training path resolution ---
+    if params.training.train_output_path:
+        # custom output: flat structure under train_output_path
+        params.common.projects_path = absolute_path(params.training.train_output_path)
+        params.common.project_path = os.path.join(params.common.projects_path)
+        params.dataset.dataset_path = os.path.join(params.common.project_path, 'dataset')
+        params.common.project_run_path = params.common.projects_path
+        params.training.training_path = absolute_path(
+            os.path.join(params.training.train_output_path, 'training_base'))
+        if params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+            params.training.training_path_quantization = absolute_path(
+                os.path.join(params.training.train_output_path, 'training_quantization'))
+        params.training.model_packaged_path = os.path.join(
+            params.training.train_output_path,
+            '_'.join(os.path.split(params.common.run_name)) + '.zip')
+    else:
+        # default: nested structure under projects_path/dataset_name/run/run_name
+        params.common.projects_path = absolute_path(params.common.projects_path)
+        params.common.project_path = os.path.join(
+            params.common.projects_path, params.dataset.dataset_name)
+        params.common.project_run_path = os.path.join(
+            params.common.project_path, 'run', params.common.run_name)
+        params.dataset.dataset_path = os.path.join(params.common.project_path, 'dataset')
+        params.training.training_path = absolute_path(
+            os.path.join(params.common.project_run_path, 'training', 'base'))
+        if params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+            params.training.training_path_quantization = absolute_path(
+                os.path.join(params.common.project_run_path, 'training', 'quantization'))
+        params.training.model_packaged_path = os.path.join(
+            params.training.training_path,
+            '_'.join(os.path.split(params.common.run_name)) + '.zip')
+
+    # --- target device validation ---
+    if params.common.target_device not in target_devices_all:
+        raise ValueError(
+            f'common.target_device must be set to one of: {target_devices_all}')
+
+    # --- compilation path resolution ---
+    if params.compilation.compile_output_path:
+        if params.training.enable is False and params.compilation.enable is True:
+            params.common.projects_path = absolute_path(params.compilation.compile_output_path)
+            params.common.project_run_path = params.common.projects_path
+        params.compilation.compilation_path = absolute_path(params.compilation.compile_output_path)
+        params.compilation.model_packaged_path = os.path.join(
+            params.compilation.compile_output_path,
+            '_'.join(os.path.split(params.common.run_name))
+            + f'_{params.common.target_device}.zip')
+    else:
+        params.compilation.compilation_path = absolute_path(
+            os.path.join(params.common.project_run_path, 'compilation'))
+        params.compilation.model_packaged_path = os.path.join(
+            params.compilation.compilation_path,
+            '_'.join(os.path.split(params.common.run_name))
+            + f'_{params.common.target_device}.zip')
+
+    return params
+
+
 def is_junction(path: str) -> bool:
     try:
         return bool(os.readlink(path))
