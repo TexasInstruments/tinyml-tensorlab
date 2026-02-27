@@ -16686,21 +16686,21 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
           target_c_mcpu: cortex-m33
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
       forced_soft_npu_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     blower_imbalance:
@@ -16708,21 +16708,21 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
           target_c_mcpu: cortex-m33
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
       forced_soft_npu_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     generic_timeseries_classification:
@@ -16730,21 +16730,21 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
           target_c_mcpu: cortex-m33
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
       forced_soft_npu_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     generic_timeseries_forecasting:
@@ -16752,21 +16752,21 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
           target_c_mcpu: cortex-m33
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
       forced_soft_npu_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     generic_timeseries_regression:
@@ -16774,21 +16774,21 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
           target_c_mcpu: cortex-m33
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=false
           target_c_mcpu: cortex-m33
       forced_soft_npu_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     motor_fault:
@@ -16796,21 +16796,21 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
           target_c_mcpu: cortex-m33
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=hard skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
       forced_soft_npu_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
   AM261:
@@ -16917,32 +16917,36 @@ preset_descriptions:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard
+            -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m
+            -mthumb
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m4
     generic_timeseries_forecasting:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard
+            -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m
+            -mthumb
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m4
     generic_timeseries_regression:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard
+            -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m
+            -mthumb
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m4
     pir_detection:
       default_preset:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
-          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard
+            -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m
+            -mthumb
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m4
   CC1354:
@@ -16951,7 +16955,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
     generic_timeseries_forecasting:
@@ -16959,7 +16963,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
     generic_timeseries_regression:
@@ -16967,7 +16971,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
     pir_detection:
@@ -16975,7 +16979,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
   CC2755:
@@ -18007,7 +18011,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     blower_imbalance:
@@ -18015,7 +18019,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     generic_timeseries_classification:
@@ -18023,7 +18027,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     generic_timeseries_forecasting:
@@ -18031,7 +18035,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
     generic_timeseries_regression:
@@ -18039,7 +18043,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=false
           target_c_mcpu: cortex-m33
     motor_fault:
@@ -18047,7 +18051,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
     pir_detection:
@@ -18055,7 +18059,7 @@ preset_descriptions:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
-            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
   MSPM33C34: {}
