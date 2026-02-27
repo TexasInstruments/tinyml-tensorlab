@@ -824,15 +824,19 @@ def get_confusion_matrix(output, target, classes):
     Compute multi-class confusion matrix, a matrix of dimension num_classes x num_classes
     where each element at position (i,j) is the number of examples with true class i that were predicted to be class j.
     """
-    return multiclass_confusion_matrix(output, target, classes)
+    # torcheval uses sparse COO tensors internally, which are not supported
+    # on MPS.  Move to CPU for this computation.
+    return multiclass_confusion_matrix(output.cpu(), target.cpu(), classes)
 
 
 def get_f1_score(output, target, classes):
-    return multiclass_f1_score(output, target, num_classes=classes)
+    # Move to CPU — torcheval may use ops unsupported on MPS
+    return multiclass_f1_score(output.cpu(), target.cpu(), num_classes=classes)
 
 
 def get_au_roc(output, target, classes):
-    return multiclass_auroc(output, target, num_classes=classes, average='macro')
+    # Move to CPU — torcheval may use ops unsupported on MPS
+    return multiclass_auroc(output.cpu(), target.cpu(), num_classes=classes, average='macro')
 
 
 def get_r2_score(output,target):
