@@ -142,7 +142,11 @@ def init_params(*args, **kwargs):
             load_saved_model=None,
             ondevice_training = False,
             trainable_layers_from_last = 1,
-            partial_quantization = False
+            partial_quantization = False,
+
+            # Performance optimization (opt-in, primarily beneficial on CUDA)
+            compile_model=0,    # 1 to enable torch.compile (inductor on CUDA, aot_eager on MPS)
+            native_amp=False,   # True to enable PyTorch native AMP (autocast)
         ),
 
         testing=dict(
