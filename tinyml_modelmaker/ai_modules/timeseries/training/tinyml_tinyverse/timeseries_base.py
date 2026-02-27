@@ -429,60 +429,82 @@ def get_forecasting_log_summary_regex():
 def get_anomaly_detection_log_summary_regex():
     """
     Returns the log summary regex patterns for anomaly detection tasks.
-    Extracts MSE metrics from training logs (best epoch only, as per-epoch validation logging is not performed).
+    Extracts epoch numbers, training loss, validation loss, and best epoch data from training logs.
+    
+    Log format examples:
+    - INFO: root.utils.MetricLogger.FloatTrain: Training   - Epoch[0]:  [  0/188]  loss: 1.3182 (1.3182)
+    - INFO: root.utils.MetricLogger.FloatTrain: Training   - Epoch[0]:  Total time: 0:00:00
+    - INFO: root.train_utils.train.FloatTrain: Training   - Epoch[0]:  MSE 0.523456
+    - INFO: root.utils.MetricLogger.FloatTrain: Validation - Epoch[0]:   [ 0/38]  loss: 1.1205 (1.1205)
+    - INFO: root.utils.MetricLogger.FloatTrain: Validation - Epoch[0]:  Total time: 0:00:00
+    - INFO: root.train_utils.evaluate.FloatTrain: Validation - Epoch[0]:  MSE 0.412300
+    - INFO: root.main.FloatTrain.BestEpoch: Best Epoch: 46
+    - INFO: root.main.FloatTrain.BestEpoch: MSE 0.008
     """
     return {
         'js': [
-            # Floating Point Training Metrics
+            # Floating Point Training Metrics (per epoch)
             {'type': 'Epoch (FloatTrain)', 'name': 'Epoch (FloatTrain)', 'description': 'Epochs (FloatTrain)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'FloatTrain:.*?Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
+                 {'op': 'search', 'pattern': r'FloatTrain:\s+Training\s+-\s+Epoch\[(?<eid>\d+)\]:\s+Total', 'groupId': 'eid'}],
              },
-            {'type': 'Training Loss (FloatTrain)', 'name': 'Loss (FloatTrain)',
-             'description': 'Training Loss (FloatTrain)', 'unit': 'Loss', 'value': None,
+            {'type': 'Training MSE Loss(FloatTrain)', 'name': 'Training MSE Loss(FloatTrain)',
+             'description': 'Training MSE Loss per Epoch (FloatTrain)', 'unit': 'MSE', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'FloatTrain:.*?Training.*?Epoch\[\d+\].*?loss:\s+(?<loss>\d+\.\d+)',
-                        'groupId': 'loss'}],
+                        'pattern': r'FloatTrain:\s+Training\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                        'groupId': 'mse', 'scale_factor': 1}],
              },
-            # Quantized Training Metrics
+            {'type': 'Validation MSE Loss (FloatTrain)', 'name': 'Validation MSE Loss (FloatTrain)',
+             'description': 'Validation MSE Loss per Epoch (FloatTrain)', 'unit': 'MSE', 'value': None,
+             'regex': [{'op': 'search',
+                        'pattern': r'FloatTrain:\s+Validation\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                        'groupId': 'mse', 'scale_factor': 1}],
+             },
+            # Quantized Training Metrics (per epoch)
             {'type': 'Epoch (QuantTrain)', 'name': 'Epoch (QuantTrain)', 'description': 'Epochs (QuantTrain)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'QuantTrain:.*?Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
+                 {'op': 'search', 'pattern': r'QuantTrain:\s+Training\s+-\s+Epoch\[(?<eid>\d+)\]:\s+Total', 'groupId': 'eid'}],
              },
-            {'type': 'Training Loss (QuantTrain)', 'name': 'Loss (QuantTrain)',
-             'description': 'Training Loss (QuantTrain)', 'unit': 'Loss', 'value': None,
+            {'type': 'Training MSE Loss(QuantTrain)', 'name': 'Training MSE Loss(QuantTrain)',
+             'description': 'Training MSE Loss per Epoch (QuantTrain)', 'unit': 'MSE', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'QuantTrain:.*?Training.*?Epoch\[\d+\].*?loss:\s+(?<loss>\d+\.\d+)',
-                        'groupId': 'loss'}],
+                        'pattern': r'QuantTrain:\s+Training\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                        'groupId': 'mse', 'scale_factor': 1}],
+             },
+            {'type': 'Validation MSE Loss (QuantTrain)', 'name': 'Validation MSE Loss (QuantTrain)',
+             'description': 'Validation MSE Loss per Epoch (QuantTrain)', 'unit': 'MSE', 'value': None,
+             'regex': [{'op': 'search',
+                        'pattern': r'QuantTrain:\s+Validation\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                        'groupId': 'mse', 'scale_factor': 1}],
              },
             # Best Epoch FloatTrain Metrics
             {'type': 'Epoch (FloatTrain, BestEpoch)', 'name': 'Epoch (FloatTrain, BestEpoch)',
-             'description': 'Epochs (FloatTrain, BestEpoch)',
+             'description': 'Best Epoch Number (FloatTrain)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'FloatTrain.BestEpoch\s*: Best Epoch:\s+(?<eid>\d+)',
+                 {'op': 'search', 'pattern': r'FloatTrain\.BestEpoch:\s+Best\s+Epoch:\s+(?<eid>\d+)',
                   'groupId': 'eid'}],
              },
             {'type': 'MSE (FloatTrain, BestEpoch)', 'name': 'MSE (FloatTrain, BestEpoch)',
-             'description': 'MSE (FloatTrain, BestEpoch)', 'unit': 'MSE', 'value': None,
+             'description': 'Best Epoch MSE (FloatTrain)', 'unit': 'MSE', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'FloatTrain.BestEpoch\s*: MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                 {'op': 'search', 'pattern': r'FloatTrain\.BestEpoch:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
                   'groupId': 'mse', 'scale_factor': 1}],
              },
             # Best Epoch QuantTrain Metrics
             {'type': 'Epoch (QuantTrain, BestEpoch)', 'name': 'Epoch (QuantTrain, BestEpoch)',
-             'description': 'Epochs (QuantTrain, BestEpoch)',
+             'description': 'Best Epoch Number (QuantTrain)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'QuantTrain.BestEpoch\s*: Best Epoch:\s+(?<eid>\d+)',
+                 {'op': 'search', 'pattern': r'QuantTrain\.BestEpoch:\s+Best\s+Epoch:\s+(?<eid>\d+)',
                   'groupId': 'eid'}],
              },
             {'type': 'MSE (QuantTrain, BestEpoch)', 'name': 'MSE (QuantTrain, BestEpoch)',
-             'description': 'MSE (QuantTrain, BestEpoch)', 'unit': 'MSE', 'value': None,
+             'description': 'Best Epoch MSE (QuantTrain)', 'unit': 'MSE', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'QuantTrain.BestEpoch\s*: MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                 {'op': 'search', 'pattern': r'QuantTrain\.BestEpoch:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
                   'groupId': 'mse', 'scale_factor': 1}],
              },
         ]
