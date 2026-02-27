@@ -18265,7 +18265,7 @@ target_device_descriptions:
       * SDK release: 1_02_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM13E2
-    device_selection_factor: 16
+    device_selection_factor: 18
     device_type: MCU
     sdk_release: '1_02_00_00'
     sdk_version: 1.02.00.00
@@ -18277,7 +18277,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM261
-    device_selection_factor: 7
+    device_selection_factor: 15
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18289,7 +18289,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM263
-    device_selection_factor: 7
+    device_selection_factor: 16
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18301,7 +18301,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM263P
-    device_selection_factor: 7
+    device_selection_factor: 17
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18313,7 +18313,7 @@ target_device_descriptions:
       * SDK release: 08_31_00_11\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1352
-    device_selection_factor: 18
+    device_selection_factor: 2
     device_type: MCU
     sdk_release: 08_31_00_11
     sdk_version: 8.31.00.11
@@ -18325,7 +18325,7 @@ target_device_descriptions:
       * SDK release: 08_31_00_11\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1354
-    device_selection_factor: 19
+    device_selection_factor: 3
     device_type: MCU
     sdk_release: 08_31_00_11
     sdk_version: 8.31.00.11
@@ -18337,7 +18337,7 @@ target_device_descriptions:
       * SDK release: 09_12_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC2755
-    device_selection_factor: 17
+    device_selection_factor: 4
     device_type: MCU
     sdk_release: 09_12_00_00
     sdk_version: 9.12.00.00
@@ -18349,7 +18349,7 @@ target_device_descriptions:
       \nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab\
       \ \n"
     device_name: CC35X1
-    device_selection_factor: 20
+    device_selection_factor: 10
     device_type: MCU
     sdk_release: 09_21_00_15
     sdk_version: 9.21.00.15
@@ -18362,7 +18362,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F280013
-    device_selection_factor: 0
+    device_selection_factor: 7
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18374,7 +18374,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F280015
-    device_selection_factor: 1
+    device_selection_factor: 8
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18386,7 +18386,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28003
-    device_selection_factor: 2
+    device_selection_factor: 6
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18398,7 +18398,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28004
-    device_selection_factor: 3
+    device_selection_factor: 5
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18410,7 +18410,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F2837
-    device_selection_factor: 4
+    device_selection_factor: 11
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18422,7 +18422,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28P55
-    device_selection_factor: 6
+    device_selection_factor: 14
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18434,7 +18434,7 @@ target_device_descriptions:
       * SDK release: 06_00_01\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28P65
-    device_selection_factor: 5
+    device_selection_factor: 12
     device_type: MCU
     sdk_release: '06_00_01'
     sdk_version: 6.0.1
@@ -18446,7 +18446,7 @@ target_device_descriptions:
       * SDK release: 01_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F29H85
-    device_selection_factor: 8
+    device_selection_factor: 22
     device_type: MCU
     sdk_release: '01_00_00'
     sdk_version: '1.00'
@@ -18457,7 +18457,7 @@ target_device_descriptions:
       * SDK release: 01_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F29P32
-    device_selection_factor: 10
+    device_selection_factor: 20
     device_type: MCU
     sdk_release: '01_00_00'
     sdk_version: '1.00'
@@ -18468,7 +18468,7 @@ target_device_descriptions:
       * SDK release: 01_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F29P58
-    device_selection_factor: 9
+    device_selection_factor: 21
     device_type: MCU
     sdk_release: '01_00_00'
     sdk_version: '1.00'
@@ -18480,7 +18480,7 @@ target_device_descriptions:
       * SDK release: 2_08_00_03\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G3507
-    device_selection_factor: 11
+    device_selection_factor: 0
     device_type: MCU
     sdk_release: '2_08_00_03'
     sdk_version: 2.08.00.03
@@ -18492,7 +18492,7 @@ target_device_descriptions:
       * SDK release: 2_08_00_03\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G3519
-    device_selection_factor: 12
+    device_selection_factor: 1
     device_type: MCU
     sdk_release: '2_08_00_03'
     sdk_version: 2.08.00.03
@@ -18516,7 +18516,7 @@ target_device_descriptions:
       * SDK release: 1_02_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM33C32
-    device_selection_factor: 14
+    device_selection_factor: 9
     device_type: MCU
     sdk_release: '1_02_00_00'
     sdk_version: 1.02.00.00
@@ -18528,7 +18528,7 @@ target_device_descriptions:
       * SDK release: 1_02_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM33C34
-    device_selection_factor: 15
+    device_selection_factor: 19
     device_type: MCU
     sdk_release: '1_02_00_00'
     sdk_version: 1.02.00.00

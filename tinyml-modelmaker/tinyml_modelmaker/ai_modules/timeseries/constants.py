@@ -686,7 +686,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F280013: {
         'device_name': TARGET_DEVICE_F280013,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 0,
+        'device_selection_factor': 7,
         'device_details': TARGET_DEVICE_DETAILS_F280013,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -694,7 +694,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F280015: {
         'device_name': TARGET_DEVICE_F280015,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 1,
+        'device_selection_factor': 8,
         'device_details': TARGET_DEVICE_DETAILS_F280015,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -702,7 +702,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28003: {
         'device_name': TARGET_DEVICE_F28003,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 2,
+        'device_selection_factor': 6,
         'device_details': TARGET_DEVICE_DETAILS_F28003,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -710,7 +710,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28004: {
         'device_name': TARGET_DEVICE_F28004,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 3,
+        'device_selection_factor': 5,
         'device_details': TARGET_DEVICE_DETAILS_F28004,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -718,7 +718,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F2837: {
         'device_name': TARGET_DEVICE_F2837,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 4,
+        'device_selection_factor': 11,
         'device_details': TARGET_DEVICE_DETAILS_F2837,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -726,7 +726,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P65: {
         'device_name': TARGET_DEVICE_F28P65,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 5,
+        'device_selection_factor': 12,
         'device_details': TARGET_DEVICE_DETAILS_F28P65,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -734,7 +734,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P55: {
         'device_name': TARGET_DEVICE_F28P55,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 6,
+        'device_selection_factor': 14,
         'device_details': TARGET_DEVICE_DETAILS_F28P55,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -742,7 +742,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
         'device_name': TARGET_DEVICE_AM263,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 7,
+        'device_selection_factor': 16,
         'device_details': TARGET_DEVICE_DETAILS_AM263,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -750,7 +750,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM263P: {
         'device_name': TARGET_DEVICE_AM263P,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 7,
+        'device_selection_factor': 17,
         'device_details': TARGET_DEVICE_DETAILS_AM263P,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -758,7 +758,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM261: {
         'device_name': TARGET_DEVICE_AM261,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 7,
+        'device_selection_factor': 15,
         'device_details': TARGET_DEVICE_DETAILS_AM261,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -766,7 +766,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29H85: {
         'device_name': TARGET_DEVICE_F29H85,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 8,
+        'device_selection_factor': 22,
         'device_details': TARGET_DEVICE_DETAILS_F29H85,
         'sdk_version': TARGET_SDK_VERSION_F29H85,
         'sdk_release': TARGET_SDK_RELEASE_F29H85,
@@ -774,7 +774,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29P58: {
         'device_name': TARGET_DEVICE_F29P58,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 9,
+        'device_selection_factor': 21,
         'device_details': TARGET_DEVICE_DETAILS_F29P58,
         'sdk_version': TARGET_SDK_VERSION_F29P58,
         'sdk_release': TARGET_SDK_RELEASE_F29P58,
@@ -782,7 +782,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29P32: {
         'device_name': TARGET_DEVICE_F29P32,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 10,
+        'device_selection_factor': 20,
         'device_details': TARGET_DEVICE_DETAILS_F29P32,
         'sdk_version': TARGET_SDK_VERSION_F29P32,
         'sdk_release': TARGET_SDK_RELEASE_F29P32,
@@ -790,7 +790,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM0G3507: {
         'device_name': TARGET_DEVICE_MSPM0G3507,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 11,
+        'device_selection_factor': 0,
         'device_details': TARGET_DEVICE_DETAILS_MSPM0G3507,
         'sdk_version': TARGET_SDK_VERSION_MSPM0,
         'sdk_release': TARGET_SDK_RELEASE_MSPM0,
@@ -798,7 +798,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM0G3519: {
         'device_name': TARGET_DEVICE_MSPM0G3519,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 12,
+        'device_selection_factor': 1,
         'device_details': TARGET_DEVICE_DETAILS_MSPM0G3519,
         'sdk_version': TARGET_SDK_VERSION_MSPM0,
         'sdk_release': TARGET_SDK_RELEASE_MSPM0,
@@ -814,7 +814,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM33C32: {
         'device_name': TARGET_DEVICE_MSPM33C32,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 14,
+        'device_selection_factor': 9,
         'device_details': TARGET_DEVICE_DETAILS_MSPM33C32,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -822,7 +822,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM33C34: {
         'device_name': TARGET_DEVICE_MSPM33C34,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 15,
+        'device_selection_factor': 19,
         'device_details': TARGET_DEVICE_DETAILS_MSPM33C34,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -830,7 +830,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM13E2: {
         'device_name': TARGET_DEVICE_AM13E2,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 16,
+        'device_selection_factor': 18,
         'device_details': TARGET_DEVICE_DETAILS_AM13E2,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -838,7 +838,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_CC2755: {
         'device_name': TARGET_DEVICE_CC2755,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 17,
+        'device_selection_factor': 4,
         'device_details': TARGET_DEVICE_DETAILS_CC2755,
         'sdk_version': TARGET_SDK_VERSION_CC2755,
         'sdk_release': TARGET_SDK_RELEASE_CC2755,
@@ -846,7 +846,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_CC1352: {
         'device_name': TARGET_DEVICE_CC1352,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 18,
+        'device_selection_factor': 2,
         'device_details': TARGET_DEVICE_DETAILS_CC1352,
         'sdk_version': TARGET_SDK_VERSION_CC1352,
         'sdk_release': TARGET_SDK_RELEASE_CC1352,
@@ -854,7 +854,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_CC1354: {
         'device_name': TARGET_DEVICE_CC1354,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 19,
+        'device_selection_factor': 3,
         'device_details': TARGET_DEVICE_DETAILS_CC1354,
         'sdk_version': TARGET_SDK_VERSION_CC1354,
         'sdk_release': TARGET_SDK_RELEASE_CC1354,
@@ -862,7 +862,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_CC35X1: {
         'device_name': TARGET_DEVICE_CC35X1,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 20,
+        'device_selection_factor': 10,
         'device_details': TARGET_DEVICE_DETAILS_CC35X1,
         'sdk_version': TARGET_SDK_VERSION_CC35X1,
         'sdk_release': TARGET_SDK_RELEASE_CC35X1,
