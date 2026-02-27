@@ -87,9 +87,9 @@ The initial branch consists of three convolution layers with (input_channel, out
 
 To run this example for device: `F28P55`, it should be mentioned inside the target_device field in the config.yaml:
 ```sh
-cd tinyml-modelmaker
+cd tinyml-modelzoo
 
-run_tinyml_modelmaker.sh examples/branched_model_parameters/config.yaml
+run_tinyml_modelzoo.sh examples/branched_model_parameters/config.yaml
 ```
 
 ## Comparison of models

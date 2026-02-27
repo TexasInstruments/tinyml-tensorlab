@@ -68,7 +68,7 @@ Unlike classification tasks, forecasting **always requires annotation files**. T
 
 For this example, we have already prepared the dataset in the required format. You can find the zipped dataset [here.](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip)
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
 You can run this example directly in **TinyML ModelMaker** using the following command:
 
@@ -292,7 +292,7 @@ Also you can see the compiled model at: `tinyml-modelmaker/data/projects/{datase
 
 ## Running on Device
 
-We have compiled this example using the ti-npu soft preset, which means the software emulation of the TI-NPU with some optimized operations. After successfully running Modelmaker, you will get four main files:
+We have compiled this example using the ti-npu soft preset for F28P55x device, which means the software emulation of the TI-NPU with some optimized operations. After successfully running Modelmaker, you will get four main files:
 
 1. **Artifacts**:
    - `mod.a` and `tvmgen_default.h` are generated and stored in:
@@ -303,8 +303,10 @@ We have compiled this example using the ti-npu soft preset, which means the soft
 2. **Golden Vectors**:
    - `user_input_config.h` and `test_vector.c` are stored in:
      ```
-     tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/golden_vectors
+     tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/golden_vectors
      ```
+
+These four files will be needed while running on device.
 
 In this example, we will use the following setup:
 
@@ -329,6 +331,7 @@ Here are the key performance metrics for the model running on the device:
 
 | Metric               | Value       |
 |----------------------|-------------|
+| **Device Name**      | F28P55x     |
 | **Cycles**           | 102307      |
 | **Inference Time**   | 682.05 µs   |
 | **Results Match**    | TRUE        |

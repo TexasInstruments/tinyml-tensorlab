@@ -44,7 +44,7 @@ Derived quantities included in the dataset
 - Apparent power: S = V × I
 - Thermal effects and simple resistance scaling are included so models must learn both linear and non-linear interactions.
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
 Prepare the zipped dataset by running the induction_motor_speed_prediction python file. The script will create zipped dataset as `induction_motor_speed_prediction_dataset.zip`. 
 ```bash

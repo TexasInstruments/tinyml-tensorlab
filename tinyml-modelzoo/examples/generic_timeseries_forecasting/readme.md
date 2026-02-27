@@ -69,7 +69,7 @@ Unlike classification tasks, forecasting **always requires annotation files**. T
 
 For this example, we have already prepared the dataset in the required format. You can find the zipped dataset at: [`generic_timeseries_forecasting.zip`](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_forecasting.zip)
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
 You can run this example directly in **TinyML ModelMaker** using the following command:
 
@@ -299,9 +299,11 @@ After successfully running ModelMaker, you will get the compiled model artifacts
 2. **Golden Vectors**:
    - `user_input_config.h` and `test_vector.c` are stored in:
      ```
-     tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/base/golden_vectors
+     tinyml-modelmaker/data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/golden_vectors
      ```
-
+     
+These four files will be needed while running on device.
+ 
 Steps to run this example on-device can be found by following this guide: [Deploying Forecasting Models from ModelMaker to Device](../../docs/deploying_forecasting_models_from_modelmaker_to_device/readme.md)
 
 <hr>

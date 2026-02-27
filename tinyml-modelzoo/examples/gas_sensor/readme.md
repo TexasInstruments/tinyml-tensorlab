@@ -24,15 +24,15 @@ dataset:
     input_data_path: 'examples/gas_sensor/gas_sensor_dataset.zip'
 ```
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
 This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelmaker.sh examples/gas_sensor/config.yaml
+run_tinyml_modelzoo.sh examples/gas_sensor/config.yaml
 ```
 
-1. `run_tinyml_modelmaker.sh` is the script to run modelmaker. It take two required arguments TARGET_SOC and CONFIG_FILE.
+1. `run_tinyml_modelzoo.sh` is the script to run modelmaker. It take two required arguments TARGET_SOC and CONFIG_FILE.
 2. `examples/gas_sensor/config.yaml` path of the yaml configuration file to run
 
 The users can configure the yaml [configuration](config.yaml) to change parameters related to data preprocessing feature extraction, **training**, testing, model and model compilation. In this example, we will configure the parameter of training, specifically *output_int*.
