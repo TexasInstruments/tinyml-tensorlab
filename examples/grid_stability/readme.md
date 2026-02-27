@@ -46,8 +46,8 @@ Interpreting PCA plots:
 - PCA (Principal Component Analysis) reduces high-dimensional feature vectors to 2D or 3D for visualization. PCA plots help you see whether classes separate well in feature space — well separated clusters suggest easier learning for simple models.
 
 ```bash
-cd tinyml-modelmaker
-run_tinyml_modelmaker.sh examples/grid_stability/config.yaml
+cd tinyml-modelzoo
+run_tinyml_modelzoo.sh examples/grid_stability/config.yaml
 ```
 
 ModelMaker will start by loading the dataset, train the model, test the model, compile the model. ModelMaker will create the output folder in `tinyml-modelmaker/data/projects/{dataset_name}`. For this example dataset_name is `grid_stability`. You can find the dataset name in the [configuration](config.yaml) yaml.

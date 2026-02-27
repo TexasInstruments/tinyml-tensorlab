@@ -67,7 +67,7 @@ Unlike classification tasks, regression **always requires annotation files**. Th
 
 For this example, we have already prepared the dataset in the required format. You can find the zipped dataset at: [`generic_timeseries_regression_dataset`](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_regression.zip)
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
 You can run this example directly in **TinyML ModelMaker** using the following command:
 

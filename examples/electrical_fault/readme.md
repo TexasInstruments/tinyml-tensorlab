@@ -43,15 +43,15 @@ dataset:
     input_data_path: 'examples/electrical_fault/electrical_fault_dataset.zip'
 ```
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
-This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
+This zipped dataset is designed to work with Tiny ML ModelZoo. Run the modelzoo with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelmaker.sh examples/electrical_fault/config.yaml
+run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml
 ```
 
-1. `run_tinyml_modelmaker.sh` is the script to run modelmaker. It take two required arguments.
+1. `run_tinyml_modelzoo.sh` is the script to run modelzoo. It take two required arguments.
 2. `examples/electrical_fault/config.yaml` path of the yaml configuration to run
 
 The users can configure the yaml [configuration](config.yaml) to change parameters related to **data preprocessing feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. 
@@ -132,10 +132,10 @@ data_processing_feature_extraction:
 2. `feature_size_per_frame`: size of binned features from one frame
 3. `num_frame_concat`: number of frames used for concatenating features
 
-After doing the above changes in yaml [configuration](config.yaml) file. Run the modelmaker again for this dataset.
+After doing the above changes in yaml [configuration](config.yaml) file. Run the modelzoo again for this dataset.
 
 ```bash
-run_tinyml_modelmaker.sh examples/electrical_fault/config.yaml
+run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml
 ```
 
 You can see that, you don't encounter any error during modelmaker run. This is because the feature extraction was succesfully able to mitigate the mulitcollinearity problem. This will resolve the error of to train the model properly with good hyper parameters.

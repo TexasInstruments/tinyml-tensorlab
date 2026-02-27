@@ -53,7 +53,7 @@ The dataset contains temperature data for various ambient temperatures, coolant 
 
 - **T_case - T_linear**
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
 The datset for this project is `mosfet_temp_prediction_dataset.zip`. The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
 

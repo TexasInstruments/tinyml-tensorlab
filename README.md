@@ -261,6 +261,8 @@ These applications are designed for specific use cases with optimized models and
 | **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
 | **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect faults in BLDC fans from accelerometer data |
 | **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
+| **grid_fault_detection** | classification | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect electrical grid faults from sensor data |
+| **mosfet_temp_prediction** | regression | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Predict MOSFET temperature from electrical parameters |
 | **pir_detection** | pir_detection | CC2755, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
 | **MNIST_image_classification** | image_classification | MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | Handwritten digit recognition (MNIST dataset) |
 
@@ -270,7 +272,7 @@ These applications are designed for specific use cases with optimized models and
   - Regression: 5 examples (1 base + 4 real-world applications)
   - Forecasting: 3 examples (1 base + 2 real-world applications)
   - Anomaly Detection: 6 examples (1 base + 5 application variants)
-- **Application-Specific Tasks** (8 examples): arc_fault (2), motor_fault (3), pir_detection (1), ecg_classification (1), image_classification (1)
+- **Application-Specific Tasks** (10 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), image_classification (1)
 
 ---
 

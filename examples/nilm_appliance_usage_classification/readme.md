@@ -73,12 +73,12 @@ Additionally, we reduced the number of variables from the original 30 to just 5 
 
 From these selected classes, we created the **train**, **validation**, and **test** datasets and structured the data to make it compatible with **Tiny ML ModelMaker** for classification tasks. You can access the refined dataset as a ZIP file [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip).
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
-Here is the command to use the refined dataset we produced earlier with Tiny ML ModelMaker:
+Here is the command to use the refined dataset we produced earlier with Tiny ML ModelZoo:
 
 ```bash
-./run_tinyml_modelmaker.sh examples/nilm_appliance_usage_classification/config.yaml
+./run_tinyml_modelzoo.sh examples/nilm_appliance_usage_classification/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
@@ -161,7 +161,7 @@ After successfully running Modelmaker, you will get four main files:
      data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/golden_vectors
      ```
 
-These four files will be needed while running on device and are attached here in this same directory.
+These four files will be needed while running on device.
 
 In this example, we will use the following setup:
 
@@ -184,7 +184,7 @@ Here are the key performance metrics for the model running on the device:
 
 | Metric               | Value       |
 |----------------------|-------------|
-| **Device Name**      | f28p55x     |
+| **Device Name**      | F28P55x     |
 | **AI Model Cycles**  | 165629      |
 | **Inference Time**   | 1104.19 µs  |
 | **Results Match**    | TRUE        |

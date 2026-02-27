@@ -48,7 +48,7 @@ For regression tasks, the dataset structure is expected to be as follows :
 
 * The dataset can be directly downloaded from https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/washing_machine_loading_data.zip, it's directly downloaded in the example
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
 The example can be run directly using the following command
 

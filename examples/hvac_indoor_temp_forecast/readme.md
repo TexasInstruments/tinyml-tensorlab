@@ -32,12 +32,12 @@ The dataset consists of time-series samples collected at uniform timesteps and i
 **`indoorTemperature` at the next timestep** (or over a short future horizon. You can do this by setting forecast_horizon parameter in the YAML file.)
 
 
-## Usage in Tiny ML ModelMaker
+## Usage in Tiny ML ModelZoo
 
-Here is the command to use this dataset with Tiny ML ModelMaker:
+Here is the command to use this dataset with Tiny ML ModelZoo:
 
 ```bash
-./run_tinyml_modelmaker.sh examples/hvac_indoor_temp_forecast/config.yaml
+./run_tinyml_modelzoo.sh examples/hvac_indoor_temp_forecast/config.yaml
 ```
 
 Users can configure the model pipeline using a YAML configuration file (like shown in the command above), where different stages (dataset loading, data processing and feature extraction, training, testing, and compilation) can be enabled or disabled based on requirements.
@@ -166,7 +166,7 @@ You can find the compiled model at: tinyml-modelmaker/data/projects/{dataset_nam
 
 ## Running on Device
 
-We have compiled this example using the ti-npu soft preset, which means the software emulation of the TI-NPU with some optimized operations. After successfully running Modelmaker, you will get four main files:
+We have compiled this example using the ti-npu soft preset for F28P55x device, which means the software emulation of the TI-NPU with some optimized operations. After successfully running Modelmaker, you will get four main files:
 
 1. **Artifacts**:
    - `mod.a` and `tvmgen_default.h` are generated and stored in:
@@ -180,7 +180,7 @@ We have compiled this example using the ti-npu soft preset, which means the soft
      data/projects/{dataset_name}/run/{date-time}/{model_name}/training/quantization/golden_vectors
      ```
 
-These four files will be needed while running on device and are attached here in this same directory.
+These four files will be needed while running on device.
 
 In this example, we will use the following setup:
 
@@ -204,7 +204,7 @@ Here are the key performance metrics for the model running on the device:
 
 | Metric               | Value       |
 |----------------------|-------------|
-| **Device Name**      | f28p55x     |
+| **Device Name**      | F28P55x     |
 | **AI Model Cycles**  | 199432      |
 | **Inference Time**   | 1329.55 µs  |
 | **Results Match**    | TRUE        |

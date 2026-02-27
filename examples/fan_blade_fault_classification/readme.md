@@ -73,8 +73,8 @@ This application example showcases the following story:
 
 * You can use the Model Composer GUI or Tiny ML Modelmaker to train your model and compile it.
 * In Model Composer, you can play with different settings that can get your model to accuracy suited to you
-* For Tiny ML Modelmaker, you can use [this](config.yaml) config file and run it as follows from the `tinyml-modelmaker` directory
-  * `run_tinyml_modelmaker.sh fan_blade_fault_classification/config.yaml`
+* For Tiny ML Modelmaker, you can use [this](config.yaml) config file and run it as follows from the `tinyml-modelzoo` directory
+  * `run_tinyml_modelzoo.sh fan_blade_fault_classification/config.yaml`
 * This configuration file should give you a 100% accuracy
 
 ## Live Preview
