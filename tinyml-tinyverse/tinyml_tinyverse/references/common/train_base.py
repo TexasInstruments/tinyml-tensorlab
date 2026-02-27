@@ -197,6 +197,9 @@ def get_base_args_parser(description="This script loads time series data and tra
     parser.add_argument('--apex', action='store_true', help='Use apex for mixed precision training')
     parser.add_argument('--apex-opt-level', default='O1', type=str,
                         help='For apex mixed precision training O0 for FP32 training, O1 for mixed precision training.')
+    parser.add_argument('--native-amp', action='store_true',
+                        help='Use PyTorch native AMP (torch.amp.autocast) for mixed precision training. '
+                             'Works on CUDA and MPS backends. Preferred over --apex for non-NVIDIA hardware.')
 
     # Distributed training parameters
     parser.add_argument('--world-size', default=1, type=int, help='number of distributed processes')
@@ -655,6 +658,86 @@ def move_model_to_device(model, device, logger):
         sys.exit(1)
 
 
+def compile_model_if_enabled(model, args, logger):
+    """
+    Apply torch.compile to the model if --compile-model is enabled.
+
+    torch.compile (PyTorch 2.0+) fuses operations into optimized kernels,
+    which can significantly speed up training (15-30% on supported backends).
+
+    Args:
+        model: The model to potentially compile
+        args: Parsed arguments (uses args.compile_model)
+        logger: Logger instance
+
+    Returns:
+        The (possibly compiled) model
+    """
+    if getattr(args, 'compile_model', 0) and hasattr(torch, 'compile'):
+        # Determine the best backend for the current device
+        device_type = str(next(model.parameters()).device).split(':')[0] if len(list(model.parameters())) > 0 else 'cpu'
+        if device_type == 'mps':
+            # MPS supports torch.compile via the 'aot_eager' backend
+            backend = 'aot_eager'
+        elif device_type == 'cuda':
+            backend = 'inductor'
+        else:
+            backend = 'aot_eager'
+        logger.info(f"Compiling model with torch.compile (backend={backend})")
+        try:
+            model = torch.compile(model, backend=backend)
+        except Exception as e:
+            logger.warning(f"torch.compile failed, falling back to eager mode: {e}")
+    return model
+
+
+def get_amp_context(args, device):
+    """
+    Get the appropriate AMP (Automatic Mixed Precision) autocast context manager.
+
+    When --native-amp is enabled, returns a torch.amp.autocast context manager
+    configured for the current device. This enables float16/bfloat16 computation
+    for compatible operations, reducing memory usage and improving throughput.
+
+    Args:
+        args: Parsed arguments (uses args.native_amp)
+        device: The torch device being used for training
+
+    Returns:
+        A context manager: torch.amp.autocast if enabled, or contextlib.nullcontext
+    """
+    import contextlib
+    if getattr(args, 'native_amp', False):
+        device_type = str(device).split(':')[0]
+        if device_type in ('cuda', 'mps'):
+            return torch.amp.autocast(device_type=device_type)
+        else:
+            # CPU autocast is available but typically not beneficial
+            return contextlib.nullcontext()
+    return contextlib.nullcontext()
+
+
+def get_grad_scaler(args, device):
+    """
+    Get a GradScaler for native AMP training.
+
+    GradScaler is only useful for CUDA with float16 (prevents gradient underflow).
+    On MPS or with bfloat16, scaling is unnecessary.
+
+    Args:
+        args: Parsed arguments (uses args.native_amp)
+        device: The torch device being used for training
+
+    Returns:
+        torch.amp.GradScaler if CUDA + native_amp, else None
+    """
+    if getattr(args, 'native_amp', False):
+        device_type = str(device).split(':')[0]
+        if device_type == 'cuda':
+            return torch.amp.GradScaler()
+    return None
+
+
 def save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema=None, extra_data=None):
     """
     Save training checkpoint.
@@ -801,10 +884,15 @@ def create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args
     Returns:
         tuple: (data_loader, data_loader_test)
     """
+    # pin_memory accelerates CUDA host-to-device transfers but is not useful for MPS or CPU
+    use_pin_memory = torch.cuda.is_available() and gpu >= 0
+    # persistent_workers avoids the overhead of respawning worker processes each epoch
+    # (especially significant on macOS where the 'spawn' start method is used)
+    use_persistent_workers = args.workers > 0
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler, num_workers=args.workers,
-        pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn)
+        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers, collate_fn=utils.collate_fn)
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=args.batch_size, sampler=test_sampler, num_workers=args.workers,
-        pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn)
+        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers, collate_fn=utils.collate_fn)
     return data_loader, data_loader_test
