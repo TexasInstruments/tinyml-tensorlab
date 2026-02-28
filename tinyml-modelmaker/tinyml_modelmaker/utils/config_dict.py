@@ -85,7 +85,7 @@ class ConfigDict(dict):
 
     # pickling used by multiprocessing did not work without defining __getstate__
     def __getstate__(self):
-        self.__dict__.copy()
+        return self.__dict__.copy()
 
     # this seems to be not required by multiprocessing
     def __setstate__(self, state):
@@ -98,7 +98,7 @@ class ConfigDict(dict):
         input_dict = {}
         include_files = list(include_files)
         for include_file in include_files:
-            append_base = not (include_file.startswith('/') and include_file.startswith('./'))
+            append_base = not (include_file.startswith('/') or include_file.startswith('./'))
             include_file = os.path.join(include_base_path, include_file) if append_base else include_file
             with open(include_file) as ifp:
                 idict = yaml.safe_load(ifp)
