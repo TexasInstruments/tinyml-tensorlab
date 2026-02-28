@@ -871,10 +871,22 @@ class BaseModelTraining:
             # Insert task-specific args before the last 10 items
             argv = argv[:-10] + task_argv + argv[-10:]
 
+        # Collect standalone boolean flags (store_true args have no value).
+        # These must be stripped before argv slicing (which uses fixed offsets
+        # for trailing key-value pairs) and re-appended after.
+        bool_flags = []
+        if getattr(self.params.training, 'native_amp', False):
+            bool_flags.append('--native-amp')
+        argv.extend(bool_flags)
+
         args = self.train_module.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event
 
         if not utils.misc_utils.str2bool(self.params.testing.skip_train):
+            # Strip boolean flags before argv manipulation so fixed offsets remain correct
+            for flag in bool_flags:
+                argv.remove(flag)
+
             if utils.misc_utils.str2bool(self.params.training.run_quant_train_only):
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
                     argv = argv[:-2]  # Remove --output-dir <output-dir>
@@ -885,6 +897,7 @@ class BaseModelTraining:
                         '--weight-bitwidth', f'{self.params.training.quantization_weight_bitwidth}',
                         '--activation-bitwidth', f'{self.params.training.quantization_activation_bitwidth}',
                     ])
+                    argv.extend(bool_flags)
 
                     args = self.train_module.get_args_parser().parse_args(argv)
                     args.quit_event = self.quit_event
@@ -892,6 +905,7 @@ class BaseModelTraining:
                 else:
                     raise ValueError(f"quantization cannot be {TinyMLQuantizationVersion.NO_QUANTIZATION} if run_quant_train_only argument is chosen")
             else:
+                argv.extend(bool_flags)
                 self.train_module.run(args)
 
                 if utils.misc_utils.str2bool(self.params.data_processing_feature_extraction.store_feat_ext_data) and \
@@ -899,6 +913,9 @@ class BaseModelTraining:
                     return self.params
 
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+                    # Strip boolean flags again before quant argv manipulation
+                    for flag in bool_flags:
+                        argv.remove(flag)
                     # Remove trailing arguments for quant training
                     argv = argv[:-8]  # Remove --store-feat-ext-data, --epochs, --lr, --output-dir pairs
 
@@ -919,6 +936,7 @@ class BaseModelTraining:
                         '--lr-warmup-epochs', '0',
                         '--store-feat-ext-data', 'False'
                     ])
+                    argv.extend(bool_flags)
 
                     args = self.train_module.get_args_parser().parse_args(argv)
                     args.quit_event = self.quit_event
