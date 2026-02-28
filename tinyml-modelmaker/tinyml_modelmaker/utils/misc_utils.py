@@ -180,9 +180,10 @@ def cleanup_special_chars(file_name):
                 log_line = re.sub(r'(\x9B|\x1B[\[\(\=])[0-?]*[ -\/]*([@-~]|$)', '', log_line)
                 new_lines.append(log_line)
             #
-            with open(file_name, 'w', encoding="utf-8") as wfp:
-                wfp.writelines(new_lines)
-            #
+        #
+        # Write after closing the read handle to avoid data loss if write fails mid-way
+        with open(file_name, 'w', encoding="utf-8") as wfp:
+            wfp.writelines(new_lines)
         #
     #
 
