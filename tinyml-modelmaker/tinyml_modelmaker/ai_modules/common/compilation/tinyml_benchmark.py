@@ -188,9 +188,9 @@ class ModelCompilation():
         ]
         # compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
         args = compile_scr.get_args_parser().parse_args(argv)
+        args.quit_event = self.quit_event
         compile_scr.modify_user_input_config(user_input_config_h, target)
         exit_flag = compile_scr.run(args)
-        args.quit_event = self.quit_event
         return exit_flag
 
     def _get_compiled_artifact_dir(self):
