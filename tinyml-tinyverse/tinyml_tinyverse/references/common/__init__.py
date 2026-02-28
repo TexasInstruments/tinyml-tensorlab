@@ -25,6 +25,7 @@ from .train_base import (
     setup_training_environment,
     prepare_transforms,
     create_data_loaders,
+    shutdown_data_loaders,
     # Model creation and setup
     create_model,
     log_model_summary,

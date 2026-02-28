@@ -78,6 +78,7 @@ from ..common.train_base import (
     get_output_int_flag,
     load_onnx_for_inference,
     create_data_loaders,
+    shutdown_data_loaders,
 )
 
 dataset_loader_dict = {'GenericTSDatasetForecasting': GenericTSDatasetForecasting}
@@ -307,6 +308,8 @@ def main(gpu, args):
         generate_golden_vector_dir(args.output_dir)
         output_int = get_output_int_flag(args)
         generate_golden_vectors(args.output_dir, output_int, dataset, args.generic_model)
+
+    shutdown_data_loaders(data_loader, data_loader_test)
 
 
 def run(args):
