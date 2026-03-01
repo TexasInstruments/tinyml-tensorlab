@@ -77,8 +77,6 @@ from glob import glob
 from logging import getLogger
 from os.path import basename as opb
 
-import matplotlib
-matplotlib.use('Agg') # Force non-interactive backend
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
@@ -613,6 +611,8 @@ class SmoothedValue:
         self.fmt = fmt
 
     def update(self, value, n=1):
+        if isinstance(value, torch.Tensor):
+            value = value.item()
         self.deque.append(value)
         self.count += n
         self.total += value * n
@@ -684,11 +684,9 @@ class MetricLogger(object):
 
     def update(self, **kwargs):
         for k, v in kwargs.items():
-            if isinstance(v, torch.Tensor):
-                v = v.item()
-            if not isinstance(v, (float, int)):
+            if not isinstance(v, (float, int, torch.Tensor)):
                 raise TypeError(
-                    f"This method expects the value of the input arguments to be of type float or int, instead  got {type(v)}"
+                    f"This method expects the value of the input arguments to be of type float, int, or Tensor, instead  got {type(v)}"
                 )
             self.meters[k].update(v)
 
@@ -721,7 +719,8 @@ class MetricLogger(object):
         iter_time = SmoothedValue(fmt="{avg:.4f}")
         data_time = SmoothedValue(fmt="{avg:.4f}")
         space_fmt = ":" + str(len(str(len(iterable)))) + "d"
-        if torch.cuda.is_available():
+        _has_mem = torch.cuda.is_available() or (hasattr(torch.backends, 'mps') and torch.backends.mps.is_available())
+        if _has_mem:
             log_msg = self.delimiter.join(
                 [
                     header,
@@ -730,7 +729,7 @@ class MetricLogger(object):
                     "{meters}",
                     "time: {time}",
                     "data: {data}",
-                    "max mem: {memory:.0f}",
+                    "mem: {memory:.0f}",
                 ]
             )
         else:
@@ -745,7 +744,11 @@ class MetricLogger(object):
             if print_freq is not None and i % print_freq == 0:
                 eta_seconds = iter_time.global_avg * (len(iterable) - i)
                 eta_string = str(datetime.timedelta(seconds=int(eta_seconds)))
-                if torch.cuda.is_available():
+                if _has_mem:
+                    if torch.cuda.is_available():
+                        mem = torch.cuda.max_memory_allocated() / MB
+                    else:
+                        mem = torch.mps.current_allocated_memory() / MB
                     self.logger.info(
                         log_msg.format(
                             i,
@@ -754,7 +757,7 @@ class MetricLogger(object):
                             meters=str(self),
                             time=str(iter_time),
                             data=str(data_time),
-                            memory=torch.cuda.max_memory_allocated() / MB,
+                            memory=mem,
                         )
                     )
                 else:
@@ -1066,55 +1069,64 @@ def seed_everything(seed: int):
 
 
 def train_one_epoch_regression(model, criterion, optimizer, data_loader, device, epoch, transform, lambda_reg=0.01,
-                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
+                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
+                    amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
     print_freq = print_freq if print_freq else len(data_loader)
     header = f"Epoch: [{epoch}]"
-    # TODO: If transform is required
     if transform:
         transform = transform.to(device)
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
-    # for _, data, target in data_loader:
         start_time = timeit.default_timer()
-        data = data.float().to(device)
-        target = target.float().to(device)
+        data = data.float().to(device, non_blocking=True)
+        target = target.float().to(device, non_blocking=True)
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            loss = criterion(output, target)
 
-        loss = criterion(output, target)
         if not is_ptq:
-            optimizer.zero_grad()
+            optimizer.zero_grad(set_to_none=True)
             if lambda_reg:
                 l1_norm = sum(p.abs().sum() for p in model.parameters())
                 l2_norm = sum(p.pow(2.0).sum() for p in model.parameters())
-
                 loss += (lambda_reg*(l1_norm))
                 loss += (lambda_reg*(l2_norm))
-            if apex:
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
         mse = get_mse(output, target).squeeze()
         batch_size = output.shape[0]
-        metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
-        metric_logger.meters['mse'].update(mse, n=batch_size)
+        metric_logger.update(loss=loss.detach(), lr=optimizer.param_groups[0]["lr"])
+        metric_logger.meters['mse'].update(mse.detach(), n=batch_size)
         metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
 
     if model_ema:
         model_ema.update_parameters(model)
 
 def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device, epoch, transform,
-                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
+                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
+                    amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
@@ -1122,47 +1134,47 @@ def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
 
     header = f"Epoch: [{epoch}]"
-    # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    
+
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.float().to(device)
-        target = target.float().to(device)
+        data = data.float().to(device, non_blocking=True)
+        target = target.float().to(device, non_blocking=True)
 
-        # apply transform and model on whole batch directly on device
-        # TODO: If transform is required
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)"
-
-        output = output.view_as(target)
-
-        loss = criterion(output, target)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            output = output.view_as(target)
+            loss = criterion(output, target)
 
         if not is_ptq:
-            optimizer.zero_grad()
-            if apex:
+            optimizer.zero_grad(set_to_none=True)
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
 
-        smape_score = smape(target.detach(), output.detach()).item()
         batch_size = output.shape[0]
-        metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
-        metric_logger.meters['smape'].update(smape_score, n=batch_size)
+        metric_logger.update(loss=loss.detach(), lr=optimizer.param_groups[0]["lr"])
+        metric_logger.meters['smape'].update(smape(target.detach(), output.detach()), n=batch_size)
         metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
 
     if model_ema:
         model_ema.update_parameters(model)
-    
+
 
 def evaluate_forecasting(model, criterion, data_loader, device, transform=None, log_suffix='', print_freq=None, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
@@ -1195,10 +1207,9 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
 
             # Compute loss
             loss = criterion(output, target)
-            metric_logger.update(loss=loss.item())
+            metric_logger.update(loss=loss.detach())
             batch_size = data.shape[0]
-            smape_score = smape(target.detach(), output.detach()).item()
-            metric_logger.meters['smape'].update(smape_score, n=batch_size)
+            metric_logger.meters['smape'].update(smape(target.detach(), output.detach()), n=batch_size)
             targets.append(target)
             outputs.append(output)
             
@@ -1245,8 +1256,6 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
 
-    target_array = torch.Tensor([]).to(device, non_blocking=True)
-    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
     with torch.no_grad():
         val_loss = 0
         target_list = []
@@ -1265,14 +1274,14 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
                 output = model(data)
 
             loss = criterion(output, target)  # .squeeze()
-            val_loss += loss.item()
+            val_loss += loss.detach()
             mse = get_mse(output, target)  # .squeeze()
             r2 = get_r2_score(output, target)  # .squeeze()
             target_list.append(target)
             predictions_list.append(output)
             # FIXME need to take into account that the datasets could have been padded in distributed setup
             batch_size = data.shape[0]
-            metric_logger.update(loss=loss.item())
+            metric_logger.update(loss=loss.detach())
             metric_logger.meters['mse'].update(mse, n=batch_size)
             metric_logger.meters['r2'].update(r2, n=batch_size)
 
@@ -1287,44 +1296,48 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
 
 def train_one_epoch_anomalydetection(
         model, criterion, optimizer, data_loader, device, epoch, transform,
-        apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
-    logger = getLogger(f"root.train_utils.train.{phase}")
+        apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
+        amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    header = f"Training   - Epoch[{epoch}]: "
+    header = f"Training   - Epoch[{epoch}]:"
     if transform:
         transform = transform.to(device)
-    for _,data, labels in metric_logger.log_every(data_loader, print_freq, header):
-        # for batch_idx, (data, target) in enumerate(data_loader):
+    for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.float().to(device)
-        #In anomlay detection with auto encoder, the target and the input data both are same. 
+        data = data.float().to(device, non_blocking=True)
+        # In anomaly detection with autoencoder, the target and the input data are the same
         target = data.clone()
 
-        # apply transform and model on whole batch directly on device
-        # TODO: If transform is required
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)
-
-        loss = criterion(output, target)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            loss = criterion(output, target)
 
         if not is_ptq:
-            optimizer.zero_grad()
-            if apex:
+            optimizer.zero_grad(set_to_none=True)
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
 
-        metric_logger.update(loss=loss.item())
-    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
+        metric_logger.update(loss=loss.detach())
+
     if model_ema:
         model_ema.update_parameters(model)
 
@@ -1351,69 +1364,64 @@ def evaluate_anomalydetection(
             else:
                 output = model(data)
 
-            loss = criterion(output, target) 
+            loss = criterion(output, target)
             batch_size = data.shape[0]
-            metric_logger.update(loss=loss.item())
+            metric_logger.update(loss=loss.detach())
     metric_logger.synchronize_between_processes()
-    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
     return metric_logger.loss.global_avg
 
 
 def train_one_epoch_classification(
         model, criterion, optimizer, data_loader, device, epoch, transform,
         apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
-        nn_for_feature_extraction=False, **kwargs):
+        nn_for_feature_extraction=False, amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
-    #
-    # new_sample_rate = 8000
-    # transform = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=new_sample_rate)
 
     header = f"Epoch: [{epoch}]"
-    # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
     for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
-        # for batch_idx, (data, target) in enumerate(data_loader):
-        # logger.info(batch_idx)
         start_time = timeit.default_timer()
         if nn_for_feature_extraction:
-            data = data_raw.float().to(device)
+            data = data_raw.float().to(device, non_blocking=True)
         else:
-            data = data_feat_ext.float().to(device)
-        target = target.long().to(device)
+            data = data_feat_ext.float().to(device, non_blocking=True)
+        target = target.long().to(device, non_blocking=True)
 
-        # apply transform and model on whole batch directly on device
-        # TODO: If transform is required
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)
-
-        # negative log-likelihood for a tensor of size (batch x 1 x n_output)
-        loss = criterion(output, target)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            loss = criterion(output, target)
 
         if not is_ptq:
-            optimizer.zero_grad()
-            if apex:
+            optimizer.zero_grad(set_to_none=True)
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
 
         acc1 = accuracy(output, target, topk=(1,))
-        # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
         batch_size = output.shape[0]
-        metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
-        metric_logger.meters['acc1'].update(acc1[0], n=batch_size)
+        metric_logger.update(loss=loss.detach(), lr=optimizer.param_groups[0]["lr"])
+        metric_logger.meters['acc1'].update(acc1[0].detach(), n=batch_size)
         metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
 
     if model_ema:
@@ -1426,19 +1434,18 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
-    confusion_matrix_total = np.zeros((kwargs.get('num_classes'), kwargs.get('num_classes')))
+    num_classes = kwargs.get('num_classes')
+    confusion_matrix_total = np.zeros((num_classes, num_classes))
 
-    target_array = torch.Tensor([]).to(device, non_blocking=True)
-    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
+    target_list = []
+    predictions_list = []
 
     with torch.no_grad():
-        # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
-        for data_raw, data_feat_ext, target  in metric_logger.log_every(data_loader, print_freq, header):
-            # for data, target in data_loader:
+        for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
             if nn_for_feature_extraction:
                 data = data_raw.float().to(device, non_blocking=True)
             else:
-                data = data_feat_ext.float().to(device)
+                data = data_feat_ext.float().to(device, non_blocking=True)
 
             target = target.long().to(device, non_blocking=True)
             if transform:
@@ -1449,51 +1456,35 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
             else:
                 output = model(data)
 
-            target_array = torch.cat((target_array, target))
-            predictions_array = torch.cat((predictions_array, output))
+            target_list.append(target)
+            predictions_list.append(output)
 
             loss = criterion(output.squeeze(), target)
             acc1 = accuracy(output.squeeze(), target, topk=(1,))
-            f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
 
-            confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
-            confusion_matrix_total += confusion_matrix
-
-            # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
-            # au_roc_total += au_roc
-            # FIXME need to take into account that the datasets could have been padded in distributed setup
             batch_size = data.shape[0]
-            metric_logger.update(loss=loss.item())
-            metric_logger.meters['acc1'].update(acc1[0], n=batch_size)
-            metric_logger.meters['f1'].update(f1_score, n=batch_size)
-            # metric_logger.meters['auroc'].update(au_roc, n=batch_size)
-            # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
-            # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
+            metric_logger.update(loss=loss.detach())
+            metric_logger.meters['acc1'].update(acc1[0].detach(), n=batch_size)
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
 
-    # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
+    # Concatenate all predictions/targets once (O(n) instead of O(n²) per-batch torch.cat)
+    target_array = torch.cat(target_list)
+    predictions_array = torch.cat(predictions_list)
+
+    # Compute all metrics at epoch-end instead of per-batch
     logger.info(f'{header} Acc@1 {accuracy(predictions_array.squeeze(), target_array, topk=(1,))[0]:.3f}')
-    logger.info(f'{header} F1-Score {get_f1_score(predictions_array.squeeze(), target_array, kwargs.get("num_classes")):.3f}')
-    # auc = get_au_roc_from_conf_matrix(confusion_matrix_total)
-    # logger.info('AU-ROC Score: {:.3f}'.format(auc))
-    auc = get_au_roc(predictions_array, target_array, kwargs.get('num_classes'))
+    f1 = get_f1_score(predictions_array.squeeze(), target_array, num_classes)
+    logger.info(f'{header} F1-Score {f1:.3f}')
+    auc = get_au_roc(predictions_array, target_array, num_classes)
     logger.info("AU-ROC Score: {:.3f}".format(auc))
-    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(get_confusion_matrix(
-        predictions_array.cpu(), target_array.type(dtype=torch.int64).cpu(), kwargs.get('num_classes')),
-        columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
-        index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]), headers="keys", tablefmt='grid')))
+    confusion_matrix_total = get_confusion_matrix(
+        predictions_array.cpu(), target_array.type(dtype=torch.int64).cpu(), num_classes).numpy()
+    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
+        columns=[f"Predicted as: {x}" for x in range(num_classes)],
+        index=[f"Ground Truth: {x}" for x in range(num_classes)]), headers="keys", tablefmt='grid')))
 
-    # logger.info(f'{header} AUROC {metric_logger.auroc.global_avg:.3f}')
-    # logger.info('\n' + '\n'.join([f"Ground Truth:(Class {i}), Predicted:(Class {j}): {int(confusion_matrix_total[i][j])}" for j in range(kwargs.get('num_classes')) for i in range(kwargs.get('num_classes'))]))
-
-    # logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
-    #               columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
-    #               index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]),
-    #                                                      headers="keys", tablefmt='grid')))
-
-    # logger.info(f'AU-ROC: {au_roc_total}')
-    return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, auc, confusion_matrix_total, predictions_array, target_array
+    return metric_logger.acc1.global_avg, f1, auc, confusion_matrix_total, predictions_array, target_array
 
 def print_file_level_classification_summary(dataset, predicted, ground_truth,phase):
     logger_flcs = getLogger(f"root.utils.print_file_level_classification_summary.{phase}")
@@ -1728,8 +1719,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         for data_raw, data_fe, _ in data_loader:
             start_time = timeit.default_timer()
 
-            data_raw = data_raw.float().to(device)
-            data_fe = data_fe.float().to(device)
+            data_raw = data_raw.float().to(device, non_blocking=True)
+            data_fe = data_fe.float().to(device, non_blocking=True)
 
             output = model(data_raw)  # (n,1,8000) -> (n,35)
 
@@ -1737,7 +1728,7 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
             loss = criterion(output, data_fe)
 
             if not is_ptq:
-                optimizer.zero_grad()
+                optimizer.zero_grad(set_to_none=True)
                 loss.backward()
                 optimizer.step()
         if not is_ptq:
@@ -1755,8 +1746,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         with torch.no_grad():
             for data_raw, data_fe, _ in data_loader_test:
                 # Assuming the dataset returns (data, target)
-                data_raw = data_raw.float().to(device)
-                data_fe = data_fe.float().to(device)
+                data_raw = data_raw.float().to(device, non_blocking=True)
+                data_fe = data_fe.float().to(device, non_blocking=True)
                 outputs = model(data_raw)
 
                 # Calculate loss

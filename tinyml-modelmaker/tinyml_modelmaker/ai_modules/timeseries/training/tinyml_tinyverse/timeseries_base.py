@@ -429,82 +429,60 @@ def get_forecasting_log_summary_regex():
 def get_anomaly_detection_log_summary_regex():
     """
     Returns the log summary regex patterns for anomaly detection tasks.
-    Extracts epoch numbers, training loss, validation loss, and best epoch data from training logs.
-    
-    Log format examples:
-    - INFO: root.utils.MetricLogger.FloatTrain: Training   - Epoch[0]:  [  0/188]  loss: 1.3182 (1.3182)
-    - INFO: root.utils.MetricLogger.FloatTrain: Training   - Epoch[0]:  Total time: 0:00:00
-    - INFO: root.train_utils.train.FloatTrain: Training   - Epoch[0]:  MSE 0.523456
-    - INFO: root.utils.MetricLogger.FloatTrain: Validation - Epoch[0]:   [ 0/38]  loss: 1.1205 (1.1205)
-    - INFO: root.utils.MetricLogger.FloatTrain: Validation - Epoch[0]:  Total time: 0:00:00
-    - INFO: root.train_utils.evaluate.FloatTrain: Validation - Epoch[0]:  MSE 0.412300
-    - INFO: root.main.FloatTrain.BestEpoch: Best Epoch: 46
-    - INFO: root.main.FloatTrain.BestEpoch: MSE 0.008
+    Extracts MSE metrics from training logs (best epoch only, as per-epoch validation logging is not performed).
     """
     return {
         'js': [
-            # Floating Point Training Metrics (per epoch)
+            # Floating Point Training Metrics
             {'type': 'Epoch (FloatTrain)', 'name': 'Epoch (FloatTrain)', 'description': 'Epochs (FloatTrain)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'FloatTrain:\s+Training\s+-\s+Epoch\[(?<eid>\d+)\]:\s+Total', 'groupId': 'eid'}],
+                 {'op': 'search', 'pattern': r'FloatTrain:.*?Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
              },
-            {'type': 'Training MSE Loss(FloatTrain)', 'name': 'Training MSE Loss(FloatTrain)',
-             'description': 'Training MSE Loss per Epoch (FloatTrain)', 'unit': 'MSE', 'value': None,
+            {'type': 'Training Loss (FloatTrain)', 'name': 'Loss (FloatTrain)',
+             'description': 'Training Loss (FloatTrain)', 'unit': 'Loss', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'FloatTrain:\s+Training\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
-                        'groupId': 'mse', 'scale_factor': 1}],
+                        'pattern': r'FloatTrain:.*?Training.*?Epoch\[\d+\].*?loss:\s+(?<loss>\d+\.\d+)',
+                        'groupId': 'loss'}],
              },
-            {'type': 'Validation MSE Loss (FloatTrain)', 'name': 'Validation MSE Loss (FloatTrain)',
-             'description': 'Validation MSE Loss per Epoch (FloatTrain)', 'unit': 'MSE', 'value': None,
-             'regex': [{'op': 'search',
-                        'pattern': r'FloatTrain:\s+Validation\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
-                        'groupId': 'mse', 'scale_factor': 1}],
-             },
-            # Quantized Training Metrics (per epoch)
+            # Quantized Training Metrics
             {'type': 'Epoch (QuantTrain)', 'name': 'Epoch (QuantTrain)', 'description': 'Epochs (QuantTrain)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'QuantTrain:\s+Training\s+-\s+Epoch\[(?<eid>\d+)\]:\s+Total', 'groupId': 'eid'}],
+                 {'op': 'search', 'pattern': r'QuantTrain:.*?Epoch:\s+\[(?<eid>\d+)\]\s+Total', 'groupId': 'eid'}],
              },
-            {'type': 'Training MSE Loss(QuantTrain)', 'name': 'Training MSE Loss(QuantTrain)',
-             'description': 'Training MSE Loss per Epoch (QuantTrain)', 'unit': 'MSE', 'value': None,
+            {'type': 'Training Loss (QuantTrain)', 'name': 'Loss (QuantTrain)',
+             'description': 'Training Loss (QuantTrain)', 'unit': 'Loss', 'value': None,
              'regex': [{'op': 'search',
-                        'pattern': r'QuantTrain:\s+Training\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
-                        'groupId': 'mse', 'scale_factor': 1}],
-             },
-            {'type': 'Validation MSE Loss (QuantTrain)', 'name': 'Validation MSE Loss (QuantTrain)',
-             'description': 'Validation MSE Loss per Epoch (QuantTrain)', 'unit': 'MSE', 'value': None,
-             'regex': [{'op': 'search',
-                        'pattern': r'QuantTrain:\s+Validation\s+-\s+Epoch\[\d+\]:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
-                        'groupId': 'mse', 'scale_factor': 1}],
+                        'pattern': r'QuantTrain:.*?Training.*?Epoch\[\d+\].*?loss:\s+(?<loss>\d+\.\d+)',
+                        'groupId': 'loss'}],
              },
             # Best Epoch FloatTrain Metrics
             {'type': 'Epoch (FloatTrain, BestEpoch)', 'name': 'Epoch (FloatTrain, BestEpoch)',
-             'description': 'Best Epoch Number (FloatTrain)',
+             'description': 'Epochs (FloatTrain, BestEpoch)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'FloatTrain\.BestEpoch:\s+Best\s+Epoch:\s+(?<eid>\d+)',
+                 {'op': 'search', 'pattern': r'FloatTrain.BestEpoch\s*: Best Epoch:\s+(?<eid>\d+)',
                   'groupId': 'eid'}],
              },
             {'type': 'MSE (FloatTrain, BestEpoch)', 'name': 'MSE (FloatTrain, BestEpoch)',
-             'description': 'Best Epoch MSE (FloatTrain)', 'unit': 'MSE', 'value': None,
+             'description': 'MSE (FloatTrain, BestEpoch)', 'unit': 'MSE', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'FloatTrain\.BestEpoch:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                 {'op': 'search', 'pattern': r'FloatTrain.BestEpoch\s*: MSE\s+(?<mse>[-+e\d+\.\d+]+)',
                   'groupId': 'mse', 'scale_factor': 1}],
              },
             # Best Epoch QuantTrain Metrics
             {'type': 'Epoch (QuantTrain, BestEpoch)', 'name': 'Epoch (QuantTrain, BestEpoch)',
-             'description': 'Best Epoch Number (QuantTrain)',
+             'description': 'Epochs (QuantTrain, BestEpoch)',
              'unit': 'Epoch', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'QuantTrain\.BestEpoch:\s+Best\s+Epoch:\s+(?<eid>\d+)',
+                 {'op': 'search', 'pattern': r'QuantTrain.BestEpoch\s*: Best Epoch:\s+(?<eid>\d+)',
                   'groupId': 'eid'}],
              },
             {'type': 'MSE (QuantTrain, BestEpoch)', 'name': 'MSE (QuantTrain, BestEpoch)',
-             'description': 'Best Epoch MSE (QuantTrain)', 'unit': 'MSE', 'value': None,
+             'description': 'MSE (QuantTrain, BestEpoch)', 'unit': 'MSE', 'value': None,
              'regex': [
-                 {'op': 'search', 'pattern': r'QuantTrain\.BestEpoch:\s+MSE\s+(?<mse>[-+e\d+\.\d+]+)',
+                 {'op': 'search', 'pattern': r'QuantTrain.BestEpoch\s*: MSE\s+(?<mse>[-+e\d+\.\d+]+)',
                   'groupId': 'mse', 'scale_factor': 1}],
              },
         ]
@@ -526,7 +504,7 @@ def create_template_model_description(task_category, task_type, dataset_loader=N
     """
     training_dict = dict(
         quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-        training_backend='tinyml_tinyverse',
+        training_backend=constants.TRAINING_BACKEND_TINYML_TINYVERSE,
         model_training_id='',
         model_name='',
         learning_rate=2e-3,
@@ -671,12 +649,23 @@ class BaseModelTraining:
 
     def _get_device(self):
         """
-        Determine the training device based on GPU availability.
+        Determine the training device based on configuration and hardware.
+
+        Priority order:
+            1. Explicit ``training_device`` in config (mps / cuda / cpu)
+            2. Auto-detect: MPS if available, else CUDA, else CPU
 
         Returns:
             tuple: (device string, distributed flag)
         """
         distributed = 1 if self.params.training.num_gpus > 1 else 0
+
+        explicit = getattr(self.params.training, 'training_device', None)
+        if explicit and explicit not in ('auto', constants.TRAINING_DEVICE_CUDA):
+            # User explicitly chose a device — honour it.
+            return explicit, distributed
+
+        # Auto-detect
         device = 'cpu'
         if self.params.training.num_gpus > 0:
             if torch.backends.mps.is_available():
@@ -692,7 +681,7 @@ class BaseModelTraining:
         Returns:
             list: Common training arguments
         """
-        return [
+        argv = [
             '--model', f'{self.params.training.model_training_id}',
             '--dual-op', f'{self.params.training.dual_op}',
             '--model-config', f'{self.params.training.model_config}',
@@ -738,12 +727,14 @@ class BaseModelTraining:
             '--ondevice-training', f'{self.params.training.ondevice_training}',
             '--partial-quantization', f'{self.params.training.partial_quantization}',
             '--trainable_layers_from_last', f'{self.params.training.trainable_layers_from_last}',
+            '--compile-model', f'{getattr(self.params.training, "compile_model", 0)}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',
             '--epochs', f'{self.params.training.training_epochs}',
             '--lr', f'{self.params.training.learning_rate}',
             '--output-dir', f'{self.params.training.training_path}',
         ]
+        return argv
 
     def _get_task_specific_train_argv(self):
         """
@@ -851,10 +842,27 @@ class BaseModelTraining:
             # Insert task-specific args before the last 10 items
             argv = argv[:-10] + task_argv + argv[-10:]
 
+        # Collect standalone boolean flags (store_true args have no value).
+        # These must be stripped before argv slicing (which uses fixed offsets
+        # for trailing key-value pairs) and re-appended after.
+        bool_flags = []
+        # Auto-enable AMP on MPS (Apple Silicon) unless explicitly disabled.
+        # MPS benefits from bfloat16 autocast with no GradScaler needed.
+        native_amp = getattr(self.params.training, 'native_amp', None)
+        if native_amp is None and device == 'mps':
+            native_amp = True
+        if native_amp:
+            bool_flags.append('--native-amp')
+        argv.extend(bool_flags)
+
         args = self.train_module.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event
 
         if not utils.misc_utils.str2bool(self.params.testing.skip_train):
+            # Strip boolean flags before argv manipulation so fixed offsets remain correct
+            for flag in bool_flags:
+                argv.remove(flag)
+
             if utils.misc_utils.str2bool(self.params.training.run_quant_train_only):
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
                     argv = argv[:-2]  # Remove --output-dir <output-dir>
@@ -865,6 +873,7 @@ class BaseModelTraining:
                         '--weight-bitwidth', f'{self.params.training.quantization_weight_bitwidth}',
                         '--activation-bitwidth', f'{self.params.training.quantization_activation_bitwidth}',
                     ])
+                    argv.extend(bool_flags)
 
                     args = self.train_module.get_args_parser().parse_args(argv)
                     args.quit_event = self.quit_event
@@ -872,6 +881,7 @@ class BaseModelTraining:
                 else:
                     raise ValueError(f"quantization cannot be {TinyMLQuantizationVersion.NO_QUANTIZATION} if run_quant_train_only argument is chosen")
             else:
+                argv.extend(bool_flags)
                 self.train_module.run(args)
 
                 if utils.misc_utils.str2bool(self.params.data_processing_feature_extraction.store_feat_ext_data) and \
@@ -879,6 +889,9 @@ class BaseModelTraining:
                     return self.params
 
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+                    # Strip boolean flags again before quant argv manipulation
+                    for flag in bool_flags:
+                        argv.remove(flag)
                     # Remove trailing arguments for quant training
                     argv = argv[:-8]  # Remove --store-feat-ext-data, --epochs, --lr, --output-dir pairs
 
@@ -899,6 +912,7 @@ class BaseModelTraining:
                         '--lr-warmup-epochs', '0',
                         '--store-feat-ext-data', 'False'
                     ])
+                    argv.extend(bool_flags)
 
                     args = self.train_module.get_args_parser().parse_args(argv)
                     args.quit_event = self.quit_event

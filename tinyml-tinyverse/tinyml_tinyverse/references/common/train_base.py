@@ -158,8 +158,11 @@ def get_base_args_parser(description="This script loads time series data and tra
     parser.add_argument('--gpus', default=1, type=int, help='number of gpus')
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
     parser.add_argument('--epochs', default=90, type=int, metavar='N', help='number of total epochs to run')
-    parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 8, type=int, metavar='N',
-                        help='number of data loading workers (default: 8)')
+    # macOS uses 'spawn' (not 'fork') for multiprocessing; 4 workers is a
+    # better default than 8 because the spawn overhead saturates quickly.
+    _default_workers = 0 if platform.system() == 'Windows' else (4 if platform.system() == 'Darwin' else 8)
+    parser.add_argument('-j', '--workers', default=_default_workers, type=int, metavar='N',
+                        help=f'number of data loading workers (default: {_default_workers})')
     parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
     parser.add_argument('--lr', default=0.1, type=float, help='initial learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
