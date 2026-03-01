@@ -51,6 +51,7 @@ from ..common.test_onnx_base import (
     load_onnx_model,
     run_distributed_test,
 )
+from ..common.train_base import shutdown_data_loaders
 
 dataset_loader_dict = {
     'GenericTSDataset': GenericTSDataset,
@@ -138,6 +139,7 @@ def get_reconstruction_errors_stats(args):
 
     normal_error_mean = torch.mean(errors)
     normal_error_std = torch.std(errors)
+    shutdown_data_loaders(data_loader)
     return normal_error_mean.cpu(), normal_error_std.cpu()
 
 
@@ -270,6 +272,8 @@ def main(gpu, args):
     )
 
     logger.info('Confusion Matrix:\n {}'.format(tabulate(confusion_matrix_df, headers="keys", tablefmt='grid')))
+
+    shutdown_data_loaders(data_loader)
 
 
 def run(args):

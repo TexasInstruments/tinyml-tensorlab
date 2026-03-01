@@ -47,6 +47,7 @@ from tinyml_tinyverse.common.datasets import GenericImageDataset
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
+from ..common.train_base import shutdown_data_loaders
 
 # Import common functions from base module
 from ..common.test_onnx_base import (
@@ -198,6 +199,7 @@ def main(gpu, args):
         except Exception as e:
             logger.error(f"Failed to generate file-level classification summary: {str(e)}")
 
+    shutdown_data_loaders(data_loader)
     return
 
 def run(args):

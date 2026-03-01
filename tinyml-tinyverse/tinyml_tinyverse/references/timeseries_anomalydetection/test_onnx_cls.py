@@ -47,6 +47,7 @@ from tinyml_tinyverse.common.datasets import GenericTSDataset
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
+from ..common.train_base import shutdown_data_loaders
 
 dataset_loader_dict = {'GenericTSDataset': GenericTSDataset}
 
@@ -192,6 +193,7 @@ def main(gpu, args):
         logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
             confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
             index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
+    shutdown_data_loaders(data_loader)
     return
 
 def run(args):
