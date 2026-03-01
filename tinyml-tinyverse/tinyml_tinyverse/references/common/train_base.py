@@ -813,10 +813,18 @@ def create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args
 def shutdown_data_loaders(*loaders):
     """Explicitly shut down DataLoader worker processes to avoid leaked semaphore warnings.
 
-    Must be called before exit when persistent_workers=True (especially on macOS
-    where the 'spawn' start method tracks semaphores via resource_tracker).
+    Must be called before exit when DataLoaders use num_workers > 0 (especially
+    on macOS where the 'spawn' start method tracks semaphores via resource_tracker).
+    Works for both persistent_workers=True and False.
     """
+    import gc
     for loader in loaders:
         if hasattr(loader, '_iterator') and loader._iterator is not None:
-            loader._iterator._shutdown_workers()
+            try:
+                loader._iterator._shutdown_workers()
+            except Exception:
+                pass
             loader._iterator = None
+    # Force garbage collection so any remaining iterator / queue references
+    # are released before the process exits.
+    gc.collect()

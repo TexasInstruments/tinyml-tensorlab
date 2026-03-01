@@ -50,6 +50,7 @@ from ..common.test_onnx_base import (
     load_onnx_model,
     run_distributed_test,
 )
+from ..common.train_base import shutdown_data_loaders
 
 dataset_loader_dict = {'GenericTSDataset': GenericTSDataset, 'GenericTSDatasetReg': GenericTSDatasetReg}
 
@@ -139,6 +140,7 @@ def main(gpu, args):
     logger = getLogger("root.main.test_data")
     logger.info(f"{logger.name}: Test Data Evaluation RMSE: {torch.sqrt(metric.compute()):.2f}")
     logger.info(f"{logger.name}: Test Data Evaluation R2-Score: {r2_score.compute():.2f}")
+    shutdown_data_loaders(data_loader)
     return
 
 

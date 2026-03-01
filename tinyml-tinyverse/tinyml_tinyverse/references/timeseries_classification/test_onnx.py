@@ -53,6 +53,7 @@ from ..common.test_onnx_base import (
     load_onnx_model,
     run_distributed_test,
 )
+from ..common.train_base import shutdown_data_loaders
 
 dataset_loader_dict = {'GenericTSDataset': GenericTSDataset}
 
@@ -172,6 +173,7 @@ def main(gpu, args):
         except Exception as e:
             logger.error(f"Failed to generate file-level classification summary: {str(e)}")
 
+    shutdown_data_loaders(data_loader)
     return
 
 

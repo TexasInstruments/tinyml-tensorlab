@@ -52,6 +52,7 @@ from ..common.test_onnx_base import (
     load_onnx_model,
     run_distributed_test,
 )
+from ..common.train_base import shutdown_data_loaders
 
 dataset_loader_dict = {'GenericTSDatasetForecasting': GenericTSDatasetForecasting}
 
@@ -183,6 +184,8 @@ def main(gpu, args):
                 plt.tight_layout()
                 plt.savefig(os.path.join(plots_dir, f'{target_variable_name}_predictions.png'))
                 plt.close()
+
+    shutdown_data_loaders(data_loader_test)
 
 
 def run(args):
