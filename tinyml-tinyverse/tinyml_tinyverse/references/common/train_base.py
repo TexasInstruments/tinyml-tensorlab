@@ -797,15 +797,58 @@ def shutdown_data_loaders(*loaders):
     Must be called before exit when DataLoaders use num_workers > 0 (especially
     on macOS where the 'spawn' start method tracks semaphores via resource_tracker).
     Works for both persistent_workers=True and False.
+
+    The key issue on macOS: each DataLoader iterator holds multiprocessing Queue
+    objects whose internal Lock/Semaphore are POSIX named semaphores tracked by
+    Python's resource_tracker.  ``_shutdown_workers()`` joins worker processes
+    and closes queues, but does NOT release the Queue objects themselves.  If
+    those objects survive until the resource_tracker's ``atexit`` handler runs,
+    it reports them as "leaked".  We break the references here so CPython's
+    refcount-based deallocation triggers ``sem_unlink`` immediately.
     """
     import gc
     for loader in loaders:
-        if hasattr(loader, '_iterator') and loader._iterator is not None:
+        if not (hasattr(loader, '_iterator') and loader._iterator is not None):
+            continue
+        it = loader._iterator
+        try:
+            it._shutdown_workers()
+        except Exception:
+            pass
+        # Break the iterator's references to multiprocessing objects so their
+        # __del__ methods fire (calling sem_unlink) during gc below.
+        for attr in ('_index_queues', '_workers', '_data_queue',
+                     '_worker_result_queue', '_pin_memory_thread',
+                     '_workers_done_event'):
             try:
-                loader._iterator._shutdown_workers()
+                val = getattr(it, attr, None)
+                if val is None:
+                    continue
+                if isinstance(val, list):
+                    for item in val:
+                        if hasattr(item, 'close'):
+                            try:
+                                item.close()
+                            except Exception:
+                                pass
+                    try:
+                        val.clear()
+                    except Exception:
+                        pass
+                else:
+                    if hasattr(val, 'close'):
+                        try:
+                            val.close()
+                        except Exception:
+                            pass
+                    try:
+                        setattr(it, attr, None)
+                    except Exception:
+                        pass
             except Exception:
                 pass
-            loader._iterator = None
-    # Force garbage collection so any remaining iterator / queue references
-    # are released before the process exits.
+        loader._iterator = None
+    # Two rounds: first collects the iterator itself, second collects
+    # Queue/Lock/Semaphore objects that were only reachable through it.
+    gc.collect()
     gc.collect()
