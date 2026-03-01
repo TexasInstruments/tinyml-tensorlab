@@ -613,15 +613,27 @@ class SmoothedValue:
         self.fmt = fmt
 
     def update(self, value, n=1):
+        if isinstance(value, torch.Tensor):
+            # Store detached tensor without calling .item() — avoids forcing
+            # a GPU sync (MPS command-buffer flush) on every batch.  The
+            # scalar conversion is deferred to the property accessors which
+            # are only evaluated at print time (every print_freq iterations).
+            value = value.detach()
+
         self.deque.append(value)
         self.count += n
-        self.total += value * n
+        if isinstance(value, torch.Tensor):
+            # Keep total as a tensor so the addition stays on-device.
+            self.total = self.total + (value * n)
+        else:
+            self.total += value * n
 
     def synchronize_between_processes(self):
         """
         Warning: does not synchronize the deque!
         """
-        t = reduce_across_processes([self.count, self.total])
+        total = self.total.item() if isinstance(self.total, torch.Tensor) else self.total
+        t = reduce_across_processes([self.count, total])
         try:
             t = t.tolist()
         except AttributeError:
@@ -632,10 +644,10 @@ class SmoothedValue:
     @property
     def median(self):
         latest = self.deque[-1]
-        if isinstance(latest, numbers.Number):
-            d = torch.tensor(list(self.deque))
+        if isinstance(latest, torch.Tensor) and latest.ndim == 0:
+            d = torch.stack(list(self.deque))
             return d.median().item()
-        elif isinstance(latest, torch.Tensor) and latest.ndim == 0:
+        elif isinstance(latest, numbers.Number):
             d = torch.tensor(list(self.deque))
             return d.median().item()
         else:
@@ -644,27 +656,35 @@ class SmoothedValue:
     @property
     def avg(self):
         latest = self.deque[-1]
-        if isinstance(latest, numbers.Number):
-            d = torch.tensor(list(self.deque), dtype=torch.float32)
+        if isinstance(latest, torch.Tensor) and latest.ndim == 0:
+            d = torch.stack(list(self.deque))
             return d.mean().item()
-        elif isinstance(latest, torch.Tensor) and latest.ndim == 0:
+        elif isinstance(latest, numbers.Number):
             d = torch.tensor(list(self.deque), dtype=torch.float32)
             return d.mean().item()
         else:
             return latest
 
-
     @property
     def global_avg(self):
-        return self.total / self.count
+        total = self.total
+        if isinstance(total, torch.Tensor):
+            total = total.item()
+        return total / self.count
 
     @property
     def max(self):
+        latest = self.deque[-1]
+        if isinstance(latest, torch.Tensor) and latest.ndim == 0:
+            return torch.stack(list(self.deque)).max().item()
         return max(self.deque)
 
     @property
     def value(self):
-        return self.deque[-1]
+        v = self.deque[-1]
+        if isinstance(v, torch.Tensor):
+            return v.item()
+        return v
 
     def __str__(self):
         latest = self.deque[-1]
