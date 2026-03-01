@@ -1,6 +1,7 @@
 import numpy as np
 import torch
-import os
+import logging
+
 
 class AvgrageMeter(object):
     """
@@ -8,26 +9,17 @@ class AvgrageMeter(object):
     Useful for tracking metrics like loss or accuracy during training/validation.
     """
     def __init__(self):
-        self.reset()  # Initialize/reset all statistics
+        self.reset()
 
     def reset(self):
-        """
-        Reset all statistics to zero.
-        """
-        self.avg = 0  # Average value
-        self.sum = 0  # Sum of all values
-        self.cnt = 0  # Count of all samples
+        self.avg = 0
+        self.sum = 0
+        self.cnt = 0
 
     def update(self, val, n=1):
-        """
-        Update the meter with a new value.
-        Args:
-            val (float): Value to add.
-            n (int): Number of samples the value represents (default 1).
-        """
-        self.sum += val * n  # Update sum
-        self.cnt += n        # Update count
-        self.avg = self.sum / self.cnt  # Update average
+        self.sum += val * n
+        self.cnt += n
+        self.avg = self.sum / self.cnt
 
 
 def accuracy(output, target, topk=(1,)):
@@ -40,18 +32,19 @@ def accuracy(output, target, topk=(1,)):
     Returns:
         list: List of accuracies for each k in topk.
     """
-    maxk = max(topk)  # Maximum k value
-    batch_size = target.size(0)  # Number of samples in batch
+    maxk = max(topk)
+    batch_size = target.size(0)
 
-    _, pred = output.topk(maxk, 1, True, True)  # Get top-k predictions
-    pred = pred.t()  # Transpose for comparison
-    correct = pred.eq(target.view(1, -1).expand_as(pred))  # Compare with targets
+    _, pred = output.topk(maxk, 1, True, True)
+    pred = pred.t()
+    correct = pred.eq(target.view(1, -1).expand_as(pred))
 
     res = []
     for k in topk:
-        correct_k = correct[:k].reshape(-1).float().sum(0)  # Number of correct predictions in top-k
-        res.append(correct_k.mul_(100.0/batch_size))        # Convert to percentage
+        correct_k = correct[:k].reshape(-1).float().sum(0)
+        res.append(correct_k.mul_(100.0 / batch_size))
     return res
+
 
 def count_parameters_in_MB(model):
     """
@@ -59,25 +52,33 @@ def count_parameters_in_MB(model):
     Args:
         model (nn.Module): The model to count parameters for.
     Returns:
-        float: Number of parameters in millions (MB).
+        float: Number of parameters in millions.
     """
-    return np.sum([np.prod(v.size()) for name, v in model.named_parameters() if "auxiliary" not in name]) / 1e6
+    return np.sum(
+        [np.prod(v.size()) for name, v in model.named_parameters()
+         if "auxiliary" not in name]
+    ) / 1e6
 
-def save(model, model_path):
-    """
-    Save the model's state dictionary to a file.
-    Args:
-        model (nn.Module): The model to save.
-        model_path (str): Path to save the model.
-    """
-    torch.save(model.state_dict(), model_path)
 
-def create_exp_dir(path):
+def get_device(gpu_index=0):
     """
-    Create a directory for experiment outputs if it doesn't exist.
+    Return the best available torch.device for NAS.
+
+    Preference order: CUDA (with specified index) > MPS (Apple Silicon) > CPU.
+
     Args:
-        path (str): Directory path to create.
+        gpu_index (int): CUDA device index (ignored for MPS/CPU).
+    Returns:
+        torch.device: The resolved compute device.
     """
-    if not os.path.exists(path):
-        os.mkdir(path)
-    print('Experiment dir : {}'.format(path))
+    logger = logging.getLogger("root.modelopt.nas")
+    if torch.cuda.is_available():
+        device = torch.device(f'cuda:{gpu_index}')
+        logger.info('NAS device: %s (%s)', device, torch.cuda.get_device_name(device))
+    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        device = torch.device('mps')
+        logger.info('NAS device: mps (Apple Metal)')
+    else:
+        device = torch.device('cpu')
+        logger.info('NAS device: cpu')
+    return device
