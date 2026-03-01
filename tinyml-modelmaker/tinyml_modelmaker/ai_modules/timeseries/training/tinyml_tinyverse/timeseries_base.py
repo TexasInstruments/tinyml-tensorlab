@@ -846,11 +846,11 @@ class BaseModelTraining:
         # These must be stripped before argv slicing (which uses fixed offsets
         # for trailing key-value pairs) and re-appended after.
         bool_flags = []
-        # Auto-enable AMP on MPS (Apple Silicon) unless explicitly disabled.
-        # MPS benefits from bfloat16 autocast with no GradScaler needed.
+        # AMP (mixed-precision) — only enable when the user explicitly passes
+        # --native-amp.  On MPS, autocast defaults to float16 but GradScaler
+        # is unsupported, so small TinyML models suffer gradient underflow
+        # (all predictions collapse to one class).  Do NOT auto-enable.
         native_amp = getattr(self.params.training, 'native_amp', None)
-        if native_amp is None and device == 'mps':
-            native_amp = True
         if native_amp:
             bool_flags.append('--native-amp')
         argv.extend(bool_flags)
