@@ -47,6 +47,7 @@ from tinyml_tinyverse.common.datasets import GenericImageDataset
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
+from ..common.train_base import shutdown_data_loaders
 
 dataset_loader_dict = {'GenericImageDataset': GenericImageDataset}
 
@@ -189,6 +190,7 @@ def main(gpu, args):
                 index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
         except ValueError as e:
             logger.warning("Not able to compute Confusion Matrix. Error: " + str(e))
+    shutdown_data_loaders(data_loader)
     return
 
 def run(args):
