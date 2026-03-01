@@ -1083,8 +1083,8 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
         transform = transform.to(device)
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.float().to(device, non_blocking=True)
-        target = target.float().to(device, non_blocking=True)
+        data = data.float().to(device)
+        target = target.float().to(device)
         if transform:
             data = transform(data)
 
@@ -1139,8 +1139,8 @@ def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device
 
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.float().to(device, non_blocking=True)
-        target = target.float().to(device, non_blocking=True)
+        data = data.float().to(device)
+        target = target.float().to(device)
 
         if transform:
             data = transform(data)
@@ -1189,8 +1189,8 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
     with torch.no_grad():
         for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
             # Move data and target to the specified device
-            data = data.float().to(device, non_blocking=True)
-            target = target.float().to(device, non_blocking=True)
+            data = data.float().to(device)
+            target = target.float().to(device)
 
             # Apply transformation if provided
             if transform:
@@ -1262,8 +1262,8 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
         predictions_list = []
         # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         for _, data, target in data_loader:
-            data = data.float().to(device, non_blocking=True)
-            target = target.float().to(device, non_blocking=True)
+            data = data.float().to(device)
+            target = target.float().to(device)
 
             if transform:
                 data = transform(data)
@@ -1308,7 +1308,7 @@ def train_one_epoch_anomalydetection(
         transform = transform.to(device)
     for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.float().to(device, non_blocking=True)
+        data = data.float().to(device)
         # In anomaly detection with autoencoder, the target and the input data are the same
         target = data.clone()
 
@@ -1353,7 +1353,7 @@ def evaluate_anomalydetection(
     with torch.no_grad():
         for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
-            data = data.float().to(device, non_blocking=True)
+            data = data.float().to(device)
             #In anomlay detection with auto encoder, the target and the input data both are same. 
             target = data
             if transform:
@@ -1389,10 +1389,10 @@ def train_one_epoch_classification(
     for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
         if nn_for_feature_extraction:
-            data = data_raw.float().to(device, non_blocking=True)
+            data = data_raw.float().to(device)
         else:
-            data = data_feat_ext.float().to(device, non_blocking=True)
-        target = target.long().to(device, non_blocking=True)
+            data = data_feat_ext.float().to(device)
+        target = target.long().to(device)
 
         if transform:
             data = transform(data)
@@ -1443,11 +1443,11 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     with torch.no_grad():
         for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
             if nn_for_feature_extraction:
-                data = data_raw.float().to(device, non_blocking=True)
+                data = data_raw.float().to(device)
             else:
-                data = data_feat_ext.float().to(device, non_blocking=True)
+                data = data_feat_ext.float().to(device)
 
-            target = target.long().to(device, non_blocking=True)
+            target = target.long().to(device)
             if transform:
                 data = transform(data)
 
@@ -1719,8 +1719,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         for data_raw, data_fe, _ in data_loader:
             start_time = timeit.default_timer()
 
-            data_raw = data_raw.float().to(device, non_blocking=True)
-            data_fe = data_fe.float().to(device, non_blocking=True)
+            data_raw = data_raw.float().to(device)
+            data_fe = data_fe.float().to(device)
 
             output = model(data_raw)  # (n,1,8000) -> (n,35)
 
@@ -1746,8 +1746,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         with torch.no_grad():
             for data_raw, data_fe, _ in data_loader_test:
                 # Assuming the dataset returns (data, target)
-                data_raw = data_raw.float().to(device, non_blocking=True)
-                data_fe = data_fe.float().to(device, non_blocking=True)
+                data_raw = data_raw.float().to(device)
+                data_fe = data_fe.float().to(device)
                 outputs = model(data_raw)
 
                 # Calculate loss
