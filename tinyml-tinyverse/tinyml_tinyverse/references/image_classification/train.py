@@ -113,6 +113,7 @@ from ..common.train_base import (
     apply_output_int_default,
     get_output_int_flag,
     load_onnx_for_inference,
+    shutdown_data_loaders,
 )
 
 dataset_loader_dict = {'GenericImageDataset':GenericImageDataset}
@@ -455,12 +456,14 @@ def main(gpu, args):
     log_training_time(start_time)
     
     if args.gen_golden_vectors:
-        
         set_dataset_augmentation_enabled(dataset, False)
         set_dataset_augmentation_enabled(dataset_test, False)
         generate_golden_vector_dir(args.output_dir)
         output_int = get_output_int_flag(args)
         generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
+
+    shutdown_data_loaders(data_loader, data_loader_test)
+    return
 
 
 def run(args):
