@@ -810,6 +810,58 @@ def create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args
     return data_loader, data_loader_test
 
 
+def _unregister_tracked_semaphores(*objects):
+    """Unregister multiprocessing semaphores from Python's resource_tracker.
+
+    On Python <=3.11, ``_multiprocessing.SemLock``'s C dealloc calls
+    ``sem_close()`` but never ``resource_tracker.unregister()``.  The
+    resource_tracker's ``atexit`` handler therefore reports every
+    semaphore ever created as "leaked".  (Fixed in Python 3.12+ where
+    SemLock.__del__ calls unregister.)
+
+    This function walks known multiprocessing container attributes
+    (Queue._rlock, Queue._wlock, Queue._sem, Event._cond, Event._flag,
+    etc.) to find underlying SemLock objects and unregisters their named
+    semaphores so the resource_tracker stays quiet.
+    """
+    try:
+        from multiprocessing.resource_tracker import unregister
+    except ImportError:
+        return
+
+    seen = set()
+
+    def _scan(obj):
+        obj_id = id(obj)
+        if obj_id in seen:
+            return
+        seen.add(obj_id)
+        # Leaf: a Lock / Semaphore / BoundedSemaphore wrapping a SemLock
+        semlock = getattr(obj, '_semlock', None)
+        if semlock is not None:
+            name = getattr(semlock, 'name', None)
+            if name:
+                try:
+                    unregister(name, "semaphore")
+                except Exception:
+                    pass
+            return
+        # Recurse into known container attributes
+        for attr in ('_rlock', '_wlock', '_sem', '_lock', '_cond', '_flag'):
+            child = getattr(obj, attr, None)
+            if child is not None:
+                _scan(child)
+
+    for obj in objects:
+        if obj is None:
+            continue
+        if isinstance(obj, (list, tuple)):
+            for item in obj:
+                _scan(item)
+        else:
+            _scan(obj)
+
+
 def shutdown_data_loaders(*loaders):
     """Explicitly shut down DataLoader worker processes to avoid leaked semaphore warnings.
 
@@ -817,13 +869,12 @@ def shutdown_data_loaders(*loaders):
     on macOS where the 'spawn' start method tracks semaphores via resource_tracker).
     Works for both persistent_workers=True and False.
 
-    The key issue on macOS: each DataLoader iterator holds multiprocessing Queue
-    objects whose internal Lock/Semaphore are POSIX named semaphores tracked by
-    Python's resource_tracker.  ``_shutdown_workers()`` joins worker processes
-    and closes queues, but does NOT release the Queue objects themselves.  If
-    those objects survive until the resource_tracker's ``atexit`` handler runs,
-    it reports them as "leaked".  We break the references here so CPython's
-    refcount-based deallocation triggers ``sem_unlink`` immediately.
+    After joining workers, we explicitly unregister all POSIX named semaphores
+    owned by the iterator's multiprocessing Queues and Events from the
+    resource_tracker.  On Python <=3.11, this unregister never happens
+    automatically (the C SemLock dealloc only calls sem_close, not
+    resource_tracker.unregister), so without this step the resource_tracker
+    warns about "leaked semaphore objects" at shutdown.
     """
     import gc
     for loader in loaders:
@@ -834,40 +885,12 @@ def shutdown_data_loaders(*loaders):
             it._shutdown_workers()
         except Exception:
             pass
-        # Break the iterator's references to multiprocessing objects so their
-        # __del__ methods fire (calling sem_unlink) during gc below.
-        for attr in ('_index_queues', '_workers', '_data_queue',
-                     '_worker_result_queue', '_pin_memory_thread',
-                     '_workers_done_event'):
-            try:
-                val = getattr(it, attr, None)
-                if val is None:
-                    continue
-                if isinstance(val, list):
-                    for item in val:
-                        if hasattr(item, 'close'):
-                            try:
-                                item.close()
-                            except Exception:
-                                pass
-                    try:
-                        val.clear()
-                    except Exception:
-                        pass
-                else:
-                    if hasattr(val, 'close'):
-                        try:
-                            val.close()
-                        except Exception:
-                            pass
-                    try:
-                        setattr(it, attr, None)
-                    except Exception:
-                        pass
-            except Exception:
-                pass
+        # Unregister all POSIX named semaphores from the resource_tracker
+        # so it does not report them as leaked at exit.
+        _unregister_tracked_semaphores(
+            getattr(it, '_index_queues', None),
+            getattr(it, '_data_queue', None),
+            getattr(it, '_workers_done_event', None),
+        )
         loader._iterator = None
-    # Two rounds: first collects the iterator itself, second collects
-    # Queue/Lock/Semaphore objects that were only reachable through it.
-    gc.collect()
     gc.collect()
