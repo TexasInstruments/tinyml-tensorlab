@@ -691,6 +691,221 @@ class CNN_TS_GEN_BASE_55K_NPU(GenericModelWithSpec):
         return model_spec
 
 
+# =============================================================================
+# APPLICATION-SPECIFIC MODELS
+# Open-source implementations of application-specific CNN architectures
+# for arc fault detection, motor fault classification, and fan imbalance.
+# =============================================================================
+
+
+class CNN_AF_3L_200(GenericModelWithSpec):
+    """
+    3-Layer CNN for Arc Fault Detection — ~200 parameter variant.
+
+    Smallest and fastest of the arc fault models. Best suited for
+    simple fault patterns where inference speed is critical.
+
+    Architecture: BatchNorm -> Conv3x1(4) -> Conv3x1(4) -> Conv3x1(8) -> AvgPool -> FC
+    ~200 parameters (with 1 input variable, 2 classes)
+    """
+    def __init__(self, config, input_features=256, variables=1, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=4, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=4, out_channels=4, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=4, out_channels=8, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_AF_3L_300(GenericModelWithSpec):
+    """
+    3-Layer CNN for Arc Fault Detection — ~300 parameter variant.
+
+    Slightly larger than the 200-param variant. Handles moderately
+    complex fault patterns while maintaining fast inference.
+
+    Architecture: BatchNorm -> Conv5x1(4) -> Conv5x1(4) -> Conv5x1(8) -> AvgPool -> FC
+    ~300 parameters (with 1 input variable, 2 classes)
+    """
+    def __init__(self, config, input_features=256, variables=1, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=4, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=4, out_channels=4, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=4, out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_AF_3L_700(GenericModelWithSpec):
+    """
+    3-Layer CNN for Arc Fault Detection — ~700 parameter variant.
+
+    Sweet spot between inference speed and model capacity.
+    Recommended starting point for most arc fault applications.
+
+    Architecture: BatchNorm -> Conv3x1(8) -> Conv3x1(8) -> Conv3x1(16) -> AvgPool -> FC
+    ~700 parameters (with 1 input variable, 2 classes)
+    """
+    def __init__(self, config, input_features=256, variables=1, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=8, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_AF_3L_1400(GenericModelWithSpec):
+    """
+    3-Layer CNN for Arc Fault Detection — ~1400 parameter variant.
+
+    Largest and most accurate arc fault model. Best for complex data
+    scenarios where accuracy is more important than inference speed.
+
+    Architecture: BatchNorm -> Conv5x1(8) -> Conv5x1(8) -> Conv5x1(16) -> AvgPool -> FC
+    ~1400 parameters (with 1 input variable, 2 classes)
+    """
+    def __init__(self, config, input_features=256, variables=1, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_MF_1L(GenericModelWithSpec):
+    """
+    1-Layer CNN for Motor Fault / Fan Imbalance Classification.
+
+    Simplest of the motor fault models with ~600 parameters.
+    Single convolutional layer followed by global pooling.
+
+    Architecture: BatchNorm -> Conv5x1(16) -> AvgPool -> FC
+    ~600 parameters (with 1 input variable, 4 classes)
+    """
+    def __init__(self, config, input_features=256, variables=1, num_classes=4):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='AdaptiveAvgPoolLayer', output_size=(8, 1))}
+        layers += {'3': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'4': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_MF_2L(GenericModelWithSpec):
+    """
+    2-Layer CNN for Motor Fault / Fan Imbalance Classification.
+
+    Largest of the motor fault models with ~3000 parameters.
+    Two convolutional layers with wider channels for maximum accuracy.
+    Hardest to train but most capable.
+
+    Architecture: BatchNorm -> Conv5x1(16) -> Conv5x1(32) -> AvgPool -> FC
+    ~3000 parameters (with 1 input variable, 4 classes)
+    """
+    def __init__(self, config, input_features=256, variables=1, num_classes=4):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'3': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'4': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'5': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_MF_3L(GenericModelWithSpec):
+    """
+    3-Layer CNN for Motor Fault / Fan Imbalance Classification.
+
+    Middle of the three motor fault models with ~1000 parameters.
+    Three narrow convolutional layers balance depth and efficiency.
+
+    Architecture: BatchNorm -> Conv5x1(4) -> Conv5x1(8) -> Conv3x1(16) -> AvgPool -> FC
+    ~1000 parameters (with 1 input variable, 4 classes)
+    """
+    def __init__(self, config, input_features=256, variables=1, num_classes=4):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=4, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=4, out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
 # Export all classification models
 __all__ = [
     # Non-NPU models (residual networks, specialized architectures)
@@ -710,4 +925,12 @@ __all__ = [
     'CNN_TS_GEN_BASE_13K_NPU',
     'CNN_TS_GEN_BASE_20K_NPU',
     'CNN_TS_GEN_BASE_55K_NPU',
+    # Application-specific models (arc fault, motor fault, fan imbalance)
+    'CNN_AF_3L_200',
+    'CNN_AF_3L_300',
+    'CNN_AF_3L_700',
+    'CNN_AF_3L_1400',
+    'CNN_MF_1L',
+    'CNN_MF_2L',
+    'CNN_MF_3L',
 ]
