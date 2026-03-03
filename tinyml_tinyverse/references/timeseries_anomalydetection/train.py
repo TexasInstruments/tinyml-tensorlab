@@ -251,7 +251,7 @@ def main(gpu, args):
                 model_ema, criterion, data_loader_test, device=device, transform=None, epoch=epoch,
                 log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
         if args.output_dir and avg_mse <= best['mse']:
-            logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) <= {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
+            logger.info(f"Epoch[{epoch}]: {avg_mse:.6f} (Val MSE) <= {best['mse']:.6f} (So far least error). Hence updating checkpoint.pth")
             best['mse'], best['epoch'] = avg_mse, epoch
             checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
             utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))

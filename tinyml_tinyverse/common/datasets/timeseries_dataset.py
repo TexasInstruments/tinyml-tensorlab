@@ -342,7 +342,7 @@ class BaseGenericTSDataset(Dataset):
 
     def _transform_raw(self, wave_frame):
         result_wave = wave_frame
-        mean_of_wave = np.sum(result_wave) // len(result_wave)
+        mean_of_wave = np.sum(result_wave) / len(result_wave)
         if self.dc_remove:
             result_wave = result_wave - mean_of_wave
         return wave_frame, result_wave

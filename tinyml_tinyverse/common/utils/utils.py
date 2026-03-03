@@ -1284,10 +1284,11 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
 def train_one_epoch_anomalydetection(
         model, criterion, optimizer, data_loader, device, epoch, transform,
         apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
+    logger = getLogger(f"root.train_utils.train.{phase}")
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    header = f"Training   - Epoch[{epoch}]:"
+    header = f"Training   - Epoch[{epoch}]: "
     if transform:
         transform = transform.to(device)
     for _,data, labels in metric_logger.log_every(data_loader, print_freq, header):
@@ -1319,7 +1320,7 @@ def train_one_epoch_anomalydetection(
             optimizer.step()
 
         metric_logger.update(loss=loss.item())
-        
+    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
     if model_ema:
         model_ema.update_parameters(model)
 
@@ -1350,6 +1351,7 @@ def evaluate_anomalydetection(
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
     metric_logger.synchronize_between_processes()
+    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
     return metric_logger.loss.global_avg
 
 
