@@ -1009,7 +1009,7 @@ def get_live_preview_example_descriptions(params):
                 'deviceName': 'CC3551E',
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
                 'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
-                'pkgId': 'SIMPLELINK-WIFI-SDK',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC3551E.ccxml',
                 'transport': {'baudRate': 115200}
             },
