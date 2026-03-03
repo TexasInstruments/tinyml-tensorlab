@@ -1193,7 +1193,7 @@ C2000WARE_ROOT = os.path.abspath(os.getenv('C2000WARE_ROOT', os.path.join(TOOLS_
 C2000WARE_INCLUDE = os.path.join(C2000WARE_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
 C2000_DRIVERLIB_INCLUDE = os.path.join(C2000WARE_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 # C2000 F29 Compiler
-C29_CGT_VERSION = 'ti-cgt-c29_2.1.0.STS'
+C29_CGT_VERSION = 'ti-cgt-c29_2.0.0.STS'
 CG_TOOL_ROOT = os.path.abspath(os.getenv('CG_TOOL_ROOT', os.path.join(TOOLS_PATH, C29_CGT_VERSION)))
 C29CLANG_CROSS_COMPILER = os.path.join(CG_TOOL_ROOT, 'bin', 'c29clang')
 C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
