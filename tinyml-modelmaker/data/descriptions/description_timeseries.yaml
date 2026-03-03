@@ -105,14 +105,18 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   * SDK release: 2_08_00_03\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
   * SDK release: 2_08_00_03\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
-  * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN/9.12.00.00\n\
-  * SDK release: 09_12_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n\
-  * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* CC1352 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK\n\
-  * SDK release: 08_31_00_11\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n\
-  * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* CC1354 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK\n\
-  * SDK release: 08_31_00_11\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n\
-  * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* CC35X1 SDK: https://www.ti.com/tool/SIMPLELINK-WIFI-SDK\n\
-  * SDK release: 09_21_00_15\n\n\n## Additional information\n\n * Tiny ML model development\
+  * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+  * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n\
+  * SDK release: 01_00_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n\
+  * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+  * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+  * SDK release: 01_00_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n\
+  * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+  * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+  * SDK release: 01_00_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n\
+  * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+  * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n\
+  * SDK release: 01_00_00_00\n\n\n## Additional information\n\n * Tiny ML model development\
   \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset\
   \ format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
   \ dataset, but there are some changes as explained below.\n\n\n####  Dataset format\n\
@@ -698,7 +702,7 @@ live_preview_example:
       - from: artifacts/
         to: ai_artifacts/
       from: examples/rtos/LP_EM_CC35X1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang.projectspec
-      pkgId: SIMPLELINK-WIFI-SDK
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
       targetCfg: targetConfigs/CC3551E.ccxml
       transport:
         baudRate: 115200
@@ -16989,7 +16993,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
     generic_timeseries_forecasting:
       default_preset:
@@ -16997,7 +17001,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
     generic_timeseries_regression:
       default_preset:
@@ -17005,7 +17009,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
     pir_detection:
       default_preset:
@@ -17013,7 +17017,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
   CC35X1:
     generic_timeseries_classification:
@@ -17022,7 +17026,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
     generic_timeseries_forecasting:
       default_preset:
@@ -17030,7 +17034,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
     generic_timeseries_regression:
       default_preset:
@@ -17038,7 +17042,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
     pir_detection:
       default_preset:
@@ -17046,7 +17050,7 @@ preset_descriptions:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
           cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
             -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
-          target: c, ti-npu type=soft
+          target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
   F280013:
     arc_fault:
@@ -18313,50 +18317,54 @@ target_device_descriptions:
     device_details: "48MHz SimpleLink\u2122 32-bit Arm\xAE Cortex\xAE-M4F multiprotocol\
       \ wireless MCU with 352KB flash\n* More details : https://www.ti.com/product/CC1352R1\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/CC1352R\n\
-      * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* CC1352 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK\n\
-      * SDK release: 08_31_00_11\n\nAdditional information:\n\n * Tiny ML model development\
+      * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+      * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+      * SDK release: 01_00_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1352
     device_selection_factor: 2
     device_type: MCU
-    sdk_release: 08_31_00_11
-    sdk_version: 8.31.00.11
+    sdk_release: '01_00_00_00'
+    sdk_version: 1.00.00.00
   CC1354:
     device_details: "SimpleLink\u2122 32-bit Arm\xAE Cortex\xAE-M33 multiprotocol\
       \ wireless MCU\n* More details : https://www.ti.com/product/CC1354P10\n\nImportant\
       \ links:\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad:\
-      \ https://www.ti.com/tool/LP-EM-CC1354P10\n* CC1354 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK\n\
-      * SDK release: 08_31_00_11\n\nAdditional information:\n\n * Tiny ML model development\
+      \ https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+      * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+      * SDK release: 01_00_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1354
     device_selection_factor: 3
     device_type: MCU
-    sdk_release: 08_31_00_11
-    sdk_version: 8.31.00.11
+    sdk_release: '01_00_00_00'
+    sdk_version: 1.00.00.00
   CC2755:
     device_details: "96MHz SimpleLink\u2122 32-bit Arm\xAE Cortex\xAE-M33 multiprotocol\
       \ wireless MCU with 1MB flash, HSM, APU, NPU-CDE\n* More details : https://www.ti.com/product/CC2755R10\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/CC2755R10\n\
-      * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN/9.12.00.00\n\
-      * SDK release: 09_12_00_00\n\nAdditional information:\n\n * Tiny ML model development\
+      * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+      * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n\
+      * SDK release: 01_00_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC2755
     device_selection_factor: 4
     device_type: MCU
-    sdk_release: 09_12_00_00
-    sdk_version: 9.12.00.00
+    sdk_release: '01_00_00_00'
+    sdk_version: 1.00.00.00
   CC35X1:
     device_details: "SimpleLink\u2122 32-bit Arm\xAE Cortex\xAE-M33 Wi-Fi wireless\
       \ MCU\n* More details : https://www.ti.com/product/CC3551E\n\nImportant links:\n\
       * Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n\
-      * CC35X1 SDK: https://www.ti.com/tool/SIMPLELINK-WIFI-SDK\n* SDK release: 09_21_00_15\n\
-      \nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab\
-      \ \n"
+      * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
+      * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n\
+      * SDK release: 01_00_00_00\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC35X1
     device_selection_factor: 10
     device_type: MCU
-    sdk_release: 09_21_00_15
-    sdk_version: 9.21.00.15
+    sdk_release: '01_00_00_00'
+    sdk_version: 1.00.00.00
   F280013:
     device_details: "C2000\u2122 120-MHz C28x CPU with FPU and TMU, 256-KB Flash,\
       \ two 12-bit ADCs, 14 PWM channels, CAN (DCAN), one encoder module (eQEP), UART,\

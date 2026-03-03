@@ -278,17 +278,17 @@ TARGET_SDK_RELEASE_MSPM0 = '2_08_00_03'
 TARGET_SDK_VERSION_MSPM33C = "1.02.00.00"
 TARGET_SDK_RELEASE_MSPM33C = '1_02_00_00'
 
-TARGET_SDK_VERSION_CC2755 = '9.12.00.00'
-TARGET_SDK_RELEASE_CC2755 = '09_12_00_00'
+TARGET_SDK_VERSION_CC2755 = '1.00.00.00'
+TARGET_SDK_RELEASE_CC2755 = '01_00_00_00'
 
-TARGET_SDK_VERSION_CC1352 = '8.31.00.11'
-TARGET_SDK_RELEASE_CC1352 = '08_31_00_11'
+TARGET_SDK_VERSION_CC1352 = '1.00.00.00'
+TARGET_SDK_RELEASE_CC1352 = '01_00_00_00'
 
-TARGET_SDK_VERSION_CC1354 = '8.31.00.11'
-TARGET_SDK_RELEASE_CC1354 = '08_31_00_11'
+TARGET_SDK_VERSION_CC1354 = '1.00.00.00'
+TARGET_SDK_RELEASE_CC1354 = '01_00_00_00'
 
-TARGET_SDK_VERSION_CC35X1 = '9.21.00.15'
-TARGET_SDK_RELEASE_CC35X1 = '09_21_00_15'
+TARGET_SDK_VERSION_CC35X1 = '1.00.00.00'
+TARGET_SDK_RELEASE_CC35X1 = '01_00_00_00'
 
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n'
@@ -616,7 +616,8 @@ Additional information:
 TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2755 = \
     f'''* Product information: https://www.ti.com/product/CC2755R10
 * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1
-* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN/9.12.00.00
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19
 * SDK release: {TARGET_SDK_RELEASE_CC2755}'''
 
 TARGET_DEVICE_DETAILS_CC2755= \
@@ -633,7 +634,8 @@ Additional information:
 TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1352 = \
     f'''* Product information: https://www.ti.com/product/CC1352R
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1
-* CC1352 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
 * SDK release: {TARGET_SDK_RELEASE_CC1352}'''
 
 TARGET_DEVICE_DETAILS_CC1352 = \
@@ -650,7 +652,8 @@ Additional information:
 TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354 = \
     f'''* Product information: https://www.ti.com/product/CC1354P10
 * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10
-* CC1354 SDK: https://www.ti.com/tool/SIMPLELINK-CC13XX-CC26XX-SDK
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
 * SDK release: {TARGET_SDK_RELEASE_CC1354}'''
 
 TARGET_DEVICE_DETAILS_CC1354 = \
@@ -667,7 +670,8 @@ Additional information:
 TARGET_DEVICE_SETUP_INSTRUCTIONS_CC35X1 = \
     f'''* Product information: https://www.ti.com/product/CC3551E
 * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1
-* CC35X1 SDK: https://www.ti.com/tool/SIMPLELINK-WIFI-SDK
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15
 * SDK release: {TARGET_SDK_RELEASE_CC35X1}'''
 
 TARGET_DEVICE_DETAILS_CC35X1 = \
@@ -1281,11 +1285,13 @@ COMPILATION_AM13E2_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normal
 COMPILATION_AM13E2_SOFT_TINPU_AD = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 COMPILATION_AM13E2_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 COMPILATION_AM13E2_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
-# MSPM33 - Connectivity
+# Connectivity Devices
 COMPILATION_CC2755_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC2755_CROSS_COMPILER, )
+COMPILATION_CC2755_CDE_TINPU = dict(target="c, ti-npu type=m33cde", target_c_mcpu='cortex-m33', cross_compiler=CC2755_CROSS_COMPILER, )
 COMPILATION_CC1352_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m4', cross_compiler=CC1352_CROSS_COMPILER, )
 COMPILATION_CC1354_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC1354_CROSS_COMPILER, )
 COMPILATION_CC35X1_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC35X1_CROSS_COMPILER, )
+COMPILATION_CC35X1_CDE_TINPU = dict(target="c, ti-npu type=m33cde", target_c_mcpu='cortex-m33', cross_compiler=CC35X1_CROSS_COMPILER, )
 # AM263
 COMPILATION_AM263_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
 COMPILATION_AM263_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-r5', cross_compiler=AM263_CROSS_COMPILER, )
@@ -1457,7 +1463,8 @@ _DEVICE_PROFILES = {
         'has_hard_npu': True,
     },
     TARGET_DEVICE_CC2755: {
-        'compilation_base': COMPILATION_CC2755_SOFT_TINPU,
+        'compilation_base': COMPILATION_CC2755_CDE_TINPU,
+        'compilation_soft': COMPILATION_CC2755_SOFT_TINPU,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_CC1352: {
@@ -1469,7 +1476,8 @@ _DEVICE_PROFILES = {
         'has_hard_npu': False,
     },
     TARGET_DEVICE_CC35X1: {
-        'compilation_base': COMPILATION_CC35X1_SOFT_TINPU,
+        'compilation_base': COMPILATION_CC35X1_CDE_TINPU,
+        'compilation_soft': COMPILATION_CC35X1_SOFT_TINPU,
         'has_hard_npu': False,
     },
 }
