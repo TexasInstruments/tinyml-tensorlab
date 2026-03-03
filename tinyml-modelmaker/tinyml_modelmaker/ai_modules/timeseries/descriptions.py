@@ -788,18 +788,18 @@ def get_live_capture_example_descriptions(params):
             },
             'CC1352': {
                 'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
-                'deviceName': 'CC1352R1F3',
+                'deviceName': 'CC1352R1',
                 'files': [],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection_cc1352/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC1354P10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection_cc1354p10/freertos/ticlang/edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}
@@ -809,8 +809,8 @@ def get_live_capture_example_descriptions(params):
                 'deviceName': 'CC3551E',
                 'files': [],
                 'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
-                'pkgId': 'SIMPLELINK-WIFI-SDK',
-                'targetCfg': 'targetConfigs/CC3551E.ccxml',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC35X1E.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'MSPM0G5187': {
@@ -988,18 +988,18 @@ def get_live_preview_example_descriptions(params):
             },
             'CC1352': {
                 'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
-                'deviceName': 'CC1352R1F3',
+                'deviceName': 'CC1352R1',
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection_cc1352/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC1354P10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection_cc1354p10/freertos/ticlang/edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}
@@ -1010,7 +1010,7 @@ def get_live_preview_example_descriptions(params):
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
                 'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
-                'targetCfg': 'targetConfigs/CC3551E.ccxml',
+                'targetCfg': 'targetConfigs/CC35X1E.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'MSPM0G5187': {
