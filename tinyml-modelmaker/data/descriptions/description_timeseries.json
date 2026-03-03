@@ -18382,10 +18382,10 @@
   },
   "preset_descriptions":{
     "AM263":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"cortex-r5",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
@@ -18402,10 +18402,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-r5",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
@@ -18431,20 +18441,10 @@
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
           }
         }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
       }
     },
     "AM263P":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18454,7 +18454,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18476,7 +18476,7 @@
       }
     },
     "AM261":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18486,7 +18486,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18508,10 +18508,10 @@
       }
     },
     "F280013":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18528,10 +18528,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18552,16 +18562,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18570,10 +18570,10 @@
       }
     },
     "F280015":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18590,10 +18590,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18614,16 +18624,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18632,10 +18632,10 @@
       }
     },
     "F28003":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18652,10 +18652,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18676,16 +18686,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18694,10 +18694,10 @@
       }
     },
     "F28004":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18714,10 +18714,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18738,16 +18748,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18756,10 +18756,10 @@
       }
     },
     "F28P65":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18776,10 +18776,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18800,16 +18810,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18818,10 +18818,10 @@
       }
     },
     "F2837":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18838,10 +18838,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18862,16 +18872,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18880,10 +18880,10 @@
       }
     },
     "F28P55":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18891,7 +18891,7 @@
         },
         "forced_soft_npu_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18932,10 +18932,36 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -18988,32 +19014,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19038,10 +19038,10 @@
       }
     },
     "F29H85":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19058,10 +19058,20 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19087,7 +19097,9 @@
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
-      },
+      }
+    },
+    "F29P58":{
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -19097,23 +19109,11 @@
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
-      }
-    },
-    "F29P58":{
+      },
       "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19132,20 +19132,20 @@
       }
     },
     "F29P32":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19164,17 +19164,7 @@
       }
     },
     "MSPM0G3507":{
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19194,7 +19184,27 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19215,16 +19225,6 @@
         }
       },
       "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19236,17 +19236,7 @@
       }
     },
     "MSPM0G3519":{
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19266,7 +19256,27 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19287,16 +19297,6 @@
         }
       },
       "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19308,33 +19308,7 @@
       }
     },
     "MSPM0G5187":{
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19386,7 +19360,59 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19439,32 +19465,6 @@
         }
       },
       "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19492,6 +19492,46 @@
       }
     },
     "MSPM33C32":{
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
       "pir_detection":{
         "default_preset":{
           "compilation":{
@@ -19502,36 +19542,6 @@
           }
         }
       },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -19546,16 +19556,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -19565,10 +19565,10 @@
     },
     "MSPM33C34":{},
     "AM13E2":{
-      "generic_timeseries_forecasting":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -19617,10 +19617,36 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -19673,32 +19699,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -19723,16 +19723,6 @@
       }
     },
     "CC2755":{
-      "generic_timeseries_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=m33cde",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -19743,7 +19733,7 @@
           }
         }
       },
-      "generic_timeseries_forecasting":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -19753,7 +19743,17 @@
           }
         }
       },
-      "pir_detection":{
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=m33cde",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -19765,16 +19765,6 @@
       }
     },
     "CC1352":{
-      "generic_timeseries_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m4",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
-          }
-        }
-      },
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -19785,7 +19775,7 @@
           }
         }
       },
-      "generic_timeseries_forecasting":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19795,7 +19785,17 @@
           }
         }
       },
-      "pir_detection":{
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m4",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19807,16 +19807,6 @@
       }
     },
     "CC1354":{
-      "generic_timeseries_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
-          }
-        }
-      },
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -19827,7 +19817,7 @@
           }
         }
       },
-      "generic_timeseries_forecasting":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19837,7 +19827,17 @@
           }
         }
       },
-      "pir_detection":{
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19849,16 +19849,6 @@
       }
     },
     "CC35X1":{
-      "generic_timeseries_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=m33cde",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -19869,7 +19859,7 @@
           }
         }
       },
-      "generic_timeseries_forecasting":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -19879,7 +19869,17 @@
           }
         }
       },
-      "pir_detection":{
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=m33cde",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
