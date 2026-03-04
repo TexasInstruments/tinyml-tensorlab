@@ -109,7 +109,7 @@ class FEModel(torch.nn.Module):
 
     def forward(self, x):
         x = self.layers(x[..., None])
-        x = torch.nn.functional.adaptive_avg_pool2d(x, output_size=(1, 1))
+        x = torch.nn.functional.adaptive_avg_pool2d(x, output_size=(1,1))
         x = x.view((-1, self.variables, self.out_features, 1))
         return x
 
@@ -132,7 +132,7 @@ class FEModelLinear(torch.nn.Module):
         self.variables = variables
         self.out_features = out_features
         self.in_features = in_features
-        self.adaptive_avg_pool2D = torch.nn.AdaptiveAvgPool2d(output_size=(1, 1))
+        self.adaptive_avg_pool2D = torch.nn.AdaptiveAvgPool2d(output_size=(1,1))
 
         layers = []
         start_channel = 16
