@@ -126,7 +126,7 @@ class FC_CNN_TS_GEN_BASE_500_NPU(GenericModelWithSpec):
         layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=4, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=4, out_channels=8, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
-        layers += {'3': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}
+        layers += {'3': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'4': dict(type='ReshapeLayer', ndim=2)}
         layers += {'5': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
@@ -179,7 +179,7 @@ class FC_CNN_TS_GEN_BASE_2K_NPU(GenericModelWithSpec):
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=16, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
-        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'5': dict(type='ReshapeLayer', ndim=2)}
         layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes * 8)}
         layers += {'7': dict(type='ReluLayer')}
@@ -207,7 +207,7 @@ class FC_CNN_TS_GEN_BASE_4K_NPU(GenericModelWithSpec):
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
-        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'5': dict(type='ReshapeLayer', ndim=2)}
         layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes * 32)}
         layers += {'7': dict(type='ReluLayer')}
@@ -240,7 +240,7 @@ class FC_CNN_TS_GEN_BASE_6K_NPU(GenericModelWithSpec):
         # Depthwise separable block 2
         layers += {'4': dict(type='ConvBNReLULayer', in_channels=16, out_channels=16, kernel_size=(self.kernel,1), stride=(2,1), padding=(2,0), groups=16)}
         layers += {'5': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        layers += {'6': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}
+        layers += {'6': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'7': dict(type='ReshapeLayer', ndim=2)}
         layers += {'8': dict(type='LinearLayer', in_features=None, out_features=self.num_classes * 32)}
         layers += {'9': dict(type='ReluLayer')}
@@ -269,7 +269,7 @@ class FC_CNN_TS_GEN_BASE_8K_NPU(GenericModelWithSpec):
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'4': dict(type='ConvBNReLULayer', in_channels=32, out_channels=32, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
-        layers += {'5': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}
+        layers += {'5': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'6': dict(type='ReshapeLayer', ndim=2)}
         layers += {'7': dict(type='LinearLayer', in_features=None, out_features=self.num_classes * 32)}
         layers += {'8': dict(type='ReluLayer')}
@@ -297,7 +297,7 @@ class FC_CNN_TS_GEN_BASE_10K_NPU(GenericModelWithSpec):
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'3': dict(type='ConvBNReLULayer', in_channels=32, out_channels=32, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
-        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'5': dict(type='ReshapeLayer', ndim=2)}
         layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes * 64)}
         layers += {'7': dict(type='ReluLayer')}
@@ -328,7 +328,7 @@ class FC_CNN_TS_GEN_BASE_20K_NPU(GenericModelWithSpec):
         layers += {'4': dict(type='MaxPoolLayer', kernel_size=(3,1))}
         layers += {'5': dict(type='ConvBNReLULayer', in_channels=32, out_channels=64, kernel_size=(self.kernel,1), stride=(2,1), padding=(1,0))}
         layers += {'6': dict(type='ConvBNReLULayer', in_channels=64, out_channels=64, kernel_size=(self.kernel,1), stride=(1,1), padding=(1,0))}
-        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(2,1))}
+        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'8': dict(type='ReshapeLayer', ndim=2)}
         layers += {'9': dict(type='LinearLayer', in_features=None, out_features=self.num_classes * 64)}
         layers += {'10': dict(type='ReluLayer')}

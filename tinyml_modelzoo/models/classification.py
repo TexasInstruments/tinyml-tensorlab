@@ -75,7 +75,7 @@ class CNN_TS_GEN_BASE_1K_NPU(GenericModelWithSpec):
         layers += {'1a':dict(type='ConvBNReLULayer', in_channels=8, out_channels=8, kernel_size=(5,1), stride=(1,1))}
         layers += {'2': dict(type='MaxPoolLayer', kernel_size=(3, 1), stride=(2, 1))}
         layers += {'3':dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3,1), stride=(1,1))}
-        layers += {'5':dict(type='AdaptiveAvgPoolLayer', output_size=(4,1))}
+        layers += {'5':dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'6':dict(type='ReshapeLayer', ndim=2)}
         layers += {'7':dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
@@ -110,7 +110,7 @@ class CNN_TS_GEN_BASE_2K_NPU(GenericModelWithSpec):
         layers += {'3': dict(type='MaxPoolLayer', kernel_size=(3, 1), stride=(2, 1))}
         layers += {'4':dict(type='ConvBNReLULayer', in_channels=16, out_channels=16, kernel_size=(5,1), stride=(2,1))}
         layers += {'5':dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(5,1), stride=(2,1))}
-        layers += {'6':dict(type='AdaptiveAvgPoolLayer', output_size=(4,1))}
+        layers += {'6':dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'7':dict(type='ReshapeLayer', ndim=2)}
         layers += {'8':dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
@@ -155,7 +155,7 @@ class CNN_TS_GEN_BASE_6K_NPU(GenericModelWithSpec):
         # Final feature extraction
         layers += {'6': dict(type='ConvBNReLULayer', in_channels=48, out_channels=16, kernel_size=(5, 1), stride=(1, 1))}
         # Global pooling and classification
-        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'8': dict(type='ReshapeLayer', ndim=2)}
         layers += {'9': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
 
@@ -440,7 +440,7 @@ class CNN_TS_GEN_BASE_100_NPU(GenericModelWithSpec):
         # Use 8 output channels (m4) to ensure FC gets minimum 8 features
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(1, 1), stride=(1, 1))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=8, kernel_size=(3, 1), stride=(1, 1))}
-        layers += {'3': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'3': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'4': dict(type='ReshapeLayer', ndim=2)}
         # FC input = 8 features (meets NPU minimum)
         layers += {'5': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
@@ -473,7 +473,7 @@ class CNN_TS_GEN_BASE_500_NPU(GenericModelWithSpec):
         layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
-        layers += {'3': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'3': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'4': dict(type='ReshapeLayer', ndim=2)}
         layers += {'5': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
@@ -507,7 +507,7 @@ class CNN_TS_GEN_BASE_4K_NPU(GenericModelWithSpec):
         layers += {'1p': dict(type='MaxPoolLayer', kernel_size=(3, 1), stride=(2, 1))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(5, 1), stride=(2, 1))}
         layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(5, 1), stride=(2, 1))}
-        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'5': dict(type='ReshapeLayer', ndim=2)}
         layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
@@ -550,7 +550,7 @@ class CNN_TS_GEN_BASE_8K_NPU(GenericModelWithSpec):
         layers += {'5b': dict(type='ConvBNReLULayer', in_channels=32, out_channels=64, kernel_size=(1, 1), stride=(1, 1))}
         # Final conv
         layers += {'6': dict(type='ConvBNReLULayer', in_channels=64, out_channels=32, kernel_size=(3, 1), stride=(1, 1))}
-        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'8': dict(type='ReshapeLayer', ndim=2)}
         layers += {'9': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
@@ -585,7 +585,7 @@ class CNN_TS_GEN_BASE_13K_NPU(GenericModelWithSpec):
         layers += {'4': dict(type='ConvBNReLULayer', in_channels=16, out_channels=32, kernel_size=(3, 1), stride=(2, 1))}
         layers += {'5': dict(type='ConvBNReLULayer', in_channels=32, out_channels=32, kernel_size=(3, 1), stride=(1, 1))}
         layers += {'6': dict(type='ConvBNReLULayer', in_channels=32, out_channels=64, kernel_size=(3, 1), stride=(2, 1))}
-        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'7': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'8': dict(type='ReshapeLayer', ndim=2)}
         layers += {'9': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
@@ -627,7 +627,7 @@ class CNN_TS_GEN_BASE_20K_NPU(GenericModelWithSpec):
         layers += {'6': dict(type='ConvBNReLULayer', in_channels=64, out_channels=128, kernel_size=(3, 1), stride=(1, 1))}
         # Stage 4: Final conv and pooling
         layers += {'7': dict(type='ConvBNReLULayer', in_channels=128, out_channels=64, kernel_size=(3, 1), stride=(1, 1))}
-        layers += {'8': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'8': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'9': dict(type='ReshapeLayer', ndim=2)}
         layers += {'10': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         model_spec = dict(model_spec=layers)
