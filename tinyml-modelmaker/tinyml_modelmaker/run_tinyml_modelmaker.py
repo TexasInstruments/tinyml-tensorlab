@@ -30,10 +30,13 @@
 
 import argparse
 import json
+import logging
 import os
 import sys
 
 import yaml
+
+logger = logging.getLogger(__name__)
 
 
 def main(config):
@@ -51,7 +54,7 @@ def main(config):
     else:
         target_module = tinyml_modelmaker.get_target_module_from_task_type(task_type)
         if target_module is None:
-            print(f"Error: Could not infer target_module from task_type '{task_type}'. Please specify 'target_module' in config.")
+            logger.error(f"Could not infer target_module from task_type '{task_type}'. Please specify 'target_module' in config.")
             return False
         config['common']['target_module'] = target_module
 
@@ -64,11 +67,22 @@ def main(config):
     params = ai_target_module.runner.ModelRunner.init_params()
     # get pretrained model for the given model_name
     model_name = config['training']['model_name']
+    nas_enabled = config.get('training', {}).get('nas_enabled', False)
     model_description = ai_target_module.runner.ModelRunner.get_model_description(model_name)
     if config.get('training').get('enable', True):
-        if model_description is None:
-            print(f"please check if the given model_name is a supported one: {model_name}")
+        if model_description is None and not nas_enabled:
+            logger.error(f"please check if the given model_name is a supported one: {model_name}")
             return False
+    # When NAS is enabled, provide a minimal model description so the pipeline
+    # can locate the correct training module and treat it as a generic model.
+    if nas_enabled and model_description is None:
+        model_description = {
+            'common': {'generic_model': True},
+            'training': {
+                'training_backend': 'tinyml_tinyverse',
+                'model_training_id': model_name,  # e.g. 'NAS_m'
+            },
+        }
 
     dataset_preset_descriptions = ai_target_module.runner.ModelRunner.get_dataset_preset_descriptions(params)
     dataset_preset_name = ai_target_module.constants.DATASET_DEFAULT
@@ -91,20 +105,20 @@ def main(config):
     if 'compile_preset_name' in config['compilation']:
         compilation_preset_name = config['compilation']['compile_preset_name']
     if compilation_preset_name not in preset_descriptions[target_device][task_type].keys():
-        print(f'WARNING: Using "default_preset" for compilation since user choice-"{compilation_preset_name}" is unavailable')
+        logger.warning(f'Using "default_preset" for compilation since user choice-"{compilation_preset_name}" is unavailable')
         compilation_preset_name = 'default_preset'
 
     compilation_preset_description = preset_descriptions[target_device][task_type][compilation_preset_name]
 
     # update the params with model_description, preset and config
-    params = params.update(model_description).update(dataset_preset_description).update(feature_extraction_preset_description).update(compilation_preset_description).update(config)
+    params = params.update(model_description or {}).update(dataset_preset_description).update(feature_extraction_preset_description).update(compilation_preset_description).update(config)
 
     # create the runner
     model_runner = ai_target_module.runner.ModelRunner(params)
 
     # prepare
     run_params_file = model_runner.prepare()
-    print(f'Run params is at: {run_params_file}')
+    logger.info(f'Run params is at: {run_params_file}')
     
     # run
     model_runner.run()
@@ -112,7 +126,7 @@ def main(config):
 
 
 if __name__ == '__main__':
-    print(f'argv: {sys.argv}')
+    logger.info(f'argv: {sys.argv}')
     # the cwd must be the root of the repository
     if os.path.split(os.getcwd())[-1] == 'tinyml_modelmaker':
         os.chdir('..')
@@ -136,7 +150,7 @@ if __name__ == '__main__':
         elif args.config_file.endswith('.json'):
             config = json.load(fp)
         else:
-            assert False, f'unrecognized config file extension for {args.config_file}'
+            raise ValueError(f'unrecognized config file extension for {args.config_file}')
         #
     #
 
