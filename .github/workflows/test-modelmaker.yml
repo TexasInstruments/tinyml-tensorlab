@@ -52,12 +52,12 @@ jobs:
 
       - name: Tier 1 — Component Tests
         working-directory: tinyml-modelmaker
-        run: pytest tests/test_model_registry.py tests/test_config_validation.py -v --tb=short
+        run: python -m pytest tests/test_model_registry.py tests/test_config_validation.py -v --tb=short
 
       - name: Tier 3 — Cross-Device Validation
         working-directory: tinyml-modelmaker
-        run: pytest tests/test_cross_device.py -v --tb=short
+        run: python -m pytest tests/test_cross_device.py -v --tb=short
 
       - name: Tier 2 — Pipeline Smoke Tests
         working-directory: tinyml-modelmaker
-        run: pytest tests/test_pipeline_smoke.py -v --tb=short
+        run: python -m pytest tests/test_pipeline_smoke.py -v --tb=short
