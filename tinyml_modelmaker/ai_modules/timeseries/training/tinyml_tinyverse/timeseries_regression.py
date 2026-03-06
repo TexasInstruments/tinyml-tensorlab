@@ -55,13 +55,18 @@ class ModelTraining(BaseModelTraining):
     def _get_task_specific_train_argv(self):
         """Get regression-specific training arguments."""
         return [
+              # MSP-specific
+            '--q15-scale-factor', f'{self.params.data_processing_feature_extraction.q15_scale_factor}', 
             '--lambda-reg', f'{self.params.training.lambda_reg}',
-        ]
+        ]  
 
     def _get_task_specific_test_argv(self):
-        """Get regression-specific test arguments."""
-        return []
-
+        """Get regression-specific test arguments."""    
+        return [
+        # MSP-specific
+        '--q15-scale-factor', f'{self.params.data_processing_feature_extraction.q15_scale_factor}',
+        ]
+        
     def _get_log_summary_regex(self):
         """Get regression-specific log summary regex."""
         return get_regression_log_summary_regex()
