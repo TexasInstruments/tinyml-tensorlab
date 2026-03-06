@@ -1,79 +1,88 @@
 context_help:
-  annotate:
-    mce_demo_task_1_default_annotate:
-      context:
-        task_type:
-        - mce_demo_task_1
-      help_url: file://gettingStarted/annotate.md
   capture:
-    mce_demo_task_1_default_capture:
+    mce_arc_fault_default_capture:
       context:
-        task_type:
-        - mce_demo_task_1
-      help_url: file://gettingStarted/capture.md
-  capture_visualization:
-    mce_demo_task_1_default_visualization:
-      context:
-        task_type:
-        - mce_demo_task_1
-      help_url: https://dev.ti.com/tirex/explore
-  compile:
-    default_compile_all:
-      context:
-        task_type:
-        - mce_demo_task_1
-        - mce_demo_task_2
-        - mce_demo_task_3
-      help_url: file://gettingStarted/compile_all.md
-    mce_demo_task_1_MCEDemo_Device_2_compile_1:
-      context:
-        devices:
-        - F28P55
-        - MCEDemo_Device_2
         task_type:
         - arc_fault
-        - generic_timeseries
-        - mce_demo_task_1
-      help_url: https://dev.ti.com/
-    mce_demo_task_1_MCEDemo_Device_2_compile_2:
+      help_url: file://gettingStarted/capture_AFCI.md
+    mce_ecg_default_capture:
       context:
-        devices:
-        - F28P55
-        - MCEDemo_Device_2
         task_type:
-        - mce_demo_task_1
-      help_url: file://gettingStarted/compile_device2.md
-    unsupported_device_compile:
+        - ecg_classification
+      help_url: file://gettingStarted/capture_ECG.md
+    mce_gts_default_capture:
       context:
-        devices:
-        - F28P55
         task_type:
-        - arc_fault
-        - generic_timeseries
-        - mce_demo_task_1
-      help_url: file://gettingStarted/compile_f28p55.md
-    unsupported_task_compile:
+        - generic_timeseries_classification
+      help_url: file://gettingStarted/capture_GTS.md
+    mce_motor_fault_default_capture:
       context:
         task_type:
         - motor_fault
-      help_url: file://gettingStarted/should_not_be_included.md
-  deploy:
-    mce_demo_task_1_default_deploy:
+      help_url: file://gettingStarted/capture_MotorFault.md
+    mce_pir_default_capture:
       context:
         task_type:
-        - mce_demo_task_1
-      help_url: file://gettingStarted/deploy.md
+        - pir_detection
+      help_url: file://gettingStarted/capture_PIR.md
+  capture_visualization:
+    mce_all_task_default_visualization:
+      context:
+        task_type:
+        - arc_fault
+        - motor_fault
+        - generic_timeseries_classification
+        - ecg_classification
+        - pir_detection
+      help_url: file://gettingStarted/capture_visualization.md
+  compile:
+    mce_all_task_default_compilation:
+      context:
+        task_type:
+        - arc_fault
+        - motor_fault
+        - generic_timeseries_classification
+        - ecg_classification
+        - pir_detection
+        - blower_imbalance
+        - generic_timeseries_anomalydetection
+        - generic_timeseries_forecasting
+        - generic_timeseries_regression
+      help_url: file://gettingStarted/compile.md
   livedemo:
-    mce_demo_task_1_default_livedemo:
+    mce_arc_fault_default_livedemo:
       context:
         task_type:
-        - mce_demo_task_1
-      help_url: file://gettingStarted/livedemo.md
+        - arc_fault
+      help_url: file://gettingStarted/livedemo_AFCI.md
+    mce_ecg_default_livedemo:
+      context:
+        task_type:
+        - ecg_classification
+      help_url: file://gettingStarted/livedemo_ECG.md
+    mce_gts_default_livedemo:
+      context:
+        task_type:
+        - generic_timeseries_classification
+      help_url: file://gettingStarted/livedemo_GTS.md
+    mce_motor_fault_default_livedemo:
+      context:
+        task_type:
+        - motor_fault
+      help_url: file://gettingStarted/livedemo_MotorFault.md
+    mce_pir_default_livedemo:
+      context:
+        task_type:
+        - pir_detection
+      help_url: file://gettingStarted/livedemo_PIR.md
   train:
-    mce_demo_task_1_default_train:
+    mce_all_tasks_default_train:
       context:
         task_type:
-        - mce_demo_task_1
+        - arc_fault
+        - motor_fault
+        - ecg_classification
+        - generic_timeseries_classification
       help_url: file://gettingStarted/train.md
 help_descriptions: "\n## Overview\nThis is a tool for collecting data, training and\
   \ compiling AI models for use on TI's embedded microcontrollers. The compiled models\
@@ -100,11 +109,11 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
   * SDK release: 06_00_01\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_08_00_03\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n\
+  * SDK release: 2_10_00_04\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_08_00_03\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
+  * SDK release: 2_10_00_04\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_08_00_03\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
+  * SDK release: 2_10_00_04\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
   * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n\
   * SDK release: 01_00_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n\
@@ -18489,37 +18498,37 @@ target_device_descriptions:
       \ ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_08_00_03\n\nAdditional information:\n\n * Tiny ML model development\
+      * SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G3507
     device_selection_factor: 0
     device_type: MCU
-    sdk_release: '2_08_00_03'
-    sdk_version: 2.08.00.03
+    sdk_release: '2_10_00_04'
+    sdk_version: 2.10.00.04
   MSPM0G3519:
     device_details: "80MHz Arm\xAE Cortex\xAE-M0+ MCU with 512KB flash 128KB SRAM\
       \ 2x4Msps ADC, DAC, COMP, OPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3519\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3519\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_08_00_03\n\nAdditional information:\n\n * Tiny ML model development\
+      * SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G3519
     device_selection_factor: 1
     device_type: MCU
-    sdk_release: '2_08_00_03'
-    sdk_version: 2.08.00.03
+    sdk_release: '2_10_00_04'
+    sdk_version: 2.10.00.04
   MSPM0G5187:
     device_details: "80MHz Arm\xAE Cortex\xAE-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps\
       \ ADC, USB, TI-NPU\n* More details : https://www.ti.com/product/MSPM0G5187\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_08_00_03\n\nAdditional information:\n\n * Tiny ML model development\
+      * SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G5187
     device_selection_factor: 13
     device_type: MCU
-    sdk_release: '2_08_00_03'
-    sdk_version: 2.08.00.03
+    sdk_release: '2_10_00_04'
+    sdk_version: 2.10.00.04
   MSPM33C32:
     device_details: "160MHz Arm\xAE Cortex\xAE-M33 MCU with TrustZone\xAE, 1MB flash,\
       \ 256kB SRAM, QSPI, 2x CAN-FD and security\n* More details : https://www.ti.com/product/MSPM33C321A\n\

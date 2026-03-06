@@ -1032,56 +1032,55 @@ def get_live_preview_example_descriptions(params):
 
 def get_context_help_descriptions(params):
     context_help_descriptions = {
-        'annotate': {
-            'mce_demo_task_1_default_annotate': {
-                'context': {'task_type': ['mce_demo_task_1']},
-                'help_url': 'file://gettingStarted/annotate.md'}
-        },
         'capture': {
-            'mce_demo_task_1_default_capture': {
-                'context': {'task_type': ['mce_demo_task_1']},
-                'help_url': 'file://gettingStarted/capture.md'}
-        },
-        'capture_visualization': {
-            'mce_demo_task_1_default_visualization': {
-                'context': {'task_type': ['mce_demo_task_1']},
-                'help_url': 'https://dev.ti.com/tirex/explore'}
-        },
-        'compile': {
-            'default_compile_all': {
-                'context': {'task_type': ['mce_demo_task_1', 'mce_demo_task_2', 'mce_demo_task_3']},
-                'help_url': 'file://gettingStarted/compile_all.md'},
-            'mce_demo_task_1_MCEDemo_Device_2_compile_1': {
-                'context': {'devices': ['F28P55', 'MCEDemo_Device_2'],
-                            'task_type': ['arc_fault', 'generic_timeseries', 'mce_demo_task_1']},
-                'help_url': 'https://dev.ti.com/'},
-            'mce_demo_task_1_MCEDemo_Device_2_compile_2': {
-                'context': {'devices': ['F28P55', 'MCEDemo_Device_2'],
-                            'task_type': ['mce_demo_task_1']},
-                'help_url': 'file://gettingStarted/compile_device2.md'},
-            'unsupported_device_compile': {
-                'context': {'devices': ['F28P55'],
-                            'task_type': ['arc_fault', 'generic_timeseries', 'mce_demo_task_1']},
-                'help_url': 'file://gettingStarted/compile_f28p55.md'},
-            'unsupported_task_compile': {
+            'mce_arc_fault_default_capture': {
+                'context': {'task_type': ['arc_fault']},
+                'help_url': 'file://gettingStarted/capture_AFCI.md'},
+            'mce_pir_default_capture': {
+                'context': {'task_type': ['pir_detection']},
+                'help_url': 'file://gettingStarted/capture_PIR.md'},
+            'mce_motor_fault_default_capture': {
                 'context': {'task_type': ['motor_fault']},
-                'help_url': 'file://gettingStarted/should_not_be_included.md'}
-        },
-        'deploy': {
-            'mce_demo_task_1_default_deploy': {
-                'context': {'task_type': ['mce_demo_task_1']},
-                'help_url': 'file://gettingStarted/deploy.md'}
+                'help_url': 'file://gettingStarted/capture_MotorFault.md'},
+            'mce_ecg_default_capture': {
+                'context': {'task_type': ['ecg_classification']},
+                'help_url': 'file://gettingStarted/capture_ECG.md'},
+            'mce_gts_default_capture': {
+                'context': {'task_type': ['generic_timeseries_classification']},
+                'help_url': 'file://gettingStarted/capture_GTS.md'}
         },
         'livedemo': {
-            'mce_demo_task_1_default_livedemo': {
-                'context': {'task_type': ['mce_demo_task_1']},
-                'help_url': 'file://gettingStarted/livedemo.md'}
+            'mce_arc_fault_default_livedemo': {
+                'context': {'task_type': ['arc_fault']},
+                'help_url': 'file://gettingStarted/livedemo_AFCI.md'},
+            'mce_pir_default_livedemo': {
+                'context': {'task_type': ['pir_detection']},
+                'help_url': 'file://gettingStarted/livedemo_PIR.md'},
+            'mce_motor_fault_default_livedemo': {
+                'context': {'task_type': ['motor_fault']},
+                'help_url': 'file://gettingStarted/livedemo_MotorFault.md'},
+            'mce_ecg_default_livedemo': {
+                'context': {'task_type': ['ecg_classification']},
+                'help_url': 'file://gettingStarted/livedemo_ECG.md'},
+            'mce_gts_default_livedemo': {
+                'context': {'task_type': ['generic_timeseries_classification']},
+                'help_url': 'file://gettingStarted/livedemo_GTS.md'}
         },
         'train': {
-            'mce_demo_task_1_default_train': {
-                'context': {'task_type': ['mce_demo_task_1']},
+            'mce_all_tasks_default_train': {
+                'context': {'task_type': ['arc_fault', 'motor_fault', 'ecg_classification', 'generic_timeseries_classification']},
                 'help_url': 'file://gettingStarted/train.md'}
-        }
+        },
+        'capture_visualization': {
+            'mce_all_task_default_visualization': {
+                'context': {'task_type': ['arc_fault', 'motor_fault', 'generic_timeseries_classification', 'ecg_classification', 'pir_detection']},
+                'help_url': 'file://gettingStarted/capture_visualization.md'}
+        },
+        'compile': {
+            'mce_all_task_default_compilation': {
+                'context': {'task_type': ['arc_fault', 'motor_fault', 'generic_timeseries_classification', 'ecg_classification', 'pir_detection', 'blower_imbalance', 'generic_timeseries_anomalydetection', 'generic_timeseries_forecasting', 'generic_timeseries_regression' ]},
+                'help_url': 'file://gettingStarted/compile.md'}
+        },
     }
     return context_help_descriptions
 

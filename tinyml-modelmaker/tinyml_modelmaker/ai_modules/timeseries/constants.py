@@ -272,8 +272,8 @@ TARGET_SDK_RELEASE_F29P58 = '01_00_00'
 TARGET_SDK_VERSION_F29P32 = '1.00'
 TARGET_SDK_RELEASE_F29P32 = '01_00_00'
 
-TARGET_SDK_VERSION_MSPM0 = "2.08.00.03"
-TARGET_SDK_RELEASE_MSPM0 = '2_08_00_03'
+TARGET_SDK_VERSION_MSPM0 = "2.10.00.04"
+TARGET_SDK_RELEASE_MSPM0 = '2_10_00_04'
 
 TARGET_SDK_VERSION_MSPM33C = "1.02.00.00"
 TARGET_SDK_RELEASE_MSPM33C = '1_02_00_00'
@@ -1208,7 +1208,7 @@ MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
 ARM_LLVM_CGT_PATH = os.path.abspath(os.getenv('ARM_LLVM_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
 MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
-# M0SDK_VERSION='mspm0_sdk_2_08_00_03'
+# M0SDK_VERSION='mspm0_sdk_2_10_00_04'
 # M0SDK_PATH = os.path.abspath(os.getenv('M0SDK_PATH', os.path.join(TOOLS_PATH, M0SDK_VERSION)))
 # M0SDK_INCLUDE = os.path.join(M0SDK_PATH, 'source')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
