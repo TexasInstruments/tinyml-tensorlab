@@ -91,7 +91,9 @@ def get_args_parser():
         if action.dest == 'loader_type':
             action.default = 'regression'
             break
-
+    
+    #MSP specific 
+    parser.add_argument('--q15-scale-factor', help="q15 scaling factor")
     # Regression-specific arguments
     parser.add_argument('--lambda-reg', default=0.01, type=float, help='lambda for L1 & L2 normalization in regression')
     return parser
