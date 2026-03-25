@@ -138,6 +138,13 @@ Use this approach for models that can be defined as a sequence of standard layer
 
            return dict(model_spec=layers)
 
+.. tip::
+
+   When using ``AdaptiveAvgPoolLayer``, choose ``output_size=(1, 1)`` for global
+   average pooling to ensure maximum ONNX export compatibility across different
+   input sizes. While other output sizes work in PyTorch, they may fail in ONNX
+   export if the input spatial dimensions are not exact factors of the output size.
+
 Option B: Custom PyTorch Model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -369,9 +376,15 @@ You should see your model in the count. You can also verify interactively:
    import torch
 
    model = get_model('MY_NEW_MODEL_2K', variables=1, num_classes=3, input_features=128)
-   x = torch.randn(1, 1, 128)  # (batch, variables, features)
+   x = torch.randn(1, 1, 128, 1)  # (batch, variables, features, 1)
    y = model(x)
    print(f"Output shape: {y.shape}")  # Should be (1, 3)
+
+.. note::
+
+   Time series classification models use Conv2d and BatchNorm2d layers internally,
+   which require 4D input tensors: ``(batch_size, num_variables, num_features, 1)``.
+   The last dimension (1) represents the channel height in the 2D convolution.
 
 **ONNX Export Test:**
 
@@ -393,11 +406,12 @@ To test with an actual training run, modify an example config to use your model:
 
    ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
-Step 5 (Optional): Add Device Performance Info
-------------------------------------------------
+Step 5: Add Device Performance Info
+------------------------------------
 
-If you have benchmarked your model on target devices, add the info to
-``device_info/run_info.py``:
+Add device performance information to ``device_info/run_info.py`` so the model
+is recognized by the training pipeline. If you have benchmarked your model on
+target devices, provide actual values; otherwise use ``'TBD'``:
 
 .. code-block:: python
 

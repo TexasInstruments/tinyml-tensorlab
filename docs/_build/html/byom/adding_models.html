@@ -1076,7 +1076,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="#available-layer-types">11.1.5. Available Layer Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-5-optional-add-device-performance-info">11.1.8. Step 5 (Optional): Add Device Performance Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-add-device-performance-info">11.1.8. Step 5: Add Device Performance Info</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#naming-conventions">11.1.11. Naming Conventions</a></li>
@@ -1361,6 +1361,13 @@ or <code class="docutils literal notranslate"><span class="pre">torch.nn.Module<
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">model_spec</span><span class="o">=</span><span class="n">layers</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">AdaptiveAvgPoolLayer</span></code>, choose <code class="docutils literal notranslate"><span class="pre">output_size=(1,</span> <span class="pre">1)</span></code> for global
+average pooling to ensure maximum ONNX export compatibility across different
+input sizes. While other output sizes work in PyTorch, they may fail in ONNX
+export if the input spatial dimensions are not exact factors of the output size.</p>
+</div>
 </section>
 <section id="option-b-custom-pytorch-model">
 <h3><span class="section-number">11.1.4.2. </span>Option B: Custom PyTorch Model<a class="headerlink" href="#option-b-custom-pytorch-model" title="Link to this heading"></a></h3>
@@ -1599,10 +1606,16 @@ the pipeline.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">get_model</span><span class="p">(</span><span class="s1">&#39;MY_NEW_MODEL_2K&#39;</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">input_features</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>  <span class="c1"># (batch, variables, features)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># (batch, variables, features, 1)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Output shape: </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Should be (1, 3)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Time series classification models use Conv2d and BatchNorm2d layers internally,
+which require 4D input tensors: <code class="docutils literal notranslate"><span class="pre">(batch_size,</span> <span class="pre">num_variables,</span> <span class="pre">num_features,</span> <span class="pre">1)</span></code>.
+The last dimension (1) represents the channel height in the 2D convolution.</p>
 </div>
 <p><strong>ONNX Export Test:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -1620,10 +1633,11 @@ the pipeline.</p>
 </pre></div>
 </div>
 </section>
-<section id="step-5-optional-add-device-performance-info">
-<h2><span class="section-number">11.1.8. </span>Step 5 (Optional): Add Device Performance Info<a class="headerlink" href="#step-5-optional-add-device-performance-info" title="Link to this heading"></a></h2>
-<p>If you have benchmarked your model on target devices, add the info to
-<code class="docutils literal notranslate"><span class="pre">device_info/run_info.py</span></code>:</p>
+<section id="step-5-add-device-performance-info">
+<h2><span class="section-number">11.1.8. </span>Step 5: Add Device Performance Info<a class="headerlink" href="#step-5-add-device-performance-info" title="Link to this heading"></a></h2>
+<p>Add device performance information to <code class="docutils literal notranslate"><span class="pre">device_info/run_info.py</span></code> so the model
+is recognized by the training pipeline. If you have benchmarked your model on
+target devices, provide actual values; otherwise use <code class="docutils literal notranslate"><span class="pre">'TBD'</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DEVICE_RUN_INFO</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># ... existing models ...</span>
 
@@ -1837,7 +1851,7 @@ values.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Mar 24, 2026.
+      <span class="lastupdated">Last updated on Mar 25, 2026.
       </span></p>
   </div>
 
