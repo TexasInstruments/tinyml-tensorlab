@@ -73,6 +73,7 @@ from ..common.train_base import (
     setup_training_environment,
     prepare_transforms,
     create_data_loaders,
+    shutdown_data_loaders,
     log_model_summary,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
@@ -361,6 +362,8 @@ def main(gpu, args):
         generate_golden_vector_dir(args.output_dir)
         output_int = get_output_int_flag(args)
         generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
+
+    shutdown_data_loaders(data_loader, data_loader_test)
 
 
 def run(args):

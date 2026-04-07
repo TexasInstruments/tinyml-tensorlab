@@ -89,7 +89,7 @@ from tinyml_tinyverse.common.datasets import GenericImageDataset
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights,gof_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger, create_dir
-from tinyml_tinyverse.references.common.train_base import apply_output_int_default
+from tinyml_tinyverse.references.common.train_base import apply_output_int_default, shutdown_data_loaders
 
 dataset_loader_dict = {'GenericImageDataset':GenericImageDataset}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
@@ -649,7 +649,8 @@ def main(gpu, args):
         generate_golden_vector_dir(args.output_dir)
         output_int = args.quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU and args.output_int
         generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
-        
+
+    shutdown_data_loaders(data_loader, data_loader_test)
     return
 
 
