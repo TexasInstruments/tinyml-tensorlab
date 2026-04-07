@@ -162,11 +162,11 @@ def get_default_data_dir_for_task(task_category):
         str: 'classes' for classification/anomaly tasks, 'files' for regression/forecasting
     """
     if task_category in [TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_ANOMALYDETECTION]:
-        return 'classes'
+        return DATA_DIR_CLASSES
     elif task_category in [TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING]:
-        return 'files'
+        return DATA_DIR_FILES
     else:
-        return 'classes'  # Safe fallback
+        return DATA_DIR_CLASSES  # Safe fallback
 
 
 # target_device
@@ -235,6 +235,13 @@ TARGET_DEVICE_TYPE_MCU = 'MCU'
 TARGET_DEVICE_TYPES = [
     TARGET_DEVICE_TYPE_MCU
 ]
+
+# training backend
+TRAINING_BACKEND_TINYML_TINYVERSE = 'tinyml_tinyverse'
+
+# data directory names
+DATA_DIR_CLASSES = 'classes'
+DATA_DIR_FILES = 'files'
 
 # training_device
 TRAINING_DEVICE_CPU = 'cpu'

@@ -29,7 +29,7 @@
 #################################################################################
 
 import copy
-import datetime
+import logging
 import os
 
 from zipfile import ZipFile
@@ -39,8 +39,8 @@ import yaml
 from ... import utils
 from . import constants, datasets, descriptions
 from .params import init_params
-from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 
+logger = logging.getLogger(__name__)
 
 
 class ModelRunner():
@@ -55,70 +55,26 @@ class ModelRunner():
     def __init__(self, *args, verbose=True, **kwargs):
         self.params = self.init_params(*args, **kwargs)
 
-        # print the runner params
+        # log the runner params
         if verbose:
-            [print(key, ':', value) for key, value in vars(self.params).items()]
+            for key, value in vars(self.params).items():
+                logger.info('%s : %s', key, value)
         #
-        # normalize the paths
-        if not self.params.dataset.dataset_name:
-            self.params.dataset.dataset_name = os.path.splitext(os.path.basename(self.params.dataset.input_data_path))[0]
-        self.params.dataset.input_data_path = utils.absolute_path(self.params.dataset.input_data_path)
-        self.params.dataset.input_annotation_path = utils.absolute_path(self.params.dataset.input_annotation_path)
-
-        self.params.common.run_name = self.resolve_run_name(self.params.common.run_name, self.params.training.model_name)
-        self.params.dataset.extract_path = self.params.dataset.dataset_path
-
-        if self.params.training.train_output_path:
-            self.params.common.projects_path = utils.absolute_path(self.params.training.train_output_path)
-            self.params.common.project_path = os.path.join(self.params.common.projects_path)# , self.params.dataset.dataset_name)
-            self.params.dataset.dataset_path = os.path.join(self.params.common.project_path, 'dataset')
-            self.params.common.project_run_path = self.params.common.projects_path
-            self.params.training.training_path = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_base'))
-            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
-                self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.training.train_output_path, 'training_quantization'))
-            self.params.training.model_packaged_path = os.path.join(self.params.training.train_output_path,
-                                    '_'.join(os.path.split(self.params.common.run_name))+'.zip')
-        else:
-            self.params.common.projects_path = utils.absolute_path(self.params.common.projects_path)
-            self.params.common.project_path = os.path.join(self.params.common.projects_path, self.params.dataset.dataset_name)
-            self.params.common.project_run_path = os.path.join(self.params.common.project_path, 'run', self.params.common.run_name)
-            self.params.dataset.dataset_path = os.path.join(self.params.common.project_path, 'dataset')
-            self.params.training.training_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'base'))
-            if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
-                self.params.training.training_path_quantization = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'training', 'quantization'))
-            self.params.training.model_packaged_path = os.path.join(self.params.training.training_path,
-                                    '_'.join(os.path.split(self.params.common.run_name))+'.zip')
-
-        assert self.params.common.target_device in constants.TARGET_DEVICES_ALL, f'common.target_device must be set to one of: {constants.TARGET_DEVICES_ALL}'
-        # target_device_compilation_folder = self.params.common.target_device
-
-        if self.params.compilation.compile_output_path:
-            if self.params.training.enable == False and self.params.compilation.enable == True:
-                self.params.common.projects_path = utils.absolute_path(self.params.compilation.compile_output_path)
-                self.params.common.project_run_path = self.params.common.projects_path
-            self.params.compilation.compilation_path = utils.absolute_path(self.params.compilation.compile_output_path)
-            self.params.compilation.model_packaged_path = os.path.join(self.params.compilation.compile_output_path,
-                                                                    '_'.join(os.path.split(
-                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
-        else:
-            # self.params.compilation.compilation_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'compilation', target_device_compilation_folder))
-            self.params.compilation.compilation_path = utils.absolute_path(os.path.join(self.params.common.project_run_path, 'compilation'))
-            self.params.compilation.model_packaged_path = os.path.join(self.params.compilation.compilation_path,
-                                                                    '_'.join(os.path.split(
-                                                                        self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
+        # resolve and normalize all paths
+        utils.misc_utils.resolve_paths(self.params, constants.TARGET_DEVICES_ALL)
 
         if self.params.common.target_device in self.params.training.target_devices:
             inference_time_us_list = {k:v['inference_time_us'] for k,v in self.params.training.target_devices.items()}
             sram_usage_list = {k: v['sram'] for k, v in self.params.training.target_devices.items()}
             flash_usage_list = {k: v['flash'] for k, v in self.params.training.target_devices.items()}
-            print('---------------------------------------------------------------------')
-            print(f'Run Name: {self.params.common.run_name}')
-            print(f'- Model: {self.params.training.model_name}')
-            print(f'- TargetDevices & Estimated Inference Times (us): {inference_time_us_list}')
-            print(f'- TargetDevices & Estimated SRAM Usage (bytes): {sram_usage_list}')
-            print(f'- TargetDevices & Estimated Flash Usage (bytes): {flash_usage_list}')
-            print('- This model can be compiled for the above device(s).')
-            print('---------------------------------------------------------------------')
+            logger.info('---------------------------------------------------------------------')
+            logger.info(f'Run Name: {self.params.common.run_name}')
+            logger.info(f'- Model: {self.params.training.model_name}')
+            logger.info(f'- TargetDevices & Estimated Inference Times (us): {inference_time_us_list}')
+            logger.info(f'- TargetDevices & Estimated SRAM Usage (bytes): {sram_usage_list}')
+            logger.info(f'- TargetDevices & Estimated Flash Usage (bytes): {flash_usage_list}')
+            logger.info('- This model can be compiled for the above device(s).')
+            logger.info('---------------------------------------------------------------------')
         #
 
         #####################################################################
@@ -127,23 +83,10 @@ class ModelRunner():
             auto_data_dir = constants.get_default_data_dir_for_task(self.params.common.task_category)
             self.params.dataset.data_dir = auto_data_dir
             if verbose:
-                print(f"Auto-detected data_dir='{auto_data_dir}' for task_category='{self.params.common.task_category}'")
+                logger.info(f"Auto-detected data_dir='{auto_data_dir}' for task_category='{self.params.common.task_category}'")
         elif verbose:
-            print(f"Using user-specified data_dir='{self.params.dataset.data_dir}'")
+            logger.info(f"Using user-specified data_dir='{self.params.dataset.data_dir}'")
         #
-
-    def resolve_run_name(self, run_name, model_name):
-        if not run_name:
-            return ''
-        #
-        # modify or set any parameters here as required.
-        if '{date-time}' in run_name:
-            run_name = run_name.replace('{date-time}', datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-        #
-        if '{model_name}' in run_name:
-            run_name = run_name.replace('{model_name}', model_name)
-        #
-        return run_name
 
     def clear(self):
         pass
@@ -233,9 +176,9 @@ class ModelRunner():
             self.package_trained_model(model_training_package_files, self.params.training.model_packaged_path)
             if not utils.misc_utils.str2bool(self.params.testing.skip_train):
                 if self.params.training.training_path_quantization:
-                    print(f'\nTrained model is at: {self.params.training.training_path_quantization}\n')
+                    logger.info(f'Trained model is at: {self.params.training.training_path_quantization}')
                 else:
-                    print(f'\nTrained model is at: {self.params.training.training_path}\n')
+                    logger.info(f'Trained model is at: {self.params.training.training_path}')
             # we are done with training
             with open(self.params.training.log_file_path, 'a') as lfp:
                 lfp.write('\nSUCCESS: ModelMaker - Training completed.')
@@ -251,7 +194,7 @@ class ModelRunner():
             self.model_compilation.clear()
             exit_flag = self.model_compilation.run()
             if exit_flag:
-                print(f'Compilation failed')
+                logger.error('Compilation failed')
                 with open(self.params.compilation.log_file_path, 'a') as lfp:
                     lfp.write('FAILURE: ModelMaker - Compilation failed.')
                 return self.params
@@ -276,7 +219,7 @@ class ModelRunner():
 
 
             self.package_trained_model(model_compilation_package_files, self.params.compilation.model_packaged_path)
-            print(f'Compiled model is at: {self.params.compilation.compilation_path}')
+            logger.info(f'Compiled model is at: {self.params.compilation.compilation_path}')
             with open(self.params.compilation.log_file_path, 'a') as lfp:
                 lfp.write('\nSUCCESS: ModelMaker - Compilation completed.')
 

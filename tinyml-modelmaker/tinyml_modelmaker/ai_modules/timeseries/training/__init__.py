@@ -29,9 +29,12 @@
 #################################################################################
 
 import copy
+import logging
 import sys
 
 from .. import constants
+
+logger = logging.getLogger(__name__)
 
 # list all the modules here to add pretrained models
 _model_descriptions = {}
@@ -81,13 +84,13 @@ def get_target_module(backend_name, task_category):
     try:
         backend_package = getattr(this_module, backend_name)
     except Exception as e:
-        print(f"get_target_module(): The requested module could not be found: {backend_name}. {str(e)}")
+        logger.error(f"get_target_module(): The requested module could not be found: {backend_name}. {str(e)}")
         return None
     #
     try:
         target_module = getattr(backend_package, task_category)
     except Exception as e:
-        print(f"get_target_module(): The task_category {task_category} could not be found in the module {backend_name}. {str(e)}")
+        logger.error(f"get_target_module(): The task_category {task_category} could not be found in the module {backend_name}. {str(e)}")
         return None
     #
     return target_module

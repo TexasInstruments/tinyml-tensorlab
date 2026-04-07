@@ -58,7 +58,7 @@ template_model_description = dict(
     download=dict(download_url='', download_path=''),
     training=dict(
         quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-        training_backend='tinyml_tinyverse',
+        training_backend=constants.TRAINING_BACKEND_TINYML_TINYVERSE,
         dataset_loader='GenericImageDataset',
         model_training_id='',
         model_name='',
