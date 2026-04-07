@@ -108,7 +108,7 @@ def get_model_description(model_name):
 
 class ModelTraining:
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = dict(training=dict())
         params = utils.ConfigDict(params, *args, **kwargs)
         return params

@@ -14,7 +14,7 @@ class Cell(nn.Module):
             reduction_prev (bool): Whether previous cell was a reduction cell.
         """
         super(Cell, self).__init__()
-        
+
         # Preprocess input depending on whether previous cell was reduction
         if reduction_prev:
             self.preprocess = FactorizedReduce(C_prev, C)
@@ -28,7 +28,7 @@ class Cell(nn.Module):
         else:
             op_names, indices = zip(*genotype.normal)
             concat = genotype.normal_concat
-        
+
         # Compile the cell structure (ops, indices, concat)
         self._compile(C, op_names, indices, concat, reduction)
     
@@ -76,7 +76,8 @@ class Cell(nn.Module):
         return torch.cat([states[i] for i in self._concat], dim=1)
 
 class Network(nn.Module):
-    def __init__(self, C, num_classes, layers, genotype, in_channels):
+    def __init__(self, C, num_classes, layers, genotype, in_channels,
+                 steps=4, multiplier=4, stem_multiplier=3):
         """
         Network is the full model, composed of multiple cells.
         Args:
@@ -85,6 +86,9 @@ class Network(nn.Module):
             layers (int): Number of cells in the network.
             genotype: Genotype object specifying the cell structure.
             in_channels (int): Number of input channels.
+            steps (int): Number of intermediate nodes per cell (must match search).
+            multiplier (int): Number of outputs to concatenate per cell (must match search).
+            stem_multiplier (int): Multiplier for initial stem channels (must match search).
         """
         super(Network, self).__init__()
         self._layers = layers
@@ -92,12 +96,11 @@ class Network(nn.Module):
 
         # Input batchnorm
         self.input_batchnorm = nn.BatchNorm2d(self._in_channels)
-        
-        stem_multiplier = 3
+
         C_curr = stem_multiplier * C
         # Initial stem convolution to increase channel dimension
         self.stem = nn.Sequential(
-            nn.Conv2d(self._in_channels, C_curr, (3, 1), padding=(1,0)),
+            nn.Conv2d(self._in_channels, C_curr, (3, 1), padding=(1, 0)),
             nn.BatchNorm2d(C_curr),
             nn.ReLU(inplace=False)
         )
@@ -107,7 +110,7 @@ class Network(nn.Module):
         reduction_prev = False        # Track if previous cell was reduction
         for i in range(layers):
             # Insert reduction cells at 1/3 and 2/3 of total layers
-            if i in [layers//3, 2*layers//3]:
+            if i in [layers // 3, 2 * layers // 3]:
                 C_curr *= 2
                 reduction = True
             else:
@@ -115,8 +118,8 @@ class Network(nn.Module):
             cell = Cell(genotype, C_prev, C_curr, reduction, reduction_prev)
             reduction_prev = reduction
             self.cells += [cell]
-            C_prev = cell.multiplier * C_curr  # Update for next cell
-        
+            C_prev = multiplier * C_curr  # Update for next cell
+
         self.global_pooling = nn.AdaptiveAvgPool2d((1, 1))  # Global average pooling
         self.flat = nn.Flatten()                            # Flatten for classifier
         self.classifier = nn.Linear(C_prev, num_classes)     # Linear classifier
