@@ -692,7 +692,7 @@ class BaseModelTraining:
         Returns:
             list: Common training arguments
         """
-        return [
+        argv = [
             '--model', f'{self.params.training.model_training_id}',
             '--dual-op', f'{self.params.training.dual_op}',
             '--model-config', f'{self.params.training.model_config}',
@@ -738,12 +738,14 @@ class BaseModelTraining:
             '--ondevice-training', f'{self.params.training.ondevice_training}',
             '--partial-quantization', f'{self.params.training.partial_quantization}',
             '--trainable_layers_from_last', f'{self.params.training.trainable_layers_from_last}',
+            '--compile-model', f'{getattr(self.params.training, "compile_model", 0)}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',
             '--epochs', f'{self.params.training.training_epochs}',
             '--lr', f'{self.params.training.learning_rate}',
             '--output-dir', f'{self.params.training.training_path}',
         ]
+        return argv
 
     def _get_task_specific_train_argv(self):
         """
@@ -850,6 +852,10 @@ class BaseModelTraining:
         if task_argv:
             # Insert task-specific args before the last 10 items
             argv = argv[:-10] + task_argv + argv[-10:]
+
+        # Append boolean flags after splice (store_true args have no value)
+        if getattr(self.params.training, 'native_amp', False):
+            argv.append('--native-amp')
 
         args = self.train_module.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event

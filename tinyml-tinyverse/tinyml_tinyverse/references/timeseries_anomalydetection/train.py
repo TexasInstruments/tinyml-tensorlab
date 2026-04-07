@@ -72,6 +72,9 @@ from ..common.train_base import (
     save_checkpoint,
     handle_export_only,
     move_model_to_device,
+    compile_model_if_enabled,
+    get_amp_context,
+    get_grad_scaler,
     log_training_time,
     apply_output_int_default,
     get_output_int_flag,
@@ -223,6 +226,7 @@ def main(gpu, args):
         return
 
     move_model_to_device(model, device, logger)
+    model = compile_model_if_enabled(model, args, logger)
     criterion = nn.MSELoss()
 
     optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
@@ -230,6 +234,8 @@ def main(gpu, args):
     resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
 
     phase = 'QuantTrain' if args.quantization else 'FloatTrain'
+    amp_autocast = get_amp_context(args, device)
+    grad_scaler = get_grad_scaler(args, device)
     logger.info("Start training")
     start_time = timeit.default_timer()
     best = dict(mse=np.inf, epoch=None)
@@ -240,7 +246,8 @@ def main(gpu, args):
         utils.train_one_epoch_anomalydetection(
             model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
             print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
-            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
+            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False,
+            amp_autocast=amp_autocast, grad_scaler=grad_scaler)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
         avg_mse = utils.evaluate_anomalydetection(model, criterion, data_loader_test, device=device,
