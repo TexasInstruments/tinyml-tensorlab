@@ -41,3 +41,10 @@ exclude = [ "tests*",]
 
 [tool.setuptools.dynamic.version]
 attr = "tinyml_modelmaker.__version__"
+
+[tool.pytest.ini_options]
+markers = [
+    "component: Tier 1 component tests",
+    "smoke: Tier 2 pipeline smoke tests",
+    "device: Tier 3 cross-device validation tests",
+]
