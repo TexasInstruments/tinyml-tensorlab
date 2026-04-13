@@ -1448,8 +1448,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
             target_array = torch.cat((target_array, target))
             predictions_array = torch.cat((predictions_array, output))
 
-            loss = criterion(output.squeeze(), target)
-            acc1 = accuracy(output.squeeze(), target, topk=(1,))
+            loss = criterion(output, target)
+            acc1 = accuracy(output, target, topk=(1,))
             f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
 
             confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
@@ -1469,8 +1469,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     metric_logger.synchronize_between_processes()
 
     # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
-    logger.info(f'{header} Acc@1 {accuracy(predictions_array.squeeze(), target_array, topk=(1,))[0]:.3f}')
-    logger.info(f'{header} F1-Score {get_f1_score(predictions_array.squeeze(), target_array, kwargs.get("num_classes")):.3f}')
+    logger.info(f'{header} Acc@1 {accuracy(predictions_array, target_array, topk=(1,))[0]:.3f}')
+    logger.info(f'{header} F1-Score {get_f1_score(predictions_array, target_array, kwargs.get("num_classes")):.3f}')
     # auc = get_au_roc_from_conf_matrix(confusion_matrix_total)
     # logger.info('AU-ROC Score: {:.3f}'.format(auc))
     auc = get_au_roc(predictions_array, target_array, kwargs.get('num_classes'))
