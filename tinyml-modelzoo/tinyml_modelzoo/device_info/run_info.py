@@ -1529,5 +1529,29 @@ DEVICE_RUN_INFO = {
         'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+    },
+    'TEST_NEW_MODEL_2K': {
+        'F280013': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F280015': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F28003': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F28004': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F2837': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F28P55': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F29H85': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F29P58': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F29P32': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'CC2755': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'CC1352': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'CC1354': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'CC35X1': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM33C32': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'AM13E2': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'AM263': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'AM263P': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'AM261': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
     }
 }

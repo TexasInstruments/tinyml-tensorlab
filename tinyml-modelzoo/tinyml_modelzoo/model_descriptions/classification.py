@@ -890,6 +890,40 @@ _model_descriptions = {
                         dict(type="group", dynamic=True, script="pirdetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
+    'TEST_NEW_MODEL_2K': deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            model_details='Test model created following documentation pattern. 2 Conv+BN+ReLU layers + MaxPool + Linear. ~2K parameters.'
+        ),
+        'training': dict(
+            model_training_id='TEST_NEW_MODEL_2K',
+            model_name='TEST_NEW_MODEL_2K',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F29H85]),
+                constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F29P58]),
+                constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_CC2755: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_CC2755]),
+                constants.TARGET_DEVICE_CC1352: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_CC1352]),
+                constants.TARGET_DEVICE_CC1354: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_CC1354]),
+                constants.TARGET_DEVICE_CC35X1: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_CC35X1]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_MSPM0G5187]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=None) | (DEVICE_RUN_INFO['TEST_NEW_MODEL_2K'][constants.TARGET_DEVICE_AM261]),
+            },
+            properties=template_gui_model_properties,
+        ),
+    }),
 }
 
 enabled_models_list = [
@@ -907,7 +941,9 @@ enabled_models_list = [
     # Application-specific models
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
     'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t', 'PIRDetection_model_1_t',
-    'FanImbalance_model_1_t', 'FanImbalance_model_2_t', 'FanImbalance_model_3_t'
+    'FanImbalance_model_1_t', 'FanImbalance_model_2_t', 'FanImbalance_model_3_t',
+    # Test model
+    'TEST_NEW_MODEL_2K'
 ]
 
 

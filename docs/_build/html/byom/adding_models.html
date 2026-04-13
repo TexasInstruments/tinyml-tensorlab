@@ -1077,7 +1077,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#step-5-add-device-performance-info">11.1.8. Step 5: Add Device Performance Info</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-6-add-model-description">11.1.9. Step 6: Add Model Description</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#naming-conventions">11.1.11. Naming Conventions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#configuring-model-layer-parameters">11.1.12. Configuring Model Layer Parameters</a></li>
@@ -1247,8 +1247,8 @@ tinyml-modelmaker</strong>.</p>
 <ol class="arabic simple">
 <li><p>Add your model class to the appropriate file in <code class="docutils literal notranslate"><span class="pre">tinyml_modelzoo/models/</span></code></p></li>
 <li><p>Add the class name to that file’s <code class="docutils literal notranslate"><span class="pre">__all__</span></code> list</p></li>
-<li><p>(Optional) Add device performance info to <code class="docutils literal notranslate"><span class="pre">device_info/run_info.py</span></code></p></li>
-<li><p>(Optional) Add a model description to <code class="docutils literal notranslate"><span class="pre">model_descriptions/</span></code> for GUI integration</p></li>
+<li><p>Add device performance info to <code class="docutils literal notranslate"><span class="pre">device_info/run_info.py</span></code></p></li>
+<li><p>Add a model description to <code class="docutils literal notranslate"><span class="pre">model_descriptions/</span></code> to enable training pipeline integration</p></li>
 </ol>
 <p>That’s it! The model is automatically registered and available everywhere.</p>
 </section>
@@ -1652,10 +1652,12 @@ target devices, provide actual values; otherwise use <code class="docutils liter
 </pre></div>
 </div>
 </section>
-<section id="step-6-optional-add-gui-model-description">
-<h2><span class="section-number">11.1.9. </span>Step 6 (Optional): Add GUI Model Description<a class="headerlink" href="#step-6-optional-add-gui-model-description" title="Link to this heading"></a></h2>
-<p>If you want the model to appear in the Tiny ML Studio GUI, add a description to
-the appropriate file in <code class="docutils literal notranslate"><span class="pre">tinyml_modelzoo/model_descriptions/</span></code>:</p>
+<section id="step-6-add-model-description">
+<h2><span class="section-number">11.1.9. </span>Step 6: Add Model Description<a class="headerlink" href="#step-6-add-model-description" title="Link to this heading"></a></h2>
+<p>Add a model description to the appropriate file in <code class="docutils literal notranslate"><span class="pre">tinyml_modelzoo/model_descriptions/</span></code>.
+This step is <strong>mandatory</strong> because it creates the mapping between your model class name
+(defined in <code class="docutils literal notranslate"><span class="pre">models/</span></code>) and the <code class="docutils literal notranslate"><span class="pre">model_name</span></code> used in configuration files. The description
+also enables the model to appear in the Tiny ML Studio GUI:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 40.0%" />
@@ -1723,12 +1725,18 @@ the appropriate file in <code class="docutils literal notranslate"><span class="
 </div>
 <p><strong>Important fields:</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">model_training_id</span></code>: Must exactly match your model class name in <code class="docutils literal notranslate"><span class="pre">models/</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">model_name</span></code>: The display name shown in the GUI</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_training_id</span></code>: <strong>REQUIRED</strong> - Must exactly match your model class name in <code class="docutils literal notranslate"><span class="pre">models/</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_name</span></code>: The name users will specify in configuration files (e.g., in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">model_details</span></code>: Brief description of the model architecture</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">target_devices</span></code>: Dict of supported devices with performance info from <code class="docutils literal notranslate"><span class="pre">DEVICE_RUN_INFO</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">properties</span></code>: GUI properties for training parameters (use the template)</p></li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">model_training_id</span></code> field <strong>must exactly match</strong> your model class name from Step 2.
+This is the critical link that allows the training pipeline to find and instantiate your model
+when users specify <code class="docutils literal notranslate"><span class="pre">model_name</span></code> in their configuration files.</p>
+</div>
 <p>After adding, verify the description is generated correctly:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>tinyml-modelmaker
 python<span class="w"> </span>scripts/run_generate_description.py

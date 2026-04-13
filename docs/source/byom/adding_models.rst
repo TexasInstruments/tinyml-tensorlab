@@ -31,8 +31,8 @@ To add a new model:
 
 1. Add your model class to the appropriate file in ``tinyml_modelzoo/models/``
 2. Add the class name to that file's ``__all__`` list
-3. (Optional) Add device performance info to ``device_info/run_info.py``
-4. (Optional) Add a model description to ``model_descriptions/`` for GUI integration
+3. Add device performance info to ``device_info/run_info.py``
+4. Add a model description to ``model_descriptions/`` to enable training pipeline integration
 
 That's it! The model is automatically registered and available everywhere.
 
@@ -427,11 +427,13 @@ target devices, provide actual values; otherwise use ``'TBD'``:
        },
    }
 
-Step 6 (Optional): Add GUI Model Description
-----------------------------------------------
+Step 6: Add Model Description
+------------------------------
 
-If you want the model to appear in the Tiny ML Studio GUI, add a description to
-the appropriate file in ``tinyml_modelzoo/model_descriptions/``:
+Add a model description to the appropriate file in ``tinyml_modelzoo/model_descriptions/``.
+This step is **mandatory** because it creates the mapping between your model class name
+(defined in ``models/``) and the ``model_name`` used in configuration files. The description
+also enables the model to appear in the Tiny ML Studio GUI:
 
 .. list-table::
    :header-rows: 1
@@ -492,11 +494,17 @@ Add your model to the ``_model_descriptions`` dict and ``enabled_models_list``:
 
 **Important fields:**
 
-* ``model_training_id``: Must exactly match your model class name in ``models/``
-* ``model_name``: The display name shown in the GUI
+* ``model_training_id``: **REQUIRED** - Must exactly match your model class name in ``models/``
+* ``model_name``: The name users will specify in configuration files (e.g., in ``config.yaml``)
 * ``model_details``: Brief description of the model architecture
 * ``target_devices``: Dict of supported devices with performance info from ``DEVICE_RUN_INFO``
 * ``properties``: GUI properties for training parameters (use the template)
+
+.. warning::
+
+   The ``model_training_id`` field **must exactly match** your model class name from Step 2.
+   This is the critical link that allows the training pipeline to find and instantiate your model
+   when users specify ``model_name`` in their configuration files.
 
 After adding, verify the description is generated correctly:
 
