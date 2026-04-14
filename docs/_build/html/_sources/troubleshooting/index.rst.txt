@@ -19,14 +19,14 @@ Quick Fixes
 
 .. dropdown:: "ModuleNotFoundError" when importing
 
-   Ensure you've installed in the correct order:
+   Ensure you've installed all components in editable mode:
 
    .. code-block:: bash
 
-      cd tinyml-modelmaker && pip install -e .
-      cd ../tinyml-tinyverse && pip install -e .
-      cd ../tinyml-modeloptimization/torchmodelopt && pip install -e .
-      cd ../../tinyml-modelzoo && pip install -e .
+      pip install -e tinyml-modelmaker
+      pip install -e tinyml-tinyverse
+      pip install -e tinyml-modeloptimization/torchmodelopt
+      pip install -e tinyml-modelzoo
 
 .. dropdown:: Python version errors
 

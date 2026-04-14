@@ -92,10 +92,10 @@ The script handles:
    pip install --upgrade pip
 
    # Install components
-   cd tinyml-modelmaker && pip install -e .
-   cd ../tinyml-tinyverse && pip install -e .
-   cd ../tinyml-modeloptimization/torchmodelopt && pip install -e .
-   cd ../../tinyml-modelzoo && pip install -e .
+   pip install -e tinyml-modelmaker
+   pip install -e tinyml-tinyverse
+   pip install -e tinyml-modeloptimization/torchmodelopt
+   pip install -e tinyml-modelzoo
 
 Verification
 ------------
@@ -141,6 +141,56 @@ Verification
    # Run hello world example
    cd tinyml-modelzoo
    ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
+
+Speeding Up Installation
+------------------------
+
+The installation process can take 15-30 minutes due to downloading large packages. Here are ways to make it faster:
+
+**Use setup_all.sh (Parallel Installation)**
+
+This is the fastest method:
+
+.. code-block:: bash
+
+   cd tinyml-tensorlab/tinyml-modelmaker
+   ./setup_all.sh
+
+This typically completes in 10-15 minutes (vs 20-30 minutes for manual installation).
+
+**Enable pip Caching for Future Installs**
+
+.. code-block:: bash
+
+   # Create pip config
+   mkdir -p ~/.pip
+   cat > ~/.pip/pip.conf << EOF
+   [global]
+   cache-dir = ~/.cache/pip
+   no-cache-dir = False
+   EOF
+
+Subsequent reinstalls will use cached packages and complete in 5-10 minutes.
+
+**Use CPU-Only PyTorch (If No GPU)**
+
+If you don't need GPU support:
+
+.. code-block:: bash
+
+   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+   pip install -e tinyml-modelmaker
+   # ... rest of installation
+
+This skips CUDA components and saves 5-10 minutes.
+
+**Check Installation Progress**
+
+To monitor downloads in real-time:
+
+.. code-block:: bash
+
+   pip install --verbose -e tinyml-modelmaker
 
 GPU Setup (Optional)
 --------------------

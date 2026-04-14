@@ -128,8 +128,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="#directory-structure-after-installation">2.3.6. Directory Structure After Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#updating">2.3.7. Updating</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#common-developer-tasks">2.3.8. Common Developer Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">2.3.9. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#next-steps">2.3.10. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#speeding-up-installation">2.3.9. Speeding Up Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">2.3.10. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">2.3.11. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="windows_setup.html">2.4. Windows Setup</a><ul>
@@ -153,13 +154,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="linux_setup.html#installing-python-3-10">2.5.2. Installing Python 3.10</a></li>
 <li class="toctree-l3"><a class="reference internal" href="linux_setup.html#installation">2.5.3. Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="linux_setup.html#verification">2.5.4. Verification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#gpu-setup-optional">2.5.5. GPU Setup (Optional)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#shell-configuration">2.5.6. Shell Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#permission-issues">2.5.7. Permission Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#multiple-python-versions">2.5.8. Multiple Python Versions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#system-service-optional">2.5.9. System Service (Optional)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#troubleshooting">2.5.10. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#next-steps">2.5.11. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#speeding-up-installation">2.5.5. Speeding Up Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#gpu-setup-optional">2.5.6. GPU Setup (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#shell-configuration">2.5.7. Shell Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#permission-issues">2.5.8. Permission Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#multiple-python-versions">2.5.9. Multiple Python Versions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#system-service-optional">2.5.10. System Service (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#troubleshooting">2.5.11. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="linux_setup.html#next-steps">2.5.12. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="environment_variables.html">2.6. Environment Variables</a><ul>
@@ -1078,8 +1080,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#available-layer-types">11.1.5. Available Layer Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-5-optional-add-device-performance-info">11.1.8. Step 5 (Optional): Add Device Performance Info</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-5-add-device-performance-info">11.1.8. Step 5: Add Device Performance Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-6-add-model-description">11.1.9. Step 6: Add Model Description</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#naming-conventions">11.1.11. Naming Conventions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#configuring-model-layer-parameters">11.1.12. Configuring Model Layer Parameters</a></li>
@@ -1267,17 +1269,10 @@ python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </s
 pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
 
 <span class="c1"># Install components in order</span>
-<span class="nb">cd</span><span class="w"> </span>tinyml-modelmaker
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-
-<span class="nb">cd</span><span class="w"> </span>../tinyml-tinyverse
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-
-<span class="nb">cd</span><span class="w"> </span>../tinyml-modeloptimization/torchmodelopt
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-
-<span class="nb">cd</span><span class="w"> </span>../../tinyml-modelzoo
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modelmaker
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-tinyverse
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modeloptimization/torchmodelopt
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modelzoo
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Create virtual environment</span>
@@ -1288,17 +1283,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="n">python</span> <span class="n">-m</span> <span class="n">pip</span> <span class="n">install</span> <span class="p">-</span><span class="n">-upgrade</span> <span class="n">pip</span>
 
 <span class="c"># Install components in order</span>
-<span class="nb">cd </span><span class="n">tinyml-modelmaker</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="p">.</span>
-
-<span class="nb">cd </span><span class="p">..\</span><span class="n">tinyml-tinyverse</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="p">.</span>
-
-<span class="nb">cd </span><span class="p">..\</span><span class="n">tinyml-modeloptimization</span><span class="p">\</span><span class="n">torchmodelopt</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="p">.</span>
-
-<span class="nb">cd </span><span class="p">..\..\</span><span class="n">tinyml-modelzoo</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="p">.</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="n">tinyml-modelmaker</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="n">tinyml-tinyverse</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="n">tinyml-modeloptimization</span><span class="p">\</span><span class="n">torchmodelopt</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="n">tinyml-modelzoo</span>
 </pre></div>
 </div>
 </div></div>
@@ -1384,10 +1372,10 @@ specific to your target device <strong>before running examples</strong>.</p>
 git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
 
 <span class="c1"># Reinstall components if dependencies changed</span>
-<span class="nb">cd</span><span class="w"> </span>tinyml-modelmaker<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-<span class="nb">cd</span><span class="w"> </span>../tinyml-tinyverse<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-<span class="nb">cd</span><span class="w"> </span>../tinyml-modeloptimization/torchmodelopt<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-<span class="nb">cd</span><span class="w"> </span>../../tinyml-modelzoo<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modelmaker
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-tinyverse
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modeloptimization/torchmodelopt
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modelzoo
 </pre></div>
 </div>
 </section>
@@ -1409,8 +1397,67 @@ vim<span class="w"> </span>tinyml-tinyverse/tinyml_tinyverse/references/timeseri
 <p><strong>Adding Custom Transforms</strong></p>
 <p>Edit files in <code class="docutils literal notranslate"><span class="pre">tinyml-tinyverse/tinyml_tinyverse/common/transforms/</span></code>.</p>
 </section>
+<section id="speeding-up-installation">
+<h2><span class="section-number">2.3.9. </span>Speeding Up Installation<a class="headerlink" href="#speeding-up-installation" title="Link to this heading"></a></h2>
+<p>The developer installation can take significant time due to downloading large dependencies (PyTorch, TensorFlow, etc.). Here are several ways to speed it up:</p>
+<p><strong>Option 1: Use setup_all.sh with Parallel Installation (Linux)</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">setup_all.sh</span></code> script automatically uses parallel builds:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>tinyml-modelmaker
+./setup_all.sh
+</pre></div>
+</div>
+<p>This is typically 2-3x faster than manual installation.</p>
+<p><strong>Option 2: Enable pip Caching</strong></p>
+<p>Create or update <code class="docutils literal notranslate"><span class="pre">~/.pip/pip.conf</span></code> to enable aggressive caching:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[global]</span>
+<span class="na">cache-dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">~/.cache/pip</span>
+<span class="na">no-cache-dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">False</span>
+</pre></div>
+</div>
+<p>This caches downloaded packages so reinstalls are faster.</p>
+<p><strong>Option 3: Use Pre-built Wheels</strong></p>
+<p>Ensure pip uses pre-built wheels instead of compiling from source:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span>wheel
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modelmaker<span class="w">  </span><span class="c1"># Will use wheels if available</span>
+</pre></div>
+</div>
+<p><strong>Option 4: Skip Optional GPU Dependencies (If Not Needed)</strong></p>
+<p>If you don’t need GPU support, you can use CPU-only PyTorch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CPU-only PyTorch (faster to install)</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.0.0<span class="w"> </span><span class="nv">torchvision</span><span class="o">==</span><span class="m">0</span>.15.1<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+
+<span class="c1"># Then install components</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modelmaker
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-tinyverse
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modeloptimization/torchmodelopt
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>tinyml-modelzoo
+</pre></div>
+</div>
+<p><strong>Option 5: Use Faster Package Index</strong></p>
+<p>Some regions may have mirror repositories. For example, in China:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-i<span class="w"> </span>https://pypi.tsinghua.edu.cn/simple<span class="w"> </span>-e<span class="w"> </span>tinyml-modelmaker
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Installation Times (Approximate)</strong></p>
+<ul class="simple">
+<li><p>Full developer install (first time): 15-30 minutes</p></li>
+<li><p>With caching enabled (subsequent installs): 5-10 minutes</p></li>
+<li><p>Using setup_all.sh (Linux): 10-15 minutes</p></li>
+</ul>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><strong>Checking Download Progress</strong></p>
+<p>To see real-time download progress:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--verbose<span class="w"> </span>-e<span class="w"> </span>tinyml-modelmaker
+</pre></div>
+</div>
+</div>
+</section>
 <section id="troubleshooting">
-<h2><span class="section-number">2.3.9. </span>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.3.10. </span>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
 <p><strong>“ModuleNotFoundError” after installation</strong></p>
 <p>Ensure you’re in the correct virtual environment:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>python<span class="w">  </span><span class="c1"># Should point to your venv</span>
@@ -1433,7 +1480,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>tinyml-modelmaker/run_tin
 </div>
 </section>
 <section id="next-steps">
-<h2><span class="section-number">2.3.10. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.3.11. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="environment_variables.html"><span class="doc">Environment Variables</span></a> - Configure compilation tools</p></li>
 <li><p><a class="reference internal" href="../getting_started/quickstart.html"><span class="doc">Quickstart</span></a> - Train your first model</p></li>
@@ -1454,7 +1501,7 @@ chmod<span class="w"> </span>+x<span class="w"> </span>tinyml-modelmaker/run_tin
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Mar 24, 2026.
+      <span class="lastupdated">Last updated on Apr 14, 2026.
       </span></p>
   </div>
 

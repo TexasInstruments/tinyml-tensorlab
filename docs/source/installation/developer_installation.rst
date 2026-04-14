@@ -59,17 +59,10 @@ If the script doesn't work or you're on Windows:
          pip install --upgrade pip
 
          # Install components in order
-         cd tinyml-modelmaker
-         pip install -e .
-
-         cd ../tinyml-tinyverse
-         pip install -e .
-
-         cd ../tinyml-modeloptimization/torchmodelopt
-         pip install -e .
-
-         cd ../../tinyml-modelzoo
-         pip install -e .
+         pip install -e tinyml-modelmaker
+         pip install -e tinyml-tinyverse
+         pip install -e tinyml-modeloptimization/torchmodelopt
+         pip install -e tinyml-modelzoo
 
    .. tab:: Windows
 
@@ -83,17 +76,10 @@ If the script doesn't work or you're on Windows:
          python -m pip install --upgrade pip
 
          # Install components in order
-         cd tinyml-modelmaker
-         pip install -e .
-
-         cd ..\tinyml-tinyverse
-         pip install -e .
-
-         cd ..\tinyml-modeloptimization\torchmodelopt
-         pip install -e .
-
-         cd ..\..\tinyml-modelzoo
-         pip install -e .
+         pip install -e tinyml-modelmaker
+         pip install -e tinyml-tinyverse
+         pip install -e tinyml-modeloptimization\torchmodelopt
+         pip install -e tinyml-modelzoo
 
 Step 3: Verify Installation
 ---------------------------
@@ -198,10 +184,10 @@ Alternatively, update each component manually:
    git pull origin main
 
    # Reinstall components if dependencies changed
-   cd tinyml-modelmaker && pip install -e .
-   cd ../tinyml-tinyverse && pip install -e .
-   cd ../tinyml-modeloptimization/torchmodelopt && pip install -e .
-   cd ../../tinyml-modelzoo && pip install -e .
+   pip install -e tinyml-modelmaker
+   pip install -e tinyml-tinyverse
+   pip install -e tinyml-modeloptimization/torchmodelopt
+   pip install -e tinyml-modelzoo
 
 Common Developer Tasks
 ----------------------
@@ -228,6 +214,84 @@ Edit files in ``tinyml-tinyverse/tinyml_tinyverse/references/``:
 **Adding Custom Transforms**
 
 Edit files in ``tinyml-tinyverse/tinyml_tinyverse/common/transforms/``.
+
+Speeding Up Installation
+------------------------
+
+The developer installation can take significant time due to downloading large dependencies (PyTorch, TensorFlow, etc.). Here are several ways to speed it up:
+
+**Option 1: Use setup_all.sh with Parallel Installation (Linux)**
+
+The ``setup_all.sh`` script automatically uses parallel builds:
+
+.. code-block:: bash
+
+   cd tinyml-modelmaker
+   ./setup_all.sh
+
+This is typically 2-3x faster than manual installation.
+
+**Option 2: Enable pip Caching**
+
+Create or update ``~/.pip/pip.conf`` to enable aggressive caching:
+
+.. code-block:: ini
+
+   [global]
+   cache-dir = ~/.cache/pip
+   no-cache-dir = False
+
+This caches downloaded packages so reinstalls are faster.
+
+**Option 3: Use Pre-built Wheels**
+
+Ensure pip uses pre-built wheels instead of compiling from source:
+
+.. code-block:: bash
+
+   pip install --upgrade pip wheel
+   pip install -e tinyml-modelmaker  # Will use wheels if available
+
+**Option 4: Skip Optional GPU Dependencies (If Not Needed)**
+
+If you don't need GPU support, you can use CPU-only PyTorch:
+
+.. code-block:: bash
+
+   # CPU-only PyTorch (faster to install)
+   pip install torch==2.0.0 torchvision==0.15.1 --index-url https://download.pytorch.org/whl/cpu
+
+   # Then install components
+   pip install -e tinyml-modelmaker
+   pip install -e tinyml-tinyverse
+   pip install -e tinyml-modeloptimization/torchmodelopt
+   pip install -e tinyml-modelzoo
+
+**Option 5: Use Faster Package Index**
+
+Some regions may have mirror repositories. For example, in China:
+
+.. code-block:: bash
+
+   pip install -i https://pypi.tsinghua.edu.cn/simple -e tinyml-modelmaker
+
+.. note::
+
+   **Installation Times (Approximate)**
+
+   * Full developer install (first time): 15-30 minutes
+   * With caching enabled (subsequent installs): 5-10 minutes
+   * Using setup_all.sh (Linux): 10-15 minutes
+
+.. tip::
+
+   **Checking Download Progress**
+
+   To see real-time download progress:
+
+   .. code-block:: bash
+
+      pip install --verbose -e tinyml-modelmaker
 
 Troubleshooting
 ---------------
