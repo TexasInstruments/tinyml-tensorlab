@@ -37,7 +37,7 @@ Use a fresh virtual environment:
 
    python -m venv venv_fresh
    source venv_fresh/bin/activate
-   pip install -e .
+   pip install -e tinyml-modelmaker
 
 **TI Compiler Not Found**
 

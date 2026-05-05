@@ -122,11 +122,13 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#step-1-clone-the-repository">2.3.2. Step 1: Clone the Repository</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#step-2-set-up-python-environment">2.3.3. Step 2: Set Up Python Environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#step-3-verify-installation">2.3.4. Step 3: Verify Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#directory-structure-after-installation">2.3.5. Directory Structure After Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#updating">2.3.6. Updating</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#common-developer-tasks">2.3.7. Common Developer Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#troubleshooting">2.3.8. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#next-steps">2.3.9. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#step-4-configure-environment-variables">2.3.5. Step 4: Configure Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#directory-structure-after-installation">2.3.6. Directory Structure After Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#updating">2.3.7. Updating</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#common-developer-tasks">2.3.8. Common Developer Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#speeding-up-installation">2.3.9. Speeding Up Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#troubleshooting">2.3.10. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#next-steps">2.3.11. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/windows_setup.html">2.4. Windows Setup</a><ul>
@@ -150,13 +152,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#installing-python-3-10">2.5.2. Installing Python 3.10</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#installation">2.5.3. Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#verification">2.5.4. Verification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#gpu-setup-optional">2.5.5. GPU Setup (Optional)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#shell-configuration">2.5.6. Shell Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#permission-issues">2.5.7. Permission Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#multiple-python-versions">2.5.8. Multiple Python Versions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#system-service-optional">2.5.9. System Service (Optional)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#troubleshooting">2.5.10. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#next-steps">2.5.11. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#speeding-up-installation">2.5.5. Speeding Up Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#gpu-setup-optional">2.5.6. GPU Setup (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#shell-configuration">2.5.7. Shell Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#permission-issues">2.5.8. Permission Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#multiple-python-versions">2.5.9. Multiple Python Versions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#system-service-optional">2.5.10. System Service (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#troubleshooting">2.5.11. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#next-steps">2.5.12. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/environment_variables.html">2.6. Environment Variables</a><ul>
@@ -1075,8 +1078,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#available-layer-types">11.1.5. Available Layer Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-5-optional-add-device-performance-info">11.1.8. Step 5 (Optional): Add Device Performance Info</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-5-add-device-performance-info">11.1.8. Step 5: Add Device Performance Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#step-6-add-model-description">11.1.9. Step 6: Add Model Description</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#naming-conventions">11.1.11. Naming Conventions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../byom/adding_models.html#configuring-model-layer-parameters">11.1.12. Configuring Model Layer Parameters</a></li>
@@ -1638,7 +1641,7 @@ for all compilation options.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Mar 24, 2026.
+      <span class="lastupdated">Last updated on May 05, 2026.
       </span></p>
   </div>
 

@@ -88,8 +88,8 @@ The script handles:
    python -m venv venv
    source venv/bin/activate
 
-   # Upgrade pip
-   pip install --upgrade pip
+   # Upgrade pip and build tools
+   pip install --upgrade pip setuptools wheel
 
    # Install components
    pip install -e tinyml-modelmaker

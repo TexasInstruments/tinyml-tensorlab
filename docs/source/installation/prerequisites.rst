@@ -97,11 +97,11 @@ Git is required to clone the repository.
 
 **pip**
 
-pip should be included with Python. Ensure it's up to date:
+pip should be included with Python. Ensure it and core build tools are up to date:
 
 .. code-block:: bash
 
-   python -m pip install --upgrade pip
+   python -m pip install --upgrade pip setuptools wheel
 
 For Compilation (Optional)
 --------------------------

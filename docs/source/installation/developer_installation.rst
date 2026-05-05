@@ -55,8 +55,8 @@ If the script doesn't work or you're on Windows:
          python -m venv venv
          source venv/bin/activate
 
-         # Upgrade pip
-         pip install --upgrade pip
+         # Upgrade pip and build tools
+         pip install --upgrade pip setuptools wheel
 
          # Install components in order
          pip install -e tinyml-modelmaker
@@ -72,8 +72,8 @@ If the script doesn't work or you're on Windows:
          python -m venv venv
          .\venv\Scripts\Activate.ps1
 
-         # Upgrade pip
-         python -m pip install --upgrade pip
+         # Upgrade pip and build tools
+         python -m pip install --upgrade pip setuptools wheel
 
          # Install components in order
          pip install -e tinyml-modelmaker
@@ -249,7 +249,7 @@ Ensure pip uses pre-built wheels instead of compiling from source:
 
 .. code-block:: bash
 
-   pip install --upgrade pip wheel
+   pip install --upgrade pip setuptools wheel
    pip install -e tinyml-modelmaker  # Will use wheels if available
 
 **Option 4: Skip Optional GPU Dependencies (If Not Needed)**

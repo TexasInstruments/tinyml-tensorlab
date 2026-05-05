@@ -80,7 +80,6 @@ If you want to customize models, add features, or contribute:
       .. code-block:: powershell
 
          git clone https://github.com/TexasInstruments/tinyml-tensorlab.git
-         cd tinyml-tensorlab\tinyml-modelmaker
-         python -m pip install --editable .
+         python -m pip install --editable tinyml-tensorlab\tinyml-modelmaker
 
 See the detailed guides in this section for complete instructions.

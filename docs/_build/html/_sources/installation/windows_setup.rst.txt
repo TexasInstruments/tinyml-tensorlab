@@ -53,18 +53,14 @@ During installation:
    python -m venv venv
    .\venv\Scripts\Activate.ps1
 
+   # Upgrade pip and build tools
+   python -m pip install --upgrade pip setuptools wheel
+
    # Install components
-   cd tinyml-modelmaker
-   pip install -e .
-
-   cd ..\tinyml-tinyverse
-   pip install -e .
-
-   cd ..\tinyml-modeloptimization\torchmodelopt
-   pip install -e .
-
-   cd ..\..\tinyml-modelzoo
-   pip install -e .
+   pip install -e tinyml-modelmaker
+   pip install -e tinyml-tinyverse
+   pip install -e tinyml-modeloptimization\torchmodelopt
+   pip install -e tinyml-modelzoo
 
 **Step 4: Configure Environment Variables**
 
