@@ -180,9 +180,7 @@ For more complex architectures that cannot be expressed as a layer spec:
 
        def forward(self, x):
            # x shape: (batch, variables, input_features) or (batch, variables, input_features, 1)
-           if x.dim() == 3:
-               x = x.unsqueeze(-1)  # Add channel dimension
-
+           assert x.dim() == 4, f"Expected 4D input, got {x.dim()}D"  
            x = self.conv1(x)
            x = self.bn1(x)
            x = self.relu(x)
