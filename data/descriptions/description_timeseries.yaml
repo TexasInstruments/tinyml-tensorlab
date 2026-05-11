@@ -129,7 +129,7 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset\
   \ format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
   \ dataset, but there are some changes as explained below.\n\n\n####  Dataset format\n\
-  The dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n\
+  The dataset should have the following structure.\n\n<pre>\ndata/projects/<dataset_name>/dataset\n\
   \                             |\n                             |--classes\n     \
   \                        |     |-- the directories should be here\n            \
   \                 |     |-- class1\n                             |     |-- class2\n\
@@ -148,8 +148,8 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   \ will be available in a folder inside [./data/projects](./data/projects)\nThe config\
   \ file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page\
   \ provides a button to download the compiled model artifacts to the development\
-  \ board. \n- The downloaded model artifacts are located in a folder inside /opt/projects.\
-  \ It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference\
+  \ board.\n- The downloaded model artifacts are located in a folder inside /opt/projects.\
+  \ It can be used with the SDK to run inference.\n- Please see \"C2000Ware Reference\
   \ Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\
   \n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over\
   \ the entire training dataset. It is a hyper parameter that can be tuned to get\
@@ -387,6 +387,15 @@ live_capture_example:
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 5820000
+    MSPM33C32:
+      ccsProj: ac_arc_fault_data_capture_LP_MSPM33C321A_nortos_ticlang
+      deviceName: MSPM33C32
+      files: []
+      from: examples/nortos/LP_MSPM33C321A/edgeAI/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec
+      pkgId: MSPM33-SDK
+      targetCfg: targetConfigs/MSPM33C321A.ccxml
+      transport:
+        baudRate: 115200
   ecg_classification:
     MSPM0G3507:
       ccsProj: ecg_anomaly_detection_data_capture_LP_MSPM0G3507_nortos_ticlang
@@ -416,6 +425,42 @@ live_capture_example:
       transport:
         baudRate: 115200
   generic_timeseries_classification:
+    AM13E2:
+      ccsProj: jerk_detection_am13e230x_lp_m33_nortos_ti_arm_clang
+      deviceName: AM13E2
+      files: []
+      from: examples/ai/jerk_detection/am13e230x_lp/m33_nortos/ti_arm_clang/example.projectspec
+      pkgId: AM13E2X-SDK
+      targetCfg: targetConfigs/AM13E23019.ccxml
+      transport:
+        baudRate: 921600
+    AM263:
+      ccsProj: imu_sensor_data_capture_am263x-lp_r5fss0-0_nortos_ti-arm-clang
+      deviceName: AM263
+      files: []
+      from: examples/ai/imu_sensor_data_capture/am263x-lp/r5fss0-0_nortos/ti-arm-clang/example.projectspec
+      pkgId: com.ti.MCU_PLUS_SDK_AM263X
+      targetCfg: targetConfigs/AM263x.ccxml
+      transport:
+        baudRate: 115200
+    AM263P:
+      ccsProj: imu_sensor_data_capture_am263px-lp_r5fss0-0_nortos_ti-arm-clang
+      deviceName: AM263P
+      files: []
+      from: examples/ai/imu_sensor_data_capture/am263px-lp/r5fss0-0_nortos/ti-arm-clang/example.projectspec
+      pkgId: com.ti.MCU_PLUS_SDK_AM263PX
+      targetCfg: targetConfigs/AM263Px.ccxml
+      transport:
+        baudRate: 115200
+    F29H85:
+      ccsProj: acc_data_capture_with_preview
+      deviceName: F29H85
+      files: []
+      from: examples/ai/acc_data_capture_with_preview/f29h85x/ccs/acc_data_capture_with_preview.projectspec
+      pkgId: f29h85x-sdk
+      targetCfg: targetConfigs/F29H850TU9.ccxml
+      transport:
+        baudRate: 4687500
     MSPM0G3507:
       ccsProj: timeseries_data_capture_LP_MSPM0G3507_nortos_ticlang
       deviceName: MSPM0G3507
@@ -432,6 +477,15 @@ live_capture_example:
       from: examples/nortos/LP_MSPM0G5187/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 115200
+    MSPM33C32:
+      ccsProj: timeseries_data_capture_LP_MSPM33C321A_nortos_ticlang
+      deviceName: MSPM33C32
+      files: []
+      from: examples/nortos/LP_MSPM33C321A/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec
+      pkgId: MSPM33-SDK
+      targetCfg: targetConfigs/MSPM33C321A.ccxml
       transport:
         baudRate: 115200
   motor_fault:
@@ -469,6 +523,15 @@ live_capture_example:
       from: examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 115200
+    MSPM33C32:
+      ccsProj: motor_fault_data_capture_LP_MSPM33C321A_nortos_ticlang
+      deviceName: MSPM33C32
+      files: []
+      from: examples/nortos/LP_MSPM33C321A/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec
+      pkgId: MSPM33-SDK
+      targetCfg: targetConfigs/MSPM33C321A.ccxml
       transport:
         baudRate: 115200
   pir_detection:
@@ -533,6 +596,15 @@ live_capture_example:
       from: examples/nortos/LP_MSPM0G5187/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 115200
+    MSPM33C32:
+      ccsProj: pir_detection_data_capture_LP_MSPM33C321A_nortos_ticlang
+      deviceName: MSPM33C32
+      files: []
+      from: examples/nortos/LP_MSPM33C321A/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec
+      pkgId: MSPM33-SDK
+      targetCfg: targetConfigs/MSPM33C321A.ccxml
       transport:
         baudRate: 115200
 live_preview:
@@ -607,6 +679,21 @@ live_preview_example:
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 5820000
+    MSPM33C32:
+      ccsProj: ac_arc_fault_detection_live_preview_LP_MSPM33C321A_nortos_ticlang
+      deviceName: MSPM33C32
+      files:
+      - from: artifacts/mod.a
+        to: model/model.a
+      - from: artifacts/tvmgen_default.h
+        to: model/tvmgen_default.h
+      - from: golden_vectors/user_input_config.h
+        to: model/user_input_config.h
+      from: examples/nortos/LP_MSPM33C321A/edgeAI/ac_arc_fault_detection_live_preview/ticlang/ac_arc_fault_detection_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec
+      pkgId: MSPM33-SDK
+      targetCfg: targetConfigs/MSPM33C321A.ccxml
+      transport:
+        baudRate: 115200
   ecg_classification:
     MSPM0G5187:
       ccsProj: ecg_anomaly_detection_live_preview_LP_MSPM0G5187_nortos_ticlang
@@ -670,6 +757,21 @@ live_preview_example:
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 115200
+    MSPM33C32:
+      ccsProj: motor_fault_live_preview_LP_MSPM33C321A_nortos_ticlang
+      deviceName: MSPM33C32
+      files:
+      - from: artifacts/mod.a
+        to: model/model.a
+      - from: artifacts/tvmgen_default.h
+        to: model/tvmgen_default.h
+      - from: user_input_config.h
+        to: model/user_input_config.h
+      from: examples/nortos/LP_MSPM33C321A/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec
+      pkgId: MSPM33-SDK
+      targetCfg: targetConfigs/MSPM33C321A.ccxml
+      transport:
+        baudRate: 115200
   pir_detection:
     CC1352:
       ccsProj: edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang
@@ -728,6 +830,21 @@ live_preview_example:
       from: examples/nortos/LP_MSPM0G5187/edgeAI/pir_detection_live_preview/ticlang/pir_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 115200
+    MSPM33C32:
+      ccsProj: pir_detection_live_preview_LP_MSPM33C321A_nortos_ticlang
+      deviceName: MSPM33C32
+      files:
+      - from: artifacts/mod.a
+        to: model/model.a
+      - from: artifacts/tvmgen_default.h
+        to: model/tvmgen_default.h
+      - from: artifacts/user_input_config.h
+        to: model/user_input_config.h
+      from: examples/nortos/LP_MSPM33C321A/edgeAI/pir_detection_live_preview/ticlang/pir_detection_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec
+      pkgId: MSPM33-SDK
+      targetCfg: targetConfigs/MSPM33C321A.ccxml
       transport:
         baudRate: 115200
 model_descriptions:
@@ -18076,6 +18193,164 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
   MSPM33C34: {}
+rex_dependencies:
+- devices:
+  - AM13E2
+  envVarName: COM_TI_AM13E230X_SDK_INSTALL_DIR
+  installDirName: am13e230x_sdk_26_00_00_06
+  readableName: AM13E230X SDK
+  rexPackageId: AM13E2X-SDK
+  rexPackageVersion: 26.00.00.06
+  task: compile
+- devices:
+  - CC1352
+  - CC1354
+  envVarName: COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR
+  installDirName: simplelink_cc13xx_cc26xx_sdk_8_31_00_11
+  readableName: SimpleLink CC13xx CC26xx SDK
+  rexPackageId: com.ti.SIMPLELINK_CC13XX_CC26XX_SDK
+  rexPackageVersion: 8.31.00.11
+  task: compile
+- devices:
+  - CC2755
+  envVarName: COM_TI_SIMPLELINK_LOWPOWER_F3_SDK_INSTALL_DIR
+  installDirName: simplelink_lowpower_f3_sdk_9_12_00_19
+  readableName: SimpleLink Low Power F3 SDK
+  rexPackageId: com.ti.SIMPLELINK_LOWPOWER_F3_SDK
+  rexPackageVersion: 9.12.00.19
+  task: compile
+- devices:
+  - CC35X1
+  envVarName: COM_TI_SIMPLELINK_WIFI_SDK_INSTALL_DIR
+  installDirName: simplelink_wifi_sdk_9_21_00_15
+  readableName: SimpleLink WiFi SDK
+  rexPackageId: com.ti.SIMPLELINK_WIFI_SDK
+  rexPackageVersion: 9.21.00.15
+  task: compile
+- devices:
+  - AM263
+  envVarName: MCU_PLUS_SDK_PATH
+  installDirName: mcu_plus_sdk_am263x_26_00_00_01
+  readableName: MCU+ SDK for AM263x
+  rexPackageId: com.ti.MCU_PLUS_SDK_AM263X
+  rexPackageVersion: 26.00.00.01
+  task: compile
+- devices:
+  - AM263P
+  envVarName: MCU_PLUS_SDK_PATH
+  installDirName: mcu_plus_sdk_am263px_26_00_00_01
+  readableName: MCU+ SDK for AM263Px
+  rexPackageId: com.ti.MCU_PLUS_SDK_AM263PX
+  rexPackageVersion: 26.00.00.01
+  task: compile
+- devices:
+  - AM261
+  envVarName: MCU_PLUS_SDK_PATH
+  installDirName: mcu_plus_sdk_am261x_26_00_00_01
+  readableName: MCU+ SDK for AM261x
+  rexPackageId: com.ti.MCU_PLUS_SDK_AM261X
+  rexPackageVersion: 26.00.00.01
+  task: compile
+- devices:
+  - MSPM0G3507
+  - MSPM0G3519
+  - MSPM0G5187
+  envVarName: COM_TI_MSPM0_SDK_INSTALL_DIR
+  installDirName: mspm0_sdk_2_09_00_01
+  readableName: MSPM0 SDK
+  rexPackageId: MSPM0-SDK
+  rexPackageVersion: 2.09.00.01
+  task: compile
+- devices:
+  - F280013
+  - F280015
+  - F28003
+  - F28004
+  - F2837
+  - F28P65
+  - F28P55
+  envVarName: C2000WARE_MOTOR_CONTROL_ROOT
+  installDirName: C2000Ware_MotorControl_SDK_5_04_00_00
+  readableName: C2000Ware_MotorControl_SDK
+  rexPackageId: motor_control_c2000ware_sdk_software_package
+  rexPackageVersion: 5.04.00.00
+  task: compile
+- devices:
+  - F280013
+  - F280015
+  - F28003
+  - F28004
+  - F2837
+  - F28P65
+  - F28P55
+  envVarName: C2000WARE_DIGITAL_POWER_ROOT
+  installDirName: C2000Ware_DigitalPower_SDK_5_06_00_00
+  readableName: C2000Ware_DigitalPower_SDK
+  rexPackageId: digital_power_c2000ware_sdk_software_package
+  rexPackageVersion: 5.06.00.00
+  task: compile
+- devices:
+  - F29H85
+  - F29P58
+  - F29P32
+  envVarName: COM_TI_F29H85X_SDK_INSTALL_DIR
+  installDirName: f29h85x-sdk_26_00_00_00
+  readableName: F29H85X-SDK
+  rexPackageId: f29h85x-sdk
+  rexPackageVersion: 26.00.00.00
+  task: compile
+- devices:
+  - MSPM33C32
+  envVarName: COM_TI_MSPM33_SDK_INSTALL_DIR
+  installDirName: mspm33_sdk_1_03_00_01
+  readableName: MSPM33 SDK
+  rexPackageId: MSPM33-SDK
+  rexPackageVersion: 1.03.00.01
+  task: compile
+- devices:
+  - F280013
+  - F280015
+  - F28003
+  - F28004
+  - F2837
+  - F28P65
+  - F28P55
+  envVarName: C2000_CG_ROOT
+  installDirName: ti_cgt_c2000_25.11.0.LTS
+  readableName: TI C28x/CLA Compiler
+  rexPackageId: C2000-CGT
+  rexPackageVersion: 25.11.00.00
+  task: compile
+- devices:
+  - F29H85
+  - F29P58
+  - F29P32
+  envVarName: CG_TOOL_ROOT
+  installDirName: ti-cgt-c29_2.2.0.LTS
+  readableName: TI C29 Clang 2.2.0 LTS Compiler
+  rexPackageId: C29-CGT
+  rexPackageVersion: 2.02.00.00
+  task: compile
+- devices:
+  - CC1352
+  - CC1354
+  - CC2755
+  - CC2754
+  - CC35X1
+  - AM13E2
+  - AM263
+  - AM263P
+  - AM261
+  - MSPM0G3507
+  - MSPM0G3519
+  - MSPM0G5187
+  - MSPM33C32
+  envVarName: ARM_LLVM_CGT_PATH
+  installDirName: ti_cgt_arm_llvm_4.0.3.LTS
+  readableName: TI Arm Clang 4.0.3 LTS Compiler
+  rexPackageId: ti_cgt_tiarmclang
+  rexPackageVersion: 4.00.03.00
+  task: compile
 sample_dataset_descriptions:
   ac_arc_fault_example_dsk:
     common:

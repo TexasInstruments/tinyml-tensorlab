@@ -18382,17 +18382,7 @@
   },
   "preset_descriptions":{
     "AM263":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18422,7 +18412,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18433,6 +18423,16 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18444,7 +18444,7 @@
       }
     },
     "AM263P":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18464,7 +18464,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18476,7 +18476,7 @@
       }
     },
     "AM261":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18496,7 +18496,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -18508,17 +18508,7 @@
       }
     },
     "F280013":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18548,7 +18538,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18559,6 +18549,16 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18570,17 +18570,7 @@
       }
     },
     "F280015":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18610,7 +18600,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18621,6 +18611,16 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18632,17 +18632,7 @@
       }
     },
     "F28003":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18672,7 +18662,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18683,6 +18673,16 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18694,17 +18694,7 @@
       }
     },
     "F28004":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18734,7 +18724,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18745,6 +18735,16 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18756,17 +18756,7 @@
       }
     },
     "F28P65":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18796,7 +18786,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18807,6 +18797,16 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18818,17 +18818,7 @@
       }
     },
     "F2837":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18858,7 +18848,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18869,6 +18859,16 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -18880,33 +18880,7 @@
       }
     },
     "F28P55":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -18984,7 +18958,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19011,6 +18985,32 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19038,10 +19038,30 @@
       }
     },
     "F29H85":{
-      "arc_fault":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19058,27 +19078,7 @@
           }
         }
       },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "motor_fault":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19088,7 +19088,7 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19100,10 +19100,10 @@
       }
     },
     "F29P58":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19120,10 +19120,10 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19132,10 +19132,10 @@
       }
     },
     "F29P32":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19152,10 +19152,10 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -19164,27 +19164,7 @@
       }
     },
     "MSPM0G3507":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19204,7 +19184,27 @@
           }
         }
       },
-      "motor_fault":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19224,7 +19224,7 @@
           }
         }
       },
-      "pir_detection":{
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19236,7 +19236,17 @@
       }
     },
     "MSPM0G3519":{
-      "arc_fault":{
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19266,17 +19276,7 @@
           }
         }
       },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19296,7 +19296,7 @@
           }
         }
       },
-      "pir_detection":{
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19308,7 +19308,33 @@
       }
     },
     "MSPM0G5187":{
-      "arc_fault":{
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19386,33 +19412,7 @@
           }
         }
       },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19464,7 +19464,7 @@
           }
         }
       },
-      "pir_detection":{
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19492,17 +19492,7 @@
       }
     },
     "MSPM33C32":{
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "blower_imbalance":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19532,17 +19522,7 @@
           }
         }
       },
-      "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_classification":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -19561,37 +19541,31 @@
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
           }
         }
-      }
-    },
-    "MSPM33C34":{},
-    "AM13E2":{
-      "arc_fault":{
+      },
+      "generic_timeseries_classification":{
         "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "forced_soft_npu_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
           }
-        },
-        "compress_npu_layer_data":{
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
           "compilation":{
-            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
           }
         }
-      },
-      "blower_imbalance":{
+      }
+    },
+    "MSPM33C34":{},
+    "AM13E2":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19669,7 +19643,7 @@
           }
         }
       },
-      "motor_fault":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19696,6 +19670,32 @@
         }
       },
       "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -19723,7 +19723,17 @@
       }
     },
     "CC2755":{
-      "generic_timeseries_classification":{
+      "pir_detection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=m33cde",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -19743,17 +19753,7 @@
           }
         }
       },
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=m33cde",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -19765,7 +19765,17 @@
       }
     },
     "CC1352":{
-      "generic_timeseries_classification":{
+      "pir_detection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m4",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19785,17 +19795,7 @@
           }
         }
       },
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m4",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19807,7 +19807,17 @@
       }
     },
     "CC1354":{
-      "generic_timeseries_classification":{
+      "pir_detection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19827,17 +19837,7 @@
           }
         }
       },
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -19849,7 +19849,17 @@
       }
     },
     "CC35X1":{
-      "generic_timeseries_classification":{
+      "pir_detection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=m33cde",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -19869,17 +19879,7 @@
           }
         }
       },
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=m33cde",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -20876,6 +20876,17 @@
         "transport":{
           "baudRate":5820000
         }
+      },
+      "MSPM33C32":{
+        "ccsProj":"ac_arc_fault_data_capture_LP_MSPM33C321A_nortos_ticlang",
+        "deviceName":"MSPM33C32",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM33C321A/edgeAI/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec",
+        "pkgId":"MSPM33-SDK",
+        "targetCfg":"targetConfigs/MSPM33C321A.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
       }
     },
     "generic_timeseries_classification":{
@@ -20897,6 +20908,61 @@
         "from":"examples/nortos/LP_MSPM0G3507/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec",
         "pkgId":"MSPM0-SDK",
         "targetCfg":"targetConfigs/MSPM0G3507.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      },
+      "MSPM33C32":{
+        "ccsProj":"timeseries_data_capture_LP_MSPM33C321A_nortos_ticlang",
+        "deviceName":"MSPM33C32",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM33C321A/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec",
+        "pkgId":"MSPM33-SDK",
+        "targetCfg":"targetConfigs/MSPM33C321A.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      },
+      "AM13E2":{
+        "ccsProj":"jerk_detection_am13e230x_lp_m33_nortos_ti_arm_clang",
+        "deviceName":"AM13E2",
+        "files":[],
+        "from":"examples/ai/jerk_detection/am13e230x_lp/m33_nortos/ti_arm_clang/example.projectspec",
+        "pkgId":"AM13E2X-SDK",
+        "targetCfg":"targetConfigs/AM13E23019.ccxml",
+        "transport":{
+          "baudRate":921600
+        }
+      },
+      "F29H85":{
+        "ccsProj":"acc_data_capture_with_preview",
+        "deviceName":"F29H85",
+        "files":[],
+        "from":"examples/ai/acc_data_capture_with_preview/f29h85x/ccs/acc_data_capture_with_preview.projectspec",
+        "pkgId":"f29h85x-sdk",
+        "targetCfg":"targetConfigs/F29H850TU9.ccxml",
+        "transport":{
+          "baudRate":4687500
+        }
+      },
+      "AM263":{
+        "ccsProj":"imu_sensor_data_capture_am263x-lp_r5fss0-0_nortos_ti-arm-clang",
+        "deviceName":"AM263",
+        "files":[],
+        "from":"examples/ai/imu_sensor_data_capture/am263x-lp/r5fss0-0_nortos/ti-arm-clang/example.projectspec",
+        "pkgId":"com.ti.MCU_PLUS_SDK_AM263X",
+        "targetCfg":"targetConfigs/AM263x.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      },
+      "AM263P":{
+        "ccsProj":"imu_sensor_data_capture_am263px-lp_r5fss0-0_nortos_ti-arm-clang",
+        "deviceName":"AM263P",
+        "files":[],
+        "from":"examples/ai/imu_sensor_data_capture/am263px-lp/r5fss0-0_nortos/ti-arm-clang/example.projectspec",
+        "pkgId":"com.ti.MCU_PLUS_SDK_AM263PX",
+        "targetCfg":"targetConfigs/AM263Px.ccxml",
         "transport":{
           "baudRate":115200
         }
@@ -20981,6 +21047,17 @@
         "transport":{
           "baudRate":115200
         }
+      },
+      "MSPM33C32":{
+        "ccsProj":"motor_fault_data_capture_LP_MSPM33C321A_nortos_ticlang",
+        "deviceName":"MSPM33C32",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM33C321A/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec",
+        "pkgId":"MSPM33-SDK",
+        "targetCfg":"targetConfigs/MSPM33C321A.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
       }
     },
     "pir_detection":{
@@ -21057,6 +21134,17 @@
         "from":"examples/nortos/LP_MSPM0G3519/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec",
         "pkgId":"MSPM0-SDK",
         "targetCfg":"targetConfigs/MSPM0G3519.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      },
+      "MSPM33C32":{
+        "ccsProj":"pir_detection_data_capture_LP_MSPM33C321A_nortos_ticlang",
+        "deviceName":"MSPM33C32",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM33C321A/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec",
+        "pkgId":"MSPM33-SDK",
+        "targetCfg":"targetConfigs/MSPM33C321A.ccxml",
         "transport":{
           "baudRate":115200
         }
@@ -21170,6 +21258,30 @@
         "transport":{
           "baudRate":5820000
         }
+      },
+      "MSPM33C32":{
+        "ccsProj":"ac_arc_fault_detection_live_preview_LP_MSPM33C321A_nortos_ticlang",
+        "deviceName":"MSPM33C32",
+        "files":[
+          {
+            "from":"artifacts/mod.a",
+            "to":"model/model.a"
+          },
+          {
+            "from":"artifacts/tvmgen_default.h",
+            "to":"model/tvmgen_default.h"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":"model/user_input_config.h"
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM33C321A/edgeAI/ac_arc_fault_detection_live_preview/ticlang/ac_arc_fault_detection_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec",
+        "pkgId":"MSPM33-SDK",
+        "targetCfg":"targetConfigs/MSPM33C321A.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
       }
     },
     "generic_timeseries_classification":{
@@ -21272,6 +21384,30 @@
         "transport":{
           "baudRate":115200
         }
+      },
+      "MSPM33C32":{
+        "ccsProj":"motor_fault_live_preview_LP_MSPM33C321A_nortos_ticlang",
+        "deviceName":"MSPM33C32",
+        "files":[
+          {
+            "from":"artifacts/mod.a",
+            "to":"model/model.a"
+          },
+          {
+            "from":"artifacts/tvmgen_default.h",
+            "to":"model/tvmgen_default.h"
+          },
+          {
+            "from":"user_input_config.h",
+            "to":"model/user_input_config.h"
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM33C321A/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec",
+        "pkgId":"MSPM33-SDK",
+        "targetCfg":"targetConfigs/MSPM33C321A.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
       }
     },
     "pir_detection":{
@@ -21359,6 +21495,30 @@
         "from":"examples/nortos/LP_MSPM0G5187/edgeAI/pir_detection_live_preview/ticlang/pir_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
         "pkgId":"MSPM0-SDK",
         "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      },
+      "MSPM33C32":{
+        "ccsProj":"pir_detection_live_preview_LP_MSPM33C321A_nortos_ticlang",
+        "deviceName":"MSPM33C32",
+        "files":[
+          {
+            "from":"artifacts/mod.a",
+            "to":"model/model.a"
+          },
+          {
+            "from":"artifacts/tvmgen_default.h",
+            "to":"model/tvmgen_default.h"
+          },
+          {
+            "from":"artifacts/user_input_config.h",
+            "to":"model/user_input_config.h"
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM33C321A/edgeAI/pir_detection_live_preview/ticlang/pir_detection_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec",
+        "pkgId":"MSPM33-SDK",
+        "targetCfg":"targetConfigs/MSPM33C321A.ccxml",
         "transport":{
           "baudRate":115200
         }
@@ -21496,6 +21656,210 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Time Series Classification\n* ARC Fault\n* ECG Classification\n* Motor Fault\n* Fan Blower Imbalance Fault\n* PIR Detection\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n* SDK release: 01_00_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_00_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_00_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n* SDK release: 01_00_00_00\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
-  "help_url":"file://help.md"
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Time Series Classification\n* ARC Fault\n* ECG Classification\n* Motor Fault\n* Fan Blower Imbalance Fault\n* PIR Detection\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 06_00_01\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n* SDK release: 01_00_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_00_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_00_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n* SDK release: 01_00_00_00\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure.\n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board.\n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.\n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
+  "help_url":"file://help.md",
+  "rex_dependencies":[
+    {
+      "readableName":"AM13E230X SDK",
+      "installDirName":"am13e230x_sdk_26_00_00_06",
+      "rexPackageId":"AM13E2X-SDK",
+      "rexPackageVersion":"26.00.00.06",
+      "envVarName":"COM_TI_AM13E230X_SDK_INSTALL_DIR",
+      "devices":[
+        "AM13E2"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"SimpleLink CC13xx CC26xx SDK",
+      "installDirName":"simplelink_cc13xx_cc26xx_sdk_8_31_00_11",
+      "rexPackageId":"com.ti.SIMPLELINK_CC13XX_CC26XX_SDK",
+      "rexPackageVersion":"8.31.00.11",
+      "envVarName":"COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR",
+      "devices":[
+        "CC1352",
+        "CC1354"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"SimpleLink Low Power F3 SDK",
+      "installDirName":"simplelink_lowpower_f3_sdk_9_12_00_19",
+      "rexPackageId":"com.ti.SIMPLELINK_LOWPOWER_F3_SDK",
+      "rexPackageVersion":"9.12.00.19",
+      "envVarName":"COM_TI_SIMPLELINK_LOWPOWER_F3_SDK_INSTALL_DIR",
+      "devices":[
+        "CC2755"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"SimpleLink WiFi SDK",
+      "installDirName":"simplelink_wifi_sdk_9_21_00_15",
+      "rexPackageId":"com.ti.SIMPLELINK_WIFI_SDK",
+      "rexPackageVersion":"9.21.00.15",
+      "envVarName":"COM_TI_SIMPLELINK_WIFI_SDK_INSTALL_DIR",
+      "devices":[
+        "CC35X1"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"MCU+ SDK for AM263x",
+      "installDirName":"mcu_plus_sdk_am263x_26_00_00_01",
+      "rexPackageId":"com.ti.MCU_PLUS_SDK_AM263X",
+      "rexPackageVersion":"26.00.00.01",
+      "envVarName":"MCU_PLUS_SDK_PATH",
+      "devices":[
+        "AM263"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"MCU+ SDK for AM263Px",
+      "installDirName":"mcu_plus_sdk_am263px_26_00_00_01",
+      "rexPackageId":"com.ti.MCU_PLUS_SDK_AM263PX",
+      "rexPackageVersion":"26.00.00.01",
+      "envVarName":"MCU_PLUS_SDK_PATH",
+      "devices":[
+        "AM263P"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"MCU+ SDK for AM261x",
+      "installDirName":"mcu_plus_sdk_am261x_26_00_00_01",
+      "rexPackageId":"com.ti.MCU_PLUS_SDK_AM261X",
+      "rexPackageVersion":"26.00.00.01",
+      "envVarName":"MCU_PLUS_SDK_PATH",
+      "devices":[
+        "AM261"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"MSPM0 SDK",
+      "installDirName":"mspm0_sdk_2_09_00_01",
+      "rexPackageId":"MSPM0-SDK",
+      "rexPackageVersion":"2.09.00.01",
+      "envVarName":"COM_TI_MSPM0_SDK_INSTALL_DIR",
+      "devices":[
+        "MSPM0G3507",
+        "MSPM0G3519",
+        "MSPM0G5187"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"C2000Ware_MotorControl_SDK",
+      "installDirName":"C2000Ware_MotorControl_SDK_5_04_00_00",
+      "rexPackageId":"motor_control_c2000ware_sdk_software_package",
+      "rexPackageVersion":"5.04.00.00",
+      "envVarName":"C2000WARE_MOTOR_CONTROL_ROOT",
+      "devices":[
+        "F280013",
+        "F280015",
+        "F28003",
+        "F28004",
+        "F2837",
+        "F28P65",
+        "F28P55"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"C2000Ware_DigitalPower_SDK",
+      "installDirName":"C2000Ware_DigitalPower_SDK_5_06_00_00",
+      "rexPackageId":"digital_power_c2000ware_sdk_software_package",
+      "rexPackageVersion":"5.06.00.00",
+      "envVarName":"C2000WARE_DIGITAL_POWER_ROOT",
+      "devices":[
+        "F280013",
+        "F280015",
+        "F28003",
+        "F28004",
+        "F2837",
+        "F28P65",
+        "F28P55"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"F29H85X-SDK",
+      "installDirName":"f29h85x-sdk_26_00_00_00",
+      "rexPackageId":"f29h85x-sdk",
+      "rexPackageVersion":"26.00.00.00",
+      "envVarName":"COM_TI_F29H85X_SDK_INSTALL_DIR",
+      "devices":[
+        "F29H85",
+        "F29P58",
+        "F29P32"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"MSPM33 SDK",
+      "installDirName":"mspm33_sdk_1_03_00_01",
+      "rexPackageId":"MSPM33-SDK",
+      "rexPackageVersion":"1.03.00.01",
+      "envVarName":"COM_TI_MSPM33_SDK_INSTALL_DIR",
+      "devices":[
+        "MSPM33C32"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"TI C28x/CLA Compiler",
+      "installDirName":"ti_cgt_c2000_25.11.0.LTS",
+      "rexPackageId":"C2000-CGT",
+      "rexPackageVersion":"25.11.00.00",
+      "envVarName":"C2000_CG_ROOT",
+      "devices":[
+        "F280013",
+        "F280015",
+        "F28003",
+        "F28004",
+        "F2837",
+        "F28P65",
+        "F28P55"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"TI C29 Clang 2.2.0 LTS Compiler",
+      "installDirName":"ti-cgt-c29_2.2.0.LTS",
+      "rexPackageId":"C29-CGT",
+      "rexPackageVersion":"2.02.00.00",
+      "envVarName":"CG_TOOL_ROOT",
+      "devices":[
+        "F29H85",
+        "F29P58",
+        "F29P32"
+      ],
+      "task":"compile"
+    },
+    {
+      "readableName":"TI Arm Clang 4.0.3 LTS Compiler",
+      "installDirName":"ti_cgt_arm_llvm_4.0.3.LTS",
+      "rexPackageId":"ti_cgt_tiarmclang",
+      "rexPackageVersion":"4.00.03.00",
+      "envVarName":"ARM_LLVM_CGT_PATH",
+      "devices":[
+        "CC1352",
+        "CC1354",
+        "CC2755",
+        "CC2754",
+        "CC35X1",
+        "AM13E2",
+        "AM263",
+        "AM263P",
+        "AM261",
+        "MSPM0G3507",
+        "MSPM0G3519",
+        "MSPM0G5187",
+        "MSPM33C32"
+      ],
+      "task":"compile"
+    }
+  ]
 }
