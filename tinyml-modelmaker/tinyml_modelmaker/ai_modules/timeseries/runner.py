@@ -425,3 +425,7 @@ class ModelRunner():
     @staticmethod
     def get_help_url_descriptions(*args, **kwargs):
         return descriptions.get_help_url_descriptions(*args, **kwargs)
+
+    @staticmethod
+    def get_rex_dependencies(*args, **kwargs):
+        return descriptions.get_rex_dependencies(*args, **kwargs)

@@ -115,7 +115,7 @@ These are the devices that are supported currently. As additional devices are su
 
 
 ####  Dataset format
-The dataset should have the following structure. 
+The dataset should have the following structure.
 
 <pre>
 data/projects/<dataset_name>/dataset
@@ -144,8 +144,8 @@ After the model compilation, the compiled models will be available in a folder i
 The config file can be in .yaml or in .json format
 
 ## Model deployment
-- The deploy page provides a button to download the compiled model artifacts to the development board. 
-- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. 
+- The deploy page provides a button to download the compiled model artifacts to the development board.
+- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.
 - Please see "C2000Ware Reference Design" in the SDK documentation for more information.
 
 ## Glossary of terms
