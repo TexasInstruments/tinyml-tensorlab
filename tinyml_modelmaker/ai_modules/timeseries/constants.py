@@ -972,16 +972,16 @@ TASK_DESCRIPTIONS = {
         'checkDataEnough': False,
         'task_category': TASK_CATEGORY_TS_REGRESSION
     },
-    # TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
-    #     'task_name': 'Time Series Anomaly Detection',
-    #     'task_group': 'timeseries',
-    #     'target_module': 'timeseries',
-    #     'target_devices': TARGET_DEVICES,
-    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
-    #     'application_specific': False,
-    #     'checkDataEnough': False,
-    #     'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
-    # },
+    TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+        'task_name': 'Time Series Anomaly Detection',
+        'task_group': 'timeseries',
+        'target_module': 'timeseries',
+        'target_devices': TARGET_DEVICES,
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+        'application_specific': False,
+        'checkDataEnough': False,
+        'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
+    },
     TASK_TYPE_GENERIC_TS_FORECASTING: {
         'task_name': 'Time Series Forecasting',
         'task_group': 'timeseries',
