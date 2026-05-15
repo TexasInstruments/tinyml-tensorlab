@@ -571,10 +571,65 @@ def plot_residual_error_regression(ground_truth, predictions, output_dir, phase=
     logger.info(f"Residual plot saved at: {save_path}")
     plt.close(fig)
 
-
 def plot_reconstruction_errors(anomaly_errors, normal_test_errors,normal_data_mean, threshold,image_save_folder, bins=100,  log_scale=False):
-    plt.figure(figsize=(10, 6))
-    
+    font_size = 9.5
+    fig_width = 10
+    fig_height = 11
+    bullet_marker = "  \u2022 "   # prefix printed at the start of each bullet line
+    next_line     = "\n    "      # newline + indent for continuation lines within a bullet
+
+    bullet_texts = [
+        r"$\mathbf{Red}$ — Normal samples, $\mathbf{Blue}$ — Anomaly samples. A good model shows these two distributions" + next_line +
+        r"clearly separated.",
+
+        r"$\mathbf{Green\ line}$ — threshold that best balances catching anomalies vs. avoiding false alarms. Samples" + next_line +
+        r"with reconstruction error exceeding (right side of green line) the threshold will be flagged " + next_line +
+        r"as anomalies. If this line sits clearly between the two distributions, the model is ready for" + next_line +
+        r"deployment.",
+
+        r"$\mathbf{Orange\ line}$ — mean reconstruction error on training (Normal) data. Threshold is computed as" + next_line +
+        r"${threshold = \mu_{train} + k \cdot \sigma_{train}}$ where $k$ controls sensitivity (higher $k$ = fewer false alarms).",
+
+        "If the histograms overlap heavily, consider more training epochs, a larger model, different" + next_line +
+        "feature extraction settings, or check whether the anomaly samples in the test set are truly" + next_line +
+        "representative of real faults.",
+
+        r"For detailed per-threshold metrics (accuracy, precision, recall, F1, false positive rate) see" + next_line +
+        r"$\mathbf{threshold\_performance.csv}$ in the same folder.",
+
+        r"Refer to the $\mathbf{TinyML\ TensorLab\ User\ Guide}$ for guidance on selecting the final $k$-value and" + next_line +
+        r"deploying the threshold to the target device.",
+    ]
+    if log_scale:
+        bullet_texts.append(
+            r"$\mathbf{Log\ scale}$ — When error values are very small or the two distributions are close together," + next_line +
+            r"the linear plot may not show them clearly enough. This log-scale version makes those small" + next_line +
+            r"differences visible and reveals tail behaviour that the normal plot misses. Use both plots" + next_line +
+            r"together for a complete picture."
+        )
+    else:
+        bullet_texts.append(
+            "If either distribution looks very small, is barely visible, or the two bars overlap so heavily" + next_line +
+            "that it is hard to tell them apart, view reconstruction_error_log_scale.png for a better" + next_line +
+            "analysis. The log scale stretches small differences, makes compressed distributions easier to " + next_line +
+            "read, and can reveal structure that is hidden in this linear view."
+        )
+
+    # Build full text 
+    lines = ["How to read this plot:"]
+    for b in bullet_texts:
+        lines.append(bullet_marker + b)
+    full_text = "\n".join(lines)
+
+    # Compute bottom margin from exact line count
+    n_lines = full_text.count('\n') + 1
+    line_h_fig = (font_size * 1.4 / 72) / fig_height
+    xlabel_space = 0.07
+    bottom_margin = max(0.18, min(0.50, n_lines * line_h_fig + xlabel_space + 0.02))
+
+    plt.figure(figsize=(fig_width, fig_height))
+    plt.subplots_adjust(bottom=bottom_margin, top=0.93)
+
     plt.hist(anomaly_errors, bins, alpha=0.3, label="Anomaly", color='b')
     plt.hist(normal_test_errors, bins, alpha=0.3, label="Normal", color='r')
     
@@ -597,8 +652,11 @@ def plot_reconstruction_errors(anomaly_errors, normal_test_errors,normal_data_me
     plt.xlabel(f'Reconstruction Error{"(Log scale)" if log_scale else ""}', fontsize=14)
     plt.ylabel(f'Error count{"(Log scale)" if log_scale else ""}', fontsize=14)
     plt.legend(loc='upper right')
-    
-    plt.savefig(os.path.join(image_save_folder, f'reconstruction_error{"_log_scale" if log_scale else ""}.png'))
+
+    ax_pos = plt.gca().get_position()
+    plt.figtext(ax_pos.x0, bottom_margin - xlabel_space - 0.01, full_text,ha='left', va='top', fontsize=font_size, family='monospace',bbox=dict(boxstyle='round,pad=0.4', facecolor='white', alpha=0.9))
+
+    plt.savefig(os.path.join(image_save_folder, f'reconstruction_error{"_log_scale" if log_scale else ""}.png'), dpi=150, bbox_inches='tight')
     plt.close()
     
 class SmoothedValue:
