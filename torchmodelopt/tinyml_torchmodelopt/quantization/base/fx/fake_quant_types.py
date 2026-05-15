@@ -32,143 +32,181 @@
 import torch
 import torch.ao.quantization
 
+import warnings
+from torch.jit import TracerWarning
 
-class SoftSigmoidFakeQuantize(torch.ao.quantization.fake_quantize.FakeQuantize):
+warnings.filterwarnings("ignore", category=TracerWarning)
+
+class SoftSigmoidFakeQuantize(torch.ao.quantization.FakeQuantize):
+    """Sigmoid-based fake quantization for differentiable QAT.
+
+    This class implements temperature-controlled sigmoid rounding for smooth
+    quantization during quantization-aware training (QAT). The temperature
+    parameter controls the smoothness of the rounding approximation.
     """
-    A custom quantization class that extends FakeQuantize.
-    This class can be used to define specific quantization behavior.
-    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Temperature parameter for sigmoid approximation
         self.temperature = 6.0
 
-    def update_temperature(self, t):
-        self.temperature = t
+    def update_temperature(self, temperature):
+        """Update the temperature parameter for sigmoid approximation."""
+        self.temperature = temperature
 
     def soft_round(self, x):
-        '''
-        Smooth quantization using temperature-controlled approximation of round
-        '''
-        delta = x - self.floor_ste(x)
+        """Compute smooth rounding using temperature-controlled sigmoid.
+
+        Args:
+            x: Input tensor to round.
+
+        Returns:
+            Rounded tensor with smooth gradients for backpropagation.
+        """
+        floor_x = self.floor_ste(x)
+        delta = x - floor_x
         soft_delta = torch.sigmoid(self.temperature * (delta - 0.5))
-        y = self.floor_ste(x) + soft_delta
-        return y
-
-    def hard_round(self, x):
-        y = torch.round(x)
-        return y
-
-    # def propagate_quant_ste(self, x, y):
-    #     # this works functionally as STE, but exports an onnx graph containing
-    #     # all the operators used to compute y as well
-    #     # out = x + (y - x).detach()
-    #     #
-    #     # this is another way of doing STE. in this case the operators used to generate y are skipped from onnx graph
-    #     out = x.clone()
-    #     out.data = y.data
-    #     return out
-    #
-    # def floor_ste(self, x):
-    #     return self.propagate_quant_ste(x, torch.floor(x))
+        return floor_x + soft_delta
 
     def floor_ste(self, x):
-        # Smart way to do a STE, using detach we can remove non-differentiable function from computation graph
-        # Above is a more generic approach to do so for any kind of non-differentiable function
-        return x + (torch.floor(x)-x).detach()
+        """Compute floor with straight-through estimator (STE).
 
-    def forward(self, X: torch.Tensor):
+        Uses STE to enable gradients through the non-differentiable floor operation
+        by replacing it with identity in the backward pass.
+
+        Args:
+            x: Input tensor.
+
+        Returns:
+            Floor of x with STE for gradient computation.
+        """
+        return x + (torch.floor(x) - x).detach()
+
+    def forward(self, X: torch.Tensor) -> torch.Tensor:
+        """Forward pass with soft quantization during training.
+
+        Args:
+            X: Input tensor to quantize.
+
+        Returns:
+            Quantized tensor (soft quantization during training, hard during eval).
+        """
         Y = super().forward(X)
 
         if self.training:
-            # Apply smooth quantization
+            # Prepare scale and zero_point with correct dimensions
             if self.is_per_channel:
                 scale = self.scale.clone().unsqueeze(-1)
                 zero_point = self.zero_point.clone().unsqueeze(-1)
             else:
                 scale = self.scale.clone()
                 zero_point = self.zero_point.clone()
-            # Simulate QDQ using soft round
-            data_flatten = X.reshape(X.shape[0], -1)
+
+            # Simulate QDQ (Quantize-Dequantize) with soft rounding
+            data_flatten = X.view(X.shape[0], -1)
             data_quantized = (data_flatten / scale) + zero_point
             data_soft_quant = self.soft_round(data_quantized)
             data_soft_clamped = torch.clamp(data_soft_quant, min=self.quant_min, max=self.quant_max)
             data_soft_dequantized = (data_soft_clamped - zero_point) * scale
-            quantized_data_soft = data_soft_dequantized.reshape(X.shape)
-            output = quantized_data_soft
+            return data_soft_dequantized.view(X.shape)
         else:
-            output = Y
-
-        return output
+            return Y
     
 class SoftTanhFakeQuantize(torch.ao.quantization.FakeQuantize):
+    """Tanh-based fake quantization for differentiable QAT.
+
+    This class implements temperature-controlled tanh rounding for smooth
+    quantization during quantization-aware training (QAT). Tanh provides
+    better numerical properties than sigmoid for rounding approximation.
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.temperature = 1.0
 
-    def floor_ste(self, x):
-        return x + (torch.floor(x) - x).detach()
-    
     def update_temperature(self, temperature):
+        """Update the temperature parameter for tanh approximation.
+
+        Args:
+            temperature: New temperature value. Higher values make rounding sharper.
+        """
         self.temperature = temperature
 
     def soft_round(self, x, temperature, eps=1e-3):
-        """
-        Differentiable approximation to `round` (PyTorch version).
+        """Differentiable approximation to rounding using temperature-scaled tanh.
+
+        Uses tanh to approximate rounding with controllable smoothness. For very low
+        temperatures, behaves like identity to avoid numerical issues.
 
         Args:
-            x: torch.Tensor. Inputs to the rounding function.
-            alpha: float or torch.Tensor. Controls smoothness of the approximation.
-            eps: float. Threshold below which `soft_round` will return identity.
+            x: Input tensor to round.
+            temperature: Controls smoothness of approximation. Higher = sharper rounding.
+            eps: Threshold below which soft_round returns identity.
 
         Returns:
-            torch.Tensor
+            Rounded tensor with smooth gradients for backpropagation.
         """
-        # Ensure alpha is at least eps to avoid numerical issues and NaNs.
-        # This is important for the gradient of torch.where below.
-        import warnings
-        from torch.jit import TracerWarning
-        warnings.filterwarnings("ignore", category=TracerWarning)
+        # Ensure temperature is at least eps to avoid numerical issues and NaNs
         temperature_bounded = torch.maximum(
-            torch.tensor(temperature, dtype=x.dtype, device=x.device),  # Convert alpha to tensor if needed
-            torch.tensor(eps, dtype=x.dtype, device=x.device)     # Minimum threshold
+            torch.tensor(temperature, dtype=x.dtype, device=x.device),
+            torch.tensor(eps, dtype=x.dtype, device=x.device)
         )
 
-        # Compute the midpoint between two integers (e.g., 2.5 for x in [2,3))
-        m = self.floor_ste(x) + 0.5
-        # Compute the residual distance from x to the midpoint
-        r = x - m
-        # Compute a scaling factor for the tanh output, which depends on alpha
-        z = torch.tanh(temperature_bounded / 2.0) * 2.0
-        # The core soft-rounding formula: smoothly interpolate between floor and ceil
-        y = m + torch.tanh(temperature_bounded * r) / z
-        # For very low alphas, soft_round behaves like identity (no rounding)
+        # Compute midpoint and distance from it
+        midpoint = self.floor_ste(x) + 0.5
+        distance = x - midpoint
+
+        # Tanh-based rounding: smoothly interpolate between floor and ceil
+        # using tanh scaled by temperature
+        scaling_factor = torch.tanh(temperature_bounded / 2.0) * 2.0
+        y = midpoint + torch.tanh(temperature_bounded * distance) / scaling_factor
+
+        # For very low temperatures, return identity to avoid numerical issues
         if isinstance(temperature, torch.Tensor):
-            # If alpha is a tensor, create a mask where alpha < eps and use x there, otherwise use y
             mask = (temperature < eps)
             return torch.where(mask, x, y)
         else:
-            # If alpha is a scalar, just return x if alpha < eps, else y
             return x if temperature < eps else y
 
-    def forward(self, X):
+    def floor_ste(self, x):
+        """Compute floor with straight-through estimator (STE).
+
+        Uses STE to enable gradients through the non-differentiable floor operation
+        by replacing it with identity in the backward pass.
+
+        Args:
+            x: Input tensor.
+
+        Returns:
+            Floor of x with STE for gradient computation.
+        """
+        return x + (torch.floor(x) - x).detach()
+
+    def forward(self, X: torch.Tensor) -> torch.Tensor:
+        """Forward pass with soft quantization during training.
+
+        Args:
+            X: Input tensor to quantize.
+
+        Returns:
+            Quantized tensor (soft quantization during training, hard during eval).
+        """
         Y = super().forward(X)
 
         if self.training:
-            #
+            # Prepare scale and zero_point with correct dimensions
             if self.is_per_channel:
                 scale = self.scale.clone().unsqueeze(-1)
                 zero_point = self.zero_point.clone().unsqueeze(-1)
             else:
                 scale = self.scale.clone()
                 zero_point = self.zero_point.clone()
-            # Simulate QDQ using soft round and temperature
+
+            # Simulate QDQ (Quantize-Dequantize) with temperature-controlled tanh rounding
             data_flatten = X.view(X.size(0), -1)
             data_quantized = (data_flatten / scale) + zero_point
             data_round = self.soft_round(data_quantized, self.temperature)
-            data_quantized = torch.clamp(data_round, self.quant_min, self.quant_max)
-            data_dequantized = (data_quantized - zero_point) * scale
-            data_dequantized = data_dequantized.view(X.size())
-            return data_dequantized
+            data_clamped = torch.clamp(data_round, self.quant_min, self.quant_max)
+            data_dequantized = (data_clamped - zero_point) * scale
+            return data_dequantized.view(X.size())
         else:
             return Y
