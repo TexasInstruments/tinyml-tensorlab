@@ -32,5 +32,17 @@
 from . import base, generic, tinpu
 from .common import *
 from .base.fx import TinyMLQuantFxBaseModule
+from .base.fx.observer_utils import (
+    KLDivergenceObserver,
+    KLDivergencePerChannelObserver,
+    EntropyBasedCutoffObserver,
+    EntropyBasedCutoffPerChannelObserver,
+    RangeShrinkFastHistogramObserver,
+    RangeShrinkPerChannelHistogramObserver,
+    LSQObserver,
+    LSQPerChannelObserver,
+    MovingAverageRangeShrinkFastHistogramObserver,
+    MovingAverageRangeShrinkPerChannelHistogramObserver,
+)
 from .generic import GenericTinyMLQATFxModule, GenericTinyMLPTQFxModule
 from .tinpu import TINPUTinyMLQATFxModule, TINPUTinyMLPTQFxModule

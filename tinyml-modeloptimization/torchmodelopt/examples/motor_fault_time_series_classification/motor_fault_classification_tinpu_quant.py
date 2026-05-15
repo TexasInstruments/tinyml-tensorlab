@@ -250,7 +250,7 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
                 'bitwidth': weight_bitwidth,
                 'qscheme': torch.per_channel_symmetric,
                 'power2_scale': is_ti_npu,
-                'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
+                'soft_quant': 'default' # 'soft_sigmoid' 'soft_tanh' 'default'
             },
             'activation': {
                 'bitwidth': activation_bitwidth,
@@ -265,8 +265,6 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
                 'bitwidth': weight_bitwidth,
                 'qscheme': torch.per_channel_symmetric,
                 'power2_scale': is_ti_npu,
-                'quant_min': -1,
-                'quant_max': 1,
                 'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
             },
             'activation': {

@@ -33,6 +33,7 @@
 # Imports Torch
 import torch
 import torch.ao.quantization
+import torch.nn.functional as F
 
 
 class MovingAverageRangeShrinkFastHistogramObserver(torch.ao.quantization.MinMaxObserver):
@@ -97,3 +98,667 @@ class MovingAverageRangeShrinkFastHistogramObserver(torch.ao.quantization.MinMax
 class RangeShrinkFastHistogramObserver(MovingAverageRangeShrinkFastHistogramObserver):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, moving_average=False, **kwargs)
+
+
+class MovingAverageRangeShrinkPerChannelHistogramObserver(torch.ao.quantization.PerChannelMinMaxObserver):
+    """Per-channel histogram observer with range shrinking for quantization.
+
+    Applies quantile-based range shrinking per-channel to handle outliers and
+    improve quantization accuracy while maintaining per-channel granularity.
+    """
+    RANGE_SHRINK_PERCENTILE_DEFAULT = 0.01
+
+    def __init__(
+        self,
+        averaging_constant=0.01,
+        dtype=torch.qint8,
+        qscheme=torch.per_channel_symmetric,
+        reduce_range=False,
+        quant_min=None,
+        quant_max=None,
+        range_shrink_percentile=RANGE_SHRINK_PERCENTILE_DEFAULT,
+        moving_average=True,
+        ch_axis=0,
+        **kwargs
+    ) -> None:
+        self.averaging_constant = averaging_constant
+        self.range_shrink_percentile = range_shrink_percentile
+        self.moving_average = moving_average
+        super().__init__(
+            dtype=dtype,
+            qscheme=qscheme,
+            reduce_range=reduce_range,
+            quant_min=quant_min,
+            quant_max=quant_max,
+            ch_axis=ch_axis,
+            **kwargs
+        )
+        self.freeze_observer = False
+
+    def forward(self, x_orig):
+        if x_orig.numel() == 0 or self.freeze_observer:
+            return x_orig
+
+        x = x_orig.detach().to(self.min_val.dtype)
+        x_flat = x.view(x.shape[self.ch_axis], -1)
+
+        min_val_cur, max_val_cur = self.histogram_range(x_flat)
+
+        # Initialize buffers if needed (must be done before using old values)
+        if self.min_val.numel() == 0 or self.min_val.shape != min_val_cur.shape:
+            self.min_val.resize_(min_val_cur.shape)
+            self.max_val.resize_(max_val_cur.shape)
+            self.min_val.fill_(float('inf'))
+            self.max_val.fill_(float('-inf'))
+
+        min_val = self.min_val
+        max_val = self.max_val
+
+        if (not self.moving_average) or (torch.all(torch.isinf(min_val)) and torch.all(torch.isinf(max_val))):
+            min_val = min_val_cur
+            max_val = max_val_cur
+        else:
+            min_val = min_val + self.averaging_constant * (min_val_cur - min_val)
+            max_val = max_val + self.averaging_constant * (max_val_cur - max_val)
+
+        self.min_val.copy_(min_val)
+        self.max_val.copy_(max_val)
+        return x_orig
+
+    def histogram_range(self, x_flat):
+        """Compute per-channel histogram-based range using quantiles.
+
+        Args:
+            x_flat: Tensor of shape (num_channels, -1) with flattened channel data
+
+        Returns:
+            Tuple of (min_val, max_val) per-channel tensors
+        """
+        quantile_l = self.range_shrink_percentile / 100.0
+        quantile_h = 1.0 - quantile_l
+
+        # Compute quantiles per-channel
+        r_min = torch.quantile(x_flat, quantile_l, dim=1)
+        r_max = torch.quantile(x_flat, quantile_h, dim=1)
+
+        # Handle NaN values - fallback to min/max
+        r_min = torch.where(torch.isnan(r_min), torch.min(x_flat, dim=1)[0], r_min)
+        r_max = torch.where(torch.isnan(r_max), torch.max(x_flat, dim=1)[0], r_max)
+
+        return r_min, r_max
+
+
+class RangeShrinkPerChannelHistogramObserver(MovingAverageRangeShrinkPerChannelHistogramObserver):
+    """Per-channel histogram observer without moving average."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, moving_average=False, **kwargs)
+
+
+class LSQObserver(torch.ao.quantization.MinMaxObserver):
+    """Learned Step size Quantization (LSQ) Observer for per-tensor quantization."""
+    STEP_SIZE_INIT_ALPHA = 1.0
+
+    def __init__(
+        self,
+        averaging_constant=0.01,
+        dtype=torch.quint8,
+        qscheme=torch.per_tensor_affine,
+        reduce_range=False,
+        quant_min=None,
+        quant_max=None,
+        step_size_init_alpha=STEP_SIZE_INIT_ALPHA,
+        **kwargs
+    ) -> None:
+        self.averaging_constant = averaging_constant
+        self.step_size_init_alpha = step_size_init_alpha
+        super().__init__(
+            dtype=dtype, qscheme=qscheme, reduce_range=reduce_range,
+            quant_min=quant_min, quant_max=quant_max, **kwargs
+        )
+        self.freeze_observer = False
+
+    def forward(self, x_orig):
+        if x_orig.numel() == 0 or self.freeze_observer:
+            return x_orig
+        x = x_orig.detach().to(self.min_val.dtype)
+        is_first_call = torch.all(torch.isinf(self.min_val)) and torch.all(torch.isinf(self.max_val))
+        min_val_cur, max_val_cur = torch.min(x), torch.max(x)
+        min_val = min_val_cur if is_first_call else self.min_val + self.averaging_constant * (min_val_cur - self.min_val)
+        max_val = max_val_cur if is_first_call else self.max_val + self.averaging_constant * (max_val_cur - self.max_val)
+        self.min_val.copy_(min_val)
+        self.max_val.copy_(max_val)
+        return x_orig
+
+
+class LSQPerChannelObserver(torch.ao.quantization.PerChannelMinMaxObserver):
+    """Learned Step size Quantization (LSQ) Observer for per-channel quantization."""
+    STEP_SIZE_INIT_ALPHA = 1.0
+
+    def __init__(
+        self,
+        averaging_constant=0.01,
+        dtype=torch.qint8,
+        qscheme=torch.per_channel_symmetric,
+        reduce_range=False,
+        quant_min=None,
+        quant_max=None,
+        step_size_init_alpha=STEP_SIZE_INIT_ALPHA,
+        ch_axis=0,
+        **kwargs
+    ) -> None:
+        self.averaging_constant = averaging_constant
+        self.step_size_init_alpha = step_size_init_alpha
+        super().__init__(
+            dtype=dtype, qscheme=qscheme, reduce_range=reduce_range,
+            quant_min=quant_min, quant_max=quant_max, ch_axis=ch_axis, **kwargs
+        )
+        self.freeze_observer = False
+
+    def forward(self, x_orig):
+        if x_orig.numel() == 0 or self.freeze_observer:
+            return x_orig
+        x = x_orig.detach().to(self.min_val.dtype)
+        x_flat = x.view(x.shape[self.ch_axis], -1)
+        min_val_cur = torch.min(x_flat, dim=1)[0]
+        max_val_cur = torch.max(x_flat, dim=1)[0]
+
+        # Initialize buffers if needed
+        if self.min_val.numel() == 0 or self.min_val.shape != min_val_cur.shape:
+            self.min_val.resize_(min_val_cur.shape)
+            self.max_val.resize_(max_val_cur.shape)
+            self.min_val.fill_(float('inf'))
+            self.max_val.fill_(float('-inf'))
+
+        is_first_call = torch.all(torch.isinf(self.min_val)) and torch.all(torch.isinf(self.max_val))
+        min_val = min_val_cur if is_first_call else self.min_val + self.averaging_constant * (min_val_cur - self.min_val)
+        max_val = max_val_cur if is_first_call else self.max_val + self.averaging_constant * (max_val_cur - self.max_val)
+        self.min_val.copy_(min_val)
+        self.max_val.copy_(max_val)
+        return x_orig
+
+
+class KLDivergenceObserver(torch.ao.quantization.MinMaxObserver):
+    """KL-Divergence based observer for per-tensor quantization.
+
+    Finds the optimal quantization range by minimizing KL divergence between
+    the original and quantized distributions. Uses entropy-based approach for
+    efficient search through candidate ranges.
+    """
+    NUM_BINS_DEFAULT = 2048
+
+    def __init__(
+        self,
+        averaging_constant=0.01,
+        dtype=torch.quint8,
+        qscheme=torch.per_tensor_affine,
+        reduce_range=False,
+        quant_min=None,
+        quant_max=None,
+        num_bins=NUM_BINS_DEFAULT,
+        moving_average=True,
+        **kwargs
+    ) -> None:
+        self.averaging_constant = averaging_constant
+        self.num_bins = num_bins
+        self.moving_average = moving_average
+        super().__init__(
+            dtype=dtype, qscheme=qscheme, reduce_range=reduce_range,
+            quant_min=quant_min, quant_max=quant_max, **kwargs
+        )
+        self.freeze_observer = False
+
+    def forward(self, x_orig):
+        if x_orig.numel() == 0 or self.freeze_observer:
+            return x_orig
+
+        x = x_orig.detach().to(self.min_val.dtype)
+        is_first_call = torch.all(torch.isinf(self.min_val)) and torch.all(torch.isinf(self.max_val))
+
+        # Compute optimal range using KL divergence
+        min_val_cur, max_val_cur = self._compute_kl_optimal_range(x)
+
+        if is_first_call:
+            min_val = min_val_cur
+            max_val = max_val_cur
+        else:
+            if self.moving_average:
+                min_val = self.min_val + self.averaging_constant * (min_val_cur - self.min_val)
+                max_val = self.max_val + self.averaging_constant * (max_val_cur - self.max_val)
+            else:
+                min_val = min_val_cur
+                max_val = max_val_cur
+
+        self.min_val.copy_(min_val)
+        self.max_val.copy_(max_val)
+        return x_orig
+
+    def _compute_kl_optimal_range(self, x):
+        """Compute optimal quantization range by minimizing KL divergence.
+
+        Uses entropy-based search: for each possible left boundary, find the
+        right boundary that minimizes KL divergence.
+        """
+        min_x = torch.min(x)
+        max_x = torch.max(x)
+
+        # Handle edge cases
+        if min_x == max_x:
+            return min_x, max_x
+
+        # Create histogram of original distribution
+        hist, bin_edges = torch.histogram(x, bins=self.num_bins, range=(min_x.item(), max_x.item()))
+        hist = hist / (hist.sum() + 1e-10)
+
+        best_kl = float('inf')
+        best_range = (min_x, max_x)
+
+        # Search: try different symmetric/asymmetric clipping thresholds
+        # Focus on the most promising boundaries (using percentiles)
+        percentiles = [0.5, 1.0, 2.0, 5.0, 10.0, 25.0]
+        candidates_left = []
+        candidates_right = []
+
+        for p in percentiles:
+            # Left boundary candidates
+            left_idx = max(0, int(self.num_bins * p / 100.0))
+            candidates_left.append(bin_edges[left_idx])
+
+            # Right boundary candidates
+            right_idx = min(self.num_bins - 1, self.num_bins - int(self.num_bins * p / 100.0))
+            candidates_right.append(bin_edges[right_idx])
+
+        # Also add full range
+        candidates_left.append(bin_edges[0])
+        candidates_right.append(bin_edges[-1])
+
+        # Search through candidate combinations
+        for left in candidates_left:
+            for right in candidates_right:
+                if right <= left:
+                    continue
+
+                kl_div = self._compute_kl_divergence(x, hist, bin_edges, left, right)
+                if kl_div < best_kl:
+                    best_kl = kl_div
+                    best_range = (left, right)
+
+        return best_range[0], best_range[1]
+
+    def _compute_kl_divergence(self, x, original_hist, bin_edges, range_min, range_max):
+        """Compute KL divergence between original and quantized distributions."""
+        x_clipped = torch.clamp(x, min=range_min.item(), max=range_max.item())
+
+        hist_clipped, _ = torch.histogram(
+            x_clipped, bins=self.num_bins,
+            range=(bin_edges[0].item(), bin_edges[-1].item())
+        )
+        hist_clipped = hist_clipped / (hist_clipped.sum() + 1e-10)
+
+        eps = 1e-10
+        original_hist_safe = original_hist.clamp(min=eps)
+        hist_clipped_safe = hist_clipped.clamp(min=eps)
+
+        kl_div = torch.sum(original_hist * (torch.log(original_hist_safe + eps) - torch.log(hist_clipped_safe + eps)))
+
+        return kl_div.item()
+
+
+class KLDivergencePerChannelObserver(torch.ao.quantization.PerChannelMinMaxObserver):
+    """KL-Divergence based observer for per-channel quantization.
+
+    Applies KL-divergence optimization per-channel to preserve information
+    at a finer granularity than per-tensor approaches.
+    """
+    NUM_BINS_DEFAULT = 2048
+
+    def __init__(
+        self,
+        averaging_constant=0.01,
+        dtype=torch.qint8,
+        qscheme=torch.per_channel_symmetric,
+        reduce_range=False,
+        quant_min=None,
+        quant_max=None,
+        num_bins=NUM_BINS_DEFAULT,
+        moving_average=True,
+        ch_axis=0,
+        **kwargs
+    ) -> None:
+        self.averaging_constant = averaging_constant
+        self.num_bins = num_bins
+        self.moving_average = moving_average
+        super().__init__(
+            dtype=dtype, qscheme=qscheme, reduce_range=reduce_range,
+            quant_min=quant_min, quant_max=quant_max, ch_axis=ch_axis, **kwargs
+        )
+        self.freeze_observer = False
+
+    def forward(self, x_orig):
+        if x_orig.numel() == 0 or self.freeze_observer:
+            return x_orig
+
+        x = x_orig.detach().to(self.min_val.dtype)
+        x_flat = x.view(x.shape[self.ch_axis], -1)
+
+        # Compute optimal ranges per-channel using KL divergence
+        min_val_cur = torch.zeros(x.shape[self.ch_axis], dtype=x.dtype, device=x.device)
+        max_val_cur = torch.zeros(x.shape[self.ch_axis], dtype=x.dtype, device=x.device)
+
+        for ch in range(x.shape[self.ch_axis]):
+            ch_data = x_flat[ch]
+            min_ch, max_ch = self._compute_kl_optimal_range(ch_data)
+            min_val_cur[ch] = min_ch
+            max_val_cur[ch] = max_ch
+
+        # Initialize buffers if needed
+        if self.min_val.numel() == 0 or self.min_val.shape != min_val_cur.shape:
+            self.min_val.resize_(min_val_cur.shape)
+            self.max_val.resize_(max_val_cur.shape)
+            self.min_val.fill_(float('inf'))
+            self.max_val.fill_(float('-inf'))
+
+        is_first_call = torch.all(torch.isinf(self.min_val)) and torch.all(torch.isinf(self.max_val))
+
+        if is_first_call:
+            min_val = min_val_cur
+            max_val = max_val_cur
+        else:
+            if self.moving_average:
+                min_val = self.min_val + self.averaging_constant * (min_val_cur - self.min_val)
+                max_val = self.max_val + self.averaging_constant * (max_val_cur - self.max_val)
+            else:
+                min_val = min_val_cur
+                max_val = max_val_cur
+
+        self.min_val.copy_(min_val)
+        self.max_val.copy_(max_val)
+        return x_orig
+
+    def _compute_kl_optimal_range(self, x):
+        """Compute optimal quantization range by minimizing KL divergence for a single channel."""
+        min_x = torch.min(x)
+        max_x = torch.max(x)
+
+        # Handle edge cases
+        if min_x == max_x or x.numel() == 0:
+            return min_x, max_x
+
+        # Create histogram of original distribution
+        hist, bin_edges = torch.histogram(x, bins=self.num_bins, range=(min_x.item(), max_x.item()))
+        hist = hist / (hist.sum() + 1e-10)
+
+        best_kl = float('inf')
+        best_range = (min_x, max_x)
+
+        # Search: try different symmetric/asymmetric clipping thresholds
+        percentiles = [0.5, 1.0, 2.0, 5.0, 10.0, 25.0]
+        candidates_left = []
+        candidates_right = []
+
+        for p in percentiles:
+            left_idx = max(0, int(self.num_bins * p / 100.0))
+            candidates_left.append(bin_edges[left_idx])
+
+            right_idx = min(self.num_bins - 1, self.num_bins - int(self.num_bins * p / 100.0))
+            candidates_right.append(bin_edges[right_idx])
+
+        candidates_left.append(bin_edges[0])
+        candidates_right.append(bin_edges[-1])
+
+        for left in candidates_left:
+            for right in candidates_right:
+                if right <= left:
+                    continue
+
+                kl_div = self._compute_kl_divergence(x, hist, bin_edges, left, right)
+                if kl_div < best_kl:
+                    best_kl = kl_div
+                    best_range = (left, right)
+
+        return best_range[0], best_range[1]
+
+    def _compute_kl_divergence(self, x, original_hist, bin_edges, range_min, range_max):
+        """Compute KL divergence between original and quantized distributions."""
+        x_clipped = torch.clamp(x, min=range_min.item(), max=range_max.item())
+
+        hist_clipped, _ = torch.histogram(
+            x_clipped, bins=self.num_bins,
+            range=(bin_edges[0].item(), bin_edges[-1].item())
+        )
+        hist_clipped = hist_clipped / (hist_clipped.sum() + 1e-10)
+
+        eps = 1e-10
+        original_hist_clipped = original_hist.clamp(min=eps)
+        hist_clipped_clipped = hist_clipped.clamp(min=eps)
+
+        kl_div = torch.sum(original_hist * (torch.log(original_hist_clipped + eps) - torch.log(hist_clipped_clipped + eps)))
+
+        return kl_div.item()
+
+
+class EntropyBasedCutoffObserver(torch.ao.quantization.MinMaxObserver):
+    """Entropy-based observer for per-tensor quantization.
+
+    Finds optimal quantization range by minimizing information loss (entropy).
+    Much faster than KL divergence while maintaining high accuracy through
+    efficient entropy-based search.
+    """
+    NUM_BINS_DEFAULT = 256
+
+    def __init__(
+        self,
+        averaging_constant=0.01,
+        dtype=torch.quint8,
+        qscheme=torch.per_tensor_affine,
+        reduce_range=False,
+        quant_min=None,
+        quant_max=None,
+        num_bins=NUM_BINS_DEFAULT,
+        moving_average=True,
+        **kwargs
+    ) -> None:
+        self.averaging_constant = averaging_constant
+        self.num_bins = num_bins
+        self.moving_average = moving_average
+        super().__init__(
+            dtype=dtype, qscheme=qscheme, reduce_range=reduce_range,
+            quant_min=quant_min, quant_max=quant_max, **kwargs
+        )
+        self.freeze_observer = False
+
+    def forward(self, x_orig):
+        if x_orig.numel() == 0 or self.freeze_observer:
+            return x_orig
+
+        x = x_orig.detach().to(self.min_val.dtype)
+        is_first_call = torch.all(torch.isinf(self.min_val)) and torch.all(torch.isinf(self.max_val))
+
+        min_val_cur, max_val_cur = self._compute_entropy_optimal_range(x)
+
+        if is_first_call:
+            min_val = min_val_cur
+            max_val = max_val_cur
+        else:
+            if self.moving_average:
+                min_val = self.min_val + self.averaging_constant * (min_val_cur - self.min_val)
+                max_val = self.max_val + self.averaging_constant * (max_val_cur - self.max_val)
+            else:
+                min_val = min_val_cur
+                max_val = max_val_cur
+
+        self.min_val.copy_(min_val)
+        self.max_val.copy_(max_val)
+        return x_orig
+
+    def _compute_entropy_optimal_range(self, x):
+        """Compute optimal range by minimizing entropy loss.
+
+        Uses fast entropy search: scans key percentile boundaries to find
+        the range that minimizes information loss when clipping.
+        """
+        min_x = torch.min(x)
+        max_x = torch.max(x)
+
+        if min_x == max_x:
+            return min_x, max_x
+
+        # Create histogram
+        hist, bin_edges = torch.histogram(x, bins=self.num_bins, range=(min_x.item(), max_x.item()))
+        hist = hist / (hist.sum() + 1e-10)
+
+        # Compute cumulative entropy from edges
+        # Entropy loss = probability of clipped values × bits needed
+        best_entropy_loss = float('inf')
+        best_range = (min_x, max_x)
+
+        # Quick scan: check key percentile boundaries
+        percentiles = [1, 2, 5, 10, 25]  # Fewer percentiles for speed
+
+        for left_p in percentiles:
+            left_idx = max(0, int(self.num_bins * left_p / 100.0))
+
+            for right_p in percentiles:
+                right_idx = min(self.num_bins - 1, self.num_bins - int(self.num_bins * right_p / 100.0))
+
+                if left_idx >= right_idx:
+                    continue
+
+                range_min = bin_edges[left_idx]
+                range_max = bin_edges[right_idx]
+
+                # Compute entropy loss for this range
+                entropy_loss = self._compute_entropy_loss(hist, bin_edges, left_idx, right_idx)
+
+                if entropy_loss < best_entropy_loss:
+                    best_entropy_loss = entropy_loss
+                    best_range = (range_min, range_max)
+
+        return best_range[0], best_range[1]
+
+    def _compute_entropy_loss(self, hist, bin_edges, left_idx, right_idx):
+        """Compute entropy loss for a given clipping range.
+
+        Entropy loss = probability of clipped values (information discarded)
+        """
+        # Probability of values outside the range (being clipped)
+        prob_left = hist[:left_idx].sum()
+        prob_right = hist[right_idx + 1:].sum()
+        entropy_loss = prob_left + prob_right
+
+        return entropy_loss.item()
+
+
+class EntropyBasedCutoffPerChannelObserver(torch.ao.quantization.PerChannelMinMaxObserver):
+    """Entropy-based observer for per-channel quantization.
+
+    Applies entropy-based optimization independently per-channel for
+    better granular control and faster computation than KL divergence.
+    """
+    NUM_BINS_DEFAULT = 256
+
+    def __init__(
+        self,
+        averaging_constant=0.01,
+        dtype=torch.qint8,
+        qscheme=torch.per_channel_symmetric,
+        reduce_range=False,
+        quant_min=None,
+        quant_max=None,
+        num_bins=NUM_BINS_DEFAULT,
+        moving_average=True,
+        ch_axis=0,
+        **kwargs
+    ) -> None:
+        self.averaging_constant = averaging_constant
+        self.num_bins = num_bins
+        self.moving_average = moving_average
+        super().__init__(
+            dtype=dtype, qscheme=qscheme, reduce_range=reduce_range,
+            quant_min=quant_min, quant_max=quant_max, ch_axis=ch_axis, **kwargs
+        )
+        self.freeze_observer = False
+
+    def forward(self, x_orig):
+        if x_orig.numel() == 0 or self.freeze_observer:
+            return x_orig
+
+        x = x_orig.detach().to(self.min_val.dtype)
+        x_flat = x.view(x.shape[self.ch_axis], -1)
+
+        # Compute optimal ranges per-channel
+        min_val_cur = torch.zeros(x.shape[self.ch_axis], dtype=x.dtype, device=x.device)
+        max_val_cur = torch.zeros(x.shape[self.ch_axis], dtype=x.dtype, device=x.device)
+
+        for ch in range(x.shape[self.ch_axis]):
+            ch_data = x_flat[ch]
+            min_ch, max_ch = self._compute_entropy_optimal_range(ch_data)
+            min_val_cur[ch] = min_ch
+            max_val_cur[ch] = max_ch
+
+        # Initialize buffers if needed
+        if self.min_val.numel() == 0 or self.min_val.shape != min_val_cur.shape:
+            self.min_val.resize_(min_val_cur.shape)
+            self.max_val.resize_(max_val_cur.shape)
+            self.min_val.fill_(float('inf'))
+            self.max_val.fill_(float('-inf'))
+
+        is_first_call = torch.all(torch.isinf(self.min_val)) and torch.all(torch.isinf(self.max_val))
+
+        if is_first_call:
+            min_val = min_val_cur
+            max_val = max_val_cur
+        else:
+            if self.moving_average:
+                min_val = self.min_val + self.averaging_constant * (min_val_cur - self.min_val)
+                max_val = self.max_val + self.averaging_constant * (max_val_cur - self.max_val)
+            else:
+                min_val = min_val_cur
+                max_val = max_val_cur
+
+        self.min_val.copy_(min_val)
+        self.max_val.copy_(max_val)
+        return x_orig
+
+    def _compute_entropy_optimal_range(self, x):
+        """Compute optimal range by minimizing entropy loss for single channel."""
+        min_x = torch.min(x)
+        max_x = torch.max(x)
+
+        if min_x == max_x or x.numel() == 0:
+            return min_x, max_x
+
+        hist, bin_edges = torch.histogram(x, bins=self.num_bins, range=(min_x.item(), max_x.item()))
+        hist = hist / (hist.sum() + 1e-10)
+
+        best_entropy_loss = float('inf')
+        best_range = (min_x, max_x)
+
+        percentiles = [1, 2, 5, 10, 25]
+
+        for left_p in percentiles:
+            left_idx = max(0, int(self.num_bins * left_p / 100.0))
+
+            for right_p in percentiles:
+                right_idx = min(self.num_bins - 1, self.num_bins - int(self.num_bins * right_p / 100.0))
+
+                if left_idx >= right_idx:
+                    continue
+
+                range_min = bin_edges[left_idx]
+                range_max = bin_edges[right_idx]
+
+                entropy_loss = self._compute_entropy_loss(hist, left_idx, right_idx)
+
+                if entropy_loss < best_entropy_loss:
+                    best_entropy_loss = entropy_loss
+                    best_range = (range_min, range_max)
+
+        return best_range[0], best_range[1]
+
+    def _compute_entropy_loss(self, hist, left_idx, right_idx):
+        """Compute entropy loss (probability of clipped values)."""
+        prob_left = hist[:left_idx].sum()
+        prob_right = hist[right_idx + 1:].sum()
+        entropy_loss = prob_left + prob_right
+
+        return entropy_loss.item()

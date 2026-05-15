@@ -236,6 +236,8 @@ class TINPUQuantizedReplacementUtils():
                 self.from_q_id(first_quant_node, user)
             elif is_both_node_equal(named_modules, user, torch.nn.Identity):
                 self.from_q(first_quant_node, user)
+            elif is_both_node_equal(named_modules, user, torch.ao.nn.quantized.modules.linear.Linear):
+                self.from_q_flatten(first_quant_node, user)
             else:
                 pass
         return None
@@ -316,6 +318,23 @@ class TINPUQuantizedReplacementUtils():
                 FloorClip(-2**self.activation_bw, 2**self.activation_bw - 1),                                                             # Floor, Clip
             )
         replace_call_function_or_method(self.module, start, end, qbn_module, self._get_module_num())
+        return None
+
+    def from_q_flatten(self, start: Node, end: Node):
+        # Quantization Node
+        q_node = start
+        scale = getattr(self.module, q_node.args[1].target)
+        zero_point = getattr(self.module, q_node.args[2].target)
+        # OSS Module
+        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(zero_point*0.0, 1/scale, int_bias=False, num_bits_scale=8)
+        quant_min = -(2**(self.activation_bw - 1))
+        quant_max = 2**(self.activation_bw - 1) - 1
+        if zero_point == 0:
+            quant_min = 0
+            quant_max = 2**self.activation_bw - 1
+        oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, quant_min, quant_max, ndim=2, dim=1)
+        # Replace quantize function with OSS Module
+        replace_call_function_or_method(self.module, start, start, oss_module, self._get_module_num())
         return None
     
     def from_qbn(self, start: Node, end: Node):

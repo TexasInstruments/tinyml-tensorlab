@@ -33,38 +33,45 @@ import torch
 
 
 def _ceil2_func(x):
-    y = torch.pow(2,torch.ceil(torch.log2(x)))
+    """Compute power-of-2 ceiling of input tensor."""
+    y = torch.pow(2, torch.ceil(torch.log2(x)))
     return y
 
+
 def _ceil2_tensor(x):
+    """Apply power-of-2 ceiling while preserving sign."""
     y = x
     if x.data.abs().sum() != 0:
         x2 = _ceil2_func(torch.abs(x))
         y = torch.sign(x) * x2
     return y
 
+
 def _round_tensor(x):
+    """Round tensor to nearest integer."""
     y = torch.round(x)
     return y
 
+
 def _propagate_quant_ste(x, y):
-    # straight-through estimation (STE) - this is the preferred mode for propagating outputs for quantization
-    # the backward gradients uses x (i.e. the input itself) and not y (the output)
-    # because the effect of y is completely detached during forward
-    # this works functionally as STE, but exports an onnx graph containing
-    # all the operators used to compute y as well
-    # out = x + (y - x).detach()
-    #
-    # this is another way of doing STE. in this case the operators used to generate y are skipped from onnx graph
+    """Straight-through estimation (STE) for gradient propagation.
+
+    Uses STE to skip quantization operators from ONNX graph while maintaining
+    gradients through the unquantized input x.
+    """
     out = x.clone()
     out.data = y.data
     return out
 
+
 def ceil2_tensor(x):
+    """Apply power-of-2 ceiling with straight-through estimation."""
     y = _ceil2_tensor(x)
     return _propagate_quant_ste(x, y)
 
+
 def round_tensor(x):
+    """Apply rounding with straight-through estimation."""
     y = _round_tensor(x)
     return _propagate_quant_ste(x, y)
 

@@ -92,7 +92,6 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         super().__init__()
         if not total_epochs:
             raise RuntimeError("total_epochs must be provided")
-        #
 
         # split if qconfig is a comma separated list of segments
         # (qconfig will change after some epochs if this has comma separated values)
@@ -104,13 +103,11 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             qconfig_mapping = qconfig_type
         else:
             raise RuntimeError(f"invalid value for qconfig_type: {qconfig_type}")
-        #
 
         if prepare_qdq:
             model = quantize_fx.prepare_qat_fx(model, qconfig_mapping, example_inputs)
         else:
             model = quantize_fx.prepare_fx(model, qconfig_mapping, example_inputs)
-        #
 
         self.module = model
 
@@ -137,30 +134,27 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                     if hasattr(m, 'bias_calibration_factor'):
                         self.bias_calibration_factor = max(self.bias_calibration_factor, m.bias_calibration_factor)
                         m.bias_calibration_factor = self.bias_calibration_factor
-                    #
-                #
-            #
-        #
         if not verbose:
-            quant_utils.print_once_dict = {'Freezing BN for subsequent epochs': None,
-                                           'Freezing ranges for subsequent epochs': None}
+            # Disable verbose messages by marking them as already printed
+            quant_utils.print_once.set_messages({
+                'Freezing BN for subsequent epochs': None,
+                'Freezing ranges for subsequent epochs': None
+            })
             
         # Temperature logspace array for uniform shift from soft quant to hard quant
         self.temperature_log_space = np.exp(np.linspace(np.log(1), np.log(500), self.total_epochs))
 
     def set_quant_backend(self, backend=None):
         if backend not in torch.backends.quantized.supported_engines:
-            raise RuntimeError("Quantized backend not supported: " + str(backend))
+            raise RuntimeError(f"Quantized backend not supported: {backend}")
         torch.backends.quantized.engine = backend
 
     def load_weights(self, pretrained, *args, strict=True, state_dict_name=None, **kwargs):
-        data_dict = torch.load(self, pretrained, *args, **kwargs)
+        data_dict = torch.load(pretrained, *args, **kwargs)
         if state_dict_name:
-            state_dict_names = state_dict_name if isinstance(state_dict_name, (list,tuple)) else [state_dict_name]
+            state_dict_names = state_dict_name if isinstance(state_dict_name, (list, tuple)) else [state_dict_name]
             for s_name in state_dict_names:
-                data_dict = data_dict[s_name] if ((data_dict is not None) and s_name in data_dict) else data_dict
-            #
-        #
+                data_dict = data_dict.get(s_name, data_dict)
         self.load_state_dict(data_dict, strict=strict)
 
     def train(self, mode: bool = True):
@@ -178,21 +172,19 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             self.freeze(freeze_bn=freeze_bn, freeze_observers=freeze_observers)
             if (not self.is_qat) and self.bias_calibration_factor:
                 self.bias_calibration_hooks = bias_calibration.insert_bias_calibration_hooks(self.module, self.total_epochs, self.num_epochs_tracked)
-            #
+
             for m in self.modules():
-                if isinstance(m, fake_quant_types.SoftTanhFakeQuantize) or isinstance(m, fake_quant_types.SoftSigmoidFakeQuantize):
+                if isinstance(m, (fake_quant_types.SoftTanhFakeQuantize, fake_quant_types.SoftSigmoidFakeQuantize)):
                     temperature = self.temperature_log_space[self.num_epochs_tracked]
                     m.update_temperature(temperature)
-                #
-            #
+
             self.num_epochs_tracked += 1
         else:
             if self.num_epochs_tracked == self.total_epochs:
                 self.freeze()
             if (not self.is_qat) and self.bias_calibration_factor:
                 self.bias_calibration_hooks = bias_calibration.remove_hooks(self.module, self.bias_calibration_hooks)
-            #
-        #
+
         return self
 
     def freeze(self, freeze_bn=True, freeze_observers=True):
@@ -201,13 +193,13 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             quant_utils.print_once('Freezing ranges for subsequent epochs')
         elif freeze_observers is False:
             self.apply(torch.ao.quantization.enable_observer)
-        #
+
         if freeze_bn is True:
             self.apply(torch.nn.intrinsic.qat.freeze_bn_stats)
             quant_utils.print_once('Freezing BN for subsequent epochs')
         elif freeze_bn is False:
             self.apply(torch.nn.intrinsic.qat.update_bn_stats)
-        #
+
         return self
 
     def unfreeze(self, freeze_bn=False, freeze_observers=False):
@@ -235,30 +227,29 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                preserve_qdq_model=True, simplify=True, skipped_optimizers=None, device='cpu', make_copy=True,
                is_converted=True, verbose=False, **export_kwargs):
         if self._is_observed_module():
-            model = self.convert(self, device=device, model_qconfig_format=model_qconfig_format, make_copy=make_copy)
+            self.convert(device=device, model_qconfig_format=model_qconfig_format)
+            model = self.module
         elif not is_converted:
-            model = self.convert(self, device=device, model_qconfig_format=model_qconfig_format, make_copy=make_copy)
+            self.convert(device=device, model_qconfig_format=model_qconfig_format)
+            model = self.module
         else:
             model = self.module
             if verbose:
                 warnings.warn("model has already been converted before calling export. make sure it is done correctly.")
 
         if model_qconfig_format == common.TinyMLModelQConfigFormat.INT_MODEL:
-            # # Convert QDQ format to Int8 format
             import onnxruntime as ort
             qdq_filename = os.path.splitext(filename)[0] + '_qdq.onnx'
             torch.onnx.export(model, example_inputs.to(device=device), qdq_filename, opset_version=opset_version, **export_kwargs)
             so = ort.SessionOptions()
             so.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_EXTENDED
             so.optimized_model_filepath = filename
-            # logger.info("Inplace conversion of QDQ model to INT8 model at: {}".format(onnx_file))
             ort.InferenceSession(qdq_filename, so)
             if not preserve_qdq_model:
                 os.remove(qdq_filename)
-            #
         else:
             torch.onnx.export(model, example_inputs.to(device=device), filename, opset_version=opset_version, **export_kwargs)
-        #
+
         if simplify:
             try:
                 import onnx
@@ -266,9 +257,8 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                 onnx_model = onnx.load(filename)
                 onnx_model, check = simplify(onnx_model, skipped_optimizers=skipped_optimizers)
                 onnx.save(onnx_model, filename)
-            except:
-                print("Something went wrong in simplification - maybe due to multi processes, skipping this step")
-        #
+            except Exception as e:
+                print(f"Something went wrong in simplification - maybe due to multi processes, skipping this step: {e}")
 
     def disable_backward_for_ptq(self):
         '''
@@ -276,5 +266,5 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         '''
         def backward_hook_with_error(m, g_in, g_out):
             raise RuntimeError("backward need not be called for PTQ - aborting")
-        #
+
         self.register_full_backward_hook(backward_hook_with_error)
