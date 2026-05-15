@@ -17,7 +17,7 @@ training:
   model_config: ''
   batch_size: 1024
   training_epochs: 250
-  num_gpus: 1
+  num_gpus: 0
   quantization: 1
   output_int: false
   learning_rate: 0.0001

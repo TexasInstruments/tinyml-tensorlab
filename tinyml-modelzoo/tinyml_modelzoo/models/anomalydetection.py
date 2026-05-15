@@ -34,40 +34,38 @@ import torch
 
 
 class AE_CNN_TS_GEN_BASE_4K(torch.nn.Module):
-    def __init__(self, config, input_features=512, variables=1, num_classes=4,
-                 features=8):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_4K, self).__init__()
-
+        
+        output_channels = 8
         # Encoder
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 4, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(2, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 2, kernel_size=(3, 1), stride=(1, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(1, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1),
-                            padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1),
+                            padding=(1, 0))
         )
 
     def forward(self, x):
@@ -80,47 +78,46 @@ class AE_CNN_TS_GEN_BASE_4K(torch.nn.Module):
 
 
 class AE_CNN_TS_GEN_BASE_16K(torch.nn.Module):
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=8):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_16K, self).__init__()
-
+        
+        output_channels = 8 
         # Encoder
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 4, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(2, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 8, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 8, kernel_size=(3, 1), stride=(2, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 8),
+            torch.nn.BatchNorm2d(output_channels * 8),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 8, out_channels=features * 4, kernel_size=(3, 1), stride=(1, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 8, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(1, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 2, kernel_size=(3, 1), stride=(1, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(1, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1),
                             padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
         )
 
     def forward(self, x):
@@ -134,34 +131,34 @@ class AE_CNN_TS_GEN_BASE_16K(torch.nn.Module):
 
 
 class AE_CNN_TS_GEN_BASE_1K(torch.nn.Module):
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=16):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_1K, self).__init__()
+        
+        output_channels = 16
         # Encoder
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features // 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features // 2),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels // 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels // 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features // 2, out_channels=features // 4, kernel_size=(3, 1), stride=(2, 1),
+            torch.nn.Conv2d(in_channels=output_channels // 2, out_channels=output_channels // 4, kernel_size=(3, 1), stride=(2, 1),
                       padding=(1, 0)),
-            torch.nn.BatchNorm2d(features // 4),
+            torch.nn.BatchNorm2d(output_channels // 4),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features // 4, out_channels=features // 2, kernel_size=(3, 1), stride=(1, 1),
+            torch.nn.Conv2d(in_channels=output_channels // 4, out_channels=output_channels // 2, kernel_size=(3, 1), stride=(1, 1),
                       padding=(1, 0)),
-            torch.nn.BatchNorm2d(features // 2),
+            torch.nn.BatchNorm2d(output_channels // 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features // 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels // 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
         )
 
 
@@ -360,27 +357,26 @@ class AE_CNN_TS_GEN_BASE_500_NPU(torch.nn.Module):
     Architecture: Conv(4ch) -> Conv(8ch) encoder with symmetric decoder.
     NPU Compliance: m4 channels, kH<=7 for encoder convolutions.
     """
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=4):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_500_NPU, self).__init__()
 
+        output_channels = 4
         # Encoder - NPU optimized with m4 channels
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
         )
 
     def forward(self, x):
@@ -397,33 +393,32 @@ class AE_CNN_TS_GEN_BASE_2K_NPU(torch.nn.Module):
     Architecture: Conv(8ch) -> Conv(16ch) -> Conv(16ch) encoder with symmetric decoder.
     NPU Compliance: m4 channels, kH<=7 for encoder convolutions.
     """
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=8):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_2K_NPU, self).__init__()
 
+        output_channels = 8
         # Encoder - NPU optimized with m4 channels
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
         )
 
     def forward(self, x):
@@ -441,42 +436,41 @@ class AE_CNN_TS_GEN_BASE_6K_NPU(torch.nn.Module):
     Architecture: Conv -> (DWCONV+PWCONV)x2 encoder with symmetric decoder.
     NPU Compliance: m4 channels, DWCONV kW<=7 for encoder.
     """
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=8):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_6K_NPU, self).__init__()
 
+        output_channels = 8
         # Encoder - NPU optimized with depthwise separable convolutions
         self.encoder = torch.nn.Sequential(
             # Initial conv to get to m4 channels
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
             # Depthwise separable block 1
-            torch.nn.Conv2d(in_channels=features, out_channels=features, kernel_size=(5, 1), stride=(2, 1), padding=(2, 0), groups=features),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels, kernel_size=(5, 1), stride=(2, 1), padding=(2, 0), groups=output_channels),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
             # Depthwise separable block 2
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 2, kernel_size=(5, 1), stride=(2, 1), padding=(2, 0), groups=features * 2),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 2, kernel_size=(5, 1), stride=(2, 1), padding=(2, 0), groups=output_channels * 2),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 4, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 4, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0)),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
         )
 
     def forward(self, x):
@@ -494,39 +488,38 @@ class AE_CNN_TS_GEN_BASE_8K_NPU(torch.nn.Module):
     Architecture: Conv(8ch) -> Conv(16ch) -> Conv(32ch) -> Conv(32ch) encoder with symmetric decoder.
     NPU Compliance: m4 channels, kH<=7 for encoder convolutions.
     """
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=8):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_8K_NPU, self).__init__()
 
+        output_channels = 8
         # Encoder - NPU optimized with m4 channels
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 4, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
         )
 
     def forward(self, x):
@@ -545,33 +538,32 @@ class AE_CNN_TS_GEN_BASE_10K_NPU(torch.nn.Module):
     Architecture: Conv(16ch) -> Conv(32ch) -> Conv(32ch) encoder with symmetric decoder.
     NPU Compliance: m4 channels, kH<=7 for encoder convolutions.
     """
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=16):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_10K_NPU, self).__init__()
 
+        output_channels = 16
         # Encoder - NPU optimized with m4 channels
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
         )
 
     def forward(self, x):
@@ -589,39 +581,38 @@ class AE_CNN_TS_GEN_BASE_20K_NPU(torch.nn.Module):
     Architecture: Conv(16ch) -> Conv(32ch) -> Conv(64ch) -> Conv(64ch) encoder with symmetric decoder.
     NPU Compliance: m4 channels, kH<=7 for encoder convolutions.
     """
-    def __init__(self, config, input_features=512, variables=1, num_classes=4, features=16):
+    def __init__(self, config):
         super(AE_CNN_TS_GEN_BASE_20K_NPU, self).__init__()
 
+        output_channels = 16
         # Encoder - NPU optimized with m4 channels
         self.encoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=variables, out_channels=features, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=config['variables'], out_channels=output_channels, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=features * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(2, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU()
         )
 
         # Decoder
         self.decoder = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 4, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 4),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 4, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 4),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 4, out_channels=features * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features * 2),
+            torch.nn.Conv2d(in_channels=output_channels * 4, out_channels=output_channels * 2, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels * 2),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features * 2, out_channels=features, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(features),
+            torch.nn.Conv2d(in_channels=output_channels * 2, out_channels=output_channels, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
+            torch.nn.BatchNorm2d(output_channels),
             torch.nn.ReLU(),
-            torch.nn.Conv2d(in_channels=features, out_channels=variables, kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
-            torch.nn.BatchNorm2d(variables),
-            torch.nn.ReLU()
+            torch.nn.Conv2d(in_channels=output_channels, out_channels=config['variables'], kernel_size=(3, 1), stride=(1, 1), padding=(1, 0)),
         )
 
     def forward(self, x):
