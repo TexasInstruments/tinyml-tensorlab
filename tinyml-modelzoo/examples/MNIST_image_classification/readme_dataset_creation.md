@@ -4,7 +4,7 @@
 ## Overview
 This repository provides:
 1. **The MNIST dataset** in `.zip` format, exported into a folder structure compatible with the Modelmaker flow.  
-   - Download here: [mnist_classes.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mnist_classes.zip)  
+   - Download here: [mnist_classes.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip)  
 2. **A Python script** (`dataset_mnist_creation.py`) used to convert the original [torchvision.datasets.MNIST](https://pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html) into the required format.
 
 Since the MNIST dataset is **not proprietary** but publicly available through `torchvision.datasets`, this script is included to allow anyone to regenerate the dataset if needed.

@@ -128,7 +128,7 @@ The dataset is pre-packaged and available for download:
 
 **URL:** 
 ```
-https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_anomaly_detection_dataset.zip
+https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip
 ```
 
 You don't need to manually download it, ModelZoo will automatically download and extract the dataset when you run the example.
@@ -205,7 +205,7 @@ Defines dataset details and splitting strategy:
 dataset:
     enable: True 
     dataset_name: 'motor_fault_example_dsk_ad'
-    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_anomaly_detection_dataset.zip'
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip'
 ```
 
 **Key parameters:**

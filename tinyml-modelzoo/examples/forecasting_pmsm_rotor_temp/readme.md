@@ -66,7 +66,7 @@ For forecasting tasks, **ModelMaker** expects the dataset to be packaged in a sp
 
 Unlike classification tasks, forecasting **always requires annotation files**. These tell the tool which files belong to training, validation, and testing sets. The data directory is automatically named 'files' for forecasting and regression tasks.
 
-For this example, we have already prepared the dataset in the required format. You can find the zipped dataset [here.](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip)
+For this example, we have already prepared the dataset in the required format. You can find the zipped dataset [here.](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip)
 
 ## Usage in Tiny ML ModelZoo
 
@@ -104,7 +104,7 @@ Here is how we configured `dataset` section for our pmsm dataset example case:
 ```yaml
 dataset:
     dataset_name: forecasting_pmsm_rotor_temp
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip
 ```
 
 ### `data_processing_feature_extraction` section

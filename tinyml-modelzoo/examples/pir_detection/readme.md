@@ -38,7 +38,7 @@ Check the `config_<device>.yaml` files for device-specific configurations.
 
 ## Dataset Information
 
-  The example uses the `pir_detection_classification` [Link]( https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip) dataset which contains labeled PIR sensor recordings categorized into three motion classes:
+  The example uses the `pir_detection_classification` [Link]( https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip) dataset which contains labeled PIR sensor recordings categorized into three motion classes:
 
   - **Human Motion**: Movement patterns characteristic of human activity
   - **Background Motion**: Environmental disturbances and noise

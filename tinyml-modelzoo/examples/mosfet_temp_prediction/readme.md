@@ -59,7 +59,7 @@ The datset for this project is `mosfet_temp_prediction_dataset.zip`. The path of
 
 ```yaml
 dataset:
-    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mosfet_temp_prediction.zip'
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mosfet_temp_prediction.zip'
 ```
 
 This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.

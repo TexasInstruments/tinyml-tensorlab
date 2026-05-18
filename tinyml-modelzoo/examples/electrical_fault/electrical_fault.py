@@ -7,7 +7,7 @@ import pandas as pd
 DATASET_NAME = "electrical_fault"
 
 # Dataset definition
-DATASET_URL = "https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/electrical_fault_raw.zip"
+DATASET_URL = "https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_raw.zip"
 DATASET_FILE_NAME = "detect_dataset.csv"
 independent_variables = ["Ia", "Ib", "Ic", "Va", "Vb", "Vc"]
 dependent_variables = ["Output (S)"]

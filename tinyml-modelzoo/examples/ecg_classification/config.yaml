@@ -3,7 +3,7 @@ common:
   target_device: AM13E2
 dataset:
   dataset_name: ecg
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_2class.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip
 data_processing_feature_extraction:
   data_proc_transforms:
   - Downsample
