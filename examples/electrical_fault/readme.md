@@ -13,7 +13,7 @@ The fault can be Line-to-line, Line-to-ground, Line-to-line-to-ground and more. 
 </p>
 
 There are 6 measurable parameters/variables - **(Va, Vb, Vc, Ia, Ib, Ic)** i.e the voltage and current of three phases. 
-There are two dataset files present in the compressed zip: [electrical_fault_raw.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/electrical_fault_raw.zip)
+There are two dataset files present in the compressed zip: [electrical_fault_raw.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_raw.zip)
 
 - `detect_dataset.xlsx` : which finds if there is a fault or not. Target = [Output (S)]
     - There is one target only i.e. Output (S) which has two unique values (0, 1) denoting fault and no fault.

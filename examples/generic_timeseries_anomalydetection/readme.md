@@ -54,7 +54,7 @@ The dataset consists of synthetically generated time series signals with control
 
 Each file contains 5000 samples representing 50 seconds of data at 100 Hz sampling rate.
 
-The dataset can be downloaded from here: [`generic_timeseries_anomalydetection.zip`](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_anomalydetection.zip)
+The dataset can be downloaded from here: [`generic_timeseries_anomalydetection.zip`](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip)
 
 ## Understanding Temporal Dependencies
 
@@ -151,7 +151,7 @@ ModelZoo automatically handles the splitting when you run the example. The tool 
 3. Add all files from `Anomaly/` folder to the test set
 4. Create annotation files automatically
 
-For this example, we have already prepared the dataset in the required format. You can find the zipped dataset at: [`generic_timeseries_anomalydetection.zip`](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_anomalydetection.zip)
+For this example, we have already prepared the dataset in the required format. You can find the zipped dataset at: [`generic_timeseries_anomalydetection.zip`](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip)
 
 ## Usage in TinyML ModelZoo
 

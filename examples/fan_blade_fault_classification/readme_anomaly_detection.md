@@ -126,7 +126,7 @@ The dataset is pre-packaged and available for download:
 
 **URL:** 
 ```
-https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_ad_dataset.zip
+https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip
 ```
 
 You don't need to manually download it, ModelZoo will automatically download and extract the dataset when you run the example.
@@ -205,7 +205,7 @@ Defines dataset details and splitting strategy:
 dataset:
     enable: True
     dataset_name: fan_blade_fault
-    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_ad_dataset.zip'
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip'
     split_type: 'amongst_files'
     split_factor: [0.6, 0.1, 0.3]
 ```

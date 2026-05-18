@@ -6,7 +6,7 @@ common:
 dataset:
     enable: True 
     dataset_name: fan_blade_ondevice
-    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_ad_dataset.zip'
+    input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip'
     split_type: 'amongst_files'
     split_factor: [0.6, 0.1, 0.3]
 

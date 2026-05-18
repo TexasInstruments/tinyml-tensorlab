@@ -10,7 +10,7 @@ Machine learning based forecasting enables predictive control, where future indo
 
 ## About Dataset
 
-For this example, we use a synthetic HVAC dataset designed to emulate realistic indoor thermal behavior. You can find the dataset [here.](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hvac_indoor_temp_forecast_dataset.zip) 
+For this example, we use a synthetic HVAC dataset designed to emulate realistic indoor thermal behavior. You can find the dataset [here.](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip) 
 
 The dataset captures the relationship between compressor operation, outdoor temperature, and resulting indoor temperature over time.
 The dataset consists of time-series samples collected at uniform timesteps and includes the following signals:
@@ -59,7 +59,7 @@ dataset:
     # enable/disable dataset loading
     enable: True
     dataset_name: hvac_indoor_temp_forecast
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hvac_indoor_temp_forecast_dataset.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip
 ```
 
 Important parameters configured here are: task_type set to `generic_timeseries_forecasting`, indicating the type of task being performed.`target_device` set to F28P55, ensuring that the compiled output is optimized for this device. Dataset loading is enabled, with the correct path to the dataset zip folder provided (`input_data_path`). The `data_dir` parameter is automatically detected based on the task type (forecasting tasks use 'files').
