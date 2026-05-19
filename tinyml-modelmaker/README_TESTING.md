@@ -2,7 +2,7 @@
 
 ## Overview
 
-This testing infrastructure automates testing of all 32 ModelMaker config files in the `examples/` directory. It runs each config, tracks execution time, and **only saves detailed logs for failed runs** to conserve disk space.
+This testing infrastructure automates testing of all 36 ModelMaker config files in the `examples/` directory. It runs each config, tracks execution time, and **only saves detailed logs for failed runs** to conserve disk space.
 
 ## Quick Start
 
@@ -103,7 +103,7 @@ test_logs/
 
 ## Config Categories Tested
 
-The script automatically tests all 32 configs across these categories:
+The script automatically tests all 36 configs across these categories:
 
 | Category | Count | Examples |
 |----------|-------|----------|
@@ -113,7 +113,7 @@ The script automatically tests all 32 configs across these categories:
 | Arc Fault | 5 | AC/DC variants with dsi/dsk |
 | ECG | 2 | config.yaml, config_anomaly_detection.yaml |
 | NILM | 2 | nilm_appliance, PLAID_nilm |
-| PIR Detection | 2 | config.yaml, config_CC1352.yaml |
+| PIR Detection | 6 | config_CC2755.yaml, config_CC1312.yaml, config_CC1352.yaml, config_CC1354.yaml, config_CC35X1.yaml, config_MSPM0.yaml |
 | Forecasting | 2 | HVAC, PMSM rotor |
 | Regression | 2 | washing_machine, torque |
 | Vision | 1 | MNIST image classification |
@@ -138,8 +138,11 @@ The script automatically tests all 32 configs across these categories:
 
 # Test by device
 ./run_tests.sh --filter MSPM0           # All MSPM0 configs
-./run_tests.sh --filter CC1352          # All CC1352 configs
 ./run_tests.sh --filter CC2755          # All CC2755 configs
+./run_tests.sh --filter CC1312          # All CC1312 configs
+./run_tests.sh --filter CC1352          # All CC1352 configs
+./run_tests.sh --filter CC1354          # All CC1354 configs
+./run_tests.sh --filter CC35X1          # All CC35X1 configs
 
 # Test by task type
 ./run_tests.sh --filter forecast        # Forecasting configs
@@ -152,7 +155,7 @@ The script automatically tests all 32 configs across these categories:
 | Scenario | Typical Duration |
 |----------|------------------|
 | Single config | 1-3 minutes |
-| All 32 configs (sequential) | 30-100 minutes |
+| All 36 configs (sequential) | 30-110 minutes |
 | Quick smoke test (--filter hello_world) | 5-10 minutes |
 
 ## Common Use Cases
@@ -278,7 +281,7 @@ exit $exit_code
 ## Advantages Over Manual Testing
 
 1. **Automated**: No manual intervention needed
-2. **Comprehensive**: Tests all 32 configs systematically
+2. **Comprehensive**: Tests all 36 configs systematically
 3. **Timed**: Tracks performance per config
 4. **Selective Logging**: Only saves logs for failures (saves disk space)
 5. **Resumable**: Can filter and re-test specific configs
@@ -329,7 +332,7 @@ exit $exit_code
 ## Summary
 
 This testing infrastructure provides:
-- ✓ Automated testing of all 32 ModelMaker configs
+- ✓ Automated testing of all 36 ModelMaker configs
 - ✓ Timing information for each run
 - ✓ Selective logging (only failures saved)
 - ✓ Easy filtering and configuration

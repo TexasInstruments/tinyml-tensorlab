@@ -6,7 +6,7 @@
 **Location**: `./tinyml-modelmaker/test_all_configs.py`
 
 **Features**:
-- Tests all 32 configs in the examples directory
+- Tests all 36 configs in the examples directory
 - Tracks execution time for each config
 - Logs only failed runs (saves disk space)
 - Generates summary report for all runs
@@ -52,7 +52,7 @@
 ### Basic Testing
 
 ```bash
-# Test all 32 configs (default 20-min timeout, continues on errors)
+# Test all 36 configs (default 20-min timeout, continues on errors)
 ./run_tests.sh
 
 # Test only specific configs
@@ -135,7 +135,7 @@ For each config, the script:
 | Arc Fault | 5 | AC MSPM0, DC dsi/dsk variants |
 | ECG | 2 | Classification, anomaly detection |
 | NILM | 2 | Appliance usage, PLAID |
-| PIR Detection | 2 | Default, CC1352 |
+| PIR Detection | 6 | CC2755, CC1312, CC1352, CC1354, CC35X1, MSPM0 |
 | Forecasting | 2 | HVAC, PMSM rotor |
 | Regression | 2 | Washing machine, torque |
 | Vision | 1 | MNIST image classification |
@@ -149,7 +149,7 @@ For each config, the script:
 ## Performance Characteristics
 
 ### Timing Estimates
-- **All 32 configs**: ~30-100 minutes (varies by hardware)
+- **All 36 configs**: ~30-110 minutes (varies by hardware)
 - **Single config**: ~1-3 minutes
 - **Hello world variants** (4 configs): ~5-10 minutes
 
@@ -169,7 +169,11 @@ For each config, the script:
 
 # Test by device
 ./run_tests.sh --filter MSPM0           # MSPM0 configs
+./run_tests.sh --filter CC2755          # CC2755 configs
+./run_tests.sh --filter CC1312          # CC1312 configs
 ./run_tests.sh --filter CC1352          # CC1352 configs
+./run_tests.sh --filter CC1354          # CC1354 configs
+./run_tests.sh --filter CC35X1          # CC35X1 configs
 
 # Test by task
 ./run_tests.sh --filter forecast        # Forecasting (2 configs)
@@ -222,7 +226,7 @@ exit $exit_code
 ## Advantages Over Manual Testing
 
 1. **Automated**: No manual intervention needed
-2. **Comprehensive**: Tests all 32 configs systematically
+2. **Comprehensive**: Tests all 36 configs systematically
 3. **Timed**: Tracks performance per config
 4. **Selective Logging**: Only saves logs for failures (saves space)
 5. **Resumable**: Can filter and re-test specific configs
@@ -287,7 +291,7 @@ python tinyml_modelmaker/run_tinyml_modelmaker.py examples/motor_bearing_fault/c
 | Script called | `run.py` | `run_tinyml_modelmaker.py` |
 | Arguments | `--run_type <type> --run_args <config>` | `<config_path>` |
 | Environment | Custom env vars | `PYTHONPATH=.:$PYTHONPATH` |
-| Config count | 39 configs | 32 configs |
+| Config count | 39 configs | 36 configs |
 | Directory structure | Flat | Hierarchical (subdirectories) |
 
 ## Next Steps
