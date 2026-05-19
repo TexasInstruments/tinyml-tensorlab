@@ -211,7 +211,7 @@ def main(args):
                 logger.error(f"Compilation will fail as path is invalid: {arg[2:]}")
                 exit_flag = 1
     if exit_flag:
-        logger.info("By default, compiler and SDK are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000WARE_ROOT/C2000_CG_ROOT (C2000), CG_TOOL_ROOT (F29x), ARM_LLVM_CGT_PATH (CCxx/AM26x/MSPMx)")
+        logger.info("By default, compilers are searched in ~/bin/, unless set explicitly by user using TOOLS_PATH or C2000_CG_ROOT (C2000), CG_TOOL_ROOT (F29x), ARM_LLVM_CGT_PATH (CCxx/AM26x/MSPMx)")
         logger.error("Exiting due to previous errors. Compiled model directory will be empty.")
         return exit_flag
 
