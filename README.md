@@ -105,12 +105,13 @@ tinyml-modelzoo/
 
 ### Connectivity Devices (Wireless)
 
-| Device | NPU | Description | Notes |
+| Device | Hardware Accelerator | Description | Notes |
 |--------|-----|-------------|-------|
-| CC2755 | No | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
-| CC1352 | No | Arm Cortex-M4 wireless MCU | Sub-1GHz and 2.4GHz |
-| CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz and 2.4GHz |
-| CC35X1 | No | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
+| CC2755 | CDE | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
+| CC1312 | No | Arm Cortex-M4F wireless MCU | Sub-1GHz |
+| CC1352 | No | Arm Cortex-M4F wireless MCU | Sub-1GHz |
+| CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz |
+| CC35X1 | CDE | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
 
 ---
 
@@ -263,7 +264,7 @@ These applications are designed for specific use cases with optimized models and
 | **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
 | **grid_fault_detection** | classification | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect electrical grid faults from sensor data |
 | **mosfet_temp_prediction** | regression | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Predict MOSFET temperature from electrical parameters |
-| **pir_detection** | pir_detection | CC2755, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
+| **pir_detection** | pir_detection | CC2755, CC1312, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
 | **MNIST_image_classification** | image_classification | MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | Handwritten digit recognition (MNIST dataset) |
 
 ### Summary by Task Type:
