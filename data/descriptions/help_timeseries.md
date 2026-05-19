@@ -20,43 +20,43 @@ These are the devices that are supported currently. As additional devices are su
 * Product information: https://www.ti.com/product/TMS320F28P550SJ
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F28P65
 * Product information: https://www.ti.com/product/TMS320F28P650DK
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F2837
 * Product information: https://www.ti.com/product/TMS320F28377D
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F28004
 * Product information: https://www.ti.com/product/TMS320F280049C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F28003
 * Product information: https://www.ti.com/product/TMS320F280039C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F280013
 * Product information: https://www.ti.com/product/TMS320F2800137
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F280015
 * Product information: https://www.ti.com/product/TMS320F2800157
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### MSPM0G3507
 * Product information: https://www.ti.com/product/MSPM0G3507
@@ -89,6 +89,13 @@ These are the devices that are supported currently. As additional devices are su
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
 * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
 * SDK release: 01_00_00_00
+
+### CC1312
+* Product information: https://www.ti.com/product/CC1312PSIP
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
+* SDK release: 01_10_00_00
 
 ### CC1354
 * Product information: https://www.ti.com/product/CC1354P10

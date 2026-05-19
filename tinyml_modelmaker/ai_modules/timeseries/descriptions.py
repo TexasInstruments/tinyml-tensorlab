@@ -408,6 +408,9 @@ These are the devices that are supported currently. As additional devices are su
 ### {constants.TARGET_DEVICE_CC1352}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1352}
 
+### {constants.TARGET_DEVICE_CC1312}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1312}
+
 ### {constants.TARGET_DEVICE_CC1354}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354}
 
@@ -636,8 +639,8 @@ def get_live_capture_descriptions(params):
                 {
                     'caption': 'device',
                     'id': 'device',
-                    'infoText': 'Current support is CC2755R10, CC1352R1, CC1352P7, CC1354P10 and CC35X1. You can try other device using correct application example and baud rate.',
-                    'options': ['CC2755', 'CC1352', 'CC1354', 'CC35X1'],
+                    'infoText': 'Current support is CC2755R10, CC2745R10-Q1, CC1312PSIP, CC1352R1, CC1352P7, CC1354P10 and CC35X1. You can try other device using correct application example and baud rate.',
+                    'options': ['CC2755', 'CC1312', 'CC1352', 'CC1354', 'CC35X1'],
                     'widgetType': 'select'},
                 {
                     'caption': 'sensor',
@@ -847,6 +850,15 @@ def get_live_capture_example_descriptions(params):
                 'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1312': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang',
+                'deviceName': 'CC1312PSIP',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1352': {
@@ -1082,6 +1094,15 @@ def get_live_preview_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'CC1312': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang',
+                'deviceName': 'CC1312PSIP',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
+                'transport': {'baudRate': 115200}
+            },
             'CC1352': {
                 'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1',
@@ -1218,6 +1239,7 @@ def get_rex_dependencies(params):
             "rexPackageVersion": "8.31.00.11",
             "envVarName": "COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR",
             "devices": [
+                "CC1312",
                 "CC1352",
                 "CC1354"
             ],
@@ -1288,6 +1310,23 @@ def get_rex_dependencies(params):
                 "MSPM0G3507",
                 "MSPM0G3519",
                 "MSPM0G5187"
+            ],
+            "task": "compile"
+        },
+        {
+            "readableName": "C2000Ware",
+            "installDirName": "C2000Ware_26_00_00_00",
+            "rexPackageId": "C2000WARE",
+            "rexPackageVersion": "26.00.00.00",
+            "envVarName": "C2000WARE_ROOT",
+            "devices": [
+                "F280013",
+                "F280015",
+                "F28003",
+                "F28004",
+                "F2837",
+                "F28P65",
+                "F28P55"
             ],
             "task": "compile"
         },
@@ -1386,6 +1425,7 @@ def get_rex_dependencies(params):
             "rexPackageVersion": "4.00.03.00",
             "envVarName": "ARM_LLVM_CGT_PATH",
             "devices": [
+                "CC1312",
                 "CC1352",
                 "CC1354",
                 "CC2755",

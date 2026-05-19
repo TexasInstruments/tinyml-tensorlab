@@ -529,7 +529,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 DATASET_EXAMPLES = dict(
     default=dict(),
      mnist_image_classification=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mnist_classes.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Mnist_Default'), variables=1),
     ),
 )
@@ -550,11 +550,6 @@ C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 CL2000_CROSS_COMPILER = os.path.join(C2000_CG_ROOT, 'bin', 'cl2000')
 C2000_CGT_INCLUDE = os.path.join(C2000_CG_ROOT, 'include')
-# C2000 F28 SDK
-C2000WARE_VERSION = 'C2000Ware_6_00_00_00'
-C2000WARE_ROOT = os.path.abspath(os.getenv('C2000WARE_ROOT', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
-C2000WARE_INCLUDE = os.path.join(C2000WARE_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
-C2000_DRIVERLIB_INCLUDE = os.path.join(C2000WARE_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 # C2000 F29 Compiler
 C29_CGT_VERSION = 'ti-cgt-c29_2.0.0.STS'
 CG_TOOL_ROOT = os.path.abspath(os.getenv('CG_TOOL_ROOT', os.path.join(TOOLS_PATH, C29_CGT_VERSION)))
@@ -581,7 +576,7 @@ MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
 MSPM33C_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 
-CROSS_COMPILER_OPTIONS_C28 = (f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I{C2000_DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=.")
+CROSS_COMPILER_OPTIONS_C28 = (f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I.")
 CROSS_COMPILER_OPTIONS_F29H85 = (f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I.")
 CROSS_COMPILER_OPTIONS_MSPM0 = (f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
 CROSS_COMPILER_OPTIONS_MSPM33C = (f"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type")
@@ -706,7 +701,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     },
     'dataset': {
         'dataset_name': 'mnist_image_classification',
-        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mnist_classes.zip',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip',
     },
     'info': {
         'dataset_url': 'http://yann.lecun.com/exdb/mnist/',
