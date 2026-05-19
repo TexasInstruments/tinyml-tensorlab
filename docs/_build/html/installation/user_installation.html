@@ -1264,6 +1264,15 @@ specific to your target device <strong>before running examples</strong>.</p>
 <p>See <a class="reference internal" href="environment_variables.html"><span class="doc">Environment Variables</span></a> for complete device-specific setup instructions.</p>
 </div>
 <p>After setting environment variables for your target device, run the hello world example:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Windows Users: Enable Long Path Support Before Cloning</strong></p>
+<p>If you are on Windows, run this command before cloning to enable support for long file paths:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="p">-</span><span class="n">-global</span> <span class="n">core</span><span class="p">.</span><span class="n">longpaths</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>This allows Git to handle the deeply nested directory structure in the repository. You only need to run this once per system.</p>
+</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone just the examples</span>
 git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/TexasInstruments/tinyml-tensorlab.git
 <span class="nb">cd</span><span class="w"> </span>tinyml-tensorlab/tinyml-modelzoo
@@ -1355,7 +1364,7 @@ pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on May 05, 2026.
+      <span class="lastupdated">Last updated on May 19, 2026.
       </span></p>
   </div>
 

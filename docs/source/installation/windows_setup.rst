@@ -41,7 +41,21 @@ During installation:
 * Select "Git from the command line and also from 3rd-party software"
 * Select "Checkout as-is, commit Unix-style line endings"
 
-**Step 3: Clone and Install**
+**Step 3: Configure Git for Long Paths (Windows Only)**
+
+.. warning::
+
+   **Windows users must enable long path support before cloning.**
+
+   Windows has a 260-character path limit by default, which can cause issues with the deeply nested directory structure in tinyml-* repositories. Run this command before cloning:
+
+   .. code-block:: powershell
+
+      git config --global core.longpaths true
+
+   This allows Git to handle paths longer than 260 characters globally. You only need to run this once per system.
+
+**Step 4: Clone and Install**
 
 .. code-block:: powershell
 
@@ -62,7 +76,7 @@ During installation:
    pip install -e tinyml-modeloptimization\torchmodelopt
    pip install -e tinyml-modelzoo
 
-**Step 4: Configure Environment Variables**
+**Step 5: Configure Environment Variables**
 
 .. warning::
 
@@ -82,7 +96,7 @@ During installation:
 
    See :doc:`environment_variables` for complete device-specific setup instructions.
 
-**Step 5: Run Example**
+**Step 6: Run Example**
 
 .. code-block:: powershell
 

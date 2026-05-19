@@ -1256,7 +1256,17 @@ platform. Some features may have better support on Linux.</p>
 <li><p>Select “Git from the command line and also from 3rd-party software”</p></li>
 <li><p>Select “Checkout as-is, commit Unix-style line endings”</p></li>
 </ul>
-<p><strong>Step 3: Clone and Install</strong></p>
+<p><strong>Step 3: Configure Git for Long Paths (Windows Only)</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Windows users must enable long path support before cloning.</strong></p>
+<p>Windows has a 260-character path limit by default, which can cause issues with the deeply nested directory structure in tinyml-* repositories. Run this command before cloning:</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">config</span> <span class="p">-</span><span class="n">-global</span> <span class="n">core</span><span class="p">.</span><span class="n">longpaths</span> <span class="n">true</span>
+</pre></div>
+</div>
+<p>This allows Git to handle paths longer than 260 characters globally. You only need to run this once per system.</p>
+</div>
+<p><strong>Step 4: Clone and Install</strong></p>
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="c"># Clone repository</span>
 <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">TexasInstruments</span><span class="p">/</span><span class="n">tinyml-tensorlab</span><span class="p">.</span><span class="n">git</span>
 <span class="nb">cd </span><span class="n">tinyml-tensorlab</span>
@@ -1275,7 +1285,7 @@ platform. Some features may have better support on Linux.</p>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">-e</span> <span class="n">tinyml-modelzoo</span>
 </pre></div>
 </div>
-<p><strong>Step 4: Configure Environment Variables</strong></p>
+<p><strong>Step 5: Configure Environment Variables</strong></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>IMPORTANT: Environment Variables Required for Model Compilation</strong></p>
@@ -1292,7 +1302,7 @@ specific to your target device <strong>before running examples</strong>.</p>
 </ul>
 <p>See <a class="reference internal" href="environment_variables.html"><span class="doc">Environment Variables</span></a> for complete device-specific setup instructions.</p>
 </div>
-<p><strong>Step 5: Run Example</strong></p>
+<p><strong>Step 6: Run Example</strong></p>
 <div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd </span><span class="n">tinyml-modelzoo</span>
 <span class="n">run_tinyml_modelzoo</span><span class="p">.</span><span class="n">bat</span> <span class="n">examples</span><span class="p">\</span><span class="n">generic_timeseries_classification</span><span class="p">\</span><span class="n">config</span><span class="p">.</span><span class="n">yaml</span>
 </pre></div>
@@ -1620,7 +1630,7 @@ marketplace.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on May 05, 2026.
+      <span class="lastupdated">Last updated on May 19, 2026.
       </span></p>
   </div>
 

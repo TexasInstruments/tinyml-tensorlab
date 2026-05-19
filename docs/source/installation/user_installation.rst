@@ -49,6 +49,18 @@ Running Your First Example
 
 After setting environment variables for your target device, run the hello world example:
 
+.. note::
+
+   **Windows Users: Enable Long Path Support Before Cloning**
+
+   If you are on Windows, run this command before cloning to enable support for long file paths:
+
+   .. code-block:: powershell
+
+      git config --global core.longpaths true
+
+   This allows Git to handle the deeply nested directory structure in the repository. You only need to run this once per system.
+
 .. code-block:: bash
 
    # Clone just the examples
