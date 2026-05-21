@@ -104,6 +104,13 @@ These are the devices that are supported currently. As additional devices are su
 * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
 * SDK release: 01_00_00_00
 
+### CC1314
+* Product information: https://www.ti.com/product/CC1314R10
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10
+
+* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
+* SDK release: 01_10_00_00
+
 ### CC35X1
 * Product information: https://www.ti.com/product/CC3551E
 * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1

@@ -131,7 +131,7 @@ For each config, the script:
 |----------|-------|----------|
 | Hello World | 4 | F28P55, MSPM0, CC1352, CC2755 variants |
 | Motor Fault | 3 | Classification, anomaly detection, MSPM0 |
-| Fan Blade | 3 | Classification, anomaly, on-device training |
+| Fan Blade | 9 | Classification, anomaly, on-device training |
 | Arc Fault | 5 | AC MSPM0, DC dsi/dsk variants |
 | ECG | 2 | Classification, anomaly detection |
 | NILM | 2 | Appliance usage, PLAID |
@@ -172,6 +172,7 @@ For each config, the script:
 ./run_tests.sh --filter CC2755          # CC2755 configs
 ./run_tests.sh --filter CC1312          # CC1312 configs
 ./run_tests.sh --filter CC1352          # CC1352 configs
+./run_tests.sh --filter CC1314          # CC1314 configs
 ./run_tests.sh --filter CC1354          # CC1354 configs
 ./run_tests.sh --filter CC35X1          # CC35X1 configs
 

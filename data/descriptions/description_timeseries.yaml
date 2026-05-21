@@ -125,7 +125,9 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   * SDK release: 01_10_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
   * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
-  * SDK release: 01_00_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n\
+  * SDK release: 01_00_00_00\n\n### CC1314\n* Product information: https://www.ti.com/product/CC1314R10\n\
+  * Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+  * SDK release: 01_10_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
   * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n\
   * SDK release: 01_00_00_00\n\n\n## Additional information\n\n * Tiny ML model development\
@@ -237,11 +239,18 @@ live_capture:
     propInfo:
     - caption: device
       id: device
-      infoText: Current support is F28P55. You can try other device using correct
-        application example and baud rate.
+      infoText: Current support is F28P55, CC1312PSIP, CC1312R1, CC1312R7, CC1352R1,
+        CC1352P1, CC1352P7, CC1314R10, CC1354P10, CC2755P10, CC2745R10-Q1 and CC35X1.
+        You can try other device using correct application example and baud rate.
       options:
       - F28P55
       - MSPM0G5187
+      - CC1312
+      - CC1352
+      - CC1314
+      - CC1354
+      - CC2755
+      - CC35X1
       widgetType: select
     - caption: sensor
       id: sensor
@@ -494,6 +503,60 @@ live_capture_example:
       transport:
         baudRate: 115200
   motor_fault:
+    CC1312:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang
+      deviceName: CC1312PSIP
+      files: []
+      from: examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1312PSIP.ccxml
+      transport:
+        baudRate: 115200
+    CC1314:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang
+      deviceName: CC1314R10
+      files: []
+      from: examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1314R10.ccxml
+      transport:
+        baudRate: 115200
+    CC1352:
+      ccsProj: edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang
+      deviceName: CC1352R1
+      files: []
+      from: examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1352R1F3.ccxml
+      transport:
+        baudRate: 115200
+    CC1354:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang
+      deviceName: CC1354P10
+      files: []
+      from: examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1354P10.ccxml
+      transport:
+        baudRate: 115200
+    CC2755:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang
+      deviceName: CC2745R10
+      files: []
+      from: examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC2745R10.ccxml
+      transport:
+        baudRate: 115200
+    CC35X1:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang
+      deviceName: CC3551E
+      files: []
+      from: examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC35X1E.ccxml
+      transport:
+        baudRate: 115200
     F28P55:
       ccsProj: eAI_data_acq_dap_f28p55x
       deviceName: TMS320F28P550SJ9
@@ -741,6 +804,72 @@ live_preview_example:
       transport:
         baudRate: 115200
   motor_fault:
+    CC1312:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang
+      deviceName: CC1312PSIP
+      files:
+      - from: artifacts/
+        to: ai_artifacts/
+      from: examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1312PSIP.ccxml
+      transport:
+        baudRate: 115200
+    CC1314:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang
+      deviceName: CC1314R10
+      files:
+      - from: artifacts/
+        to: ai_artifacts/
+      from: examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1314R10.ccxml
+      transport:
+        baudRate: 115200
+    CC1352:
+      ccsProj: edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang
+      deviceName: CC1352R1
+      files:
+      - from: artifacts/
+        to: ai_artifacts/
+      from: examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1352R1F3.ccxml
+      transport:
+        baudRate: 115200
+    CC1354:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang
+      deviceName: CC1354P10
+      files:
+      - from: artifacts/
+        to: ai_artifacts/
+      from: examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC1354P10.ccxml
+      transport:
+        baudRate: 115200
+    CC2755:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang
+      deviceName: CC2745R10
+      files:
+      - from: artifacts/
+        to: ai_artifacts/
+      from: examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC2745R10.ccxml
+      transport:
+        baudRate: 115200
+    CC35X1:
+      ccsProj: edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang
+      deviceName: CC3551E
+      files:
+      - from: artifacts/
+        to: ai_artifacts/
+      from: examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang.projectspec
+      pkgId: SIMPLELINK-SDK-EDGEAI-PLUGIN
+      targetCfg: targetConfigs/CC35X1E.ccxml
+      transport:
+        baudRate: 115200
     F28P55:
       ccsProj: eAI_mfd_eval_f28p55x
       deviceName: TMS320F28P550SJ9
@@ -1053,6 +1182,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 10
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 10
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -1333,6 +1467,11 @@ model_descriptions:
           model_selection_factor: 3
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 3
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 3
@@ -1621,6 +1760,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -1901,6 +2045,11 @@ model_descriptions:
           model_selection_factor: 5
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 5
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 5
@@ -2189,6 +2338,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 11
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 11
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -2469,6 +2623,11 @@ model_descriptions:
           model_selection_factor: 7
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 7
@@ -2757,6 +2916,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 4
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -3037,6 +3201,11 @@ model_descriptions:
           model_selection_factor: 6
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 6
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 6
@@ -3325,6 +3494,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 8
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 8
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -3609,6 +3783,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 9
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 9
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -3889,6 +4068,11 @@ model_descriptions:
           model_selection_factor: 2
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 2
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 2
@@ -4958,6 +5142,852 @@ model_descriptions:
       training_path_quantization: null
       warmup_epochs: 1
       weight_decay: 0.0001
+  CLS_1.2k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~1.2K params.
+
+        Compact 3-layer CNN with expanding channels (4->8->12->16).
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_1.2k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_1P2K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_1.5k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~1.5K params.
+
+        4-layer CNN with expansion-contraction-expansion pattern (12->12->8->16).
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_1.5k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_1P5K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_1.9k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~1.9K params.
+
+        4-layer CNN with constant-width Conv3x1 (16->16->16).
+
+        Optimized for TI NPU acceleration.'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_1.9k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_1P9K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
   CLS_100_NPU:
     common:
       download_path: ./data/downloads
@@ -5137,6 +6167,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -5428,6 +6463,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -5715,6 +6755,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 2
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 2
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -5804,6 +6849,288 @@ model_descriptions:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 2
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_2.8k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~2.8K params.
+
+        5-layer CNN with gradual expansion (8->8->12->12->16) + 2 FC layers.
+
+        Optimized for TI NPU acceleration.'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_2.8k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_2P8K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
           sram: TBD
       train_output_path: null
       trainable_layers_from_last: 1
@@ -5998,6 +7325,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -6289,6 +7621,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -6333,6 +7670,1134 @@ model_descriptions:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 3
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_3.1k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~3.1K params.
+
+        4-layer CNN with steady expansion (8->16->20->24).
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_3.1k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_3P1K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_3.9k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~3.9K params.
+
+        4-layer CNN with aggressive expansion and contraction (8->28->20->20).
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_3.9k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_3P9K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_4.2k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~4.2K params.
+
+        3-layer CNN (12->24->28) + 3 FC layers (28->20->16). No MaxPool.
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_4.2k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_4P2K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_40k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'Electrical Fault Classification Model with ~40k params.
+
+        3 Conv layers (16->40->68) + 3 FC layers.
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_40k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_40K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
           sram: TBD
         F28P55:
           flash: TBD
@@ -6572,6 +9037,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -6859,6 +9329,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -7151,6 +9626,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -7240,6 +9720,288 @@ model_descriptions:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  CLS_5k_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'NPU-Optimized Classification Model with ~5K params.
+
+        4-layer CNN with expansion (12->16->24->32).
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: CLS_5k_NPU
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_5K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        AM13E2:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM261:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        AM263P:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1352:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1354:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC2755:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC35X1:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280013:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F280015:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28003:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28004:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F2837:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P55:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F28P65:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29H85:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        F29P58:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM33C32:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
           sram: TBD
       train_output_path: null
       trainable_layers_from_last: 1
@@ -7435,6 +10197,11 @@ model_descriptions:
           model_selection_factor: 3
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 3
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 3
@@ -7722,6 +10489,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -8016,6 +10788,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 6
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 6
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -8302,6 +11079,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -8623,6 +11405,195 @@ model_descriptions:
       training_path_quantization: null
       warmup_epochs: 1
       weight_decay: 0.0001
+  ElectricalFault_model_40k_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'Electrical Fault Classification Model with ~40k params.
+
+        3 Conv layers (16->40->68) + 3 FC layers.
+
+        Input: 6 channels, 128 time steps. Output: 6 fault classes.
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: ElectricalFault_model_40k_t
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_40K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
   FCST_10k_NPU:
     common:
       download_path: ./data/downloads
@@ -8800,6 +11771,11 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -9088,6 +12064,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -9369,6 +12350,11 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -9659,6 +12645,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -9940,6 +12931,11 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -10230,6 +13226,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 3
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 3
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -10515,6 +13516,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -10796,6 +13802,11 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -11086,6 +14097,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -11367,6 +14383,11 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -11655,6 +14676,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -11935,6 +14961,11 @@ model_descriptions:
           model_selection_factor: 2
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 2
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 2
@@ -12700,6 +15731,384 @@ model_descriptions:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  GearboxFault_model_1.2k_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'Gearbox NPU Model with ~1.2K params.
+
+        Compact 3-layer CNN with expanding channels (4->8->12->16).
+
+        Input: 4 channels, 256 time steps. Output: 2 classes.
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: GearboxFault_model_1.2k_t
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_1P2K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_master_port: 29500
+      training_path: null
+      training_path_quantization: null
+      warmup_epochs: 1
+      weight_decay: 0.0001
+  GearboxFault_model_1.5k_t:
+    common:
+      download_path: ./data/downloads
+      generic_model: false
+      model_details: 'Gearbox NPU Model with ~1.5K params.
+
+        4-layer CNN with expansion-contraction-expansion pattern (12->12->8->16).
+
+        Input: 4 channels, 256 time steps. Output: 2 classes.
+
+        Optimized for TI NPU acceleration'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_machine: evm
+      target_module: timeseries
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+      verbose_mode: true
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      analysis_bandwidth: 1
+      chunk_size: 1
+      data_proc_transforms: []
+      dc_remove: true
+      dont_train_just_feat_ext: false
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: null
+      fft_size: 1
+      forecast_horizon: 1
+      frame_size: 1
+      frame_skip: 1
+      gain_variations: null
+      gof_test: false
+      log_base: null
+      log_mul: null
+      log_threshold: null
+      min_bin: 1
+      new_sr: 1
+      nn_for_feature_extraction: false
+      normalize_bin: 0
+      num_frame_concat: 1
+      offset: 0
+      q15_scale_factor: 4
+      resampling_factor: 1
+      sampling_rate: 1
+      scale: null
+      stacking: 2D1
+      store_feat_ext_data: false
+      stride_size: 0.01
+      target_variables: []
+      variables: 1
+      window_count: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_download: false
+      dataset_name: null
+      dataset_path: null
+      dataset_reload: false
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      batch_size: 64
+      dataset_loader: GenericTSDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.002
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: GearboxFault_model_1.5k_t
+      model_spec: null
+      model_training_id: CNN_TS_GEN_BASE_1P5K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      num_last_epochs: 5
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      partial_quantization: false
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: generictimeseriesclassification.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: generictimeseriesclassification.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G3507:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G3519:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        MSPM0G5187:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
           sram: TBD
       train_output_path: null
       trainable_layers_from_last: 1
@@ -13616,6 +17025,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -13881,6 +17295,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -14111,6 +17530,11 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 0
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -14399,6 +17823,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 3
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 3
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -14679,6 +18108,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -14970,6 +18404,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 9
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 9
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -15250,6 +18689,11 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 1
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -15541,6 +18985,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 6
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 6
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -15825,6 +19274,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 2
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 2
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -16105,6 +19559,11 @@ model_descriptions:
           model_selection_factor: 4
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 4
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 4
@@ -16396,6 +19855,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 5
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 5
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -16683,6 +20147,11 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 7
           sram: TBD
+        CC1314:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 7
+          sram: TBD
         CC1352:
           flash: TBD
           inference_time_us: TBD
@@ -16966,6 +20435,11 @@ model_descriptions:
           model_selection_factor: 8
           sram: TBD
         CC1312:
+          flash: TBD
+          inference_time_us: TBD
+          model_selection_factor: 8
+          sram: TBD
+        CC1314:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 8
@@ -17354,6 +20828,15 @@ preset_descriptions:
           target: c
           target_c_mcpu: cortex-r5
   CC1312:
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard
+            -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m
+            -mthumb
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m4
     pir_detection:
       default_preset:
         compilation:
@@ -17363,7 +20846,25 @@ preset_descriptions:
             -mthumb
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m4
+  CC1314:
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
+            -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m33
   CC1352:
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard
+            -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m
+            -mthumb
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m4
     pir_detection:
       default_preset:
         compilation:
@@ -17374,6 +20875,14 @@ preset_descriptions:
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m4
   CC1354:
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
+            -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main
+          target: c, ti-npu type=soft
+          target_c_mcpu: cortex-m33
     pir_detection:
       default_preset:
         compilation:
@@ -17383,6 +20892,14 @@ preset_descriptions:
           target: c, ti-npu type=soft
           target_c_mcpu: cortex-m33
   CC2755:
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+          target: c, ti-npu type=m33cde
+          target_c_mcpu: cortex-m33
     pir_detection:
       default_preset:
         compilation:
@@ -17392,6 +20909,14 @@ preset_descriptions:
           target: c, ti-npu type=m33cde
           target_c_mcpu: cortex-m33
   CC35X1:
+    motor_fault:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard
+            -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0
+          target: c, ti-npu type=m33cde
+          target_c_mcpu: cortex-m33
     pir_detection:
       default_preset:
         compilation:
@@ -18467,6 +21992,7 @@ rex_dependencies:
   task: compile
 - devices:
   - CC1312
+  - CC1314
   - CC1352
   - CC1354
   envVarName: COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR
@@ -18611,10 +22137,10 @@ rex_dependencies:
   task: compile
 - devices:
   - CC1312
+  - CC1314
   - CC1352
   - CC1354
   - CC2755
-  - CC2754
   - CC35X1
   - AM13E2
   - AM263
@@ -18836,7 +22362,7 @@ target_device_descriptions:
       * SDK release: 1_02_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM13E2
-    device_selection_factor: 19
+    device_selection_factor: 20
     device_type: MCU
     sdk_release: '1_02_00_00'
     sdk_version: 1.02.00.00
@@ -18848,7 +22374,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM261
-    device_selection_factor: 16
+    device_selection_factor: 17
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -18860,7 +22386,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM263
-    device_selection_factor: 17
+    device_selection_factor: 18
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -18872,7 +22398,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: AM263P
-    device_selection_factor: 18
+    device_selection_factor: 19
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -18886,6 +22412,18 @@ target_device_descriptions:
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1312
     device_selection_factor: 2
+    device_type: MCU
+    sdk_release: '01_10_00_00'
+    sdk_version: 1.10.00.00
+  CC1314:
+    device_details: "SimpleLink\u2122 32-bit Arm\xAE Cortex\xAE-M33 Sub-1 GHz wireless\
+      \ MCU\n* More details : https://www.ti.com/product/CC1314R10\n\nImportant links:\n\
+      * Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\
+      \n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+      * SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development\
+      \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
+    device_name: CC1314
+    device_selection_factor: 4
     device_type: MCU
     sdk_release: '01_10_00_00'
     sdk_version: 1.10.00.00
@@ -18911,7 +22449,7 @@ target_device_descriptions:
       * SDK release: 01_00_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1354
-    device_selection_factor: 4
+    device_selection_factor: 5
     device_type: MCU
     sdk_release: '01_00_00_00'
     sdk_version: 1.00.00.00
@@ -18924,7 +22462,7 @@ target_device_descriptions:
       * SDK release: 01_00_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC2755
-    device_selection_factor: 5
+    device_selection_factor: 6
     device_type: MCU
     sdk_release: '01_00_00_00'
     sdk_version: 1.00.00.00
@@ -18937,7 +22475,7 @@ target_device_descriptions:
       * SDK release: 01_00_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC35X1
-    device_selection_factor: 11
+    device_selection_factor: 12
     device_type: MCU
     sdk_release: '01_00_00_00'
     sdk_version: 1.00.00.00
@@ -18950,7 +22488,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F280013
-    device_selection_factor: 8
+    device_selection_factor: 9
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -18962,7 +22500,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F280015
-    device_selection_factor: 9
+    device_selection_factor: 10
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -18974,7 +22512,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28003
-    device_selection_factor: 7
+    device_selection_factor: 8
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -18986,7 +22524,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28004
-    device_selection_factor: 6
+    device_selection_factor: 7
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -18998,7 +22536,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F2837
-    device_selection_factor: 12
+    device_selection_factor: 13
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -19010,7 +22548,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28P55
-    device_selection_factor: 15
+    device_selection_factor: 16
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -19022,7 +22560,7 @@ target_device_descriptions:
       * SDK release: 26_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F28P65
-    device_selection_factor: 13
+    device_selection_factor: 14
     device_type: MCU
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
@@ -19034,7 +22572,7 @@ target_device_descriptions:
       * SDK release: 01_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F29H85
-    device_selection_factor: 23
+    device_selection_factor: 24
     device_type: MCU
     sdk_release: '01_00_00'
     sdk_version: '1.00'
@@ -19045,7 +22583,7 @@ target_device_descriptions:
       * SDK release: 01_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F29P32
-    device_selection_factor: 21
+    device_selection_factor: 22
     device_type: MCU
     sdk_release: '01_00_00'
     sdk_version: '1.00'
@@ -19056,7 +22594,7 @@ target_device_descriptions:
       * SDK release: 01_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: F29P58
-    device_selection_factor: 22
+    device_selection_factor: 23
     device_type: MCU
     sdk_release: '01_00_00'
     sdk_version: '1.00'
@@ -19092,7 +22630,7 @@ target_device_descriptions:
       * SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G5187
-    device_selection_factor: 14
+    device_selection_factor: 15
     device_type: MCU
     sdk_release: '2_10_00_04'
     sdk_version: 2.10.00.04
@@ -19104,7 +22642,7 @@ target_device_descriptions:
       * SDK release: 1_02_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM33C32
-    device_selection_factor: 10
+    device_selection_factor: 11
     device_type: MCU
     sdk_release: '1_02_00_00'
     sdk_version: 1.02.00.00
@@ -19116,7 +22654,7 @@ target_device_descriptions:
       * SDK release: 1_02_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM33C34
-    device_selection_factor: 20
+    device_selection_factor: 21
     device_type: MCU
     sdk_release: '1_02_00_00'
     sdk_version: 1.02.00.00
@@ -19327,6 +22865,12 @@ task_descriptions:
     - F29H85
     - AM13E2
     - AM263
+    - CC2755
+    - CC1312
+    - CC1352
+    - CC1314
+    - CC1354
+    - CC35X1
     target_module: timeseries
     task_category: timeseries_classification
     task_group: timeseries
