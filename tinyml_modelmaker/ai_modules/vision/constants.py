@@ -546,12 +546,12 @@ HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
 TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
 # C2000 F28 Compiler
-C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
+C2000_CGT_VERSION = 'ti-cgt-c2000_25.11.0.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 CL2000_CROSS_COMPILER = os.path.join(C2000_CG_ROOT, 'bin', 'cl2000')
 C2000_CGT_INCLUDE = os.path.join(C2000_CG_ROOT, 'include')
 # C2000 F29 Compiler
-C29_CGT_VERSION = 'ti-cgt-c29_2.0.0.STS'
+C29_CGT_VERSION = 'ti-cgt-c29_2.2.0.LTS'
 CG_TOOL_ROOT = os.path.abspath(os.getenv('CG_TOOL_ROOT', os.path.join(TOOLS_PATH, C29_CGT_VERSION)))
 C29CLANG_CROSS_COMPILER = os.path.join(CG_TOOL_ROOT, 'bin', 'c29clang')
 C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
@@ -562,7 +562,7 @@ C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
 # F29H85_DRIVERLIB_INCLUDE = os.path.join(F29H85_SDK_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 
 # MSPM0 Compiler
-MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
 ARM_LLVM_CGT_PATH = os.path.abspath(os.getenv('ARM_LLVM_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
 MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
@@ -572,7 +572,7 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
 
 # MSPM33C Compiler
-MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
 MSPM33C_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 

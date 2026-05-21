@@ -32,6 +32,11 @@
 #################################################################################
 
 #################################################################################
+# Portable realpath for macOS (GNU coreutils realpath not installed by default)
+if ! command -v realpath &>/dev/null; then
+    realpath() { python3 -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"; }
+fi
+
 CUR_DIR=$(pwd)
 PARENT_DIR=$(realpath ${CUR_DIR}/..)
 HOME_DIR=${HOME}

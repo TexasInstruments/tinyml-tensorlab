@@ -7,6 +7,11 @@ if [ $# -le 0 ]; then
     exit 0
 fi
 #################################################################################
+# Portable realpath for macOS (GNU coreutils realpath not installed by default)
+if ! command -v realpath &>/dev/null; then
+    realpath() { python3 -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"; }
+fi
+
 HOME_DIR=${HOME}
 HOME_DIR=$(realpath $HOME_DIR)
 
