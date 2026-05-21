@@ -40,6 +40,11 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # ##################################################################
+# Create non-root user and set ownership
+RUN groupadd -r tinyml && useradd -r -g tinyml tinyml && \
+    chown -R tinyml:tinyml ${HOME_DIR}
+
+# ##################################################################
 # change working directory
 WORKDIR ${HOME_DIR}
 
@@ -93,3 +98,16 @@ RUN source ${HOME_DIR}/.bashrc && \
 # Note 3: in the container, .bashrc or .pyenvrc may need to be sourced to activate the Python environment
 # if it is not being activated automatically.
 RUN source ${HOME_DIR}/.bashrc
+
+# Lock down source code and dependencies (read-only), keep only data/cache writable
+RUN find ${WORK_DIR} -type d -exec chmod 555 {} \; && \
+    find ${WORK_DIR} -type f -exec chmod 444 {} \; && \
+    chmod -R 555 ${HOME_DIR}/.pyenv && \
+    chmod 444 ${HOME_DIR}/.bashrc ${HOME_DIR}/.profile ${HOME_DIR}/.pyenvrc 2>/dev/null || true && \
+    chmod 555 ${HOME_DIR} && \
+    mkdir -p ${HOME_DIR}/.cache/pip && \
+    chmod -R 755 ${HOME_DIR}/.cache/pip && \
+    chmod -R 755 ${DATA_DIR} ${TOOLS_PATH} ${INSTALLER_PATH}
+
+# Switch to non-root user
+USER tinyml

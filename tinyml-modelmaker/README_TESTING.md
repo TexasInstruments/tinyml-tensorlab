@@ -109,7 +109,7 @@ The script automatically tests all 36 configs across these categories:
 |----------|-------|----------|
 | Hello World | 4 | config.yaml, config_MSPM0.yaml, config_CC1352.yaml, config_CC2755.yaml |
 | Motor Fault | 3 | config.yaml, config_MSPM0.yaml, config_anomaly_detection.yaml |
-| Fan Blade | 3 | config.yaml, config_anomaly_detection.yaml, ondevice_training.yaml |
+| Fan Blade | 9 | config.yaml, config_anomaly_detection.yaml, ondevice_training.yaml, config_CC2755.yaml, config_CC1312.yaml, config_CC1314.yaml, config_CC1352.yaml, config_CC1354.yaml, config_CC35X1.yaml |
 | Arc Fault | 5 | AC/DC variants with dsi/dsk |
 | ECG | 2 | config.yaml, config_anomaly_detection.yaml |
 | NILM | 2 | nilm_appliance, PLAID_nilm |
@@ -140,6 +140,7 @@ The script automatically tests all 36 configs across these categories:
 ./run_tests.sh --filter MSPM0           # All MSPM0 configs
 ./run_tests.sh --filter CC2755          # All CC2755 configs
 ./run_tests.sh --filter CC1312          # All CC1312 configs
+./run_tests.sh --filter CC1314          # All CC1314 configs
 ./run_tests.sh --filter CC1352          # All CC1352 configs
 ./run_tests.sh --filter CC1354          # All CC1354 configs
 ./run_tests.sh --filter CC35X1          # All CC35X1 configs

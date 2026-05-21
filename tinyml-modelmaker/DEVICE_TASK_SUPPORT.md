@@ -66,6 +66,7 @@ The Tiny ML framework supports the following task categories:
 ### Connectivity Devices (Wireless)
 - **CC2755** - 96 MHz Arm Cortex-M33 2.4 GHz wireless MCU with CDE (Custom Datapath Extension)
 - **CC1312** - Arm Cortex-M4F sub-1 GHz wireless MCU
+- **CC1314** - Arm Cortex-M33 sub-1 GHz wireless MCU
 - **CC1352** - Arm Cortex-M4F sub-1 GHz wireless MCU
 - **CC1354** - Arm Cortex-M33 sub-1 GHz wireless MCU
 - **CC35X1** - Arm Cortex-M33 Wi-Fi wireless MCU with CDE (Custom Datapath Extension)
@@ -79,9 +80,9 @@ The Tiny ML framework supports the following task categories:
 | Task / Application | Supported Devices | Example Projects |
 |-------------------|-------------------|-----------------|
 | **Arc Fault Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `ac_arc_fault`, `dc_arc_fault` |
-| **Motor Fault Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `motor_bearing_fault`, `fan_blade_fault_classification`, `blower_imbalance` |
+| **Motor Fault Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261, CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1 | `motor_bearing_fault`, `fan_blade_fault_classification`, `blower_imbalance` |
 | **Blower Imbalance Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `blower_imbalance` |
-| **PIR Detection** | CC2755, CC1352 | `pir_detection` |
+| **PIR Detection** | CC2755, CC1312, CC1352, CC1354, CC35X1 | `pir_detection` |
 | **Generic Timeseries Classification** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `hello_world`, `ecg_classification`, `electrical_fault`, `gas_sensor`, `grid_stability`, `nilm_appliance_usage_classification`, `PLAID_nilm_classification`, `branched_model_parameters` |
 | **Generic Timeseries Regression** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `induction_motor_speed_prediction`, `reg_washing_machine`, `torque_measurement_regression` |
 | **Generic Timeseries Anomaly Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `dc_arc_fault_anomaly_detection`, `motor_bearing_fault_anomaly_detection`, `fan_blade_anomaly_detection`, `ecg_anomaly_detection` |
@@ -100,11 +101,12 @@ The Tiny ML framework supports the following task categories:
 | **MSPM33C34** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ✅ (Hard) |
 | **AM13E2** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ (Soft) |
 | **AM26x Series** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **CC2755** | ❌ | PIR Detection | ✅ (CDE) |
-| **CC1312** | ❌ | PIR Detection | ❌ (Soft) |
-| **CC1352** | ❌ | PIR Detection | ❌ (Soft) |
-| **CC1354** | ❌ | PIR Detection | ❌ (Soft) |
-| **CC35X1** | ❌ | PIR Detection | ✅ (CDE) |
+| **CC2755** | ❌ | PIR Detection, Motor Fault | ✅ (CDE) |
+| **CC1312** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
+| **CC1314** | ❌ | Motor Fault | ❌ (Soft) |
+| **CC1352** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
+| **CC1354** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
+| **CC35X1** | ❌ | PIR Detection, Motor Fault | ✅ (CDE) |
 
 ---
 
@@ -141,9 +143,9 @@ These devices support **all** timeseries tasks (classification, regression, anom
   - Note: Limited to classification tasks due to memory constraints
 
 #### Wireless/Connectivity Devices
-- **CC2755, CC1312, CC1352, CC1354, CC35X1**
+- **CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1**
   - Generic Tasks: Classification, Regression, Anomaly Detection, Forecasting
-  - Specialized: PIR Detection
+  - Specialized: PIR Detection (CC2755, CC1312, CC1352, CC1354, CC35X1), Motor Fault (all)
   - Compilation: CDE/Soft NPU
   - Note: Optimized for wireless/connectivity applications
 
@@ -542,7 +544,7 @@ The Tiny ML ecosystem includes comprehensive example projects demonstrating vari
 - **Task Type:** PIR Detection
 - **Description:** Passive Infrared (PIR) sensor-based motion and presence detection
 - **Use Case:** Occupancy sensing, security systems, smart lighting
-- **Recommended Devices:** CC2755, CC1352 (wireless connectivity devices)
+- **Recommended Devices:** CC2755, CC1312, CC1352, CC1354, CC35X1 (wireless connectivity devices)
 - **Key Features:** Low-power operation, wireless reporting, edge AI inference
 
 ### Image Classification Examples
