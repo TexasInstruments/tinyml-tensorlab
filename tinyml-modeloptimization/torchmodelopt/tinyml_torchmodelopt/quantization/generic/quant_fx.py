@@ -78,7 +78,10 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         # qconfig_type = None is equivalent to WC8AT8 (or DEFAULT) which uses per_tensor_affine
         # Note: activation qscheme=torch.per_tensor_affine can be converted onnx model with QOperator using onnxruntime optimization
         # but activation qscheme=torch.per_tensor_symmetric stays as QDQ even when using onnxruntime optimization
-        backend = 'fbgemm' if platform.system() in ['Windows'] else 'qnnpack'
+        # fbgemm is optimal for x86; qnnpack for ARM (Apple Silicon, mobile)
+        # Intel Mac (Darwin + x86_64) also benefits from fbgemm
+        _is_x86 = platform.machine() in ('x86_64', 'AMD64', 'x86')
+        backend = 'fbgemm' if (platform.system() == 'Windows' or (platform.system() == 'Darwin' and _is_x86)) else 'qnnpack'
         super().__init__(model, *args, qconfig_type=qconfig_type, backend=backend, **kwargs)
     
     def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.INT_MODEL, **kwargs):
