@@ -31,6 +31,11 @@
 #
 #################################################################################
 
+# Portable realpath for macOS (GNU coreutils realpath not installed by default)
+if ! command -v realpath &>/dev/null; then
+    realpath() { python3 -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"; }
+fi
+
 HOME_DIR=${HOME}
 HOME_DIR=$(realpath $HOME_DIR)
 
@@ -41,10 +46,24 @@ mkdir -p ${TOOLS_PATH}
 
 #################################################################################
 # c2000 cgtools
-C2000_CGT_INSTALLER=ti_cgt_c2000_25.11.0.LTS_linux-x64_installer.bin
-C2000_CGT_INSTALLER_FILE=${INSTALLER_PATH}/${C2000_CGT_INSTALLER}
-rm -f ${C2000_CGT_INSTALLER_FILE}
-wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/25.11.0.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
-chmod +x ${C2000_CGT_INSTALLER_FILE}
-${C2000_CGT_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
-rm -f ${C2000_CGT_INSTALLER_FILE}
+if [[ "$(uname)" == "Darwin" ]]; then
+    C2000_CGT_INSTALLER=ti_cgt_c2000_25.11.0.LTS_osx_installer.app.zip
+    C2000_CGT_INSTALLER_FILE=${INSTALLER_PATH}/${C2000_CGT_INSTALLER}
+    rm -f ${C2000_CGT_INSTALLER_FILE}
+    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/25.11.0.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
+    unzip -o ${C2000_CGT_INSTALLER_FILE} -d ${INSTALLER_PATH}
+    INSTALLER_APP="${INSTALLER_PATH}/ti_cgt_c2000_25.11.0.LTS_osx_installer.app"
+    INSTALLER_BIN=$(find "${INSTALLER_APP}/Contents/MacOS" -maxdepth 1 -type f | head -1)
+    chmod +x "${INSTALLER_BIN}"
+    "${INSTALLER_BIN}" --mode unattended --prefix ${TOOLS_PATH}
+    rm -f ${C2000_CGT_INSTALLER_FILE}
+    rm -rf "${INSTALLER_APP}"
+else
+    C2000_CGT_INSTALLER=ti_cgt_c2000_25.11.0.LTS_linux-x64_installer.bin
+    C2000_CGT_INSTALLER_FILE=${INSTALLER_PATH}/${C2000_CGT_INSTALLER}
+    rm -f ${C2000_CGT_INSTALLER_FILE}
+    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-xqxJ05PLfM/25.11.0.LTS/${C2000_CGT_INSTALLER} -O ${C2000_CGT_INSTALLER_FILE}
+    chmod +x ${C2000_CGT_INSTALLER_FILE}
+    ${C2000_CGT_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
+    rm -f ${C2000_CGT_INSTALLER_FILE}
+fi
