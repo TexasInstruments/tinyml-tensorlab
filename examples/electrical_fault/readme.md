@@ -8,6 +8,10 @@ The Electrical Fault Dataset is a multivariate time series dataset. It is obtain
 
 The fault can be Line-to-line, Line-to-ground, Line-to-line-to-ground and more. Line-to-line (LL) fault is a fault between two phase conductors (e.g., A-B). This typically appears as a short-duration high-energy event affecting particular frequency bins. Line-to-ground (LG) fault: a fault between a phase conductor and ground. Pattern differs from LL faults and can be identified using combinations of voltage and current measurements. LLG / LLLG: multi-conductor faults involving two or three lines and possibly ground. These create distinct signatures across voltage and current channels.
 
+Users can choose between two dataset options, each processed by a different script to produce a distinct output file:
+- **2-class dataset** (`detect_dataset.xlsx`): Processed by `electrical_fault.py` to create `electrical_fault_dataset.zip` for fault detection (binary classification - fault vs no fault)
+- **6-class dataset** (`classData.csv`): Processed by `electrical_fault_6class.py` to create `electrical_fault_6class_dataset.zip` for fault type classification (6 fault types based on G,C,B,A combinations)
+
 <p align="center">  
     <img src="assets/simulink.png" width="280" alt="Simulink Model">
 </p>
@@ -21,26 +25,37 @@ There are two dataset files present in the compressed zip: [electrical_fault_raw
     - There are 4 target variables i.e G (Ground), C (Node C), B (Node B), A (NodeA). The value of each target is either 0 or 1.
     - Examples [G, C, B, A]:
         - [0, 0, 0, 0] means No Fault
-        - [1, 0, 0, 1] means LG Fault btw Ground and Node A
-        - [0, 0, 1, 1] means LL Fault btw Node A and Node B
-        - [1, 0, 1, 1] means LLG Fault btw Node A, Node B and Ground
+        - [0, 1, 1, 0] means LL Fault btw Node B and Node C
         - [0, 1, 1, 1] means LLL Fault btw all Nodes
+        - [1, 0, 0, 1] means LG Fault btw Ground and Node A
+        - [1, 0, 1, 1] means LLG Fault btw Node A, Node B and Ground
         - [1, 1, 1, 1] means LLLG Fault btw all Nodes and Ground
 
-For this example we will be using `detect_dataset.xlsx` to detect whether there is electrical fault or not.
+Depending on the dataset chosen, users can either detect whether there is an electrical fault (binary classification) or classify the type of fault (6-class classification).
 
 ## Downloading dataset
 
-Prepare the zipped dataset by running the electrical_fault python file. The script will create zipped dataset as `electrical_fault_dataset.zip`. 
+Users can prepare the zipped dataset using either of two python scripts, depending on which dataset they want to use:
+
+**For 2-class dataset (fault detection):**
 ```bash
 cd examples/electrical_fault
 python electrical_fault.py
 ```
-The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
+This creates `electrical_fault_dataset.zip`
+
+**For 6-class dataset (fault type classification):**
+```bash
+cd examples/electrical_fault
+python electrical_fault_6class.py
+```
+This creates `electrical_fault_6class_dataset.zip`
+
+The path to the appropriate zipped dataset file should be mentioned in [configuration](config.yaml) yaml under `dataset.input_data_path`, make sure it matches the script you ran.
 
 ```yaml
 dataset:
-    input_data_path: 'examples/electrical_fault/electrical_fault_dataset.zip'
+    input_data_path: 'examples/electrical_fault/electrical_fault_dataset.zip'   # OR 'examples/electrical_fault/electrical_fault_6class_dataset.zip'
 ```
 
 ## Usage in Tiny ML ModelZoo

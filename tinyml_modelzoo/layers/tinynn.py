@@ -39,8 +39,8 @@ import torch.nn
 
 
 __all__ = ['IdentityLayer', 'ConvLayer', 'BatchNormLayer', 'ReLULayer', 'MaxPoolLayer', 'AvgPoolLayer',
-           'AdaptiveAvgPoolLayer', 'LinearLayer', 'ConvBNReLULayer', 'ReshapeLayer','RNNLayer','GRULayer',
-           'LSTMLayer',]
+           'AdaptiveAvgPoolLayer', 'LinearLayer', 'LinearBNReLULayer', 'ConvBNReLULayer', 'ReshapeLayer',
+           'RNNLayer', 'GRULayer', 'LSTMLayer',]
 
 
 def compute_output_size(type, input_tensor_size, kernel_size, padding, stride, dilation, **kwargs):
@@ -194,6 +194,19 @@ def LinearLayer(input_tensor_size=None, out_features=None, **kwargs):
     output_tensor_size = copy.deepcopy(input_tensor_size)
     output_tensor_size[-1] = out_features
     return layer, output_tensor_size
+
+
+def LinearBNReLULayer(in_features, out_features, input_tensor_size=None, **kwargs):
+    """Linear + BatchNorm1d + ReLU combined layer."""
+    layers = []
+    layers += [torch.nn.Linear(in_features=in_features, out_features=out_features, **kwargs)]
+    layers += [torch.nn.BatchNorm1d(num_features=out_features)]
+    layers += [torch.nn.ReLU()]
+    layer = torch.nn.Sequential(*layers)
+    output_tensor_size = copy.deepcopy(input_tensor_size)
+    output_tensor_size[-1] = out_features
+    return layer, output_tensor_size
+
 
 def ReluLayer(input_tensor_size=None):
     layer = torch.nn.ReLU()
