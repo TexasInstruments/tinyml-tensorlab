@@ -28,11 +28,11 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-git subtree pull --prefix tinyml-tinyverse ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-tinyverse.git main --squash
-# git subtree pull --prefix tinyml-docs ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git main --squash
-git subtree pull --prefix tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git main --squash
-git subtree pull --prefix tinyml-modelmaker ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git main --squash
-git subtree pull --prefix tinyml-modelzoo ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git main --squash
+# git subtree pull --prefix tinyml-docs ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git main --depth 1 &
+git subtree pull --prefix tinyml-tinyverse ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-tinyverse.git main --depth 1 &
+git subtree pull --prefix tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git main --depth 1 &
+git subtree pull --prefix tinyml-modelmaker ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git main --depth 1 &
+git subtree pull --prefix tinyml-modelzoo ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git main --depth 1 &
+wait
 
 git submodule update --remote
