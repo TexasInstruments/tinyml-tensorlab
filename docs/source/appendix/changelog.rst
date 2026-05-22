@@ -4,10 +4,46 @@ Changelog
 
 Version history and release notes for Tiny ML Tensorlab.
 
-Version 1.3.0
+Version 1.4.0
 -------------
 
 *Current Release*
+
+**New Applications:**
+
+* Gearbox Fault Detection — 2-class vibration classification for MSPM0G5187 NPU
+* Electrical Fault 6-Class — fault type classification (G/C/B/A combinations)
+
+**Device Support (23 MCUs):**
+
+* CC1312 — added support for Fan Blade Fault Classification and PIR Detection
+* CC1314, CC1352, CC1354 — added support for Fan Blade Fault Classification
+* CC2755, CC35X1 — expanded support for Fan Blade Fault Classification
+* MSPM0G5187 — added PMSM Rotor Forecasting config
+
+**Model Optimization:**
+
+* LSQ (Learned Step-size Quantization) observer for weights and activations
+* MLP models with 2D input now fully supported for quantization and conversion
+
+**Compilation:**
+
+* TI MCU Neural Network Compiler upgraded to 2.1.2
+
+**Platform:**
+
+* macOS 12 or later officially supported
+
+**Other Changes:**
+
+* Timeseries Anomaly Detection re-enabled in default installation
+* Reconstruction error plot description added to anomaly detection output
+* F3 and WiFi SDK device descriptions updated
+* AM13 SDK entry added to connectivity dependencies
+* MSPM0L3 (M33) SDK version updated
+
+Version 1.3.0
+-------------
 
 **New Features:**
 
@@ -138,12 +174,9 @@ Deprecation Notices
 **Version 1.3.0:**
 
 * ``feature_extraction`` config section renamed to ``data_processing_feature_extraction``
-* Old preset names deprecated (will be removed in 1.4.0)
-
-**Planned for 1.3.0:**
-
-* Python 3.9 support will be dropped
-* Legacy model names will be removed
+* Old preset names deprecated (removed in 1.4.0)
+* Python 3.9 support dropped
+* Legacy model names removed
 
 Known Issues
 ------------

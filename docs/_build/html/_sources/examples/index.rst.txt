@@ -131,6 +131,10 @@ Classification Examples
      - :doc:`grid_fault_detection` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/grid_fault_detection>`__)
      - Univariate
      - Detect AC grid faults in EV on-board chargers using current measurements.
+   * - 14
+     - :doc:`gearbox_fault_detection` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/gearbox_fault_detection>`__)
+     - Multivariate
+     - Classify gearbox operating conditions (healthy vs. broken tooth) from vibration data.
 
 ----
 
@@ -255,6 +259,7 @@ Image Classification Examples
    nilm_classification
    pir_detection
    grid_fault_detection
+   gearbox_fault_detection
    torque_measurement_regression
    induction_motor_speed_prediction
    washing_machine_regression

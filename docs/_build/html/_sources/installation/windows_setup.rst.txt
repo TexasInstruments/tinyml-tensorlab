@@ -87,7 +87,7 @@ During installation:
 
    The variables you need depend on which device you're targeting:
 
-   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT`` and ``C2000WARE_ROOT``
+   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT``
    * **F29 devices (F29H85X, etc.)**: Set ``CG_TOOL_ROOT``
    * **MSPM0 devices**: Set ``ARM_LLVM_CGT_PATH``
    * **AM13E devices**: Set ``ARM_LLVM_CGT_PATH``
@@ -194,7 +194,7 @@ or enterprise credentials.
 
    The variables you need depend on which device you're targeting:
 
-   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT`` and ``C2000WARE_ROOT``
+   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT``
    * **F29 devices (F29H85X, etc.)**: Set ``CG_TOOL_ROOT``
    * **MSPM0 devices**: Set ``ARM_LLVM_CGT_PATH``
    * **AM13E devices**: Set ``ARM_LLVM_CGT_PATH``
@@ -368,7 +368,6 @@ Set up paths for TI tools (if compiling for devices):
 
    # Add to your profile or set in System Properties
    $env:C2000_CG_ROOT = "C:\ti\ccs\tools\compiler\ti-cgt-c2000_22.6.1.LTS"
-   $env:C2000WARE_ROOT = "C:\ti\c2000\C2000Ware_5_03_00_00"
 
 Common Windows Issues
 ---------------------

@@ -17,6 +17,44 @@ different fault types including line-to-ground, line-to-line, and three-phase fa
 
 **Data Type**: Multivariate (voltage and current signals)
 
+Dataset Variants
+----------------
+
+Two dataset scripts are provided for different classification tasks:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 25 25 30
+
+   * - Script
+     - Output Dataset
+     - Classes
+     - Use Case
+   * - ``electrical_fault.py``
+     - ``electrical_fault_dataset.zip``
+     - 2 (fault / no fault)
+     - Binary fault detection
+   * - ``electrical_fault_6class.py``
+     - ``electrical_fault_6class_dataset.zip``
+     - 6 (G, C, B, A combinations)
+     - Fault type classification
+
+**Prepare the 2-class dataset:**
+
+.. code-block:: bash
+
+   cd examples/electrical_fault
+   python electrical_fault.py
+
+**Prepare the 6-class dataset:**
+
+.. code-block:: bash
+
+   cd examples/electrical_fault
+   python electrical_fault_6class.py
+
+Set ``dataset.input_data_path`` in the config to point to the generated zip file.
+
 Configuration
 -------------
 
@@ -29,6 +67,7 @@ Configuration
 
    dataset:
      dataset_name: 'electrical_fault'
+     # Use 'electrical_fault_6class' for 6-class fault type classification
 
    training:
      model_name: 'CLS_4k_NPU'
@@ -48,14 +87,22 @@ Running the Example
       .. code-block:: bash
 
          cd tinyml-modelzoo
+         # 2-class (fault detection) on F28P55
          ./run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml
+
+         # 6-class (fault type classification) on MSPM0
+         ./run_tinyml_modelzoo.sh examples/electrical_fault/config_MSPM0.yaml
 
    .. tab:: Windows
 
       .. code-block:: powershell
 
          cd tinyml-modelzoo
+         # 2-class (fault detection) on F28P55
          run_tinyml_modelzoo.bat examples\electrical_fault\config.yaml
+
+         # 6-class (fault type classification) on MSPM0
+         run_tinyml_modelzoo.bat examples\electrical_fault\config_MSPM0.yaml
 
 Dataset Details
 ---------------

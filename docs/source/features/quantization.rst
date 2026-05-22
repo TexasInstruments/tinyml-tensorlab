@@ -691,6 +691,41 @@ accepts the following parameters:
 * ``False`` (default): Observers remain active throughout training
 * Integer value: Freezes observers after the specified epoch
 
+LSQ Observer
+^^^^^^^^^^^^
+
+The **Learned Step-size Quantization (LSQ)** observer is available for both
+weights and activations (TINYML_ALGO-689). LSQ learns the quantization step
+size as a trainable parameter during QAT, which can improve accuracy compared
+to fixed-range observers — especially for lower bit widths.
+
+To use LSQ observer, set ``qconfig_type`` when using the wrappers directly:
+
+.. code-block:: python
+
+   from tinyml_torchmodelopt.quantization import TINPUTinyMLQATFxModule
+   from tinyml_torchmodelopt.quantization.base.fx.observer_types import LSQObserver
+
+   model = TINPUTinyMLQATFxModule(
+       model,
+       qconfig_type={'weight': LSQObserver, 'activation': LSQObserver},
+       total_epochs=epochs
+   )
+
+.. note::
+
+   LSQ is available when using ``quantization: 2`` (TI style optimised).
+   It is most beneficial for 4-bit and 2-bit quantization where fixed-range
+   observers may underperform.
+
+MLP 2D Input Support
+^^^^^^^^^^^^^^^^^^^^
+
+MLP (Multi-Layer Perceptron) models with 2D input tensors are now fully
+supported for quantization and conversion (TINYML_ALGO-673). Previously,
+conversion required 1D input shapes. Models that reshape inputs to 2D
+before the first linear layer will now quantize and export correctly.
+
 .. tip::
 
    For best QAT results, set ``num_batch_norm_update_epochs`` to

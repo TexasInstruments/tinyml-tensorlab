@@ -17,6 +17,26 @@ proactive thermal management in motor drive applications.
 
 **Data Type**: Multivariate (motor operating parameters)
 
+Device Support
+--------------
+
+The primary target device is the **F28P55**. The following device is also
+fully supported:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 40 30
+
+   * - Device
+     - Description
+     - Configuration File
+   * - ``F28P55``
+     - C2000 with NPU (primary)
+     - ``config.yaml``
+   * - ``MSPM0G5187``
+     - MSPM0 with NPU
+     - ``config_MSPM0.yaml``
+
 Configuration
 -------------
 
@@ -48,14 +68,22 @@ Running the Example
       .. code-block:: bash
 
          cd tinyml-modelzoo
+         # F28P55 (primary)
          ./run_tinyml_modelzoo.sh examples/forecasting_pmsm_rotor/config.yaml
+
+         # MSPM0G5187
+         ./run_tinyml_modelzoo.sh examples/forecasting_pmsm_rotor_temp/config_MSPM0.yaml
 
    .. tab:: Windows
 
       .. code-block:: powershell
 
          cd tinyml-modelzoo
+         # F28P55 (primary)
          run_tinyml_modelzoo.bat examples\forecasting_pmsm_rotor\config.yaml
+
+         # MSPM0G5187
+         run_tinyml_modelzoo.bat examples\forecasting_pmsm_rotor_temp\config_MSPM0.yaml
 
 Dataset Details
 ---------------

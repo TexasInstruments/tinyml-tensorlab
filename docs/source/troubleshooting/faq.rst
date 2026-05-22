@@ -44,7 +44,7 @@ GPU accelerates training for larger models and NAS.
 * Linux (Ubuntu 20.04/22.04 recommended)
 * Windows 10/11 (native or WSL2)
 
-macOS is not officially supported but may work with some limitations.
+macOS 12 or later is fully supported.
 
 Installation Questions
 ----------------------

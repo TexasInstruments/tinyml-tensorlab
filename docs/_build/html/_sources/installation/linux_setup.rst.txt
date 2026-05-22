@@ -122,7 +122,7 @@ Verification
 
    The variables you need depend on which device you're targeting:
 
-   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT`` and ``C2000WARE_ROOT``
+   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT``
    * **F29 devices (F29H85X, etc.)**: Set ``CG_TOOL_ROOT``
    * **MSPM0 devices**: Set ``ARM_LLVM_CGT_PATH``
    * **AM13E devices**: Set ``ARM_LLVM_CGT_PATH``

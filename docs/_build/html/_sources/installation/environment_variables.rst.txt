@@ -23,22 +23,18 @@ C2000 Devices (F28P55, F28P65, F2837, etc.)
      - Description
    * - ``C2000_CG_ROOT``
      - Path to TI C2000 Code Generation Tools installation
-   * - ``C2000WARE_ROOT``
-     - Path to C2000Ware SDK installation
 
 **Example Values (Linux):**
 
 .. code-block:: bash
 
    export C2000_CG_ROOT="$HOME/ti/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS"
-   export C2000WARE_ROOT="$HOME/ti/c2000/C2000Ware_5_03_00_00"
 
 **Example Values (Windows):**
 
 .. code-block:: powershell
 
    $env:C2000_CG_ROOT = "C:\ti\ccs\tools\compiler\ti-cgt-c2000_22.6.1.LTS"
-   $env:C2000WARE_ROOT = "C:\ti\c2000\C2000Ware_5_03_00_00"
 
 MSPM0 Devices (MSPM0G3507, MSPM0G5187, etc.)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,7 +82,6 @@ Add to ``~/.bashrc`` or ``~/.profile``:
 
    # TI Toolchain Paths
    export C2000_CG_ROOT="$HOME/ti/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS"
-   export C2000WARE_ROOT="$HOME/ti/c2000/C2000Ware_5_03_00_00"
    export ARM_LLVM_CGT_PATH="$HOME/ti/arm-clang/4.0.0.LTS"
 
    # Add to PATH
@@ -110,7 +105,6 @@ Or use PowerShell:
 
    # Set for current user (permanent)
    [Environment]::SetEnvironmentVariable("C2000_CG_ROOT", "C:\ti\ccs\tools\compiler\ti-cgt-c2000_22.6.1.LTS", "User")
-   [Environment]::SetEnvironmentVariable("C2000WARE_ROOT", "C:\ti\c2000\C2000Ware_5_03_00_00", "User")
 
 **Per-Session (Temporary)**
 
@@ -143,12 +137,6 @@ Installing TI Tools
 2. Run installer and note installation path
 3. Set ``C2000_CG_ROOT`` to the installation directory
 
-**C2000Ware SDK**
-
-1. Download from https://www.ti.com/tool/C2000WARE
-2. Run installer and note installation path
-3. Set ``C2000WARE_ROOT`` to the installation directory
-
 **TI Arm Clang Compiler**
 
 1. Download from https://www.ti.com/tool/ARM-CGT
@@ -175,7 +163,6 @@ Check that environment variables are set:
       .. code-block:: bash
 
          echo $C2000_CG_ROOT
-         echo $C2000WARE_ROOT
          echo $ARM_LLVM_CGT_PATH
 
          # Verify compiler is accessible
@@ -186,7 +173,6 @@ Check that environment variables are set:
       .. code-block:: powershell
 
          echo $env:C2000_CG_ROOT
-         echo $env:C2000WARE_ROOT
 
          # Verify compiler
          & "$env:C2000_CG_ROOT\bin\cl2000" --version
@@ -201,14 +187,6 @@ Check the environment variable points to the correct directory:
 .. code-block:: bash
 
    ls $C2000_CG_ROOT/bin/  # Should contain cl2000
-
-**"SDK not found" errors**
-
-Verify the SDK path contains expected subdirectories:
-
-.. code-block:: bash
-
-   ls $C2000WARE_ROOT/  # Should contain device/, libraries/, etc.
 
 **Compilation works in terminal but not in IDE**
 

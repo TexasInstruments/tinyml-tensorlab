@@ -66,14 +66,14 @@ Key Capabilities
 
 **Device Support**
 
-Over 20 TI microcontrollers are supported, including:
+23+ TI microcontrollers are supported, including:
 
 * **C2000 DSP family** - F28P55 (with NPU), F28P65, F2837, F28003, F28004
 * **MSPM0 family** - MSPM0G3507, MSPM0G5187 (with NPU)
 * **MSPM33C family** - MSPM33C32, MSPM33C34
 * **AM13 family** - AM13E2 (with NPU)
 * **AM26x family** - AM263, AM263P, AM261
-* **Connectivity devices** - CC2755, CC1352, CC1354, CC35X1
+* **Connectivity devices** - CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1
 
 **Model Optimization**
 
