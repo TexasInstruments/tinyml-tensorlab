@@ -35,13 +35,12 @@ git remote add tinyml-modelmaker      ssh://git@bitbucket.itg.ti.com/tinyml-algo
 git remote add tinyml-modelzoo        ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git        2>/dev/null || true
 # git remote add tinyml-docs          ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git            2>/dev/null || true
 
-# Shallow fetch all remotes in parallel (network bottleneck eliminated)
-git fetch --depth 1 tinyml-tinyverse        main &
-git fetch --depth 1 tinyml-modeloptimization main &
-git fetch --depth 1 tinyml-modelmaker       main &
-git fetch --depth 1 tinyml-modelzoo         main &
-# git fetch --depth 1 tinyml-docs           main &
-wait
+# Shallow fetch remotes sequentially (parallel shallow fetches conflict on .git/shallow.lock)
+git fetch --depth 1 tinyml-tinyverse        main
+git fetch --depth 1 tinyml-modeloptimization main
+git fetch --depth 1 tinyml-modelmaker       main
+git fetch --depth 1 tinyml-modelzoo         main
+# git fetch --depth 1 tinyml-docs           main
 
 # Merge into subtrees sequentially (git index cannot handle parallel merges)
 git subtree merge --prefix tinyml-tinyverse        tinyml-tinyverse/main        --squash
