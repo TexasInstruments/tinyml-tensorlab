@@ -28,11 +28,26 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# git subtree pull --prefix tinyml-docs ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git main &
-git subtree pull --prefix tinyml-tinyverse ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-tinyverse.git main &
-git subtree pull --prefix tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git main &
-git subtree pull --prefix tinyml-modelmaker ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git main &
-git subtree pull --prefix tinyml-modelzoo ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git main &
+# Register named remotes (no-op if already exists)
+git remote add tinyml-tinyverse       ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-tinyverse.git       2>/dev/null || true
+git remote add tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git 2>/dev/null || true
+git remote add tinyml-modelmaker      ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git      2>/dev/null || true
+git remote add tinyml-modelzoo        ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git        2>/dev/null || true
+# git remote add tinyml-docs          ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git            2>/dev/null || true
+
+# Shallow fetch all remotes in parallel (network bottleneck eliminated)
+git fetch --depth 1 tinyml-tinyverse        main &
+git fetch --depth 1 tinyml-modeloptimization main &
+git fetch --depth 1 tinyml-modelmaker       main &
+git fetch --depth 1 tinyml-modelzoo         main &
+# git fetch --depth 1 tinyml-docs           main &
 wait
+
+# Merge into subtrees sequentially (git index cannot handle parallel merges)
+git subtree merge --prefix tinyml-tinyverse        tinyml-tinyverse/main        --squash
+git subtree merge --prefix tinyml-modeloptimization tinyml-modeloptimization/main --squash
+git subtree merge --prefix tinyml-modelmaker       tinyml-modelmaker/main       --squash
+git subtree merge --prefix tinyml-modelzoo         tinyml-modelzoo/main         --squash
+# git subtree merge --prefix tinyml-docs           tinyml-docs/main             --squash
 
 git submodule update --remote
