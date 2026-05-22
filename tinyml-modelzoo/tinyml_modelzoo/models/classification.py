@@ -691,60 +691,290 @@ class CNN_TS_GEN_BASE_55K_NPU(GenericModelWithSpec):
         return model_spec
 
 
-class TEST_NEW_MODEL_2K(GenericModelWithSpec):
+class CNN_TS_GEN_BASE_1P2K_NPU(GenericModelWithSpec):
     """
-    Test model following documentation pattern for Step 11.1.
+    NPU-Optimized ~1.2K-parameter model.
 
-    Architecture: 2 Conv+BN+ReLU layers + MaxPool + Linear
-    ~2K parameters
+    Compact model with expanding channel pattern (4->8->12->16).
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv5x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC
+    ~1.2K parameters
     """
-
-    def __init__(self, config, input_features=128, variables=1, num_classes=3):
-        super().__init__(config, input_features=input_features,
-                        variables=variables, num_classes=num_classes)
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
         self.model_spec = self.gen_model_spec()
-        self._init_model_from_spec(
-            model_spec=self.model_spec,
-            variables=self.variables,
-            input_features=self.input_features,
-            num_classes=self.num_classes
-        )
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
 
     def gen_model_spec(self):
-        """Define the model architecture using layer specifications."""
         layers = py_utils.DictPlus()
-
-        # Input normalization
         layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=12, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=12, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        # TODO: Update in_features=8 once mixed_precision is implemented
+        layers += {'6': dict(type='LinearLayer', in_features=16, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
 
-        # Conv block 1
-        layers += {'1': dict(type='ConvBNReLULayer',
-                            in_channels=self.variables,
-                            out_channels=16,
-                            kernel_size=(5, 1),
-                            stride=(1, 1))}
-        layers += {'2': dict(type='MaxPoolLayer',
-                            kernel_size=(2, 1),
-                            stride=(2, 1))}
 
-        # Conv block 2
-        layers += {'3': dict(type='ConvBNReLULayer',
-                            in_channels=16,
-                            out_channels=32,
-                            kernel_size=(3, 1),
-                            stride=(1, 1))}
-        layers += {'4': dict(type='MaxPoolLayer',
-                            kernel_size=(2, 1),
-                            stride=(2, 1))}
+class CNN_TS_GEN_BASE_1P5K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~1.5K-parameter model.
 
-        # Global pooling and classifier
+    4-layer model with expansion-contraction-expansion channel pattern (12->12->8->16).
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv5x1 -> Conv3x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC
+    ~1.5K parameters
+    """
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=12, kernel_size=(5, 1), stride=(2, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=12, out_channels=12, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=12, out_channels=8, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'4': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
         layers += {'5': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
         layers += {'6': dict(type='ReshapeLayer', ndim=2)}
-        layers += {'7': dict(type='LinearLayer',
-                            in_features=32,
-                            out_features=self.num_classes)}
+        # TODO: Update in_features=8 once mixed_precision is implemented
+        layers += {'7': dict(type='LinearLayer', in_features=16, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
 
-        return dict(model_spec=layers)
+
+class CNN_TS_GEN_BASE_1P9K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~1.9K-parameter model.
+
+    Constant-width Conv3x1 layers (16->16->16).
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv3x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC
+    Channels: 4 -> 4 -> 16 -> 16 -> 16
+    ~1.9K parameters
+    """
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=16, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearLayer', in_features=16, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_TS_GEN_BASE_2P8K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~2.8K-parameter model.
+
+    Deeper 5-layer model with gradual channel expansion (8->8->12->12->16) + 2 FC layers.
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv11x1 -> Conv7x1 -> Conv5x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC -> FC
+    ~2.8K parameters
+    """
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(11, 1), stride=(7, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=8, kernel_size=(7, 1), stride=(3, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=8, out_channels=12, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'4': dict(type='ConvBNReLULayer', in_channels=12, out_channels=12, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'5': dict(type='ConvBNReLULayer', in_channels=12, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'6': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'7': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'8': dict(type='LinearBNReLULayer', in_features=16, out_features=16)}
+        # TODO: Update in_features=8 once mixed_precision is implemented
+        layers += {'9': dict(type='LinearLayer', in_features=16, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_TS_GEN_BASE_3P1K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~3.1K-parameter model.
+
+    4-layer model with steady channel expansion (8->16->20->24).
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv3x1 -> Conv3x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC
+    ~3.1K parameters
+    """
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(3, 1), stride=(2, 1), padding=(2, 0))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=20, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'4': dict(type='ConvBNReLULayer', in_channels=20, out_channels=24, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'5': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'6': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'7': dict(type='LinearLayer', in_features=24, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_TS_GEN_BASE_3P9K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~3.9K-parameter model.
+
+    4-layer model with aggressive channel expansion and contraction (8->28->20->20).
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv3x1 -> Conv3x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC
+    ~3.9K parameters
+    """
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(3, 1), stride=(4, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=8, out_channels=28, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=28, out_channels=20, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'4': dict(type='ConvBNReLULayer', in_channels=20, out_channels=20, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'5': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'6': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'7': dict(type='LinearLayer', in_features=20, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_TS_GEN_BASE_4P2K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~4.2K-parameter model.
+
+    3-layer CNN with aggressive channel expansion (12->24->28) followed by 3 FC layers (28->20->16).
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv3x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC -> FC -> FC
+    ~4.2K parameters
+    """
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=12, kernel_size=(3, 1), stride=(4, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=12, out_channels=24, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=24, out_channels=28, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearBNReLULayer', in_features=28, out_features=20)}
+        layers += {'7': dict(type='LinearBNReLULayer', in_features=20, out_features=16)}
+        # TODO: Update in_features=12 once mixed_precision is implemented
+        layers += {'8': dict(type='LinearLayer', in_features=16, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_TS_GEN_BASE_5K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~5K-parameter model.
+
+    4-layer model with progressive channel expansion (12->16->24->32).
+    All layers NPU compliant.
+
+    Architecture: BatchNorm -> Conv5x1 -> Conv5x1 -> Conv3x1 -> Conv3x1 -> AdaptiveAvgPool -> FC
+    ~5K parameters
+    """
+    def __init__(self, config, input_features=256, variables=4, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=12, kernel_size=(5, 1), stride=(2, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=12, out_channels=16, kernel_size=(5, 1), stride=(2, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=16, out_channels=24, kernel_size=(3, 1), stride=(2, 1))}
+        layers += {'4': dict(type='ConvBNReLULayer', in_channels=24, out_channels=32, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'5': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'6': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'7': dict(type='LinearLayer', in_features=32, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
+
+class CNN_TS_GEN_BASE_40K_NPU(GenericModelWithSpec):
+    """
+    NPU-Optimized ~40K-parameter model.
+
+    All layers NPU compliant
+
+    Architecture: BatchNorm -> Conv3x1 -> Conv5x1 -> Conv7x1 -> AdaptiveAvgPool -> FC -> FC -> FC
+    ~40K parameters
+    """
+    def __init__(self, config, input_features=128, variables=3, num_classes=6):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'2': dict(type='ConvBNReLULayer', in_channels=16, out_channels=40, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=40, out_channels=68, kernel_size=(7, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearBNReLULayer', in_features=68, out_features=120)}
+        layers += {'7': dict(type='LinearBNReLULayer', in_features=120, out_features=64)}
+        layers += {'8': dict(type='LinearLayer', in_features=64, out_features=self.num_classes)}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
 
 
 # Export all classification models
@@ -761,11 +991,20 @@ __all__ = [
     'CNN_TS_GEN_BASE_100_NPU',
     'CNN_TS_GEN_BASE_500_NPU',
     'CNN_TS_GEN_BASE_1K_NPU',
+    'CNN_TS_GEN_BASE_1P2K_NPU',
+    'CNN_TS_GEN_BASE_1P5K_NPU',
+    'CNN_TS_GEN_BASE_1P9K_NPU',
     'CNN_TS_GEN_BASE_2K_NPU',
+    'CNN_TS_GEN_BASE_2P8K_NPU',
+    'CNN_TS_GEN_BASE_3P1K_NPU',
+    'CNN_TS_GEN_BASE_3P9K_NPU',
     'CNN_TS_GEN_BASE_4K_NPU',
+    'CNN_TS_GEN_BASE_4P2K_NPU',
+    'CNN_TS_GEN_BASE_5K_NPU',
     'CNN_TS_GEN_BASE_6K_NPU',
     'CNN_TS_GEN_BASE_8K_NPU',
     'CNN_TS_GEN_BASE_13K_NPU',
     'CNN_TS_GEN_BASE_20K_NPU',
     'CNN_TS_GEN_BASE_55K_NPU',
+    'CNN_TS_GEN_BASE_40K_NPU',
 ]

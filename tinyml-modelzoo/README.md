@@ -109,6 +109,7 @@ tinyml-modelzoo/
 |--------|-----|-------------|-------|
 | CC2755 | CDE | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
 | CC1312 | No | Arm Cortex-M4F wireless MCU | Sub-1GHz |
+| CC1314 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz |
 | CC1352 | No | Arm Cortex-M4F wireless MCU | Sub-1GHz |
 | CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz |
 | CC35X1 | CDE | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
@@ -259,6 +260,7 @@ These applications are designed for specific use cases with optimized models and
 | **ac_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect AC arc faults in electrical systems |
 | **dc_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect DC arc faults from current waveforms for electrical safety |
 | **ecg_classification** | ecg_classification | MSPM0G3507, MSPM0G5187, MSPM0G3519 | Classify normal vs anomalous heartbeats from ECG signals |
+| **gearbox_fault_detection** | gearbox_fault | MSPM0G3507, MSPM0G3519, MSPM0G5187 | Classify gearbox operating conditions (healthy vs broken tooth) from vibration data |
 | **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
 | **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect faults in BLDC fans from accelerometer data |
 | **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
@@ -268,12 +270,12 @@ These applications are designed for specific use cases with optimized models and
 | **MNIST_image_classification** | image_classification | MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | Handwritten digit recognition (MNIST dataset) |
 
 ### Summary by Task Type:
-- **Generic Timeseries Tasks** (22 examples): Support all target devices and can be adapted to your custom datasets
-  - Classification: 8 examples (1 base + 7 real-world applications)
+- **Generic Timeseries Tasks** (23 examples): Support all target devices and can be adapted to your custom datasets
+  - Classification: 9 examples (1 base + 8 real-world applications)
   - Regression: 5 examples (1 base + 4 real-world applications)
   - Forecasting: 3 examples (1 base + 2 real-world applications)
   - Anomaly Detection: 6 examples (1 base + 5 application variants)
-- **Application-Specific Tasks** (10 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), image_classification (1)
+- **Application-Specific Tasks** (11 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), gearbox_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), image_classification (1)
 
 ---
 
@@ -288,14 +290,15 @@ These applications are designed for specific use cases with optimized models and
 | 3   | [motor_bearing_fault](examples/motor_bearing_fault/)                                 | Multivariate | Classify 5 bearing fault types + normal operation from vibration data.          |
 | 4   | [blower_imbalance](examples/blower_imbalance/)                                       | Multivariate | Detect blade imbalance in HVAC blowers using 3-phase motor currents.            |
 | 5   | [fan_blade_fault_classification](examples/fan_blade_fault_classification/)           | Multivariate | Detect faults in BLDC fans from accelerometer data.                             |
-| 6   | [electrical_fault](examples/electrical_fault/)                                       | Multivariate | Classify transmission line faults using voltage and current.                    |
-| 7   | [grid_stability](examples/grid_stability/)                                           | Multivariate | Predict power grid stability from node parameters.                              |
-| 8   | [gas_sensor](examples/gas_sensor/)                                                   | Multivariate | Identify gas type and concentration from sensor array data.                     |
-| 9   | [branched_model_parameters](examples/branched_model_parameters/)                     | Multivariate | Human Activity Recognition from accelerometer/gyroscope data.                   |
-| 10  | [ecg_classification](examples/ecg_classification/)                                   | Multivariate | Classify normal vs anomalous heartbeats from ECG signals.                       |
-| 11  | [nilm_appliance_usage_classification](examples/nilm_appliance_usage_classification/) | Multivariate | Non-Intrusive Load Monitoring - identify active appliances.                     |
-| 12  | [PLAID_nilm_classification](examples/PLAID_nilm_classification/)                     | Multivariate | Appliance identification using the PLAID dataset.                               |
-| 13  | [pir_detection](examples/pir_detection/)                                             | Multivariate | Detect presence/motion using PIR sensor data.                                   |
+| 6   | [gearbox_fault_detection](examples/gearbox_fault_detection/)                         | Multivariate | Classify gearbox operating conditions (healthy vs broken tooth) from vibration.  |
+| 7   | [electrical_fault](examples/electrical_fault/)                                       | Multivariate | Classify transmission line faults using voltage and current.                    |
+| 8   | [grid_stability](examples/grid_stability/)                                           | Multivariate | Predict power grid stability from node parameters.                              |
+| 9   | [gas_sensor](examples/gas_sensor/)                                                   | Multivariate | Identify gas type and concentration from sensor array data.                     |
+| 10  | [branched_model_parameters](examples/branched_model_parameters/)                     | Multivariate | Human Activity Recognition from accelerometer/gyroscope data.                   |
+| 11  | [ecg_classification](examples/ecg_classification/)                                   | Multivariate | Classify normal vs anomalous heartbeats from ECG signals.                       |
+| 12  | [nilm_appliance_usage_classification](examples/nilm_appliance_usage_classification/) | Multivariate | Non-Intrusive Load Monitoring - identify active appliances.                     |
+| 13  | [PLAID_nilm_classification](examples/PLAID_nilm_classification/)                     | Multivariate | Appliance identification using the PLAID dataset.                               |
+| 14  | [pir_detection](examples/pir_detection/)                                             | Multivariate | Detect presence/motion using PIR sensor data.                                   |
 
 ### Regression Examples
 
@@ -355,19 +358,30 @@ For detailed guidelines, see [NPU Configuration Guidelines](docs/NPU_CONFIGURATI
 | `CLS_100_NPU` | ~100 | CNN | Yes | Ultra-compact model |
 | `CLS_500_NPU` | ~500 | CNN | Yes | Compact model |
 | `CLS_1k_NPU` | ~1K | CNN | Yes | Lightweight 2-layer CNN |
+| `CLS_1.2k_NPU` | ~1.2K | CNN | Yes | Compact model for ultra-low power devices |
+| `CLS_1.5k_NPU` | ~1.5K | CNN | Yes | 3-layer model with balanced performance |
+| `CLS_1.9k_NPU` | ~1.9K | CNN | Yes | Efficient 3-layer model |
 | `CLS_2k_NPU` | ~2K | CNN | Yes | 2-layer model |
+| `CLS_2.8k_NPU` | ~2.8K | CNN | Yes | Improved accuracy with compact footprint |
+| `CLS_3.1k_NPU` | ~3.1K | CNN | Yes | Higher accuracy model |
 | `CLS_ResAdd_3k` | ~3K | ResNet (Add) | No | Residual connections with addition |
 | `CLS_ResCat_3k` | ~3K | ResNet (Cat) | No | Residual connections with concatenation |
+| `CLS_3.9k_NPU` | ~3.9K | CNN | Yes | Advanced 3-layer model |
 | `CLS_4k_NPU` | ~4K | CNN | Yes | Balanced model |
+| `CLS_4.2k_NPU` | ~4.2K | CNN | Yes | Optimized 4-layer model |
+| `CLS_5k_NPU` | ~5K | CNN | Yes | Mid-range model |
 | `CLS_6k_NPU` | ~6K | CNN (DW-Sep) | Yes | Depthwise separable |
 | `CLS_8k_NPU` | ~8K | CNN (DW-Sep) | Yes | Depthwise separable |
 | `CLS_13k_NPU` | ~13K | CNN | Yes | Higher capacity |
 | `CLS_20k_NPU` | ~20K | CNN | Yes | High capacity |
+| `CLS_40k_NPU` | ~40K | CNN | Yes | Advanced model for complex tasks |
 | `CLS_55k_NPU` | ~55K | CNN | Yes | Maximum accuracy |
 | `ArcFault_model_200_t` | ~200 | Specialized | No | Arc fault detection |
 | `ArcFault_model_300_t` | ~300 | Specialized | No | Arc fault with more capacity |
 | `ArcFault_model_700_t` | ~700 | Specialized | No | Arc fault medium model |
 | `ArcFault_model_1400_t` | ~1.4K | Specialized | No | Arc fault high accuracy |
+| `GearboxFault_model_1.2k_t` | ~1.2K | CNN | Yes | Gearbox fault detection |
+| `GearboxFault_model_1.5k_t` | ~1.5K | CNN | Yes | Gearbox fault with more capacity |
 | `MotorFault_model_1_t` | Varies | Specialized | No | Motor bearing fault detection |
 | `MotorFault_model_2_t` | Varies | Specialized | No | Motor fault variant 2 |
 | `MotorFault_model_3_t` | Varies | Specialized | No | Motor fault variant 3 |
