@@ -87,7 +87,8 @@ RUN source ${HOME_DIR}/.bashrc && \
     python -m ensurepip --upgrade && \
     python -m pip install --no-input --upgrade pip setuptools && \
     python -m pip install --no-input --upgrade wheel cython numpy && \
-    rm -rf ${HOME_DIR}/.pyenv/cache/* ${HOME_DIR}/.cache/pip/* /tmp/*
+    rm -rf ${HOME_DIR}/.pyenv/cache/* ${HOME_DIR}/.cache/pip/* /tmp/* && \
+    chmod -R 555 ${HOME_DIR}/.pyenv
 
 #################################################################################
 # Note 1: this can be reversed later as a last step after all installations are done.
@@ -102,7 +103,6 @@ RUN source ${HOME_DIR}/.bashrc
 # Lock down source code and dependencies (read-only), keep only data/cache writable
 RUN find ${WORK_DIR} -type d -exec chmod 555 {} \; && \
     find ${WORK_DIR} -type f -exec chmod 444 {} \; && \
-    chmod -R 555 ${HOME_DIR}/.pyenv && \
     chmod 444 ${HOME_DIR}/.bashrc ${HOME_DIR}/.profile ${HOME_DIR}/.pyenvrc 2>/dev/null || true && \
     chmod 555 ${HOME_DIR} && \
     mkdir -p ${HOME_DIR}/.cache/pip && \
