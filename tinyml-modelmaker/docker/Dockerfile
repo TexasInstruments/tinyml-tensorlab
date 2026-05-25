@@ -34,9 +34,9 @@ RUN if [ ! -z $http_proxy ]; then echo "Acquire::http::proxy \"${http_proxy}\";"
 
 # baseline
 RUN apt update && \
-    apt install -y sudo g++ gcc git curl iputils-ping wget cmake build-essential libgtk-3-0 apt-utils libgl1 llvm llvm-dev \
+    apt install -y sudo g++ gcc git curl wget cmake build-essential apt-utils libgl1 llvm llvm-dev \
     libbz2-dev xz-utils libreadline-dev libncurses5-dev libssl-dev libsqlite3-dev liblzma-dev \
-    libffi-dev libjpeg-dev zlib1g-dev graphviz graphviz-dev protobuf-compiler && \
+    libffi-dev libjpeg-dev zlib1g-dev graphviz graphviz-dev && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # ##################################################################
@@ -87,27 +87,19 @@ RUN source ${HOME_DIR}/.bashrc && \
     python -m ensurepip --upgrade && \
     python -m pip install --no-input --upgrade pip setuptools && \
     python -m pip install --no-input --upgrade wheel cython numpy && \
-    rm -rf ${HOME_DIR}/.pyenv/cache/* ${HOME_DIR}/.cache/pip/* /tmp/* && \
-    chmod -R 555 ${HOME_DIR}/.pyenv
+    rm -rf ${HOME_DIR}/.pyenv/cache/* ${HOME_DIR}/.cache/pip/* /tmp/*
 
 #################################################################################
 # Note 1: this can be reversed later as a last step after all installations are done.
 # enabling write permissions for all users, if support is needed for users passed via --user argument of docker run
 # RUN chmod -R ugo+rwx ${HOME_DIR}
 
-# For Path variables
-# Note 3: in the container, .bashrc or .pyenvrc may need to be sourced to activate the Python environment
-# if it is not being activated automatically.
-RUN source ${HOME_DIR}/.bashrc
-
-# Lock down source code and dependencies (read-only), keep only data/cache writable
-RUN find ${WORK_DIR} -type d -exec chmod 555 {} \; && \
-    find ${WORK_DIR} -type f -exec chmod 444 {} \; && \
+# Lock down pyenv and config files (read-only); keep HOME writable so derived images can add dirs
+RUN chmod -R 555 ${HOME_DIR}/.pyenv && \
     chmod 444 ${HOME_DIR}/.bashrc ${HOME_DIR}/.profile ${HOME_DIR}/.pyenvrc 2>/dev/null || true && \
-    chmod 555 ${HOME_DIR} && \
     mkdir -p ${HOME_DIR}/.cache/pip && \
     chmod -R 755 ${HOME_DIR}/.cache/pip && \
-    chmod -R 755 ${DATA_DIR} ${TOOLS_PATH} ${INSTALLER_PATH}
+    chmod 755 ${TOOLS_PATH} ${INSTALLER_PATH}
 
 # Switch to non-root user
 USER tinyml
