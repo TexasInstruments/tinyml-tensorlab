@@ -232,7 +232,7 @@ These applications use generic task types that can be adapted to your custom dat
 | **generic_timeseries_anomalydetection**                                      | generic_timeseries_anomalydetection | Generic anomaly detection example using autoencoders |
 | The below examples demonstrate the above AI task types with real world data: |                                     |                                                      |
 | **branched_model_parameters**                                                | generic_timeseries_classification | Human Activity Recognition from accelerometer/gyroscope data |
-| **electrical_fault**                                                         | generic_timeseries_classification | Classify transmission line faults using voltage and current |
+| **electrical_fault**                                                         | generic_timeseries_classification | Classify transmission line faults using voltage and current (2-class and 6-class variants) |
 | **gas_sensor**                                                               | generic_timeseries_classification | Identify gas type and concentration from sensor array data |
 | **grid_fault_detection**                                                     | generic_timeseries_classification | Detect electrical grid faults from sensor data |
 | **grid_stability**                                                           | generic_timeseries_classification | Predict power grid stability from node parameters |
@@ -262,7 +262,7 @@ These applications are designed for specific use cases with optimized models and
 | **ecg_classification** | ecg_classification | MSPM0G3507, MSPM0G5187, MSPM0G3519 | Classify normal vs anomalous heartbeats from ECG signals |
 | **gearbox_fault_detection** | gearbox_fault | MSPM0G3507, MSPM0G3519, MSPM0G5187 | Classify gearbox operating conditions (healthy vs broken tooth) from vibration data |
 | **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
-| **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect faults in BLDC fans from accelerometer data |
+| **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263, CC1312, CC1314, CC1352, CC1354, CC2755, CC35X1 | Detect faults in BLDC fans from accelerometer data |
 | **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
 | **grid_fault_detection** | classification | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect electrical grid faults from sensor data |
 | **mosfet_temp_prediction** | regression | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Predict MOSFET temperature from electrical parameters |
@@ -270,8 +270,8 @@ These applications are designed for specific use cases with optimized models and
 | **MNIST_image_classification** | image_classification | MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | Handwritten digit recognition (MNIST dataset) |
 
 ### Summary by Task Type:
-- **Generic Timeseries Tasks** (23 examples): Support all target devices and can be adapted to your custom datasets
-  - Classification: 9 examples (1 base + 8 real-world applications)
+- **Generic Timeseries Tasks** (22 examples): Support all target devices and can be adapted to your custom datasets
+  - Classification: 8 examples (1 base + 7 real-world applications)
   - Regression: 5 examples (1 base + 4 real-world applications)
   - Forecasting: 3 examples (1 base + 2 real-world applications)
   - Anomaly Detection: 6 examples (1 base + 5 application variants)
@@ -291,7 +291,7 @@ These applications are designed for specific use cases with optimized models and
 | 4   | [blower_imbalance](examples/blower_imbalance/)                                       | Multivariate | Detect blade imbalance in HVAC blowers using 3-phase motor currents.            |
 | 5   | [fan_blade_fault_classification](examples/fan_blade_fault_classification/)           | Multivariate | Detect faults in BLDC fans from accelerometer data.                             |
 | 6   | [gearbox_fault_detection](examples/gearbox_fault_detection/)                         | Multivariate | Classify gearbox operating conditions (healthy vs broken tooth) from vibration.  |
-| 7   | [electrical_fault](examples/electrical_fault/)                                       | Multivariate | Classify transmission line faults using voltage and current.                    |
+| 7   | [electrical_fault](examples/electrical_fault/)                                       | Multivariate | Classify transmission line faults using voltage and current (2-class and 6-class variants). |
 | 8   | [grid_stability](examples/grid_stability/)                                           | Multivariate | Predict power grid stability from node parameters.                              |
 | 9   | [gas_sensor](examples/gas_sensor/)                                                   | Multivariate | Identify gas type and concentration from sensor array data.                     |
 | 10  | [branched_model_parameters](examples/branched_model_parameters/)                     | Multivariate | Human Activity Recognition from accelerometer/gyroscope data.                   |
