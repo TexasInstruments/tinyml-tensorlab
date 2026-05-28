@@ -783,3 +783,4 @@ Next Steps
 * Explore :doc:`neural_architecture_search` for model optimization
 * Learn about :doc:`feature_extraction` for input preparation
 * Deploy quantized models: :doc:`/deployment/npu_device_deployment`
+* Automatic per-layer bit width assignment: :doc:`auto_quantization`
