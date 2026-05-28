@@ -893,10 +893,11 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l2 current"><a class="current reference internal" href="#">8.4. Automatic Mixed Precision Quantization</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">8.4.1. Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#algorithm">8.4.2. Algorithm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuration">8.4.3. Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#task-specific-behaviour">8.4.4. Task-Specific Behaviour</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example-configs">8.4.5. Example Configs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#next-steps">8.4.6. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tolerance-thresholds">8.4.3. Tolerance Thresholds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">8.4.4. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-specific-behaviour">8.4.5. Task-Specific Behaviour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-configs">8.4.6. Example Configs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">8.4.7. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="feature_extraction.html">8.5. Feature Extraction</a><ul>
@@ -1337,38 +1338,44 @@ average bit width budget is exhausted.</p>
 the pipeline determines it automatically using binary search:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 30.0%" />
+<col style="width: 25.0%" />
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
 <col style="width: 20.0%" />
 <col style="width: 20.0%" />
-<col style="width: 30.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Task Type</p></th>
 <th class="head"><p>Search Range</p></th>
 <th class="head"><p>Metric</p></th>
-<th class="head"><p>Tolerance</p></th>
+<th class="head"><p>Default Tolerance</p></th>
+<th class="head"><p>Config Key</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Classification</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">8]</span></code></p></td>
 <td><p>Accuracy</p></td>
-<td><p>5% drop</p></td>
-</tr>
-<tr class="row-odd"><td><p>Anomaly Detection</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">8]</span></code></p></td>
-<td><p>MSE</p></td>
-<td><p>2x increase</p></td>
-</tr>
-<tr class="row-even"><td><p>Forecasting</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">32]</span></code></p></td>
-<td><p>SMAPE</p></td>
-<td><p>2x increase</p></td>
+<td><p>5% drop (<code class="docutils literal notranslate"><span class="pre">0.05</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">autoquant_tolerance_classification</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Regression</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">12]</span></code></p></td>
 <td><p>R²</p></td>
-<td><p>5% drop</p></td>
+<td><p>5% drop (<code class="docutils literal notranslate"><span class="pre">0.05</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">autoquant_tolerance_regression</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Forecasting</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">32]</span></code></p></td>
+<td><p>SMAPE</p></td>
+<td><p>3× float baseline (<code class="docutils literal notranslate"><span class="pre">2.0</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">autoquant_tolerance_forecasting</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Anomaly Detection</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">8]</span></code></p></td>
+<td><p>MSE</p></td>
+<td><p>3× float baseline (<code class="docutils literal notranslate"><span class="pre">2.0</span></code>)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">autoquant_tolerance_anomaly</span></code></p></td>
 </tr>
 </tbody>
 </table>
@@ -1379,8 +1386,50 @@ The binary search typically converges in two to three iterations.</p>
 <p>If the Hessian estimation fails for any reason, the pipeline falls back
 to standard uniform 8-bit QAT automatically.</p>
 </section>
+<section id="tolerance-thresholds">
+<h2><span class="section-number">8.4.3. </span>Tolerance Thresholds<a class="headerlink" href="#tolerance-thresholds" title="Link to this heading"></a></h2>
+<p>The tolerance thresholds control how much metric degradation versus the
+float baseline is acceptable during the binary-search calibration. They
+are set in <code class="docutils literal notranslate"><span class="pre">params.py</span></code> and can be overridden per run in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>
+under the <code class="docutils literal notranslate"><span class="pre">training</span></code> section.</p>
+<p>For accuracy and R², <strong>higher values are better</strong>, so the tolerance is a
+fraction representing the maximum allowed <em>drop</em> from the float baseline.
+The quantized metric must stay above <code class="docutils literal notranslate"><span class="pre">float_metric</span> <span class="pre">×</span> <span class="pre">(1</span> <span class="pre">−</span> <span class="pre">tolerance)</span></code>.</p>
+<p>For SMAPE and MSE, <strong>lower values are better</strong>, so the tolerance is a
+value added to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> to form a ceiling multiplier. The quantized metric
+must stay below <code class="docutils literal notranslate"><span class="pre">float_metric</span> <span class="pre">×</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">tolerance)</span></code>.</p>
+<p><strong>Classification — autoquant_tolerance_classification (default: 0.05)</strong></p>
+<p>Accuracy is higher-is-better. <code class="docutils literal notranslate"><span class="pre">0.05</span></code> means the quantized model’s
+accuracy may drop by at most <strong>5%</strong> relative to the float model. For
+example, if the float model achieves 90% accuracy, the threshold is
+<code class="docutils literal notranslate"><span class="pre">90%</span> <span class="pre">×</span> <span class="pre">(1</span> <span class="pre">−</span> <span class="pre">0.05)</span> <span class="pre">=</span> <span class="pre">85.5%</span></code>. Any candidate bit width that pushes
+accuracy below that threshold is rejected and the algorithm tries a
+higher bit width.</p>
+<p><strong>Regression — autoquant_tolerance_regression (default: 0.05)</strong></p>
+<p>R² is higher-is-better. <code class="docutils literal notranslate"><span class="pre">0.05</span></code> means the quantized model’s R² may
+drop by at most <strong>5%</strong> relative to the float baseline. For example, a
+float R² of <code class="docutils literal notranslate"><span class="pre">0.95</span></code> sets a threshold of <code class="docutils literal notranslate"><span class="pre">0.95</span> <span class="pre">×</span> <span class="pre">(1</span> <span class="pre">−</span> <span class="pre">0.05)</span> <span class="pre">=</span> <span class="pre">0.9025</span></code>.
+Regression metrics are highly sensitive to quantization, so keeping
+this tight ensures the selected bit width genuinely preserves model
+quality.</p>
+<p><strong>Forecasting — autoquant_tolerance_forecasting (default: 2.0)</strong></p>
+<p>SMAPE is lower-is-better. The tolerance is used as an additive factor
+to form a ceiling: <code class="docutils literal notranslate"><span class="pre">threshold</span> <span class="pre">=</span> <span class="pre">float_SMAPE</span> <span class="pre">×</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">2.0)</span> <span class="pre">=</span> <span class="pre">3</span> <span class="pre">×</span> <span class="pre">float_SMAPE</span></code>.
+So <code class="docutils literal notranslate"><span class="pre">2.0</span></code> means the quantized model’s SMAPE may be <strong>at most 3× the
+float baseline</strong> before the bit width is rejected. SMAPE is an unbounded
+ratio metric, so a multiplicative ceiling is more meaningful than a
+fixed fraction. The float SMAPE is recorded at the end of float training
+and used as the reference.</p>
+<p><strong>Anomaly Detection — autoquant_tolerance_anomaly (default: 2.0)</strong></p>
+<p>MSE is lower-is-better. The same formula applies:
+<code class="docutils literal notranslate"><span class="pre">threshold</span> <span class="pre">=</span> <span class="pre">float_MSE</span> <span class="pre">×</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">2.0)</span> <span class="pre">=</span> <span class="pre">3</span> <span class="pre">×</span> <span class="pre">float_MSE</span></code>. So <code class="docutils literal notranslate"><span class="pre">2.0</span></code>
+means the quantized model’s reconstruction MSE may be <strong>at most 3× the
+float baseline</strong> before the bit width is rejected. The absolute MSE
+value is dataset-dependent, which is why a multiplier is used rather
+than a fixed threshold.</p>
+</section>
 <section id="configuration">
-<h2><span class="section-number">8.4.3. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.4. </span>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
 <p>Since <code class="docutils literal notranslate"><span class="pre">auto_quantization</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>, no explicit config
 change is needed — it is already active whenever <code class="docutils literal notranslate"><span class="pre">quantization:</span> <span class="pre">1</span></code>
 or <code class="docutils literal notranslate"><span class="pre">quantization:</span> <span class="pre">2</span></code> is set:</p>
@@ -1409,9 +1458,39 @@ to <code class="docutils literal notranslate"><span class="pre">False</span></co
 parameter is ignored. Bit widths are assigned per-layer by the greedy
 algorithm, not set uniformly.</p>
 </div>
+<p><strong>Overriding tolerance thresholds</strong></p>
+<p>The tolerance thresholds have defaults set in <code class="docutils literal notranslate"><span class="pre">params.py</span></code> but can be
+overridden in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> under the <code class="docutils literal notranslate"><span class="pre">training</span></code> key. Only the keys
+relevant to your task type need to be specified:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;REGR_13k&#39;</span>
+<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">auto_quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="c1"># Tighten regression tolerance: allow at most 2% R² drop instead of 5%</span>
+<span class="w">  </span><span class="nt">autoquant_tolerance_regression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span>
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;AD_17K&#39;</span>
+<span class="w">  </span><span class="nt">training_epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+<span class="w">  </span><span class="nt">quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">auto_quantization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="c1"># Relax anomaly tolerance: allow up to 4x MSE increase</span>
+<span class="w">  </span><span class="nt">autoquant_tolerance_anomaly</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0</span>
+</pre></div>
+</div>
+<p>All four keys and their defaults are:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">training</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">autoquant_tolerance_classification</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.05</span><span class="w">   </span><span class="c1"># higher-is-better: max 5% accuracy drop vs float</span>
+<span class="w">  </span><span class="nt">autoquant_tolerance_regression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.05</span><span class="w">        </span><span class="c1"># higher-is-better: max 5% R² drop vs float</span>
+<span class="w">  </span><span class="nt">autoquant_tolerance_forecasting</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0</span><span class="w">        </span><span class="c1"># lower-is-better: SMAPE must stay below 3× float (1 + 2.0)</span>
+<span class="w">  </span><span class="nt">autoquant_tolerance_anomaly</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0</span><span class="w">            </span><span class="c1"># lower-is-better: MSE must stay below 3× float (1 + 2.0)</span>
+</pre></div>
+</div>
 </section>
 <section id="task-specific-behaviour">
-<h2><span class="section-number">8.4.4. </span>Task-Specific Behaviour<a class="headerlink" href="#task-specific-behaviour" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.5. </span>Task-Specific Behaviour<a class="headerlink" href="#task-specific-behaviour" title="Link to this heading"></a></h2>
 <p><strong>Classification and Anomaly Detection</strong></p>
 <p>The calibration search runs over <code class="docutils literal notranslate"><span class="pre">[4,</span> <span class="pre">8]</span></code>. For most classification
 datasets the algorithm selects an average bit width in the range 4–6,
@@ -1432,7 +1511,7 @@ compressing less sensitive intermediate layers.</p>
 average bit widths when the task demands it.</p>
 </section>
 <section id="example-configs">
-<h2><span class="section-number">8.4.5. </span>Example Configs<a class="headerlink" href="#example-configs" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.6. </span>Example Configs<a class="headerlink" href="#example-configs" title="Link to this heading"></a></h2>
 <p><strong>Regression (Washing Machine Load Weighing):</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">common</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">task_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">generic_timeseries_regression</span>
@@ -1475,7 +1554,7 @@ average bit widths when the task demands it.</p>
 </div>
 </section>
 <section id="next-steps">
-<h2><span class="section-number">8.4.6. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.4.7. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="quantization.html"><span class="doc">Quantization</span></a> — Uniform quantization configuration reference</p></li>
 <li><p><a class="reference internal" href="neural_architecture_search.html"><span class="doc">Neural Architecture Search</span></a> — Automatic model architecture search</p></li>

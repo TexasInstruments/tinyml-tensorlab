@@ -92,28 +92,33 @@ the pipeline determines it automatically using binary search:
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 20 20 30
+   :widths: 25 20 15 20 20
 
    * - Task Type
      - Search Range
      - Metric
-     - Tolerance
+     - Default Tolerance
+     - Config Key
    * - Classification
      - ``[4, 8]``
      - Accuracy
-     - 5% drop
-   * - Anomaly Detection
-     - ``[4, 8]``
-     - MSE
-     - 2x increase
-   * - Forecasting
-     - ``[4, 32]``
-     - SMAPE
-     - 2x increase
+     - 5% drop (``0.05``)
+     - ``autoquant_tolerance_classification``
    * - Regression
      - ``[4, 12]``
      - R²
-     - 5% drop
+     - 5% drop (``0.05``)
+     - ``autoquant_tolerance_regression``
+   * - Forecasting
+     - ``[4, 32]``
+     - SMAPE
+     - 3× float baseline (``2.0``)
+     - ``autoquant_tolerance_forecasting``
+   * - Anomaly Detection
+     - ``[4, 8]``
+     - MSE
+     - 3× float baseline (``2.0``)
+     - ``autoquant_tolerance_anomaly``
 
 At each candidate average bit width, a fast calibration pass (no full
 QAT retraining) is run and the metric is checked against the tolerance
@@ -122,6 +127,59 @@ The binary search typically converges in two to three iterations.
 
 If the Hessian estimation fails for any reason, the pipeline falls back
 to standard uniform 8-bit QAT automatically.
+
+Tolerance Thresholds
+--------------------
+
+The tolerance thresholds control how much metric degradation versus the
+float baseline is acceptable during the binary-search calibration. They
+are set in ``params.py`` and can be overridden per run in ``config.yaml``
+under the ``training`` section.
+
+For accuracy and R², **higher values are better**, so the tolerance is a
+fraction representing the maximum allowed *drop* from the float baseline.
+The quantized metric must stay above ``float_metric × (1 − tolerance)``.
+
+For SMAPE and MSE, **lower values are better**, so the tolerance is a
+value added to ``1.0`` to form a ceiling multiplier. The quantized metric
+must stay below ``float_metric × (1 + tolerance)``.
+
+**Classification — autoquant_tolerance_classification (default: 0.05)**
+
+Accuracy is higher-is-better. ``0.05`` means the quantized model's
+accuracy may drop by at most **5%** relative to the float model. For
+example, if the float model achieves 90% accuracy, the threshold is
+``90% × (1 − 0.05) = 85.5%``. Any candidate bit width that pushes
+accuracy below that threshold is rejected and the algorithm tries a
+higher bit width.
+
+**Regression — autoquant_tolerance_regression (default: 0.05)**
+
+R² is higher-is-better. ``0.05`` means the quantized model's R² may
+drop by at most **5%** relative to the float baseline. For example, a
+float R² of ``0.95`` sets a threshold of ``0.95 × (1 − 0.05) = 0.9025``.
+Regression metrics are highly sensitive to quantization, so keeping
+this tight ensures the selected bit width genuinely preserves model
+quality.
+
+**Forecasting — autoquant_tolerance_forecasting (default: 2.0)**
+
+SMAPE is lower-is-better. The tolerance is used as an additive factor
+to form a ceiling: ``threshold = float_SMAPE × (1 + 2.0) = 3 × float_SMAPE``.
+So ``2.0`` means the quantized model's SMAPE may be **at most 3× the
+float baseline** before the bit width is rejected. SMAPE is an unbounded
+ratio metric, so a multiplicative ceiling is more meaningful than a
+fixed fraction. The float SMAPE is recorded at the end of float training
+and used as the reference.
+
+**Anomaly Detection — autoquant_tolerance_anomaly (default: 2.0)**
+
+MSE is lower-is-better. The same formula applies:
+``threshold = float_MSE × (1 + 2.0) = 3 × float_MSE``. So ``2.0``
+means the quantized model's reconstruction MSE may be **at most 3× the
+float baseline** before the bit width is rejected. The absolute MSE
+value is dataset-dependent, which is why a multiplier is used rather
+than a fixed threshold.
 
 Configuration
 -------------
@@ -157,6 +215,42 @@ to ``False``:
    When ``auto_quantization: True``, the ``quantization_weight_bitwidth``
    parameter is ignored. Bit widths are assigned per-layer by the greedy
    algorithm, not set uniformly.
+
+**Overriding tolerance thresholds**
+
+The tolerance thresholds have defaults set in ``params.py`` but can be
+overridden in ``config.yaml`` under the ``training`` key. Only the keys
+relevant to your task type need to be specified:
+
+.. code-block:: yaml
+
+   training:
+     model_name: 'REGR_13k'
+     training_epochs: 100
+     quantization: 2
+     auto_quantization: True
+     # Tighten regression tolerance: allow at most 2% R² drop instead of 5%
+     autoquant_tolerance_regression: 0.02
+
+.. code-block:: yaml
+
+   training:
+     model_name: 'AD_17K'
+     training_epochs: 100
+     quantization: 2
+     auto_quantization: True
+     # Relax anomaly tolerance: allow up to 4x MSE increase
+     autoquant_tolerance_anomaly: 3.0
+
+All four keys and their defaults are:
+
+.. code-block:: yaml
+
+   training:
+     autoquant_tolerance_classification: 0.05   # higher-is-better: max 5% accuracy drop vs float
+     autoquant_tolerance_regression: 0.05        # higher-is-better: max 5% R² drop vs float
+     autoquant_tolerance_forecasting: 2.0        # lower-is-better: SMAPE must stay below 3× float (1 + 2.0)
+     autoquant_tolerance_anomaly: 2.0            # lower-is-better: MSE must stay below 3× float (1 + 2.0)
 
 Task-Specific Behaviour
 -----------------------
