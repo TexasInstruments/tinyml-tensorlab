@@ -12,6 +12,7 @@ more accurate and efficient models. This section covers these capabilities in de
    neural_architecture_search
    quantization
    quantization_examples
+   auto_quantization
    feature_extraction
    goodness_of_fit
    post_training_analysis
@@ -35,6 +36,16 @@ Reduce model size and improve inference speed through quantization:
 * **QAT** (Quantization-Aware Training) - Best accuracy
 * **PTQ** (Post-Training Quantization) - Faster, no retraining
 * Weight bit-widths: 2-bit, 4-bit, 8-bit
+
+**Automatic Mixed Precision Quantization**
+
+Fully automatic, Hessian-aware per-layer bit width assignment using a
+greedy algorithm. Enabled by setting ``auto_quantization: True``:
+
+* Estimates per-layer sensitivity via Hessian eigenvalue (power iteration)
+* Greedy assignment from ``{2, 4, 8, 32}`` bit widths maximising accuracy per bit
+* Automatic average bit width selection via binary search calibration
+* Fixes regression tasks where uniform 8-bit QAT fails
 
 **Standalone Quantization Examples**
 
