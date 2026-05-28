@@ -1420,7 +1420,7 @@ NAS can optimize for memory usage or computational efficiency.</p>
 greedy algorithm. Enabled by setting <code class="docutils literal notranslate"><span class="pre">auto_quantization:</span> <span class="pre">True</span></code>:</p>
 <ul class="simple">
 <li><p>Estimates per-layer sensitivity via Hessian eigenvalue (power iteration)</p></li>
-<li><p>Greedy assignment from <code class="docutils literal notranslate"><span class="pre">{2,</span> <span class="pre">4,</span> <span class="pre">8}</span></code> bit widths maximising accuracy per bit</p></li>
+<li><p>Greedy assignment from <code class="docutils literal notranslate"><span class="pre">{2,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">32}</span></code> bit widths maximising accuracy per bit</p></li>
 <li><p>Automatic average bit width selection via binary search calibration</p></li>
 <li><p>Fixes regression tasks where uniform 8-bit QAT fails</p></li>
 </ul>

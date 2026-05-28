@@ -43,7 +43,7 @@ Fully automatic, Hessian-aware per-layer bit width assignment using a
 greedy algorithm. Enabled by setting ``auto_quantization: True``:
 
 * Estimates per-layer sensitivity via Hessian eigenvalue (power iteration)
-* Greedy assignment from ``{2, 4, 8}`` bit widths maximising accuracy per bit
+* Greedy assignment from ``{2, 4, 8, 32}`` bit widths maximising accuracy per bit
 * Automatic average bit width selection via binary search calibration
 * Fixes regression tasks where uniform 8-bit QAT fails
 
