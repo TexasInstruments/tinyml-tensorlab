@@ -18,15 +18,6 @@ Once you have added the marketplace, install the plugin:
 /plugin install tinyml-agent@tinyml-agentic-skills
 ```
 
-### Manual Installation (from source)
-
-If installing from a local repository:
-
-```
-/plugin install /path/to/tinyml-agent
-```
-After installing the plugin, you can use the skill by just mentioning it.
-
 ## What This Skill Does
 
 The TinyML Agent guides you through the complete TinyML workflow to:
