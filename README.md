@@ -54,7 +54,8 @@ Invoke the skill in Claude Code by mentioning any of:
 - "Build a TinyML model with tinyml-tensorlab"
 - "I want to deploy a model to [your-target-device]"
 - "I want to develop an AI solution for..."
-[Above list is not exhaustive, it is only for representational purposes]
+
+[Above list is not exhaustive, and is only for representational purposes]
 
 Or use the explicit skill trigger:
 ```
@@ -90,7 +91,7 @@ Confirm your `tinyml-tensorlab` installation path. The skill will set up require
 - Approve before training
 
 #### **Steps 12-13: Train & Deploy**
-- Start training (live log streaming)
+- Start training
 - View training metrics and compiled model size
 - Create and build Code Composer Studio project
 - Ready for flashing to MCU and on-device use.
@@ -110,10 +111,6 @@ Quantization Mode?
   → 0 (float32, no compression)
   → 1 (standard quantization, all devices)
   → 2 (NPU-optimized, for TI NPU acceleration)
-
-Use Neural Architecture Search (NAS)?
-  → Enables automatic model architecture discovery
-  → Requires GPU, takes 10-30 min per search
 ```
 
 ## Key Concepts
@@ -129,23 +126,9 @@ The skill recommends presets based on your data:
 - **Raw transforms** — For time-domain signals (e.g., sensor time-series)
 - **Multi-frame** — Captures temporal context across multiple samples
 
-### Neural Architecture Search (NAS)
-Optional automated model discovery:
-- Searches for optimal architecture given your data and device constraints
-- Model size presets: small (3 layers) → xxl (20 layers)
-- Optimization modes: Memory (minimize parameters) or Compute (minimize latency)
-- Requires GPU; typical search takes 10-30 minutes
-
 ### Memory Footprint
 After compilation, the skill displays:
 - **FLASH** — Model weights and code (read-only memory)
 - **SRAM** — Runtime working memory (read-write memory)
 
 Verify these fit within your device's capabilities before deployment.
-
-### Recovery & Troubleshooting
-
-If the skill reports errors:
-- Read the error message carefully (e.g., "frame_size > min_sequence_length")
-- Follow the suggested fix (e.g., "reduce frame_size to ≤70")
-- Restart at the current step with corrected parameters
