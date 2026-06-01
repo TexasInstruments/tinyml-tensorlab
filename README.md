@@ -132,10 +132,3 @@ After compilation, the skill displays:
 - **SRAM** — Runtime working memory (read-write memory)
 
 Verify these fit within your device's capabilities before deployment.
-
-### Recovery & Troubleshooting
-
-If the skill reports errors:
-- Read the error message carefully (e.g., "frame_size > min_sequence_length")
-- Follow the suggested fix (e.g., "reduce frame_size to ≤70")
-- Restart at the current step with corrected parameters
