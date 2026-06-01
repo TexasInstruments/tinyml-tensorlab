@@ -1,0 +1,21 @@
+{
+  "name": "tinyml-agentic-skills",
+  "owner": {
+    "name": "Pranav A"
+  },
+  "metadata": {
+    "description": "TinyML Agentic Skills",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "tinyml-agent",
+      "description": "TinyML agentic skill for building AI-powered solutions with tinyml-tensorlab.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/tinyml-agentic-skill"
+      ]
+    }
+   ]
+}
