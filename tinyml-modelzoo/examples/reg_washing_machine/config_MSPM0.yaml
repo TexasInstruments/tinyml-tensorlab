@@ -19,6 +19,6 @@ training:
   lambda_reg: 0.01
   num_gpus: 0
   quantization: 2
-  partial_quantization : True
+  auto_quantization : True
 testing: {}
 compilation: {}

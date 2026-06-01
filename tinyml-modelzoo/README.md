@@ -260,7 +260,8 @@ These applications are designed for specific use cases with optimized models and
 | **ac_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect AC arc faults in electrical systems |
 | **dc_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect DC arc faults from current waveforms for electrical safety |
 | **ecg_classification** | ecg_classification | MSPM0G3507, MSPM0G5187, MSPM0G3519 | Classify normal vs anomalous heartbeats from ECG signals |
-| **gearbox_fault_detection** | gearbox_fault | MSPM0G3507, MSPM0G3519, MSPM0G5187 | Classify gearbox operating conditions (healthy vs broken tooth) from vibration data |
+| **fall_detection_classification** | classification | MSPM0G5187 | Detect and classify Human Fall vs Activities of Daily Living (ADL) |
+| **gearbox_fault_detection** | classification | MSPM0G3507, MSPM0G3519, MSPM0G5187 | Classify gearbox operating conditions (healthy vs broken tooth) from vibration data |
 | **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
 | **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263, CC1312, CC1314, CC1352, CC1354, CC2755, CC35X1 | Detect faults in BLDC fans from accelerometer data |
 | **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
@@ -275,7 +276,7 @@ These applications are designed for specific use cases with optimized models and
   - Regression: 5 examples (1 base + 4 real-world applications)
   - Forecasting: 3 examples (1 base + 2 real-world applications)
   - Anomaly Detection: 6 examples (1 base + 5 application variants)
-- **Application-Specific Tasks** (11 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), gearbox_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), image_classification (1)
+- **Application-Specific Tasks** (12 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), gearbox_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), image_classification (1), fall_detection_classification (1)
 
 ---
 
@@ -290,7 +291,7 @@ These applications are designed for specific use cases with optimized models and
 | 3   | [motor_bearing_fault](examples/motor_bearing_fault/)                                 | Multivariate | Classify 5 bearing fault types + normal operation from vibration data.          |
 | 4   | [blower_imbalance](examples/blower_imbalance/)                                       | Multivariate | Detect blade imbalance in HVAC blowers using 3-phase motor currents.            |
 | 5   | [fan_blade_fault_classification](examples/fan_blade_fault_classification/)           | Multivariate | Detect faults in BLDC fans from accelerometer data.                             |
-| 6   | [gearbox_fault_detection](examples/gearbox_fault_detection/)                         | Multivariate | Classify gearbox operating conditions (healthy vs broken tooth) from vibration.  |
+| 6   | [gearbox_fault_detection](examples/gearbox_fault_detection/)                         | Multivariate | Classify gearbox operating conditions (healthy vs broken tooth) from vibration. |
 | 7   | [electrical_fault](examples/electrical_fault/)                                       | Multivariate | Classify transmission line faults using voltage and current (2-class and 6-class variants). |
 | 8   | [grid_stability](examples/grid_stability/)                                           | Multivariate | Predict power grid stability from node parameters.                              |
 | 9   | [gas_sensor](examples/gas_sensor/)                                                   | Multivariate | Identify gas type and concentration from sensor array data.                     |
@@ -299,6 +300,7 @@ These applications are designed for specific use cases with optimized models and
 | 12  | [nilm_appliance_usage_classification](examples/nilm_appliance_usage_classification/) | Multivariate | Non-Intrusive Load Monitoring - identify active appliances.                     |
 | 13  | [PLAID_nilm_classification](examples/PLAID_nilm_classification/)                     | Multivariate | Appliance identification using the PLAID dataset.                               |
 | 14  | [pir_detection](examples/pir_detection/)                                             | Multivariate | Detect presence/motion using PIR sensor data.                                   |
+| 15  | [fall_detection_classification](examples/fall_detection_classification/)             | Multivariate | Detect and classify Human Fall vs Activities of Daily Living (ADL).             |
 
 ### Regression Examples
 
@@ -469,9 +471,7 @@ Key steps:
 
 - [TI's Neural Network Compiler Documentation](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
 - [NPU Configuration Guidelines](docs/NPU_CONFIGURATION_GUIDELINES.md) - Design models optimized for TI NPU acceleration
-- [Edge AI Studio Model Composer](https://dev.ti.com/modelcomposer/) - No-code GUI for model development
-- [Understanding the Config File](../tinyml-modelmaker/docs/UnderstandingConfigFile.md)
-- [Dataset Format Guide](../tinyml-modelmaker/docs/DatasetFormat_Timeseries_Classification.md)
+- [Edge AI Studio for MCUs](https://www.ti.com/tool/download/EDGE-AI-STUDIO-MCU/) - No-code GUI for data collection & model development
 
 ---
 

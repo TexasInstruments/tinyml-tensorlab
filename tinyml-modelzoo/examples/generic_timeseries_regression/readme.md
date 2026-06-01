@@ -137,7 +137,7 @@ training:
   lambda_reg: 0.01
   num_gpus: 1 # 1 when using gpu if using cpu use 0
   quantization: 2 # 0 for float model, 2 for 8 bit quantized model
-  partial_quantization: True # input batchnorm, first conv/linear layer and last fc layer are not quantized, default is False
+  auto_quantization: True 
 ```
 
 ### `compile` and `test` section
@@ -209,18 +209,18 @@ For the generic_timeseries_regression dataset the results on the test set are
 For Float Model Configuration is :
 ```yaml
   quantization: 0 
-  partial_quantization: False
+  auto_quantization: False
 ```
 For Partially Quantized Model configuration is:
 ```yaml
   quantization: 2
-  partial_quantization: True
+  auto_quantization: True
 ```
 
 For Fully Quantized Model configuration is:
 ```yaml
   quantization: 2
-  partial_quantization: False
+  auto_quantization: False
 ```
 
 ## Running on Device

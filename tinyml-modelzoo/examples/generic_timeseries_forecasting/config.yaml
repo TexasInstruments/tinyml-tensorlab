@@ -19,7 +19,7 @@ training:
   batch_size: 32
   training_epochs: 50
   num_gpus: 1
-  quantization: 1
+  quantization: 2
   optimizer: adam
   output_int: false
 testing: {}
