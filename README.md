@@ -8,12 +8,12 @@ This repository contains the tinyml-agentic-skill, an end-to-end skill for build
 
 You can register this repository as a Claude Code Plugin marketplace by running the following command in Claude Code:
 ```
-/plugin marketplace add tinyml-agentic-skills
+/plugin marketplace add ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-agent-skills.git
 ```
 
 ### Install the Plugin
 
-Alternatively, directly install the Plugin via:
+Once you have added the marketplace, install the plugin:
 ```
 /plugin install tinyml-agent@tinyml-agentic-skills
 ```
