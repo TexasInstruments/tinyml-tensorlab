@@ -1359,6 +1359,12 @@ DEVICE_RUN_INFO = {
         'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
     },
 
+    'MobileNetV1_58k_NPU': {
+        'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+    },
+
     # NPU-Optimized Generic Classification Models
     'CLS_100_NPU': {
         'F280013': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},

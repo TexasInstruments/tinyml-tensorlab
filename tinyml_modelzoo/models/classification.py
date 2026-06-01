@@ -387,7 +387,6 @@ class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
         self.fc2 = torch.nn.Linear(in_features=128, out_features=self.num_classes)
 
     def forward(self, x):
-        x = x.view(x.shape[0], -1, x.shape[-2], x.shape[-1])
         x = self.bn0(x)
         x = self.conv1(x)
         x = self.bn1(x)

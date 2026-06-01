@@ -19,6 +19,6 @@ training:
   lambda_reg: 0.01
   num_gpus: 1
   quantization: 2 # 0 for float model, 2 for 8 bit quantized model
-  partial_quantization: False # input batchnorm, first conv/linear layer and last fc layer are not quantized, default is False
+  auto_quantization: True
 testing: {}
 compilation: {}
