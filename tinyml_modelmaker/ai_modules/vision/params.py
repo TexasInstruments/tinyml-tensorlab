@@ -142,11 +142,15 @@ def init_params(*args, **kwargs):
             nas_fanout_concat=4,   # num nodes_per_layer to concat for output of current layer, it should always be less than equal to nodes_per_layer
             
             load_saved_model=None,
+            ondevice_training = False,
+            trainable_layers_from_last = 1,
+            partial_quantization = False
         ),
 
         testing=dict(
             enable=True,
             skip_train=False,
+            device_inference=False,
             # test_quant_model=False,
             # quant_model_path=None,
             test_data=None,
@@ -155,17 +159,50 @@ def init_params(*args, **kwargs):
         data_processing_feature_extraction=dict(
             variables=1,
             feature_extraction_name=None,
-            image_height = 28,
-            image_width = 28,
+
+            # Image shape / normalization
+            image_height=28,
+            image_width=28,
             image_num_channel=1,
             image_mean=0.1307,
             image_scale=0.3081,
+
+            # Transform flow, aligned with timeseries
+            feat_ext_transform=[],
+            data_proc_transforms=[],
+            augmentation_transform=[],
+
+            # Generic feature extraction controls
             nn_for_feature_extraction=False,
+            feature_size_per_frame=None,
             gof_test=False,
             store_feat_ext_data=False,
             feat_ext_store_dir=None,
             dont_train_just_feat_ext=False,
-           
+
+            # Image preprocessing optional params
+            pad_value=0,
+            binary_threshold=128,
+
+            # CLAHE
+            clahe_clip_limit=2.0,
+            clahe_tile_grid_size=(8, 8),
+
+            # Sobel / Laplacian
+            sobel_mode="magnitude",
+            sobel_ksize=3,
+            laplacian_ksize=3,
+
+            # Training-only augmentations
+            horizontal_flip_prob=0.5,
+            vertical_flip_prob=0.5,
+            random_rotation_deg=15,
+
+            # Keep mild by default, especially for color-sensitive datasets
+            color_jitter_brightness=0.10,
+            color_jitter_contrast=0.10,
+            color_jitter_saturation=0.05,
+            color_jitter_hue=0.01,
         ),
         compilation=dict(
             enable=True,

@@ -81,10 +81,10 @@ TASK_TYPE_TO_CATEGORY = {
 }
 
 
-def get_skip_normalize_and_output_int(task_category, quantization, partial_quantization):
+def get_skip_normalize_and_output_int(task_category, quantization, auto_quantization):
     """
     Compute skip_normalize and output_int based on task_category and quantization level.
-    For partial quantization, skip_normalize will fail during compilation, set it 
+    For auto quantization, skip_normalize will fail during compilation, set it 
     skip_normalize False.
 
     Matrix relationship:
@@ -122,7 +122,7 @@ def get_skip_normalize_and_output_int(task_category, quantization, partial_quant
         skip_normalize = True
         # output_int is True only for classification tasks (both timeseries and image)
         output_int = (task_category == TASK_CATEGORY_TS_CLASSIFICATION or task_category == 'image_classification')
-        if partial_quantization and task_category == TASK_CATEGORY_TS_REGRESSION:
+        if auto_quantization and task_category == TASK_CATEGORY_TS_REGRESSION:
             skip_normalize = False
         return skip_normalize, output_int
 
@@ -1399,6 +1399,7 @@ CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT=
 COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 COMPILATION_C28_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=false output_int=false", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
+COMPILATION_C28_HARD_TINPU_REG = dict(target="c, ti-npu type=hard skip_normalize=false output_int=false", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 COMPILATION_C28_HARD_TINPU_FORECASTING= dict(target="c, ti-npu type=hard skip_normalize=true output_int=false", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 # Preset for compiling RNN/GRU/LSTM models with quantization. Will be removed in the next TVM NNC release once default preset supports these models.
 COMPILATION_C28_SOFT_TINPU_FORECASTING= dict(target="c, ti-npu type=soft", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
@@ -1543,7 +1544,7 @@ _DEVICE_PROFILES = {
         'compilation_base': COMPILATION_C28_HARD_TINPU,
         'compilation_soft': COMPILATION_C28_SOFT_TINPU,
         'compilation_opt_space': COMPILATION_C28_HARD_TINPU_OPT_SPACE,
-        'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
+        'compilation_regression': COMPILATION_C28_HARD_TINPU_REG,
         'compilation_anomaly': COMPILATION_C28_HARD_TINPU_AD,
         'compilation_anomaly_soft': COMPILATION_C28_SOFT_TINPU_AD,
         'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,  # TODO: @Fasna, Once TVM is fixed
