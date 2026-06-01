@@ -522,7 +522,15 @@ DATA_PREPROCESSING_PRESET_DESCRIPTIONS = dict(
 FEATURE_EXTRACTION_DEFAULT = 'default'
 FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict( 
     Mnist_Default=dict(
-        data_processing_feature_extraction=dict(image_height = 28, image_width = 28, image_num_channel= 1, image_mean= 0.1307, image_scale= 0.3081, variables=1),  
+        data_processing_feature_extraction=dict(feat_ext_transform=['GRAYSCALE', 'RESIZE'], image_height = 28, image_width = 28, image_num_channel= 1, image_mean= 0.1307, image_scale= 0.3081, variables=1, data_proc_transforms=[]),  
+        common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
+    CoffeeBean_Default=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=["RGB","RESIZE"], 
+        image_height = 128, image_width = 128, image_num_channel= 3, image_mean= (0.485,0.456,0.406), image_scale= (0.229, 0.224, 0.225), variables=3, data_proc_transforms=[]),  
+        common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
+    CoffeeBean_Augmentation_Default=dict(data_processing_feature_extraction=dict(feat_ext_transform=["RGB","RESIZE"], augmentation_transform=["RANDOM_HORIZONTAL_FLIP","RANDOM_VERTICAL_FLIP","RANDOM_ROTATION","COLOR_JITTER"], horizontal_flip_prob=0.5, vertical_flip_prob=0.5, random_rotation_deg=10, color_jitter_brightness=0.05, color_jitter_contrast=0.05, color_jitter_saturation=0.02, color_jitter_hue=0.005, image_height=128, image_width=128, image_num_channel=3, image_mean=(0.485,0.456,0.406), image_scale=(0.229,0.224,0.225), variables=3, data_proc_transforms=[]), common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
+    MachineReadable_Default=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=["GRAYSCALE","RESIZE"], variables=1, image_height=28, image_width=28, image_num_channel=1, image_mean=0.5, image_scale=0.5, data_proc_transforms=[]),
         common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
 )
 
@@ -531,6 +539,14 @@ DATASET_EXAMPLES = dict(
      mnist_image_classification=dict(
         dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Mnist_Default'), variables=1),
+    ),
+    coffee_bean_classification=dict(
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/coffee_bean_classification.zip'),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('CoffeeBean_Default'), variables=1),
+    ),
+    machine_readable_code_classification=dict(
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/machine_readable_code_classification.zip'),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MachineReadable_Default'), variables=1),
     ),
 )
 DATASET_DEFAULT = 'default'
@@ -711,6 +727,42 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         'dataset_source': 'Created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges from NIST data',
         'dataset_license': 'Freely available for research and educational purposes',
         'dataset_citation': 'Yann LeCun, Corinna Cortes, and Christopher J.C. Burges. "The MNIST Database of Handwritten Digits." 1998. http://yann.lecun.com/exdb/mnist/',
+    }
+},
+'coffee_bean_classification': {
+    'common': {
+        'task_type': TASK_TYPE_IMAGE_CLASSIFICATION,
+        'task_category': TASK_CATEGORY_IMAGE_CLASSIFICATION,
+    },
+    'dataset': {
+        'dataset_name': 'coffee_bean_classification',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/coffee_bean_classification.zip',
+    },
+    'info': {
+        'dataset_url': 'https://www.kaggle.com/datasets/gpiosenka/coffee-bean-dataset-resized-224-x-224',
+        'dataset_detailed_name': 'Coffee Bean Dataset Resized 224x224',
+        'dataset_description': 'The Coffee Bean dataset is an image classification dataset containing coffee bean images grouped into roast/bean categories such as Dark, Green, Light, and Medium. It can be used to train and evaluate image classification models that distinguish coffee bean roast levels using visual cues such as color, texture, and surface appearance.',
+        'dataset_size': 'Four classes: Dark, Green, Light, and Medium. Images are resized to 224x224 in the original dataset source.',
+        'dataset_source': 'Kaggle dataset published as Coffee Bean Dataset Resized (224 X 224)',
+        'dataset_license': 'Refer to the dataset page for the latest license/usage terms.',
+        'dataset_citation': 'Coffee Bean Dataset Resized (224 X 224), Kaggle. https://www.kaggle.com/datasets/gpiosenka/coffee-bean-dataset-resized-224-x-224',
+    }
+},
+'machine_readable_code_classification': {
+    'common': {
+        'task_type': TASK_TYPE_IMAGE_CLASSIFICATION,
+        'task_category': TASK_CATEGORY_IMAGE_CLASSIFICATION,
+    },
+    'dataset': {
+        'dataset_name': 'machine_readable_code_classification',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/machine_readable_code_classification.zip',
+    },
+    'info': {
+        'dataset_url': 'Generated locally using the repository dataset generation script.',
+        'dataset_detailed_name': 'Synthetic Machine Readable Code 28x28 Dataset',
+        'dataset_description': 'The Machine Readable Code dataset is a synthetic low-resolution image classification dataset created for tiny image classification experiments. It contains three classes: QR code, barcode, and other/non-code images. QR images are generated using random alphanumeric payloads, barcode images are generated as Code128 barcodes without printed text, and the other class contains blank, noise, line, and block-pattern images. All images are converted to 28x28 grayscale binary PNGs.',
+        'dataset_size': '3,000 images per class, 9,000 images total. Each image is 28x28 grayscale binary.',
+        'dataset_source': 'Generated synthetically using Python packages qrcode, python-barcode, Pillow, and NumPy.',
     }
 },
 }

@@ -147,11 +147,11 @@ class ModelCompilation():
             # Convert quantization enum to integer (0, 1, or 2)
             quantization_level = int(self.params.training.quantization)
 
-            # get partial quantization value
-            partial_quantization = self.params.training.partial_quantization
+            # get auto quantization value
+            auto_quantization = self.params.training.auto_quantization
 
             # Compute correct values based on the matrix
-            skip_normalize, output_int = constants.get_skip_normalize_and_output_int(task_category, quantization_level, partial_quantization)
+            skip_normalize, output_int = constants.get_skip_normalize_and_output_int(task_category, quantization_level, auto_quantization)
 
             # Replace skip_normalize if it exists in the target string
             if has_skip_normalize:

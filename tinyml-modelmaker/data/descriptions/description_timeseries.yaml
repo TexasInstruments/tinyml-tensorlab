@@ -1119,6 +1119,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -1150,7 +1155,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1408,6 +1412,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -1439,7 +1448,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1697,6 +1705,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -1728,7 +1741,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -1986,6 +1998,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -2017,7 +2034,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2275,6 +2291,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -2306,7 +2327,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2564,6 +2584,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -2595,7 +2620,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -2853,6 +2877,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -2884,7 +2913,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3142,6 +3170,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -3173,7 +3206,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3431,6 +3463,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -3462,7 +3499,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -3720,6 +3756,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -3751,7 +3792,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -4009,6 +4049,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -4040,7 +4085,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -4299,6 +4343,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 32
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -4330,7 +4379,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -4539,6 +4587,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 32
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -4570,7 +4623,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -4780,6 +4832,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 32
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -4811,7 +4868,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -5020,6 +5076,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 32
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -5051,7 +5112,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -5262,6 +5322,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -5293,7 +5358,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -5544,6 +5608,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -5575,7 +5644,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -5826,6 +5894,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -5857,7 +5930,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -6108,6 +6180,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -6139,7 +6216,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -6400,6 +6476,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -6431,7 +6512,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -6692,6 +6772,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -6723,7 +6808,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -6984,6 +7068,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -7015,7 +7104,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -7266,6 +7354,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -7297,7 +7390,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -7558,6 +7650,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -7589,7 +7686,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -7850,6 +7946,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -7881,7 +7982,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -8132,6 +8232,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -8163,7 +8268,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -8414,6 +8518,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -8445,7 +8554,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -8696,6 +8804,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -8727,7 +8840,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -8978,6 +9090,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -9009,7 +9126,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -9270,6 +9386,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -9301,7 +9422,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -9563,6 +9683,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -9594,7 +9719,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -9855,6 +9979,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -9886,7 +10015,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -10138,6 +10266,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -10169,7 +10302,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -10430,6 +10562,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -10461,7 +10598,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -10725,6 +10861,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -10756,7 +10897,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -11020,6 +11160,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -11051,7 +11196,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -11313,6 +11457,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -11344,7 +11493,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -11527,6 +11675,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -11558,7 +11711,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -11712,6 +11864,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -11743,7 +11900,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -12001,6 +12157,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -12032,7 +12193,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -12291,6 +12451,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -12322,7 +12487,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -12582,6 +12746,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -12613,7 +12782,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -12872,6 +13040,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -12903,7 +13076,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -13163,6 +13335,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -13194,7 +13371,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -13453,6 +13629,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -13484,7 +13665,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -13743,6 +13923,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -13774,7 +13959,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -14034,6 +14218,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -14065,7 +14254,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -14324,6 +14512,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -14355,7 +14548,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -14613,6 +14805,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -14644,7 +14841,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -14902,6 +15098,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
@@ -14933,7 +15134,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -15191,6 +15391,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 256
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -15222,7 +15427,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -15415,6 +15619,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 256
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -15446,7 +15655,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -15639,6 +15847,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 256
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -15670,7 +15883,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -15868,6 +16080,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -15899,7 +16116,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -16057,6 +16273,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -16088,7 +16309,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -16242,6 +16462,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 256
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -16273,7 +16498,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -16482,6 +16706,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 256
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -16513,7 +16742,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -16722,6 +16950,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 256
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -16753,7 +16986,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -16962,6 +17194,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
@@ -16993,7 +17230,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -17252,6 +17488,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDataset
       dataset_path: null
@@ -17283,7 +17524,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -17471,6 +17711,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -17502,7 +17747,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -17760,6 +18004,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -17791,7 +18040,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -18049,6 +18297,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -18080,7 +18333,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -18341,6 +18593,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -18372,7 +18629,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -18630,6 +18886,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -18661,7 +18922,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -18922,6 +19182,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -18953,7 +19218,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -19211,6 +19475,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -19242,7 +19511,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -19500,6 +19768,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -19531,7 +19804,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -19792,6 +20064,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -19823,7 +20100,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -20084,6 +20360,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -20115,7 +20396,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -20376,6 +20656,11 @@ model_descriptions:
       test_data: null
     training:
       augment_config: null
+      auto_quantization: true
+      autoquant_tolerance_anomaly: 2.0
+      autoquant_tolerance_classification: 0.05
+      autoquant_tolerance_forecasting: 2.0
+      autoquant_tolerance_regression: 0.05
       batch_size: 64
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
@@ -20407,7 +20692,6 @@ model_descriptions:
       ondevice_training: false
       optimizer: sgd
       output_int: null
-      partial_quantization: false
       pretrained_checkpoint_path: null
       project_path: null
       properties:
@@ -21401,7 +21685,7 @@ preset_descriptions:
           cross_compiler_options: --abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml
             -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/include
             -I.
-          target: c, ti-npu type=soft skip_normalize=false output_int=false
+          target: c, ti-npu type=hard skip_normalize=false output_int=false
           target_c_mcpu: c28
       forced_soft_npu_preset:
         compilation:

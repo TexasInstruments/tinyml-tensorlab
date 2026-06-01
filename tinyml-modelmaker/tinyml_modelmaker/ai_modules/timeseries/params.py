@@ -142,7 +142,14 @@ def init_params(*args, **kwargs):
             load_saved_model=None,
             ondevice_training = False,
             trainable_layers_from_last = 1,
-            partial_quantization = False
+            auto_quantization = True,
+
+            # Auto-quantization tolerance controls for the binary-search bitwidth selection.
+            # Each value defines how much degradation vs. the float baseline is acceptable.
+            autoquant_tolerance_classification=0.05,  # fraction  — 0.05 = 5% accuracy drop tolerated
+            autoquant_tolerance_regression=0.05,      # fraction  — 0.05 = 5% R² drop tolerated
+            autoquant_tolerance_forecasting=2.0,      # max tolerated SMAPE = float_SMAPE × (1 + 2.0) = 3× float baseline, 200% increase tolerated
+            autoquant_tolerance_anomaly=2.0,          # max tolerated MSE   = float_MSE   × (1 + 2.0) = 3× float baseline, 200% increase tolerated
         ),
 
         testing=dict(
