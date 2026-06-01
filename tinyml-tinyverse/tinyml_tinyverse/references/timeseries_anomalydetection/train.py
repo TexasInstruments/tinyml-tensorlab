@@ -81,6 +81,7 @@ from ..common.train_base import (
 
 dataset_loader_dict = {'GenericTSDatasetAD': GenericTSDatasetAD}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
+_float_best_metric = None  # best float MSE; set on float run, read on QAT run
 
 
 def get_args_parser():
@@ -214,16 +215,40 @@ def main(gpu, args):
     # if output_int not set by user, then set it to default of task_type
     if args.output_int == None:
         args.output_int = False
-    model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs, args.output_int)
-    
 
     if handle_export_only(model, args, variables, input_features, logger):
         return
 
     move_model_to_device(model, device, logger)
     criterion = nn.MSELoss()
+
+    global _float_best_metric
+    sample_inputs = None
+    sample_targets = None
+    bsearch_float_metric = None
+    bsearch_example_inputs = None
+    if args.auto_quantization and args.quantization:
+        try:
+            sample_data_iter = iter(data_loader)
+            _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
+            sample_inputs = sample_data_fe.float().to(device)
+            sample_targets = sample_data_fe.float().to(device)
+            logger.info("Obtained sample data for auto quantization analysis")
+        except Exception as e:
+            logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
+        bsearch_float_metric = _float_best_metric
+        try:
+            bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
+        except Exception as e:
+            logger.warning(f"Could not get example inputs for binary search: {e}")
+
+    model = utils.quantization_wrapped_model(
+        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+        args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
+        calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
+        eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
+        task_type='anomalydetection', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
+        autoquant_tolerance_anomaly=args.autoquant_tolerance_anomaly)
 
     optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
     model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
@@ -255,6 +280,10 @@ def main(gpu, args):
             best['mse'], best['epoch'] = avg_mse, epoch
             checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
             utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+
+    if not args.quantization and args.auto_quantization:
+        _float_best_metric = best['mse']
+        logger.info(f"Stored float best MSE for binary search: {_float_best_metric:.4f}")
 
     # Log best epoch results
     logger = getLogger(f"root.main.{phase}.BestEpoch")

@@ -48,6 +48,14 @@ from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
 
+# Import common functions from base module
+from ..common.test_onnx_base import (
+    get_base_test_args_parser,
+    prepare_transforms,
+    load_onnx_model,
+    run_distributed_test,
+)
+
 dataset_loader_dict = {'GenericImageDataset': GenericImageDataset}
 
 
@@ -78,7 +86,7 @@ def get_args_parser():
     # Feature Extraction Params
     parser.add_argument('--data-proc-transforms', help="Data Preprocessing transforms ", default=[])  # default=['DownSample', 'SimpleWindow'])
     parser.add_argument('--feat-ext-transform', help="Feature Extraction transforms ", default=[])
-
+    parser.add_argument('--augmentation-transform', help="Training-only image augmentation transforms", default=[])
     # Vision Related Params
     parser.add_argument('--variables', help="1- if Univariate, 2/3/.. if multivariate")
     parser.add_argument('--image-height', help="Image dimension(Height)")
@@ -86,11 +94,36 @@ def get_args_parser():
     parser.add_argument('--image-mean', help="Average pixel intensity of dataset computed per channel")
     parser.add_argument('--image-scale', help="Standard deviation of pixel intensities per channel")
     parser.add_argument('--image-num-channel', help="Number of channels( RGB=3, Greyscale=1) present in the image")
+        # Optional image preprocessing params
+    parser.add_argument('--pad-value', help="Padding pixel value used for RESIZE_PAD transform", default=0)
+    parser.add_argument('--binary-threshold', help="Threshold value used for BINARIZE transform", default=128)
 
+    # CLAHE params
+    parser.add_argument('--clahe-clip-limit', help="Clip limit for CLAHE contrast enhancement", default=2.0)
+    parser.add_argument('--clahe-tile-grid-size', help="Tile grid size for CLAHE transform, for example '(8, 8)'", default=(8, 8))
+
+    # Sobel params
+    parser.add_argument('--sobel-mode', help="Sobel mode: x, y, or magnitude", default="magnitude")
+    parser.add_argument('--sobel-ksize', help="Kernel size for Sobel filter", default=3)
+
+    # Laplacian params
+    parser.add_argument('--laplacian-ksize', help="Kernel size for Laplacian filter", default=3)
+
+    # Random augmentation params
+    parser.add_argument('--horizontal-flip-prob', help="Probability for RANDOM_HORIZONTAL_FLIP transform during training", default=0.5)
+    parser.add_argument('--vertical-flip-prob', help="Probability for RANDOM_VERTICAL_FLIP transform during training", default=0.5)
+    parser.add_argument('--random-rotation-deg', help="Maximum rotation angle in degrees for RANDOM_ROTATION transform during training", default=15)
+
+    # Color jitter params
+    parser.add_argument('--color-jitter-brightness', help="Brightness factor for COLOR_JITTER transform during training", default=0.10)
+    parser.add_argument('--color-jitter-contrast', help="Contrast factor for COLOR_JITTER transform during training", default=0.10)
+    parser.add_argument('--color-jitter-saturation', help="Saturation factor for COLOR_JITTER transform during training", default=0.05)
+    parser.add_argument('--color-jitter-hue', help="Hue factor for COLOR_JITTER transform during training", default=0.01)
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
     parser.add_argument("--output-int", default=None, type=misc_utils.str_or_bool, help="Get quantized int8 output from model (False for dequantized float output). If not specified, determined automatically based on task type and quantization level.")
-
+    
+    parser.add_argument('--file-level-classification-log', help='File-level classification Log File', type=str)
     return parser
 
 
@@ -112,35 +145,21 @@ def main(gpu, args):
     logger.debug("Args: {}".format(args))
 
     device = torch.device(args.device)
+    prepare_transforms(args)
 
-    # torch.backends.cudnn.benchmark = True
-    if isinstance(args.data_proc_transforms, list):
-        if len(args.data_proc_transforms) and isinstance(args.data_proc_transforms[0], list):
-            args.transforms = args.data_proc_transforms[0] + args.feat_ext_transform  # args.data_proc_transforms is a list of lists
-        else:
-            args.transforms = args.data_proc_transforms + args.feat_ext_transform
-    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(args.data_path, args, dataset_loader_dict, test_only=True)  # (126073, 1, 152), 126073
+    dataset, dataset_test, train_sampler, test_sampler = utils.load_data(
+        args.data_path, args, dataset_loader_dict, test_only=True)
 
     num_classes = len(dataset.classes)
 
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=args.batch_size,
-        sampler=train_sampler, num_workers=args.workers, pin_memory=True,
-        collate_fn=utils.collate_fn)
-    # data_loader_test = torch.utils.data.DataLoader(
-    #     dataset_test, batch_size=args.batch_size,
-    #     sampler=test_sampler, num_workers=args.workers, pin_memory=True,
-    #     collate_fn=utils.collate_fn, )
-    logger.info(f"Loading ONNX model: {args.model_path}")
-    if not args.generic_model:
-        utils.decrypt(args.model_path, utils.get_crypt_key())
-    ort_sess = ort.InferenceSession(args.model_path)
-    if not args.generic_model:
-        utils.encrypt(args.model_path, utils.get_crypt_key())
+        dataset, batch_size=args.batch_size, sampler=train_sampler,
+        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
 
-    input_name = ort_sess.get_inputs()[0].name
-    output_name = ort_sess.get_outputs()[0].name
+    logger.info(f"Loading ONNX model: {args.model_path}")
+    ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
+
     predicted = torch.tensor([]).to(device, non_blocking=True)
     ground_truth = torch.tensor([]).to(device, non_blocking=True)
     for batched_raw_data, batched_data, batched_target in data_loader:
@@ -151,10 +170,14 @@ def main(gpu, args):
             batched_data = transform(batched_data)
         if args.nn_for_feature_extraction:
             for data in batched_raw_data:
-                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy().astype(np.float32)})[0]).to(device)))
+                predicted = torch.cat((predicted, torch.tensor(
+                    ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy().astype(np.float32)})[0]
+                ).to(device)))
         else:
             for data in batched_data:
-                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
+                predicted = torch.cat((predicted, torch.tensor(
+                    ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]
+                ).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
     try:
@@ -163,8 +186,9 @@ def main(gpu, args):
         utils.plot_multiclass_roc(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
                                   label_map=dataset.inverse_label_map, phase='test')
         logger.info("Plotting Class difference scores")
-        utils.plot_pairwise_differenced_class_scores(ground_truth, predicted, os.path.join(args.output_dir, 'post_training_analysis'),
-                                  label_map=dataset.inverse_label_map, phase='test')
+        utils.plot_pairwise_differenced_class_scores(ground_truth, predicted,
+                                                      os.path.join(args.output_dir, 'post_training_analysis'),
+                                                      label_map=dataset.inverse_label_map, phase='test')
     except Exception as e:
         logger.warning(f"Post Training Analysis plots will not be generated because: {e}")
 
@@ -189,26 +213,23 @@ def main(gpu, args):
                 index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
         except ValueError as e:
             logger.warning("Not able to compute Confusion Matrix. Error: " + str(e))
+
+        try:
+            Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG,
+                   name="root.utils.print_file_level_classification_summary", append_log=True, console_log=False)
+            getLogger("root.utils.print_file_level_classification_summary").propagate = False
+            utils.print_file_level_classification_summary(dataset_test, predicted, ground_truth, "TestData")
+            logger.info(f"Generated File-level classification summary of test data in: {args.file_level_classification_log}")
+        except Exception as e:
+            logger.error(f"Failed to generate file-level classification summary: {str(e)}")
+
     return
 
 def run(args):
-    if args.device != 'cpu' and args.distributed is True:
-        # for explanation of what is happening here, please see this:
-        # https://yangkky.github.io/2019/07/08/distributed-pytorch-tutorial.html
-        # this assignment of RANK assumes a single machine, but with multiple gpus
-        os.environ['RANK'] = '0'
-        os.environ['WORLD_SIZE'] = str(args.gpus)
-        os.environ['MASTER_ADDR'] = 'localhost'
-        os.environ['MASTER_PORT'] = '29500'
-        torch.multiprocessing.spawn(main, nprocs=args.gpus, args=(args,))
-    else:
-        main(0, args)
+    """Run testing with optional distributed mode."""
+    run_distributed_test(main, args)
 
 
 if __name__ == "__main__":
     arguments = get_args_parser().parse_args()
-
-    # run the training.
-    # if args.distributed is True is set, then this will launch distributed training
-    # depending on args.gpus
     run(arguments)
