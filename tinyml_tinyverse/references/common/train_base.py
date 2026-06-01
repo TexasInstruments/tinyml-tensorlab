@@ -239,8 +239,20 @@ def get_base_args_parser(description="This script loads time series data and tra
                         help="Specified whether the current model can be trained on device or not")
     parser.add_argument('--trainable_layers_from_last', default=1, type=int,
                         help='Number of trainable layers from end for on-device training (k)')
-    parser.add_argument("--partial-quantization", default=False, type=misc_utils.str2bool,
-                        help="Specified whether the current model can use partial quantization or not")
+    parser.add_argument("--auto-quantization", default=True, type=misc_utils.str2bool,
+                        help="Specified whether the current model can use auto quantization or not")
+    parser.add_argument("--autoquant-tolerance-classification", default=None, type=float,
+                        help="Max allowable accuracy drop for classification auto-quantization binary search. "
+                             "Expressed as a fraction: 0.05 means 5%% drop is tolerated.")
+    parser.add_argument("--autoquant-tolerance-regression", default=None, type=float,
+                        help="Max allowable R2 drop for regression auto-quantization binary search. "
+                             "Expressed as a fraction: 0.05 means 5%% drop is tolerated.")
+    parser.add_argument("--autoquant-tolerance-forecasting", default=None, type=float,
+                        help="Max allowable SMAPE increase for forecasting auto-quantization binary search. "
+                             "Expressed as a multiplier on the float metric: 2 means 3x (200%%) worse is tolerated.")
+    parser.add_argument("--autoquant-tolerance-anomaly", default=None, type=float,
+                        help="Max allowable MSE increase for anomaly detection auto-quantization binary search. "
+                             "Expressed as a multiplier on the float metric: 2 means 3x (200%%) worse is tolerated.")
     return parser
 
 

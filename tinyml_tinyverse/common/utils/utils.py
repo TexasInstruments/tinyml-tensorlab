@@ -1751,18 +1751,23 @@ def init_lr_scheduler(
     return lr_scheduler
 
 
-def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, output_int=True, partial_quantization = False):
+def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, output_int=True, auto_quantization=True, inputs=None, targets=None, criterion=None,
+                               calibration_dataloader=None, eval_dataloader=None, task_type=None, float_metric=None, example_inputs=None, **kwargs):
     logger = getLogger('root.utils.quantization_wrapped_model')
+    qconfig_kwargs = dict(inputs=inputs, targets=targets, criterion=criterion,
+                          calibration_dataloader=calibration_dataloader, eval_dataloader=eval_dataloader,
+                          task_type=task_type, float_metric=float_metric, example_inputs=example_inputs,
+                          **kwargs)
     if quantization == TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = GenericTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs)
+            model = GenericTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs)
+            model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs)
     elif quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs, output_int=output_int)
+            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs, output_int=output_int)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, partial_quantization).qconfig_type, total_epochs=epochs, output_int=output_int)
+            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs, output_int=output_int)
     if quantization:
         logger.info(f"Proceeding with {quantization_method} quantization")
     return model
