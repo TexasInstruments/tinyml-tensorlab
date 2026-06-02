@@ -30,7 +30,7 @@ You can register this repository as a Claude Code Plugin marketplace by running 
 
 Once you have added the marketplace, install the plugin:
 ```
-/plugin install tinyml-agent-skills@tinyml-agentic-skill
+/plugin install tinyml-agent-skill@tinyml-agent-skills
 ```
 
 ## What This Skill Does
