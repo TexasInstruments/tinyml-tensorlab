@@ -7,11 +7,10 @@ from constants import *
 
 # NPU-capable devices — require quantization: 2 for NPU deployment
 _NPU_DEVICES = {
-    "F28P55", "F28P65",
+    "F28P55",
     "MSPM0G5187",
-    "MSPM33C34",
-    "CC2755", "CC35X1",
     "AM13E2",
+    "CC2745R10_Q1"
 }
 
 _VALID_QUANTIZATION_MODES = {0, 1, 2}
