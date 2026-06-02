@@ -82,6 +82,8 @@ Or use the explicit skill trigger:
 /tinyml-agentic-skill
 ```
 
+**Note:** If you want to use the skill to also deploy the compiled model artifacts and vectors onto your target device, it is recommended to use claude code within Code Composer Studio (CCS) to ensure seamless project creation and build.
+
 ### Step-by-Step Workflow
 
 #### **Setup (Before Step 1)**
