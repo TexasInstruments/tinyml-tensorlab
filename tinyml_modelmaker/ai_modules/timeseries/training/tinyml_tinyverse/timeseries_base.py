@@ -685,6 +685,17 @@ class BaseModelTraining:
                 device = 'cuda'
         return device, distributed
 
+    def _get_device_flash_size(self):
+        """Get flash size in KB for the target device."""
+        device_name = self.params.common.target_device
+        device_info = constants.TARGET_DEVICE_DESCRIPTIONS.get(device_name, {})
+        flash_kb = device_info.get('flash_size_kb', None)
+        
+        if flash_kb is None:
+            self.logger.warning(f"Flash size not defined for device '{device_name}'")
+        
+        return flash_kb
+
     def _build_common_train_argv(self, device, distributed):
         """
         Build common training arguments shared across all task types.
@@ -736,6 +747,9 @@ class BaseModelTraining:
             '--variables', f'{self.params.data_processing_feature_extraction.variables}',
             '--lis', f'{self.params.training.log_file_path}',
             '--ondevice-training', f'{self.params.training.ondevice_training}',
+            '--export-samples-per-class', f'{self.params.training.export_samples_per_class}',
+            '--target-device-flash-kb', f'{self._get_device_flash_size()}',
+            '--target-device', f'{self.params.common.target_device}',
             '--auto-quantization', f'{self.params.training.auto_quantization}',
             '--trainable_layers_from_last', f'{self.params.training.trainable_layers_from_last}',
             '--autoquant-tolerance-classification', f'{self.params.training.autoquant_tolerance_classification}',

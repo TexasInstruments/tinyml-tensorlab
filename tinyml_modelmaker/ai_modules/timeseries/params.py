@@ -141,6 +141,8 @@ def init_params(*args, **kwargs):
             
             load_saved_model=None,
             ondevice_training = False,
+            #The order below maps to (train, val, test)
+            export_samples_per_class = (10,10,10),
             trainable_layers_from_last = 1,
             auto_quantization = True,
 

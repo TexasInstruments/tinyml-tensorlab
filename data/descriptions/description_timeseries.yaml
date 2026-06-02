@@ -1130,6 +1130,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -1423,6 +1427,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -1716,6 +1724,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -2009,6 +2021,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -2302,6 +2318,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -2595,6 +2615,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -2888,6 +2912,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -3181,6 +3209,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -3474,6 +3506,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -3767,6 +3803,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -4060,6 +4100,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -4354,6 +4398,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.04
@@ -4598,6 +4646,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.04
@@ -4843,6 +4895,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.04
@@ -5087,6 +5143,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.04
@@ -5333,6 +5393,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -5619,6 +5683,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -5905,6 +5973,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -6191,6 +6263,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -6487,6 +6563,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -6783,6 +6863,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -7079,6 +7163,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -7365,6 +7453,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -7661,6 +7753,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -7957,6 +8053,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -8243,6 +8343,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -8529,6 +8633,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -8815,6 +8923,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -9101,6 +9213,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -9397,6 +9513,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -9694,6 +9814,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -9990,6 +10114,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -10277,6 +10405,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -10573,6 +10705,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -10872,6 +11008,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -11171,6 +11311,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -11468,6 +11612,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -11686,6 +11834,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -11875,6 +12027,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -12168,6 +12324,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -12462,6 +12622,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -12757,6 +12921,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -13051,6 +13219,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -13346,6 +13518,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -13640,6 +13816,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -13934,6 +14114,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -14229,6 +14413,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -14523,6 +14711,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -14816,6 +15008,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -15109,6 +15305,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -15402,6 +15602,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.01
@@ -15630,6 +15834,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.01
@@ -15858,6 +16066,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.01
@@ -16091,6 +16303,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -16284,6 +16500,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -16473,6 +16693,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.01
@@ -16717,6 +16941,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.01
@@ -16961,6 +17189,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.01
@@ -17205,6 +17437,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -17499,6 +17735,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.04
@@ -17722,6 +17962,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -18015,6 +18259,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -18308,6 +18556,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -18604,6 +18856,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -18897,6 +19153,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -19193,6 +19453,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -19486,6 +19750,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -19779,6 +20047,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -20075,6 +20347,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -20371,6 +20647,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -20667,6 +20947,10 @@ model_descriptions:
       distributed: true
       dual_op: false
       enable: true
+      export_samples_per_class:
+      - 10
+      - 10
+      - 10
       file_level_classification_log_path: null
       lambda_reg: 0
       learning_rate: 0.002
@@ -22663,6 +22947,8 @@ target_device_descriptions:
     device_name: AM13E2
     device_selection_factor: 20
     device_type: MCU
+    flash_size_kb: 512
+    ram_size_kb: 128
     sdk_release: '1_02_00_00'
     sdk_version: 1.02.00.00
   AM261:
@@ -22849,6 +23135,8 @@ target_device_descriptions:
     device_name: F28P55
     device_selection_factor: 16
     device_type: MCU
+    flash_size_kb: 1088
+    ram_size_kb: 133
     sdk_release: '26_00_00'
     sdk_version: 26.0.0
   F28P65:
@@ -22873,6 +23161,8 @@ target_device_descriptions:
     device_name: F29H85
     device_selection_factor: 24
     device_type: MCU
+    flash_size_kb: 4352
+    ram_size_kb: 452
     sdk_release: '01_00_00'
     sdk_version: '1.00'
   F29P32:
