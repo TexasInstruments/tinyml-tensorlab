@@ -2,6 +2,8 @@
 
 This repository contains the tinyml-agentic-skill, an end-to-end skill for building, training, compiling, and deploying ML models to embedded MCUs using tinyml-tensorlab.
 
+**Beta Feature** — This skill is experimental. Workflow and output may change.
+
 ## Installation
 
 ### SSH Key Setup
@@ -56,8 +58,11 @@ The TinyML Agent guides you through the complete TinyML workflow to:
 
 **Prerequisites:**
 - `tinyml-tensorlab` installed and set up on your system
-- A dataset in CSV, TXT, or NumPy format
 - Python environment with PyTorch and tinyml dependencies
+- A dataset in CSV, TXT, or NumPy format
+
+**Data Requirements:**
+This skill handles formatting for tinyml-tensorlab compatibility. You must provide pre-processed, cleaned data — the skill does not clean or preprocess raw datasets.
 
 ## How to Use
 
