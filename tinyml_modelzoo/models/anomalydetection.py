@@ -310,23 +310,23 @@ class AD_3_LAYER_DEEP_ONDEVICE_TRAINABLE_MODEL_TS(torch.nn.Module):
         self.encoder = torch.nn.Sequential(
             torch.nn.Flatten(),
             torch.nn.Linear(input_size, hidden_size1),
-            torch.nn.BatchNorm1d(hidden_size1),
+            # torch.nn.BatchNorm1d(hidden_size1),
             torch.nn.ReLU(),
             torch.nn.Linear(hidden_size1, hidden_size2),
-            torch.nn.BatchNorm1d(hidden_size2),
+            # torch.nn.BatchNorm1d(hidden_size2),
             torch.nn.ReLU(),
             torch.nn.Linear(hidden_size2, bottleneck_size),
-            torch.nn.BatchNorm1d(bottleneck_size),
+            # torch.nn.BatchNorm1d(bottleneck_size),
             torch.nn.ReLU(),
         )
 
         # Decoder layers
         self.decoder = torch.nn.Sequential(
             torch.nn.Linear(bottleneck_size, hidden_size2),
-            torch.nn.BatchNorm1d(hidden_size2),
+            # torch.nn.BatchNorm1d(hidden_size2),
             torch.nn.ReLU(),
             torch.nn.Linear(hidden_size2, hidden_size1),
-            torch.nn.BatchNorm1d(hidden_size1),
+            # torch.nn.BatchNorm1d(hidden_size1),
             torch.nn.ReLU()
         )
 
