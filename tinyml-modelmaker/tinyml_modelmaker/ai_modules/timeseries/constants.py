@@ -790,6 +790,8 @@ TARGET_DEVICE_DESCRIPTIONS = {
         'device_details': TARGET_DEVICE_DETAILS_F28P55,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
+        'flash_size_kb': 1088,
+        'ram_size_kb': 133
     },
     TARGET_DEVICE_AM263: {
         'device_name': TARGET_DEVICE_AM263,
@@ -822,6 +824,8 @@ TARGET_DEVICE_DESCRIPTIONS = {
         'device_details': TARGET_DEVICE_DETAILS_F29H85,
         'sdk_version': TARGET_SDK_VERSION_F29H85,
         'sdk_release': TARGET_SDK_RELEASE_F29H85,
+        'flash_size_kb': 4352,
+        'ram_size_kb': 452
     },
     TARGET_DEVICE_F29P58: {
         'device_name': TARGET_DEVICE_F29P58,
@@ -886,6 +890,8 @@ TARGET_DEVICE_DESCRIPTIONS = {
         'device_details': TARGET_DEVICE_DETAILS_AM13E2,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
+        'flash_size_kb': 512,
+        'ram_size_kb': 128
     },
     TARGET_DEVICE_CC2755: {
         'device_name': TARGET_DEVICE_CC2755,
