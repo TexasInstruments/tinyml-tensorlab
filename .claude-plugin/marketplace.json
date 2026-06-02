@@ -1,5 +1,5 @@
 {
-  "name": "tinyml-agentic-skills",
+  "name": "tinyml-agent-skills",
   "owner": {
     "name": "Pranav A"
   },
@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "tinyml-agent",
+      "name": "tinyml-agent-skills",
       "description": "TinyML agentic skill for building AI-powered solutions with tinyml-tensorlab.",
       "source": "./",
       "strict": false,
