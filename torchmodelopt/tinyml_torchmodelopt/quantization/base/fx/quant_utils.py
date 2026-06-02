@@ -33,7 +33,6 @@
 from colorama import Fore
 
 
-##################################################################################
 def add_color(string, color=None):
     if color:
         string = f'{color}{string}{Fore.RESET}'
@@ -116,8 +115,3 @@ class PrintOnce:
 _print_once_instance = PrintOnce()
 print_once = _print_once_instance
 print_once_dict = _print_once_instance.print_once_dict  # Backward compatibility
-
-
-##################################################################################
-
-

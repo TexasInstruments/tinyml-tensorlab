@@ -4,6 +4,11 @@ from torch.fx import GraphModule, Node, symbolic_trace
 import operator
 from typing import Dict, List
 
+import warnings
+from torch.jit._trace import TracerWarning
+
+warnings.filterwarnings("ignore", category=TracerWarning)
+
 def are_both_function_equal(first_function, second_function) -> bool:
     """Check if two functions are equivalent operators.
     
@@ -135,9 +140,6 @@ def compute_offset_scale_shift(offset: torch.Tensor, weight: torch.Tensor, round
 
     mask = torch.isnan(scaled_weights)
     scaled_weights[mask], shift[mask] = 0, 1
-    import warnings
-    from torch.jit import TracerWarning
-    warnings.filterwarnings("ignore", category=TracerWarning)
 
     if torch.any(scaled_weights > scale_max):
         raise RuntimeError(

@@ -29,7 +29,6 @@
 #
 #################################################################################
 
-# Imports Torch
 import torch
 from torch.ao.quantization import QConfig, QConfigMapping
 import torch.ao.quantization
@@ -39,7 +38,7 @@ from . import fake_quant_types
 from . import auto_quantization
 
 
-def _get_fake_quant_from_name(fake_quant_name):
+def _get_fake_quant_from_name(fake_quant_name: str):
     if fake_quant_name == 'soft_tanh':
         return fake_quant_types.SoftTanhFakeQuantize
     elif fake_quant_name == 'soft_sigmoid':
@@ -57,25 +56,14 @@ def _get_observer_class_from_name(observer_name, qscheme, is_weight=True):
     Helper function to select observer class based on observer name and qscheme.
 
     Args:
-        observer_name (str): Name of the observer ('histogram_range', 'lsq_observer', 'channel_adaptive', or None)
+        observer_name (str): Name of the observer ('histogram', 'lsq', 'entropy', or None)
         qscheme: Quantization scheme (e.g., torch.per_channel_symmetric)
         is_weight (bool): Whether this is for weight (True) or activation (False)
 
     Returns:
         Observer class
     '''
-    if observer_name == 'lsq_observer':
-        if is_weight:
-            if qscheme == torch.per_channel_symmetric:
-                return observer_types.LSQPerChannelObserver
-            else:
-                return observer_types.LSQObserver
-        else:
-            if qscheme == torch.per_tensor_symmetric or qscheme == torch.per_tensor_affine:
-                return observer_types.LSQObserver
-            else:
-                return observer_types.LSQPerChannelObserver
-    elif observer_name == 'histogram_range':
+    if observer_name == 'histogram':
         # Choose histogram observer based on quantization scheme
         if qscheme == torch.per_channel_symmetric:
             # Use per-channel histogram observer for per_channel quantization
@@ -83,15 +71,7 @@ def _get_observer_class_from_name(observer_name, qscheme, is_weight=True):
         else:
             # Use standard histogram observer for per_tensor quantization
             return observer_types.RangeShrinkFastHistogramObserver
-    elif observer_name == 'kl_divergence':
-        # Choose histogram observer based on quantization scheme
-        if qscheme == torch.per_channel_symmetric:
-            # Use per-channel histogram observer for per_channel quantization
-            return observer_types.KLDivergencePerChannelObserver
-        else:
-            # Use standard histogram observer for per_tensor quantization
-            return observer_types.KLDivergenceObserver
-    elif observer_name == 'entropy_based_cutoff':
+    elif observer_name == 'entropy':
         # Choose histogram observer based on quantization scheme
         if qscheme == torch.per_channel_symmetric:
             # Use per-channel histogram observer for per_channel quantization
@@ -112,7 +92,7 @@ def _get_observer_class_from_name(observer_name, qscheme, is_weight=True):
     else:
         raise ValueError(
             f"Invalid observer name: {observer_name}. "
-            "Supported observer names are: 'histogram_range', 'lsq_observer', or None"
+            "Supported observer names are: 'histogram', 'entropy', or None"
         )
 
 
@@ -150,9 +130,14 @@ def get_default_qconfig(qconfig_dict=None):
     # Select weight observer based on observer parameter or default behavior
     weight_observer_base_class = _get_observer_class_from_name(weight_observer, weight_qscheme, is_weight=True)        
     weight_fake_quant_type = _get_fake_quant_from_name(weight_soft_quant)
+    
+    # Select weight observer based on observer parameter or default behavior
+    weight_observer_base_class = _get_observer_class_from_name(weight_observer, weight_qscheme, is_weight=True)
+    weight_fake_quant_type = _get_fake_quant_from_name(weight_soft_quant)
+    weight_observer_class = observer_types.get_weight_observer_type(base_class=weight_observer_base_class)
 
     weight_fake_quant = weight_fake_quant_type.with_args(
-        observer=observer_types.get_weight_observer_type(base_class=weight_observer_base_class),
+        observer=weight_observer_class,
         quant_min=weight_quant_min, quant_max=weight_quant_max,
         qscheme=weight_qscheme, dtype=weight_dtype, power2_scale=weight_power2_scale,
         range_max=weight_range_max, fixed_range=weight_fixed_range)
@@ -160,9 +145,10 @@ def get_default_qconfig(qconfig_dict=None):
     # Select activation observer based on observer parameter or default behavior
     activation_observer_base_class = _get_observer_class_from_name(activation_observer, activation_qscheme, is_weight=False)
     activation_fake_quant_type = _get_fake_quant_from_name(activation_soft_quant)
+    activation_observer_class = observer_types.get_activation_observer_type(base_class=activation_observer_base_class)
 
     activation_fake_quant = activation_fake_quant_type.with_args(
-        observer=observer_types.get_activation_observer_type(base_class=activation_observer_base_class),
+        observer=activation_observer_class,
         quant_min=activation_quant_min, quant_max=activation_quant_max,
         qscheme=activation_qscheme, dtype=activation_dtype, power2_scale=activation_power2_scale,
         range_max=activation_range_max, fixed_range=activation_fixed_range,

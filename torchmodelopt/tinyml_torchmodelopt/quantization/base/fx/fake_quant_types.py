@@ -31,9 +31,10 @@
 
 import torch
 import torch.ao.quantization
+from typing import Type
 
 import warnings
-from torch.jit import TracerWarning
+from torch.jit._trace import TracerWarning
 
 warnings.filterwarnings("ignore", category=TracerWarning)
 
@@ -111,6 +112,7 @@ class SoftSigmoidFakeQuantize(torch.ao.quantization.FakeQuantize):
         else:
             return Y
     
+
 class SoftTanhFakeQuantize(torch.ao.quantization.FakeQuantize):
     """Tanh-based fake quantization for differentiable QAT.
 
@@ -209,4 +211,5 @@ class SoftTanhFakeQuantize(torch.ao.quantization.FakeQuantize):
             data_dequantized = (data_clamped - zero_point) * scale
             return data_dequantized.view(X.size())
         else:
-            return Y
+            return Y      
+

@@ -30,20 +30,21 @@
 #################################################################################
 
 import warnings
+from typing import Optional, Type
 import torch
 import torch.ao.quantization
 
 from . import functional_utils
 from .observer_utils import (RangeShrinkPerChannelHistogramObserver, RangeShrinkFastHistogramObserver,
-                              LSQObserver, LSQPerChannelObserver, KLDivergenceObserver,
-                              KLDivergencePerChannelObserver, EntropyBasedCutoffObserver,
-                              EntropyBasedCutoffPerChannelObserver)
+                              EntropyBasedCutoffObserver, EntropyBasedCutoffPerChannelObserver)
 
 
-def get_weight_observer_type(base_class=None):
+def get_weight_observer_type(base_class: Optional[Type] = None) -> Type:
     if base_class is None:
         warnings.warn("Please pass appropriate base class for the weight observer, defaulting to PerChannelMinMaxObserver")
         base_class = torch.ao.quantization.PerChannelMinMaxObserver
+    
+    assert base_class is not None
 
     class SimplePerChannelWeightObserver(base_class):
         def __init__(self, *args, quant_min=-127, quant_max=+127, qscheme=torch.per_channel_symmetric, power2_scale=False, range_max=None, fixed_range=False, **kwargs):
@@ -79,10 +80,12 @@ def get_weight_observer_type(base_class=None):
     return SimplePerChannelWeightObserver
 
 
-def get_activation_observer_type(base_class):
+def get_activation_observer_type(base_class: Optional[Type] = None) -> Type:
     if base_class is None:
         warnings.warn("please pass appropriate base class for the activation observer")
         base_class = torch.ao.quantization.MovingAverageMinMaxObserver
+    
+    assert base_class is not None
 
     class SimpleActivationObserver(base_class):
         def __init__(self, *args, quant_min=0, quant_max=255, qscheme=torch.per_tensor_affine, power2_scale=False,
