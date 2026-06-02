@@ -1,7 +1,7 @@
 # tinyml-tensorlab - TI's MCU AI Toolchain
 
 The Tiny ML Tensorlab repository is the starting point to install and explore TI's AI offering for MCUs.
-It supports Time Series Classification, Regression, Forecasting, Anomaly Detection, and Image Classification tasks across 20+ TI microcontrollers.
+It supports Time Series Classification, Regression, Forecasting, Anomaly Detection, and Image Classification tasks across 24+ TI microcontrollers with 31 example applications.
 
 **Detailed User Guide:** [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
 
@@ -16,7 +16,7 @@ The [TI Tiny ML ModelZoo](./tinyml-modelzoo): Contains the devices supported, a 
 - [2026-Jun] Release version 1.4.0 of the software
   <details>
 
-  - Device Support: 24 MCU devices supported:
+    - Device Support: 40 MCU devices supported:
     - AM1x: AM13E2
     - C2000 F28: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65
     - C2000 F29: F29H85, F29P58, F29P32
@@ -28,7 +28,7 @@ The [TI Tiny ML ModelZoo](./tinyml-modelzoo): Contains the devices supported, a 
     - Timeseries Anomaly Detection flow - More models
     - On Device Learning Mode Enabled - Expansive functionalities
   - Applications Supported
-    - 27 (4 generic + 23 specific applications)
+    - 31 (4 generic + 27 specific applications)
   - Models:
     - 50+ generic models added over classification, regression, forecasting and anomaly detection tasks.
   - Model Optimization:
