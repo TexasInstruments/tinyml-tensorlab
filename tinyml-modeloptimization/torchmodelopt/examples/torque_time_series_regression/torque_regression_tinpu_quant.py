@@ -1,11 +1,14 @@
 # torch imports
 import torch
+import torch.backends.cudnn as cudnn
 from torch.ao.quantization import quantize_fx
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader, random_split
 import torchinfo
 import torchmetrics
 import torchmetrics.regression
+import os
+import random
 
 # ti, onnx imports
 from tinyml_torchmodelopt.quantization import \
@@ -21,6 +24,15 @@ from typing import Tuple, List
 from sklearn.metrics import confusion_matrix
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+def set_seed(seed):
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    random.seed(seed)
+    cudnn.deterministic = True
+    cudnn.benchmark = False
+    os.environ['PYTHONHASHSEED'] = str(seed)
 
 
 class TorqueMeasurementDataset(Dataset):
@@ -462,6 +474,9 @@ def validate_saved_model(model_name: str, dataloader: DataLoader) -> float:
     return r2_score, mape_score
 
 if __name__ == '__main__':
+
+    SEED = 42
+    set_seed(SEED)
 
     MODEL_NAME = "torque_measurement.onnx"
     CSV_FILE = "https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/torque_measurement.csv" # torque_measurement.csv

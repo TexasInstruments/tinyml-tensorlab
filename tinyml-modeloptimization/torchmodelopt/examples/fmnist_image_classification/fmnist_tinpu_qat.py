@@ -12,14 +12,30 @@ Refer to readme.md for instruction to set up environment
 
 import os
 import timeit
+import random
+import numpy as np
 
 import onnx
 import tinyml_torchmodelopt.quantization as tinpu_quantization
 import torch
+import torch.backends.cudnn as cudnn
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+
+SEED = 42
+
+def set_seed(seed):
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    random.seed(seed)
+    cudnn.deterministic = True
+    cudnn.benchmark = False
+    os.environ['PYTHONHASHSEED'] = str(seed)
+
+set_seed(SEED)
 
 # Download training data from open datasets.
 training_data = datasets.FashionMNIST(
