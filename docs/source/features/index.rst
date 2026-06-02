@@ -16,6 +16,8 @@ more accurate and efficient models. This section covers these capabilities in de
    feature_extraction
    goodness_of_fit
    post_training_analysis
+   ondevice_training
+   ondevice_training_advanced
 
 Feature Overview
 ----------------
@@ -77,3 +79,12 @@ Understand model performance with:
 * Confusion matrices
 * FPR/TPR threshold analysis
 * PCA visualization of feature-extracted data
+
+**On-Device Training (ODT)**
+
+Enable models to continue training directly on microcontrollers:
+
+* Deploy frozen backbone + trainable head
+* Adapt to local data and environment drift
+* Reduce re-deployment costs
+* Support for classification, regression, anomaly detection tasks

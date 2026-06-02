@@ -135,6 +135,10 @@ Classification Examples
      - :doc:`gearbox_fault_detection` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/gearbox_fault_detection>`__)
      - Multivariate
      - Classify gearbox operating conditions (healthy vs. broken tooth) from vibration data.
+   * - 15
+     - :doc:`fall_detection_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/fall_detection_classification>`__)
+     - Multivariate
+     - Detect human falls vs. normal activities (ADL) from accelerometer data for safety monitoring.
 
 ----
 
@@ -235,6 +239,10 @@ Image Classification Examples
      - :doc:`mnist_image_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/MNIST_image_classification>`__)
      - Image
      - Handwritten digit recognition (MNIST dataset).
+   * - 2
+     - :doc:`machine_readable_code_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/machine_readable_code_classification>`__)
+     - Image
+     - Classify QR codes vs barcodes vs other objects from 28×28 grayscale images.
 
 ----
 
@@ -260,6 +268,7 @@ Image Classification Examples
    pir_detection
    grid_fault_detection
    gearbox_fault_detection
+   fall_detection_classification
    torque_measurement_regression
    induction_motor_speed_prediction
    washing_machine_regression
@@ -270,3 +279,4 @@ Image Classification Examples
    forecasting_example
    image_classification_example
    mnist_image_classification
+   machine_readable_code_classification
