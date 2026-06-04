@@ -295,11 +295,10 @@ python3 $SCRIPTS_DIR/runner.py get_data_proc_feat_ext_recommendations \
 **IMPORTANT - NEVER SKIP THIS CHECK**
 Before returning the fetched recommendations to the user, go through the dataset analysis in `$WORK_DIR/.tmp_dataset_stats.json` completely. Based on these statistics ensure the recommended presets/transforms are suited for the dataset.
 For example:
-If for a classification task, the `min_sample_or_seq_length` is 70, then having a frame size of 128 or 256 would be too high and would cause that sample file to be skipped, thus causing data loss. That would be unacceptable.
-Similarly, having feature extraction presets which use a window of 128 or 256 would also be a wrong choice, for the same reason.
-In this case, you must therefore suggest presets or transforms having frame/window size <=70.
+If for a classification task, the `min_sample_or_seq_length` is 70, then having a frame_size > 70 in the preset or data transform would be too high and would cause that sample file to be skipped, thus causing data loss. **This would be unacceptable.**
+You must therefore suggest presets or transforms having frame/window size <=`min_sample_or_seq_length`. #NAME min_sample_or_seq_length could be causing confusion for agent
 
-Also, understand what each recommended transform does - go through `references/FE_and_Data_Processing_Transforms/FE_transforms.md` and `references/Data_processing_transforms.md`. For presets, go through `assets/timeseries_data_proc_feat_ext_consts.md`. 
+Also, understand what each recommended transform does - go through `references/FE_and_Data_Processing_Transforms/FE_transforms.md` and `references/Data_processing_transforms.md`. For presets, consult `$TINYML_BASE_PATH/tinyml-modelmaker/tinyml_modelmaker/ai_modules/timeseries/constants.py` (source of truth for feature extraction and data processing presets). 
 Try understanding whether your recommendations actually will be useful for the dataset you are working with and if so, why. **Give CLEAR point-by-point reasoning to the user regarding why your recommended transforms or presets are valid and useful.**
 
 Show user the complete, structured output of `get_data_proc_feat_ext_recommendations` - summarize the same as well while showing it to the user.
@@ -340,16 +339,43 @@ python3 $SCRIPTS_DIR/runner.py select_model_for_task \
   "{\"task_type\": \"$TASK_TYPE\", \"target_device\": \"$TARGET_DEVICE\", \"target_module\": \"$TARGET_MODULE\", \"variables\": $VARIABLES, \"dataset_size_bucket\": \"<from Part A>\", \"modelzoo_path\": \"$TINYML_BASE_PATH/tinyml-modelzoo/examples\"}"
 ```
 
-Show `ranked_matches` to user: model name, param count, complexity tier, score. Ask which model they want to use.
+**Part C — fetch & display all available models:**
+
+Fetch all available models filtered by `$TASK_TYPE` and number of input variables (`$VARIABLES`):
+```bash
+python3 $SCRIPTS_DIR/runner.py list_available_models \
+  "{\"task_type\": \"$TASK_TYPE\", \"variables\": $VARIABLES, \"modelzoo_path\": \"$TINYML_BASE_PATH/tinyml-modelzoo/tinyml_modelzoo/models/\", \"model_descriptions_path\": \"$TINYML_BASE_PATH/tinyml-modelzoo/tinyml_modelzoo/model_descriptions/\"}"
+```
+
+Display results as a **TABLE** with columns:
+| Model Name | Param Count | Complexity | Merits | Demerits | Ideal Use Case |
+
+For each model, include:
+- **Merits:** Speed, accuracy, memory efficiency, special capabilities (e.g., "Fast inference on NPU", "Best accuracy")
+- **Demerits:** Trade-offs (e.g., "Lower accuracy than larger models", "Requires quantization")
+- **Ideal Use Case:** When/where to use (e.g., "Tight memory constraints", "Real-time inference requirement")
+
+**Part D — provide your recommendation:**
+
+Based on dataset size, ranked scores, and device constraints, give **CLEAR, POINT-BY-POINT recommendation** format:
+
+"I recommend **[MODEL_NAME]** because:
+- Point 1: [reason specific to this dataset size]
+- Point 2: [reason specific to this device]
+- Point 3: [reason specific to performance needs]
+
+**Alternatives:**
+- [ALT_MODEL] if you prioritize [property]
+- [ALT_MODEL2] if you need [property]"
+
+Inform user: "You can accept this recommendation or select any model from the table above."
 
 Store user's choice as `MODEL_NAME`.
 
 ---
 
 ## Step 8: Generate training section
-
-> **MANDATORY: Parts C and D (quantization and NAS) are NOT optional. You MUST ask the user about both — every single time — before generating the training section YAML. Do not skip or defer these questions. The user cannot make informed decisions without being asked.**
-
+**DO NOT SKIP ANY OF THE BELOW PARTS. ENSURE STEP 8 IS FULLY DONE, EVERY PART, EVERY SINGLE TIME**
 ### Part A — get recommendations
 
 ```bash
@@ -370,6 +396,7 @@ Ask:
 - Custom learning rate?
 
 Inform the user that all are optional, user can press `Enter` to use system defaults (taken from the corresponding modules' `params.py`).
+
 **HIGHLY IMPORTANT**
 For number of GPUs, if user does not specify or does not know, run the following simple python script:
 ```python
@@ -379,9 +406,9 @@ print(torch.cuda.device_count())
 ```
 Use the result from the above script to set `NUM_GPUS`.
 
-### Part C — **MANDATORY**: ask user about quantization
+### Part C — ask user about quantization
 
-**Do not skip this.** Present all three modes clearly, state the recommendation from `quantization.recommended_mode`, and ask the user to choose:
+Present all three modes clearly, state the recommendation, and ask the user to choose:
 
 ```
 Quantization reduces model size and enables hardware acceleration.
@@ -393,82 +420,30 @@ Modes:
 
 The recommendation for YOUR device ($TARGET_DEVICE): mode <quantization.recommended_mode>
 Reason: <quantization.reason>
+
+When you select mode 1 or 2, Automatic Mixed Precision (AMP) is enabled by default:
+<autoquant_explanation>
 ```
 
-Ask in sequence — get a confirmed answer for each before moving on:
-1. "Which quantization mode do you want? (0 / 1 / 2)" → store as `QUANTIZATION_MODE`
-2. If `QUANTIZATION_MODE > 0`: "QAT (better accuracy, longer training) or PTQ (faster, less accurate)?" → store as `QUANTIZATION_METHOD`
-3. If `QUANTIZATION_MODE > 0`: "Bit width for weights? (8 / 4 / 2 — default 8)" → store as `WEIGHT_BITS`
-4. If `QUANTIZATION_MODE > 0`: "Bit width for activations? (8 / 4 / 2 — default 8)" → store as `ACTIVATION_BITS`
+Ask:
+- "Which quantization mode do you want? (0 / 1 / 2)" → store as `QUANTIZATION_MODE`
+
+That's it. No need to ask about PTQ/QAT or bit widths — AMP handles per-layer precision automatically.
 
 > Quantization mode will also determine the compilation preset in Step 10 — setting it correctly here matters for end-to-end correctness.
 
-### Part D — **MANDATORY**: ask user about NAS
+### Part D — generate YAML
 
-**Do not skip this.** 
-
-**NAS (Neural Architecture Search)** automatically finds an optimal model architecture for your task and device constraints. It replaces the fixed model from ModelZoo with a search process that discovers the best architecture from your data.
-
-When to use NAS:
-  ✓ You don't know what the right model for your use-case looks like
-  ✓ You do not want the previously recommended model from TinyML-ModelZoo
-  ✓ You have GPU access (NAS is impractical without a GPU)
-
-When NOT to use NAS:
-  ✗ No GPU available (each search epoch takes several minutes on CPU)
-  ✗ Tight time constraints
-  ✗ Standard models already work well
-
-Model size presets (controls search space):
-  s   — Small,  3 layers.  Fast search (~10-20 min). Good starting point.
-  m   — Medium, 10 layers. Moderate search time. Recommended default.
-  l   — Large,  12 layers. Longer search.
-  xl  — Extra-large, 20 layers. Use when l is insufficient.
-  xxl — Largest search space. Slowest.
-
-Optimization modes:
-  Memory  — minimize parameter count (flash/RAM footprint on MCU)
-  Compute — minimize MACs/FLOPs (inference latency)
-
-Present the above to the user, then ask the following **in this exact format**:
-1. "Do you want to use NAS? [This will result in rejection of chosen model from ModelZoo]"
-2. If yes: "Which model size preset?" (default: 'm')
-3. If yes: "Optimization mode — Memory or Compute?" (steer based on device constraints)
-4. If yes: "How many NAS search epochs?" (default: 10; more = better but slower)
-
-Store user responses in `NAS_ENABLED`, `NAS_MODEL_SIZE`, `NAS_OPT_MODE`, `NAS_EPOCHS`.
-
-### Part E — generate YAML
-
-Minimal (no quantization, no NAS):
+Since AMP is default and handles bit widths automatically, just specify the quantization mode:
 ```bash
 python3 $SCRIPTS_DIR/runner.py generate_training_section_yaml \
-  "{\"enable\": true, \"model_name\": \"$MODEL_NAME\"}" \
-  --save-yaml $WORK_DIR/training.yaml
-```
-
-With quantization (typical NPU case):
-```bash
-python3 $SCRIPTS_DIR/runner.py generate_training_section_yaml \
-  "{\"enable\": true, \"model_name\": \"$MODEL_NAME\", \"quantization\": 2, \"quantization_method\": \"QAT\", \"quantization_weight_bitwidth\": 8, \"quantization_activation_bitwidth\": 8}" \
-  --save-yaml $WORK_DIR/training.yaml
-```
-
-With NAS (preset mode):
-```bash
-python3 $SCRIPTS_DIR/runner.py generate_training_section_yaml \
-  "{\"enable\": true, \"model_name\": \"$MODEL_NAME\", \"num_gpus\": $NUM_GPUS, \"nas_enabled\": true, \"nas_epochs\": $NAS_EPOCHS, \"nas_optimization_mode\": \"$NAS_OPT_MODE\", \"nas_model_size\": \"$NAS_MODEL_SIZE\"}" \
-  --save-yaml $WORK_DIR/training.yaml
-```
-
-With both quantization + NAS:
-```bash
-python3 $SCRIPTS_DIR/runner.py generate_training_section_yaml \
-  "{\"enable\": true, \"model_name\": \"$MODEL_NAME\", \"num_gpus\": $NUM_GPUS, \"quantization\": $QUANTIZATION_MODE, \"quantization_method\": \"$QUANTIZATION_METHOD\", \"quantization_weight_bitwidth\": $WEIGHT_BITS, \"quantization_activation_bitwidth\": $ACTIVATION_BITS, \"nas_enabled\": true, \"nas_epochs\": $NAS_EPOCHS, \"nas_optimization_mode\": \"$NAS_OPT_MODE\", \"nas_model_size\": \"$NAS_MODEL_SIZE\"}" \
+  "{\"enable\": true, \"model_name\": \"$MODEL_NAME\", \"quantization\": $QUANTIZATION_MODE}" \
   --save-yaml $WORK_DIR/training.yaml
 ```
 
 Show user the generated YAML so they can confirm the training config before proceeding.
+
+**Note:** If user explicitly wants to disable AMP and use uniform quantization instead, they can set `quantization_method` and bit widths manually, but this is not recommended and rarely needed.
 
 ---
 
@@ -576,7 +551,7 @@ Then proceed to implement the changes (either the ones you recommended or the on
 DO THIS UNTIL TRAINING HAPPENS CLEANLY WITHOUT ISSUE.
 
 **COMMON ISSUES TO LOOK OUT FOR:**
-1. Feature Extraction preset failed due to size issues. Dataset's class samples may have too few entries for presets. If no presets can fit it, then think of using raw feature extraction transforms. You can find all transforms in `/home/tushxr16/tinyml-tensorlab-skills/assets/timeseries_data_proc_feat_ext_consts.md`. See if any of them or any combination of them could be of use for your usecase and accordingly select them.
+1. Feature Extraction preset failed due to size issues. Dataset's class samples may have too few entries for presets. If no presets can fit it, then think of using raw feature extraction transforms. Consult `$TINYML_BASE_PATH/tinyml-modelmaker/tinyml_modelmaker/ai_modules/timeseries/constants.py` for all available transforms and presets. See if any of them or any combination of them could be of use for your usecase and accordingly select them.
 
 2. Due to the above issue, many times files having less number of samples (less than what the presets may expect) may be skipped. As a result the metrics you get may be skewed and show very high values. Do not get confused and report this to the user as the final metrics. Stop the training, go back to the config, and refer point 1 to fix the issue. Once fixed, then train again.
 
@@ -609,7 +584,7 @@ Device: $TARGET_DEVICE
 
 **User MUST verify this fits on their device before deployment.**
 
-Get device specs from `assets/deployment_sdk_reference.md` or:
+Get device specs from `references/deployment_sdk_reference.md` or:
 - C2000 devices: check device datasheet (typically 256KB–1MB FLASH, 32KB–128KB SRAM)
 - MSPM0 devices: check SDK documentation
 - AM26x: check MCU+ SDK docs
@@ -765,6 +740,7 @@ Connect device via USB/JTAG, then:
 python3 $SCRIPTS_DIR/runner.py flash_ccs_project \
   "{\"ccs_project_path\": \"$CCS_PROJECT_PATH\", \"ccs_install_path\": \"$CCS_INSTALL_PATH\"}"
 ```
+
 If fails: flash manually in CCS (**Run → Flash Project**).
 
 **After flashing:** In CCS Debug perspective, set breakpoint after inference, check `test_result == 1` in Watch window (1 = pass, 0 = fail).
