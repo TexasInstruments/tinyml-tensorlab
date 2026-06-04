@@ -28,12 +28,4 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import sys
-from . import timeseries
-from . import vision
-from . import audio
-
-def get_target_module(backend_name):
-    this_module = sys.modules[__name__]
-    target_module = getattr(this_module, backend_name)
-    return target_module
+from . import constants, datasets, runner, training

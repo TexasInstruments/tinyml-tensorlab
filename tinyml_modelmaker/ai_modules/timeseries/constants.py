@@ -1242,8 +1242,15 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
+    MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, min_bin=1, normalize_bin=True, offset=0, scale=1, frame_skip=1, variables=3, q15_scale_factor=5, data_proc_transforms=[], dc_remove=True, stacking='1D', ),  # ch=3,
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, min_bin=1, normalize_bin=True, offset=0, scale=1, frame_skip=1, variables=3, q15_scale_factor=5, data_proc_transforms=[], dc_remove=True, stacking='2D1', ),  # ch=3,
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
+
+    MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FE_DECIMATE', 'FE_Q15', 'FE_FFT_MAG', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
 
     Generic_1024Input_FFTBIN_64Feature_8Frame=dict(

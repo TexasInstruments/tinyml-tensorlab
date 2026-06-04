@@ -60,11 +60,17 @@ def get_target_module_from_task_type(task_type):
     vision_task_types = [
         ai_modules.vision.constants.TASK_TYPE_IMAGE_CLASSIFICATION,
     ]
+      # Audio task types
+    audio_task_types = [
+        ai_modules.audio.constants.TASK_TYPE_AUDIO_CLASSIFICATION,
+    ]
 
     if task_type in timeseries_task_types:
         return 'timeseries'
     elif task_type in vision_task_types:
         return 'vision'
+    elif task_type in audio_task_types:
+        return 'audio'
     else:
         return None
 
@@ -81,5 +87,6 @@ def get_task_category_type_from_task_type(task_type):
         ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: ai_modules.timeseries.constants.TASK_CATEGORY_TS_ANOMALYDETECTION,
         ai_modules.timeseries.constants.TASK_TYPE_GENERIC_TS_FORECASTING: ai_modules.timeseries.constants.TASK_CATEGORY_TS_FORECASTING,
         ai_modules.vision.constants.TASK_TYPE_IMAGE_CLASSIFICATION: ai_modules.vision.constants.TASK_CATEGORY_IMAGE_CLASSIFICATION,
+        ai_modules.audio.constants.TASK_TYPE_AUDIO_CLASSIFICATION: ai_modules.audio.constants.TASK_CATEGORY_AUDIO_CLASSIFICATION,
     }
     return task_type_to_task_category_type_map.get(task_type)

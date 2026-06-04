@@ -1,6 +1,31 @@
 #################################################################################
 # Copyright (c) 2023-2026, Texas Instruments
 # All Rights Reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+#
+# * Neither the name of the copyright holder nor the names of its
+#   contributors may be used to endorse or promote products derived from
+#   this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
 import os
@@ -78,9 +103,31 @@ _model_descriptions = {
             },
         ),
     }),
+    'MobileNetV2_58k_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            model_details='MobileNetV2_58k_NPU.\n NPU-compliant MobileNetV2-inspired tiny model.'
+        ),
+        'training': dict(
+            model_training_id='CNN_IMG_MOBILENETV2_58K_NPU',
+            model_name='MobileNetV2_58k_NPU',
+            learning_rate=0.04,
+            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_IMAGE_CLASSIFICATION],
+            target_devices={
+                constants.TARGET_DEVICE_MSPM0G3507:
+                    dict(model_selection_factor=None) |
+                    DEVICE_RUN_INFO['MobileNetV2_58k_NPU'][constants.TARGET_DEVICE_MSPM0G3507],
+                constants.TARGET_DEVICE_MSPM0G3519:
+                    dict(model_selection_factor=None) |
+                    DEVICE_RUN_INFO['MobileNetV2_58k_NPU'][constants.TARGET_DEVICE_MSPM0G3519],
+                constants.TARGET_DEVICE_MSPM0G5187:
+                    dict(model_selection_factor=None) |
+                    DEVICE_RUN_INFO['MobileNetV2_58k_NPU'][constants.TARGET_DEVICE_MSPM0G5187],
+            },
+        ),
+    }),
 }
 
-enabled_models_list = ['Lenet5', 'MobileNetV1_58k_NPU']
+enabled_models_list = ['Lenet5', 'MobileNetV1_58k_NPU', 'MobileNetV2_58k_NPU']
 
 
 def get_model_descriptions(task_type=None):

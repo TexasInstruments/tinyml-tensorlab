@@ -42,7 +42,7 @@ from ..... import utils
 from ... import constants
 
 
-def get_image_classification_log_summary_regex():
+def get_audio_classification_log_summary_regex():
     return {
         'js': [
             # Floating Point Training
@@ -220,9 +220,10 @@ def get_model_descriptions_filtered(model_descriptions, enabled_models_list, tas
 def get_model_description_by_name(model_descriptions, enabled_models_list, model_name):
     filtered = get_model_descriptions_filtered(model_descriptions, enabled_models_list)
     return filtered.get(model_name, None)
-class BaseImageModelTraining:
+
+class BaseAudioModelTraining:
     """
-    Base class for image training modules.
+    Base class for audio training modules.
     """
 
     train_module = None
@@ -233,16 +234,6 @@ class BaseImageModelTraining:
         params = dict(training=dict())
         params = utils.ConfigDict(params, *args, **kwargs)
         return params
-    
-    # @staticmethod
-    # def _argv_value(value):
-    #     if value is None:
-    #         return "None"
-
-        if isinstance(value, (list, tuple)):
-            return repr(list(value))
-
-        return str(value)
 
     def __init__(self, *args, quit_event=None, **kwargs):
         self.params = self.init_params(*args, **kwargs)
@@ -264,7 +255,7 @@ class BaseImageModelTraining:
                 model_export_path=os.path.join(self.params.training.training_path, 'model.onnx'),
                 model_proto_path=None,
                 tspa_license_path=os.path.abspath(os.path.join(
-                    os.path.dirname(tinyml_modelmaker.ai_modules.vision.training.tinyml_tinyverse.__file__),
+                    os.path.dirname(tinyml_modelmaker.ai_modules.audio.training.tinyml_tinyverse.__file__),
                     'LICENSE.txt'
                 )),
             )
@@ -283,7 +274,7 @@ class BaseImageModelTraining:
             )
 
     def _get_log_summary_regex(self):
-        return get_image_classification_log_summary_regex()
+        return get_audio_classification_log_summary_regex()
 
     def _init_task_specific_params(self):
         pass
@@ -300,20 +291,9 @@ class BaseImageModelTraining:
 
         return device, distributed
 
-    # def _get_device_flash_size(self):
-    #     """Get flash size in KB for the target device."""
-    #     device_name = self.params.common.target_device
-    #     device_info = constants.TARGET_DEVICE_DESCRIPTIONS.get(device_name, {})
-    #     flash_kb = device_info.get('flash_size_kb', None)
-        
-    #     if flash_kb is None:
-    #         self.logger.warning(f"Flash size not defined for device '{device_name}'")
-        
-    #     return flash_kb
-
     def _build_common_train_argv(self, device, distributed):
         """
-        Common image training args.
+        Common audio training args.
         """
         return [
             '--model', f'{self.params.training.model_training_id}',
@@ -336,42 +316,42 @@ class BaseImageModelTraining:
             '--device', f'{device}',
 
             '--generic-model', f'{self.params.common.generic_model}',
-            '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
+
             # Transform
-            '--data-proc-transforms', f'{self.params.data_processing_feature_extraction.data_proc_transforms}',
-            '--feat-ext-transform', f'{self.params.data_processing_feature_extraction.feat_ext_transform}',
-            '--augmentation-transform', f'{self.params.data_processing_feature_extraction.augmentation_transform}',
+            '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,
+            '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
             '--feat-ext-store-dir', f'{self.params.data_processing_feature_extraction.feat_ext_store_dir}',
             '--dont-train-just-feat-ext', f'{self.params.data_processing_feature_extraction.dont_train_just_feat_ext}',
             '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',
             
-            # Image preprocessing params.
-            '--image-height', f'{self.params.data_processing_feature_extraction.image_height}',
-            '--image-width', f'{self.params.data_processing_feature_extraction.image_width}',
-            '--image-num-channel', f'{self.params.data_processing_feature_extraction.image_num_channel}',
-            '--image-mean', f'{self.params.data_processing_feature_extraction.image_mean}',
-            '--image-scale', f'{self.params.data_processing_feature_extraction.image_scale}',
+           # Audio preprocessing / feature extraction params
+            '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
+            '--audio-duration-ms', f'{self.params.data_processing_feature_extraction.audio_duration_ms}',
+            '--audio-feature', f'{self.params.data_processing_feature_extraction.audio_feature}',
 
-            # # Optional image transform params.
-            '--pad-value', f'{self.params.data_processing_feature_extraction.pad_value}',
-            '--binary-threshold', f'{self.params.data_processing_feature_extraction.binary_threshold}',
-            '--random-rotation-deg', f'{self.params.data_processing_feature_extraction.random_rotation_deg}',
-            '--horizontal-flip-prob', f'{self.params.data_processing_feature_extraction.horizontal_flip_prob}',
-            '--vertical-flip-prob', f'{self.params.data_processing_feature_extraction.vertical_flip_prob}',
-            '--color-jitter-brightness', f'{self.params.data_processing_feature_extraction.color_jitter_brightness}',
-            '--color-jitter-contrast', f'{self.params.data_processing_feature_extraction.color_jitter_contrast}',
-            '--color-jitter-saturation', f'{self.params.data_processing_feature_extraction.color_jitter_saturation}',
-            '--color-jitter-hue', f'{self.params.data_processing_feature_extraction.color_jitter_hue}',
+            '--n-mfcc', f'{self.params.data_processing_feature_extraction.n_mfcc}',
+            '--n-mels', f'{self.params.data_processing_feature_extraction.n_mels}',
+            '--frame-length-ms', f'{self.params.data_processing_feature_extraction.frame_length_ms}',
+            '--frame-step-ms', f'{self.params.data_processing_feature_extraction.frame_step_ms}',
+
+            '--nlpc', f'{self.params.data_processing_feature_extraction.nlpc}',
+            '--lpc-order', f'{self.params.data_processing_feature_extraction.lpc_order}',
+
+            '--normalize-audio', f'{self.params.data_processing_feature_extraction.normalize_audio}',
+            '--mono', f'{self.params.data_processing_feature_extraction.mono}',
+
+            '--data-proc-transforms', f'{self.params.data_processing_feature_extraction.data_proc_transforms}',
+            '--feat-ext-transform', f'{self.params.data_processing_feature_extraction.feat_ext_transform}',
 
             '--output-int', f'{self.params.training.output_int}',
             '--variables', f'{self.params.data_processing_feature_extraction.variables}',
             '--lis', f'{self.params.training.log_file_path}',
             '--ondevice-training', f'{self.params.training.ondevice_training}',
-            '--auto-quantization', f'{self.params.training.auto_quantization}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--epochs', f'{self.params.training.training_epochs}',
             '--lr', f'{self.params.training.learning_rate}',
             '--output-dir', f'{self.params.training.training_path}',
+            '--auto-quantization', f'{self.params.training.auto_quantization}',
         ]
 
     def _get_task_specific_train_argv(self):
@@ -379,7 +359,7 @@ class BaseImageModelTraining:
 
     def _build_common_test_argv(self, device, data_path, model_path, output_dir):
         """
-        Common image test args.
+        Common audio test args.
         """
         return [
             '--dataset', 'modelmaker',
@@ -395,23 +375,24 @@ class BaseImageModelTraining:
 
             '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
             '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,
-            '--augmentation-transform', self.params.data_processing_feature_extraction.augmentation_transform,
-            '--image-height', f'{self.params.data_processing_feature_extraction.image_height}',
-            '--image-width', f'{self.params.data_processing_feature_extraction.image_width}',
-            '--image-num-channel', f'{self.params.data_processing_feature_extraction.image_num_channel}',
-            '--image-mean', f'{self.params.data_processing_feature_extraction.image_mean}',
-            '--image-scale', f'{self.params.data_processing_feature_extraction.image_scale}',
+          # Audio preprocessing / feature extraction params
+            '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
+            '--audio-duration-ms', f'{self.params.data_processing_feature_extraction.audio_duration_ms}',
+            '--audio-feature', f'{self.params.data_processing_feature_extraction.audio_feature}',
 
-            '--pad-value', f'{self.params.data_processing_feature_extraction.pad_value}',
-            '--binary-threshold', f'{self.params.data_processing_feature_extraction.binary_threshold}',
-            '--random-rotation-deg', f'{self.params.data_processing_feature_extraction.random_rotation_deg}',
-            '--horizontal-flip-prob', f'{self.params.data_processing_feature_extraction.horizontal_flip_prob}',
-            '--vertical-flip-prob', f'{self.params.data_processing_feature_extraction.vertical_flip_prob}',
-            '--color-jitter-brightness', f'{self.params.data_processing_feature_extraction.color_jitter_brightness}',
-            '--color-jitter-contrast', f'{self.params.data_processing_feature_extraction.color_jitter_contrast}',
-            '--color-jitter-saturation', f'{self.params.data_processing_feature_extraction.color_jitter_saturation}',
-            '--color-jitter-hue', f'{self.params.data_processing_feature_extraction.color_jitter_hue}',
+            '--n-mfcc', f'{self.params.data_processing_feature_extraction.n_mfcc}',
+            '--n-mels', f'{self.params.data_processing_feature_extraction.n_mels}',
+            '--frame-length-ms', f'{self.params.data_processing_feature_extraction.frame_length_ms}',
+            '--frame-step-ms', f'{self.params.data_processing_feature_extraction.frame_step_ms}',
 
+            '--nlpc', f'{self.params.data_processing_feature_extraction.nlpc}',
+            '--lpc-order', f'{self.params.data_processing_feature_extraction.lpc_order}',
+
+            '--normalize-audio', f'{self.params.data_processing_feature_extraction.normalize_audio}',
+            '--mono', f'{self.params.data_processing_feature_extraction.mono}',
+
+            '--data-proc-transforms', f'{self.params.data_processing_feature_extraction.data_proc_transforms}',
+            '--feat-ext-transform', f'{self.params.data_processing_feature_extraction.feat_ext_transform}',
             '--nn-for-feature-extraction', f'{self.params.data_processing_feature_extraction.nn_for_feature_extraction}',
             '--output-int', f'{self.params.training.output_int}',
 
@@ -437,7 +418,8 @@ class BaseImageModelTraining:
         os.makedirs(self.params.training.training_path, exist_ok=True)
 
         device, distributed = self._get_device()
-        
+
+        # Float training argv.
         argv = self._build_common_train_argv(device, distributed)
         argv.extend(self._get_task_specific_train_argv())
 

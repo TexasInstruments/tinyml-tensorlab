@@ -40,6 +40,7 @@ This module contains common functionality shared across all timeseries task type
 import os
 import shutil
 from copy import deepcopy
+import logging
 
 import torch.backends.mps
 
@@ -620,6 +621,7 @@ class BaseModelTraining:
     def __init__(self, *args, quit_event=None, **kwargs):
         self.params = self.init_params(*args, **kwargs)
         self.quit_event = quit_event
+        self.logger = logging.getLogger("root.BaseModelTraining")
 
         # Get log summary regex (can be overridden by subclasses)
         log_summary_regex = self._get_log_summary_regex()
