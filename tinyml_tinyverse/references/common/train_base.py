@@ -239,6 +239,12 @@ def get_base_args_parser(description="This script loads time series data and tra
                         help="Specified whether the current model can be trained on device or not")
     parser.add_argument('--trainable_layers_from_last', default=1, type=int,
                         help='Number of trainable layers from end for on-device training (k)')
+    parser.add_argument('--export-samples-per-class', default='[10,5,5]', type=str,
+                    help='Number of samples per class to export for [train,val,test].')
+    parser.add_argument('--target-device-flash-kb', default=None, type=str,
+                    help='Target device flash size in KB')
+    parser.add_argument('--target-device', default=None, type=str,
+                    help='Target device name (e.g., F28P55, F29H85)')
     parser.add_argument("--auto-quantization", default=True, type=misc_utils.str2bool,
                         help="Specified whether the current model can use auto quantization or not")
     parser.add_argument("--autoquant-tolerance-classification", default=None, type=float,

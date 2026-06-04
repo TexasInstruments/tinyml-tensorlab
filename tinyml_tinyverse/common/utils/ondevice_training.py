@@ -74,6 +74,478 @@ import datetime
 import numpy as np
 import onnx
 import onnx_graphsurgeon as gs
+from ast import literal_eval
+
+# ============================================================================
+#  Export some sample data for on device training
+# ============================================================================
+
+def parse_export_samples_argument(samples_str):
+    """
+    Parse export_samples_per_class string argument.
+    
+    Args:
+        samples_str: String like '[10,5,5]' or '(10,5,5)'
+    
+    Returns:
+        tuple: (train_samples, val_samples, test_samples)
+    
+    Raises:
+        ValueError: If format is invalid
+    """
+    
+    try:
+        samples_list = literal_eval(samples_str)
+        if not isinstance(samples_list, (list, tuple)) or len(samples_list) != 3:
+            raise ValueError("Must be a list/tuple of 3 integers")
+        
+        train_samples, val_samples, test_samples = samples_list
+        
+        # Validate all should be positive integers
+        if not all(isinstance(x, int) and x > 0 for x in [train_samples, val_samples, test_samples]):
+            raise ValueError("All values must be positive integers")
+        
+        return train_samples, val_samples, test_samples
+        
+    except (ValueError, SyntaxError) as e:
+        raise ValueError(f"Invalid export_samples_per_class format: '{samples_str}'. " f"Expected format: 'ex: [10,5,5]'. Error: {e}")
+
+def sample_training_data(dataset, samples_per_class, num_frame_concat, subset_name='train'):
+    """
+    Sample raw and preprocessed data for on-device training export.
+    
+    Handles frame concatenation by reconstructing multi-frame raw data from 
+    single-frame X_raw storage. Ensures all frames come from the same source file
+    to maintain data correctness.
+    
+    Args:
+        dataset: Dataset object (must have X, X_raw, Y, file_names attributes)
+        samples_per_class: Number of samples to export per class
+        subset_name: 'train', 'val', or 'test'
+    
+    Returns:
+        tuple: (X_raw_reconstructed, Y)
+            - X_raw_reconstructed: numpy array of shape (N, C, W_raw) where W_raw = frame_size * num_frame_concat
+            - Y: numpy array of labels, shape (N,)
+    """
+    logger = logging.getLogger("root.sample_training_data")
+    
+    if len(dataset.file_names) != len(dataset.X_raw):
+        error_msg = f"Array size mismatch: file_names has {len(dataset.file_names)} entries but X has {len(dataset.X_raw)} samples"
+        logger.error(error_msg)
+        raise ValueError(error_msg)
+    
+    min_valid_index = num_frame_concat - 1
+    valid_indices_all = []
+    
+    for idx in range(len(dataset.X_raw)):
+        # Check 1: Minimum index (need enough history)
+        if idx < min_valid_index:
+            continue
+        
+        # Check 2: All required frames must be from the SAME file
+        current_file = dataset.file_names[idx]
+        all_same_file = True
+        
+        for offset in range(1, num_frame_concat):
+            prev_idx = idx - offset
+            if dataset.file_names[prev_idx] != current_file:
+                all_same_file = False
+                break
+        
+        if all_same_file:
+            valid_indices_all.append(idx)
+    
+    if len(valid_indices_all) == 0:
+        error_msg = (
+            f"No valid samples available after filtering. "
+            f"This may occur if num_frame_concat ({num_frame_concat}) is too large "
+            f"or dataset files are too small."
+        )
+        logger.error(error_msg)
+        raise ValueError(error_msg)
+    
+    sampled_indices = []
+    sampled_Y = []
+    
+    num_classes = len(dataset.classes)
+    
+    for class_idx in range(num_classes):
+        # Get all valid indices for this class
+        valid_class_indices = [
+            idx for idx in valid_indices_all 
+            if dataset.Y[idx] == class_idx
+        ]
+        
+        if len(valid_class_indices) == 0:
+            logger.warning(
+                f"Class {class_idx} ({dataset.inverse_label_map.get(class_idx, 'Unknown')}): "
+                f"No valid samples after filtering"
+            )
+            continue
+        
+        # Sample from valid indices
+        num_available = len(valid_class_indices)
+        num_to_sample = min(samples_per_class, num_available)
+        
+        if num_available < samples_per_class:
+            logger.warning(
+                f"Class {class_idx} ({dataset.inverse_label_map.get(class_idx, 'Unknown')}): "
+                f"Only {num_available} valid samples available, requested {samples_per_class}"
+            )
+        
+        selected_indices = np.random.choice(
+            valid_class_indices, size=num_to_sample, replace=False
+        )
+        
+        sampled_indices.extend(selected_indices.tolist())
+        sampled_Y.extend([class_idx] * num_to_sample)
+    
+    # Reconstruct Raw Frames
+    sampled_X_raw_reconstructed = []
+    
+    for sample_num, idx in enumerate(sampled_indices):
+        # Reconstruct raw frames by looking back
+        reconstructed_frames = []
+        for offset in range(num_frame_concat - 1, -1, -1):
+            frame_idx = idx - offset
+            raw_frame = dataset.X_raw[frame_idx]
+            reconstructed_frames.append(raw_frame)
+        
+        # Shape after stacking: (num_frame_concat, C, W, H)
+        reconstructed_frames = np.array(reconstructed_frames)  
+        
+        # Reshape: (num_frame_concat, C, W) → (C, num_frame_concat, W) → (C, num_frame_concat*W)
+        num_channels = reconstructed_frames.shape[1]
+        reconstructed_frames = reconstructed_frames.transpose(1, 0, 2, 3) if len(reconstructed_frames.shape) == 4 else reconstructed_frames.transpose(1, 0, 2)
+        reconstructed_frames = reconstructed_frames.reshape(num_channels, -1)
+        
+        sampled_X_raw_reconstructed.append(reconstructed_frames)
+    
+    sampled_X_raw_reconstructed = np.array(sampled_X_raw_reconstructed)
+    sampled_Y = np.array(sampled_Y)
+    
+    return sampled_X_raw_reconstructed, sampled_Y
+
+def get_pragma_for_device(target_device, variable_name, section_name):
+    """
+    Get the appropriate pragma/attribute directive for memory section based on device.
+    
+    Args:
+        target_device: Device name (e.g., 'F28P55', 'F29H85')
+        variable_name: Variable name (e.g., 'TRAIN_INPUTS')
+        section_name: Memory section name (e.g., 'training_data')
+    
+    Returns:
+        str: Pragma directive string
+    """
+    # C28 devices (F28xxx series)
+    if 'F28' in target_device:
+        return f'#pragma DATA_SECTION({variable_name}, "{section_name}")'
+    # C29 devices (F29xxx series) 
+    elif 'F29' in target_device or 'AM13' in target_device :
+        return f'__attribute__((section("{section_name}")))'
+    else:
+        return ''
+
+def generate_data_array(prefix, X_data, Y_data, input_size, target_device):
+    """
+    Generate C code for one dataset (TRAIN/VALIDATION/TEST).
+    
+    Args:
+        prefix: 'TRAIN', 'VALIDATION', or 'TEST'
+        X_data: Input array (N, C, W)
+        Y_data: Label array (N,)
+        input_size: Flattened input size
+        target_device: Target device name
+    
+    Returns:
+        str: C code string
+    """
+    
+    content = []
+    
+    # Section header
+    content.append(f"""// ============================================================================
+// {prefix} DATA
+// ============================================================================
+
+""")
+    
+    # Generate INPUTS array
+    input_var = f"{prefix}_INPUTS"
+    input_section = f"{prefix.lower()}_input_data"
+    
+    pragma = get_pragma_for_device(target_device, input_var, input_section)
+    content.append(f"{pragma}\n")
+    content.append(f"const float {input_var}[NUM_{prefix}_SAMPLES][RAW_INPUT_SIZE] = {{\n")
+    
+    # Write input data 
+    for idx, (x, y) in enumerate(zip(X_data, Y_data)):
+        x_flat = x.flatten()
+        content.append(f"    // Sample {idx} - Class {y}\n")
+        content.append("    {")
+        
+        # Format values (8 per line)
+        for i in range(0, len(x_flat), 8):
+            chunk = x_flat[i:i+8]
+            values = ', '.join([f"{val:.8f}f" for val in chunk])
+            if i + 8 < len(x_flat):
+                content.append(f"{values}, ")
+            else:
+                content.append(values)
+        
+        if idx < len(X_data) - 1:
+            content.append("},\n")
+        else:
+            content.append("}\n")
+    
+    content.append("};\n\n")
+    
+    # Generate LABELS array
+    label_var = f"{prefix}_LABELS"
+    label_section = f"{prefix.lower()}_label_data"
+    
+    pragma = get_pragma_for_device(target_device, label_var, label_section)
+    content.append(f"{pragma}\n")
+    content.append(f"const int16_t {label_var}[NUM_{prefix}_SAMPLES] = {{\n")
+    
+    # Write labels (10 per line)
+    content.append("    ")
+    for idx, label in enumerate(Y_data):
+        content.append(f"{int(label)}")
+        if idx < len(Y_data) - 1:
+            content.append(", ")
+            if (idx + 1) % 10 == 0:
+                content.append("\n    ")
+    
+    content.append("\n};\n\n")
+    
+    return ''.join(content)
+
+def generate_training_data_header(train_data, val_data, test_data, input_size, num_classes, 
+                                   output_dir, target_device):
+    """
+    Generate ondevice_training_data.h header file.
+    
+    Args:
+        train_data: (X_train, Y_train) tuple
+        val_data: (X_val, Y_val) tuple  
+        test_data: (X_test, Y_test) tuple
+        input_size: Flattened input size
+        num_classes: Number of classes
+        output_dir: Output directory (trainable_model/)
+        target_device: Target device name for conditional pragmas
+    
+    Returns:
+        str: Path to generated header file
+    """
+    logger = logging.getLogger("root.generate_training_data_header")
+    
+    X_train, Y_train = train_data
+    X_val, Y_val = val_data
+    X_test, Y_test = test_data
+    
+    num_train = len(X_train)
+    num_val = len(X_val)
+    num_test = len(X_test)
+    
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    content = f"""// ============================================================================
+// ondevice_training_data.h
+// AUTO-GENERATED by TI TinyML ModelMaker
+// 
+// Generated: {timestamp}
+// Target Device: {target_device}
+// Train: {num_train} samples, Val: {num_val} samples, Test: {num_test} samples
+// ============================================================================
+
+#ifndef ONDEVICE_TRAINING_DATA_H
+#define ONDEVICE_TRAINING_DATA_H
+
+#include <stdint.h>
+
+// ============================================================================
+// DATA DIMENSIONS
+// ============================================================================
+
+#define NUM_TRAIN_SAMPLES {num_train}
+#define NUM_VALIDATION_SAMPLES {num_val}
+#define NUM_TEST_SAMPLES {num_test}
+#define RAW_INPUT_SIZE {input_size}
+#define NUM_CLASSES {num_classes}
+
+// ============================================================================
+// EXTERNAL DECLARATIONS
+// ============================================================================
+
+extern const float TRAIN_INPUTS[NUM_TRAIN_SAMPLES][RAW_INPUT_SIZE];
+extern const int16_t TRAIN_LABELS[NUM_TRAIN_SAMPLES];
+
+extern const float VALIDATION_INPUTS[NUM_VALIDATION_SAMPLES][RAW_INPUT_SIZE];
+extern const int16_t VALIDATION_LABELS[NUM_VALIDATION_SAMPLES];
+
+extern const float TEST_INPUTS[NUM_TEST_SAMPLES][RAW_INPUT_SIZE];
+extern const int16_t TEST_LABELS[NUM_TEST_SAMPLES];
+
+#endif // ONDEVICE_TRAINING_DATA_H
+"""
+    
+    # Write to file
+    header_path = os.path.join(output_dir, 'ondevice_training_data.h')
+    with open(header_path, 'w') as f:
+        f.write(content)
+    
+    logger.info(f"Generated ondevice_training_data.h header file: {header_path}")
+    return header_path
+
+def generate_training_data_source(train_data, val_data, test_data, input_size, 
+                                   output_dir, target_device):
+    """
+    Generate ondevice_training_data.c source file with actual data.
+    
+    Args:
+        train_data: (X_train, Y_train) tuple
+        val_data: (X_val, Y_val) tuple  
+        test_data: (X_test, Y_test) tuple
+        input_size: Flattened input size
+        output_dir: Output directory 
+        target_device: Target device name (e.g., 'F28P55', 'F29H85')
+    
+    Returns:
+        str: Path to generated source file
+    """
+    
+    logger = logging.getLogger("root.generate_training_data_source")
+    
+    X_train, Y_train = train_data
+    X_val, Y_val = val_data
+    X_test, Y_test = test_data
+    
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    content = []
+    
+    content.append(f"""// ============================================================================
+// ondevice_training_data.c
+// AUTO-GENERATED by TI TinyML ModelMaker
+// 
+// Generated: {timestamp}
+// Target Device: {target_device}
+// ============================================================================
+
+#include "ondevice_training_data.h"
+
+""")
+    
+    # Generate TRAIN data
+    content.append(generate_data_array('TRAIN', X_train, Y_train, input_size, target_device))
+    
+    # Generate VAL data
+    content.append(generate_data_array('VALIDATION', X_val, Y_val, input_size, target_device))
+    
+    # Generate TEST data
+    content.append(generate_data_array('TEST', X_test, Y_test, input_size, target_device))
+    
+    # Write to file
+    source_path = os.path.join(output_dir, 'ondevice_training_data.c')
+    with open(source_path, 'w') as f:
+        f.write(''.join(content))
+    
+    logger.info(f"Generated ondevice_training_data.c source file: {source_path}")
+    return source_path
+
+def export_training_data(dataset_train, dataset_val, dataset_test, args):
+    """
+    Export training data for on-device training.
+    
+    Args:
+        dataset_train: Training dataset
+        dataset_val: Validation dataset  
+        dataset_test: Test dataset
+        args: Training arguments
+        
+    Generates:
+        output_dir/trainable_model/
+        ├── ondevice_training_data.h
+        └── ondevice_training_data.c
+    """
+    logger = logging.getLogger("root.export_training_data")
+    
+    output_dir = args.output_dir
+    target_device = args.target_device
+    num_frame_concat = int(args.num_frame_concat)
+    
+    # Parse samples_per_class
+    train_samples, val_samples, test_samples = parse_export_samples_argument(args.export_samples_per_class)
+    logger.info(f"Export configuration: Train={train_samples}, Val={val_samples}, Test={test_samples} samples per class") 
+    
+    X_train, Y_train = sample_training_data(dataset_train, train_samples, num_frame_concat, 'train')
+    X_val, Y_val = sample_training_data(dataset_val, val_samples, num_frame_concat,'val')
+    X_test, Y_test = sample_training_data(dataset_test,  test_samples, num_frame_concat, 'test')
+    
+    shuffle_idx = np.random.permutation(len(X_train))
+    X_train = X_train[shuffle_idx]
+    Y_train = Y_train[shuffle_idx]
+    
+    shuffle_idx = np.random.permutation(len(X_val))
+    X_val = X_val[shuffle_idx]
+    Y_val = Y_val[shuffle_idx]
+
+    shuffle_idx = np.random.permutation(len(X_test))
+    X_test = X_test[shuffle_idx]
+    Y_test = Y_test[shuffle_idx]
+    
+    # Calculate sizes
+    num_classes = len(dataset_train.classes)
+    input_size = np.prod(X_train[0].shape)  
+    total_samples = len(X_train) + len(X_val) + len(X_test)
+    
+    # Calculate memory required (float32 for inputs, int16 for labels)
+    input_bytes = total_samples * input_size * 4  
+    label_bytes = total_samples * 2
+    total_bytes = input_bytes + label_bytes
+    total_kb = total_bytes / 1024
+    
+    logger.info(f"Required flash memory: {total_kb:.2f} KB ({total_bytes} bytes)")
+    
+    # Check against device flash
+    flash_kb = args.target_device_flash_kb
+    
+    if flash_kb is None or flash_kb == 'None':
+        logger.error("target_device_flash_kb not specified")
+        raise ValueError("target_device_flash_kb is required when we need to export data")
+    else:
+        flash_kb = int(flash_kb)
+        
+        if total_kb > flash_kb:
+            error_msg = (
+                f"MEMORY OVERFLOW: Training data requires {total_kb:.2f} KB but device only has {flash_kb} KB flash.\n"
+                f"Suggestions:\n"
+                f"  1. Reduce samples_per_class\n"
+                f"  2. Reduce num_frame_concat \n"
+                f"  3. Use a device with more flash memory\n"
+                f"  4. Reduce frame_size in feature extraction"
+            )
+            logger.error(error_msg)
+            raise MemoryError(error_msg)
+    
+    trainable_model_dir = os.path.join(output_dir, 'trainable_model')
+    os.makedirs(trainable_model_dir, exist_ok=True)
+    
+    header_path = generate_training_data_header(
+        (X_train, Y_train), (X_val, Y_val), (X_test, Y_test),
+        input_size, num_classes, trainable_model_dir, target_device
+    )
+    
+    source_path = generate_training_data_source(
+        (X_train, Y_train), (X_val, Y_val), (X_test, Y_test),
+        input_size, trainable_model_dir, target_device
+    )
+    
+    return header_path, source_path
+
 
 # ============================================================================
 # EXCEPTIONS
@@ -88,7 +560,7 @@ class UnsupportedLayerError(Exception):
 # ============================================================================
 
 # Main layers that count towards k (have trainable parameters)
-MAIN_SUPPORTED_LAYERS = ["Gemm"]
+MAIN_SUPPORTED_LAYERS = ["Gemm", "Conv"]
 
 # Other layers that don't count towards k (activation, reshape, etc.)
 OTHER_SUPPORTED_LAYERS = ["Reshape", "Relu", "Flatten"]
@@ -136,8 +608,7 @@ def find_split_point(graph, k):
         k: Number of trainable layers from end
         
     Returns:
-        split_tensor: The tensor where split should happen
-                     (output of frozen part of model, input to trainable part of model)
+        split_tensor: The tensor where split should happen (output of frozen part of model, input to trainable part of model)
                      
     Raises:
         ValueError: If cannot find k trainable layers
@@ -302,8 +773,8 @@ def parse_layer_node(node):
     elif node.op == 'Relu':
         return parse_relu_layer(node)
     # TODO: Add support for more layers here
-    # elif node.op == 'Conv':
-    #     return parse_conv_layer(node, graph)
+    elif node.op == 'Conv':
+        return parse_conv2d_layer(node)
     # elif node.op == 'BatchNormalization':
     #     return parse_batchnorm_layer(node, graph)
     else:
@@ -396,6 +867,115 @@ def parse_relu_layer(node):
         'output_size': size,
         'weights': None,
         'bias': None,
+    }
+    
+    return layer_info
+
+
+def parse_conv2d_layer(node):
+    """
+    Extract Conv2D layer metadata from ONNX Conv node.
+    
+    Supports standard Conv2D with:
+        - 4D weights [out_channels, in_channels, kernel_h, kernel_w]
+        - Supports padding, stride
+        - Required bias
+        - dilation = 1 only
+        - groups = 1 only
+    
+    Args:
+        node: ONNX Conv node (from onnx_graphsurgeon)
+        
+    Returns:
+        dict: Layer metadata with weights, bias, sizes, conv parameters
+        
+    Raises:
+        ValueError: If not Conv2D (must have 4D weights)
+        ValueError: If bias is missing
+        ValueError: If dilation != [1, 1]
+        ValueError: If groups != 1
+        ValueError: If asymmetric padding
+    """
+    logger = logging.getLogger("root.parse_conv2d_layer")
+    logger.info(f"  Parsing Conv2D layer: {node.name}")
+    
+    if len(node.inputs) < 3 or node.inputs[2].values is None:
+        raise ValueError(f"Conv2D layer {node.name} must have bias. Bias is required for on-device training.")
+    
+    weights = node.inputs[1].values
+    if weights.ndim != 4:
+        raise ValueError( f"Conv layer {node.name} has {weights.ndim}D weights. Only Conv2D (4D weights) is supported. Got shape: {weights.shape}")
+    
+    out_channels, in_channels, kernel_h, kernel_w = weights.shape
+    bias = node.inputs[2].values
+    
+    # Extract and validate conv attributes
+    strides = node.attrs.get('strides', [1, 1])
+    stride_h, stride_w = strides[0], strides[1]
+    
+    # Pads (default [0, 0, 0, 0] = [top, left, bottom, right])
+    pads = node.attrs.get('pads', [0, 0, 0, 0])
+    
+    # Validate symmetric padding
+    if pads[0] != pads[2] or pads[1] != pads[3]:
+        raise ValueError(f"Conv2D layer {node.name} has asymmetric padding {pads}. Only symmetric padding is supported (top==bottom, left==right).")
+    
+    padding_h, padding_w = pads[0], pads[1]
+    
+    # Dilations (must be [1, 1])
+    dilations = node.attrs.get('dilations', [1, 1])
+    if dilations != [1, 1]:
+        raise ValueError(f"Conv2D layer {node.name} has dilation {dilations}. Only dilation=[1,1] is supported for on-device training.")
+    
+    # Groups (must be 1)
+    group = node.attrs.get('group', 1)
+    if group != 1:
+        raise ValueError(f"Conv2D layer {node.name} has group={group}. Only group=1 is supported.")
+    
+    # Get input dimensions
+    input_tensor = node.inputs[0]
+    input_shape = input_tensor.shape  # [batch, in_channels, height, width]
+    
+    # input_shape[0] is batch, input_shape[1] is channels
+    input_height = input_shape[2]
+    input_width = input_shape[3]
+    
+    output_tensor = node.outputs[0]
+    output_shape = output_tensor.shape  # [batch, out_channels, height, width]
+    
+    output_height = output_shape[2]
+    output_width = output_shape[3]
+    
+    input_size = in_channels * input_height * input_width
+    output_size = out_channels * output_height * output_width
+    
+    logger.info(f"    Input:  {in_channels} x {input_height} x {input_width} (flat: {input_size})")
+    logger.info(f"    Output: {out_channels} x {output_height} x {output_width} (flat: {output_size})")
+    logger.info(f"    Kernel: {kernel_h} x {kernel_w}")
+    logger.info(f"    Stride: {stride_h} x {stride_w}")
+    logger.info(f"    Padding: {padding_h} x {padding_w}")
+    logger.info(f"    Weights: {weights.shape} ({weights.size} params)")
+    logger.info(f"    Bias: {bias.shape} ({bias.size} params)")
+    
+    layer_info = {
+        'type': 'Conv2D',
+        'name': node.name,
+        'input_size': input_size,
+        'output_size': output_size,
+        'weights': weights,  # Shape: [out_channels, in_channels, kernel_h, kernel_w]
+        'bias': bias,        # Shape: [out_channels]
+        'out_channels': out_channels,
+        'in_channels': in_channels,
+        'kernel_h': kernel_h,
+        'kernel_w': kernel_w,
+        'stride_h': stride_h,
+        'stride_w': stride_w,
+        'padding_h': padding_h,
+        'padding_w': padding_w,
+        'input_height': input_height,
+        'input_width': input_width,
+        'output_height': output_height,
+        'output_width': output_width,
     }
     
     return layer_info
@@ -554,7 +1134,7 @@ def compute_buffer_offsets(layers, frozen_output_size):
 # CONFIG FILE GENERATION
 # ============================================================================
 
-def generate_source_file(all_weights, output_dir):
+def generate_source_file(all_weights, output_dir, target_device):
     """
     Generate trainable_model_config.c
     
@@ -594,10 +1174,10 @@ def generate_source_file(all_weights, output_dir):
 // WEIGHT STORAGE - Definitions
 // ============================================================================
 
-// Initial weights from trained model
-#pragma DATA_SECTION(ALL_WEIGHTS, "trainable_parameters")
-float ALL_WEIGHTS[TOTAL_PARAMS] = {
-""")
+// Initial weights from trained model\n""")
+
+    pragma = get_pragma_for_device(target_device, 'ALL_WEIGHTS', 'odt_trainable_parameters')
+    content.append(f"{pragma}\nfloat ALL_WEIGHTS[TOTAL_PARAMS] = {{\n")
     
     # Format weight array
     indent = 4
@@ -618,15 +1198,11 @@ float ALL_WEIGHTS[TOTAL_PARAMS] = {
     all_weights_str = '\n'.join(lines)
     content.append(all_weights_str)
     
-    content.append("""
-};
-
-// Best weights storage 
-#pragma DATA_SECTION(ALL_BEST_WEIGHTS, "trainable_best_weights")
-float ALL_BEST_WEIGHTS[TOTAL_PARAMS];
-
-""")
+    content.append("\n};\n\n// Best weights storage\n")
     
+    pragma = get_pragma_for_device(target_device, 'ALL_BEST_WEIGHTS', 'odt_best_parameters')
+    content.append(f"{pragma}\nfloat ALL_BEST_WEIGHTS[TOTAL_PARAMS];\n\n")
+
     # ========================================================================
     # SECTION 3: Buffer Data
     # ========================================================================
@@ -636,20 +1212,19 @@ float ALL_BEST_WEIGHTS[TOTAL_PARAMS];
 // ============================================================================
 
 // Intermediate activation buffers (for forward pass)
-#pragma DATA_SECTION(INTERMEDIATE_BUFFERS, "intermediate_buffers")
-float INTERMEDIATE_BUFFERS[TOTAL_INTERMEDIATE_BUFFER_SIZE];
-
-// Gradient buffers (for backward pass)
-#pragma DATA_SECTION(GRADIENT_BUFFERS, "gradient_buffers")
-float GRADIENT_BUFFERS[TOTAL_GRADIENT_BUFFER_SIZE];
-
-// Weight gradient accumulators (conditional - only for batch training)
-#if USE_GRADIENT_ACCUMULATION
-#pragma DATA_SECTION(ALL_WEIGHT_GRADS, "trainable_weight_grads")
-float ALL_WEIGHT_GRADS[TOTAL_PARAMS];
-#endif
-
 """)
+
+    pragma = get_pragma_for_device(target_device, 'INTERMEDIATE_BUFFERS', 'odt_intermediate_buffers')
+    content.append(f"{pragma}\nfloat INTERMEDIATE_BUFFERS[TOTAL_INTERMEDIATE_BUFFER_SIZE];\n\n")
+
+    content.append("// Gradient buffers (for backward pass)\n")
+    
+    pragma = get_pragma_for_device(target_device, 'GRADIENT_BUFFERS', 'odt_gradient_buffers')
+    content.append(f"{pragma}\nfloat GRADIENT_BUFFERS[TOTAL_GRADIENT_BUFFER_SIZE];\n\n")
+
+    content.append("// Weight gradient accumulators (conditional - only for batch training)\n")
+    pragma = get_pragma_for_device(target_device, 'ALL_WEIGHT_GRADS', 'odt_gradient_parameters')
+    content.append(f"#if USE_GRADIENT_ACCUMULATION\n{pragma}\nfloat ALL_WEIGHT_GRADS[TOTAL_PARAMS];\n#endif\n\n")
     
     # ========================================================================
     # Write to file
@@ -707,6 +1282,8 @@ def generate_header_file(layers, all_weights, weight_offsets, layer_weight_map,
             layer_seq.append(f"Linear({layer['input_size']}→{layer['output_size']})")
         elif layer['type'] == 'ReLU':
             layer_seq.append(f"ReLU({layer['input_size']})")
+        elif layer['type'] == 'Conv2D':
+            layer_seq.append(f"Conv2D({layer['in_channels']}x{layer['input_height']}x{layer['input_width']}→{layer['out_channels']}x{layer['output_height']}x{layer['output_width']})")
     layer_seq_str = " → ".join(layer_seq)
     
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -764,6 +1341,7 @@ def generate_header_file(layers, all_weights, weight_offsets, layer_weight_map,
 typedef enum {
     LAYER_TYPE_LINEAR,
     LAYER_TYPE_RELU,
+    LAYER_TYPE_CONV2D,
 } LayerType_t;
 
 // Task types
@@ -854,10 +1432,17 @@ typedef struct {
         struct {
             uint16_t out_channels;
             uint16_t in_channels;
-            uint16_t kernel_size;
-            uint16_t stride;
-            uint16_t padding;
-        } conv1d;
+            uint16_t kernel_h;
+            uint16_t kernel_w;
+            uint16_t stride_h;
+            uint16_t stride_w;
+            uint16_t padding_h;
+            uint16_t padding_w;
+            uint16_t input_height;
+            uint16_t input_width;
+            uint16_t output_height;
+            uint16_t output_width;
+        } conv2d;
     } shape;
     
     // Runtime pointers 
@@ -930,6 +1515,32 @@ static const LayerParams_t LAYER_PARAMS_INIT[NUM_TRAINABLE_LAYERS] = {
         .weight_count = 0,
         .bias_offset = 0,
         .bias_count = 0
+    }}"""
+        
+        elif layer_type == 'Conv2D':
+            layer_init = f"""    // Layer {i}: Conv2D(in={layer['in_channels']}x{layer['input_height']}x{layer['input_width']}, out={layer['out_channels']}x{layer['output_height']}x{layer['output_width']}, k={layer['kernel_h']}x{layer['kernel_w']})
+    {{
+        .type = LAYER_TYPE_CONV2D,
+        .input_size = {layer['input_size']},
+        .output_size = {layer['output_size']},
+        .weight_offset = {weight_offset},
+        .weight_count = {weight_count},
+        .bias_offset = {bias_offset},
+        .bias_count = {bias_count},
+        .shape.conv2d = {{
+            .out_channels = {layer['out_channels']},
+            .in_channels = {layer['in_channels']},
+            .kernel_h = {layer['kernel_h']},
+            .kernel_w = {layer['kernel_w']},
+            .stride_h = {layer['stride_h']},
+            .stride_w = {layer['stride_w']},
+            .padding_h = {layer['padding_h']},
+            .padding_w = {layer['padding_w']},
+            .input_height = {layer['input_height']},
+            .input_width = {layer['input_width']},
+            .output_height = {layer['output_height']},
+            .output_width = {layer['output_width']}
+        }}
     }}"""
         
         layer_inits.append(layer_init)
@@ -1032,6 +1643,14 @@ def export_for_ondevice_training(model_onnx_path, args):
     
     # Load ONNX Model
     onnx_model = onnx.load(model_onnx_path)
+    
+    # Run shape inference to populate intermediate tensor shapes .This is needed because PyTorch ONNX export doesn't always include shape metadata for intermediate tensors
+    logger.info(" Running ONNX shape inference...")
+    try:
+        onnx_model = onnx.shape_inference.infer_shapes(onnx_model, data_prop=True)
+    except Exception as e:
+        logger.warning(f" Shape inference failed: {e}. Continuing without full shape info.")
+    
     graph = gs.import_onnx(onnx_model)
     
     # Split ONNX Graph
@@ -1097,6 +1716,7 @@ def export_for_ondevice_training(model_onnx_path, args):
     # Generate Source File
     source_file_path = generate_source_file(
         all_weights,
-        trainable_model_dir
+        trainable_model_dir,
+        args.target_device
     )
     logger.info(f"Generated trainable model config source file at {source_file_path}")

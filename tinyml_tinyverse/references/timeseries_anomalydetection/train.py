@@ -192,6 +192,10 @@ def main(gpu, args):
         dataset, dataset_test, train_sampler, test_sampler = load_datasets(args.data_path, args, dataset_loader_dict)
         dataset_load_state['dataset'], dataset_load_state['dataset_test'] = dataset, dataset_test
         dataset_load_state['train_sampler'], dataset_load_state['test_sampler'] = train_sampler, test_sampler
+        
+    dataset_test_final = None
+    if args.ondevice_training:
+        dataset_test_final, _, _, _ = utils.load_data(args.data_path, args, dataset_loader_dict, test_only=True)
 
     num_classes = len(dataset.classes)
     variables = dataset.X.shape[1]
@@ -303,6 +307,7 @@ def main(gpu, args):
         if args.ondevice_training:
             saved_onnx_path = os.path.join(args.output_dir, 'model.onnx')
             ondevice_training.export_for_ondevice_training(saved_onnx_path, args)
+            ondevice_training.export_training_data(dataset, dataset_test, dataset_test_final, args)
 
     log_training_time(start_time)
 

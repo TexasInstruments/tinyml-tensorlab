@@ -176,7 +176,7 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
     logger.info("Loading data")
     dataset_loader = dataset_loader_dict.get(args.dataset_loader)
     
-    st = timeit.default_timer()
+    st = timeit.default_timer() 
     if test_only:
         # datadir is supposed to be test dir
         if args.dataset == 'modelmaker':

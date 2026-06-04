@@ -84,7 +84,7 @@ import torchinfo
 from tabulate import tabulate
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GenericImageDataset
+from tinyml_tinyverse.common.datasets import GoogleSpeechCommandsDataset
 from tinyml_tinyverse.common.utils import misc_utils, utils, gof_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 
@@ -115,7 +115,7 @@ from ..common.train_base import (
     load_onnx_for_inference,
 )
 
-dataset_loader_dict = {'GenericImageDataset':GenericImageDataset}
+dataset_loader_dict = {'GoogleSpeechCommandsDataset':GoogleSpeechCommandsDataset}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
 
 
@@ -123,60 +123,48 @@ def get_args_parser():
     """
     This function is used to process inputs given to the program
     """
-    DESCRIPTION = "This script loads image data and trains it generating a model"
-    parser = get_base_args_parser("This script loads time series data and trains an image classification model")
+    DESCRIPTION = "This script loads audio data and trains it generating a model"
 
-    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
-    parser.add_argument('--image-height', help="Image dimension(Height)")
-    parser.add_argument('--image-width', help="Image dimension(Width)")
-    parser.add_argument('--image-mean', help="Average pixel intensity of dataset computed per channel")
-    parser.add_argument('--image-scale', help="Standard deviation of pixel intensities per channel")
-    parser.add_argument('--image-num-channel', help="Number of channels( RGB=3, Greyscale=1) present in the image")
-    parser.add_argument('--file-level-classification-log', help='File level classification log file', type=str)
-    # Optional image preprocessing params
-    parser.add_argument('--pad-value', help="Padding pixel value used for RESIZE_PAD transform", default=0)
-    parser.add_argument('--binary-threshold', help="Threshold value used for BINARIZE transform", default=128)
+    parser = get_base_args_parser("This script loads audio wav data and trains an classification model")
 
-    # CLAHE params
-    parser.add_argument('--clahe-clip-limit', help="Clip limit for CLAHE contrast enhancement", default=2.0)
-    parser.add_argument('--clahe-tile-grid-size', help="Tile grid size for CLAHE transform, for example '(8, 8)'", default=(8, 8))
+    parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
+    parser.add_argument('--audio-duration-ms', help='Audio clip duration in milliseconds', default=1000, type=int)
+    parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, or RAW', default='MFCC', type=str)
 
-    # Sobel params
-    parser.add_argument('--sobel-mode', help="Sobel mode: x, y, or magnitude", default="magnitude")
-    parser.add_argument('--sobel-ksize', help="Kernel size for Sobel filter", default=3)
+    # MFCC params
+    parser.add_argument('--n-mfcc', help='Number of MFCC coefficients', default=10, type=int)
+    parser.add_argument('--n-mels', help='Number of Mel filterbank bins', default=40, type=int)
+    parser.add_argument('--frame-length-ms', help='Frame/window length in milliseconds', default=30, type=int)
+    parser.add_argument('--frame-step-ms', help='Frame step/hop length in milliseconds', default=20, type=int)
 
-    # Laplacian params
-    parser.add_argument('--laplacian-ksize', help="Kernel size for Laplacian filter", default=3)
+    # LPC params
+    parser.add_argument('--nlpc', help='Number of LPC output features/filterbank energies', default=14, type=int)
+    parser.add_argument('--lpc-order', help='LPC analysis order', default=14, type=int)
 
-    # Random augmentation params
-    parser.add_argument('--horizontal-flip-prob', help="Probability for RANDOM_HORIZONTAL_FLIP transform during training", default=0.5)
-    parser.add_argument('--vertical-flip-prob', help="Probability for RANDOM_VERTICAL_FLIP transform during training", default=0.5)
-    parser.add_argument('--random-rotation-deg', help="Maximum rotation angle in degrees for RANDOM_ROTATION transform during training", default=15)
-
-    # Color jitter params
-    parser.add_argument('--color-jitter-brightness', help="Brightness factor for COLOR_JITTER transform during training", default=0.10)
-    parser.add_argument('--color-jitter-contrast', help="Contrast factor for COLOR_JITTER transform during training", default=0.10)
-    parser.add_argument('--color-jitter-saturation', help="Saturation factor for COLOR_JITTER transform during training", default=0.05)
-    parser.add_argument('--color-jitter-hue', help="Hue factor for COLOR_JITTER transform during training", default=0.01)
-   
+    # Audio loading params
+    parser.add_argument('--normalize-audio', help='Normalize waveform by max absolute value', default=True, type=misc_utils.str2bool)
+    parser.add_argument('--mono', help='Convert multi-channel audio to mono', default=True, type=misc_utils.str2bool)
+    
     parser.add_argument('--gof-test', type=misc_utils.str2bool, default=False, help='Enable goodness-of-fit test') 
- 
-    parser.add_argument("--with-input-batchnorm", default=True, help="onnx opset 18 doesn't export input batchnorm, use this if using TINPU style QAT only")
-    parser.add_argument('--augmentation-transform', help="Training-only image augmentation transforms", default=[])
-
+    
+    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
+    parser.add_argument('--file-level-classification-log', help='File level classification log file', type=str)
+    #######################################
     # nas args
     #######################################
     parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS")
     parser.add_argument("--nas_optimization_mode", default="Memory", type=str,  help="Optimize model for compute or storage efficiency")
     parser.add_argument("--nas_model_size", default='None', choices=['s', 'm', 'l', 'xl', 'None'], help="Proxy for model size")
     parser.add_argument("--nas_epochs", default=10, type=int, help="Iterations for search")
-    
+
     parser.add_argument("--nas_nodes_per_layer", default=4, type=int, help="Number of nodes per layer")
     parser.add_argument("--nas_layers", default=3, type=int, help="Shoulde be minimum 3")
     parser.add_argument("--nas_init_channels", default=1, type=int, help="Initial channel size of the first feature map")
     parser.add_argument("--nas_init_channel_multiplier", default=3, type=int, help="Channel size of after first preprocess")
     parser.add_argument("--nas_fanout_concat", default=4, type=int, help="Number of nodes to concat for output after each layer")
+
     parser.add_argument("--load_saved_model", type=str, default='None', help="Model path for pre-searched nas model")
+
     return parser
 
 
@@ -236,9 +224,8 @@ def generate_golden_vectors(output_dir, dataset, output_int, generic_model=False
 
             # Saving as .txt
             arr = np_raw.detach().cpu().numpy().flatten()
-            # np.savetxt(half_path + f'image_{label}_{index}.txt', np_raw.flatten(), fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,', header=f'//Class: {label} (Index: {index}): Image Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{', footer='}', comments='', newline=' ')
-            np.savetxt(half_path + f'image_{label}_{index}.txt', arr, fmt='%f,' if arr.dtype.kind == 'f' else '%d,',header=f'//Class: {label} (Index: {index}): Image Data\nfloat raw_input_test[{len(arr)}]= {{',footer='}', comments='', newline=' ')
-            vector_files.append(half_path + f'image_{label}_{index}.txt')
+            np.savetxt(half_path + f'audio_{label}_{index}.txt', arr, fmt='%f,' if arr.dtype.kind == 'f' else '%d,',header=f'//Class: {label} (Index: {index}): Audio Data\nfloat raw_input_test[{len(arr)}]= {{',footer='}', comments='', newline=' ')
+            vector_files.append(half_path + f'audio_{label}_{index}.txt')
             if not nn_for_feature_extraction:
                 np.savetxt(half_path + f'features_{label}_{index}.txt', np_feat.flatten(), fmt='%.5f,', header=f'//Class: {label} (Index: {index}): Extracted Features\nfloat model_test_input[{len(np_feat.flatten())}] = {{', footer='}', comments='', newline=' ')
                 vector_files.append(half_path + f'features_{label}_{index}.txt')
@@ -287,8 +274,8 @@ def main(gpu, args):
     # collate_fn = None
     num_classes = len(dataset.classes)
     variables = dataset.X.shape[1]
-    input_features = dataset.X.shape[2]
-
+    # input_features = dataset.X.shape[2]
+    input_features = tuple(dataset.X.shape[2:])
     logger.info("Loading data:")
     data_loader, data_loader_test = create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args, gpu)
 
@@ -464,10 +451,9 @@ def run(args):
 
 
 if __name__ == "__main__":
-
     arguments = get_args_parser().parse_args()
     # Apply default output_int if not specified by user
-    apply_output_int_default(arguments, 'image_classification')
+    apply_output_int_default(arguments, 'audio_classification')
 
     # run the training.
     # if args.distributed is True is set, then this will launch distributed training
