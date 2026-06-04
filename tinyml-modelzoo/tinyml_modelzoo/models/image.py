@@ -32,6 +32,7 @@
 
 from ..utils import py_utils
 from .base import GenericModelWithSpec
+import torch
 
 class CNN_LENET5(GenericModelWithSpec):
     def __init__(self, config, input_features=(28,28), variables=1, num_classes=10):
@@ -59,7 +60,6 @@ class CNN_LENET5(GenericModelWithSpec):
 
 
 class CNN_IMG_MOBILENETV1_58K_NPU(GenericModelWithSpec):
-
     """
     NPU-compliant MobileNetV1-inspired tiny model.
     - ~58K parameters
@@ -115,8 +115,137 @@ class CNN_IMG_MOBILENETV1_58K_NPU(GenericModelWithSpec):
         model_spec = dict(model_spec=layers)
         return model_spec
 
+class CNN_IMG_MOBILENETV2_58K_NPU(GenericModelWithSpec):
+    """
+    NPU-compliant MobileNetV2-inspired probe model.                                                                                                                          Closest possible sequential approximation of MobileNetV2
+
+    """
+    def __init__(self, config, input_features=(128, 128), variables=3, num_classes=4):
+        super().__init__(
+            config,
+            input_features=input_features,
+            variables=variables,
+            num_classes=num_classes,
+        )
+
+        stem_ch = 16
+        final_ch = 96
+
+        self.stem = torch.nn.Sequential(
+            torch.nn.BatchNorm2d(num_features=self.variables),
+            torch.nn.Conv2d(
+                self.variables, stem_ch,
+                kernel_size=(3, 3),
+                stride=(2, 2),
+                padding=(1, 1),
+                bias=False,
+            ),
+            torch.nn.BatchNorm2d(stem_ch),
+            torch.nn.ReLU(),
+        )
+
+        cfg = [
+            (1, 16, 1, 1),
+            (2, 24, 2, 2),
+            (2, 24, 1, 1),
+            (2, 32, 2, 2),
+            (2, 32, 1, 1),
+            (2, 48, 2, 2),
+        ]
+
+        blocks = []
+        in_ch = stem_ch
+
+        for expansion_ratio, out_ch, repeats, stride in cfg:
+            for block_idx in range(repeats):
+                block_stride = stride if block_idx == 0 else 1
+
+                blocks.append(
+                    InvertedResidualBlockTinyQuantFriendly(
+                        in_channels=in_ch,
+                        out_channels=out_ch,
+                        stride=block_stride,
+                        expansion_ratio=expansion_ratio,
+                    )
+                )
+
+                in_ch = out_ch
+
+        self.blocks = torch.nn.Sequential(*blocks)
+
+        self.head = torch.nn.Sequential(
+            torch.nn.Conv2d(
+                in_ch, final_ch,
+                kernel_size=(1, 1),
+                stride=(1, 1),
+                padding=(0, 0),
+                bias=False,
+            ),
+            torch.nn.BatchNorm2d(final_ch),
+            torch.nn.ReLU(),
+            torch.nn.AdaptiveAvgPool2d((1, 1)),
+            torch.nn.Flatten(start_dim=1),
+            torch.nn.Linear(final_ch, self.num_classes),
+        )
+
+    def forward(self, x):
+        x = self.stem(x)
+        x = self.blocks(x)
+        x = self.head(x)
+        return x
+
+
+class InvertedResidualBlockTinyQuantFriendly(torch.nn.Module):
+    def __init__(self, in_channels, out_channels, stride, expansion_ratio):
+        super().__init__()
+
+        hidden_channels = in_channels * expansion_ratio
+
+        layers = []
+
+        if expansion_ratio != 1:
+            layers += [
+                torch.nn.Conv2d(
+                    in_channels, hidden_channels,
+                    kernel_size=(1, 1),
+                    stride=(1, 1),
+                    padding=(0, 0),
+                    bias=False,
+                ),
+                torch.nn.BatchNorm2d(hidden_channels),
+                torch.nn.ReLU(),
+            ]
+
+        layers += [
+            torch.nn.Conv2d(
+                hidden_channels, hidden_channels,
+                kernel_size=(3, 3),
+                stride=(stride, stride),
+                padding=(1, 1),
+                groups=hidden_channels,
+                bias=False,
+            ),
+            torch.nn.BatchNorm2d(hidden_channels),
+            torch.nn.ReLU(),
+
+            torch.nn.Conv2d(
+                hidden_channels, out_channels,
+                kernel_size=(1, 1),
+                stride=(1, 1),
+                padding=(0, 0),
+                bias=False,
+            ),
+            torch.nn.BatchNorm2d(out_channels),
+            torch.nn.ReLU(),
+        ]
+
+        self.block = torch.nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.block(x)
 # Export all image classification models
 __all__ = [
     'CNN_LENET5',
     'CNN_IMG_MOBILENETV1_58K_NPU',
+    'CNN_IMG_MOBILENETV2_58K_NPU',
 ]

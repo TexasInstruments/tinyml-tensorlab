@@ -57,6 +57,7 @@ _MODEL_MODULES = [
     'forecasting',
     'feature_extraction',
     'image',
+    'audio'
 ]
 
 # Central model registry - built dynamically
