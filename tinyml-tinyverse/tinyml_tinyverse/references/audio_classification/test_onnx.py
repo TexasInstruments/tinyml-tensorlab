@@ -41,7 +41,7 @@ import torch
 import torcheval
 from tabulate import tabulate
 
-from tinyml_tinyverse.common.datasets import GenericImageDataset
+from tinyml_tinyverse.common.datasets import GoogleSpeechCommandsDataset
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
@@ -56,49 +56,37 @@ from ..common.test_onnx_base import (
     run_distributed_test,
 )
 
-dataset_loader_dict = {'GenericImageDataset': GenericImageDataset}
+dataset_loader_dict = {'GoogleSpeechCommandsDataset': GoogleSpeechCommandsDataset}
 
 
 def get_args_parser():
-    DESCRIPTION = "This script loads image dataset and tests it against a onnx model using ONNX RT"
-    parser = get_base_test_args_parser("This script loads an image dataset and tests a classification model")
-    
-    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
-    # Feature Extraction Params
-    parser.add_argument('--augmentation-transform', help="Training-only image augmentation transforms", default=[])
-    # Vision Related Params
-    parser.add_argument('--image-height', help="Image dimension(Height)")
-    parser.add_argument('--image-width', help="Image dimension(Width)")
-    parser.add_argument('--image-mean', help="Average pixel intensity of dataset computed per channel")
-    parser.add_argument('--image-scale', help="Standard deviation of pixel intensities per channel")
-    parser.add_argument('--image-num-channel', help="Number of channels( RGB=3, Greyscale=1) present in the image")
-        # Optional image preprocessing params
-    parser.add_argument('--pad-value', help="Padding pixel value used for RESIZE_PAD transform", default=0)
-    parser.add_argument('--binary-threshold', help="Threshold value used for BINARIZE transform", default=128)
+    DESCRIPTION = "This script loads time series dataset and tests it against a onnx model using ONNX RT"
+    parser = get_base_test_args_parser("This script loads an audio wav dataset and tests a classification model")
+   
+    # Audio preprocessing / feature extraction params
+    parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
+    parser.add_argument('--audio-duration-ms', help='Audio clip duration in milliseconds', default=1000, type=int)
+    parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, or RAW', default='MFCC', type=str)
+    # MFCC params
+    parser.add_argument('--n-mfcc', help='Number of MFCC coefficients', default=10, type=int)
+    parser.add_argument('--n-mels', help='Number of Mel filterbank bins', default=40, type=int)
+    parser.add_argument('--frame-length-ms', help='Frame/window length in milliseconds', default=30, type=int)
+    parser.add_argument('--frame-step-ms', help='Frame step/hop length in milliseconds', default=20, type=int)
 
-    # CLAHE params
-    parser.add_argument('--clahe-clip-limit', help="Clip limit for CLAHE contrast enhancement", default=2.0)
-    parser.add_argument('--clahe-tile-grid-size', help="Tile grid size for CLAHE transform, for example '(8, 8)'", default=(8, 8))
+    # LPC params
+    parser.add_argument('--nlpc', help='Number of LPC output features/filterbank energies', default=14, type=int)
+    parser.add_argument('--lpc-order', help='LPC analysis order', default=14, type=int)
 
-    # Sobel params
-    parser.add_argument('--sobel-mode', help="Sobel mode: x, y, or magnitude", default="magnitude")
-    parser.add_argument('--sobel-ksize', help="Kernel size for Sobel filter", default=3)
+    # Audio loading params
+    parser.add_argument('--normalize-audio', help='Normalize waveform by max absolute value', default=True, type=misc_utils.str2bool)
+    parser.add_argument('--mono', help='Convert multi-channel audio to mono', default=True, type=misc_utils.str2bool)
 
-    # Laplacian params
-    parser.add_argument('--laplacian-ksize', help="Kernel size for Laplacian filter", default=3)
-
-    # Random augmentation params
-    parser.add_argument('--horizontal-flip-prob', help="Probability for RANDOM_HORIZONTAL_FLIP transform during training", default=0.5)
-    parser.add_argument('--vertical-flip-prob', help="Probability for RANDOM_VERTICAL_FLIP transform during training", default=0.5)
-    parser.add_argument('--random-rotation-deg', help="Maximum rotation angle in degrees for RANDOM_ROTATION transform during training", default=15)
-
-    # Color jitter params
-    parser.add_argument('--color-jitter-brightness', help="Brightness factor for COLOR_JITTER transform during training", default=0.10)
-    parser.add_argument('--color-jitter-contrast', help="Contrast factor for COLOR_JITTER transform during training", default=0.10)
-    parser.add_argument('--color-jitter-saturation', help="Saturation factor for COLOR_JITTER transform during training", default=0.05)
-    parser.add_argument('--color-jitter-hue', help="Hue factor for COLOR_JITTER transform during training", default=0.01)
-
+    # Training parameters
     parser.add_argument('--file-level-classification-log', help='File-level classification Log File', type=str)
+    parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool,
+                        help="Use an AI model for preprocessing")
+   
+   
     return parser
 
 

@@ -11,7 +11,34 @@ from PIL import Image, ImageOps
 from torch.utils.data import Dataset
 from torchvision import transforms
 
+from ast import literal_eval
 
+def _normalize_transform_list(value):
+    if value is None:
+        return []
+
+    if isinstance(value, str):
+        value = value.strip()
+
+        if value in ("", "[]", "None"):
+            return []
+
+        try:
+            parsed = literal_eval(value)
+
+            if isinstance(parsed, (list, tuple)):
+                return list(parsed)
+
+            return [parsed]
+
+        except Exception:
+            return [value]
+
+    if isinstance(value, (list, tuple)):
+        return list(value)
+
+    return [value]
+    
 def _to_bool(val):
     if isinstance(val, bool):
         return val
@@ -171,9 +198,8 @@ class GenericImageDataset(Dataset):
         raw_feat_ext_transform = getattr(self, "feat_ext_transform", [])
         raw_augmentation_transform = getattr(self, "augmentation_transform", [])
         raw_transforms = getattr(self, "transforms", raw_feat_ext_transform)
-
-        self.transforms = (raw_transforms)
-        self.augmentation_transforms = (raw_augmentation_transform)
+        self.transforms = _normalize_transform_list(raw_transforms)
+        self.augmentation_transforms = _normalize_transform_list(raw_augmentation_transform)
         self.enable_online_augmentation = False
      
         self.augment_pipeline = []
