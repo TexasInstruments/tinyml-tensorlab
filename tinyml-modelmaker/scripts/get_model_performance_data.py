@@ -6,7 +6,7 @@ from tinyml_modelmaker.ai_modules.vision import constants as constants_vision
 valid_model_list = ['MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
                     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
                     'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t',
-                    'TimeSeries_Generic_13k_t', 'Lenet5', 'MobileNetV1_58k_NPU', 'PIRDetection_model_1_t']
+                    'TimeSeries_Generic_13k_t', 'Lenet5', 'MobileNetV1_58k_NPU', 'MobileNetV2_58k_NPU'. 'PIRDetection_model_1_t']
 soft_tinie_targets = ['c28_soft_int_in_int_out']
 hard_tinie_targets = ['c28_hard_int_in_int_out']
 valid_tinie_targets = soft_tinie_targets + hard_tinie_targets

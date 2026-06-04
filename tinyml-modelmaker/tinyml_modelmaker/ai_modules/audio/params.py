@@ -49,7 +49,6 @@ def init_params(*args, **kwargs):
             task_category=None,
             target_machine='evm',
             target_device=None,
-            target_module='vision',
             # run_name can be any string, but there are some special cases:
             # {date-time} will be replaced with datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             # {model_name} will be replaced with the name of the model
@@ -83,7 +82,7 @@ def init_params(*args, **kwargs):
             augment_config=None,
             model_config=None,
             model_spec=None,
-            dataset_loader='GenericImageDataset',
+            dataset_loader='GoogleSpeechCommandsDataset',
             model_training_id=None,
             training_backend=None,
             pretrained_checkpoint_path=None,
@@ -110,7 +109,7 @@ def init_params(*args, **kwargs):
             training_master_port=29500,
             train_output_path=None,
             run_quant_train_only=False,
-            # out_dir=os.getcwd())
+            auto_quantization = False,
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
             quantization_method=TinyMLQuantizationMethod.QAT,
             quantization_weight_bitwidth=8,
@@ -141,12 +140,11 @@ def init_params(*args, **kwargs):
             nas_init_channels=1,    # Initial feature map channel for conv layer
             nas_init_channel_multiplier=3,  # First layer channel multiplier
             nas_fanout_concat=4,   # num nodes_per_layer to concat for output of current layer, it should always be less than equal to nodes_per_layer
+            
             load_saved_model=None,
             ondevice_training = False,
-            #The order below maps to (train, val, test)
-            # export_samples_per_class = (10,10,10),
-            # trainable_layers_from_last = 1,
-            auto_quantization = False,
+            trainable_layers_from_last = 1,
+            partial_quantization = False
         ),
 
         testing=dict(
@@ -161,13 +159,25 @@ def init_params(*args, **kwargs):
         data_processing_feature_extraction=dict(
             variables=1,
             feature_extraction_name=None,
-            sampling_rate=1,
-            # Image shape / normalization
-            image_height=28,
-            image_width=28,
-            image_num_channel=1,
-            image_mean=0.1307,
-            image_scale=0.3081,
+
+            # Audio shape / feature extraction
+            sampling_rate=16000,
+            audio_duration_ms=1000,
+            audio_feature="MFCC",
+
+            # MFCC
+            n_mfcc=10,
+            n_mels=40,
+            frame_length_ms=30,
+            frame_step_ms=20,
+
+            # LPC
+            nlpc=14,
+            lpc_order=14,
+
+            # Audio loading
+            normalize_audio=True,
+            mono=True,
 
             # Transform flow, aligned with timeseries
             feat_ext_transform=[],
@@ -182,29 +192,6 @@ def init_params(*args, **kwargs):
             feat_ext_store_dir=None,
             dont_train_just_feat_ext=False,
 
-            # Image preprocessing optional params
-            pad_value=0,
-            binary_threshold=128,
-
-            # CLAHE
-            clahe_clip_limit=2.0,
-            clahe_tile_grid_size=(8, 8),
-
-            # Sobel / Laplacian
-            sobel_mode="magnitude",
-            sobel_ksize=3,
-            laplacian_ksize=3,
-
-            # Training-only augmentations
-            horizontal_flip_prob=0.5,
-            vertical_flip_prob=0.5,
-            random_rotation_deg=15,
-
-            # Keep mild by default, especially for color-sensitive datasets
-            color_jitter_brightness=0.10,
-            color_jitter_contrast=0.10,
-            color_jitter_saturation=0.05,
-            color_jitter_hue=0.01,
         ),
         compilation=dict(
             enable=True,
