@@ -246,7 +246,7 @@ def get_training_recommendations(
         num_gpus: Optional. Number of GPUs available (0 or None = no GPU).
 
     Returns:
-        quantization recommendations, NAS recommendations, and plain-English explanations.
+        quantization recommendations and plain-English explanations.
     """
     device_has_npu = target_device in _NPU_DEVICES
     has_gpu = num_gpus is not None and num_gpus > 0
@@ -269,56 +269,16 @@ def get_training_recommendations(
 
     quantization_options = {
         0: "Float32 training — no quantization. Largest model, slowest inference. Use only when evaluating accuracy first.",
-        1: "Standard PyTorch quantization — general-purpose, works on all devices. 4x size reduction typical.",
+        1: "Standard PyTorch quantization — general-purpose, works on all devices. 4× size reduction typical.",
         2: "TI NPU-optimized quantization — required for NPU acceleration. Best performance on NPU-equipped devices.",
     }
 
-    method_explanation = {
-        "QAT": (
-            "Quantization-Aware Training — simulates quantization during training. "
-            "Better accuracy retention (<1% drop for INT8). Longer training time. Recommended for most cases."
-        ),
-        "PTQ": (
-            "Post-Training Quantization — quantizes after training completes. "
-            "Faster and simpler but may lose more accuracy. Good for quick evaluation."
-        ),
-    }
-
-    bitwidth_explanation = {
-        8: "INT8 — 4x smaller than float32. Usually <1% accuracy drop. Recommended starting point.",
-        4: "INT4 — 8x smaller than float32. 1-5% accuracy drop typical. Use when memory is very tight.",
-        2: "INT2 — 16x smaller than float32. 5-15% accuracy drop. Only for extreme memory constraints.",
-    }
-
-    # ── NAS recommendation ────────────────────────────────────────────────────
-    nas_recommended = False
-    nas_reason = ""
-
-    if not has_gpu:
-        nas_reason = (
-            "NAS requires a GPU — without one it is impractical (each search epoch takes several minutes on CPU). "
-            "Skip NAS and use the model recommended by select_model_for_task instead."
-        )
-    elif dataset_size_bucket == "tiny":
-        nas_reason = (
-            "Dataset is very small ('tiny'). NAS may overfit during search. "
-            "Standard models are safer — try NAS only if standard models perform poorly."
-        )
-    else:
-        nas_recommended = True
-        nas_reason = (
-            "GPU available. NAS can find a smaller model that meets accuracy requirements automatically. "
-            "Start with nas_model_size='s' or 'm' to keep search time manageable. "
-            "Use nas_optimization_mode='Memory' if flash/RAM is tight, 'Compute' if latency is the priority."
-        )
-
-    nas_model_size_explanation = {
-        "s":   "Small — 3 layers, fast search (~10-20 min). Good starting point.",
-        "m":   "Medium — 10 layers, moderate search time. Recommended default.",
-        "l":   "Large — 12 layers, longer search. Use when accuracy needs improvement.",
-        "xl":  "Extra-large — 20 layers, slow. Use only when l is insufficient.",
-        "xxl": "Extra-extra-large — 20 layers, 6 nodes. Slowest, largest search space.",
-    }
+    autoquant_explanation = (
+        "When quantization: 1 or 2 is selected, Automatic Mixed Precision (AMP) is enabled by default. "
+        "AMP automatically assigns per-layer bit widths (2, 4, 8, or 32) using Hessian-aware sensitivity analysis, "
+        "balancing model size and accuracy without manual tuning. No PTQ/QAT or bit width configuration needed — "
+        "the system handles this optimally for your task and dataset."
+    )
 
     return {
         "success": True,
@@ -328,21 +288,8 @@ def get_training_recommendations(
             "recommended_mode": recommended_quantization,
             "reason": quantization_reason,
             "options": quantization_options,
-            "recommended_method": "QAT",
-            "method_explanation": method_explanation,
-            "recommended_bitwidth": 8,
-            "bitwidth_explanation": bitwidth_explanation,
-        },
-        # NAS
-        "nas": {
-            "recommended": nas_recommended,
-            "reason": nas_reason,
-            "model_size_options": nas_model_size_explanation,
-            "optimization_modes": {
-                "Memory":  "Minimizes parameter count → smaller flash/RAM footprint on MCU.",
-                "Compute": "Minimizes MACs/FLOPs → lower inference latency.",
-            },
-        },
+            "autoquant_explanation": autoquant_explanation,
+        }
     }
 
 
