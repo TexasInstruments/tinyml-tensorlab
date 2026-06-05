@@ -117,6 +117,7 @@ from ..common.train_base import (
 
 dataset_loader_dict = {'GenericImageDataset':GenericImageDataset}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
+_float_best_metric = None  # best float accuracy; set on float run, read on QAT run
 
 
 def get_args_parser():
@@ -325,7 +326,7 @@ def main(gpu, args):
 
     move_model_to_device(model, device, logger)
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
-# logger.info(f"args.transforms = {args.transforms}"
+
     model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
     optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
     resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
@@ -409,6 +410,10 @@ def main(gpu, args):
             best['predictions'], best['ground_truth'] = predictions, ground_truth
             checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
             utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+
+    if not args.quantization and args.auto_quantization:
+        _float_best_metric = best['accuracy'] / 100.0
+        logger.info(f"Stored float best accuracy for binary search: {_float_best_metric:.4f}")
 
     # Log best epoch results
     set_dataset_augmentation_enabled(dataset, False)

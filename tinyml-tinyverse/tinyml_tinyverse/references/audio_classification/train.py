@@ -117,6 +117,7 @@ from ..common.train_base import (
 
 dataset_loader_dict = {'GoogleSpeechCommandsDataset':GoogleSpeechCommandsDataset}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
+_float_best_metric = None  # best float accuracy; set on float run, read on QAT run
 
 
 def get_args_parser():
@@ -237,10 +238,7 @@ def generate_golden_vectors(output_dir, dataset, output_int, generic_model=False
     generate_test_vector(output_dir, header_file_info)
     generate_model_aux(output_dir, dataset)
 
-def set_dataset_augmentation_enabled(dataset, enabled):
-    if hasattr(dataset, "set_augmentation_enabled"):
-        dataset.set_augmentation_enabled(enabled)
-        
+
 def main(gpu, args):
     """Main training function for classification."""
     logger, device = setup_training_environment(args, gpu, 'classification', __file__)
@@ -312,7 +310,6 @@ def main(gpu, args):
 
     move_model_to_device(model, device, logger)
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
-# logger.info(f"args.transforms = {args.transforms}"
     model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
     optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
     resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
@@ -367,21 +364,14 @@ def main(gpu, args):
 
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
-         train_sampler.set_epoch(epoch)
-
-        set_dataset_augmentation_enabled(dataset, True)
-
+            train_sampler.set_epoch(epoch)
         utils.train_one_epoch_classification(
             model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
             print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
             is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False,
             nn_for_feature_extraction=args.nn_for_feature_extraction)
-
-        set_dataset_augmentation_enabled(dataset, False)
         if not (args.quantization_method in ['PTQ'] and args.quantization):
             lr_scheduler.step()
-        set_dataset_augmentation_enabled(dataset, False)
-        set_dataset_augmentation_enabled(dataset_test, False)
         avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(
             model, criterion, data_loader_test, device=device, transform=None, phase=phase,
             num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
@@ -397,9 +387,11 @@ def main(gpu, args):
             checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
             utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
+    if not args.quantization and args.auto_quantization:
+        _float_best_metric = best['accuracy'] / 100.0
+        logger.info(f"Stored float best accuracy for binary search: {_float_best_metric:.4f}")
+
     # Log best epoch results
-    set_dataset_augmentation_enabled(dataset, False)
-    set_dataset_augmentation_enabled(dataset_test, False)
     logger = getLogger(f"root.main.{phase}.BestEpoch")
     logger.info("")
     logger.info("Printing statistics of best epoch:")
@@ -438,8 +430,6 @@ def main(gpu, args):
     
     if args.gen_golden_vectors:
         
-        set_dataset_augmentation_enabled(dataset, False)
-        set_dataset_augmentation_enabled(dataset_test, False)
         generate_golden_vector_dir(args.output_dir)
         output_int = get_output_int_flag(args)
         generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
