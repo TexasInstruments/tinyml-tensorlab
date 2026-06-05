@@ -138,8 +138,8 @@ TRAINING_BATCH_SIZE_DEFAULT = {
 
 }
 
-TARGET_SDK_VERSION_C2000 = '6.0'
-TARGET_SDK_RELEASE_C2000 = '06_00_00'
+TARGET_SDK_VERSION_C2000 = '26.0.0'
+TARGET_SDK_RELEASE_C2000 = '26_00_00'
 
 TARGET_SDK_VERSION_F29H85 = '1.00'
 TARGET_SDK_RELEASE_F29H85 = '01_00_00'
@@ -763,6 +763,25 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         'dataset_description': 'The Machine Readable Code dataset is a synthetic low-resolution image classification dataset created for tiny image classification experiments. It contains three classes: QR code, barcode, and other/non-code images. QR images are generated using random alphanumeric payloads, barcode images are generated as Code128 barcodes without printed text, and the other class contains blank, noise, line, and block-pattern images. All images are converted to 28x28 grayscale binary PNGs.',
         'dataset_size': '3,000 images per class, 9,000 images total. Each image is 28x28 grayscale binary.',
         'dataset_source': 'Generated synthetically using Python packages qrcode, python-barcode, Pillow, and NumPy.',
+    }
+},
+'mnist_classes': {
+    'common': {
+        'task_type': TASK_TYPE_IMAGE_CLASSIFICATION,
+        'task_category': TASK_CATEGORY_IMAGE_CLASSIFICATION,
+    },
+    'dataset': {
+        'dataset_name': 'mnist_classes',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip',
+    },
+    'info': {
+        'dataset_url': 'http://yann.lecun.com/exdb/mnist/',
+        'dataset_detailed_name': 'MNIST Handwritten Digits Classification',
+        'dataset_description': 'MNIST dataset with handwritten digit images (0-9) organized as class folders for image classification workflows. Standard 28x28 grayscale images used for image classification training and evaluation.',
+        'dataset_size': 'Multiple classes of handwritten digit images (28x28 grayscale)',
+        'dataset_source': 'Created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges from NIST data',
+        'dataset_license': 'Freely available for research and educational purposes',
+        'dataset_citation': 'Yann LeCun, Corinna Cortes, and Christopher J.C. Burges. "The MNIST Database of Handwritten Digits." 1998. http://yann.lecun.com/exdb/mnist/',
     }
 },
 }

@@ -174,6 +174,7 @@ TARGET_DEVICE_AM263 = 'AM263'
 TARGET_DEVICE_AM263P = 'AM263P'
 TARGET_DEVICE_AM261 = 'AM261'
 TARGET_DEVICE_F280013 = 'F280013'
+TARGET_DEVICE_F28E12 = 'F28E12'
 TARGET_DEVICE_F280015 = 'F280015'
 TARGET_DEVICE_F28003 = 'F28003'
 TARGET_DEVICE_F28004 = 'F28004'
@@ -199,6 +200,7 @@ TARGET_DEVICE_CC35X1 = 'CC35X1'
 
 TARGET_DEVICES = [
     TARGET_DEVICE_F280013,
+    TARGET_DEVICE_F28E12,
     TARGET_DEVICE_F280015,
     TARGET_DEVICE_F28003,
     TARGET_DEVICE_F28004,
@@ -384,6 +386,23 @@ TARGET_DEVICE_DETAILS_F280013 = \
 
 Important links:
 {TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F28E12 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F28E12 = \
+    f'''* Product information: https://www.ti.com/product/TMS320F28E12
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28E12X
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F28E12 = \
+    f'''C2000™ 32-bit MCU 160-MHz C28x CPU with FPU, 64-KB Flash, 12-bit ADCs, PGA
+* More details : https://www.ti.com/tool/LAUNCHXL-F28E12X
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28E12}
 
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
@@ -738,15 +757,23 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F280013: {
         'device_name': TARGET_DEVICE_F280013,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 9,
+        'device_selection_factor': 10,
         'device_details': TARGET_DEVICE_DETAILS_F280013,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
+    TARGET_DEVICE_F28E12: {
+        'device_name': TARGET_DEVICE_F28E12,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 9,
+        'device_details': TARGET_DEVICE_DETAILS_F28E12,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_F280015: {
         'device_name': TARGET_DEVICE_F280015,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 10,
+        'device_selection_factor': 11,
         'device_details': TARGET_DEVICE_DETAILS_F280015,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -770,7 +797,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F2837: {
         'device_name': TARGET_DEVICE_F2837,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 13,
+        'device_selection_factor': 14,
         'device_details': TARGET_DEVICE_DETAILS_F2837,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -778,7 +805,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P65: {
         'device_name': TARGET_DEVICE_F28P65,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 14,
+        'device_selection_factor': 15,
         'device_details': TARGET_DEVICE_DETAILS_F28P65,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -786,7 +813,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P55: {
         'device_name': TARGET_DEVICE_F28P55,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 16,
+        'device_selection_factor': 17,
         'device_details': TARGET_DEVICE_DETAILS_F28P55,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -796,7 +823,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM263: {
         'device_name': TARGET_DEVICE_AM263,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 18,
+        'device_selection_factor': 19,
         'device_details': TARGET_DEVICE_DETAILS_AM263,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -804,7 +831,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM263P: {
         'device_name': TARGET_DEVICE_AM263P,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 19,
+        'device_selection_factor': 20,
         'device_details': TARGET_DEVICE_DETAILS_AM263P,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -812,7 +839,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM261: {
         'device_name': TARGET_DEVICE_AM261,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 17,
+        'device_selection_factor': 18,
         'device_details': TARGET_DEVICE_DETAILS_AM261,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -820,7 +847,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29H85: {
         'device_name': TARGET_DEVICE_F29H85,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 24,
+        'device_selection_factor': 25,
         'device_details': TARGET_DEVICE_DETAILS_F29H85,
         'sdk_version': TARGET_SDK_VERSION_F29H85,
         'sdk_release': TARGET_SDK_RELEASE_F29H85,
@@ -830,7 +857,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29P58: {
         'device_name': TARGET_DEVICE_F29P58,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 23,
+        'device_selection_factor': 24,
         'device_details': TARGET_DEVICE_DETAILS_F29P58,
         'sdk_version': TARGET_SDK_VERSION_F29P58,
         'sdk_release': TARGET_SDK_RELEASE_F29P58,
@@ -838,7 +865,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29P32: {
         'device_name': TARGET_DEVICE_F29P32,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 22,
+        'device_selection_factor': 23,
         'device_details': TARGET_DEVICE_DETAILS_F29P32,
         'sdk_version': TARGET_SDK_VERSION_F29P32,
         'sdk_release': TARGET_SDK_RELEASE_F29P32,
@@ -862,7 +889,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM0G5187: {
         'device_name': TARGET_DEVICE_MSPM0G5187,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 15,
+        'device_selection_factor': 16,
         'device_details': TARGET_DEVICE_DETAILS_MSPM0G5187,
         'sdk_version': TARGET_SDK_VERSION_MSPM0,
         'sdk_release': TARGET_SDK_RELEASE_MSPM0,
@@ -870,7 +897,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM33C32: {
         'device_name': TARGET_DEVICE_MSPM33C32,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 11,
+        'device_selection_factor': 12,
         'device_details': TARGET_DEVICE_DETAILS_MSPM33C32,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -878,7 +905,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM33C34: {
         'device_name': TARGET_DEVICE_MSPM33C34,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 21,
+        'device_selection_factor': 22,
         'device_details': TARGET_DEVICE_DETAILS_MSPM33C34,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -886,7 +913,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM13E2: {
         'device_name': TARGET_DEVICE_AM13E2,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 20,
+        'device_selection_factor': 21,
         'device_details': TARGET_DEVICE_DETAILS_AM13E2,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -937,7 +964,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_CC35X1: {
         'device_name': TARGET_DEVICE_CC35X1,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 12,
+        'device_selection_factor': 13,
         'device_details': TARGET_DEVICE_DETAILS_CC35X1,
         'sdk_version': TARGET_SDK_VERSION_CC35X1,
         'sdk_release': TARGET_SDK_RELEASE_CC35X1,
@@ -1402,6 +1429,7 @@ CROSS_COMPILER_OPTIONS_CC35X1 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -m
 
 
 CROSS_COMPILER_OPTIONS_F280013 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280013.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28E12 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28E12.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
@@ -1438,7 +1466,6 @@ COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", 
 COMPILATION_MSPM33C_SOFT_TINPU_OPT_SPACE = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 COMPILATION_MSPM33C_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 # MSPM33 Forecasting - Preset for RNN/GRU/LSTM models
-COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 # AM13E2
 COMPILATION_AM13E2_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 COMPILATION_AM13E2_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
@@ -1471,6 +1498,7 @@ COMPILATION_AM261_SOFT_TINPU = dict(target="c", target_c_mcpu='cortex-r5', cross
 # Cross-compiler options lookup
 _CROSS_COMPILER_OPTIONS = {
     TARGET_DEVICE_F280013: CROSS_COMPILER_OPTIONS_F280013,
+    TARGET_DEVICE_F28E12: CROSS_COMPILER_OPTIONS_F28E12,
     TARGET_DEVICE_F280015: CROSS_COMPILER_OPTIONS_F280015,
     TARGET_DEVICE_F28003: CROSS_COMPILER_OPTIONS_F28003,
     TARGET_DEVICE_F28004: CROSS_COMPILER_OPTIONS_F28004,
@@ -1780,7 +1808,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'info': {
             'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip',
-            'dataset_detailed_name': 'Ac Arc Fault Classification Example',
+            'dataset_detailed_name': 'AC Arc Fault Classification Example on public dataset',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
@@ -1798,7 +1826,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'info': {
             'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip',
-            'dataset_detailed_name': 'Ac Arc Fault Classification Example',
+            'dataset_detailed_name': 'AC Arc Fault Classification Example collected on TI Testbed',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal. The Log300 takes 1-10MHZ filtered signal and envelopes it. This down converts the signal to to a 100kHz equivalent logarithmically scaled power measurement of the energy in the high frequency band.',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
@@ -2147,4 +2175,544 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #         'dataset_license': 'TI Internal License'
     #     }
     # },
+    'arc_fault_dsi_anomaly_detection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'arc_fault_dsi_anomaly_detection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsi_anomaly_detection.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsi_anomaly_detection.zip',
+            'dataset_detailed_name': 'Arc Fault Anomaly Detection Example with complex dataset',
+            'dataset_description': 'Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'arc_fault_dsk_anomaly_detection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'arc_fault_dsk_anomaly_detection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsk_anomaly_detection.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsk_anomaly_detection.zip',
+            'dataset_detailed_name': 'Arc Fault Anomaly Detection Example',
+            'dataset_description': 'Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'generic_timeseries_anomalydetection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'generic_timeseries_anomalydetection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip',
+            'dataset_detailed_name': 'Timeseries Anomaly Detection Example',
+            'dataset_description': 'Generic timeseries anomaly detection dataset with synthetic signal patterns for anomaly identification',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'motor_fault_anomaly_detection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'motor_fault_anomaly_detection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip',
+            'dataset_detailed_name': 'Motor Fault Anomaly Detection Example',
+            'dataset_description': 'Example motor bearing fault timeseries anomaly detection dataset for identifying abnormal vibration patterns',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'ecg_ad_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'ecg_ad_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_ad_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_ad_dataset.zip',
+            'dataset_detailed_name': 'ECG Anomaly Detection Example',
+            'dataset_description': 'Example ECG sensor timeseries anomaly detection dataset for identifying abnormal cardiac patterns',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'fan_blade_ad_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'fan_blade_ad_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip',
+            'dataset_detailed_name': 'Fan Blade Anomaly Detection Example',
+            'dataset_description': 'Example fan blade fault timeseries anomaly detection dataset for identifying abnormal vibration',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'ac_arc_fault': {
+        'common': {
+            'task_type': TASK_TYPE_ARC_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'ac_arc_fault',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip',
+            'dataset_detailed_name': 'AC Arc Fault Classification Dataset',
+            'dataset_description': 'AC arc fault timeseries classification dataset with multiple categories for fault detection',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'ac_arc_fault_log300': {
+        'common': {
+            'task_type': TASK_TYPE_ARC_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'ac_arc_fault_log300',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip',
+            'dataset_detailed_name': 'AC Arc Fault Log300 Classification Dataset',
+            'dataset_description': 'AC arc fault timeseries classification dataset with Log300 signal processing for enhanced fault detection',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'arc_fault_classification_dsi': {
+        'common': {
+            'task_type': TASK_TYPE_ARC_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'arc_fault_classification_dsi',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip',
+            'dataset_detailed_name': 'Arc Fault Classification DSI Dataset',
+            'dataset_description': 'Arc fault timeseries classification dataset from DSI board for electrical fault detection',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'ecg_classification_2class': {
+        'common': {
+            'task_type': TASK_TYPE_ECG_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'ecg_classification_2class',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip',
+            'dataset_detailed_name': 'ECG 2-Class Classification Dataset',
+            'dataset_description': 'ECG sensor timeseries classification dataset with 2-class arrhythmia detection',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'electrical_fault_6class_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'electrical_fault_6class_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_6class_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_6class_dataset.zip',
+            'dataset_detailed_name': 'Electrical Fault 6-Class Classification Dataset',
+            'dataset_description': 'Electrical fault timeseries classification dataset with 6 fault categories',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'electrical_fault_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'electrical_fault_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip',
+            'dataset_detailed_name': 'Electrical Fault Classification Dataset',
+            'dataset_description': 'Electrical fault timeseries classification dataset for power grid and electrical system monitoring',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'esda_nilm_2021_5_variable_4_class_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'esda_nilm_2021_5_variable_4_class_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+            'dataset_detailed_name': 'ESDA NILM 2021 5-Variable 4-Class Dataset',
+            'dataset_description': 'Non-Intrusive Load Monitoring (NILM) dataset with 5 variables and 4 appliance classes for energy management',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'fall_detection_classification': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'fall_detection_classification',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fall_detection_classification.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fall_detection_classification.zip',
+            'dataset_detailed_name': 'Fall Detection Classification Dataset',
+            'dataset_description': 'IMU-based timeseries classification dataset for human fall detection and activity recognition',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'fan_blade_fault_dsi': {
+        'common': {
+            'task_type': TASK_TYPE_MOTOR_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'fan_blade_fault_dsi',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip',
+            'dataset_detailed_name': 'Fan Blade Fault DSI Classification Dataset',
+            'dataset_description': 'Fan blade fault timeseries classification dataset from DSI board with vibration sensor data',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'gas_sensor_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'gas_sensor_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip',
+            'dataset_detailed_name': 'Gas Sensor Classification Dataset',
+            'dataset_description': 'Multi-variable gas sensor timeseries classification dataset for gas detection and identification',
+            'dataset_size': None,
+            'dataset_source': 'Gas sensor test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'gearbox_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_MOTOR_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'gearbox_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip',
+            'dataset_detailed_name': 'Gearbox Fault Classification Dataset',
+            'dataset_description': 'Gearbox vibration timeseries classification dataset for gearbox fault detection and diagnosis',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'generic_timeseries_forecasting': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_FORECASTING,
+            'task_category': TASK_CATEGORY_TS_FORECASTING,
+        },
+        'dataset': {
+            'dataset_name': 'generic_timeseries_forecasting',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_forecasting.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_forecasting.zip',
+            'dataset_detailed_name': 'Generic Timeseries Forecasting Example',
+            'dataset_description': 'Generic timeseries forecasting dataset for time series prediction and trend forecasting',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'generic_timeseries_regression': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'generic_timeseries_regression',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip',
+            'dataset_detailed_name': 'Generic Timeseries Regression Example',
+            'dataset_description': 'Generic timeseries regression dataset for continuous value prediction from temporal data',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'grid_fault_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'grid_fault_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_fault_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_fault_dataset.zip',
+            'dataset_detailed_name': 'Grid Fault Detection Dataset',
+            'dataset_description': 'Power grid timeseries classification dataset for detecting grid faults and abnormal events',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'grid_stability_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'grid_stability_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip',
+            'dataset_detailed_name': 'Grid Stability Classification Dataset',
+            'dataset_description': 'Power grid stability timeseries classification dataset from electrical grid measurements',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'hvac_indoor_temp_forecast_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_FORECASTING,
+            'task_category': TASK_CATEGORY_TS_FORECASTING,
+        },
+        'dataset': {
+            'dataset_name': 'hvac_indoor_temp_forecast_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip',
+            'dataset_detailed_name': 'HVAC Indoor Temperature Forecasting Dataset',
+            'dataset_description': 'HVAC system timeseries forecasting dataset for predicting indoor temperature trends',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'induction_motor_speed_prediction_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'induction_motor_speed_prediction_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/induction_motor_speed_prediction_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/induction_motor_speed_prediction_dataset.zip',
+            'dataset_detailed_name': 'Induction Motor Speed Prediction Dataset',
+            'dataset_description': 'Induction motor timeseries regression dataset for motor speed prediction from electrical measurements',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'motor_fault_anomaly_detection_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'motor_fault_anomaly_detection_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip',
+            'dataset_detailed_name': 'Motor Fault Anomaly Detection Dataset',
+            'dataset_description': 'Motor bearing fault timeseries anomaly detection dataset for identifying abnormal operating conditions',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'pir_detection_classification_dsk': {
+        'common': {
+            'task_type': TASK_TYPE_PIR_DETECTION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'pir_detection_classification_dsk',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip',
+            'dataset_detailed_name': 'PIR Detection Classification DSK Dataset',
+            'dataset_description': 'PIR sensor timeseries classification dataset for motion detection with multiple object categories',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'plaid_nilm_submetered_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'plaid_nilm_submetered_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip',
+            'dataset_detailed_name': 'PLAID NILM Submetered Classification Dataset',
+            'dataset_description': 'PLAID NILM dataset for submetered appliance classification from electrical current signatures',
+            'dataset_size': None,
+            'dataset_source': 'PLAID dataset adapted by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'pmsm_rotor_temp': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_FORECASTING,
+            'task_category': TASK_CATEGORY_TS_FORECASTING,
+        },
+        'dataset': {
+            'dataset_name': 'pmsm_rotor_temp',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip',
+            'dataset_detailed_name': 'PMSM Rotor Temperature Forecasting Dataset',
+            'dataset_description': 'PMSM (Permanent Magnet Synchronous Motor) timeseries forecasting dataset for rotor temperature prediction',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'torque_measurement_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'torque_measurement_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip',
+            'dataset_detailed_name': 'Torque Measurement Regression Dataset',
+            'dataset_description': 'Motor torque timeseries regression dataset for predicting torque from multi-variable sensor readings',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'washing_machine_loading_data': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'washing_machine_loading_data',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip',
+            'dataset_detailed_name': 'Washing Machine Load Weighing Regression Dataset',
+            'dataset_description': 'Washing machine timeseries regression dataset for estimating load weight from sensor measurements',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'wisdm_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'wisdm_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/wisdm_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/wisdm_dataset.zip',
+            'dataset_detailed_name': 'WISDM Activity Recognition Dataset',
+            'dataset_description': 'WISDM timeseries classification dataset for human activity recognition from accelerometer data',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
 }
