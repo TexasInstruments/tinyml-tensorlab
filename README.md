@@ -1,4 +1,4 @@
-# TinyML Agent - Claude Code Skill
+# Tiny ML Agent - Claude Code Skill
 
 This repository contains the tinyml-agentic-skill, an end-to-end skill for building, training, compiling, and deploying ML models to embedded MCUs using tinyml-tensorlab.
 
@@ -37,7 +37,7 @@ Once you have added the marketplace, install the plugin:
 
 ## What This Skill Does
 
-The TinyML Agent guides you through the complete TinyML workflow to:
+The Tiny ML Agent guides you through the complete Tiny ML workflow to:
 
 1. **Configure your project** — Select task type, target device, and data sources
 2. **Analyze your data** — Extract statistical insights and validate dataset format
@@ -58,7 +58,7 @@ The TinyML Agent guides you through the complete TinyML workflow to:
 
 **Prerequisites:**
 - `tinyml-tensorlab` installed and set up on your system
-- Python environment with PyTorch and tinyml dependencies
+- Python environment with PyTorch and tinyml-tensorlab dependencies
 - A dataset in CSV, TXT, or NumPy format
 
 **Data Requirements:**
@@ -71,7 +71,7 @@ This skill handles formatting for tinyml-tensorlab compatibility. You must provi
 Invoke the skill in Claude Code by mentioning any of:
 - "Create an ML model for my MCU"
 - "Train and deploy to embedded device"
-- "Build a TinyML model with tinyml-tensorlab"
+- "Build a Tiny ML model with tinyml-tensorlab"
 - "I want to deploy a model to [your-target-device]"
 - "I want to develop an AI solution for..."
 
