@@ -30,9 +30,8 @@ If `success: false`, show the user the `errors` and `hint` fields and ask them t
 **Setup repo and environment for working**
 
 Once the repository is installed and the installation is verified, also verify if the repository has been set-up with a virtual environment and is ready for use. 
-First check to find a virtual environment which may be present at the root level of the tinyml-tensorlab repository (installed at `$TINYML_BASE_PATH`).
-Try `source .venv/bin/activate` or `source venv/bin/activate`.
-Then try running the following script:
+
+Try running the following script:
 ```python
 
    import tinyml_modelmaker
@@ -100,3 +99,5 @@ ls $TINYML_TENSORLAB_DOCS_PATH/getting_started/ 2>/dev/null | head -3
 If this returns no output or an error, the path is wrong. Correct value is `$TINYML_BASE_PATH/docs/source/`. Fix it before writing to `.env`.
 
 **ALWAYS CREATE A LOCAL `.env` FILE WITH ALL OF THE ABOVE 4 ENV VARIABLES**
+
+After the `tinyml-tensorlab` repository is fully set up, index the repository and ensure you understand it fully. You must be able to retrieve relevant context whenever necessary going forward.

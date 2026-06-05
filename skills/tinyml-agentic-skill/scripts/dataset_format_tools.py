@@ -519,7 +519,6 @@ def _check_regression(path: str, is_zip: bool) -> Tuple[List[str], List[str], bo
             warnings.append(
                 "No annotations/ directory found. "
                 "ModelMaker will auto-generate train/val splits using split_factor from config. "
-                "Call reorganize_dataset to generate annotation files explicitly."
             )
         else:
             if not os.path.exists(os.path.join(ann_dir, "instances_train_list.txt")):
@@ -541,9 +540,7 @@ def validate_dataset_format(
     format for the given task_type.
 
     Call this tool immediately after the user provides input_data_path, BEFORE
-    generating the dataset config section. If validation fails (is_valid=False),
-    call reorganize_dataset to fix the layout, then continue with config generation
-    using the new_input_data_path returned by reorganize_dataset.
+    generating the dataset config section.
 
     Supported input: local directory path or local .zip file.
     Remote URLs cannot be validated — skip validation and proceed with config generation.
@@ -562,7 +559,6 @@ def validate_dataset_format(
           — ALWAYS show this to the user when validation fails
         - issues: list of errors blocking correct data loading
         - warnings: list of non-fatal issues (ModelMaker may still work)
-        - can_auto_reorganize: True if reorganize_dataset can fix all issues automatically
         - reorganize_hints: instructions for the user if can_auto_reorganize is False
           (e.g., which parameters to provide to reorganize_dataset)
         - success: True if the validation check itself completed without internal errors
@@ -574,7 +570,6 @@ def validate_dataset_format(
             "expected_structure": _EXPECTED_STRUCTURES[_get_task_family(task_type)],
             "issues": [],
             "warnings": ["Remote URL provided — format validation skipped. Ensure dataset matches expected structure."],
-            "can_auto_reorganize": False,
             "reorganize_hints": "Download the dataset locally to run format validation.",
             "success": True,
         }
@@ -586,7 +581,6 @@ def validate_dataset_format(
             "expected_structure": _EXPECTED_STRUCTURES[_get_task_family(task_type)],
             "issues": [f"Path does not exist: {input_data_path}"],
             "warnings": [],
-            "can_auto_reorganize": False,
             "reorganize_hints": "Verify the path and try again.",
             "success": True,
         }
@@ -608,7 +602,6 @@ def validate_dataset_format(
             "expected_structure": _EXPECTED_STRUCTURES[family],
             "issues": [f"Validation failed with internal error: {e}"],
             "warnings": [],
-            "can_auto_reorganize": False,
             "reorganize_hints": "",
             "success": False,
         }
@@ -619,7 +612,6 @@ def validate_dataset_format(
         "expected_structure": _EXPECTED_STRUCTURES[family],
         "issues": errors,
         "warnings": warnings,
-        "can_auto_reorganize": can_fix if errors else True,
         "reorganize_hints": hints if errors else "",
         "success": True,
     }

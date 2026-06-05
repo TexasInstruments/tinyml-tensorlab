@@ -156,10 +156,8 @@ def validate_dataset_section(
                 "effective_input_data_path": None,
                 "format_validation": format_validation,
                 "errors": [
-                    "Dataset format is incorrect. "
-                    "Show the user the expected_structure and issues from format_validation, "
-                    "then gather the required parameters described in reorganize_hints and "
-                    "call reorganize_dataset_stage_1."
+                    "Dataset format is incorrect."
+                    "Show the user the expected_structure and issues from format_validation."
                 ],
                 "warnings": [],
             }
