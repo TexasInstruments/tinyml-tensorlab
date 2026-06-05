@@ -337,7 +337,7 @@ class GoogleSpeechCommandsDataset(Dataset):
             frame_step=frame_step,
         )
 
-        lpc_features = self._compute_lpc_features(frames)
+        lpc_features = self._compute_lpc_features(frames) #TODO implement LPC
 
         return torch.tensor(lpc_features, dtype=torch.float32).unsqueeze(0)
 

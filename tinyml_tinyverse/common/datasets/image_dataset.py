@@ -11,8 +11,6 @@ from PIL import Image, ImageOps
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from ast import literal_eval
-
 def _normalize_transform_list(value):
     if value is None:
         return []
@@ -38,7 +36,7 @@ def _normalize_transform_list(value):
         return list(value)
 
     return [value]
-    
+
 def _to_bool(val):
     if isinstance(val, bool):
         return val
