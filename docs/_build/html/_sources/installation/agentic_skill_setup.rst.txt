@@ -1,5 +1,5 @@
 ================================================
-TinyML Agentic Skill — AI-Guided Model Creation
+Tiny ML Agentic Skill — AI-Guided Model Creation
 ================================================
 
 .. warning::
@@ -8,7 +8,7 @@ TinyML Agentic Skill — AI-Guided Model Creation
 What Is This Skill?
 ====================
 
-The **TinyML Agentic Skill** is an end-to-end AI assistant that guides you through
+The **Tiny ML Agentic Skill** is an end-to-end AI assistant that guides you through
 the complete machine learning workflow for embedded devices. It handles everything
 from project configuration, data analysis, model selection, training, compilation,
 and deployment to TI microcontrollers — all conversationally.
@@ -97,7 +97,7 @@ Or trigger naturally:
 
    I want to create an ML model for [your-device]
    Train and deploy to embedded device
-   Build a TinyML model with tinyml-tensorlab
+   Build a Tiny ML model with tinyml-tensorlab
    Deploy a model to [target-device]
    I want to develop an AI solution for...
 

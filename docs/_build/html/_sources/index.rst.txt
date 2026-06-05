@@ -68,7 +68,7 @@ Quick Links
 
       +++
       :bdg-warning:`23+ Devices`
-   .. grid-item-card:: TinyML Agentic Skill
+   .. grid-item-card:: Tiny ML Agentic Skill
       :link: installation/agentic_skill_setup
       :link-type: doc
       :class-card: sd-border-0 sd-shadow-sm
