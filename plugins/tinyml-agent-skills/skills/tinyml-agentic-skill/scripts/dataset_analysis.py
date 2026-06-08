@@ -3,11 +3,50 @@ from typing import Dict, List, Any
 import os
 import pandas as pd
 import glob
+import pickle
+import numpy as np
+from pathlib import Path
 
 class StatisticalAnalysisEngine:
     def __init__(self, data_path, task_family):
         self.data_path = data_path
         self.task_family = task_family
+        self.supported_formats = {'.csv', '.txt', '.npy', '.pkl'}
+
+    @staticmethod
+    def _load_data_file(file_path: str) -> pd.DataFrame:
+        """Load a data file in any supported format to DataFrame."""
+        ext = Path(file_path).suffix.lower()
+
+        if ext == '.csv':
+            return pd.read_csv(file_path)
+        elif ext == '.txt':
+            return pd.read_csv(file_path, sep=r'\s+|,|\t', engine='python')
+        elif ext == '.npy':
+            arr = np.load(file_path)
+            return pd.DataFrame(arr)
+        elif ext == '.pkl':
+            with open(file_path, 'rb') as f:
+                obj = pickle.load(f)
+                if isinstance(obj, pd.DataFrame):
+                    return obj
+                elif isinstance(obj, np.ndarray):
+                    return pd.DataFrame(obj)
+                else:
+                    raise TypeError(f"Pickled object is {type(obj)}, expected DataFrame or ndarray")
+        else:
+            raise ValueError(f"Unsupported format: {ext}. Supported: {StatisticalAnalysisEngine.supported_formats}")
+
+    @staticmethod
+    def _find_data_files(directory: str, extensions: set = None) -> List[str]:
+        """Find all data files in directory, optionally filtered by extension."""
+        if extensions is None:
+            extensions = {'.csv', '.txt', '.npy', '.pkl'}
+
+        files = []
+        for ext in extensions:
+            files.extend(glob.glob(os.path.join(directory, f"*{ext}")))
+        return sorted(files)
 
     def bin_dataset(self, dataset_size):
         if dataset_size < 500:
@@ -31,13 +70,16 @@ class StatisticalAnalysisEngine:
             if not os.path.isdir(cls_path):                                      
                 continue                                                         
                                                                         
-            # Find all CSVs in sample folder                                 
-            csv_files = glob.glob(os.path.join(cls_path, "*.csv"))
-            for csv_file in csv_files:                                       
-                df = pd.read_csv(csv_file)
-                global_min = min(global_min, df.shape[0])
-                total_size += df.shape[0]
-                cls_size += df.shape[0]        
+            data_files = self._find_data_files(cls_path)
+            for data_file in data_files:
+                try:
+                    df = self._load_data_file(data_file)
+                    global_min = min(global_min, df.shape[0])
+                    total_size += df.shape[0]
+                    cls_size += df.shape[0]
+                except Exception as e:
+                    print(f"Warning: Could not load {data_file}: {e}")
+                    continue
 
             class_wise_dist.append(cls_size)    
 
@@ -52,11 +94,15 @@ class StatisticalAnalysisEngine:
         if not os.path.isdir(files_path):
             return
                    
-        csv_files = glob.glob(os.path.join(files_path, "*.csv"))
-        for csv_file in csv_files:                                       
-            df = pd.read_csv(csv_file)
-            global_min = min(global_min, df.shape[0])
-            total_size += df.shape[0]
+        data_files = self._find_data_files(files_path)
+        for data_file in data_files:
+            try:
+                df = self._load_data_file(data_file)
+                global_min = min(global_min, df.shape[0])
+                total_size += df.shape[0]
+            except Exception as e:
+                print(f"Warning: Could not load {data_file}: {e}")
+                continue
 
         dataset_bucket = self.bin_dataset(total_size)
                                                                     
