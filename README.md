@@ -11,7 +11,7 @@ The [TI Tiny ML ModelZoo](./tinyml-modelzoo): Contains the devices supported, a 
 
 <hr>
 
-## Tiny ML Agentic Skill Plugin** 
+## Tiny ML Agentic Skill Plugin 
 To install and begin using the tinyml-agentic-skill, follow the steps given below: 
 
 1. Open claude code CLI and register tinyml-agent-skills as a Claude Code Plugin marketplace by running the following command in Claude Code:
