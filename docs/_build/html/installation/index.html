@@ -189,8 +189,25 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="environment_variables.html#next-steps">2.7.6. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#which-install-should-i-choose">2.8. Which Install Should I Choose?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#quick-start">2.9. Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html">2.8. Tiny ML Agentic Skill — AI-Guided Model Creation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#what-is-this-skill">2.8.1. What Is This Skill?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#prerequisites">2.8.2. Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#installation">2.8.3. Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="agentic_skill_setup.html#step-1-install-tinyml-tensorlab">2.8.3.1. Step 1: Install tinyml-tensorlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="agentic_skill_setup.html#step-2-activate-claude-code-skill">2.8.3.2. Step 2: Activate Claude Code Skill</a></li>
+<li class="toctree-l4"><a class="reference internal" href="agentic_skill_setup.html#step-3-confirm-tensorlab-installation">2.8.3.3. Step 3: Confirm Tensorlab Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#workflow-overview">2.8.4. Workflow Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#example-interaction">2.8.5. Example Interaction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#key-concepts">2.8.6. Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#common-questions">2.8.7. Common Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#getting-help">2.8.8. Getting Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="agentic_skill_setup.html#next-steps">2.8.9. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#which-install-should-i-choose">2.9. Which Install Should I Choose?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">2.10. Quick Start</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">3. Getting Started</a><ul>
@@ -1427,10 +1444,22 @@ Choose the installation path that best fits your needs.</p>
 <li class="toctree-l2"><a class="reference internal" href="environment_variables.html#next-steps">2.7.6. Next Steps</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="agentic_skill_setup.html">2.8. Tiny ML Agentic Skill — AI-Guided Model Creation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#what-is-this-skill">2.8.1. What Is This Skill?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#prerequisites">2.8.2. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#installation">2.8.3. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#workflow-overview">2.8.4. Workflow Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#example-interaction">2.8.5. Example Interaction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#key-concepts">2.8.6. Key Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#common-questions">2.8.7. Common Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#getting-help">2.8.8. Getting Help</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agentic_skill_setup.html#next-steps">2.8.9. Next Steps</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <section id="which-install-should-i-choose">
-<h2><span class="section-number">2.8. </span>Which Install Should I Choose?<a class="headerlink" href="#which-install-should-i-choose" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.9. </span>Which Install Should I Choose?<a class="headerlink" href="#which-install-should-i-choose" title="Link to this heading"></a></h2>
 <p>Before diving into the prerequisites or detailed guides, use this table to pick
 the right installation type for your situation:</p>
 <table class="docutils align-default">
@@ -1476,7 +1505,7 @@ Required only if you need to extend or modify the framework itself.</p></li>
 </ul>
 </section>
 <section id="quick-start">
-<h2><span class="section-number">2.9. </span>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.10. </span>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
 <p><strong>For Users (Quick Install)</strong></p>
 <p>If you want to use Tiny ML Tensorlab without modifying the source code:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/TexasInstruments/tinyml-tensorlab.git@main#subdirectory<span class="o">=</span>tinyml-modelmaker
@@ -1516,7 +1545,7 @@ Required only if you need to extend or modify the framework itself.</p></li>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Jun 02, 2026.
+      <span class="lastupdated">Last updated on Jun 05, 2026.
       </span></p>
   </div>
 

@@ -11,6 +11,41 @@ The [TI Tiny ML ModelZoo](./tinyml-modelzoo): Contains the devices supported, a 
 
 <hr>
 
+**Tiny ML Agentic Skill Plugin**
+
+To install and begin using the tinyml-agentic-skill, follow the steps given below: 
+
+**NOTE**: Please ensure you have cloned the repository - below commands use local path for plugin installation
+
+1. Open claude code CLI and register tinyml-agent-skills as a Claude Code Plugin marketplace by running the following command in Claude Code:
+```
+/plugin marketplace add ./tinyml-agent-skills
+```
+2. Once you have added the marketplace, install the plugin:
+```
+/plugin install tinyml-agent-skills@tinyml-agent-skills
+```
+3. Reload plugins for the installation to start reflecting:
+```
+/reload-plugins
+```
+
+Once installed, invoke it with:
+```
+/tinyml-agentic-skill
+```
+
+Or trigger naturally:
+```
+I want to create an ML model for [your-device]
+Train and deploy to embedded device
+Build a Tiny ML model with tinyml-tensorlab
+Deploy a model to [target-device]
+I want to develop an AI solution for...
+```
+
+Learn More About the Agentic Skill Here - [TI Tiny ML Tensorlab Agentic Skill User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/installation/agentic_skill_setup.html)
+
 ### Release History
 
 - [2026-Jun] Release version 1.4.0 of the software

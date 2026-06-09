@@ -16,6 +16,7 @@ Choose the installation path that best fits your needs.
    linux_setup
    macos_setup
    environment_variables
+   agentic_skill_setup
 
 Which Install Should I Choose?
 -------------------------------
