@@ -1,0 +1,25 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: MSPM0G5187
+
+dataset:
+  dataset_name: gearbox_fault_detection
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip
+
+data_processing_feature_extraction:
+  data_proc_transforms: ['SimpleWindow']
+  frame_size: 256
+  stride_size: 1
+  variables: 4
+  stacking: '2D1'
+
+training:
+  enable: True 
+  model_name: GearboxFault_model_1.2k_t   # GearboxFault_model_1.5k_t
+  batch_size: 256
+  training_epochs: 50
+  num_gpus: 0
+
+testing: {}
+
+compilation: {}
