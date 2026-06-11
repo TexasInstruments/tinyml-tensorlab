@@ -1,0 +1,18 @@
+common:
+  target_module: vision
+  task_type: image_classification
+  target_device: MSPM0G5187
+dataset:
+  dataset_name: coffee_bean_classification
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/coffee_bean_classification.zip
+data_processing_feature_extraction:
+  feature_extraction_name: CoffeeBean_Default
+training:
+  model_name: MobileNetV1_58k_NPU
+  batch_size: 64
+  training_epochs: 30
+  num_gpus: 0
+  quantization: 2
+  learning_rate: 0.1
+testing: {}
+compilation: {}

@@ -1,0 +1,40 @@
+common:
+  task_type: motor_fault
+  target_device: F28P55
+dataset:
+  dataset_name: motor_fault_example_dsk
+data_processing_feature_extraction:
+  feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1
+  #    feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_1D
+  #    feature_extraction_name: Input256_FFT_128Feature_1Frame_3InputChannel_removeDC_2D1
+  #    feature_extraction_name: Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
+  #    feature_extraction_name: 'Custom_MotorFault'
+  #    frame_size: 1024
+  #    feature_size_per_frame: 64
+  #    num_frame_concat: 4
+  #    normalize_bin: 1
+  #    stacking: 1D
+  #    feat_ext_transform: [ 'FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT' ]
+  #    offset: 0
+  #    scale: 1
+  #    frame_skip: 1
+  #    log_mul: 20
+  #    log_base: 10
+  #    log_threshold: 1e-100
+  gof_test: false
+  #    gain_variations: { class0_bearingNormal: [ 0.9, 1.1 ], class1_bearingContaminated: [ 0.95, 1.15 ], class2_bearingErosion: [ 0.92, 1.12 ] }
+  variables: 3
+  # Variables parameter supports three formats (column indices are 0-indexed after time columns are removed):
+  # Format 1 (Integer): Select first n columns after time removal
+  # Format 2 (List of indices): Select specific columns by index
+  # variables: [0, 2, 4]
+  # Format 3 (List of column names): Select columns by name (requires CSV header)
+  # variables: ['accel_x', 'accel_y', 'accel_z']
+training:
+  model_name: CLS_1k_NPU
+  model_config: ''
+  batch_size: 256
+  training_epochs: 20
+  num_gpus: 0
+testing: {}
+compilation: {}
