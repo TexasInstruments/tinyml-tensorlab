@@ -33,7 +33,7 @@ git remote add tinyml-tinyverse       ssh://git@bitbucket.itg.ti.com/tinyml-algo
 git remote add tinyml-modeloptimization ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modeloptimization.git 2>/dev/null || true
 git remote add tinyml-modelmaker      ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelmaker.git      2>/dev/null || true
 git remote add tinyml-modelzoo        ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git        2>/dev/null || true
-git remote add tinyml-agent-skills    ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-modelzoo.git        2>/dev/null || true
+git remote add tinyml-agent-skills    ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-agent-skills.git        2>/dev/null || true
 # git remote add tinyml-docs          ssh://git@bitbucket.itg.ti.com/tinyml-algo/tinyml-docs.git            2>/dev/null || true
 
 # Shallow fetch remotes sequentially (parallel shallow fetches conflict on .git/shallow.lock)
