@@ -625,7 +625,8 @@ class CNN_TS_GEN_BASE_20K_NPU(GenericModelWithSpec):
         layers += {'5': dict(type='ConvBNReLULayer', in_channels=64, out_channels=64, kernel_size=(3, 1), stride=(2, 1))}
         layers += {'6': dict(type='ConvBNReLULayer', in_channels=64, out_channels=128, kernel_size=(3, 1), stride=(1, 1))}
         # Stage 4: Final conv and pooling
-        layers += {'7': dict(type='ConvBNReLULayer', in_channels=128, out_channels=64, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'7a': dict(type='ConvBNReLULayer', in_channels=128, out_channels=84, kernel_size=(1, 1), stride=(1, 1))}
+        layers += {'7b': dict(type='ConvBNReLULayer', in_channels=84, out_channels=64, kernel_size=(3, 1), stride=(1, 1))}
         layers += {'8': dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
         layers += {'9': dict(type='ReshapeLayer', ndim=2)}
         layers += {'10': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
@@ -678,7 +679,8 @@ class CNN_TS_GEN_BASE_55K_NPU(GenericModelWithSpec):
         layers += {'8': dict(type='MaxPoolLayer', kernel_size=(4, 1), stride=(2, 1))}
 
         # Stage 5: Final feature extraction
-        layers += {'9': dict(type='ConvBNReLULayer', in_channels=64, out_channels=64, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'9a': dict(type='ConvBNReLULayer', in_channels=64, out_channels=48, kernel_size=(1, 1), stride=(1, 1))}
+        layers += {'9b': dict(type='ConvBNReLULayer', in_channels=48, out_channels=64, kernel_size=(5, 1), stride=(1, 1))}
         layers += {'10': dict(type='MaxPoolLayer', kernel_size=(2, 1), stride=(2, 1))}
 
         layers += {'11': dict(type='ConvBNReLULayer', in_channels=64, out_channels=64, kernel_size=(3, 1), stride=(1, 1))}
@@ -965,7 +967,8 @@ class CNN_TS_GEN_BASE_40K_NPU(GenericModelWithSpec):
         layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
         layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
         layers += {'2': dict(type='ConvBNReLULayer', in_channels=16, out_channels=40, kernel_size=(5, 1), stride=(1, 1))}
-        layers += {'3': dict(type='ConvBNReLULayer', in_channels=40, out_channels=68, kernel_size=(7, 1), stride=(1, 1))}
+        layers += {'3a': dict(type='ConvBNReLULayer', in_channels=40, out_channels=36, kernel_size=(1, 1), stride=(1, 1))}
+        layers += {'3b': dict(type='ConvBNReLULayer', in_channels=36, out_channels=68, kernel_size=(7, 1), stride=(1, 1))}
         layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
         layers += {'5': dict(type='ReshapeLayer', ndim=2)}
         layers += {'6': dict(type='LinearBNReLULayer', in_features=68, out_features=120)}
