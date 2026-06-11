@@ -536,7 +536,7 @@ def get_live_capture_descriptions(params):
                 {
                     'caption': 'device',
                     'id': 'device',
-                    'infoText': 'Current support is F28P55, CC1312PSIP, CC1312R1, CC1312R7, CC1352R1, CC1352P1, CC1352P7, CC1314R10, CC1354P10, CC2755P10, CC2745R10-Q1 and CC35X1. You can try other device using correct application example and baud rate.',
+                    'infoText': 'Current support is F28P55, CC1312, CC1352, CC1314, CC1354, CC2755 and CC35X1. You can try other device using correct application example and baud rate.',
                     'options': ['F28P55', 'MSPM0G5187', 'CC1312', 'CC1352', 'CC1314', 'CC1354', 'CC2755', 'CC35X1'],
                     'widgetType': 'select'
                 },
@@ -642,8 +642,8 @@ def get_live_capture_descriptions(params):
                 {
                     'caption': 'device',
                     'id': 'device',
-                    'infoText': 'Current support is CC2755R10, CC2745R10-Q1, CC1312PSIP, CC1352R1, CC1352P7, CC1354P10 and CC35X1. You can try other device using correct application example and baud rate.',
-                    'options': ['CC2755', 'CC1312', 'CC1352', 'CC1354', 'CC35X1'],
+                    'infoText': 'Current support is CC2755, CC1312, CC1314, CC1352, CC1354 and CC35X1. You can try other device using correct application example and baud rate.',
+                    'options': ['CC2755', 'CC1312', 'CC1314', 'CC1352', 'CC1354', 'CC35X1'],
                     'widgetType': 'select'},
                 {
                     'caption': 'sensor',
@@ -845,55 +845,55 @@ def get_live_capture_example_descriptions(params):
                 'transport': {'baudRate': 115200}
             },
             'CC2755': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang',
                 'deviceName': 'CC2745R10',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1312': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang',
                 'deviceName': 'CC1312PSIP',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1314': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang',
                 'deviceName': 'CC1314R10',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1314R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1352': {
-                'ccsProj': 'edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1',
                 'files': [],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC35X1': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang',
                 'deviceName': 'CC3551E',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC35X1E.ccxml',
                 'transport': {'baudRate': 115200}
@@ -918,20 +918,29 @@ def get_live_capture_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'CC1314': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang',
+                'deviceName': 'CC1314R10',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1314R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
             'CC1352': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1',
                 'files': [],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection_cc1352/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection_cc1354p10/freertos/ticlang/edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}
@@ -1153,55 +1162,61 @@ def get_live_preview_example_descriptions(params):
                 'transport': {'baudRate': 115200}
             },
             'CC2755': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang',
                 'deviceName': 'CC2745R10',
-                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1312': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang',
                 'deviceName': 'CC1312PSIP',
-                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1314': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang',
                 'deviceName': 'CC1314R10',
-                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1314R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1352': {
-                'ccsProj': 'edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1',
-                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
-                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC35X1': {
-                'ccsProj': 'edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang',
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang',
                 'deviceName': 'CC3551E',
-                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault/freertos/ticlang/edgeai_fan_blade_fault_LP_EM_CC35X1_freertos_ticlang.projectspec',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC35X1E.ccxml',
                 'transport': {'baudRate': 115200}
@@ -1226,20 +1241,29 @@ def get_live_preview_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'CC1314': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang',
+                'deviceName': 'CC1314R10',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1314R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
             'CC1352': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1',
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection_cc1352/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection_cc1354p10/freertos/ticlang/edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}

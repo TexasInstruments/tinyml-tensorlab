@@ -81,14 +81,14 @@ These are the devices that are supported currently. As additional devices are su
 * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
 * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19
-* SDK release: 01_00_00_00
+* SDK release: 01_10_00_00
 
 ### CC1352
 * Product information: https://www.ti.com/product/CC1352R
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
 * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
-* SDK release: 01_00_00_00
+* SDK release: 01_10_00_00
 
 ### CC1312
 * Product information: https://www.ti.com/product/CC1312PSIP
@@ -102,7 +102,7 @@ These are the devices that are supported currently. As additional devices are su
 * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
 * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
-* SDK release: 01_00_00_00
+* SDK release: 01_10_00_00
 
 ### CC1314
 * Product information: https://www.ti.com/product/CC1314R10
@@ -116,7 +116,7 @@ These are the devices that are supported currently. As additional devices are su
 * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
 * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15
-* SDK release: 01_00_00_00
+* SDK release: 01_10_00_00
 
 
 ## Additional information
