@@ -277,46 +277,34 @@ class TINPUQuantizedReplacementUtils():
 
         scale = qbn_module.scale
         zero_point = qbn_module.zero_point
-        if not self.init_qdq:
-            bn_offset = (- qbn_module.running_mean + qbn_module.bias * bn_sigma / qbn_module.weight)
-            # first get the effective weight due to batchnorm
-            combined_weight = (qbn_module.weight / bn_sigma)
-            # then modify the weight by output scale so that the output is converted to output scale
-            bn_scale = combined_weight / scale
-            round_offset = scale / 2 / combined_weight
-            num_bits_scale = 8
-            quant_min = -(2**(self.activation_bw - 1))
-            quant_max = 2**(self.activation_bw - 1) - 1
-            if zero_point == 0:
-                quant_min = 0
-                quant_max = 2**self.activation_bw - 1
-            if self.init_qdq:
-                bn_offset = bn_offset / q_scale - q_zp
-                bn_scale = bn_scale * q_scale
-                round_offset = round_offset / q_scale
-                num_bits_scale = 32
-                oss_offset, oss_scale, oss_shift = torch.tensor([q_scale / 2 + q_zp * q_scale]), torch.tensor([1 / q_scale]), torch.tensor([1])
-                qdq_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 2**(self.activation_bw) - 1, ndim=4, dim=1)
-            # OSS Module for First BN represented as offset, scale and shift, the scale can be an 8bit quantity
-            oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, round_offset, int_bias=False, num_bits_scale=num_bits_scale)
-            normalize_input = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, quant_min, quant_max, ndim=4, dim=1)
-            qbn_module = normalize_input
-            # Remove the scale, zero_point, quantize method and bn layer with OSS Module
-        else:
-            range_of_input = q_scale * (2**self.activation_bw - 1)
-            float_scaler_bits = ceil(log2(range_of_input)) + 1
-            float_scaler = 2**float_scaler_bits     # accounts for decimal places while rounding for quantization
-            qbn_module = torch.nn.Sequential(
-                MultiplyModule(torch.tensor([float_scaler / q_scale]).reshape(1,1,1,1)),         # Mul
-                FloorClip(),
-                AddModule(torch.tensor([float_scaler / 2 ]).reshape(1,1,1,1)),               # Add
-                MultiplyModule(1/torch.tensor([float_scaler]).reshape(1,1,1,1)),            # Mul
-                FloorClip(-2**self.activation_bw, 2**self.activation_bw - 1),                                                              # Floor, Clip
-                MultiplyModule((float_scaler*(q_scale*qbn_module.weight/bn_sigma/scale).reshape(1,channels,1,1).detach().cpu()).type(torch.int)),   # Mul
-                AddModule(((float_scaler*(scale/2 + qbn_module.bias - (qbn_module.running_mean/bn_sigma*qbn_module.weight))/scale).reshape(1,channels,1,1).detach().cpu()).type(torch.int)),
-                MultiplyModule(torch.tensor([1/float_scaler]).reshape(1,1,1,1)),        # Mul
-                FloorClip(-2**self.activation_bw, 2**self.activation_bw - 1),                                                             # Floor, Clip
-            )
+
+        bn_offset = (- qbn_module.running_mean + qbn_module.bias * bn_sigma / qbn_module.weight)
+        # first get the effective weight due to batchnorm
+        combined_weight = (qbn_module.weight / bn_sigma)
+        # then modify the weight by output scale so that the output is converted to output scale
+        bn_scale = combined_weight / scale
+        round_offset = scale / 2 / combined_weight
+        num_bits_scale = 8
+        quant_min = -(2**(self.activation_bw - 1))
+        quant_max = 2**(self.activation_bw - 1) - 1
+        if zero_point == 0:
+            quant_min = 0
+            quant_max = 2**self.activation_bw - 1
+        # To get the QDQ in form of BNORM sequence, adjust num_bits_scale for resolution of scale
+        # if self.init_qdq:
+        #     bn_offset = bn_offset / q_scale - q_zp
+        #     bn_scale = bn_scale * q_scale
+        #     round_offset = round_offset / q_scale
+        #     num_bits_scale = 32
+        #     oss_offset, oss_scale, oss_shift = torch.tensor([q_scale / 2 + q_zp * q_scale]), torch.tensor([1 / q_scale]), torch.tensor([1])
+        #     qdq_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, 0, 2**(self.activation_bw) - 1, ndim=4, dim=1)
+        # OSS Module for First BN represented as offset, scale and shift, the scale can be an 8bit quantity
+        oss_offset, oss_scale, oss_shift = compute_offset_scale_shift(bn_offset, bn_scale, round_offset, int_bias=False, num_bits_scale=num_bits_scale)
+        normalize_input = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, quant_min, quant_max, ndim=4, dim=1)
+        qbn_module = torch.nn.Sequential(normalize_input)
+        if self.init_qdq:
+            qbn_module = torch.nn.Sequential(qdq_module, normalize_input)
+
         replace_call_function_or_method(self.module, start, end, qbn_module, self._get_module_num())
         return None
 

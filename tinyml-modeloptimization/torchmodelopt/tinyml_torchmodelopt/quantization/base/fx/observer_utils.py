@@ -33,7 +33,6 @@
 # Imports Torch
 import torch
 import torch.ao.quantization
-import numpy as np
 
 
 class MovingAverageRangeShrinkFastHistogramObserver(torch.ao.quantization.MinMaxObserver):
@@ -421,3 +420,99 @@ class EntropyBasedCutoffPerChannelObserver(torch.ao.quantization.PerChannelMinMa
 
         return entropy_loss.item()
 
+def sigmoid_2_step(x):
+    """Step function approximation of sigmoid for inference"""
+    return torch.where(x > 0, torch.ones_like(x), torch.zeros_like(x))
+
+class DBQObserver(torch.nn.Module):
+	"""Observer that computes quantization statistics from data.
+
+	Supports lazy initialization: statistics computed on first forward pass.
+	"""
+      
+	alpha: torch.Tensor
+      
+	def __init__(self, quant_min, quant_max, qscheme, num_levels=3, **kwargs):
+		super(DBQObserver, self).__init__()
+		# Store quantization bounds for compatibility with standard PyTorch observers
+		self.quant_min = quant_min
+		self.quant_max = quant_max
+		self.qscheme = qscheme
+		self.num_levels = num_levels
+
+		# Standard observer attributes expected by PyTorch quantization framework
+		self.is_dynamic = False  # DBQObserver is static (not adaptive during inference)
+		self.eps = 1e-8  # Small epsilon for numerical stability
+		# Extract dtype from kwargs or use default (qint8 for quantized int8)
+		self.dtype = kwargs.get('dtype', torch.qint8)
+		self.reduce_range = kwargs.get('reduce_range', False)  # Standard observer attribute
+		self.has_customized_qrange = False  # Flag for customized quantization range
+		self.ch_axis = 0  # Channel axis for per-channel quantization (0 = output channels)
+
+		self._initialized = False
+
+	def forward(self, x):
+		"""Compute and cache statistics on first call"""
+		self._initialize_from_data(x)
+		return x
+
+	def _initialize_from_data(self, data):
+		"""Initialize beta and alpha statistics from data (per-channel for weights)"""
+		if data.numel() == 0:
+			return
+
+		# Determine if this is a weight tensor (has batch dim added) or activation tensor
+		# Weight tensors are added batch dim in _pre_quantize_dbq_weights before calling observer
+		# For weights: expected shapes are [1, out_channels, ...] where ... can be 2D (linear) or higher (conv)
+		# For activations: expected shapes are [batch_size, channels, height, width] or similar
+
+		if data.dim() >= 3 and data.size(0) == 1:
+			# This looks like a weight tensor with batch dim [1, out_channels, ...]
+			# Compute max per output channel (dim 1)
+			out_channels = data.size(1)
+			if data.dim() == 3:
+				# Linear weight: [1, out_channels, in_channels]
+				data_reshaped = data.view(1, out_channels, -1)
+				max_vals = data_reshaped.abs().amax(dim=[0, 2])  # shape: [out_channels]
+			else:
+				# Conv weight: [1, out_channels, in_channels, ...]
+				data_reshaped = data.view(1, out_channels, -1)
+				max_vals = data_reshaped.abs().amax(dim=[0, 2])  # shape: [out_channels]
+		else:
+			# Activation-like tensor: per-sample max
+			data_reshaped = data.view(data.size(0), -1)
+			max_vals = data_reshaped.abs().max(dim=1)[0]  # shape: [batch_size]
+
+		beta = 1.0 / (max_vals + 1e-8)
+		# For DBQ ternary quantization, alpha represents the scale factor
+		# The formula ensures alpha = max_vals / expected_range
+		# For DBQ: expected_range = (num_levels - 1) / 2 = 1 for ternary
+		alpha = max_vals / ((self.num_levels - 1) / 2 + 1e-8)
+
+		self.register_buffer('beta', beta)
+		self.register_buffer('alpha', alpha)
+		self._initialized = True
+
+	def reset_min_max_vals(self):
+		"""Reset initialized state for re-calibration"""
+		self._initialized = False
+		# Delete buffers so they can be re-registered in _initialize_from_data
+		if hasattr(self, '_buffers') and 'beta' in self._buffers:
+			delattr(self, 'beta')
+		if hasattr(self, '_buffers') and 'alpha' in self._buffers:
+			delattr(self, 'alpha')
+
+	def calculate_qparams(self):
+		"""Return quantization scale and zero_point for PyTorch compatibility"""
+		if self._initialized and self.alpha is not None:
+			# Return per-channel scales as 1D tensor
+			scale = self.alpha if self.alpha.dim() > 0 else self.alpha.unsqueeze(0)
+			if scale.dim() > 1:
+				scale = scale.flatten()
+			# Clamp minimum to avoid numerical issues
+			scale = torch.clamp(scale, min=1e-5)
+			# zero_point must be 1D with same length as scale
+			zero_point = torch.zeros(scale.shape[0], dtype=torch.int64)
+			return scale, zero_point
+		# Default fallback
+		return torch.tensor(1.0), torch.tensor(0, dtype=torch.int64)

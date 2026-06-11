@@ -50,7 +50,6 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
     This module handles the preparation, training, conversion, and export of quantized models
     using PyTorch's FX graph mode quantization framework.
 
-    Supports various quantization schemes including LSQ, PACT, DBQ, and more.
     """
 
     # ========================================================================
@@ -278,7 +277,8 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                 self.module, self.total_epochs, self.num_epochs_tracked)
 
         # Update temperature for temperature-aware quantizers
-        self._update_fake_quant_temperatures()
+        if not freeze_observers:
+            self._update_fake_quant_temperatures()
 
         self.num_epochs_tracked += 1
 
@@ -300,6 +300,8 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                                  fake_quant_types.SoftSigmoidFakeQuantize)):
                 temperature = self.temperature_log_space[self.num_epochs_tracked]
                 module.update_temperature(temperature)
+            if isinstance(module, (fake_quant_types.DBQFakeQuantize)):
+                module.update_temperature()
 
     def freeze(self, freeze_bn=True, freeze_observers=True):
         """Freeze batch norm and/or observer statistics.
@@ -342,6 +344,28 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
     # Model Conversion and Export
     # ========================================================================
 
+    def _apply_dbq_quantization_to_weights(self, model):
+        """Apply DBQ quantization logic to weights being quantized by DBQFakeQuantize modules.
+
+        For each DBQFakeQuantize module, finds the parent module whose weight it quantizes
+        and applies DBQ thresholding before convert_fx, preserving DBQ semantics.
+        """
+        for name, dbq_module in model.named_modules():
+            if isinstance(dbq_module, fake_quant_types.DBQFakeQuantize):
+                # Extract parent module name from DBQFakeQuantize name
+                # e.g., "layers.1.weight_fake_quant" → "layers.1"
+                if 'weight_fake_quant' in name:
+                    parent_name = name.replace('.weight_fake_quant', '')
+                    parent_module = dict(model.named_modules()).get(parent_name)
+
+                    if parent_module is not None and hasattr(parent_module, 'weight'):
+                        weight = parent_module.weight
+                        if weight is not None:
+                            # Apply DBQ quantization to the parent module's weight
+                            with torch.no_grad():
+                                quantized_weight = dbq_module._explicit_quantize_dequantize_dbq(weight)
+                                parent_module.weight.data = quantized_weight
+
     def _is_observed_module(self) -> bool:
         """Check if model is still in observed state (before conversion).
 
@@ -372,6 +396,9 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
 
         # Convert requires CPU model
         model = model.to(torch.device(device))
+
+        # Apply DBQ quantization to weights before convert_fx
+        self._apply_dbq_quantization_to_weights(model)
 
         # Convert model using PyTorch's convert_fx
         self.module = quantize_fx.convert_fx(model)

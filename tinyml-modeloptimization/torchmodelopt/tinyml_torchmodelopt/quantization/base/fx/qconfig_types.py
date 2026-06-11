@@ -43,12 +43,14 @@ def _get_fake_quant_from_name(fake_quant_name: str):
         return fake_quant_types.SoftTanhFakeQuantize
     elif fake_quant_name == 'soft_sigmoid':
         return fake_quant_types.SoftSigmoidFakeQuantize
+    elif fake_quant_name == 'dbq':
+        return fake_quant_types.DBQFakeQuantize
     elif fake_quant_name == 'default':
         return torch.ao.quantization.FakeQuantize
     else:
         raise ValueError(
             "Invalid soft quantization type. "
-            "Soft Quantization types could be 'soft_tanh', 'soft_sigmoid' and 'default'"
+            "Soft Quantization types could be 'soft_tanh', 'dbq', 'soft_sigmoid' and 'default'"
         )
 
 def _get_observer_class_from_name(observer_name, qscheme, is_weight=True):
@@ -56,7 +58,7 @@ def _get_observer_class_from_name(observer_name, qscheme, is_weight=True):
     Helper function to select observer class based on observer name and qscheme.
 
     Args:
-        observer_name (str): Name of the observer ('histogram', 'lsq', 'entropy', or None)
+        observer_name (str): Name of the observer ('histogram', 'entropy', or None)
         qscheme: Quantization scheme (e.g., torch.per_channel_symmetric)
         is_weight (bool): Whether this is for weight (True) or activation (False)
 
@@ -128,13 +130,12 @@ def get_default_qconfig(qconfig_dict=None):
     activation_soft_quant = activation_qconfig.get('soft_quant', 'default')
 
     # Select weight observer based on observer parameter or default behavior
-    weight_observer_base_class = _get_observer_class_from_name(weight_observer, weight_qscheme, is_weight=True)        
-    weight_fake_quant_type = _get_fake_quant_from_name(weight_soft_quant)
-    
-    # Select weight observer based on observer parameter or default behavior
     weight_observer_base_class = _get_observer_class_from_name(weight_observer, weight_qscheme, is_weight=True)
     weight_fake_quant_type = _get_fake_quant_from_name(weight_soft_quant)
     weight_observer_class = observer_types.get_weight_observer_type(base_class=weight_observer_base_class)
+
+    if weight_fake_quant_type == fake_quant_types.DBQFakeQuantize:
+        weight_observer_class = observer_types.DBQObserver
 
     weight_fake_quant = weight_fake_quant_type.with_args(
         observer=weight_observer_class,

@@ -151,7 +151,7 @@ class TinyMLQConfigType:
                     'power2_scale': False,
                     'range_max': None,
                     'fixed_range': False,
-                    'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
+                    'soft_quant': 'dbq' # 'soft_sigmoid' 'soft_tanh' 'default'
                 },
                 'activation': {
                     'bitwidth': activation_bitwidth,
