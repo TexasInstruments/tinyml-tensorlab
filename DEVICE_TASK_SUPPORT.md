@@ -82,7 +82,7 @@ The Tiny ML framework supports the following task categories:
 | **Arc Fault Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `ac_arc_fault`, `dc_arc_fault` |
 | **Motor Fault Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261, CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1 | `motor_bearing_fault`, `fan_blade_fault_classification`, `blower_imbalance` |
 | **Blower Imbalance Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `blower_imbalance` |
-| **PIR Detection** | CC2755, CC1312, CC1352, CC1354, CC35X1 | `pir_detection` |
+| **PIR Detection** | CC2755, CC1312, CC1352, CC1314, CC1354, CC35X1 | `pir_detection` |
 | **Generic Timeseries Classification** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `hello_world`, `ecg_classification`, `electrical_fault`, `gas_sensor`, `grid_stability`, `nilm_appliance_usage_classification`, `PLAID_nilm_classification`, `branched_model_parameters` |
 | **Generic Timeseries Regression** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `induction_motor_speed_prediction`, `reg_washing_machine`, `torque_measurement_regression` |
 | **Generic Timeseries Anomaly Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `dc_arc_fault_anomaly_detection`, `motor_bearing_fault_anomaly_detection`, `fan_blade_anomaly_detection`, `ecg_anomaly_detection` |
@@ -103,7 +103,7 @@ The Tiny ML framework supports the following task categories:
 | **AM26x Series** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
 | **CC2755** | ❌ | PIR Detection, Motor Fault | ✅ (CDE) |
 | **CC1312** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC1314** | ❌ | Motor Fault | ❌ (Soft) |
+| **CC1314** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
 | **CC1352** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
 | **CC1354** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
 | **CC35X1** | ❌ | PIR Detection, Motor Fault | ✅ (CDE) |
