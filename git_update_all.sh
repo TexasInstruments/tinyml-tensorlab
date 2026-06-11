@@ -49,7 +49,7 @@ git subtree merge --prefix tinyml-tinyverse        tinyml-tinyverse/main        
 git subtree merge --prefix tinyml-modeloptimization tinyml-modeloptimization/main --squash
 git subtree merge --prefix tinyml-modelmaker       tinyml-modelmaker/main       --squash
 git subtree merge --prefix tinyml-modelzoo         tinyml-modelzoo/main         --squash
-git subtree merge --prefix tinyml-agent-skills     tinyml-agent-skills          --squash
+git subtree merge --prefix tinyml-agent-skills     tinyml-agent-skills/main          --squash
 # git subtree merge --prefix tinyml-docs           tinyml-docs/main             --squash
 
 git submodule update --remote
