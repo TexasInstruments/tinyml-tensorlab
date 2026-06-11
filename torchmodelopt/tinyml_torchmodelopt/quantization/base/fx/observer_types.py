@@ -36,7 +36,8 @@ import torch.ao.quantization
 
 from . import functional_utils
 from .observer_utils import (RangeShrinkPerChannelHistogramObserver, RangeShrinkFastHistogramObserver,
-                              EntropyBasedCutoffObserver, EntropyBasedCutoffPerChannelObserver)
+                              EntropyBasedCutoffObserver, EntropyBasedCutoffPerChannelObserver,
+                              DBQObserver)
 
 
 def get_weight_observer_type(base_class: Optional[Type] = None) -> Type:

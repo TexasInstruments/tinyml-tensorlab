@@ -341,7 +341,78 @@ def find_optimal_bitwidth_binary_search(
             f"passed the threshold; using {range_hi}"
         )
     logger.info(f"Binary search complete | selected target_avg_bitwidth={best_bitwidth}")
-    return best_bitwidth
+    return best_bitwidth, threshold, higher_is_better
+
+def try_downgrade_32bit_layers(
+    mixed_precision,
+    model,
+    module_sensitivities,
+    module_params,
+    qconfig_dict,
+    threshold,
+    higher_is_better,
+    base_bw,
+    get_default_qconfig_fn,
+    apply_mixed_precision_fn,
+):
+    """For each 32-bit layer, probe whether downgrading to 8-bit still meets the accuracy threshold.
+    Layers are probed least-sensitive first, so layers that are most likely to be safely downgraded
+    are tried first. Only keeps 32-bit where it is truly required"""
+    from . import qconfig_types
+    if 32 not in mixed_precision or not mixed_precision[32]:
+        return mixed_precision
+    base = qconfig_dict or {}
+    calibration_dataloader = qconfig_dict.get('calibration_dataloader')
+    eval_dataloader = qconfig_dict.get('eval_dataloader')
+    task_type = qconfig_dict.get('task_type', 'classification')
+    example_inputs = qconfig_dict.get('example_inputs')
+    device = qconfig_dict.get('device')
+    num_calibration_batches = qconfig_dict.get('num_calibration_batches')
+    # Sort least-sensitive 32-bit layers first — most likely to be safely downgraded
+    layers_32 = sorted(mixed_precision[32], key=lambda l: module_sensitivities.get(l, 0.0))
+    current = copy.deepcopy(mixed_precision)
+    logger.info("Probing 32-bit layers for NPU compatibility (least sensitive first)...")
+    for layer_name in layers_32:
+        trial = copy.deepcopy(current)
+        trial[32].remove(layer_name)
+        if not trial[32]:
+            del trial[32]
+        trial.setdefault(8, []).append(layer_name)
+        bw_qconfig_dict = {
+            'weight': {**base.get('weight', {}), 'bitwidth': base_bw},
+            'activation': {**base.get('activation', {}), 'bitwidth': base_bw},
+        }
+        probe_mapping = QConfigMapping().set_global(get_default_qconfig_fn(bw_qconfig_dict))
+        qcd_copy = {'weight': dict(base.get('weight', {})), 'activation': dict(base.get('activation', {}))}
+        probe_mapping = apply_mixed_precision_fn(probe_mapping, qcd_copy, trial)
+        metric = calibrate_and_evaluate(
+            model=model,
+            qconfig_mapping=probe_mapping,
+            calibration_dataloader=calibration_dataloader,
+            eval_dataloader=eval_dataloader,
+            task_type=task_type,
+            example_inputs=example_inputs,
+            device=device,
+            num_calibration_batches=num_calibration_batches,
+        )
+        if metric != metric:
+            passes = False
+        elif higher_is_better:
+            passes = metric >= threshold
+        else:
+            passes = metric <= threshold
+        if passes:
+            logger.info(
+                f"  {layer_name}: downgraded from 32 to 8 bit "
+                f"(metric={metric:.4f} passes threshold={threshold:.4f})"
+            )
+            current = trial
+        else:
+            logger.info(
+                f"  {layer_name}: kept at 32 bit "
+                f"(metric={metric:.4f} fails threshold={threshold:.4f})"
+            )
+    return current
 
 
 def run_auto_quantization(model, qconfig_dict, qconfig_mapping, get_default_qconfig_fn, apply_mixed_precision_fn):
@@ -377,7 +448,10 @@ def run_auto_quantization(model, qconfig_dict, qconfig_mapping, get_default_qcon
         ):
             if qconfig_dict.get(tolerance_key) is not None:
                 bsearch_kwargs[tolerance_key] = qconfig_dict[tolerance_key]
-        optimal_bitwidth = find_optimal_bitwidth_binary_search(**bsearch_kwargs)
+        optimal_bitwidth, bsearch_threshold, higher_is_better = find_optimal_bitwidth_binary_search(**bsearch_kwargs)
+    else:
+        bsearch_threshold = None
+        higher_is_better = None
 
     total_params = sum(module_params.values())
     total_bit_budget = optimal_bitwidth * total_params
@@ -386,6 +460,21 @@ def run_auto_quantization(model, qconfig_dict, qconfig_mapping, get_default_qcon
     logger.info(f"Total bit budget: {total_bit_budget}")
     logger.info("Starting greedy bit allocation...")
     mixed_precision = greedy_bit_allocation(module_sensitivities, module_params, optimal_bitwidth)
+    final_bw = min(int(optimal_bitwidth), 8)
+    # Per-layer probe: downgrade any 32-bit layer to 8-bit if accuracy still meets threshold
+    if bsearch_threshold is not None and qconfig_dict.get('calibration_dataloader') is not None:
+        mixed_precision = try_downgrade_32bit_layers(
+            mixed_precision=mixed_precision,
+            model=model,
+            module_sensitivities=module_sensitivities,
+            module_params=module_params,
+            qconfig_dict=qconfig_dict,
+            threshold=bsearch_threshold,
+            higher_is_better=higher_is_better,
+            base_bw=final_bw,
+            get_default_qconfig_fn=get_default_qconfig_fn,
+            apply_mixed_precision_fn=apply_mixed_precision_fn,
+        )
     actual_bits = sum(bw * sum(module_params[l] for l in layers) for bw, layers in mixed_precision.items())
     actual_avg = actual_bits / total_params if total_params > 0 else 0
     logger.info(f"Bit allocation complete. Actual average bitwidth: {actual_avg:.2f}")
@@ -402,7 +491,6 @@ def run_auto_quantization(model, qconfig_dict, qconfig_mapping, get_default_qcon
             rows.append([f"{layer_name} ({layer_type})", p, params, f"{pct:.2f}%"])
     logger.info("Hessian-based precision assignment (greedy bit budget):\n{}".format(
         tabulate(rows, headers=["Layer (Type)", "Assigned bitwidth", "Params", "% of Total Params"], tablefmt="grid")))
-    final_bw = min(int(optimal_bitwidth), 8)
     bw_qconfig_dict = {
         'weight': {**qconfig_dict.get('weight', {}), 'bitwidth': final_bw},
         'activation': {**qconfig_dict.get('activation', {}), 'bitwidth': final_bw},
