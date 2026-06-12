@@ -922,13 +922,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="#quantization-wrapper-architecture">8.2.14. Quantization Wrapper Architecture</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#npu-hardware-constraints">8.2.15. NPU Hardware Constraints</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#using-quantization-wrappers-directly">8.2.16. Using Quantization Wrappers Directly</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#wrapper-api-reference">8.2.17. Wrapper API Reference</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#lsq-observer">8.2.17.1. LSQ Observer</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mlp-2d-input-support">8.2.17.2. MLP 2D Input Support</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#model-surgery">8.2.18. Model Surgery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#next-steps">8.2.19. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrapper-api-reference">8.2.17. Wrapper API Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">8.2.18. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="quantization_examples.html">8.3. Standalone Quantization Examples</a><ul>
@@ -2032,82 +2027,9 @@ half to 3/4 of total epochs.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">False</span></code> (default): Observers remain active throughout training</p></li>
 <li><p>Integer value: Freezes observers after the specified epoch</p></li>
 </ul>
-<section id="lsq-observer">
-<h3><span class="section-number">8.2.17.1. </span>LSQ Observer<a class="headerlink" href="#lsq-observer" title="Link to this heading"></a></h3>
-<p>The <strong>Learned Step-size Quantization (LSQ)</strong> observer is available for both
-weights and activations (TINYML_ALGO-689). LSQ learns the quantization step
-size as a trainable parameter during QAT, which can improve accuracy compared
-to fixed-range observers — especially for lower bit widths.</p>
-<p>To use LSQ observer, set <code class="docutils literal notranslate"><span class="pre">qconfig_type</span></code> when using the wrappers directly:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tinyml_torchmodelopt.quantization</span><span class="w"> </span><span class="kn">import</span> <span class="n">TINPUTinyMLQATFxModule</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tinyml_torchmodelopt.quantization.base.fx.observer_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">LSQObserver</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">TINPUTinyMLQATFxModule</span><span class="p">(</span>
-    <span class="n">model</span><span class="p">,</span>
-    <span class="n">qconfig_type</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="n">LSQObserver</span><span class="p">,</span> <span class="s1">&#39;activation&#39;</span><span class="p">:</span> <span class="n">LSQObserver</span><span class="p">},</span>
-    <span class="n">total_epochs</span><span class="o">=</span><span class="n">epochs</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>LSQ is available when using <code class="docutils literal notranslate"><span class="pre">quantization:</span> <span class="pre">2</span></code> (TI style optimised).
-It is most beneficial for 4-bit and 2-bit quantization where fixed-range
-observers may underperform.</p>
-</div>
-</section>
-<section id="mlp-2d-input-support">
-<h3><span class="section-number">8.2.17.2. </span>MLP 2D Input Support<a class="headerlink" href="#mlp-2d-input-support" title="Link to this heading"></a></h3>
-<p>MLP (Multi-Layer Perceptron) models with 2D input tensors are now fully
-supported for quantization and conversion (TINYML_ALGO-673). Previously,
-conversion required 1D input shapes. Models that reshape inputs to 2D
-before the first linear layer will now quantize and export correctly.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>For best QAT results, set <code class="docutils literal notranslate"><span class="pre">num_batch_norm_update_epochs</span></code> to
-approximately half of <code class="docutils literal notranslate"><span class="pre">total_epochs</span></code>. This allows the model to
-learn quantization-aware representations before freezing statistics.</p>
-</div>
-</section>
-</section>
-<section id="model-surgery">
-<h2><span class="section-number">8.2.18. </span>Model Surgery<a class="headerlink" href="#model-surgery" title="Link to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">tinyml-modeloptimization</span></code> package includes model surgery utilities
-that use <code class="docutils literal notranslate"><span class="pre">torch.fx</span></code> to replace unsupported modules with efficient
-alternatives. This is useful for adapting existing models to meet NPU
-constraints.</p>
-<p><strong>Basic Usage:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tinyml_torchmodelopt.surgery</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert_to_lite_fx</span>
-
-<span class="c1"># Replace unsupported layers with default replacements</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">convert_to_lite_fx</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><strong>Custom Replacements:</strong></p>
-<p>You can define custom replacement rules:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tinyml_torchmodelopt.surgery</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">convert_to_lite_fx</span><span class="p">,</span> <span class="n">get_replacement_dict_default</span>
-<span class="p">)</span>
-
-<span class="c1"># Get and modify the default replacement dictionary</span>
-<span class="n">replacement_dict</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">get_replacement_dict_default</span><span class="p">())</span>
-<span class="n">replacement_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">})</span>
-
-<span class="c1"># Apply with custom replacements</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">convert_to_lite_fx</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">replacement_dict</span><span class="o">=</span><span class="n">replacement_dict</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The replacement value can also be a function for complex transformations:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">replacement_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;my_layer&#39;</span><span class="p">:</span> <span class="n">my_replacement_function</span><span class="p">})</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">convert_to_lite_fx</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">replacement_dict</span><span class="o">=</span><span class="n">replacement_dict</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Model surgery is applied automatically during the quantization pipeline
-when needed. Direct usage is only necessary for custom workflows.</p>
 </section>
 <section id="next-steps">
-<h2><span class="section-number">8.2.19. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<h2><span class="section-number">8.2.18. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Explore <a class="reference internal" href="neural_architecture_search.html"><span class="doc">Neural Architecture Search</span></a> for model optimization</p></li>
 <li><p>Learn about <a class="reference internal" href="feature_extraction.html"><span class="doc">Feature Extraction</span></a> for input preparation</p></li>
