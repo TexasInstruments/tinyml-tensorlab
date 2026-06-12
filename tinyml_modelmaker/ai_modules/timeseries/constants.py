@@ -1319,43 +1319,43 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsi=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=None, data_proc_transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, frame_size=3130, stride_size=0.01),
     ),
     dc_arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     motor_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsi=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsi.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsh=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsh.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     generic_timeseries_classification=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_classification.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     ac_arc_fault_log300_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip'), 
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('ArcFault_1024Input_FE_RFFT_128Feature_8Frame_1InputChannel_removeDC_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     ac_arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip'), 
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('ArcFault_1024Input_FE_RFFT_128Feature_8Frame_1InputChannel_removeDC_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     pir_detection_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D'), data_proc_transforms=[], sampling_rate=33, variables=1),
     ),
     ecg_classification_4class=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_4class.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('ECG2500Input_Roundoff_1Frame'), data_proc_transforms=[], sampling_rate=1, variables=1),
     ),
 )
@@ -1769,10 +1769,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'arc_fault_classification_dsi',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip',
     #         'dataset_detailed_name': 'Arc Fault Classification Example1',
     #         'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
     #         'dataset_size': None,
@@ -1787,10 +1787,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'dc_arc_fault_classification_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip',
             'dataset_detailed_name': 'DC Arc Fault Classification Example',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -1805,10 +1805,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ac_arc_fault',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip',
             'dataset_detailed_name': 'AC Arc Fault Classification Example on public dataset',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -1823,10 +1823,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ac_arc_fault_log300',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip',
             'dataset_detailed_name': 'AC Arc Fault Classification Example collected on TI Testbed',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal. The Log300 takes 1-10MHZ filtered signal and envelopes it. This down converts the signal to to a 100kHz equivalent logarithmically scaled power measurement of the energy in the high frequency band.',
             'dataset_size': None,
@@ -1841,10 +1841,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_example_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Motor Bearing Fault Classification Example',
             'dataset_description': 'Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking',
             'dataset_size': None,
@@ -1859,10 +1859,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'fan_blower_imbalance_dsi',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsi.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsi.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip',
             'dataset_detailed_name': 'Fan Imbalance Classification Example',
             'dataset_description': 'Example fan imbalance timeseries classification dataset with 4 categories-Normal, Blade damage, Blade imbalance and  Blade obstruction',
             'dataset_size': None,
@@ -1877,10 +1877,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'blower_imbalance_example_dsh',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsh.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsh.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip',
             'dataset_detailed_name': 'Blower Imbalance Classification Example',
             'dataset_description': 'Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip',
             'dataset_size': None,
@@ -1895,10 +1895,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'generic_timeseries_classification',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_classification.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_classification.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip',
             'dataset_detailed_name': 'Timeseries Classification Example',
             'dataset_description': 'Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth',
             'dataset_size': None,
@@ -1913,10 +1913,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'grid_fault_detection',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_fault_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_fault_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_fault_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_fault_dataset.zip',
             'dataset_detailed_name': 'Grid Fault Detection',
             'dataset_description': 'Protect the OBC against adverse grid events, log abnormal events, and potentially safe the OBC',
             'dataset_size': None,
@@ -1931,10 +1931,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'mosfet_temp_prediction',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mosfet_temp_prediction.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mosfet_temp_prediction.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mosfet_temp_prediction.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mosfet_temp_prediction.zip',
             'dataset_detailed_name': 'MOSFET Temperature Prediction',
             'dataset_description': 'Predicting switch temperature based on the power loss of a switch and indirect temperature measurement from a temperature sensor in the vicinity of the switch.',
             'dataset_size': None,
@@ -1949,10 +1949,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'pir_detection_classification_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
             'dataset_detailed_name': 'PIR Detection Classification Example',
             'dataset_description': 'Example PIR sensor based motion detection timeseries classification dataset with 3 categories - human, dog, background motion',
             'dataset_size': None,
@@ -1967,10 +1967,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ecg_classification_4class',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_4class.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_4class.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip',
             'dataset_detailed_name': 'ECG Waveform Classification Example',
             'dataset_description': 'Example ECG Sensor based timeseries classification dataset with 4 classes',
             'dataset_size': None,
@@ -1985,10 +1985,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'ecg',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip',
     #         'dataset_detailed_name': 'ECG Arrhythmia Classification Example',
     #         'dataset_description': 'Medical timeseries for ECG heartbeat classification dataset',
     #         'dataset_size': None,
@@ -2003,10 +2003,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'gas_sensor',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip',
     #         'dataset_detailed_name': 'Gas Sensor Classification Example',
     #         'dataset_description': 'Multi-variable gas sensor timeseries classification for detecting different gases',
     #         'dataset_size': None,
@@ -2021,10 +2021,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'esda_nilm_2021_5_variable_4_class_dataset',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
     #         'dataset_detailed_name': 'NILM Appliance Usage Classification Example',
     #         'dataset_description': 'Non-Intrusive Load Monitoring (NILM) for appliance usage classification from electrical current signatures with 4 appliance categories',
     #         'dataset_size': None,
@@ -2039,10 +2039,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'plaid_submetered',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip',
     #         'dataset_detailed_name': 'PLAID NILM Classification Example',
     #         'dataset_description': 'PLAID NILM dataset for submetered appliance classification from electrical signatures',
     #         'dataset_size': None,
@@ -2057,10 +2057,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'electrical_fault',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip',
     #         'dataset_detailed_name': 'Electrical Fault Classification Example',
     #         'dataset_description': 'Electrical system fault detection and classification from multi-variable sensor data',
     #         'dataset_size': None,
@@ -2075,10 +2075,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'grid_stability',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip',
     #         'dataset_detailed_name': 'Grid Stability Classification Example',
     #         'dataset_description': 'Power grid stability classification from electrical grid measurements',
     #         'dataset_size': None,
@@ -2093,10 +2093,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'fan_blade_fault',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip',
     #         'dataset_detailed_name': 'Fan Blade Fault Classification Example',
     #         'dataset_description': 'Fan blade imbalance and fault classification using vibration data from accelerometer sensors',
     #         'dataset_size': None,
@@ -2111,10 +2111,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'torque_measurement',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip',
     #         'dataset_detailed_name': 'Torque Measurement Regression Example',
     #         'dataset_description': 'Example timeseries regression for predicting motor torque from multi-variable sensor readings',
     #         'dataset_size': None,
@@ -2129,10 +2129,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'washing_machine_load_weighing',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip',
             'dataset_detailed_name': 'Washing Machine Load Regression Example',
             'dataset_description': 'Regression for estimating washing machine load weight from sensor measurements',
             'dataset_size': None,
@@ -2147,10 +2147,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'hvac_indoor_temp_forecast',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hvac_indoor_temp_forecast_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hvac_indoor_temp_forecast_dataset.zip',
             'dataset_detailed_name': 'HVAC Indoor Temperature Forecasting Example',
             'dataset_description': 'Example timeseries forecasting for predicting indoor temperature in HVAC systems',
             'dataset_size': None,
@@ -2165,10 +2165,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     #     },
     #     'dataset': {
     #         'dataset_name': 'pmsm_rotor_temp_prediction_dataset',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip',
     #         'dataset_detailed_name': 'PMSM Rotor Temperature Forecasting Example',
     #         'dataset_description': 'Forecasting PMSM (Permanent Magnet Synchronous Motor) rotor temperature from operational parameters',
     #         'dataset_size': None,
@@ -2183,10 +2183,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_dsi_anomaly_detection',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsi_anomaly_detection.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsi_anomaly_detection.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsi_anomaly_detection.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsi_anomaly_detection.zip',
             'dataset_detailed_name': 'Arc Fault Anomaly Detection Example with complex dataset',
             'dataset_description': 'Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures',
             'dataset_size': None,
@@ -2201,10 +2201,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_dsk_anomaly_detection',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsk_anomaly_detection.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsk_anomaly_detection.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsk_anomaly_detection.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsk_anomaly_detection.zip',
             'dataset_detailed_name': 'Arc Fault Anomaly Detection Example',
             'dataset_description': 'Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures',
             'dataset_size': None,
@@ -2219,10 +2219,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'generic_timeseries_anomalydetection',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip',
             'dataset_detailed_name': 'Timeseries Anomaly Detection Example',
             'dataset_description': 'Generic timeseries anomaly detection dataset with synthetic signal patterns for anomaly identification',
             'dataset_size': None,
@@ -2237,10 +2237,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_anomaly_detection',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_anomaly_detection_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_anomaly_detection_dataset.zip',
             'dataset_detailed_name': 'Motor Fault Anomaly Detection Example',
             'dataset_description': 'Example motor bearing fault timeseries anomaly detection dataset for identifying abnormal vibration patterns',
             'dataset_size': None,
@@ -2255,10 +2255,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ecg_ad_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_ad_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_ad_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_ad_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_ad_dataset.zip',
             'dataset_detailed_name': 'ECG Anomaly Detection Example',
             'dataset_description': 'Example ECG sensor timeseries anomaly detection dataset for identifying abnormal cardiac patterns',
             'dataset_size': None,
@@ -2273,10 +2273,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'fan_blade_ad_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_ad_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_ad_dataset.zip',
             'dataset_detailed_name': 'Fan Blade Anomaly Detection Example',
             'dataset_description': 'Example fan blade fault timeseries anomaly detection dataset for identifying abnormal vibration',
             'dataset_size': None,
@@ -2291,10 +2291,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'arc_fault_classification_dsi',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip',
             'dataset_detailed_name': 'Arc Fault Classification DSI Dataset',
             'dataset_description': 'Arc fault timeseries classification dataset from DSI board for electrical fault detection',
             'dataset_size': None,
@@ -2309,10 +2309,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ecg_classification_2class',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip',
             'dataset_detailed_name': 'ECG 2-Class Classification Dataset',
             'dataset_description': 'ECG sensor timeseries classification dataset with 2-class arrhythmia detection',
             'dataset_size': None,
@@ -2327,10 +2327,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'electrical_fault_6class_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_6class_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_6class_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_6class_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_6class_dataset.zip',
             'dataset_detailed_name': 'Electrical Fault 6-Class Classification Dataset',
             'dataset_description': 'Electrical fault timeseries classification dataset with 6 fault categories',
             'dataset_size': None,
@@ -2345,10 +2345,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'electrical_fault_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip',
             'dataset_detailed_name': 'Electrical Fault Classification Dataset',
             'dataset_description': 'Electrical fault timeseries classification dataset for power grid and electrical system monitoring',
             'dataset_size': None,
@@ -2363,10 +2363,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'esda_nilm_2021_5_variable_4_class_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
             'dataset_detailed_name': 'ESDA NILM 2021 5-Variable 4-Class Dataset',
             'dataset_description': 'Non-Intrusive Load Monitoring (NILM) dataset with 5 variables and 4 appliance classes for energy management',
             'dataset_size': None,
@@ -2381,10 +2381,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'fall_detection_classification',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fall_detection_classification.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fall_detection_classification.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fall_detection_classification.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fall_detection_classification.zip',
             'dataset_detailed_name': 'Fall Detection Classification Dataset',
             'dataset_description': 'IMU-based timeseries classification dataset for human fall detection and activity recognition',
             'dataset_size': None,
@@ -2399,10 +2399,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'fan_blade_fault_dsi',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip',
             'dataset_detailed_name': 'Fan Blade Fault DSI Classification Dataset',
             'dataset_description': 'Fan blade fault timeseries classification dataset from DSI board with vibration sensor data',
             'dataset_size': None,
@@ -2417,10 +2417,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'gas_sensor_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip',
             'dataset_detailed_name': 'Gas Sensor Classification Dataset',
             'dataset_description': 'Multi-variable gas sensor timeseries classification dataset for gas detection and identification',
             'dataset_size': None,
@@ -2435,10 +2435,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'gearbox_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gearbox_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gearbox_dataset.zip',
             'dataset_detailed_name': 'Gearbox Fault Classification Dataset',
             'dataset_description': 'Gearbox vibration timeseries classification dataset for gearbox fault detection and diagnosis',
             'dataset_size': None,
@@ -2453,10 +2453,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'generic_timeseries_forecasting',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_forecasting.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_forecasting.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_forecasting.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_forecasting.zip',
             'dataset_detailed_name': 'Generic Timeseries Forecasting Example',
             'dataset_description': 'Generic timeseries forecasting dataset for time series prediction and trend forecasting',
             'dataset_size': None,
@@ -2471,10 +2471,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'generic_timeseries_regression',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip',
             'dataset_detailed_name': 'Generic Timeseries Regression Example',
             'dataset_description': 'Generic timeseries regression dataset for continuous value prediction from temporal data',
             'dataset_size': None,
@@ -2489,10 +2489,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'grid_stability_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip',
             'dataset_detailed_name': 'Grid Stability Classification Dataset',
             'dataset_description': 'Power grid stability timeseries classification dataset from electrical grid measurements',
             'dataset_size': None,
@@ -2507,10 +2507,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'induction_motor_speed_prediction_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/induction_motor_speed_prediction_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/induction_motor_speed_prediction_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip',
             'dataset_detailed_name': 'Induction Motor Speed Prediction Dataset',
             'dataset_description': 'Induction motor timeseries regression dataset for motor speed prediction from electrical measurements',
             'dataset_size': None,
@@ -2525,10 +2525,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'pir_detection_classification_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
             'dataset_detailed_name': 'PIR Detection Classification DSK Dataset',
             'dataset_description': 'PIR sensor timeseries classification dataset for motion detection with multiple object categories',
             'dataset_size': None,
@@ -2543,10 +2543,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'plaid_nilm_submetered_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip',
             'dataset_detailed_name': 'PLAID NILM Submetered Classification Dataset',
             'dataset_description': 'PLAID NILM dataset for submetered appliance classification from electrical current signatures',
             'dataset_size': None,
@@ -2561,10 +2561,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'pmsm_rotor_temp',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip',
             'dataset_detailed_name': 'PMSM Rotor Temperature Forecasting Dataset',
             'dataset_description': 'PMSM (Permanent Magnet Synchronous Motor) timeseries forecasting dataset for rotor temperature prediction',
             'dataset_size': None,
@@ -2579,10 +2579,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'torque_measurement_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip',
             'dataset_detailed_name': 'Torque Measurement Regression Dataset',
             'dataset_description': 'Motor torque timeseries regression dataset for predicting torque from multi-variable sensor readings',
             'dataset_size': None,
@@ -2597,10 +2597,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'wisdm_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/wisdm_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wisdm_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/wisdm_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wisdm_dataset.zip',
             'dataset_detailed_name': 'WISDM Activity Recognition Dataset',
             'dataset_description': 'WISDM timeseries classification dataset for human activity recognition from accelerometer data',
             'dataset_size': None,

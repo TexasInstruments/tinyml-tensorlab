@@ -537,15 +537,15 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 DATASET_EXAMPLES = dict(
     default=dict(),
      mnist_image_classification=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Mnist_Default'), variables=1),
     ),
     coffee_bean_classification=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/coffee_bean_classification.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/coffee_bean_classification.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('CoffeeBean_Default'), variables=1),
     ),
     machine_readable_code_classification=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/machine_readable_code_classification.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/machine_readable_code_classification.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MachineReadable_Default'), variables=1),
     ),
 )
@@ -717,7 +717,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     },
     'dataset': {
         'dataset_name': 'mnist_image_classification',
-        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip',
     },
     'info': {
         'dataset_url': 'http://yann.lecun.com/exdb/mnist/',
@@ -736,7 +736,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     },
     'dataset': {
         'dataset_name': 'coffee_bean_classification',
-        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/coffee_bean_classification.zip',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/coffee_bean_classification.zip',
     },
     'info': {
         'dataset_url': 'https://www.kaggle.com/datasets/gpiosenka/coffee-bean-dataset-resized-224-x-224',
@@ -755,7 +755,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     },
     'dataset': {
         'dataset_name': 'machine_readable_code_classification',
-        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/machine_readable_code_classification.zip',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/machine_readable_code_classification.zip',
     },
     'info': {
         'dataset_url': 'Generated locally using the repository dataset generation script.',
@@ -772,7 +772,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     },
     'dataset': {
         'dataset_name': 'mnist_classes',
-        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip',
     },
     'info': {
         'dataset_url': 'http://yann.lecun.com/exdb/mnist/',
