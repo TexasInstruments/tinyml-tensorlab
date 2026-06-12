@@ -1,0 +1,20 @@
+{
+  "skill_name": "tinyml-tensorlab-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have vibration sensor data from 3 axes and want to detect motor faults on an F28P55. My data is at /home/user/motor_data.zip. Help me set up the full tinyml pipeline.",
+      "expected_output": "Skill walks through all 13 steps: confirms installation, sets WORK_DIR, validates dataset format, generates all 6 config sections as files, assembles config.yaml, and offers to run training."
+    },
+    {
+      "id": 2,
+      "prompt": "I want to do time series anomaly detection on a CC2755 device. I have sensor readings in /data/normal_ops/ and /data/faults/. Walk me through setting up the config.",
+      "expected_output": "Skill identifies generic_timeseries_anomalydetection task, validates CC2755 device, checks dataset structure for Normal/Anomaly folders, recommends forced_soft_npu_preset for compilation, and generates all config sections."
+    },
+    {
+      "id": 3,
+      "prompt": "Help me do image classification for a defect detection system on an F28P65. I have 500 labeled images across 4 classes.",
+      "expected_output": "Skill identifies image_classification task, vision module, F28P65 device, analyzes small dataset size (500 samples), recommends lightweight models, and walks through the full config creation workflow."
+    }
+  ]
+}
