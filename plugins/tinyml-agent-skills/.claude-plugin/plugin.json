@@ -1,0 +1,16 @@
+{
+    "name": "tinyml-agent-skills",
+    "description": "Tiny ML agentic skill plugin for building AI-powered solutions with tinyml-tensorlab.",
+    "version": "1.4.0",
+    "author": {
+        "name": "tinyml-agent-skills"
+    },
+    "keywords": [
+        "tinyml-agent",
+        "tinyml-agentic-skill",
+        "tinyml-tensorlab"
+    ],
+    "skills": [
+        "./skills/tinyml-agentic-skill"
+    ]
+}
