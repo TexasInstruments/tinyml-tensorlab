@@ -46,7 +46,7 @@ Deploy a model to [target-device]
 I want to develop an AI solution for...
 ```
 
-Learn More About the Agentic Skill Here - [TI Tiny ML Tensorlab Agentic Skill User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/installation/agentic_skill_setup.html)
+Learn More About the Agentic Skill Here - [TI Tiny ML Tensorlab Agentic Skill User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/user_guide/installation/agentic_skill_setup.html)
 
 ### Release History
 
