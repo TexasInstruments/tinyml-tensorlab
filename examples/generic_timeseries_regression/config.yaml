@@ -3,7 +3,7 @@ common:
   target_device: F28P55
 dataset:
   dataset_name: generic_timeseries_regression
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip
 data_processing_feature_extraction:
   stride_size: 1
   data_proc_transforms:

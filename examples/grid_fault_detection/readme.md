@@ -23,7 +23,7 @@ The path of this zipped dataset file is already mentioned in [configuration](con
 
 ```yaml
 dataset:
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_fault_dataset.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_fault_dataset.zip
 ```
 
 ## Usage in Tiny ML ModelZoo

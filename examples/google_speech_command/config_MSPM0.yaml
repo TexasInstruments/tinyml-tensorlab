@@ -4,7 +4,7 @@ common:
   target_device: MSPM0G5187
 dataset:
   dataset_name: google_speech_commands_12class
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/google_speech_commands_12class.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/google_speech_commands_12class.zip
 data_processing_feature_extraction:
   feature_extraction_name: GoogleSpeechCommands_MFCC_Default
 training:

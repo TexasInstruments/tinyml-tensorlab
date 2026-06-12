@@ -4,7 +4,7 @@ common:
 
 dataset:
   dataset_name: gearbox_fault_detection
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gearbox_dataset.zip
 
 data_processing_feature_extraction:
   data_proc_transforms: ['SimpleWindow']

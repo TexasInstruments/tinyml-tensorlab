@@ -8,7 +8,7 @@ import shutil
 DATASET_NAME = "electrical_fault_6class"
 
 # Dataset definition
-DATASET_URL = "https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_raw.zip"
+DATASET_URL = "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_raw.zip"
 DATASET_FILE_NAME = "classData.csv"
 independent_variables = ["Ia", "Ib", "Ic", "Va", "Vb", "Vc"]
 dependent_variables = ["G", "C", "B", "A"]  # Ground, Node C, Node B, Node A
