@@ -55,13 +55,13 @@ Learn More About the Agentic Skill Here - [TI Tiny ML Tensorlab Agentic Skill Us
 
     - Agent Skills with Claude Code supported for users to solve Edge AI/Tiny ML problems using natural language!
     - Device Support: 40 MCU devices supported:
-    - AM1x: AM13E2
-    - C2000 F28: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65
-    - C2000 F29: F29H85, F29P58, F29P32
-    - MSP M0: MSPM0G3507, MSPM0G3519, MSPM0G5187
-    - MSP M33: MSPM33C32,
-    - Connectivity: CC2755, CC1352, CC1354, CC35X1, CC1312, CC1314
-    - AM26x: AM263, AM263P, AM261
+      - AM1x: AM13E2
+      - C2000 F28: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65
+      - C2000 F29: F29H85, F29P58, F29P32
+      - MSP M0: MSPM0G3507, MSPM0G3519, MSPM0G5187
+      - MSP M33: MSPM33C32,
+      - Connectivity: CC2755, CC1352, CC1354, CC35X1, CC1312, CC1314
+      - AM26x: AM263, AM263P, AM261
   - Flows:
     - Timeseries Anomaly Detection flow - More models
     - On Device Learning Mode Enabled - Expansive functionalities
