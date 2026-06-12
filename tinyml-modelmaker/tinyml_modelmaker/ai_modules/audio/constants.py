@@ -527,7 +527,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
 DATASET_EXAMPLES = dict(
     default=dict(),
      google_speech_commands_12class=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/google_speech_commands_12class.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/google_speech_commands_12class.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('GoogleSpeechCommands_MFCC_Default'), variables=1),
     ),
 )
@@ -699,7 +699,7 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     },
     'dataset': {
         'dataset_name': 'google_speech_commands_12class',
-        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/google_speech_commands_12class.zip',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/google_speech_commands_12class.zip',
     },
     'info': {
         'dataset_url': 'https://pytorch.org/audio/stable/generated/torchaudio.datasets.SPEECHCOMMANDS.html',

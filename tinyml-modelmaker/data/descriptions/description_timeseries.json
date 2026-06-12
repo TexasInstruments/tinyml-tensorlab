@@ -23131,26 +23131,6 @@
   },
   "preset_descriptions":{
     "AM263":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23181,7 +23161,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23200,10 +23190,20 @@
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
           }
         }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
       }
     },
     "AM263P":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23223,7 +23223,7 @@
           }
         }
       },
-      "generic_timeseries_anomalydetection":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23233,7 +23233,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23245,7 +23245,7 @@
       }
     },
     "AM261":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23265,7 +23265,7 @@
           }
         }
       },
-      "generic_timeseries_anomalydetection":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23275,7 +23275,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23287,26 +23287,6 @@
       }
     },
     "F280013":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23337,7 +23317,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23351,6 +23341,16 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23359,26 +23359,6 @@
       }
     },
     "F280015":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23409,7 +23389,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23423,6 +23413,16 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23431,26 +23431,6 @@
       }
     },
     "F28003":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23481,7 +23461,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23495,6 +23485,16 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23503,26 +23503,6 @@
       }
     },
     "F28004":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23553,7 +23533,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23567,6 +23557,16 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23575,26 +23575,6 @@
       }
     },
     "F28P65":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23625,7 +23605,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23639,6 +23629,16 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23647,26 +23647,6 @@
       }
     },
     "F2837":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23697,7 +23677,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23716,9 +23706,97 @@
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
       }
     },
     "F28P55":{
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
       "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
@@ -23771,110 +23849,6 @@
           }
         }
       },
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -23900,29 +23874,35 @@
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
       }
     },
     "F29H85":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -23953,7 +23933,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23967,6 +23957,16 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23975,7 +23975,7 @@
       }
     },
     "F29P58":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23995,20 +23995,20 @@
           }
         }
       },
-      "generic_timeseries_anomalydetection":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -24017,7 +24017,7 @@
       }
     },
     "F29P32":{
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24037,16 +24037,6 @@
           }
         }
       },
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -24056,40 +24046,20 @@
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
       }
     },
     "MSPM0G3507":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
       "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24119,7 +24089,27 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24130,6 +24120,16 @@
         }
       },
       "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24141,37 +24141,7 @@
       }
     },
     "MSPM0G3519":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
       "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24201,7 +24171,27 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24212,6 +24202,16 @@
         }
       },
       "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24223,85 +24223,7 @@
       }
     },
     "MSPM0G5187":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
       "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -24379,7 +24301,59 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -24406,6 +24380,32 @@
         }
       },
       "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -24433,16 +24433,6 @@
       }
     },
     "MSPM33C32":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
       "pir_detection":{
         "default_preset":{
           "compilation":{
@@ -24453,16 +24443,6 @@
           }
         }
       },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
       "blower_imbalance":{
         "default_preset":{
           "compilation":{
@@ -24493,7 +24473,17 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "arc_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24512,10 +24502,98 @@
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
           }
         }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
       }
     },
     "MSPM33C34":{},
     "AM13E2":{
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
       "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
@@ -24568,62 +24646,10 @@
           }
         }
       },
-      "blower_imbalance":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -24650,32 +24676,6 @@
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -25322,10 +25322,10 @@
       },
       "dataset":{
         "dataset_name":"dc_arc_fault_classification_dsk",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsk.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsk.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip",
         "dataset_detailed_name":"DC Arc Fault Classification Example",
         "dataset_description":"Example arc-fault timeseries classification dataset with 2 categories - arc, normal",
         "dataset_size":null,
@@ -25340,10 +25340,10 @@
       },
       "dataset":{
         "dataset_name":"ac_arc_fault",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip",
         "dataset_detailed_name":"AC Arc Fault Classification Example on public dataset",
         "dataset_description":"Example arc-fault timeseries classification dataset with 2 categories - arc, normal",
         "dataset_size":null,
@@ -25358,10 +25358,10 @@
       },
       "dataset":{
         "dataset_name":"ac_arc_fault_log300",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ac_arc_fault_log300.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip",
         "dataset_detailed_name":"AC Arc Fault Classification Example collected on TI Testbed",
         "dataset_description":"Example arc-fault timeseries classification dataset with 2 categories - arc, normal. The Log300 takes 1-10MHZ filtered signal and envelopes it. This down converts the signal to to a 100kHz equivalent logarithmically scaled power measurement of the energy in the high frequency band.",
         "dataset_size":null,
@@ -25376,10 +25376,10 @@
       },
       "dataset":{
         "dataset_name":"motor_fault_example_dsk",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_classification_dsk.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_classification_dsk.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip",
         "dataset_detailed_name":"Motor Bearing Fault Classification Example",
         "dataset_description":"Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking",
         "dataset_size":null,
@@ -25394,10 +25394,10 @@
       },
       "dataset":{
         "dataset_name":"fan_blower_imbalance_dsi",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsi.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsi.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip",
         "dataset_detailed_name":"Fan Imbalance Classification Example",
         "dataset_description":"Example fan imbalance timeseries classification dataset with 4 categories-Normal, Blade damage, Blade imbalance and  Blade obstruction",
         "dataset_size":null,
@@ -25412,10 +25412,10 @@
       },
       "dataset":{
         "dataset_name":"blower_imbalance_example_dsh",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsh.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blower_imbalance_dsh.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip",
         "dataset_detailed_name":"Blower Imbalance Classification Example",
         "dataset_description":"Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip",
         "dataset_size":null,
@@ -25430,10 +25430,10 @@
       },
       "dataset":{
         "dataset_name":"generic_timeseries_classification",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_classification.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_classification.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip",
         "dataset_detailed_name":"Timeseries Classification Example",
         "dataset_description":"Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth",
         "dataset_size":null,
@@ -25448,10 +25448,10 @@
       },
       "dataset":{
         "dataset_name":"grid_fault_detection",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_fault_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_fault_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_fault_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_fault_dataset.zip",
         "dataset_detailed_name":"Grid Fault Detection",
         "dataset_description":"Protect the OBC against adverse grid events, log abnormal events, and potentially safe the OBC",
         "dataset_size":null,
@@ -25466,10 +25466,10 @@
       },
       "dataset":{
         "dataset_name":"mosfet_temp_prediction",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mosfet_temp_prediction.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mosfet_temp_prediction.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mosfet_temp_prediction.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mosfet_temp_prediction.zip",
         "dataset_detailed_name":"MOSFET Temperature Prediction",
         "dataset_description":"Predicting switch temperature based on the power loss of a switch and indirect temperature measurement from a temperature sensor in the vicinity of the switch.",
         "dataset_size":null,
@@ -25484,10 +25484,10 @@
       },
       "dataset":{
         "dataset_name":"pir_detection_classification_dsk",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip",
         "dataset_detailed_name":"PIR Detection Classification Example",
         "dataset_description":"Example PIR sensor based motion detection timeseries classification dataset with 3 categories - human, dog, background motion",
         "dataset_size":null,
@@ -25502,10 +25502,10 @@
       },
       "dataset":{
         "dataset_name":"ecg_classification_4class",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_4class.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_4class.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip",
         "dataset_detailed_name":"ECG Waveform Classification Example",
         "dataset_description":"Example ECG Sensor based timeseries classification dataset with 4 classes",
         "dataset_size":null,
@@ -25520,10 +25520,10 @@
       },
       "dataset":{
         "dataset_name":"washing_machine_load_weighing",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip",
         "dataset_detailed_name":"Washing Machine Load Regression Example",
         "dataset_description":"Regression for estimating washing machine load weight from sensor measurements",
         "dataset_size":null,
@@ -25538,10 +25538,10 @@
       },
       "dataset":{
         "dataset_name":"hvac_indoor_temp_forecast",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hvac_indoor_temp_forecast_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hvac_indoor_temp_forecast_dataset.zip",
         "dataset_detailed_name":"HVAC Indoor Temperature Forecasting Example",
         "dataset_description":"Example timeseries forecasting for predicting indoor temperature in HVAC systems",
         "dataset_size":null,
@@ -25556,10 +25556,10 @@
       },
       "dataset":{
         "dataset_name":"arc_fault_dsi_anomaly_detection",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsi_anomaly_detection.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsi_anomaly_detection.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsi_anomaly_detection.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsi_anomaly_detection.zip",
         "dataset_detailed_name":"Arc Fault Anomaly Detection Example with complex dataset",
         "dataset_description":"Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures",
         "dataset_size":null,
@@ -25574,10 +25574,10 @@
       },
       "dataset":{
         "dataset_name":"arc_fault_dsk_anomaly_detection",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsk_anomaly_detection.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsk_anomaly_detection.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_dsk_anomaly_detection.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsk_anomaly_detection.zip",
         "dataset_detailed_name":"Arc Fault Anomaly Detection Example",
         "dataset_description":"Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures",
         "dataset_size":null,
@@ -25592,10 +25592,10 @@
       },
       "dataset":{
         "dataset_name":"generic_timeseries_anomalydetection",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip",
         "dataset_detailed_name":"Timeseries Anomaly Detection Example",
         "dataset_description":"Generic timeseries anomaly detection dataset with synthetic signal patterns for anomaly identification",
         "dataset_size":null,
@@ -25610,10 +25610,10 @@
       },
       "dataset":{
         "dataset_name":"motor_fault_anomaly_detection",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_anomaly_detection_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/motor_fault_anomaly_detection_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_anomaly_detection_dataset.zip",
         "dataset_detailed_name":"Motor Fault Anomaly Detection Example",
         "dataset_description":"Example motor bearing fault timeseries anomaly detection dataset for identifying abnormal vibration patterns",
         "dataset_size":null,
@@ -25628,10 +25628,10 @@
       },
       "dataset":{
         "dataset_name":"ecg_ad_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_ad_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_ad_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_ad_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_ad_dataset.zip",
         "dataset_detailed_name":"ECG Anomaly Detection Example",
         "dataset_description":"Example ECG sensor timeseries anomaly detection dataset for identifying abnormal cardiac patterns",
         "dataset_size":null,
@@ -25646,10 +25646,10 @@
       },
       "dataset":{
         "dataset_name":"fan_blade_ad_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_ad_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_ad_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_ad_dataset.zip",
         "dataset_detailed_name":"Fan Blade Anomaly Detection Example",
         "dataset_description":"Example fan blade fault timeseries anomaly detection dataset for identifying abnormal vibration",
         "dataset_size":null,
@@ -25664,10 +25664,10 @@
       },
       "dataset":{
         "dataset_name":"arc_fault_classification_dsi",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/arc_fault_classification_dsi.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip",
         "dataset_detailed_name":"Arc Fault Classification DSI Dataset",
         "dataset_description":"Arc fault timeseries classification dataset from DSI board for electrical fault detection",
         "dataset_size":null,
@@ -25682,10 +25682,10 @@
       },
       "dataset":{
         "dataset_name":"ecg_classification_2class",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_2class.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip",
         "dataset_detailed_name":"ECG 2-Class Classification Dataset",
         "dataset_description":"ECG sensor timeseries classification dataset with 2-class arrhythmia detection",
         "dataset_size":null,
@@ -25700,10 +25700,10 @@
       },
       "dataset":{
         "dataset_name":"electrical_fault_6class_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_6class_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_6class_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_6class_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_6class_dataset.zip",
         "dataset_detailed_name":"Electrical Fault 6-Class Classification Dataset",
         "dataset_description":"Electrical fault timeseries classification dataset with 6 fault categories",
         "dataset_size":null,
@@ -25718,10 +25718,10 @@
       },
       "dataset":{
         "dataset_name":"electrical_fault_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/electrical_fault_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip",
         "dataset_detailed_name":"Electrical Fault Classification Dataset",
         "dataset_description":"Electrical fault timeseries classification dataset for power grid and electrical system monitoring",
         "dataset_size":null,
@@ -25736,10 +25736,10 @@
       },
       "dataset":{
         "dataset_name":"esda_nilm_2021_5_variable_4_class_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip",
         "dataset_detailed_name":"ESDA NILM 2021 5-Variable 4-Class Dataset",
         "dataset_description":"Non-Intrusive Load Monitoring (NILM) dataset with 5 variables and 4 appliance classes for energy management",
         "dataset_size":null,
@@ -25754,10 +25754,10 @@
       },
       "dataset":{
         "dataset_name":"fall_detection_classification",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fall_detection_classification.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fall_detection_classification.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fall_detection_classification.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fall_detection_classification.zip",
         "dataset_detailed_name":"Fall Detection Classification Dataset",
         "dataset_description":"IMU-based timeseries classification dataset for human fall detection and activity recognition",
         "dataset_size":null,
@@ -25772,10 +25772,10 @@
       },
       "dataset":{
         "dataset_name":"fan_blade_fault_dsi",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip",
         "dataset_detailed_name":"Fan Blade Fault DSI Classification Dataset",
         "dataset_description":"Fan blade fault timeseries classification dataset from DSI board with vibration sensor data",
         "dataset_size":null,
@@ -25790,10 +25790,10 @@
       },
       "dataset":{
         "dataset_name":"gas_sensor_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gas_sensor_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip",
         "dataset_detailed_name":"Gas Sensor Classification Dataset",
         "dataset_description":"Multi-variable gas sensor timeseries classification dataset for gas detection and identification",
         "dataset_size":null,
@@ -25808,10 +25808,10 @@
       },
       "dataset":{
         "dataset_name":"gearbox_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gearbox_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/gearbox_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gearbox_dataset.zip",
         "dataset_detailed_name":"Gearbox Fault Classification Dataset",
         "dataset_description":"Gearbox vibration timeseries classification dataset for gearbox fault detection and diagnosis",
         "dataset_size":null,
@@ -25826,10 +25826,10 @@
       },
       "dataset":{
         "dataset_name":"generic_timeseries_forecasting",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_forecasting.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_forecasting.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_forecasting.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_forecasting.zip",
         "dataset_detailed_name":"Generic Timeseries Forecasting Example",
         "dataset_description":"Generic timeseries forecasting dataset for time series prediction and trend forecasting",
         "dataset_size":null,
@@ -25844,10 +25844,10 @@
       },
       "dataset":{
         "dataset_name":"generic_timeseries_regression",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip",
         "dataset_detailed_name":"Generic Timeseries Regression Example",
         "dataset_description":"Generic timeseries regression dataset for continuous value prediction from temporal data",
         "dataset_size":null,
@@ -25862,10 +25862,10 @@
       },
       "dataset":{
         "dataset_name":"grid_stability_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip",
         "dataset_detailed_name":"Grid Stability Classification Dataset",
         "dataset_description":"Power grid stability timeseries classification dataset from electrical grid measurements",
         "dataset_size":null,
@@ -25880,10 +25880,10 @@
       },
       "dataset":{
         "dataset_name":"induction_motor_speed_prediction_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/induction_motor_speed_prediction_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/induction_motor_speed_prediction_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip",
         "dataset_detailed_name":"Induction Motor Speed Prediction Dataset",
         "dataset_description":"Induction motor timeseries regression dataset for motor speed prediction from electrical measurements",
         "dataset_size":null,
@@ -25898,10 +25898,10 @@
       },
       "dataset":{
         "dataset_name":"pir_detection_classification_dsk",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip",
         "dataset_detailed_name":"PIR Detection Classification DSK Dataset",
         "dataset_description":"PIR sensor timeseries classification dataset for motion detection with multiple object categories",
         "dataset_size":null,
@@ -25916,10 +25916,10 @@
       },
       "dataset":{
         "dataset_name":"plaid_nilm_submetered_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip",
         "dataset_detailed_name":"PLAID NILM Submetered Classification Dataset",
         "dataset_description":"PLAID NILM dataset for submetered appliance classification from electrical current signatures",
         "dataset_size":null,
@@ -25934,10 +25934,10 @@
       },
       "dataset":{
         "dataset_name":"pmsm_rotor_temp",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pmsm_rotor_temp.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip",
         "dataset_detailed_name":"PMSM Rotor Temperature Forecasting Dataset",
         "dataset_description":"PMSM (Permanent Magnet Synchronous Motor) timeseries forecasting dataset for rotor temperature prediction",
         "dataset_size":null,
@@ -25952,10 +25952,10 @@
       },
       "dataset":{
         "dataset_name":"torque_measurement_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/torque_measurement_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip",
         "dataset_detailed_name":"Torque Measurement Regression Dataset",
         "dataset_description":"Motor torque timeseries regression dataset for predicting torque from multi-variable sensor readings",
         "dataset_size":null,
@@ -25970,10 +25970,10 @@
       },
       "dataset":{
         "dataset_name":"wisdm_dataset",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/wisdm_dataset.zip"
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wisdm_dataset.zip"
       },
       "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/wisdm_dataset.zip",
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wisdm_dataset.zip",
         "dataset_detailed_name":"WISDM Activity Recognition Dataset",
         "dataset_description":"WISDM timeseries classification dataset for human activity recognition from accelerometer data",
         "dataset_size":null,
@@ -27361,7 +27361,7 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Time Series Classification\n* ARC Fault\n* ECG Classification\n* Motor Fault\n* Fan Blower Imbalance Fault\n* PIR Detection\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n* SDK release: 01_10_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1312\n* Product information: https://www.ti.com/product/CC1312PSIP\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1314\n* Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n* SDK release: 01_10_00_00\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure.\n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board.\n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.\n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Time Series Classification\n* ARC Fault\n* ECG Classification\n* Motor Fault\n* Fan Blower Imbalance Fault\n* PIR Detection\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n* SDK release: 01_10_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1312\n* Product information: https://www.ti.com/product/CC1312PSIP\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1314\n* Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n* SDK release: 01_10_00_00\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure.\n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board.\n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.\n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
   "help_url":"file://help.md",
   "rex_dependencies":[
     {
