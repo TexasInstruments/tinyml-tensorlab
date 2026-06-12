@@ -53,6 +53,7 @@ Learn More About the Agentic Skill Here - [TI Tiny ML Tensorlab Agentic Skill Us
 - [2026-Jun] Release version 1.4.0 of the software
   <details>
 
+    - Agent Skills with Claude Code supported for users to solve Edge AI/Tiny ML problems using natural language!
     - Device Support: 40 MCU devices supported:
     - AM1x: AM13E2
     - C2000 F28: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65
