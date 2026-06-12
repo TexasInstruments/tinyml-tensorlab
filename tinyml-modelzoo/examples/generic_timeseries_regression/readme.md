@@ -38,7 +38,7 @@ The dataset consists of synthetically generated columns:
 - Test: 1 file 
 
 Each file contains 5000 datapoints of generated x corresponding y variable
-The dataset can be downloaded from here: [`generic_timeseries_regression_dataset'](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip)
+The dataset can be downloaded from here: [`generic_timeseries_regression_dataset'](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip)
 
 ## Preparing the Dataset
 
@@ -65,7 +65,7 @@ For regression tasks, **ModelMaker** expects the dataset to be packaged in a spe
 
 Unlike classification tasks, regression **always requires annotation files**. These tell the tool which files belong to training, validation, and testing sets. The data directory is automatically named 'files' for regression and forecasting tasks.
 
-For this example, we have already prepared the dataset in the required format. You can find the zipped dataset at: [`generic_timeseries_regression_dataset`](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip)
+For this example, we have already prepared the dataset in the required format. You can find the zipped dataset at: [`generic_timeseries_regression_dataset`](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip)
 
 ## Usage in Tiny ML ModelZoo
 
@@ -100,7 +100,7 @@ Here is how we configured `dataset` section for our hello world dataset example:
 ```yaml
 dataset:
     dataset_name: generic_timeseries_regression
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_regression.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip
 ```
 
 ### `data_processing_feature_extraction` section

@@ -3,7 +3,7 @@ common:
   target_device: F28P55
 dataset:
   dataset_name: grid_stability
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/grid_stability_dataset.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip
 data_processing_feature_extraction:
   data_proc_transforms: ['SimpleWindow']
   frame_size: 256

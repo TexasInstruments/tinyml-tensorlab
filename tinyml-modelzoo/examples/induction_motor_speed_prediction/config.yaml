@@ -3,7 +3,7 @@ common:
   target_device: F29H85
 dataset:
   dataset_name: induction_motor_speed_prediction
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/induction_motor_speed_prediction_dataset.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip
 data_processing_feature_extraction:
   data_proc_transforms: ['SimpleWindow']
   variables: 11

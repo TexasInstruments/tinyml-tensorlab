@@ -3,7 +3,7 @@ common:
   target_device: F28P55
 dataset:
   dataset_name: hvac_indoor_temp_forecast
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hvac_indoor_temp_forecast_dataset.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hvac_indoor_temp_forecast_dataset.zip
 data_processing_feature_extraction:
   data_proc_transforms:
   - SimpleWindow  # 'SimpleWindow' must be specified for forecasting tasks

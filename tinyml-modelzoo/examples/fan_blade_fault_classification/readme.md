@@ -79,7 +79,7 @@ This application example showcases the following story:
 
 ## Dataset
 
-* The dataset collected with this setup at TI can be found [here](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip)
+* The dataset collected with this setup at TI can be found [here](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip)
 
 ## Training the Model
 

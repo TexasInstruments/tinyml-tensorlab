@@ -46,7 +46,7 @@ For regression tasks, the dataset structure is expected to be as follows :
 * We need to have the annotations folder in regression task.
 * The data directory is automatically named 'files' for regression tasks.
 
-* The dataset can be directly downloaded from https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip, it's directly downloaded in the example
+* The dataset can be directly downloaded from https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip, it's directly downloaded in the example
 
 ## Usage in Tiny ML ModelZoo
 
@@ -75,7 +75,7 @@ target_device: 'F28P55'
 In the dataset section
 ```
 dataset_name: 'washing_machine_load_weighing'
-input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/washing_machine_loading_data.zip
+input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip
 ```
 
 * The data directory is automatically detected as 'files' for regression tasks

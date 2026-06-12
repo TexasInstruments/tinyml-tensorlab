@@ -9,7 +9,7 @@ dataset:
     # enable/disable dataset loading
     enable: True #False
     dataset_name: ecg_classification_4class
-    # input_data_path: "https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/ecg_classification_4class.zip"
+    # input_data_path: "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip"
 
 data_processing_feature_extraction:
     feature_extraction_name: ECG2500Input_Roundoff_1Frame

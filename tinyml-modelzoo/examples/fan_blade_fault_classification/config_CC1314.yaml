@@ -3,7 +3,7 @@ common:
   target_device: CC1314
 dataset:
   dataset_name: fan_blade_fault
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/fan_blade_fault_dsi.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip
 data_processing_feature_extraction:
   data_proc_transforms: []
   feature_extraction_name: Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1

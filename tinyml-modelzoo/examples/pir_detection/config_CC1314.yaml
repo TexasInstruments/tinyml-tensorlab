@@ -2,12 +2,12 @@
 common:
     target_module: 'timeseries'
     task_type: 'pir_detection'
-    target_device: 'CC1312'
+    target_device: 'CC1314'
     run_name: '{date-time}/{model_name}'
 
 dataset:
     dataset_name: pir_detection_classification
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip
 
 data_processing_feature_extraction: # One or more can be cascaded in the list
     data_proc_transforms: []
@@ -15,8 +15,6 @@ data_processing_feature_extraction: # One or more can be cascaded in the list
     variables: 1
 
 training:
-    # enable/disable training
-    enable: True #False
     model_name: 'PIRDetection_model_1_t'
     model_config: ''
     batch_size: 64
@@ -25,5 +23,4 @@ training:
     learning_rate: 0.001
 
 testing: {}
-
 compilation: {}

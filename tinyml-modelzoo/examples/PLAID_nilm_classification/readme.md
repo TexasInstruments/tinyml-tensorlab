@@ -34,7 +34,7 @@ The classes here correspond to **11 different appliance types**:
 10. **Vacuum**
 11. **Washing Machine**
 
-In this dataset, each class directory contains files corresponding to the voltage and current measurements when only that appliance class is turned on. While the dataset is extensive, we have taken a subset of it to use with ModelMaker. You can find the dataset subset here: [PLAID_submetered_dataset](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip)
+In this dataset, each class directory contains files corresponding to the voltage and current measurements when only that appliance class is turned on. While the dataset is extensive, we have taken a subset of it to use with ModelMaker. You can find the dataset subset here: [PLAID_submetered_dataset](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip)
 
 ## Usage in Tiny ML ModelZoo
 
@@ -59,7 +59,7 @@ common:
 dataset:
     enable: True
     dataset_name: plaid_submetered
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/plaid_nilm_submetered_dataset.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip
 ```
 
 The important parameters here are: task type `generic_timeseries_classification` has been selected. The target device is set to `F28P55`, ensuring that ModelMaker generates a compiled output that runs on this device. Dataset loading is enabled, and the correct dataset path to the zip folder is provided.

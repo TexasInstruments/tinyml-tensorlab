@@ -3,7 +3,7 @@ common:
   target_device: CC2755
 dataset:
   dataset_name: pir_detection_classification
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip
 data_processing_feature_extraction:
   data_proc_transforms: []
   feature_extraction_name: PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D

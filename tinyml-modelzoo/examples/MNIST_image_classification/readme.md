@@ -35,7 +35,7 @@
   - **Source:** MNIST dataset exported via torchvision
   - **Classes:** 10 digits (0-9)
   - **Image Format:** 28x28 grayscale PNG images
-  - **Download:** [mnist_classes.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/mnist_classes.zip)
+  - **Download:** [mnist_classes.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip)
 
 
 For dataset recreation instructions, refer to `readme_dataset_creation.md`.

@@ -7,6 +7,7 @@
 **⚠️ Device Support:** While this documentation focuses on the **MSPM0G5187**, the following device are also fully supported:
   - **CC35X1**
   - **CC1312** 
+  - **CC1314**
   - **CC1352**
   - **CC1354** 
   - **CC2755**
@@ -39,7 +40,7 @@ Check the `config_<device>.yaml` files for device-specific configurations.
 
 ## Dataset Information
 
-  The example uses the `pir_detection_classification` [Link]( https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/pir_detection_classification_dsk.zip) dataset which contains labeled PIR sensor recordings categorized into three motion classes:
+  The example uses the `pir_detection_classification` [Link]( https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip) dataset which contains labeled PIR sensor recordings categorized into three motion classes:
 
   - **Human Motion**: Movement patterns characteristic of human activity
   - **Background Motion**: Environmental disturbances and noise
@@ -114,6 +115,7 @@ Data was captured using the EdgeAI Sensor Boosterpack with motion recorded from 
  
   - config_MSPM0.yaml - MSPM0G5187
   - config_CC1312.yaml - CC1312
+  - config_CC1314.yaml - CC1314
   - config_CC1352.yaml - CC1352
   - config_CC1354.yaml - CC1354
   - config_CC2755.yaml - CC2755

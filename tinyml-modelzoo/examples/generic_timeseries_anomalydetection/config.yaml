@@ -7,7 +7,7 @@ common:
 dataset:
     enable: True 
     dataset_name: generic_timeseries_anomalydetection
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/generic_timeseries_anomalydetection.zip
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip
     split_factor: [0.5, 0.1, 0.4]
 
 data_processing_feature_extraction: 
