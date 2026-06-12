@@ -42,7 +42,7 @@ Prerequisites
 
   * Sample datasets are included in ``tinyml-tensorlab/tinyml-modelzoo/examples/`` for testing
 
-* **Code Composer Studio (CCS)** — Only needed for on-device deployment
+* **Code Composer Studio (TI CCStudio IDE)** — Needed for on-device deployment
 
   * `Download here <https://www.ti.com/tool/CCSTUDIO>`__ (free)
   * Skip if you only want to train and test on your PC
@@ -116,7 +116,7 @@ dependencies and set up required environment variables.
 
 .. note::
    **For Device Deployment** — If you plan to deploy the trained model to a TI MCU,
-   it is **strongly recommended** to use Claude Code within Code Composer Studio (CCS).
+   it is **strongly recommended** to use Claude Code within Code Composer Studio (TI CCStudio IDE).
    This ensures seamless project creation, automatic file generation, and build integration
    without the need for manual setup.
 
