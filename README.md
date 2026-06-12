@@ -6,26 +6,14 @@ This repository contains the tinyml-agentic-skill, an end-to-end skill for build
 
 ## Installation
 
-### SSH Key Setup
-Ensure you have your ssh key set up for bitbucket on your system. You can then add the same key to the ssh-agent via the following commands:
-```
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-```
-
-Key name may vary. Please check and verify that your key name matches the key configured for your bitbucket account.
-Once added, verify the same with:
-```
-ssh-add -l
-```
-
-Your key fingerprint should be displayed. Once this is done, proceed to the following steps.
+Clone `tinyml-agent-skills` and ensure you have the directory present locally.
+**Note:** `tinyml-tensorlab` now contains `tinyml-agent-skills`. If you have the directory present already, you do not need to clone it again. Proceed to the steps given below. 
 
 ### Add to Claude Code Marketplace
 
 You can register this repository as a Claude Code Plugin marketplace by running the following command in Claude Code:
 ```
-/plugin marketplace add git@bitbucket.itg.ti.com:TINYML-ALGO/tinyml-agent-skills.git
+/plugin marketplace add path/to/tinyml-agent-skills
 ```
 
 ### Install the Plugin
