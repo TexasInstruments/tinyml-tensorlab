@@ -1,0 +1,19 @@
+common:
+  target_module: vision
+  task_type: image_classification
+  target_device: MSPM0G5187
+dataset:
+  dataset_name: machine_readable_code_classification
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/machine_readable_code_classification.zip
+data_processing_feature_extraction:
+  feature_extraction_name:  MachineReadable_Default
+training:
+  model_name: Lenet5
+  batch_size: 64
+  training_epochs: 10
+  num_gpus: 0
+  quantization: 2
+  learning_rate: 0.1
+  weight_decay: 1e-5
+testing: {}
+compilation: {}
