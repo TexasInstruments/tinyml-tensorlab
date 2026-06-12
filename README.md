@@ -3,7 +3,9 @@
 The Tiny ML Tensorlab repository is the starting point to install and explore TI's AI offering for MCUs.
 It supports Time Series Classification, Regression, Forecasting, Anomaly Detection, and Image Classification tasks across 24+ TI microcontrollers with 31 example applications.
 
-**Detailed User Guide:** [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
+**Detailed User Guide:**
+- **Online:** [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/user_guide/index.html)
+- **Local:** Open `docs/_build/html/index.html` in your browser after cloning
 
 <hr>
 
