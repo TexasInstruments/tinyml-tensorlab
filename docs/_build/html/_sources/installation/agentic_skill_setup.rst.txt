@@ -164,7 +164,7 @@ The workflow skill guides you through 13 steps across 4 phases:
 5. Analyze statistical properties
 6. Select feature extraction transforms and data processing presets (FFT-based or Raw transforms)
 
-**Phase 3: Model & Training Configuration (Steps 7-11)**
+**Phase 3: Model & Training Configuration (Steps 7-10)**
 
 7. View ranked model recommendations (sorted by size, speed, device fit)
 8. Select quantization mode:
@@ -177,7 +177,7 @@ The workflow skill guides you through 13 steps across 4 phases:
 9. Choose compilation preset
 10. Generate ``config.yaml`` with all 50+ parameters
 
-**Phase 4: Training & Deployment (Steps 12-13)**
+**Phase 4: Training & Deployment (Steps 11-13)**
 
 11. Upon user review & approval of configuration, start training; show metrics and compiled model size i.e memory footprint (FLASH/SRAM)
 12. Create and build Code Composer Studio project
