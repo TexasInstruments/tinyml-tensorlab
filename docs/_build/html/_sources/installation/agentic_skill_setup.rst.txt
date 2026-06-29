@@ -35,12 +35,11 @@ Prerequisites
   * GPU strongly recommended for faster training (CPU works but is slower)
 
 * **Claude Code** — The CLI tool or IDE extension where this skill runs
-
-**Optional:**
-
 * **Your Dataset** — CSV, TXT, or NumPy format with pre-processed, cleaned sensor or image data
 
   * Sample datasets are included in ``tinyml-tensorlab/tinyml-modelzoo/examples/`` for testing
+
+**Optional:**
 
 * **Code Composer Studio (TI CCStudio IDE)** — Needed for on-device deployment
 
@@ -67,13 +66,14 @@ Step 2: Activate Claude Code Skill
 -----------------------------------
 
 To install and begin using the tinyml-agentic-skill, follow the steps given below:
+
 1. Open claude code CLI and register tinyml-agent-skills as a Claude Code Plugin marketplace by running the following command in Claude Code:
 
 .. code-block:: text
 
    /plugin marketplace add path/to/tinyml-agent-skills
 
-**NOTE:** If you have cloned tinyml-tensorlab, tinyml-agent-skills can be found at tinyml-tensorlab/tinyml-agent-skills
+**NOTE:** If you have cloned tinyml-tensorlab, tinyml-agent-skills can be found at ``tinyml-tensorlab/tinyml-agent-skills``
 
 2. Once you have added the marketplace, install the plugin:
 
@@ -96,7 +96,7 @@ Before using the workflow skill, run the setup skill [needed for initial setup *
 
    /tinyml-agent-skills:setup
 
-This configures update mode, discovers script directories, verifies tinyml-tensorlab installation, sets up the virtual environment, and saves all required variables to ``.env``.
+This configures update mode, discovers script directories, verifies tinyml-tensorlab installation, and saves all required variables to ``~/.tinyml-agent-skills/.env``.
 
 Step 4: Invoke the Workflow Skill
 ----------------------------------
@@ -131,13 +131,15 @@ When you run the setup skill, it will prompt:
    → auto-update (latest skill version on each run)
    → pinned (lock to current version, manual updates only)
 
+.. note::
+   Updates cover **both** the tinyml-agent-skill and tinyml-tensorlab. When you enable auto-update mode, both components are kept in sync with the main repository branch.
+
 Provide the absolute path (not ``~/tinyml-tensorlab``) and select the update mode of your choice. The setup skill will:
 
 * Configure update mode (auto-update or pinned to specific version)
 * Verify tinyml-tensorlab installation and dependencies
 * Discover SCRIPTS_DIR location
-* Configure virtual environment
-* Set up required environment variables and save to ``.env``
+* Set up required environment variables and save to ``~/.tinyml-agent-skills/.env``
 
 .. note::
    **For Device Deployment** — If you plan to deploy the trained model to a TI MCU,
@@ -154,7 +156,7 @@ The workflow skill guides you through 13 steps across 4 phases:
 
 1. Specify task type (classification, anomaly detection, regression, forecasting)
 2. Choose target device (F28P55, MSPM0, AM26x, etc.)
-3. Provide dataset location and channel count
+3. Provide dataset location and variable (indepenent features) count
 
 **Phase 2: Data Preparation (Steps 4-6)**
 
@@ -172,54 +174,14 @@ The workflow skill guides you through 13 steps across 4 phases:
    * Mode 2 (NPU-Optimized) — Smallest/fastest, requires NPU hardware (F28P55, specific AM26x models)
    * Automatic Mixed Precision Quantization applied by default
 
-9. Enable Neural Architecture Search (NAS) if desired
-10. Choose compilation preset
-11. Generate ``config.yaml`` with all 50+ parameters
+9. Choose compilation preset
+10. Generate ``config.yaml`` with all 50+ parameters
 
 **Phase 4: Training & Deployment (Steps 12-13)**
 
-12. Review complete configuration
-13. Approve and start training; view metrics and compiled model size (FLASH/SRAM)
-14. Create and build Code Composer Studio project
-15. Deploy to device via CCS or use trained model on PC
-
-Example Interaction
-===================
-
-.. code-block:: text
-
-   You: I have motor vibration data and want to detect bearing faults on F28P55
-
-   Skill: Let me set up a fault detection project.
-
-   Questions asked:
-   - Dataset location? → /home/user/motor_data/
-   - How many channels? → 3 (X, Y, Z accelerometers)
-   - Roughly how many samples? → 5000
-
-   Skill: Analyzing dataset...
-   → Found 3 classes, 1500 samples per class ✓
-   → Recommended FFT-based feature extraction for vibration
-   → Recommended CLS_1K_NPU model
-   → Quantization mode 2 recommended (F28P55 has NPU)
-   [Automatic Mixed Precision Quantization used by default]
-
-   You: Sounds good, proceed with training.
-
-   Skill: Training in progress...
-   Epoch 1/15: Loss 0.52, Accuracy 83.2%
-   Epoch 5/15: Loss 0.28, Accuracy 92.7%
-   Epoch 15/15: Loss 0.18, Accuracy 95.4%
-
-   Compiled model: 38 KB (FLASH), 12 KB (SRAM)
-
-   Deploy to device?
-
-   You: Deploy to device, this looks good.
-
-   Skill: Creating Code Composer Studio project...
-   → Project ready at: ~/projects/motor_fault_detector/
-   → Open in CCS, build, and click "Flash"
+11. Upon user review & approval of configuration, start training; show metrics and compiled model size i.e memory footprint (FLASH/SRAM)
+12. Create and build Code Composer Studio project
+13. Deploy to device via CCS or use trained model on PC
 
 Key Concepts
 ============
@@ -235,10 +197,6 @@ Key Concepts
 * **FFT-based** — For frequency-domain patterns (vibration, audio, motor analysis)
 * **Raw Transforms** — For time-domain signals (sensor time-series, raw accelerometer)
 * **Multi-frame** — Captures temporal context across multiple samples
-
-**Neural Architecture Search (NAS)**
-
-Enable NAS to automatically explore and optimize model architectures for your specific dataset and device constraints. Optional but recommended for best performance.
 
 **Memory Footprint**
 
@@ -263,7 +221,7 @@ experiments in parallel with different quantization modes, models, or transforms
 
 **Q: Can I export the trained model for use outside tinyml-tensorlab?**
 
-A: The skill generates ONNX and compiled C code. You can use the C code in your own
+A: The skill generates ONNX and compiled model artifacts. You can use the artifacts in your own
 embedded projects. ONNX can be used with any ONNX-compatible framework.
 
 Getting Help
@@ -282,17 +240,12 @@ Ask questions anytime:
 
 The skill pauses and explains before proceeding.
 
-**Reporting Issues**
-
-* Report bugs or suggest improvements via GitHub Issues
-* Provide: dataset size, target device, error message, and steps to reproduce
-
 Next Steps
 ==========
 
 1. **Install tinyml-tensorlab**
 2. **Prepare your dataset** (CSV, TXT, or NumPy format)
-3. **Invoke the skill** — Use ``/tinyml-agentic-skill`` or natural language
+3. **Invoke the skill** — Use ``/tinyml-agent-skills:tinyml-workflow-agent`` or natural language
 4. **Follow guided prompts** — Answer questions about your task and device
 5. **Review recommendations** — Approve data transforms, model selection, quantization
 6. **Train your model**

@@ -73,7 +73,7 @@ Quick Links
       :link-type: doc
       :class-card: sd-border-0 sd-shadow-sm
 
-      Use the tinyml-agentic-skill for end-to-end guidance and development with tinyml-tensorlab.
+      Use the Tiny ML Agent Skill for end-to-end guidance and development with tinyml-tensorlab.
 
       +++
       :bdg-danger:`Agentic-Flow`
