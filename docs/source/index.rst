@@ -68,12 +68,12 @@ Quick Links
 
       +++
       :bdg-warning:`23+ Devices`
-   .. grid-item-card:: Tiny ML Agentic Skill
+   .. grid-item-card:: Tiny ML Agent Skill
       :link: installation/agentic_skill_setup
       :link-type: doc
       :class-card: sd-border-0 sd-shadow-sm
 
-      Use the tinyml-agentic-skill for end-to-end guidance and development with tinyml-tensorlab.
+      Use the Tiny ML Agent Skill for end-to-end guidance and development with tinyml-tensorlab.
 
       +++
       :bdg-danger:`Agentic-Flow`

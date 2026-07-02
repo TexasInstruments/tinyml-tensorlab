@@ -1,5 +1,5 @@
 ================================================
-Tiny ML Agentic Skill — AI-Guided Model Creation
+Tiny ML Agent Skill — AI-Guided Model Creation
 ================================================
 
 .. warning::
@@ -8,7 +8,7 @@ Tiny ML Agentic Skill — AI-Guided Model Creation
 What Is This Skill?
 ====================
 
-The **Tiny ML Agentic Skill** is an end-to-end AI assistant that guides you through
+The **Tiny ML Agent Skill** is an end-to-end AI assistant that guides you through
 the complete machine learning workflow for embedded devices. It handles everything
 from project configuration, data analysis, model selection, training, compilation,
 and deployment to TI microcontrollers — all conversationally.
@@ -35,12 +35,11 @@ Prerequisites
   * GPU strongly recommended for faster training (CPU works but is slower)
 
 * **Claude Code** — The CLI tool or IDE extension where this skill runs
-
-**Optional:**
-
 * **Your Dataset** — CSV, TXT, or NumPy format with pre-processed, cleaned sensor or image data
 
   * Sample datasets are included in ``tinyml-tensorlab/tinyml-modelzoo/examples/`` for testing
+
+**Optional:**
 
 * **Code Composer Studio (TI CCStudio IDE)** — Needed for on-device deployment
 
@@ -67,11 +66,14 @@ Step 2: Activate Claude Code Skill
 -----------------------------------
 
 To install and begin using the tinyml-agentic-skill, follow the steps given below:
+
 1. Open claude code CLI and register tinyml-agent-skills as a Claude Code Plugin marketplace by running the following command in Claude Code:
 
 .. code-block:: text
 
-   /plugin marketplace add ./tinyml-agent-skills
+   /plugin marketplace add path/to/tinyml-agent-skills
+
+**NOTE:** If you have cloned tinyml-tensorlab, tinyml-agent-skills can be found at ``tinyml-tensorlab/tinyml-agent-skills``
 
 2. Once you have added the marketplace, install the plugin:
 
@@ -79,17 +81,31 @@ To install and begin using the tinyml-agentic-skill, follow the steps given belo
 
    /plugin install tinyml-agent-skills@tinyml-agent-skills
 
-2. Reload plugins for the installation to start reflecting:
+3. Reload plugins for the installation to start reflecting:
 
 .. code-block:: text
 
    /reload-plugins
 
-Once installed, invoke it with:
+Step 3: Run Setup Skill (First Time Only)
+------------------------------------------
+
+Before using the workflow skill, run the setup skill [needed for initial setup **ONLY**]:
 
 .. code-block:: text
 
-   /tinyml-agentic-skill
+   /tinyml-agent-skills:setup
+
+This configures update mode, discovers script directories, verifies tinyml-tensorlab installation, and saves all required variables to ``~/.tinyml-agent-skills/.env``.
+
+Step 4: Invoke the Workflow Skill
+----------------------------------
+
+Once setup is complete, invoke the main workflow skill with:
+
+.. code-block:: text
+
+   /tinyml-agent-skills:tinyml-workflow-agent
 
 Or trigger naturally:
 
@@ -101,18 +117,29 @@ Or trigger naturally:
    Deploy a model to [target-device]
    I want to develop an AI solution for...
 
-Step 3: Confirm Tensorlab Installation
----------------------------------------
+Setup Confirmation
+-------------------
 
-When you first invoke the skill, it will ask:
+When you run the setup skill, it will prompt:
 
 .. code-block:: text
 
    What is the full path to your tinyml-tensorlab directory?
    Example: /home/user/tinyml-tensorlab
 
-Provide the absolute path (not ``~/tinyml-tensorlab``), and the skill will verify
-dependencies and set up required environment variables.
+   Update mode?
+   → auto-update (latest skill version on each run)
+   → pinned (lock to current version, manual updates only)
+
+.. note::
+   Updates cover **both** the tinyml-agent-skill and tinyml-tensorlab. When you enable auto-update mode, both components are kept in sync with the main repository branch.
+
+Provide the absolute path (not ``~/tinyml-tensorlab``) and select the update mode of your choice. The setup skill will:
+
+* Configure update mode (auto-update or pinned to specific version)
+* Verify tinyml-tensorlab installation and dependencies
+* Discover SCRIPTS_DIR location
+* Set up required environment variables and save to ``~/.tinyml-agent-skills/.env``
 
 .. note::
    **For Device Deployment** — If you plan to deploy the trained model to a TI MCU,
@@ -123,91 +150,62 @@ dependencies and set up required environment variables.
 Workflow Overview
 =================
 
-The skill guides you through these steps:
+The workflow skill guides you through 13 steps across 4 phases:
 
-**Phase 1: Project Setup**
+**Phase 1: Project Configuration (Steps 1-3)**
 
-1. Confirm tinyml-tensorlab installation path
-2. Select task type (classification, anomaly detection, regression, forecasting)
-3. Choose target device (F28P55, MSPM0, AM26x, etc.)
-4. Provide dataset location and channel count
-5. Name your project
+1. Specify task type (classification, anomaly detection, regression, forecasting)
+2. Choose target device (F28P55, MSPM0, AM26x, etc.)
+3. Provide dataset location and variable (indepenent features) count
 
-**Phase 2: Data Preparation**
+**Phase 2: Data Preparation (Steps 4-6)**
 
-6. Validate dataset format (auto-fixes common issues)
-7. Analyze statistical properties
-8. Recommend feature extraction transforms and data processing presets
-9. Review and approve data preparation configuration
+4. Validate dataset format (auto-fixes common issues)
+5. Analyze statistical properties
+6. Select feature extraction transforms and data processing presets (FFT-based or Raw transforms)
 
-**Phase 3: Model Configuration**
+**Phase 3: Model & Training Configuration (Steps 7-10)**
 
-10. View ranked model recommendations (sorted by size, speed, device fit)
-11. Select quantization mode (0=float32, 1=standard, 2=NPU-optimized) - Automatic Mixed Precision Quantization will be applied by default
-12. Choose compilation preset
+7. View ranked model recommendations (sorted by size, speed, device fit)
+8. Select quantization mode:
 
-**Phase 4: Training & Deployment**
+   * Mode 0 (Float32) — No compression, largest model, PC testing only
+   * Mode 1 (Standard) — 4× smaller, works on all devices
+   * Mode 2 (NPU-Optimized) — Smallest/fastest, requires NPU hardware (F28P55, specific AM26x models)
+   * Automatic Mixed Precision Quantization applied by default
 
-13. Review complete configuration (all 50+ parameters)
-14. Approve and start training
-15. Generate compiled binaries and Code Composer Studio project (optional)
-16. Deploy to device via CCS or use trained model on PC
+9. Choose compilation preset
+10. Generate ``config.yaml`` with all 50+ parameters
 
-Example Interaction
-===================
+**Phase 4: Training & Deployment (Steps 11-13)**
 
-.. code-block:: text
-
-   You: I have motor vibration data and want to detect bearing faults on F28P55
-
-   Skill: Let me set up a fault detection project.
-
-   Questions asked:
-   - Dataset location? → /home/user/motor_data/
-   - How many channels? → 3 (X, Y, Z accelerometers)
-   - Roughly how many samples? → 5000
-
-   Skill: Analyzing dataset...
-   → Found 3 classes, 1500 samples per class ✓
-   → Recommended FFT-based feature extraction for vibration
-   → Recommended CLS_1K_NPU model
-   → Quantization mode 2 recommended (F28P55 has NPU)
-   [Automatic Mixed Precision Quantization used by default]
-
-   You: Sounds good, proceed with training.
-
-   Skill: Training in progress...
-   Epoch 1/15: Loss 0.52, Accuracy 83.2%
-   Epoch 5/15: Loss 0.28, Accuracy 92.7%
-   Epoch 15/15: Loss 0.18, Accuracy 95.4%
-
-   Compiled model: 38 KB (FLASH), 12 KB (SRAM)
-
-   Deploy to device?
-
-   You: Deploy to device, this looks good.
-
-   Skill: Creating Code Composer Studio project...
-   → Project ready at: ~/projects/motor_fault_detector/
-   → Open in CCS, build, and click "Flash"
+11. Upon user review & approval of configuration, start training; show metrics and compiled model size i.e memory footprint (FLASH/SRAM)
+12. Create and build Code Composer Studio project
+13. Deploy to device via CCS or use trained model on PC
 
 Key Concepts
 ============
 
 **Quantization Modes**
 
-* **Mode 0 (Float32)** — No compression. Largest model, slowest. Use only for PC-based testing.
+* **Mode 0 (Float32)** — No compression. Largest model, slowest. Use only for PC-based verification.
 * **Mode 1 (Standard PyTorch Quantization)** — 4× smaller. Works on all devices. Recommended default.
 * **Mode 2 (NPU-Optimized)** — Smallest, fastest. Requires NPU hardware (F28P55, specific AM26x models).
 
-**Data Transforms**
+**Feature Extraction**
 
 * **FFT-based** — For frequency-domain patterns (vibration, audio, motor analysis)
 * **Raw Transforms** — For time-domain signals (sensor time-series, raw accelerometer)
+* **Multi-frame** — Captures temporal context across multiple samples
 
 **Memory Footprint**
 
-After compilation, check both **FLASH** and **SRAM**. Ensure both fit within your device's memory constraints before deployment.
+After compilation, check both **FLASH** and **SRAM**:
+
+* **FLASH** — Model weights and code (read-only memory)
+* **SRAM** — Runtime working memory (read-write memory)
+
+Ensure both fit within your device's memory constraints before deployment.
 
 Common Questions
 ================
@@ -223,7 +221,7 @@ experiments in parallel with different quantization modes, models, or transforms
 
 **Q: Can I export the trained model for use outside tinyml-tensorlab?**
 
-A: The skill generates ONNX and compiled C code. You can use the C code in your own
+A: The skill generates ONNX and compiled model artifacts. You can use the artifacts in your own
 embedded projects. ONNX can be used with any ONNX-compatible framework.
 
 Getting Help
@@ -242,17 +240,12 @@ Ask questions anytime:
 
 The skill pauses and explains before proceeding.
 
-**Reporting Issues**
-
-* Report bugs or suggest improvements via GitHub Issues
-* Provide: dataset size, target device, error message, and steps to reproduce
-
 Next Steps
 ==========
 
 1. **Install tinyml-tensorlab**
 2. **Prepare your dataset** (CSV, TXT, or NumPy format)
-3. **Invoke the skill** — Use ``/tinyml-agentic-skill`` or natural language
+3. **Invoke the skill** — Use ``/tinyml-agent-skills:tinyml-workflow-agent`` or natural language
 4. **Follow guided prompts** — Answer questions about your task and device
 5. **Review recommendations** — Approve data transforms, model selection, quantization
 6. **Train your model**

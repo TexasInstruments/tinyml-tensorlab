@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2.8. Tiny ML Agentic Skill — AI-Guided Model Creation &mdash; TI Tiny ML Tensorlab 1.4.0 documentation</title>
+  <title>2.8. Tiny ML Agent Skill — AI-Guided Model Creation &mdash; TI Tiny ML Tensorlab 1.4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -187,21 +187,22 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="environment_variables.html#next-steps">2.7.6. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">2.8. Tiny ML Agentic Skill — AI-Guided Model Creation</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.8. Tiny ML Agent Skill — AI-Guided Model Creation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-is-this-skill">2.8.1. What Is This Skill?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#prerequisites">2.8.2. Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installation">2.8.3. Installation</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#step-1-install-tinyml-tensorlab">2.8.3.1. Step 1: Install tinyml-tensorlab</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-2-activate-claude-code-skill">2.8.3.2. Step 2: Activate Claude Code Skill</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#step-3-confirm-tensorlab-installation">2.8.3.3. Step 3: Confirm Tensorlab Installation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-3-run-setup-skill-first-time-only">2.8.3.3. Step 3: Run Setup Skill (First Time Only)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-4-invoke-the-workflow-skill">2.8.3.4. Step 4: Invoke the Workflow Skill</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#setup-confirmation">2.8.3.5. Setup Confirmation</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#workflow-overview">2.8.4. Workflow Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example-interaction">2.8.5. Example Interaction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#key-concepts">2.8.6. Key Concepts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#common-questions">2.8.7. Common Questions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#getting-help">2.8.8. Getting Help</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#next-steps">2.8.9. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-concepts">2.8.5. Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-questions">2.8.6. Common Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-help">2.8.7. Getting Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">2.8.8. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="index.html#which-install-should-i-choose">2.9. Which Install Should I Choose?</a></li>
@@ -1343,7 +1344,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html"><span class="section-number">2. </span>Installation</a></li>
-      <li class="breadcrumb-item active"><span class="section-number">2.8. </span>Tiny ML Agentic Skill — AI-Guided Model Creation</li>
+      <li class="breadcrumb-item active"><span class="section-number">2.8. </span>Tiny ML Agent Skill — AI-Guided Model Creation</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -1352,15 +1353,15 @@ document.addEventListener('DOMContentLoaded', function() {
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="tiny-ml-agentic-skill-ai-guided-model-creation">
-<h1><span class="section-number">2.8. </span>Tiny ML Agentic Skill — AI-Guided Model Creation<a class="headerlink" href="#tiny-ml-agentic-skill-ai-guided-model-creation" title="Link to this heading"></a></h1>
+  <section id="tiny-ml-agent-skill-ai-guided-model-creation">
+<h1><span class="section-number">2.8. </span>Tiny ML Agent Skill — AI-Guided Model Creation<a class="headerlink" href="#tiny-ml-agent-skill-ai-guided-model-creation" title="Link to this heading"></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Beta Feature</strong> — This skill is experimental. Workflow and output may change.</p>
 </div>
 <section id="what-is-this-skill">
 <h2><span class="section-number">2.8.1. </span>What Is This Skill?<a class="headerlink" href="#what-is-this-skill" title="Link to this heading"></a></h2>
-<p>The <strong>Tiny ML Agentic Skill</strong> is an end-to-end AI assistant that guides you through
+<p>The <strong>Tiny ML Agent Skill</strong> is an end-to-end AI assistant that guides you through
 the complete machine learning workflow for embedded devices. It handles everything
 from project configuration, data analysis, model selection, training, compilation,
 and deployment to TI microcontrollers — all conversationally.</p>
@@ -1385,14 +1386,14 @@ ready for device deployment.</p>
 </ul>
 </li>
 <li><p><strong>Claude Code</strong> — The CLI tool or IDE extension where this skill runs</p></li>
-</ul>
-<p><strong>Optional:</strong></p>
-<ul class="simple">
 <li><p><strong>Your Dataset</strong> — CSV, TXT, or NumPy format with pre-processed, cleaned sensor or image data</p>
 <ul>
 <li><p>Sample datasets are included in <code class="docutils literal notranslate"><span class="pre">tinyml-tensorlab/tinyml-modelzoo/examples/</span></code> for testing</p></li>
 </ul>
 </li>
+</ul>
+<p><strong>Optional:</strong></p>
+<ul class="simple">
 <li><p><strong>Code Composer Studio (TI CCStudio IDE)</strong> — Needed for on-device deployment</p>
 <ul>
 <li><p><a class="reference external" href="https://www.ti.com/tool/CCSTUDIO">Download here</a> (free)</p></li>
@@ -1415,25 +1416,39 @@ You must provide pre-processed, cleaned data — the skill does not clean or pre
 </section>
 <section id="step-2-activate-claude-code-skill">
 <h3><span class="section-number">2.8.3.2. </span>Step 2: Activate Claude Code Skill<a class="headerlink" href="#step-2-activate-claude-code-skill" title="Link to this heading"></a></h3>
-<p>To install and begin using the tinyml-agentic-skill, follow the steps given below:
-1. Open claude code CLI and register tinyml-agent-skills as a Claude Code Plugin marketplace by running the following command in Claude Code:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/plugin marketplace add ./tinyml-agent-skills
+<p>To install and begin using the tinyml-agentic-skill, follow the steps given below:</p>
+<ol class="arabic simple">
+<li><p>Open claude code CLI and register tinyml-agent-skills as a Claude Code Plugin marketplace by running the following command in Claude Code:</p></li>
+</ol>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/plugin marketplace add path/to/tinyml-agent-skills
 </pre></div>
 </div>
+<p><strong>NOTE:</strong> If you have cloned tinyml-tensorlab, tinyml-agent-skills can be found at <code class="docutils literal notranslate"><span class="pre">tinyml-tensorlab/tinyml-agent-skills</span></code></p>
 <ol class="arabic simple" start="2">
 <li><p>Once you have added the marketplace, install the plugin:</p></li>
 </ol>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/plugin install tinyml-agent-skills@tinyml-agent-skills
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
+<ol class="arabic simple" start="3">
 <li><p>Reload plugins for the installation to start reflecting:</p></li>
 </ol>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/reload-plugins
 </pre></div>
 </div>
-<p>Once installed, invoke it with:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/tinyml-agentic-skill
+</section>
+<section id="step-3-run-setup-skill-first-time-only">
+<h3><span class="section-number">2.8.3.3. </span>Step 3: Run Setup Skill (First Time Only)<a class="headerlink" href="#step-3-run-setup-skill-first-time-only" title="Link to this heading"></a></h3>
+<p>Before using the workflow skill, run the setup skill [needed for initial setup <strong>ONLY</strong>]:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/tinyml-agent-skills:setup
+</pre></div>
+</div>
+<p>This configures update mode, discovers script directories, verifies tinyml-tensorlab installation, and saves all required variables to <code class="docutils literal notranslate"><span class="pre">~/.tinyml-agent-skills/.env</span></code>.</p>
+</section>
+<section id="step-4-invoke-the-workflow-skill">
+<h3><span class="section-number">2.8.3.4. </span>Step 4: Invoke the Workflow Skill<a class="headerlink" href="#step-4-invoke-the-workflow-skill" title="Link to this heading"></a></h3>
+<p>Once setup is complete, invoke the main workflow skill with:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/tinyml-agent-skills:tinyml-workflow-agent
 </pre></div>
 </div>
 <p>Or trigger naturally:</p>
@@ -1445,15 +1460,28 @@ I want to develop an AI solution for...
 </pre></div>
 </div>
 </section>
-<section id="step-3-confirm-tensorlab-installation">
-<h3><span class="section-number">2.8.3.3. </span>Step 3: Confirm Tensorlab Installation<a class="headerlink" href="#step-3-confirm-tensorlab-installation" title="Link to this heading"></a></h3>
-<p>When you first invoke the skill, it will ask:</p>
+<section id="setup-confirmation">
+<h3><span class="section-number">2.8.3.5. </span>Setup Confirmation<a class="headerlink" href="#setup-confirmation" title="Link to this heading"></a></h3>
+<p>When you run the setup skill, it will prompt:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>What is the full path to your tinyml-tensorlab directory?
 Example: /home/user/tinyml-tensorlab
+
+Update mode?
+→ auto-update (latest skill version on each run)
+→ pinned (lock to current version, manual updates only)
 </pre></div>
 </div>
-<p>Provide the absolute path (not <code class="docutils literal notranslate"><span class="pre">~/tinyml-tensorlab</span></code>), and the skill will verify
-dependencies and set up required environment variables.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Updates cover <strong>both</strong> the tinyml-agent-skill and tinyml-tensorlab. When you enable auto-update mode, both components are kept in sync with the main repository branch.</p>
+</div>
+<p>Provide the absolute path (not <code class="docutils literal notranslate"><span class="pre">~/tinyml-tensorlab</span></code>) and select the update mode of your choice. The setup skill will:</p>
+<ul class="simple">
+<li><p>Configure update mode (auto-update or pinned to specific version)</p></li>
+<li><p>Verify tinyml-tensorlab installation and dependencies</p></li>
+<li><p>Discover SCRIPTS_DIR location</p></li>
+<li><p>Set up required environment variables and save to <code class="docutils literal notranslate"><span class="pre">~/.tinyml-agent-skills/.env</span></code></p></li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>For Device Deployment</strong> — If you plan to deploy the trained model to a TI MCU,
@@ -1465,102 +1493,75 @@ without the need for manual setup.</p>
 </section>
 <section id="workflow-overview">
 <h2><span class="section-number">2.8.4. </span>Workflow Overview<a class="headerlink" href="#workflow-overview" title="Link to this heading"></a></h2>
-<p>The skill guides you through these steps:</p>
-<p><strong>Phase 1: Project Setup</strong></p>
+<p>The workflow skill guides you through 13 steps across 4 phases:</p>
+<p><strong>Phase 1: Project Configuration (Steps 1-3)</strong></p>
 <ol class="arabic simple">
-<li><p>Confirm tinyml-tensorlab installation path</p></li>
-<li><p>Select task type (classification, anomaly detection, regression, forecasting)</p></li>
+<li><p>Specify task type (classification, anomaly detection, regression, forecasting)</p></li>
 <li><p>Choose target device (F28P55, MSPM0, AM26x, etc.)</p></li>
-<li><p>Provide dataset location and channel count</p></li>
-<li><p>Name your project</p></li>
+<li><p>Provide dataset location and variable (indepenent features) count</p></li>
 </ol>
-<p><strong>Phase 2: Data Preparation</strong></p>
-<ol class="arabic simple" start="6">
+<p><strong>Phase 2: Data Preparation (Steps 4-6)</strong></p>
+<ol class="arabic simple" start="4">
 <li><p>Validate dataset format (auto-fixes common issues)</p></li>
 <li><p>Analyze statistical properties</p></li>
-<li><p>Recommend feature extraction transforms and data processing presets</p></li>
-<li><p>Review and approve data preparation configuration</p></li>
+<li><p>Select feature extraction transforms and data processing presets (FFT-based or Raw transforms)</p></li>
 </ol>
-<p><strong>Phase 3: Model Configuration</strong></p>
-<ol class="arabic simple" start="10">
+<p><strong>Phase 3: Model &amp; Training Configuration (Steps 7-10)</strong></p>
+<ol class="arabic simple" start="7">
 <li><p>View ranked model recommendations (sorted by size, speed, device fit)</p></li>
-<li><p>Select quantization mode (0=float32, 1=standard, 2=NPU-optimized) - Automatic Mixed Precision Quantization will be applied by default</p></li>
+<li><p>Select quantization mode:</p>
+<ul class="simple">
+<li><p>Mode 0 (Float32) — No compression, largest model, PC testing only</p></li>
+<li><p>Mode 1 (Standard) — 4× smaller, works on all devices</p></li>
+<li><p>Mode 2 (NPU-Optimized) — Smallest/fastest, requires NPU hardware (F28P55, specific AM26x models)</p></li>
+<li><p>Automatic Mixed Precision Quantization applied by default</p></li>
+</ul>
+</li>
 <li><p>Choose compilation preset</p></li>
+<li><p>Generate <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> with all 50+ parameters</p></li>
 </ol>
-<p><strong>Phase 4: Training &amp; Deployment</strong></p>
-<ol class="arabic simple" start="13">
-<li><p>Review complete configuration (all 50+ parameters)</p></li>
-<li><p>Approve and start training</p></li>
-<li><p>Generate compiled binaries and Code Composer Studio project (optional)</p></li>
+<p><strong>Phase 4: Training &amp; Deployment (Steps 11-13)</strong></p>
+<ol class="arabic simple" start="11">
+<li><p>Upon user review &amp; approval of configuration, start training; show metrics and compiled model size i.e memory footprint (FLASH/SRAM)</p></li>
+<li><p>Create and build Code Composer Studio project</p></li>
 <li><p>Deploy to device via CCS or use trained model on PC</p></li>
 </ol>
 </section>
-<section id="example-interaction">
-<h2><span class="section-number">2.8.5. </span>Example Interaction<a class="headerlink" href="#example-interaction" title="Link to this heading"></a></h2>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>You: I have motor vibration data and want to detect bearing faults on F28P55
-
-Skill: Let me set up a fault detection project.
-
-Questions asked:
-- Dataset location? → /home/user/motor_data/
-- How many channels? → 3 (X, Y, Z accelerometers)
-- Roughly how many samples? → 5000
-
-Skill: Analyzing dataset...
-→ Found 3 classes, 1500 samples per class ✓
-→ Recommended FFT-based feature extraction for vibration
-→ Recommended CLS_1K_NPU model
-→ Quantization mode 2 recommended (F28P55 has NPU)
-[Automatic Mixed Precision Quantization used by default]
-
-You: Sounds good, proceed with training.
-
-Skill: Training in progress...
-Epoch 1/15: Loss 0.52, Accuracy 83.2%
-Epoch 5/15: Loss 0.28, Accuracy 92.7%
-Epoch 15/15: Loss 0.18, Accuracy 95.4%
-
-Compiled model: 38 KB (FLASH), 12 KB (SRAM)
-
-Deploy to device?
-
-You: Deploy to device, this looks good.
-
-Skill: Creating Code Composer Studio project...
-→ Project ready at: ~/projects/motor_fault_detector/
-→ Open in CCS, build, and click &quot;Flash&quot;
-</pre></div>
-</div>
-</section>
 <section id="key-concepts">
-<h2><span class="section-number">2.8.6. </span>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.8.5. </span>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading"></a></h2>
 <p><strong>Quantization Modes</strong></p>
 <ul class="simple">
-<li><p><strong>Mode 0 (Float32)</strong> — No compression. Largest model, slowest. Use only for PC-based testing.</p></li>
+<li><p><strong>Mode 0 (Float32)</strong> — No compression. Largest model, slowest. Use only for PC-based verification.</p></li>
 <li><p><strong>Mode 1 (Standard PyTorch Quantization)</strong> — 4× smaller. Works on all devices. Recommended default.</p></li>
 <li><p><strong>Mode 2 (NPU-Optimized)</strong> — Smallest, fastest. Requires NPU hardware (F28P55, specific AM26x models).</p></li>
 </ul>
-<p><strong>Data Transforms</strong></p>
+<p><strong>Feature Extraction</strong></p>
 <ul class="simple">
 <li><p><strong>FFT-based</strong> — For frequency-domain patterns (vibration, audio, motor analysis)</p></li>
 <li><p><strong>Raw Transforms</strong> — For time-domain signals (sensor time-series, raw accelerometer)</p></li>
+<li><p><strong>Multi-frame</strong> — Captures temporal context across multiple samples</p></li>
 </ul>
 <p><strong>Memory Footprint</strong></p>
-<p>After compilation, check both <strong>FLASH</strong> and <strong>SRAM</strong>. Ensure both fit within your device’s memory constraints before deployment.</p>
+<p>After compilation, check both <strong>FLASH</strong> and <strong>SRAM</strong>:</p>
+<ul class="simple">
+<li><p><strong>FLASH</strong> — Model weights and code (read-only memory)</p></li>
+<li><p><strong>SRAM</strong> — Runtime working memory (read-write memory)</p></li>
+</ul>
+<p>Ensure both fit within your device’s memory constraints before deployment.</p>
 </section>
 <section id="common-questions">
-<h2><span class="section-number">2.8.7. </span>Common Questions<a class="headerlink" href="#common-questions" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.8.6. </span>Common Questions<a class="headerlink" href="#common-questions" title="Link to this heading"></a></h2>
 <p><strong>Q: Do I need a GPU?</strong></p>
 <p>A: No, but strongly recommended. CPU training works but is slower.</p>
 <p><strong>Q: What if I want to experiment with different configurations?</strong></p>
 <p>A: Start a new session anytime. Each project is independent. You can run multiple
 experiments in parallel with different quantization modes, models, or transforms.</p>
 <p><strong>Q: Can I export the trained model for use outside tinyml-tensorlab?</strong></p>
-<p>A: The skill generates ONNX and compiled C code. You can use the C code in your own
+<p>A: The skill generates ONNX and compiled model artifacts. You can use the artifacts in your own
 embedded projects. ONNX can be used with any ONNX-compatible framework.</p>
 </section>
 <section id="getting-help">
-<h2><span class="section-number">2.8.8. </span>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.8.7. </span>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading"></a></h2>
 <p><strong>During the Skill Session</strong></p>
 <p>Ask questions anytime:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Explain quantization
@@ -1570,18 +1571,13 @@ Show me the complete configuration
 </pre></div>
 </div>
 <p>The skill pauses and explains before proceeding.</p>
-<p><strong>Reporting Issues</strong></p>
-<ul class="simple">
-<li><p>Report bugs or suggest improvements via GitHub Issues</p></li>
-<li><p>Provide: dataset size, target device, error message, and steps to reproduce</p></li>
-</ul>
 </section>
 <section id="next-steps">
-<h2><span class="section-number">2.8.9. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<h2><span class="section-number">2.8.8. </span>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><strong>Install tinyml-tensorlab</strong></p></li>
 <li><p><strong>Prepare your dataset</strong> (CSV, TXT, or NumPy format)</p></li>
-<li><p><strong>Invoke the skill</strong> — Use <code class="docutils literal notranslate"><span class="pre">/tinyml-agentic-skill</span></code> or natural language</p></li>
+<li><p><strong>Invoke the skill</strong> — Use <code class="docutils literal notranslate"><span class="pre">/tinyml-agent-skills:tinyml-workflow-agent</span></code> or natural language</p></li>
 <li><p><strong>Follow guided prompts</strong> — Answer questions about your task and device</p></li>
 <li><p><strong>Review recommendations</strong> — Approve data transforms, model selection, quantization</p></li>
 <li><p><strong>Train your model</strong></p></li>
@@ -1604,7 +1600,7 @@ Show me the complete configuration
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Jun 12, 2026.
+      <span class="lastupdated">Last updated on Jun 29, 2026.
       </span></p>
   </div>
 
