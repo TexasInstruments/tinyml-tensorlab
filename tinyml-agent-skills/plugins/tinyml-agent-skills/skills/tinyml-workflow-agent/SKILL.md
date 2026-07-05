@@ -1,5 +1,5 @@
 ---
-name: tinyml-agentic-skill
+name: tinyml-workflow-agent
 description: Guides users through end-to-end Tiny ML model creation, training, compilation, and device deployment. Use when user mentions creating AI solutions, AI models, training for embedded devices, deploying to MCUs, or any tiny ML workflow. Covers config creation, model training, compilation, and Code Composer Studio (TI CCStudio IDE) flashing. Always confirm tinyml-tensorlab installation path before proceeding.
 ---
 
@@ -18,7 +18,6 @@ Build, train, compile, and deploy ML models to embedded MCUs using Tiny ML tenso
 When setting up:
 ```bash
 SCRIPTS_DIR=<path-to-this-skill>/scripts
-# Example: /home/user/.claude/skills/tinyml-tensorlab-skill/scripts
 
 # runner.py is at:
 $SCRIPTS_DIR/runner.py
@@ -29,12 +28,12 @@ Do NOT use:
 - `~/tinyml-tensorlab/tinyml-modelmaker/scripts/` (wrong)
 
 Use:
-- `~/.claude/skills/tinyml-tensorlab-skill/scripts/` (correct — this is the skill)
+- `~/.claude/plugins/marketplaces/<plugin_name>/skills/<skill_name>/scripts/` (correct — this is the skill)
 
 ---
 
 **Workflow (13 steps):**
-1. **Session setup** — confirm installation path, setup venv if one is not present, make sure tinyml-tensorlab is fully set-up. Refer `references/setup_guide.md` for setup and installation guide for tinyml-tensorlab.
+1. **Session setup** — load `.env`, activate venv, check for updates. If not set up, run `/tinyml-agent-skills:setup` first.
 2. **Requirements** — task type, device, data type, channel count
 3. **Common section** — task_type + target_device → save to WORK_DIR
 4. **Dataset validation** — validate format, get effective path
@@ -51,7 +50,6 @@ Use:
 13. **Deploy to device** — create CCS project → flash
 **IMPORTANT: After EACH step which generates a section of the config file, pause and show the user the config file (created thus far) and proceed only with user's approval of the config.**
 **Reference guides** (read on demand, not upfront):
-- `references/setup_guide.md` - Session setup, venv activation, tinyml-tensorlab repo setup and verification.
 - `references/config_creation_guide.md` — task types, devices, YAML rules
 - `references/example_running_guide.md` — run commands, monitoring, troubleshooting
 - `references/device_deployment_guide.md` — CCS project, flashing, validation
@@ -59,41 +57,82 @@ Use:
 ---
 ## Session Setup (do this before Step 1) ***NEVER SKIP THIS***
 
-First, check if a `.env` file exists at the root level of this skill(i.e `tinyml-tensorlab-skill`). 
-If it does, get the values of the environment variables (from the list given below) from their corresponding values in the `.env` file, set the values, and export the same in the session **WITHOUT FAIL**.
-| Variable          | Source         | Description                              |
-|-------------------|----------------|------------------------------------------|
-| `SCRIPTS_DIR`     | Setup          | Absolute path to scripts/ folder         |
-| `IS_REPO_SETUP`   | Setup          | Indicates if tinyml-tensorlab is setup or not |
-| `TINYML_BASE_PATH`| Setup          | Root of tinyml-tensorlab checkout        |
-| `TINYML_TENSORLAB_DOCS_PATH`       | Setup          | Path to documentation for tinyml-tensorlab |
+### 1. Discover SCRIPTS_DIR
 
-If the `.env` file does not exist or if any env variable **whose source is `setup`** still remains un-set, then refer `references/skill_setup_guide.md` for steps to setup the skill. Specifically, use the guide to setup any un-set required variables or if nothing is setup (i.e it is the first setup) then make sure all the above variables are set (**whose source is `setup`**) and the repo is fully ready.
+Find the tinyml-workflow-agent runner (works on all platforms — search under `~/.claude`):
+```bash
+find ~/.claude -name "runner.py" 2>/dev/null | grep "tinyml-workflow-agent" | head -1
+```
+Strip `/runner.py` from the result to get `SCRIPTS_DIR`.
 
-Once the setup is complete, **return here and ensure the following instructions are understood BEFORE proceeding to step 1**.
+If not found, ask the user where the tinyml-agent-skills plugin is installed.
 
-While working, always create your config files in the /examples directory within tinyml-tensorlab/tinyml-modelzoo, where all other examples are present.
+### 2. Load environment
 
-**Session state — track these throughout all steps:**
-**All variables with source as `Setup` will be set as per the rules specified above. The rest of the variables will be progressively set up in upcoming steps and are subject to change for each user-given problem statement. Therefore they are not to be added to the `.env` file.
+Check if `.env` exists at `~/.tinyml-agent-skills/.env` (same location on all platforms — Linux, macOS, Windows).
 
-| Variable          | Source         | Description                              |
-|-------------------|----------------|------------------------------------------|
-| `SCRIPTS_DIR`     | Setup          | Absolute path to scripts/ folder         |
-| `IS_REPO_SETUP`   | Setup          | Indicates if tinyml-tensorlab is setup or not |
-| `TINYML_BASE_PATH`| Setup          | Root of tinyml-tensorlab checkout        |
-| `TASK_NAME`       | Step 2         | Slug used for config subdirectory        |
-| `WORK_DIR`        | Step 2         | Temp dir for intermediate section YAMLs  |
-| `CONFIG_DIR`      | Step 11        | Permanent dir where config.yaml is saved  |
-| `TASK_TYPE`       | Step 2         | e.g., `motor_fault`                      |
-| `TARGET_DEVICE`   | Step 2         | e.g., `F28P55`                           |
-| `TARGET_MODULE`   | Step 3 output  | `timeseries` or `vision`                 |
-| `VARIABLES`       | Step 2/6       | Number of sensor channels                |
-| `DATA_PATH`       | Step 2         | User's raw dataset path                  |
-| `EFFECTIVE_DATA_PATH` | Step 4     | Path after any auto-reorganization       |
-| `QUANTIZATION_MODE` | Step 8C      | 0/1/2 — drives compilation preset       |
-| `NAS_ENABLED`     | Step 8D        | true/false                               |
-| `TINYML_TENSORLAB_DOCS_PATH`       | Setup          | Path to documentation for tinyml-tensorlab |
+If it exists, load and export these variables:
+
+| Variable                    | Description                              |
+|-----------------------------|------------------------------------------|
+| `IS_REPO_SETUP`             | Indicates if tinyml-tensorlab is setup   |
+| `TINYML_BASE_PATH`          | Root of tinyml-tensorlab checkout        |
+| `TINYML_TENSORLAB_DOCS_PATH`| Path to documentation                    |
+
+**Inform the user:**
+> ".env loaded from: `~/.tinyml-agent-skills/.env`"
+> "Session variables ready: IS_REPO_SETUP, TINYML_BASE_PATH, TINYML_TENSORLAB_DOCS_PATH"
+
+**If `.env` is missing or any variable is unset:** stop and tell the user:
+> "Run `/tinyml-agent-skills:setup` first. It will create `~/.tinyml-agent-skills/.env` with your configuration."
+Do not proceed until setup is done.
+
+### 2. Activate virtual environment
+
+Check if a venv exists first:
+```bash
+ls "$TINYML_BASE_PATH/tinyml-modelmaker/venv/bin/activate" 2>/dev/null && echo "venv found" || echo "no venv"
+```
+
+- **venv found** — activate it: `source "$TINYML_BASE_PATH/tinyml-modelmaker/venv/bin/activate"`
+- **no venv** — user may have installed packages globally or via pyenv/conda. Do NOT force a venv. Proceed with current Python environment. If packages are still not found, ask the user regarding the same. And if you are told the packages are not yet installed, direct them to run `/tinyml-agent-skills:setup` before running the tinyml-workflow-agent workflow.
+
+### 3. Check for updates
+
+```bash
+python3 $SCRIPTS_DIR/runner.py get_update_status '{}'
+```
+
+- **`initialized: false`** → tell user to run `/tinyml-agent-skills:setup` first. Stop.
+- **`mode: "auto"`** → run `python3 $SCRIPTS_DIR/runner.py check_updates '{}'`
+  - `update_available: true` → show message from check_updates output and ask: "Update now?"
+    - Yes: `python3 $SCRIPTS_DIR/runner.py do_update '{"tinyml_base_path": "$TINYML_BASE_PATH"}'`
+    - No: proceed with current version
+  - `update_available: false` → proceed normally
+- **`mode: "pinned"`** → proceed normally
+
+Always create config files in the `/examples` directory within `tinyml-tensorlab/tinyml-modelzoo`.
+
+**Session state — track these throughout all steps. `.env` variables are pre-loaded from setup. Remaining variables set progressively; do NOT write them to `.env`.**
+
+| Variable                    | Source           | Description                              |
+|-----------------------------|------------------|------------------------------------------|
+| `SCRIPTS_DIR`               | discovered       | Absolute path to scripts/ folder         |
+| `IS_REPO_SETUP`             | ~/.tinyml-agent-skills/.env | tinyml-tensorlab setup flag   |
+| `TINYML_BASE_PATH`          | ~/.tinyml-agent-skills/.env | Root of tinyml-tensorlab checkout |
+| `TINYML_TENSORLAB_DOCS_PATH`| ~/.tinyml-agent-skills/.env | Path to documentation         |
+| `TASK_NAME`                 | Step 2  | Slug used for config subdirectory        |
+| `WORK_DIR`                  | Step 2  | Temp dir for intermediate section YAMLs  |
+| `CONFIG_DIR`                | Step 11 | Permanent dir where config.yaml is saved |
+| `TASK_TYPE`                 | Step 2  | e.g., `motor_fault`                      |
+| `TARGET_DEVICE`             | Step 2  | e.g., `F28P55`                           |
+| `TARGET_MODULE`             | Step 3  | `timeseries` or `vision`                 |
+| `VARIABLES`                 | Step 2/6| Number of sensor channels                |
+| `DATA_PATH`                 | Step 2  | User's raw dataset path                  |
+| `EFFECTIVE_DATA_PATH`       | Step 4  | Path after any auto-reorganization       |
+| `QUANTIZATION_MODE`         | Step 8C | 0/1/2 — drives compilation preset       |
+| `NAS_ENABLED`               | Step 8D | true/false                               |
+
 ---
 
 ## Error Handling Rule
@@ -113,6 +152,7 @@ See "Session Setup" above. Do not proceed until:
 - `IS_REPO_SETUP` is set to `true` or `1`
 - All four setup variables (`SCRIPTS_DIR`, `IS_REPO_SETUP`, `TINYML_BASE_PATH`, `TINYML_TENSORLAB_DOCS_PATH`) are set and saved to `.env`
 - Virtual environment is activated
+- **[MANDATORY — every session, no exceptions]** Step 3 ("Check for updates") run and completed — update mode checked, acted accordingly
 ---
 
 ## Step 2: Understand requirements

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Dispatcher for tinyml-tensorlab-skills functions.
+Dispatcher for tinyml-workflow-agent skill functions.
 
 Usage:
     python3 runner.py <function_name> '<json_args>' [--save-yaml <file>] [--save-result <file>]
@@ -29,6 +29,8 @@ import os
 import inspect
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from update_manager import check_updates, get_update_status, do_update
 
 FUNCTION_MAP = {
     # common_section_tools
@@ -77,42 +79,6 @@ FUNCTION_MAP = {
 }
 
 
-def _check_installation(kwargs):
-    """Built-in function: verify a tinyml-tensorlab installation path."""
-    base = kwargs.get("tinyml_base_path", "")
-    if not base:
-        return {"success": False, "errors": ["tinyml_base_path is required"]}
-
-    base = os.path.expanduser(base)
-    checks = {
-        "tinyml-modelzoo":         os.path.join(base, "tinyml-modelzoo"),
-        "tinyml-modelzoo/examples": os.path.join(base, "tinyml-modelzoo", "examples"),
-        "run_script":              os.path.join(base, "tinyml-modelzoo", "run_tinyml_modelzoo.sh"),
-        "tinyml-modelmaker":       os.path.join(base, "tinyml-modelmaker"),
-    }
-    results = {}
-    all_ok = True
-    for name, path in checks.items():
-        exists = os.path.exists(path)
-        results[name] = {"path": path, "exists": exists}
-        if not exists:
-            all_ok = False
-
-    return {
-        "success": all_ok,
-        "tinyml_base_path": base,
-        "checks": results,
-        "errors": [] if all_ok else [
-            f"Missing: {name} at {info['path']}"
-            for name, info in results.items() if not info["exists"]
-        ],
-        "hint": (
-            "Installation looks good." if all_ok
-            else "Verify the path is the root of the tinyml-tensorlab checkout, "
-                 "containing tinyml-modelzoo/ and tinyml-modelmaker/ subdirectories."
-        ),
-    }
-
 
 def _get_required_params(fn):
     """Return list of required (no-default) parameter names for a function."""
@@ -151,19 +117,34 @@ def main():
 
     # for skill to list available functions
     if func_name == "--list":
-        fns = sorted(list(FUNCTION_MAP.keys()) + ["check_installation"])
+        fns = sorted(list(FUNCTION_MAP.keys()) + [
+            "get_update_status", "check_updates", "do_update"
+        ])
         print(json.dumps({"available_functions": fns}))
         return
 
     # Built-in functions
-    if func_name == "check_installation":
+    if func_name == "get_update_status":
+        result = get_update_status()
+        _output_result(result, save_yaml_path, save_result_path)
+        return
+
+    if func_name == "check_updates":
+        result = check_updates()
+        _output_result(result, save_yaml_path, save_result_path)
+        return
+
+    if func_name == "do_update":
         args_json = positional[1] if len(positional) > 1 else "{}"
         try:
             kwargs = json.loads(args_json)
         except json.JSONDecodeError as e:
             print(json.dumps({"error": f"Invalid JSON args: {e}"}))
             sys.exit(1)
-        result = _check_installation(kwargs)
+        if "tinyml_base_path" not in kwargs:
+            print(json.dumps({"error": "Missing required parameter: tinyml_base_path"}))
+            sys.exit(1)
+        result = do_update(kwargs["tinyml_base_path"])
         _output_result(result, save_yaml_path, save_result_path)
         if not result.get("success"):
             sys.exit(1)
@@ -172,7 +153,7 @@ def main():
     if func_name not in FUNCTION_MAP:
         print(json.dumps({
             "error": f"Unknown function: '{func_name}'",
-            "available": sorted(list(FUNCTION_MAP.keys()) + ["check_installation"]),
+            "available": sorted(list(FUNCTION_MAP.keys()) + ["get_update_status", "check_updates", "do_update"]),
         }))
         sys.exit(1)
 

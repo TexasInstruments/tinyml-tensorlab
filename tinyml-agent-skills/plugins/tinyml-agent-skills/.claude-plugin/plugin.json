@@ -8,9 +8,11 @@
     "keywords": [
         "tinyml-agent",
         "tinyml-agentic-skill",
-        "tinyml-tensorlab"
+        "tinyml-tensorlab",
+        "tinyml-workflow-agent"
     ],
     "skills": [
-        "./skills/tinyml-agentic-skill"
+        "./skills/setup",
+        "./skills/tinyml-workflow-agent"
     ]
 }
