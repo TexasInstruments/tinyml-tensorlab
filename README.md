@@ -1,145 +1,206 @@
 # Tiny ML Agent - Claude Code Skill
 
-This repository contains the tinyml-agentic-skill, an end-to-end skill for building, training, compiling, and deploying ML models to embedded MCUs using tinyml-tensorlab.
+An end-to-end Claude Code plugin for building, training, compiling, and deploying ML models to embedded MCUs using tinyml-tensorlab. Automates the complete workflow from data validation through device deployment.
 
-**Beta Feature** — This skill is experimental. Workflow and output may change.
+**Status:** Beta — Workflow and output may change.
 
 ## Installation
 
-Clone `tinyml-agent-skills` and ensure you have the directory present locally.
+### Prerequisites
 
-**Note:** `tinyml-tensorlab` now contains `tinyml-agent-skills`. If you have the directory present already, you do not need to clone it again. Proceed to the steps given below. 
+- `tinyml-tensorlab` installed and configured on your system
+- Python environment with PyTorch and tinyml-tensorlab dependencies
+- A cleaned and ready-to-use dataset (CSV, TXT, or NumPy format)
 
-### Add to Claude Code Marketplace
+**Note:** `tinyml-tensorlab` already includes `tinyml-agent-skills`. If the directory exists locally, skip the clone step.
 
-You can register this repository as a Claude Code Plugin marketplace by running the following command in Claude Code:
+### Register Plugin Marketplace
+
+Add this repository as a marketplace in Claude Code:
 ```
-/plugin marketplace add path/to/tinyml-agent-skills
+/plugin marketplace add path/to/tinyml-agent-skills 
+# Replace path/to/tinyml-agent-skills with your actual path to the directory
 ```
 
 ### Install the Plugin
 
-Once you have added the marketplace, install the plugin:
 ```
 /plugin install tinyml-agent-skills@tinyml-agent-skills
 ```
 
-## What This Skill Does
+## Initial Setup (Required)
 
-The Tiny ML Agent guides you through the complete Tiny ML workflow to:
+**Before using the tinyml-workflow-agent skill, complete the one-time setup:**
 
-1. **Configure your project** — Select task type, target device, and data sources
-2. **Analyze your data** — Extract statistical insights and validate dataset format
-3. **Extract features** — Generate baseline feature extraction and data processing transforms
-4. **Select a model** — Ranked model recommendations from tinyml-modelzoo based on dataset size and input variable constraints
-5. **Configure training** — Set hyperparameters, quantization mode, and Neural Architecture Search (NAS) options
-6. **Build and compile** — Generate compiled binaries for your target MCU
-7. **Deploy to hardware** — Create, and build a new Code Composer Studio project with the compiled binaries and golden vectors for device deployment.
+```
+/tinyml-agent-skills:setup
+```
 
-## Why Use This Skill
+This configures:
+- **tinyml-tensorlab path** — Locates and verifies your installation
+- **Update mode** — Selects how skill updates are managed
+- **Environment variables** — Saves configuration to `~/.tinyml-agent-skills/.env`
 
-- **Complete workflow automation** — Handles all configuration details from raw data to deployed model
-- **Device-aware optimization** — Recommends presets and quantization modes specific to your target MCU (F28P55, MSPM0, AM26x, etc.) depending on NPU availability
-- **Data validation** — Automatically detects and fixes common dataset formatting issues
-- **Guided decision-making** — Explains trade-offs for quantization, NAS, and feature extraction strategies
-- **Error recovery** — Captures and diagnoses failures, suggests fixes, and validates fixes before proceeding
-- **Memory footprint tracking** — Displays FLASH/SRAM usage and verifies model fits on device before deployment
+Configuration is stored in `~/.tinyml-agent-skills/.env` in your home directory. This file persists across plugin updates, reinstalls, and Claude Code sessions. Re-run setup only if you move tinyml-tensorlab or want to change update mode.
 
-**Prerequisites:**
-- `tinyml-tensorlab` installed and set up on your system
-- Python environment with PyTorch and tinyml-tensorlab dependencies
-- A dataset in CSV, TXT, or NumPy format
+### Update Modes
 
-**Data Requirements:**
-This skill handles formatting for tinyml-tensorlab compatibility. You must provide pre-processed, cleaned data — the skill does not clean or preprocess raw datasets.
+Choose your preferred update strategy during setup:
 
-## How to Use
+#### Pinned Mode
 
-### Quick Start
+Skill remains on the installed version. No automatic updates.
 
-Invoke the skill in Claude Code by mentioning any of:
+- Use when: Reproducibility is critical and you want to stick to one version
+- Manual updates: Re-run setup skill post update or if you want to switch update modes
+
+#### Auto-update Mode
+
+Skill automatically checks for and applies updates from the main branch of the tinyml-tensorlab repository.
+
+- **How it works:** Compares the installed version against the main branch of the tinyml-tensorlab repository
+- **When updates occur:** Updates are checked for during startup of the skill each time. If available, detected updates are auto-installed post user confirmation
+- **Use when:** You want latest features and improvements automatically
+
+Your choice persists in `~/.tinyml-agent-skills/.env` and survives session restarts, plugin updates, and reinstalls.
+
+## Workflow Overview
+
+Post the setup, you may invoke the tinyml-workflow-agent skill which guides you through the complete Tiny ML Tensorlab pipeline:
+
+1. **Project Configuration** — Define task type (classification, anomaly detection, regression, forecasting) and select target device
+2. **Data Analysis** — Validate dataset format, analyze statistical properties, auto-fix common issues
+3. **Feature Extraction** — Select and configure feature transforms (FFT-based, raw transforms, multi-frame) based on data characteristics
+4. **Model Selection** — Review ranked recommendations from tinyml-modelzoo based on dataset size and device constraints
+5. **Training Configuration** — Set hyperparameters, quantization mode, and Neural Architecture Search (NAS) options
+6. **Build & Compile** — Generate optimized binaries for your target MCU
+7. **Device Deployment** — Create Code Composer Studio project with compiled artifacts and golden vectors for flashing
+
+## Key Features
+
+- **End-to-end automation** — Handles configuration, training, compilation, and deployment in one workflow
+- **Device-aware optimization** — Recommends quantization modes and presets specific to your MCU (F28P55, MSPM0, AM26x, etc.) and NPU availability
+- **Intelligent data handling** — Validates dataset format, detects common issues, applies fixes automatically
+- **Guided decisions** — Explains trade-offs for advanced features including quantization, and feature extraction presets/transforms
+- **Error diagnosis** — Captures failures, suggests fixes, validates corrections before proceeding
+- **Memory verification** — Tracks FLASH/SRAM usage, ensures model fits on target device
+
+## Data Requirements
+
+The skill handles format conversion for tinyml-tensorlab compatibility. You must provide:
+- **Pre-processed data** — Cleaned, normalized, and formatted (CSV, TXT, or NumPy). The skill does not perform raw data cleaning or preprocessing
+- **Appropriate size** — Dataset must be suitable for your task type and target device constraints
+
+## Getting Started
+
+### First Time: Complete Setup
+
+As explained above, run the setup skill immediately after installing the plugin. This is a one-time configuration:
+
+```
+/tinyml-agent-skills:setup
+```
+
+Setup will:
+- Verify tinyml-tensorlab installation
+- Configure update mode (pinned or auto-update)
+- Save configuration to `~/.tinyml-agent-skills/.env`
+
+### Trigger the Skill
+
+Start the tinyml-workflow-agent skill by saying:
+
+```
+/tinyml-agent-skills:tinyml-workflow-agent
+```
+
+Or use natural language:
 - "Create an ML model for my MCU"
 - "Train and deploy to embedded device"
+- "Deploy a model to F28P55"
 - "Build a Tiny ML model with tinyml-tensorlab"
-- "I want to deploy a model to [your-target-device]"
-- "I want to develop an AI solution for..."
 
-[Above list is not exhaustive, and is only for representational purposes]
+### Workflow Execution
 
-Or use the explicit skill trigger:
-```
-/tinyml-agentic-skill
-```
+The skill guides you through each phase with clear prompts:
 
-**Note:** If you want to use the skill to also deploy the compiled model artifacts and vectors onto your target device, it is recommended to use claude code within TI CCStudio IDE to ensure seamless project creation and build.
-
-### Step-by-Step Workflow
-
-#### **Setup (Before Step 1)**
-Confirm your `tinyml-tensorlab` installation path. The skill will set up required environment variables and verify dependencies.
-
-#### **Steps 1-3: Project Configuration**
-- Specify task type (classification, anomaly detection, etc.)
+**Phase 1: Project Definition**
+- Select task type (classification, anomaly detection, regression, forecasting)
 - Choose target device (F28P55, MSPM0, AM26x, etc.)
-- Provide dataset location and channel count
-- Generate project configuration
+- Specify dataset path and channel count
+- Generate initial project configuration
 
-#### **Steps 4-6: Data Preparation**
-- Validate dataset format (auto-fixes common issues)
-- Analyze statistical properties
-- Select feature extraction transforms and data processing presets
-- Review recommendations before proceeding
+**Phase 2: Data Analysis & Preparation**
+- Validate dataset format (auto-corrects common issues)
+- Review statistical properties and data distribution
+- Select appropriate feature extraction transforms
+- Apply data processing presets based on your data type
 
-#### **Steps 7-10: Model & Training Config**
-- View ranked model recommendations
-- Select quantization mode (0=float32, 1=standard, 2=NPU-optimized)
-- Enable Neural Architecture Search (NAS) if desired
-- Choose compilation preset
+**Phase 3: Model & Training Configuration**
+- Review ranked model recommendations from tinyml-modelzoo
+- Select quantization mode:
+  - `0` = Float32 (no compression, largest model, slowest)
+  - `1` = Standard quantization (4× smaller, all devices)
+  - `2` = NPU-optimized (smallest model, fastest, requires NPU hardware)
+- Enable Neural Architecture Search (NAS) for automatic model tuning
+- Configure hyperparameters and training settings
 
-#### **Step 11: Generate Config**
-- Assemble all sections into `config.yaml`
-- Review complete configuration
-- Approve before training
+**Phase 4: Build, Compile & Deploy**
+- Generate complete `config.yaml` with all settings
+- Review configuration before proceeding
+- Train the model and monitor metrics
+- Compile to target MCU binary
+- Create Code Composer Studio project with golden vectors
+- Deploy to device
 
-#### **Steps 12-13: Train & Deploy**
-- Start training
-- View training metrics and compiled model size
-- Create and build Code Composer Studio project
-- Ready for flashing to MCU and on-device use.
+**Note:** For best results deploying to CCStudio, use Claude Code within the TI Code Composer Studio IDE to ensure seamless project creation and build integration.
 
-### Configuration Example
-
-During setup, the skill guides you through decisions like:
-
-```
-Task Type?
-  → classification, anomaly_detection, regression, forecasting
-
-Target Device?
-  → F28P55, MSPM0, AM26x, etc.
-
-Quantization Mode?
-  → 0 (float32, no compression)
-  → 1 (standard quantization, all devices)
-  → 2 (NPU-optimized, for TI NPU acceleration)
-```
-
-## Key Concepts
+## Technical Concepts
 
 ### Quantization Modes
-- **Mode 0 (Float32)** — No compression. Largest model, slowest inference. Use only for verification.
-- **Mode 1 (Standard)** — PyTorch quantization. 4× smaller, works on all devices.
-- **Mode 2 (NPU-Optimized)** — TI NPU acceleration. Smallest model, fastest inference. Requires NPU hardware.
 
-### Feature Extraction
-The skill recommends presets based on your data:
-- **FFT-based** — For frequency-domain patterns (e.g., vibration, audio)
-- **Raw transforms** — For time-domain signals (e.g., sensor time-series)
-- **Multi-frame** — Captures temporal context across multiple samples
+**Mode 0: Float32 (Full Precision)**
+- No compression applied
+- Largest model size
+- Slowest inference
+- Use for: Verification and baseline accuracy testing only
 
-### Memory Footprint
-After compilation, the skill displays:
-- **FLASH** — Model weights and code (read-only memory)
-- **SRAM** — Runtime working memory (read-write memory)
+**Mode 1: Standard Quantization**
+- PyTorch INT8 quantization
+- ~4× model size reduction
+- Works on all TI MCU devices
+- Recommended for: Most production deployments with memory constraints
 
-Verify these fit within your device's capabilities before deployment.
+**Mode 2: NPU-Optimized**
+- TI Neural Processing Unit acceleration
+- Smallest model footprint
+- Fastest inference
+- Requires: Target device with NPU hardware (e.g., AM26x series)
+
+### Feature Extraction Strategies
+
+The skill recommends extraction methods based on data characteristics:
+
+**FFT-Based Transforms**
+- Use for: Frequency-domain patterns (vibration, acoustic, audio signals)
+- Extracts: Power spectrum, frequency bins, harmonic content
+- Ideal for: Anomaly detection on vibration or sound data
+
+**Raw Signal Transforms**
+- Use for: Time-domain sensor signals (accelerometer, temperature, pressure)
+- Extracts: Statistical features (mean, std dev, peak, energy)
+- Ideal for: Time-series classification and regression
+
+**Multi-Frame Aggregation**
+- Use for: Temporal pattern recognition
+- Captures: Context across multiple consecutive samples
+- Ideal for: Gesture recognition, activity detection, sequential patterns
+
+### Memory Footprint Management
+
+After compilation, the skill reports:
+
+- **FLASH** — Permanent storage for model weights and inference code (read-only memory)
+- **SRAM** — Runtime working memory for activations and intermediate computations (read-write memory)
+
+The skill automatically verifies that both metrics fit within your target device's constraints before deployment proceeds.

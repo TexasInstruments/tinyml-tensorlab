@@ -350,8 +350,7 @@ def select_model_for_task(
     target_module: str,
     variables: Optional[int] = None,
     dataset_size_bucket: Optional[str] = None,
-    modelzoo_path: 
-    Optional[str] = None,
+    modelzoo_path: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Tool: Select ideal model based on closest matching example in tinyml-modelzoo.

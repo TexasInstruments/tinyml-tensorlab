@@ -1,7 +1,11 @@
 # All valid task types and their required target_module
 from typing import Dict
+from pathlib import Path
 from dotenv import load_dotenv
-load_dotenv()                                                                                                                                                          
+
+# Load .env from ~/.tinyml-agent-skills/ explicitly to support execution from any directory
+_env_file = Path.home() / ".tinyml-agent-skills" / ".env"
+load_dotenv(_env_file)                                                                                                                                                          
 # Note: Feature extraction presets, transforms, augmenters, and task recommendations
 # have been moved to schema.yaml and are accessed via feature_schema module.
 # This keeps constants.py focused on device support and task mappings.
@@ -64,6 +68,12 @@ _ASSETS_DIR = _os.path.join(_SKILL_DIR, "assets")
 
 TINYML_TENSORLAB_PATH = _os.environ.get("TINYML_BASE_PATH")
 TINYML_DOCS_PATH = _os.environ.get("TINYML_TENSORLAB_DOCS_PATH")
+
+if not TINYML_TENSORLAB_PATH or not TINYML_DOCS_PATH:
+    raise RuntimeError(
+        "Environment variables TINYML_BASE_PATH and TINYML_TENSORLAB_DOCS_PATH must be set. "
+        "Run: /tinyml-agent-skills:setup"
+    )
 
 CONTEXT_PATHS = {
     # Feature extraction documentation (local .rst) -> to be changed
