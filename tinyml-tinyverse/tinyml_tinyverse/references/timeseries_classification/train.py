@@ -101,7 +101,7 @@ def get_args_parser():
     parser.add_argument('--gof-test', type=misc_utils.str2bool, default=False, help='Enable goodness-of-fit test')
     parser.add_argument('--q15-scale-factor', help="q15 scaling factor")
     parser.add_argument('--file-level-classification-log', help='File level classification log file', type=str)
-
+    
     # PIR Detection related params
     parser.add_argument('--window-count', help="Number of windows in each input frame ", type=int, default=25)
     parser.add_argument('--chunk-size', help="length of kurtosis section size within a window in samples ", type=int, default=8)
