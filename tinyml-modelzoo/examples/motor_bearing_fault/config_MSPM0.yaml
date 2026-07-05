@@ -8,8 +8,7 @@ common:
 dataset:
     # enable/disable dataset loading
     enable: True #False
-    dataset_name: fan_blower_imbalance_dataset
-    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip
+    dataset_name: motor_fault_example_dsk
 
 data_processing: # One or more can be cascaded in the list
     # transforms: 'DownSample SimpleWindow'
@@ -23,7 +22,7 @@ data_processing: # One or more can be cascaded in the list
     variables: 1
 
 data_processing_feature_extraction:
-   feature_extraction_name: MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_2D1
+   feature_extraction_name: MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1
 
 training:
     model_name: 'CLS_1k_NPU'
