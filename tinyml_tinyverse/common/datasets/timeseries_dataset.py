@@ -126,12 +126,12 @@ class BaseGenericTSDataset(Dataset):
 
         # Flatten transforms list
         self.transforms = np.array(self.transforms).flatten().tolist()
+        if subset is not None:
+            # Load file list based on subset
+            self._walker = self._load_file_list(subset, kwargs)
 
-        # Load file list based on subset
-        self._walker = self._load_file_list(subset, kwargs)
-
-        # Get classes from the dataset
-        self.classes = self._get_classes()
+            # Get classes from the dataset
+            self.classes = self._get_classes()
 
     def _parse_variables_parameter(self):
         """
@@ -908,6 +908,8 @@ class BaseGenericTSDataset(Dataset):
                 self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] - 1
             if 'NORMALIZE' in self.transforms:
                 self.preprocessing_flags.append('FE_NORMALIZE')
+            if 'RANGE_NORMALIZE' in self.transforms:
+                self.preprocessing_flags.append('FE_RANGE_NORMALIZE')
             if 'BINNING' in self.transforms:
                 self.preprocessing_flags.append('FE_BIN')
                 if self.feature_size_per_frame is None:
@@ -1342,6 +1344,9 @@ class GenericTSDatasetAD(BaseGenericTSDataset):
             self.preprocessing_flags.append('FE_FFT')
         if 'NORMALIZE' in self.transforms:
             self.preprocessing_flags.append('FE_NORMALIZE')
+        if 'RANGE_NORMALIZE' in self.transforms:
+            self.preprocessing_flags.append('FE_RANGE_NORMALIZE')
+        
         if 'FFT_POS_HALF' in self.transforms:
             self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] // 2 + (self.min_bin if self.min_bin else 1)
         if 'DC_REMOVE' in self.transforms:

@@ -134,6 +134,7 @@ def get_base_args_parser(description="This script loads time series data and tra
     parser.add_argument('--stacking', help="1D/2D1/None")
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
     parser.add_argument('--scale', help="Scaling factor to input data")
+    
 
     # Model arguments
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)

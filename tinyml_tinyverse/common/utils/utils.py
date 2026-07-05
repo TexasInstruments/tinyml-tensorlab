@@ -1368,6 +1368,17 @@ def train_one_epoch_anomalydetection(
 
         loss = criterion(output, target)
 
+        # Check for NaN/Inf loss (training instability)
+        if torch.isnan(loss) or torch.isinf(loss):
+            error_msg = (
+                f"Training encountered NaN/Inf loss at Epoch {epoch}. This indicates training instability.\n"
+                f"Common causes and fixes:\n"
+                f"  1. Learning rate might be too high, try reducing learning_rate\n"
+                f"  2. Batch size might be too large, try reducing batch_size\n"
+            )
+            logger.error(error_msg)
+            raise RuntimeError(error_msg)
+
         if not is_ptq:
             optimizer.zero_grad()
             if apex:
