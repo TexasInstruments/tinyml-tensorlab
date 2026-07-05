@@ -25,6 +25,23 @@ The dataset includes 6 bearing conditions:
 5. **No Lubrication** - Dry bearing operation
 6. **Localized Fault** - Point defect on bearing
 
+Device Support
+--------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 50 15
+
+   * - Device
+     - Notes
+     - Configuration File
+   * - ``F28P55``
+     - Primary target, NPU-accelerated
+     - ``config.yaml``
+   * - ``MSPM0G5187``
+     - MSPM0 with NPU
+     - ``config_MSPM0.yaml``
+
 Running the Example
 -------------------
 
@@ -35,14 +52,20 @@ Running the Example
       .. code-block:: bash
 
          cd tinyml-modelzoo
+         # F28P55
          ./run_tinyml_modelzoo.sh examples/motor_bearing_fault/config.yaml
+         # MSPM0G5187
+         ./run_tinyml_modelzoo.sh examples/motor_bearing_fault/config_MSPM0.yaml
 
    .. tab:: Windows
 
       .. code-block:: powershell
 
          cd tinyml-modelzoo
+         # F28P55
          run_tinyml_modelzoo.bat examples\motor_bearing_fault\config.yaml
+         # MSPM0G5187
+         run_tinyml_modelzoo.bat examples\motor_bearing_fault\config_MSPM0.yaml
 
 Configuration
 -------------

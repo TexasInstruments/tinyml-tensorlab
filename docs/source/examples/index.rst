@@ -139,6 +139,10 @@ Classification Examples
      - :doc:`fall_detection_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/fall_detection_classification>`__)
      - Multivariate
      - Detect human falls vs. normal activities (ADL) from accelerometer data for safety monitoring.
+   * - 16
+     - :doc:`dynamic_hand_gesture_recognition` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/dynamic_hand_gesture_recognition>`__)
+     - Multivariate
+     - Classify dynamic hand gestures (circle, wave, tap) from 3-axis accelerometer data on MSPM0G5187.
 
 ----
 
@@ -269,6 +273,7 @@ Image Classification Examples
    grid_fault_detection
    gearbox_fault_detection
    fall_detection_classification
+   dynamic_hand_gesture_recognition
    torque_measurement_regression
    induction_motor_speed_prediction
    washing_machine_regression
