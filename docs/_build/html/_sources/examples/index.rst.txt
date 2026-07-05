@@ -228,8 +228,26 @@ Anomaly Detection Examples
 
 ----
 
-Image Classification Examples
+Audio Classification Examples
 -----------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 5 25 15 55
+
+   * - No.
+     - Example
+     - Data Type
+     - Description
+   * - 1
+     - :doc:`google_speech_command` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/google_speech_command>`__)
+     - Audio
+     - 12-class keyword spotting from audio using MFCC features and DSCNN model.
+
+----
+
+Image Classification Examples
+------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -247,6 +265,10 @@ Image Classification Examples
      - :doc:`machine_readable_code_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/machine_readable_code_classification>`__)
      - Image
      - Classify QR codes vs barcodes vs other objects from 28×28 grayscale images.
+   * - 3
+     - :doc:`coffee_bean_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/coffee_bean_classification>`__)
+     - Image
+     - Classify coffee bean quality from images using MobileNetV1 on MSPM0G5187.
 
 ----
 
@@ -283,5 +305,7 @@ Image Classification Examples
    anomaly_detection_example
    forecasting_example
    image_classification_example
+   google_speech_command
    mnist_image_classification
    machine_readable_code_classification
+   coffee_bean_classification
