@@ -11254,42 +11254,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -11594,42 +11558,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":1,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -11942,42 +11870,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -12282,42 +12174,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":2,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -12630,42 +12486,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -12970,42 +12790,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":4,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -13318,42 +13102,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -13658,42 +13406,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":6,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -14006,42 +13718,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -14346,42 +14022,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":8,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -14694,42 +14334,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -15034,42 +14638,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -15382,42 +14950,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -15722,42 +15254,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":2,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -16070,42 +15566,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -16410,42 +15870,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":4,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":4,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -16758,42 +16182,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":5,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -17098,42 +16486,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":6,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":6,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -17446,42 +16798,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":7,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -17786,42 +17102,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":8,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":8,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -18134,42 +17414,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":9,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -18474,42 +17718,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":10,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":10,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":10,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":10,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":10,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":10,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":10,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -18822,42 +18030,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":11,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":11,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":11,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":11,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":11,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":11,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -19162,42 +18334,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -19510,42 +18646,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":1,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -19850,42 +18950,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":2,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":2,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -20198,42 +19262,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":3,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -20538,42 +19566,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -20886,42 +19878,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -21226,42 +20182,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -21574,42 +20494,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -21914,42 +20798,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -22262,42 +21110,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -22602,42 +21414,6 @@
             "sram":"TBD"
           },
           "MSPM0G5187":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
             "model_selection_factor":0,
             "flash":"TBD",
             "inference_time_us":"TBD",
@@ -22950,42 +21726,6 @@
             "flash":"TBD",
             "inference_time_us":"TBD",
             "sram":"TBD"
-          },
-          "CC2755":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1312":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1314":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1352":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC1354":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
-          },
-          "CC35X1":{
-            "model_selection_factor":0,
-            "flash":"TBD",
-            "inference_time_us":"TBD",
-            "sram":"TBD"
           }
         },
         "project_path":null,
@@ -23131,30 +21871,20 @@
   },
   "preset_descriptions":{
     "AM263":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-r5",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
@@ -23181,17 +21911,27 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"cortex-r5",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23203,7 +21943,17 @@
       }
     },
     "AM263P":{
-      "generic_timeseries_anomalydetection":{
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23223,17 +21973,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23245,7 +21985,17 @@
       }
     },
     "AM261":{
-      "generic_timeseries_anomalydetection":{
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c",
+            "target_c_mcpu":"cortex-r5",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23265,17 +22015,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c",
-            "target_c_mcpu":"cortex-r5",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
             "target":"c",
@@ -23287,30 +22027,20 @@
       }
     },
     "F280013":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23337,17 +22067,27 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23359,30 +22099,20 @@
       }
     },
     "F280015":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23409,17 +22139,27 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23431,30 +22171,20 @@
       }
     },
     "F28003":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23481,17 +22211,27 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23503,30 +22243,20 @@
       }
     },
     "F28004":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23553,17 +22283,27 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23575,30 +22315,20 @@
       }
     },
     "F28P65":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23625,17 +22355,27 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu64 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23647,30 +22387,20 @@
       }
     },
     "F2837":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23697,48 +22427,10 @@
           }
         }
       },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=false output_int=false",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      }
-    },
-    "F28P55":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c28",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
-            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23753,10 +22445,32 @@
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
+        }
+      },
+      "blower_imbalance":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      }
+    },
+    "F28P55":{
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
         },
         "forced_soft_npu_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23771,10 +22485,10 @@
           }
         }
       },
-      "motor_fault":{
+      "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target":"c, ti-npu type=hard skip_normalize=false output_int=false",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23849,10 +22563,10 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=false output_int=false",
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"c28",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
             "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23875,7 +22589,33 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"c28",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/cl2000",
+            "cross_compiler_options":"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support=fpu32 -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -23903,30 +22643,20 @@
       }
     },
     "F29H85":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
@@ -23953,17 +22683,27 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"c29",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23975,7 +22715,17 @@
       }
     },
     "F29P58":{
-      "generic_timeseries_anomalydetection":{
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -23995,17 +22745,7 @@
           }
         }
       },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_classification":{
+      "generic_timeseries_anomalydetection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24017,26 +22757,6 @@
       }
     },
     "F29P32":{
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"c29",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
-            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
-          }
-        }
-      },
       "generic_timeseries_regression":{
         "default_preset":{
           "compilation":{
@@ -24056,9 +22776,89 @@
             "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
           }
         }
+      },
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
+      },
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"c29",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/c29clang",
+            "cross_compiler_options":"-O3 -ffast-math -I/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/include -I."
+          }
+        }
       }
     },
     "MSPM0G3507":{
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
       "pir_detection":{
         "default_preset":{
           "compilation":{
@@ -24079,57 +22879,7 @@
           }
         }
       },
-      "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_classification":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24141,6 +22891,66 @@
       }
     },
     "MSPM0G3519":{
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
       "pir_detection":{
         "default_preset":{
           "compilation":{
@@ -24161,57 +22971,7 @@
           }
         }
       },
-      "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_classification":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24223,6 +22983,162 @@
       }
     },
     "MSPM0G5187":{
+      "motor_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_anomalydetection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "ecg_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "arc_fault":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
+      "generic_timeseries_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      },
       "pir_detection":{
         "default_preset":{
           "compilation":{
@@ -24275,137 +23191,7 @@
           }
         }
       },
-      "motor_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_anomalydetection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "arc_fault":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "ecg_classification":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_regression":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m0plus",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-          }
-        }
-      },
-      "generic_timeseries_classification":{
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -24433,40 +23219,20 @@
       }
     },
     "MSPM33C32":{
-      "pir_detection":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -24493,17 +23259,37 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
           }
         }
       },
-      "generic_timeseries_classification":{
+      "pir_detection":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
@@ -24516,62 +23302,36 @@
     },
     "MSPM33C34":{},
     "AM13E2":{
-      "blower_imbalance":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
-      "generic_timeseries_forecasting":{
-        "default_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "forced_soft_npu_preset":{
-          "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        },
-        "compress_npu_layer_data":{
-          "compilation":{
-            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
-            "target_c_mcpu":"cortex-m33",
-            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
-            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-          }
-        }
-      },
       "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "generic_timeseries_regression":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -24646,10 +23406,10 @@
           }
         }
       },
-      "generic_timeseries_regression":{
+      "generic_timeseries_classification":{
         "default_preset":{
           "compilation":{
-            "target":"c, ti-npu type=soft skip_normalize=true output_int=false",
+            "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
             "target_c_mcpu":"cortex-m33",
             "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
             "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
@@ -24672,7 +23432,33 @@
           }
         }
       },
-      "generic_timeseries_classification":{
+      "generic_timeseries_forecasting":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+          }
+        }
+      },
+      "blower_imbalance":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=hard skip_normalize=true output_int=true",
@@ -24700,7 +23486,7 @@
       }
     },
     "CC2755":{
-      "pir_detection":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -24710,7 +23496,7 @@
           }
         }
       },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -24722,7 +23508,7 @@
       }
     },
     "CC1352":{
-      "pir_detection":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24732,7 +23518,7 @@
           }
         }
       },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24744,7 +23530,7 @@
       }
     },
     "CC1312":{
-      "pir_detection":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24754,7 +23540,7 @@
           }
         }
       },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24766,7 +23552,7 @@
       }
     },
     "CC1314":{
-      "pir_detection":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24776,7 +23562,7 @@
           }
         }
       },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24788,7 +23574,7 @@
       }
     },
     "CC1354":{
-      "pir_detection":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24798,7 +23584,7 @@
           }
         }
       },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=soft",
@@ -24810,7 +23596,7 @@
       }
     },
     "CC35X1":{
-      "pir_detection":{
+      "motor_fault":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -24820,7 +23606,7 @@
           }
         }
       },
-      "motor_fault":{
+      "pir_detection":{
         "default_preset":{
           "compilation":{
             "target":"c, ti-npu type=m33cde",
@@ -24953,25 +23739,25 @@
       "device_name":"MSPM0G3507",
       "device_type":"MCU",
       "device_selection_factor":0,
-      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
-      "sdk_version":"2.10.00.04",
-      "sdk_release":"2_10_00_04"
+      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_11_00_xx\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "sdk_version":"2.11.00.xx",
+      "sdk_release":"2_11_00_xx"
     },
     "MSPM0G3519":{
       "device_name":"MSPM0G3519",
       "device_type":"MCU",
       "device_selection_factor":1,
-      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 512KB flash 128KB SRAM 2x4Msps ADC, DAC, COMP, OPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3519\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
-      "sdk_version":"2.10.00.04",
-      "sdk_release":"2_10_00_04"
+      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 512KB flash 128KB SRAM 2x4Msps ADC, DAC, COMP, OPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3519\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_11_00_xx\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "sdk_version":"2.11.00.xx",
+      "sdk_release":"2_11_00_xx"
     },
     "MSPM0G5187":{
       "device_name":"MSPM0G5187",
       "device_type":"MCU",
       "device_selection_factor":16,
-      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, USB, TI-NPU\n* More details : https://www.ti.com/product/MSPM0G5187\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
-      "sdk_version":"2.10.00.04",
-      "sdk_release":"2_10_00_04"
+      "device_details":"80MHz Arm\u00ae Cortex\u00ae-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, USB, TI-NPU\n* More details : https://www.ti.com/product/MSPM0G5187\n\nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_11_00_xx\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "sdk_version":"2.11.00.xx",
+      "sdk_release":"2_11_00_xx"
     },
     "MSPM33C32":{
       "device_name":"MSPM33C32",
@@ -25003,7 +23789,7 @@
       "device_name":"CC2755",
       "device_type":"MCU",
       "device_selection_factor":6,
-      "device_details":"96MHz SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 multiprotocol wireless MCU with 1MB flash, HSM, APU, NPU-CDE\n* More details : https://www.ti.com/product/CC2755R10\n\nImportant links:\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "device_details":"96MHz SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 multiprotocol wireless MCU with 1MB flash, HSM, APU, NPU-CDE\n* More details : https://www.ti.com/product/CC2755R10\n\nImportant links:\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.20.00.81\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
       "sdk_version":"1.10.00.00",
       "sdk_release":"01_10_00_00"
     },
@@ -25011,7 +23797,7 @@
       "device_name":"CC1352",
       "device_type":"MCU",
       "device_selection_factor":3,
-      "device_details":"48MHz SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M4F multiprotocol wireless MCU with 352KB flash\n* More details : https://www.ti.com/product/CC1352R1\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "device_details":"48MHz SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M4F multiprotocol wireless MCU with 352KB flash\n* More details : https://www.ti.com/product/CC1352R1\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
       "sdk_version":"1.10.00.00",
       "sdk_release":"01_10_00_00"
     },
@@ -25019,7 +23805,7 @@
       "device_name":"CC1312",
       "device_type":"MCU",
       "device_selection_factor":2,
-      "device_details":"48MHz SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M4F multiprotocol wireless MCU with 352KB flash\n* More details : https://www.ti.com/product/CC1312PSIP\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1312PSIP\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "device_details":"48MHz SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M4F multiprotocol wireless MCU with 352KB flash\n* More details : https://www.ti.com/product/CC1312PSIP\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1312PSIP\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
       "sdk_version":"1.10.00.00",
       "sdk_release":"01_10_00_00"
     },
@@ -25027,7 +23813,7 @@
       "device_name":"CC1354",
       "device_type":"MCU",
       "device_selection_factor":5,
-      "device_details":"SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 multiprotocol wireless MCU\n* More details : https://www.ti.com/product/CC1354P10\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "device_details":"SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 multiprotocol wireless MCU\n* More details : https://www.ti.com/product/CC1354P10\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
       "sdk_version":"1.10.00.00",
       "sdk_release":"01_10_00_00"
     },
@@ -25035,7 +23821,7 @@
       "device_name":"CC1314",
       "device_type":"MCU",
       "device_selection_factor":4,
-      "device_details":"SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 Sub-1 GHz wireless MCU\n* More details : https://www.ti.com/product/CC1314R10\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "device_details":"SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 Sub-1 GHz wireless MCU\n* More details : https://www.ti.com/product/CC1314R10\n\nImportant links:\n* Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
       "sdk_version":"1.10.00.00",
       "sdk_release":"01_10_00_00"
     },
@@ -25043,7 +23829,7 @@
       "device_name":"CC35X1",
       "device_type":"MCU",
       "device_selection_factor":13,
-      "device_details":"SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 Wi-Fi wireless MCU\n* More details : https://www.ti.com/product/CC3551E\n\nImportant links:\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
+      "device_details":"SimpleLink\u2122 32-bit Arm\u00ae Cortex\u00ae-M33 Wi-Fi wireless MCU\n* More details : https://www.ti.com/product/CC3551E\n\nImportant links:\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/10.10.01.08\n* SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n",
       "sdk_version":"1.10.00.00",
       "sdk_release":"01_10_00_00"
     }
@@ -25143,7 +23929,10 @@
         "F29H85",
         "MSPM33C32",
         "AM13E2",
-        "AM263"
+        "AM263",
+        "MSPM0G3507",
+        "MSPM0G3519",
+        "MSPM0G5187"
       ],
       "stages":[
         "dataset",
@@ -25510,24 +24299,6 @@
         "dataset_description":"Example ECG Sensor based timeseries classification dataset with 4 classes",
         "dataset_size":null,
         "dataset_source":"Generated by Texas Instruments",
-        "dataset_license":"TI Internal License"
-      }
-    },
-    "washing_machine_load_regression":{
-      "common":{
-        "task_type":"generic_timeseries_regression",
-        "task_category":"timeseries_regression"
-      },
-      "dataset":{
-        "dataset_name":"washing_machine_load_weighing",
-        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip"
-      },
-      "info":{
-        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip",
-        "dataset_detailed_name":"Washing Machine Load Regression Example",
-        "dataset_description":"Regression for estimating washing machine load weight from sensor measurements",
-        "dataset_size":null,
-        "dataset_source":"Generated by Texas Instruments at a specialised test bed",
         "dataset_license":"TI Internal License"
       }
     },
@@ -25980,6 +24751,42 @@
         "dataset_source":"Generated by Texas Instruments at a specialised test bed",
         "dataset_license":"TI Internal License"
       }
+    },
+    "fan_blower_imbalance_dataset":{
+      "common":{
+        "task_type":"motor_fault",
+        "task_category":"timeseries_classification"
+      },
+      "dataset":{
+        "dataset_name":"fan_blower_imbalance_dataset",
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip"
+      },
+      "info":{
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip",
+        "dataset_detailed_name":"Fan Blower Imbalance Dataset",
+        "dataset_description":"Example fan blower imbalance",
+        "dataset_size":null,
+        "dataset_source":"Generated by Texas Instruments at a specialised test bed",
+        "dataset_license":"TI Internal License"
+      }
+    },
+    "hand_gesture_dataset":{
+      "common":{
+        "task_type":"generic_timeseries_classification",
+        "task_category":"timeseries_classification"
+      },
+      "dataset":{
+        "dataset_name":"hand_gesture_dataset",
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip"
+      },
+      "info":{
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip",
+        "dataset_detailed_name":"Hand Gesture Dataset",
+        "dataset_description":"Human hand gesture recognition",
+        "dataset_size":null,
+        "dataset_source":"Generated by Texas Instruments at a specialised test bed",
+        "dataset_license":"TI Internal License"
+      }
     }
   },
   "version_descriptions":{
@@ -26330,6 +25137,32 @@
         }
       }
     },
+    "fall_detection_classification":{
+      "MSPM0G5187":{
+        "ccsProj":"tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang",
+        "deviceName":"MSPM0G5187",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":921600
+        }
+      }
+    },
+    "hand_gesture_dataset":{
+      "MSPM0G5187":{
+        "ccsProj":"tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang",
+        "deviceName":"MSPM0G5187",
+        "files":[],
+        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":921600
+        }
+      }
+    },
     "generic_timeseries_classification":{
       "MSPM0G5187":{
         "ccsProj":"timeseries_data_capture_LP_MSPM0G5187_nortos_ticlang",
@@ -26457,10 +25290,10 @@
         }
       },
       "MSPM0G5187":{
-        "ccsProj":"motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang",
+        "ccsProj":"motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang",
         "deviceName":"MSPM0G5187",
         "files":[],
-        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec",
         "pkgId":"MSPM0-SDK",
         "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
         "transport":{
@@ -26468,10 +25301,10 @@
         }
       },
       "MSPM0G3507":{
-        "ccsProj":"motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang",
+        "ccsProj":"motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang",
         "deviceName":"MSPM0G3507",
         "files":[],
-        "from":"examples/nortos/LP_MSPM0G3507/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec",
+        "from":"examples/nortos/LP_MSPM0G3507/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec",
         "pkgId":"MSPM0-SDK",
         "targetCfg":"targetConfigs/MSPM0G3507.ccxml",
         "transport":{
@@ -26479,10 +25312,10 @@
         }
       },
       "MSPM0G3519":{
-        "ccsProj":"motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang",
+        "ccsProj":"motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang",
         "deviceName":"MSPM0G3519",
         "files":[],
-        "from":"examples/nortos/LP_MSPM0G3519/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec",
+        "from":"examples/nortos/LP_MSPM0G3519/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec",
         "pkgId":"MSPM0-SDK",
         "targetCfg":"targetConfigs/MSPM0G3519.ccxml",
         "transport":{
@@ -26915,7 +25748,7 @@
         }
       },
       "MSPM0G5187":{
-        "ccsProj":"motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang",
+        "ccsProj":"motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang",
         "deviceName":"MSPM0G5187",
         "files":[
           {
@@ -26931,7 +25764,7 @@
             "to":"model/user_input_config.h"
           }
         ],
-        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_live_preview/ticlang/motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
         "pkgId":"MSPM0-SDK",
         "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
         "transport":{
@@ -27228,6 +26061,58 @@
           "baudRate":115200
         }
       }
+    },
+    "fall_detection_classification":{
+      "MSPM0G5187":{
+        "ccsProj":"fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang",
+        "deviceName":"MSPM0G5187",
+        "files":[
+          {
+            "from":"artifacts/mod.a",
+            "to":"model/model.a"
+          },
+          {
+            "from":"artifacts/tvmgen_default.h",
+            "to":"model/tvmgen_default.h"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":"model/user_input_config.h"
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/fall_detection_live_preview/ticlang/fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      }
+    },
+    "hand_gesture_dataset":{
+      "MSPM0G5187":{
+        "ccsProj":"dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang",
+        "deviceName":"MSPM0G5187",
+        "files":[
+          {
+            "from":"artifacts/mod.a",
+            "to":"model/model.a"
+          },
+          {
+            "from":"artifacts/tvmgen_default.h",
+            "to":"model/tvmgen_default.h"
+          },
+          {
+            "from":"golden_vectors/user_input_config.h",
+            "to":"model/user_input_config.h"
+          }
+        ],
+        "from":"examples/nortos/LP_MSPM0G5187/edgeAI/dynamic_hand_gesture_recognition_live_preview/ticlang/dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec",
+        "pkgId":"MSPM0-SDK",
+        "targetCfg":"targetConfigs/MSPM0G5187.ccxml",
+        "transport":{
+          "baudRate":115200
+        }
+      }
     }
   },
   "context_help":{
@@ -27361,230 +26246,6 @@
       }
     }
   },
-  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Time Series Classification\n* ARC Fault\n* ECG Classification\n* Motor Fault\n* Fan Blower Imbalance Fault\n* PIR Detection\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_10_00_04\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n* SDK release: 01_10_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1312\n* Product information: https://www.ti.com/product/CC1312PSIP\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC1314\n* Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n* SDK release: 01_10_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n* SDK release: 01_10_00_00\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure.\n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board.\n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.\n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
-  "help_url":"file://help.md",
-  "rex_dependencies":[
-    {
-      "readableName":"AM13E230X SDK",
-      "installDirName":"am13e230x_sdk_26_00_00_06",
-      "rexPackageId":"AM13E2X-SDK",
-      "rexPackageVersion":"26.00.00.06",
-      "envVarName":"COM_TI_AM13E230X_SDK_INSTALL_DIR",
-      "devices":[
-        "AM13E2"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"SimpleLink CC13xx CC26xx SDK",
-      "installDirName":"simplelink_cc13xx_cc26xx_sdk_8_31_00_11",
-      "rexPackageId":"com.ti.SIMPLELINK_CC13XX_CC26XX_SDK",
-      "rexPackageVersion":"8.31.00.11",
-      "envVarName":"COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR",
-      "devices":[
-        "CC1312",
-        "CC1314",
-        "CC1352",
-        "CC1354"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"SimpleLink Low Power F3 SDK",
-      "installDirName":"simplelink_lowpower_f3_sdk_9_12_00_19",
-      "rexPackageId":"com.ti.SIMPLELINK_LOWPOWER_F3_SDK",
-      "rexPackageVersion":"9.12.00.19",
-      "envVarName":"COM_TI_SIMPLELINK_LOWPOWER_F3_SDK_INSTALL_DIR",
-      "devices":[
-        "CC2755"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"SimpleLink WiFi SDK",
-      "installDirName":"simplelink_wifi_sdk_9_21_00_15",
-      "rexPackageId":"com.ti.SIMPLELINK_WIFI_SDK",
-      "rexPackageVersion":"9.21.00.15",
-      "envVarName":"COM_TI_SIMPLELINK_WIFI_SDK_INSTALL_DIR",
-      "devices":[
-        "CC35X1"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"MCU+ SDK for AM263x",
-      "installDirName":"mcu_plus_sdk_am263x_26_00_00_01",
-      "rexPackageId":"com.ti.MCU_PLUS_SDK_AM263X",
-      "rexPackageVersion":"26.00.00.01",
-      "envVarName":"MCU_PLUS_SDK_PATH",
-      "devices":[
-        "AM263"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"MCU+ SDK for AM263Px",
-      "installDirName":"mcu_plus_sdk_am263px_26_00_00_01",
-      "rexPackageId":"com.ti.MCU_PLUS_SDK_AM263PX",
-      "rexPackageVersion":"26.00.00.01",
-      "envVarName":"MCU_PLUS_SDK_PATH",
-      "devices":[
-        "AM263P"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"MCU+ SDK for AM261x",
-      "installDirName":"mcu_plus_sdk_am261x_26_00_00_01",
-      "rexPackageId":"com.ti.MCU_PLUS_SDK_AM261X",
-      "rexPackageVersion":"26.00.00.01",
-      "envVarName":"MCU_PLUS_SDK_PATH",
-      "devices":[
-        "AM261"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"MSPM0 SDK",
-      "installDirName":"mspm0_sdk_2_09_00_01",
-      "rexPackageId":"MSPM0-SDK",
-      "rexPackageVersion":"2.09.00.01",
-      "envVarName":"COM_TI_MSPM0_SDK_INSTALL_DIR",
-      "devices":[
-        "MSPM0G3507",
-        "MSPM0G3519",
-        "MSPM0G5187"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"C2000Ware",
-      "installDirName":"C2000Ware_26_00_00_00",
-      "rexPackageId":"C2000WARE",
-      "rexPackageVersion":"26.00.00.00",
-      "envVarName":"C2000WARE_ROOT",
-      "devices":[
-        "F280013",
-        "F280015",
-        "F28003",
-        "F28004",
-        "F2837",
-        "F28P65",
-        "F28P55"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"C2000Ware_MotorControl_SDK",
-      "installDirName":"C2000Ware_MotorControl_SDK_5_04_00_00",
-      "rexPackageId":"motor_control_c2000ware_sdk_software_package",
-      "rexPackageVersion":"5.04.00.00",
-      "envVarName":"C2000WARE_MOTOR_CONTROL_ROOT",
-      "devices":[
-        "F280013",
-        "F280015",
-        "F28003",
-        "F28004",
-        "F2837",
-        "F28P65",
-        "F28P55"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"C2000Ware_DigitalPower_SDK",
-      "installDirName":"C2000Ware_DigitalPower_SDK_5_06_00_00",
-      "rexPackageId":"digital_power_c2000ware_sdk_software_package",
-      "rexPackageVersion":"5.06.00.00",
-      "envVarName":"C2000WARE_DIGITAL_POWER_ROOT",
-      "devices":[
-        "F280013",
-        "F280015",
-        "F28003",
-        "F28004",
-        "F2837",
-        "F28P65",
-        "F28P55"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"F29H85X-SDK",
-      "installDirName":"f29h85x-sdk_26_00_00_00",
-      "rexPackageId":"f29h85x-sdk",
-      "rexPackageVersion":"26.00.00.00",
-      "envVarName":"COM_TI_F29H85X_SDK_INSTALL_DIR",
-      "devices":[
-        "F29H85",
-        "F29P58",
-        "F29P32"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"MSPM33 SDK",
-      "installDirName":"mspm33_sdk_1_03_00_01",
-      "rexPackageId":"MSPM33-SDK",
-      "rexPackageVersion":"1.03.00.01",
-      "envVarName":"COM_TI_MSPM33_SDK_INSTALL_DIR",
-      "devices":[
-        "MSPM33C32"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"TI C28x/CLA Compiler",
-      "installDirName":"ti_cgt_c2000_25.11.0.LTS",
-      "rexPackageId":"C2000-CGT",
-      "rexPackageVersion":"25.11.00.00",
-      "envVarName":"C2000_CG_ROOT",
-      "devices":[
-        "F280013",
-        "F280015",
-        "F28003",
-        "F28004",
-        "F2837",
-        "F28P65",
-        "F28P55"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"TI C29 Clang 2.2.0 LTS Compiler",
-      "installDirName":"ti-cgt-c29_2.2.0.LTS",
-      "rexPackageId":"C29-CGT",
-      "rexPackageVersion":"2.02.00.00",
-      "envVarName":"CG_TOOL_ROOT",
-      "devices":[
-        "F29H85",
-        "F29P58",
-        "F29P32"
-      ],
-      "task":"compile"
-    },
-    {
-      "readableName":"TI Arm Clang 4.0.3 LTS Compiler",
-      "installDirName":"ti_cgt_arm_llvm_4.0.3.LTS",
-      "rexPackageId":"ti_cgt_tiarmclang",
-      "rexPackageVersion":"4.00.03.00",
-      "envVarName":"ARM_LLVM_CGT_PATH",
-      "devices":[
-        "CC1312",
-        "CC1314",
-        "CC1352",
-        "CC1354",
-        "CC2755",
-        "CC35X1",
-        "AM13E2",
-        "AM263",
-        "AM263P",
-        "AM261",
-        "MSPM0G3507",
-        "MSPM0G3519",
-        "MSPM0G5187",
-        "MSPM33C32"
-      ],
-      "task":"compile"
-    }
-  ]
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Time Series Classification\n* ARC Fault\n* ECG Classification\n* Motor Fault\n* Fan Blower Imbalance Fault\n* PIR Detection\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\n### F28P55\n* Product information: https://www.ti.com/product/TMS320F28P550SJ\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28P65\n* Product information: https://www.ti.com/product/TMS320F28P650DK\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F2837\n* Product information: https://www.ti.com/product/TMS320F28377D\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28004\n* Product information: https://www.ti.com/product/TMS320F280049C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F28003\n* Product information: https://www.ti.com/product/TMS320F280039C\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280013\n* Product information: https://www.ti.com/product/TMS320F2800137\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### F280015\n* Product information: https://www.ti.com/product/TMS320F2800157\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n* SDK release: 26_00_00\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_11_00_xx\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_11_00_xx\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n* SDK release: 2_11_00_xx\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.20.00.81\n* SDK release: 01_10_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n* Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\n### CC1312\n* Product information: https://www.ti.com/product/CC1312PSIP\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\n### CC1314\n* Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n* SDK release: 01_10_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/10.10.01.08\n* SDK release: 01_10_00_00\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure.\n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board.\n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.\n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n",
+  "help_url":"file://help.md"
 }

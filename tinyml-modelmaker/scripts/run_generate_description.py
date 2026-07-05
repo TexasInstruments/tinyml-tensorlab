@@ -105,7 +105,7 @@ def run(config):
     help_url_descriptions = ai_target_module.runner.ModelRunner.get_help_url_descriptions(params)
 
     # rex dependencies
-    rex_dependencies = ai_target_module.runner.ModelRunner.get_rex_dependencies(params)
+    # rex_dependencies = ai_target_module.runner.ModelRunner.get_rex_dependencies(params)
 
     description = dict(training_module_descriptions=training_module_descriptions,
                        model_descriptions=model_descriptions_desc,
@@ -122,7 +122,7 @@ def run(config):
                        context_help=context_help_descriptions,
                        help_descriptions=help_descriptions,
                        help_url=help_url_descriptions,
-                       rex_dependencies=rex_dependencies)
+                    )
     return description, help_descriptions
 
 

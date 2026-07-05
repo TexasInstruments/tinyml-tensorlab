@@ -109,27 +109,27 @@ help_descriptions: "\n## Overview\nThis is a tool for collecting data, training 
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157\n* C2000 SDK: https://www.ti.com/tool/C2000WARE\n\
   * SDK release: 26_00_00\n\n### MSPM0G3507\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_10_00_04\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n\
+  * SDK release: 2_11_00_xx\n\n### MSPM0G3519\n* Product information: https://www.ti.com/product/MSPM0G3519\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_10_00_04\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
+  * SDK release: 2_11_00_xx\n\n### MSPM0G5187\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
   * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-  * SDK release: 2_10_00_04\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
+  * SDK release: 2_11_00_xx\n\n### CC2755\n* Product information: https://www.ti.com/product/CC2755R10\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-  * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n\
+  * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.20.00.81\n\
   * SDK release: 01_10_00_00\n\n### CC1352\n* Product information: https://www.ti.com/product/CC1352R\n\
   * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-  * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+  * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
   * SDK release: 01_10_00_00\n\n### CC1312\n* Product information: https://www.ti.com/product/CC1312PSIP\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-  * CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+  * CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
   * SDK release: 01_10_00_00\n\n### CC1354\n* Product information: https://www.ti.com/product/CC1354P10\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-  * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+  * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
   * SDK release: 01_10_00_00\n\n### CC1314\n* Product information: https://www.ti.com/product/CC1314R10\n\
-  * Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+  * Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
   * SDK release: 01_10_00_00\n\n### CC35X1\n* Product information: https://www.ti.com/product/CC3551E\n\
   * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-  * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n\
+  * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/10.10.01.08\n\
   * SDK release: 01_10_00_00\n\n\n## Additional information\n\n * Tiny ML model development\
   \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset\
   \ format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
@@ -438,6 +438,16 @@ live_capture_example:
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 115200
+  fall_detection_classification:
+    MSPM0G5187:
+      ccsProj: tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang
+      deviceName: MSPM0G5187
+      files: []
+      from: examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 921600
   generic_timeseries_classification:
     AM13E2:
       ccsProj: jerk_detection_am13e230x_lp_m33_nortos_ti_arm_clang
@@ -502,6 +512,16 @@ live_capture_example:
       targetCfg: targetConfigs/MSPM33C321A.ccxml
       transport:
         baudRate: 115200
+  hand_gesture_dataset:
+    MSPM0G5187:
+      ccsProj: tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang
+      deviceName: MSPM0G5187
+      files: []
+      from: examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 921600
   motor_fault:
     CC1312:
       ccsProj: edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang
@@ -567,28 +587,28 @@ live_capture_example:
       transport:
         baudRate: 2343750
     MSPM0G3507:
-      ccsProj: motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang
+      ccsProj: motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang
       deviceName: MSPM0G3507
       files: []
-      from: examples/nortos/LP_MSPM0G3507/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec
+      from: examples/nortos/LP_MSPM0G3507/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G3507.ccxml
       transport:
         baudRate: 115200
     MSPM0G3519:
-      ccsProj: motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang
+      ccsProj: motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang
       deviceName: MSPM0G3519
       files: []
-      from: examples/nortos/LP_MSPM0G3519/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec
+      from: examples/nortos/LP_MSPM0G3519/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G3519.ccxml
       transport:
         baudRate: 115200
     MSPM0G5187:
-      ccsProj: motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang
+      ccsProj: motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang
       deviceName: MSPM0G5187
       files: []
-      from: examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec
+      from: examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
@@ -796,6 +816,22 @@ live_preview_example:
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 115200
+  fall_detection_classification:
+    MSPM0G5187:
+      ccsProj: fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang
+      deviceName: MSPM0G5187
+      files:
+      - from: artifacts/mod.a
+        to: model/model.a
+      - from: artifacts/tvmgen_default.h
+        to: model/tvmgen_default.h
+      - from: golden_vectors/user_input_config.h
+        to: model/user_input_config.h
+      from: examples/nortos/LP_MSPM0G5187/edgeAI/fall_detection_live_preview/ticlang/fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G5187.ccxml
+      transport:
+        baudRate: 115200
   generic_timeseries_classification:
     MSPM0G5187:
       ccsProj: timeseries_live_preview_LP_MSPM0G5187_nortos_ticlang
@@ -825,6 +861,22 @@ live_preview_example:
       from: examples/nortos/LP_MSPM33C321A/edgeAI/generic_timeseries_classification_live_preview/ticlang/generic_timeseries_classification_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec
       pkgId: MSPM33-SDK
       targetCfg: targetConfigs/MSPM33C321A.ccxml
+      transport:
+        baudRate: 115200
+  hand_gesture_dataset:
+    MSPM0G5187:
+      ccsProj: dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang
+      deviceName: MSPM0G5187
+      files:
+      - from: artifacts/mod.a
+        to: model/model.a
+      - from: artifacts/tvmgen_default.h
+        to: model/tvmgen_default.h
+      - from: golden_vectors/user_input_config.h
+        to: model/user_input_config.h
+      from: examples/nortos/LP_MSPM0G5187/edgeAI/dynamic_hand_gesture_recognition_live_preview/ticlang/dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec
+      pkgId: MSPM0-SDK
+      targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
         baudRate: 115200
   motor_fault:
@@ -922,7 +974,7 @@ live_preview_example:
       transport:
         baudRate: 2343750
     MSPM0G5187:
-      ccsProj: motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang
+      ccsProj: motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang
       deviceName: MSPM0G5187
       files:
       - from: artifacts/mod.a
@@ -931,7 +983,7 @@ live_preview_example:
         to: model/tvmgen_default.h
       - from: golden_vectors/user_input_config.h
         to: model/user_input_config.h
-      from: examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec
+      from: examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_live_preview/ticlang/motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec
       pkgId: MSPM0-SDK
       targetCfg: targetConfigs/MSPM0G5187.ccxml
       transport:
@@ -1232,36 +1284,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 10
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 10
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 10
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 10
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 10
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 10
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 10
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -1525,36 +1547,6 @@ model_descriptions:
           model_selection_factor: 3
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 3
@@ -1826,36 +1818,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -2119,36 +2081,6 @@ model_descriptions:
           model_selection_factor: 5
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 5
@@ -2420,36 +2352,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 11
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 11
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 11
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 11
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 11
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 11
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 11
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -2713,36 +2615,6 @@ model_descriptions:
           model_selection_factor: 7
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 7
@@ -3014,36 +2886,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 4
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -3307,36 +3149,6 @@ model_descriptions:
           model_selection_factor: 6
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 6
@@ -3608,36 +3420,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 8
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -3905,36 +3687,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 9
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -4198,36 +3950,6 @@ model_descriptions:
           model_selection_factor: 2
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 2
@@ -12129,36 +11851,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -12422,36 +12114,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -12720,36 +12382,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -13023,36 +12655,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -13317,36 +12919,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -13620,36 +13192,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 3
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -13918,36 +13460,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -14212,36 +13724,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -14515,36 +13997,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -14809,36 +14261,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -15110,36 +14532,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -15403,36 +14795,6 @@ model_descriptions:
           model_selection_factor: 2
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 2
@@ -17539,36 +16901,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -18064,36 +17396,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -18361,36 +17663,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 3
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -18654,36 +17926,6 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -18958,36 +18200,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 9
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 9
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -19251,36 +18463,6 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -19555,36 +18737,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 6
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -19852,36 +19004,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 2
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -20145,36 +19267,6 @@ model_descriptions:
           model_selection_factor: 4
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 4
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 4
@@ -20449,36 +19541,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 5
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 5
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -20749,36 +19811,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 7
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 7
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -21045,36 +20077,6 @@ model_descriptions:
           model_selection_factor: 8
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 8
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 8
@@ -22240,6 +21242,14 @@ preset_descriptions:
             -mthumb -mfloat-abi=soft -I. -Wno-return-type
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m0plus
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: cortex-m0plus
     ecg_classification:
       default_preset:
         compilation:
@@ -22305,6 +21315,14 @@ preset_descriptions:
             -mthumb -mfloat-abi=soft -I. -Wno-return-type
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m0plus
+    blower_imbalance:
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: cortex-m0plus
     ecg_classification:
       default_preset:
         compilation:
@@ -22363,6 +21381,28 @@ preset_descriptions:
           target_c_mcpu: cortex-m0plus
   MSPM0G5187:
     arc_fault:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: cortex-m0plus
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=hard skip_normalize=true output_int=true
+          target_c_mcpu: cortex-m0plus
+      forced_soft_npu_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: cortex-m0plus
+    blower_imbalance:
       compress_npu_layer_data:
         compilation:
           cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
@@ -22604,181 +21644,6 @@ preset_descriptions:
           target: c, ti-npu type=soft skip_normalize=true output_int=true
           target_c_mcpu: cortex-m33
   MSPM33C34: {}
-rex_dependencies:
-- devices:
-  - AM13E2
-  envVarName: COM_TI_AM13E230X_SDK_INSTALL_DIR
-  installDirName: am13e230x_sdk_26_00_00_06
-  readableName: AM13E230X SDK
-  rexPackageId: AM13E2X-SDK
-  rexPackageVersion: 26.00.00.06
-  task: compile
-- devices:
-  - CC1312
-  - CC1314
-  - CC1352
-  - CC1354
-  envVarName: COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR
-  installDirName: simplelink_cc13xx_cc26xx_sdk_8_31_00_11
-  readableName: SimpleLink CC13xx CC26xx SDK
-  rexPackageId: com.ti.SIMPLELINK_CC13XX_CC26XX_SDK
-  rexPackageVersion: 8.31.00.11
-  task: compile
-- devices:
-  - CC2755
-  envVarName: COM_TI_SIMPLELINK_LOWPOWER_F3_SDK_INSTALL_DIR
-  installDirName: simplelink_lowpower_f3_sdk_9_12_00_19
-  readableName: SimpleLink Low Power F3 SDK
-  rexPackageId: com.ti.SIMPLELINK_LOWPOWER_F3_SDK
-  rexPackageVersion: 9.12.00.19
-  task: compile
-- devices:
-  - CC35X1
-  envVarName: COM_TI_SIMPLELINK_WIFI_SDK_INSTALL_DIR
-  installDirName: simplelink_wifi_sdk_9_21_00_15
-  readableName: SimpleLink WiFi SDK
-  rexPackageId: com.ti.SIMPLELINK_WIFI_SDK
-  rexPackageVersion: 9.21.00.15
-  task: compile
-- devices:
-  - AM263
-  envVarName: MCU_PLUS_SDK_PATH
-  installDirName: mcu_plus_sdk_am263x_26_00_00_01
-  readableName: MCU+ SDK for AM263x
-  rexPackageId: com.ti.MCU_PLUS_SDK_AM263X
-  rexPackageVersion: 26.00.00.01
-  task: compile
-- devices:
-  - AM263P
-  envVarName: MCU_PLUS_SDK_PATH
-  installDirName: mcu_plus_sdk_am263px_26_00_00_01
-  readableName: MCU+ SDK for AM263Px
-  rexPackageId: com.ti.MCU_PLUS_SDK_AM263PX
-  rexPackageVersion: 26.00.00.01
-  task: compile
-- devices:
-  - AM261
-  envVarName: MCU_PLUS_SDK_PATH
-  installDirName: mcu_plus_sdk_am261x_26_00_00_01
-  readableName: MCU+ SDK for AM261x
-  rexPackageId: com.ti.MCU_PLUS_SDK_AM261X
-  rexPackageVersion: 26.00.00.01
-  task: compile
-- devices:
-  - MSPM0G3507
-  - MSPM0G3519
-  - MSPM0G5187
-  envVarName: COM_TI_MSPM0_SDK_INSTALL_DIR
-  installDirName: mspm0_sdk_2_09_00_01
-  readableName: MSPM0 SDK
-  rexPackageId: MSPM0-SDK
-  rexPackageVersion: 2.09.00.01
-  task: compile
-- devices:
-  - F280013
-  - F280015
-  - F28003
-  - F28004
-  - F2837
-  - F28P65
-  - F28P55
-  envVarName: C2000WARE_ROOT
-  installDirName: C2000Ware_26_00_00_00
-  readableName: C2000Ware
-  rexPackageId: C2000WARE
-  rexPackageVersion: 26.00.00.00
-  task: compile
-- devices:
-  - F280013
-  - F280015
-  - F28003
-  - F28004
-  - F2837
-  - F28P65
-  - F28P55
-  envVarName: C2000WARE_MOTOR_CONTROL_ROOT
-  installDirName: C2000Ware_MotorControl_SDK_5_04_00_00
-  readableName: C2000Ware_MotorControl_SDK
-  rexPackageId: motor_control_c2000ware_sdk_software_package
-  rexPackageVersion: 5.04.00.00
-  task: compile
-- devices:
-  - F280013
-  - F280015
-  - F28003
-  - F28004
-  - F2837
-  - F28P65
-  - F28P55
-  envVarName: C2000WARE_DIGITAL_POWER_ROOT
-  installDirName: C2000Ware_DigitalPower_SDK_5_06_00_00
-  readableName: C2000Ware_DigitalPower_SDK
-  rexPackageId: digital_power_c2000ware_sdk_software_package
-  rexPackageVersion: 5.06.00.00
-  task: compile
-- devices:
-  - F29H85
-  - F29P58
-  - F29P32
-  envVarName: COM_TI_F29H85X_SDK_INSTALL_DIR
-  installDirName: f29h85x-sdk_26_00_00_00
-  readableName: F29H85X-SDK
-  rexPackageId: f29h85x-sdk
-  rexPackageVersion: 26.00.00.00
-  task: compile
-- devices:
-  - MSPM33C32
-  envVarName: COM_TI_MSPM33_SDK_INSTALL_DIR
-  installDirName: mspm33_sdk_1_03_00_01
-  readableName: MSPM33 SDK
-  rexPackageId: MSPM33-SDK
-  rexPackageVersion: 1.03.00.01
-  task: compile
-- devices:
-  - F280013
-  - F280015
-  - F28003
-  - F28004
-  - F2837
-  - F28P65
-  - F28P55
-  envVarName: C2000_CG_ROOT
-  installDirName: ti_cgt_c2000_25.11.0.LTS
-  readableName: TI C28x/CLA Compiler
-  rexPackageId: C2000-CGT
-  rexPackageVersion: 25.11.00.00
-  task: compile
-- devices:
-  - F29H85
-  - F29P58
-  - F29P32
-  envVarName: CG_TOOL_ROOT
-  installDirName: ti-cgt-c29_2.2.0.LTS
-  readableName: TI C29 Clang 2.2.0 LTS Compiler
-  rexPackageId: C29-CGT
-  rexPackageVersion: 2.02.00.00
-  task: compile
-- devices:
-  - CC1312
-  - CC1314
-  - CC1352
-  - CC1354
-  - CC2755
-  - CC35X1
-  - AM13E2
-  - AM263
-  - AM263P
-  - AM261
-  - MSPM0G3507
-  - MSPM0G3519
-  - MSPM0G5187
-  - MSPM33C32
-  envVarName: ARM_LLVM_CGT_PATH
-  installDirName: ti_cgt_arm_llvm_4.0.3.LTS
-  readableName: TI Arm Clang 4.0.3 LTS Compiler
-  rexPackageId: ti_cgt_tiarmclang
-  rexPackageVersion: 4.00.03.00
-  task: compile
 sample_dataset_descriptions:
   ac_arc_fault_example_dsk:
     common:
@@ -23022,6 +21887,20 @@ sample_dataset_descriptions:
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
       dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip
+  fan_blower_imbalance_dataset:
+    common:
+      task_category: timeseries_classification
+      task_type: motor_fault
+    dataset:
+      dataset_name: fan_blower_imbalance_dataset
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip
+    info:
+      dataset_description: Example fan blower imbalance
+      dataset_detailed_name: Fan Blower Imbalance Dataset
+      dataset_license: TI Internal License
+      dataset_size: null
+      dataset_source: Generated by Texas Instruments at a specialised test bed
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip
   fan_blower_imbalance_dsi:
     common:
       task_category: timeseries_classification
@@ -23157,6 +22036,20 @@ sample_dataset_descriptions:
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
       dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip
+  hand_gesture_dataset:
+    common:
+      task_category: timeseries_classification
+      task_type: generic_timeseries_classification
+    dataset:
+      dataset_name: hand_gesture_dataset
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip
+    info:
+      dataset_description: Human hand gesture recognition
+      dataset_detailed_name: Hand Gesture Dataset
+      dataset_license: TI Internal License
+      dataset_size: null
+      dataset_source: Generated by Texas Instruments at a specialised test bed
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip
   hvac_indoor_temp_forecast:
     common:
       task_category: timeseries_forecasting
@@ -23308,21 +22201,6 @@ sample_dataset_descriptions:
       dataset_size: null
       dataset_source: Generated by Texas Instruments at a specialised test bed
       dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip
-  washing_machine_load_regression:
-    common:
-      task_category: timeseries_regression
-      task_type: generic_timeseries_regression
-    dataset:
-      dataset_name: washing_machine_load_weighing
-      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip
-    info:
-      dataset_description: Regression for estimating washing machine load weight from
-        sensor measurements
-      dataset_detailed_name: Washing Machine Load Regression Example
-      dataset_license: TI Internal License
-      dataset_size: null
-      dataset_source: Generated by Texas Instruments at a specialised test bed
-      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip
   wisdm_dataset:
     common:
       task_category: timeseries_classification
@@ -23392,7 +22270,7 @@ target_device_descriptions:
       \ wireless MCU with 352KB flash\n* More details : https://www.ti.com/product/CC1312PSIP\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/CC1312PSIP\n\
       * Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-      * CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+      * CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
       * SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1312
@@ -23404,7 +22282,7 @@ target_device_descriptions:
     device_details: "SimpleLink\u2122 32-bit Arm\xAE Cortex\xAE-M33 Sub-1 GHz wireless\
       \ MCU\n* More details : https://www.ti.com/product/CC1314R10\n\nImportant links:\n\
       * Product information: https://www.ti.com/product/CC1314R10\n* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10\n\
-      \n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+      \n* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
       * SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1314
@@ -23417,7 +22295,7 @@ target_device_descriptions:
       \ wireless MCU with 352KB flash\n* More details : https://www.ti.com/product/CC1352R1\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/CC1352R\n\
       * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-      * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+      * CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
       * SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1352
@@ -23430,7 +22308,7 @@ target_device_descriptions:
       \ wireless MCU\n* More details : https://www.ti.com/product/CC1354P10\n\nImportant\
       \ links:\n* Product information: https://www.ti.com/product/CC1354P10\n* Launchpad:\
       \ https://www.ti.com/tool/LP-EM-CC1354P10\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-      * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11\n\
+      * CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16\n\
       * SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC1354
@@ -23443,7 +22321,7 @@ target_device_descriptions:
       \ wireless MCU with 1MB flash, HSM, APU, NPU-CDE\n* More details : https://www.ti.com/product/CC2755R10\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/CC2755R10\n\
       * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1\n* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-      * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19\n\
+      * CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.20.00.81\n\
       * SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC2755
@@ -23456,7 +22334,7 @@ target_device_descriptions:
       \ MCU\n* More details : https://www.ti.com/product/CC3551E\n\nImportant links:\n\
       * Product information: https://www.ti.com/product/CC3551E\n* Launchpad: https://www.ti.com/tool/LP-EM-CC35X1\n\
       * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN\n\
-      * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15\n\
+      * CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/10.10.01.08\n\
       * SDK release: 01_10_00_00\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: CC35X1
@@ -23604,37 +22482,37 @@ target_device_descriptions:
       \ ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3507\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3507\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development\
+      * SDK release: 2_11_00_xx\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G3507
     device_selection_factor: 0
     device_type: MCU
-    sdk_release: '2_10_00_04'
-    sdk_version: 2.10.00.04
+    sdk_release: 2_11_00_xx
+    sdk_version: 2.11.00.xx
   MSPM0G3519:
     device_details: "80MHz Arm\xAE Cortex\xAE-M0+ MCU with 512KB flash 128KB SRAM\
       \ 2x4Msps ADC, DAC, COMP, OPA, CAN-FD, MATHA\n* More details : https://www.ti.com/product/MSPM0G3519\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G3519\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G3519\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development\
+      * SDK release: 2_11_00_xx\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G3519
     device_selection_factor: 1
     device_type: MCU
-    sdk_release: '2_10_00_04'
-    sdk_version: 2.10.00.04
+    sdk_release: 2_11_00_xx
+    sdk_version: 2.11.00.xx
   MSPM0G5187:
     device_details: "80MHz Arm\xAE Cortex\xAE-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps\
       \ ADC, USB, TI-NPU\n* More details : https://www.ti.com/product/MSPM0G5187\n\
       \nImportant links:\n* Product information: https://www.ti.com/product/MSPM0G5187\n\
       * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187\n* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK\n\
-      * SDK release: 2_10_00_04\n\nAdditional information:\n\n * Tiny ML model development\
+      * SDK release: 2_11_00_xx\n\nAdditional information:\n\n * Tiny ML model development\
       \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n"
     device_name: MSPM0G5187
     device_selection_factor: 16
     device_type: MCU
-    sdk_release: '2_10_00_04'
-    sdk_version: 2.10.00.04
+    sdk_release: 2_11_00_xx
+    sdk_version: 2.11.00.xx
   MSPM33C32:
     device_details: "160MHz Arm\xAE Cortex\xAE-M33 MCU with TrustZone\xAE, 1MB flash,\
       \ 256kB SRAM, QSPI, 2x CAN-FD and security\n* More details : https://www.ti.com/product/MSPM33C321A\n\
@@ -23703,6 +22581,9 @@ task_descriptions:
     - MSPM33C32
     - AM13E2
     - AM263
+    - MSPM0G3507
+    - MSPM0G3519
+    - MSPM0G5187
     target_module: timeseries
     task_category: timeseries_classification
     task_group: timeseries

@@ -47,22 +47,22 @@ mkdir -p ${TOOLS_PATH}
 #################################################################################
 # ARM clang cgtools
 if [[ "$(uname)" == "Darwin" ]]; then
-    ARM_CGT_CLANG_INSTALLER=ti_cgt_armllvm_4.0.4.LTS_osx_installer.app.zip
+    ARM_CGT_CLANG_INSTALLER=ti_cgt_armllvm_5.1.1.LTS_osx_installer.app.zip
     ARM_CGT_CLANG_INSTALLER_FILE=${INSTALLER_PATH}/${ARM_CGT_CLANG_INSTALLER}
     rm -f ${ARM_CGT_CLANG_INSTALLER_FILE}
-    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-ayxs93eZNN/4.0.4.LTS/${ARM_CGT_CLANG_INSTALLER} -O ${ARM_CGT_CLANG_INSTALLER_FILE}
+    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-ayxs93eZNN/5.1.1.LTS/${ARM_CGT_CLANG_INSTALLER} -O ${ARM_CGT_CLANG_INSTALLER_FILE}
     unzip -o ${ARM_CGT_CLANG_INSTALLER_FILE} -d ${INSTALLER_PATH}
-    INSTALLER_APP="${INSTALLER_PATH}/ti_cgt_armllvm_4.0.4.LTS_osx_installer.app"
+    INSTALLER_APP="${INSTALLER_PATH}/ti_cgt_armllvm_5.1.1.LTS_osx_installer.app"
     INSTALLER_BIN=$(find "${INSTALLER_APP}/Contents/MacOS" -maxdepth 1 -type f | head -1)
     chmod +x "${INSTALLER_BIN}"
     "${INSTALLER_BIN}" --mode unattended --prefix ${TOOLS_PATH}
     rm -f ${ARM_CGT_CLANG_INSTALLER_FILE}
     rm -rf "${INSTALLER_APP}"
 else
-    ARM_CGT_CLANG_INSTALLER=ti_cgt_armllvm_4.0.4.LTS_linux-x64_installer.bin
+    ARM_CGT_CLANG_INSTALLER=ti_cgt_armllvm_5.1.1.LTS_linux-x64_installer.bin
     ARM_CGT_CLANG_INSTALLER_FILE=${INSTALLER_PATH}/${ARM_CGT_CLANG_INSTALLER}
     rm -f ${ARM_CGT_CLANG_INSTALLER_FILE}
-    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-ayxs93eZNN/4.0.4.LTS/${ARM_CGT_CLANG_INSTALLER} -O ${ARM_CGT_CLANG_INSTALLER_FILE}
+    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-ayxs93eZNN/5.1.1.LTS/${ARM_CGT_CLANG_INSTALLER} -O ${ARM_CGT_CLANG_INSTALLER_FILE}
     chmod +x ${ARM_CGT_CLANG_INSTALLER_FILE}
     ${ARM_CGT_CLANG_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
     rm -f ${ARM_CGT_CLANG_INSTALLER_FILE}
