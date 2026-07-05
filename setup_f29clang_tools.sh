@@ -47,22 +47,22 @@ mkdir -p ${TOOLS_PATH}
 #################################################################################
 # F29 clang cgtools
 if [[ "$(uname)" == "Darwin" ]]; then
-    F29_CGT_CLANG_INSTALLER=ti_cgt_c29_2.2.0.LTS_osx_installer.app.zip
+    F29_CGT_CLANG_INSTALLER=ti_cgt_c29_2.2.1.LTS_osx_installer.app.zip
     F29_CGT_CLANG_INSTALLER_FILE=${INSTALLER_PATH}/${F29_CGT_CLANG_INSTALLER}
     rm -f ${F29_CGT_CLANG_INSTALLER_FILE}
-    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-CIrrlYTTGZ/2.2.0.LTS/${F29_CGT_CLANG_INSTALLER} -O ${F29_CGT_CLANG_INSTALLER_FILE}
+    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-CIrrlYTTGZ/2.2.1.LTS/${F29_CGT_CLANG_INSTALLER} -O ${F29_CGT_CLANG_INSTALLER_FILE}
     unzip -o ${F29_CGT_CLANG_INSTALLER_FILE} -d ${INSTALLER_PATH}
-    INSTALLER_APP="${INSTALLER_PATH}/ti_cgt_c29_2.2.0.LTS_osx_installer.app"
+    INSTALLER_APP="${INSTALLER_PATH}/ti_cgt_c29_2.2.1.LTS_linux-x64_installer.app"
     INSTALLER_BIN=$(find "${INSTALLER_APP}/Contents/MacOS" -maxdepth 1 -type f | head -1)
     chmod +x "${INSTALLER_BIN}"
     "${INSTALLER_BIN}" --mode unattended --prefix ${TOOLS_PATH}
     rm -f ${F29_CGT_CLANG_INSTALLER_FILE}
     rm -rf "${INSTALLER_APP}"
 else
-    F29_CGT_CLANG_INSTALLER=ti_cgt_c29_2.2.0.LTS_linux-x64_installer.bin
+    F29_CGT_CLANG_INSTALLER=ti_cgt_c29_2.2.1.LTS_linux-x64_installer.bin
     F29_CGT_CLANG_INSTALLER_FILE=${INSTALLER_PATH}/${F29_CGT_CLANG_INSTALLER}
     rm -f ${F29_CGT_CLANG_INSTALLER_FILE}
-    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-CIrrlYTTGZ/2.2.0.LTS/${F29_CGT_CLANG_INSTALLER} -O ${F29_CGT_CLANG_INSTALLER_FILE}
+    wget https://dr-download.ti.com/software-development/ide-configuration-compiler-or-debugger/MD-CIrrlYTTGZ/2.2.1.LTS/${F29_CGT_CLANG_INSTALLER} -O ${F29_CGT_CLANG_INSTALLER_FILE}
     chmod +x ${F29_CGT_CLANG_INSTALLER_FILE}
     ${F29_CGT_CLANG_INSTALLER_FILE} --mode unattended --prefix ${TOOLS_PATH}
     rm -f ${F29_CGT_CLANG_INSTALLER_FILE}

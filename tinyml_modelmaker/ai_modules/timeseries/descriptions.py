@@ -704,6 +704,28 @@ def get_live_capture_example_descriptions(params):
                 'transport': {'baudRate': 115200}
             }
         },
+        'fall_detection_classification': {
+             'MSPM0G5187': {
+                'ccsProj': 'tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 921600}
+            },
+        },
+        'hand_gesture_dataset': {
+             'MSPM0G5187': {
+                'ccsProj': 'tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 921600}
+            },
+        },
         'generic_timeseries_classification': {
             'MSPM0G5187': {
                 'ccsProj': 'timeseries_data_capture_LP_MSPM0G5187_nortos_ticlang',
@@ -809,28 +831,28 @@ def get_live_capture_example_descriptions(params):
                 'transport': {'baudRate': 2343750}
             },
             'MSPM0G5187': {
-                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'MSPM0G3507': {
-                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang',
                 'deviceName': 'MSPM0G3507',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G3507.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'MSPM0G3519': {
-                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang',
                 'deviceName': 'MSPM0G3519',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G3519/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G3519/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G3519.ccxml',
                 'transport': {'baudRate': 115200}
@@ -1138,13 +1160,13 @@ def get_live_preview_example_descriptions(params):
                 'transport': {'baudRate': 2343750}
             },
             'MSPM0G5187': {
-                'ccsProj': 'motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [{'from': 'artifacts/mod.a',
                 'to': 'model/model.a'},
                 {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
                 {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
-                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_live_preview/ticlang/motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
@@ -1301,6 +1323,36 @@ def get_live_preview_example_descriptions(params):
                 'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
                 'transport': {'baudRate': 115200}
             }
+        },
+        'fall_detection_classification': {
+            'MSPM0G5187': {
+                'ccsProj': 'fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/fall_detection_live_preview/ticlang/fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+
+        },
+        'hand_gesture_dataset': {
+            'MSPM0G5187': {
+                'ccsProj': 'dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/dynamic_hand_gesture_recognition_live_preview/ticlang/dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+
         }
     }
     return live_preview_example_descriptions
@@ -1366,229 +1418,229 @@ def get_help_url_descriptions(params):
     return help_url_descriptions
 
 
-def get_rex_dependencies(params):
-    rex_dependencies = [
-        {
-            "readableName": "AM13E230X SDK",
-            "installDirName": "am13e230x_sdk_26_00_00_06",
-            "rexPackageId": "AM13E2X-SDK",
-            "rexPackageVersion": "26.00.00.06",
-            "envVarName": "COM_TI_AM13E230X_SDK_INSTALL_DIR",
-            "devices": [
-                "AM13E2"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "SimpleLink CC13xx CC26xx SDK",
-            "installDirName": "simplelink_cc13xx_cc26xx_sdk_8_31_00_11",
-            "rexPackageId": "com.ti.SIMPLELINK_CC13XX_CC26XX_SDK",
-            "rexPackageVersion": "8.31.00.11",
-            "envVarName": "COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR",
-            "devices": [
-                "CC1312",
-                "CC1314",
-                "CC1352",
-                "CC1354"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "SimpleLink Low Power F3 SDK",
-            "installDirName": "simplelink_lowpower_f3_sdk_9_12_00_19",
-            "rexPackageId": "com.ti.SIMPLELINK_LOWPOWER_F3_SDK",
-            "rexPackageVersion": "9.12.00.19",
-            "envVarName": "COM_TI_SIMPLELINK_LOWPOWER_F3_SDK_INSTALL_DIR",
-            "devices": [
-                "CC2755"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "SimpleLink WiFi SDK",
-            "installDirName": "simplelink_wifi_sdk_9_21_00_15",
-            "rexPackageId": "com.ti.SIMPLELINK_WIFI_SDK",
-            "rexPackageVersion": "9.21.00.15",
-            "envVarName": "COM_TI_SIMPLELINK_WIFI_SDK_INSTALL_DIR",
-            "devices": [
-                "CC35X1"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "MCU+ SDK for AM263x",
-            "installDirName": "mcu_plus_sdk_am263x_26_00_00_01",
-            "rexPackageId": "com.ti.MCU_PLUS_SDK_AM263X",
-            "rexPackageVersion": "26.00.00.01",
-            "envVarName": "MCU_PLUS_SDK_PATH",
-            "devices": [
-                "AM263"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "MCU+ SDK for AM263Px",
-            "installDirName": "mcu_plus_sdk_am263px_26_00_00_01",
-            "rexPackageId": "com.ti.MCU_PLUS_SDK_AM263PX",
-            "rexPackageVersion": "26.00.00.01",
-            "envVarName": "MCU_PLUS_SDK_PATH",
-            "devices": [
-                "AM263P"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "MCU+ SDK for AM261x",
-            "installDirName": "mcu_plus_sdk_am261x_26_00_00_01",
-            "rexPackageId": "com.ti.MCU_PLUS_SDK_AM261X",
-            "rexPackageVersion": "26.00.00.01",
-            "envVarName": "MCU_PLUS_SDK_PATH",
-            "devices": [
-                "AM261"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "MSPM0 SDK",
-            "installDirName": "mspm0_sdk_2_09_00_01",
-            "rexPackageId": "MSPM0-SDK",
-            "rexPackageVersion": "2.09.00.01",
-            "envVarName": "COM_TI_MSPM0_SDK_INSTALL_DIR",
-            "devices": [
-                "MSPM0G3507",
-                "MSPM0G3519",
-                "MSPM0G5187"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "C2000Ware",
-            "installDirName": "C2000Ware_26_00_00_00",
-            "rexPackageId": "C2000WARE",
-            "rexPackageVersion": "26.00.00.00",
-            "envVarName": "C2000WARE_ROOT",
-            "devices": [
-                "F280013",
-                "F280015",
-                "F28003",
-                "F28004",
-                "F2837",
-                "F28P65",
-                "F28P55"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "C2000Ware_MotorControl_SDK",
-            "installDirName": "C2000Ware_MotorControl_SDK_5_04_00_00",
-            "rexPackageId": "motor_control_c2000ware_sdk_software_package",
-            "rexPackageVersion": "5.04.00.00",
-            "envVarName": "C2000WARE_MOTOR_CONTROL_ROOT",
-            "devices": [
-                "F280013",
-                "F280015",
-                "F28003",
-                "F28004",
-                "F2837",
-                "F28P65",
-                "F28P55"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "C2000Ware_DigitalPower_SDK",
-            "installDirName": "C2000Ware_DigitalPower_SDK_5_06_00_00",
-            "rexPackageId": "digital_power_c2000ware_sdk_software_package",
-            "rexPackageVersion": "5.06.00.00",
-            "envVarName": "C2000WARE_DIGITAL_POWER_ROOT",
-            "devices": [
-                "F280013",
-                "F280015",
-                "F28003",
-                "F28004",
-                "F2837",
-                "F28P65",
-                "F28P55"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "F29H85X-SDK",
-            "installDirName": "f29h85x-sdk_26_00_00_00",
-            "rexPackageId": "f29h85x-sdk",
-            "rexPackageVersion": "26.00.00.00",
-            "envVarName": "COM_TI_F29H85X_SDK_INSTALL_DIR",
-            "devices": [
-                "F29H85",
-                "F29P58",
-                "F29P32"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "MSPM33 SDK",
-            "installDirName": "mspm33_sdk_1_03_00_01",
-            "rexPackageId": "MSPM33-SDK",
-            "rexPackageVersion": "1.03.00.01",
-            "envVarName": "COM_TI_MSPM33_SDK_INSTALL_DIR",
-            "devices": [
-                "MSPM33C32"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "TI C28x/CLA Compiler",
-            "installDirName": "ti_cgt_c2000_25.11.0.LTS",
-            "rexPackageId": "C2000-CGT",
-            "rexPackageVersion": "25.11.00.00",
-            "envVarName": "C2000_CG_ROOT",
-            "devices": [
-                "F280013",
-                "F280015",
-                "F28003",
-                "F28004",
-                "F2837",
-                "F28P65",
-                "F28P55"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "TI C29 Clang 2.2.0 LTS Compiler",
-            "installDirName": "ti-cgt-c29_2.2.0.LTS",
-            "rexPackageId": "C29-CGT",
-            "rexPackageVersion": "2.02.00.00",
-            "envVarName": "CG_TOOL_ROOT",
-            "devices": [
-                "F29H85",
-                "F29P58",
-                "F29P32"
-            ],
-            "task": "compile"
-        },
-        {
-            "readableName": "TI Arm Clang 4.0.3 LTS Compiler",
-            "installDirName": "ti_cgt_arm_llvm_4.0.3.LTS",
-            "rexPackageId": "ti_cgt_tiarmclang",
-            "rexPackageVersion": "4.00.03.00",
-            "envVarName": "ARM_LLVM_CGT_PATH",
-            "devices": [
-                "CC1312",
-                "CC1314",
-                "CC1352",
-                "CC1354",
-                "CC2755",
-                "CC35X1",
-                "AM13E2",
-                "AM263",
-                "AM263P",
-                "AM261",
-                "MSPM0G3507",
-                "MSPM0G3519",
-                "MSPM0G5187",
-                "MSPM33C32"
-            ],
-            "task": "compile"
-        }
-    ]
-    return rex_dependencies
+# def get_rex_dependencies(params):
+#     rex_dependencies = [
+#         {
+#             "readableName": "AM13E230X SDK",
+#             "installDirName": "am13e230x_sdk_26_00_00_06",
+#             "rexPackageId": "AM13E2X-SDK",
+#             "rexPackageVersion": "26.00.00.06",
+#             "envVarName": "COM_TI_AM13E230X_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "AM13E2"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "SimpleLink CC13xx CC26xx SDK",
+#             "installDirName": "simplelink_cc13xx_cc26xx_sdk_8_31_00_11",
+#             "rexPackageId": "com.ti.SIMPLELINK_CC13XX_CC26XX_SDK",
+#             "rexPackageVersion": "8.31.00.11",
+#             "envVarName": "COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "CC1312",
+#                 "CC1314",
+#                 "CC1352",
+#                 "CC1354"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "SimpleLink Low Power F3 SDK",
+#             "installDirName": "simplelink_lowpower_f3_sdk_9_12_00_19",
+#             "rexPackageId": "com.ti.SIMPLELINK_LOWPOWER_F3_SDK",
+#             "rexPackageVersion": "9.12.00.19",
+#             "envVarName": "COM_TI_SIMPLELINK_LOWPOWER_F3_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "CC2755"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "SimpleLink WiFi SDK",
+#             "installDirName": "simplelink_wifi_sdk_9_21_00_15",
+#             "rexPackageId": "com.ti.SIMPLELINK_WIFI_SDK",
+#             "rexPackageVersion": "9.21.00.15",
+#             "envVarName": "COM_TI_SIMPLELINK_WIFI_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "CC35X1"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MCU+ SDK for AM263x",
+#             "installDirName": "mcu_plus_sdk_am263x_26_00_00_01",
+#             "rexPackageId": "com.ti.MCU_PLUS_SDK_AM263X",
+#             "rexPackageVersion": "26.00.00.01",
+#             "envVarName": "MCU_PLUS_SDK_PATH",
+#             "devices": [
+#                 "AM263"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MCU+ SDK for AM263Px",
+#             "installDirName": "mcu_plus_sdk_am263px_26_00_00_01",
+#             "rexPackageId": "com.ti.MCU_PLUS_SDK_AM263PX",
+#             "rexPackageVersion": "26.00.00.01",
+#             "envVarName": "MCU_PLUS_SDK_PATH",
+#             "devices": [
+#                 "AM263P"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MCU+ SDK for AM261x",
+#             "installDirName": "mcu_plus_sdk_am261x_26_00_00_01",
+#             "rexPackageId": "com.ti.MCU_PLUS_SDK_AM261X",
+#             "rexPackageVersion": "26.00.00.01",
+#             "envVarName": "MCU_PLUS_SDK_PATH",
+#             "devices": [
+#                 "AM261"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MSPM0 SDK",
+#             "installDirName": "mspm0_sdk_2_09_00_01",
+#             "rexPackageId": "MSPM0-SDK",
+#             "rexPackageVersion": "2.09.00.01",
+#             "envVarName": "COM_TI_MSPM0_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "MSPM0G3507",
+#                 "MSPM0G3519",
+#                 "MSPM0G5187"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "C2000Ware",
+#             "installDirName": "C2000Ware_26_00_00_00",
+#             "rexPackageId": "C2000WARE",
+#             "rexPackageVersion": "26.00.00.00",
+#             "envVarName": "C2000WARE_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "C2000Ware_MotorControl_SDK",
+#             "installDirName": "C2000Ware_MotorControl_SDK_5_04_00_00",
+#             "rexPackageId": "motor_control_c2000ware_sdk_software_package",
+#             "rexPackageVersion": "5.04.00.00",
+#             "envVarName": "C2000WARE_MOTOR_CONTROL_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "C2000Ware_DigitalPower_SDK",
+#             "installDirName": "C2000Ware_DigitalPower_SDK_5_06_00_00",
+#             "rexPackageId": "digital_power_c2000ware_sdk_software_package",
+#             "rexPackageVersion": "5.06.00.00",
+#             "envVarName": "C2000WARE_DIGITAL_POWER_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "F29H85X-SDK",
+#             "installDirName": "f29h85x-sdk_26_00_00_00",
+#             "rexPackageId": "f29h85x-sdk",
+#             "rexPackageVersion": "26.00.00.00",
+#             "envVarName": "COM_TI_F29H85X_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "F29H85",
+#                 "F29P58",
+#                 "F29P32"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MSPM33 SDK",
+#             "installDirName": "mspm33_sdk_1_03_00_01",
+#             "rexPackageId": "MSPM33-SDK",
+#             "rexPackageVersion": "1.03.00.01",
+#             "envVarName": "COM_TI_MSPM33_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "MSPM33C32"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "TI C28x/CLA Compiler",
+#             "installDirName": "ti_cgt_c2000_25.11.0.LTS",
+#             "rexPackageId": "C2000-CGT",
+#             "rexPackageVersion": "25.11.00.00",
+#             "envVarName": "C2000_CG_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "TI C29 Clang 2.2.0 LTS Compiler",
+#             "installDirName": "ti-cgt-c29_2.2.0.LTS",
+#             "rexPackageId": "C29-CGT",
+#             "rexPackageVersion": "2.02.00.00",
+#             "envVarName": "CG_TOOL_ROOT",
+#             "devices": [
+#                 "F29H85",
+#                 "F29P58",
+#                 "F29P32"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "TI Arm Clang 4.0.3 LTS Compiler",
+#             "installDirName": "ti_cgt_arm_llvm_4.0.3.LTS",
+#             "rexPackageId": "ti_cgt_tiarmclang",
+#             "rexPackageVersion": "4.00.03.00",
+#             "envVarName": "ARM_LLVM_CGT_PATH",
+#             "devices": [
+#                 "CC1312",
+#                 "CC1314",
+#                 "CC1352",
+#                 "CC1354",
+#                 "CC2755",
+#                 "CC35X1",
+#                 "AM13E2",
+#                 "AM263",
+#                 "AM263P",
+#                 "AM261",
+#                 "MSPM0G3507",
+#                 "MSPM0G3519",
+#                 "MSPM0G5187",
+#                 "MSPM33C32"
+#             ],
+#             "task": "compile"
+#         }
+#     ]
+#     return rex_dependencies
