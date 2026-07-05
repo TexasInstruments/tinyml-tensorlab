@@ -14,6 +14,12 @@ Welcome to the **Tiny ML ModelZoo** - Texas Instruments' central repository for 
   - [Generic Timeseries Applications](#generic-timeseries-applications)
   - [Application-Specific Examples](#application-specific-examples)
   - [Detailed Examples by Task Type](#detailed-examples-by-task-type)
+    - [Classification Examples](#classification-examples)
+    - [Regression Examples](#regression-examples)
+    - [Forecasting Examples](#forecasting-examples)
+    - [Anomaly Detection Examples](#anomaly-detection-examples)
+    - [Audio Classification Examples](#audio-classification-examples)
+    - [Image Classification Examples](#image-classification-examples)
 - [Available Models](#available-models)
 - [Adding New Models](#adding-new-models)
 - [Additional Resources](#additional-resources)
@@ -174,6 +180,7 @@ Tiny ML ModelZoo supports the following AI task categories:
 | **Time Series Regression**        | Predict continuous values from time-series inputs         | Torque estimation, speed prediction, load measurement         |
 | **Time Series Forecasting**       | Predict future values based on historical patterns        | Temperature prediction, demand forecasting                    |
 | **Time Series Anomaly Detection** | Identify abnormal patterns using autoencoder-based models | Equipment health monitoring, predictive maintenance           |
+| **Audio Classification**          | Classify audio signals from MFCC features                 | Keyword spotting, voice commands, sound event detection       |
 | **Image Classification**          | Categorize images into classes                            | Visual inspection, object recognition                         |
 
 ### Understanding Each Task
@@ -199,6 +206,8 @@ Tiny ML ModelZoo supports the following AI task categories:
   * Using independent variables Xa, Xb, Xc to predict dependent continuous variable (target) **Y** at the **same** time instant --> Regression
   * Using independent variables Xa, Xb, Xc to predict dependent continuous variable (target) **Xa** (or Xb or Xc) for the **next** time instant--> Forecasting
 
+**Audio Classification** - Extracts MFCC features from a fixed-length audio window and classifies into keyword or sound categories. Best for: "What keyword was spoken?", "What sound event occurred?"
+
 ---
 
 There are two ways to proceed using this toolchain. 
@@ -221,8 +230,11 @@ The following ready-to-use examples demonstrate various AI applications for MCUs
 
 ### Generic Timeseries Applications
 
-These applications use generic task types that can be adapted to your custom datasets. All generic timeseries applications support **all 22 target devices.**
-> **All 22 generic timeseries applications support all 22 devices:** F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, CC2755, CC1352, CC1354, CC35X1, AM263, AM263P, AM261, AM13E2
+These applications use generic task types that can be adapted to your custom datasets.
+
+> **Device support for generic timeseries tasks:**
+> - **Classification** — all 22 devices: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1, AM263, AM263P, AM261, AM13E2
+> - **Regression, Forecasting, Anomaly Detection** — C2000, MSPM0, MSPM33C, AM26x, AM13 families. Connectivity devices (CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1) do **not** support these task types.
 
 | Example Name                                                                 | Task Type | Description |
 |------------------------------------------------------------------------------|-----------|-------------|
@@ -267,16 +279,20 @@ These applications are designed for specific use cases with optimized models and
 | **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
 | **grid_fault_detection** | classification | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect electrical grid faults from sensor data |
 | **mosfet_temp_prediction** | regression | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Predict MOSFET temperature from electrical parameters |
-| **pir_detection** | pir_detection | CC2755, CC1312, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
+| **pir_detection** | pir_detection | CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
+| **dynamic_hand_gesture_recognition** | ecg_classification | MSPM0G5187 | Classify 4 dynamic hand gestures from 3-axis accelerometer data |
+| **google_speech_command** | audio_classification | MSPM0G5187 | 12-class keyword spotting from audio using MFCC features |
+| **machine_readable_code_classification** | image_classification | MSPM0G5187 | Classify QR codes, barcodes, and other symbols from 28×28 images |
+| **coffee_bean_classification** | image_classification | MSPM0G5187 | Classify coffee bean quality from images |
 | **MNIST_image_classification** | image_classification | MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | Handwritten digit recognition (MNIST dataset) |
 
 ### Summary by Task Type:
-- **Generic Timeseries Tasks** (22 examples): Support all target devices and can be adapted to your custom datasets
-  - Classification: 8 examples (1 base + 7 real-world applications)
-  - Regression: 5 examples (1 base + 4 real-world applications)
-  - Forecasting: 3 examples (1 base + 2 real-world applications)
-  - Anomaly Detection: 6 examples (1 base + 5 application variants)
-- **Application-Specific Tasks** (12 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), gearbox_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), image_classification (1), fall_detection_classification (1)
+- **Generic Timeseries Tasks** (22 examples): Adaptable to custom datasets
+  - Classification: 8 examples (1 base + 7 real-world applications) — all 22 devices
+  - Regression: 5 examples (1 base + 4 real-world applications) — C2000/MSPM0/AM families only
+  - Forecasting: 3 examples (1 base + 2 real-world applications) — C2000/MSPM0/AM families only
+  - Anomaly Detection: 6 examples (1 base + 5 application variants) — C2000/MSPM0/AM families only
+- **Application-Specific Tasks** (16 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), gearbox_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), hand_gesture_recognition (1), audio_classification (1), image_classification (3), fall_detection_classification (1)
 
 ---
 
@@ -301,6 +317,7 @@ These applications are designed for specific use cases with optimized models and
 | 13  | [PLAID_nilm_classification](examples/PLAID_nilm_classification/)                     | Multivariate | Appliance identification using the PLAID dataset.                               |
 | 14  | [pir_detection](examples/pir_detection/)                                             | Multivariate | Detect presence/motion using PIR sensor data.                                   |
 | 15  | [fall_detection_classification](examples/fall_detection_classification/)             | Multivariate | Detect and classify Human Fall vs Activities of Daily Living (ADL).             |
+| 16  | [dynamic_hand_gesture_recognition](examples/dynamic_hand_gesture_recognition/)       | Multivariate | Classify 4 dynamic hand gestures (circle, wave, tap, other) from 3-axis accelerometer. |
 
 ### Regression Examples
 
@@ -312,10 +329,10 @@ These applications are designed for specific use cases with optimized models and
 
 ### Forecasting Examples
 
-| No. | Example                                                          | Data Type    | Description                                  |
-|-----|------------------------------------------------------------------|--------------|----------------------------------------------|
-| 1   | [forecasting_pmsm_rotor](examples/forecasting_pmsm_rotor/)       | Multivariate | Forecast PMSM rotor winding temperature.     |
-| 2   | [hvac_indoor_temp_forecast](examples/hvac_indoor_temp_forecast/) | Multivariate | Predict indoor temperature for HVAC control. |
+| No. | Example                                                                        | Data Type    | Description                                  |
+|-----|--------------------------------------------------------------------------------|--------------|----------------------------------------------|
+| 1   | [forecasting_pmsm_rotor_temp](examples/forecasting_pmsm_rotor_temp/)           | Multivariate | Forecast PMSM rotor winding temperature.     |
+| 2   | [hvac_indoor_temp_forecast](examples/hvac_indoor_temp_forecast/)               | Multivariate | Predict indoor temperature for HVAC control. |
 
 ### Anomaly Detection Examples
 
@@ -328,11 +345,19 @@ These applications are designed for specific use cases with optimized models and
 | 5   | [motor_bearing_fault](examples/motor_bearing_fault/config_anomaly_detection.yaml)                       | Multivariate | Detect anomalous bearing behavior from vibration data.            |
 
 
+### Audio Classification Examples
+
+| No. | Example                                                          | Data Type | Description                                                     |
+|-----|------------------------------------------------------------------|-----------|-----------------------------------------------------------------|
+| 1   | [google_speech_command](examples/google_speech_command/)         | Audio     | 12-class keyword spotting from audio using MFCC + DSCNN model. |
+
 ### Image Classification Examples
 
-| No. | Example                                                            | Data Type | Description                                    |
-|-----|--------------------------------------------------------------------|-----------|------------------------------------------------|
-| 1   | [MNIST_image_classification](examples/MNIST_image_classification/) | Image     | Handwritten digit recognition (MNIST dataset). |
+| No. | Example                                                                                            | Data Type | Description                                                    |
+|-----|----------------------------------------------------------------------------------------------------|-----------|----------------------------------------------------------------|
+| 1   | [MNIST_image_classification](examples/MNIST_image_classification/)                                 | Image     | Handwritten digit recognition (MNIST dataset).                 |
+| 2   | [machine_readable_code_classification](examples/machine_readable_code_classification/)             | Image     | Classify QR codes, barcodes, and other symbols (28×28 images). |
+| 3   | [coffee_bean_classification](examples/coffee_bean_classification/)                                 | Image     | Classify coffee bean quality from images.                      |
 
 ---
 
@@ -445,11 +470,19 @@ Note: LSTM models are not NPU-supported.
 | `FCST_LSTM8` | Varies | LSTM | No | Single LSTM (hidden=8) + Linear |
 | `FCST_LSTM10` | Varies | LSTM | No | Single LSTM (hidden=10) + Linear |
 
+### Audio Classification Models
+
+| Model Name | Parameters | Architecture | NPU | Description |
+|------------|------------|--------------|-----|-------------|
+| `DSCNN_NPU` | ~9K | DSCNN | Yes | Depthwise separable CNN for keyword spotting; input (1, 49, 10) MFCC |
+
 ### Image Classification Models
 
 | Model Name | Parameters | Architecture | NPU | Description |
 |------------|------------|--------------|-----|-------------|
 | `Lenet5` | ~60K | LeNet-5 | No | Classic CNN for image classification |
+| `MobileNetV1_58k_NPU` | ~58K | MobileNetV1-style DW-Sep | Yes | Compact NPU-optimized image classifier |
+| `MobileNetV2_58k_NPU` | ~58K | MobileNetV2-style DW-Sep | Yes | Inverted residual image classifier |
 
 ---
 
