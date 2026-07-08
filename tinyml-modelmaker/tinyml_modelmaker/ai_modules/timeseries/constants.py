@@ -1285,7 +1285,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
 
     MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
-        data_processing_feature_extraction=dict(feat_ext_transform=['FE_DECIMATE', 'FE_Q15', 'FE_FFT_MAG', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
+        data_processing_feature_extraction=dict(feat_ext_transform=['FE_DECIMATE', 'FE_Q15', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
 
     Generic_1024Input_FFTBIN_64Feature_8Frame=dict(
@@ -1318,6 +1318,9 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     Generic_128Input_RAW_128Feature_1Frame=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_8Input_ABS_8Feature_1Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['ABS', 'LOG_DB', 'CONCAT'], frame_size=8, feature_size_per_frame=8, num_frame_concat=1, normalize_bin=True, frame_skip=1, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=11,),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_REGRESSION), ),
     PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=33, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),
