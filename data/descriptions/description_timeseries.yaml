@@ -5217,26 +5217,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -5503,26 +5483,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -5797,26 +5757,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -6083,36 +6023,6 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -6387,36 +6297,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -6683,36 +6563,6 @@ model_descriptions:
           model_selection_factor: 2
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 2
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 2
@@ -6987,26 +6837,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -7273,36 +7103,6 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -7577,36 +7377,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -7873,26 +7643,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -8167,26 +7917,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -8457,26 +8187,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 0
           sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -8743,26 +8453,6 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -9337,36 +9027,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -9638,36 +9298,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 1
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -9934,26 +9564,6 @@ model_descriptions:
           model_selection_factor: 0
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 0
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 0
@@ -10229,36 +9839,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 3
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 3
-          sram: TBD
         F280013:
           flash: 11331
           inference_time_us: 11091
@@ -10525,36 +10105,6 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
@@ -10832,36 +10382,6 @@ model_descriptions:
           inference_time_us: TBD
           model_selection_factor: 6
           sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
-        CC35X1:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 6
-          sram: TBD
         F280013:
           flash: TBD
           inference_time_us: TBD
@@ -11131,36 +10651,6 @@ model_descriptions:
           model_selection_factor: 1
           sram: TBD
         AM263P:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1312:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1314:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1352:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC1354:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC2755:
-          flash: TBD
-          inference_time_us: TBD
-          model_selection_factor: 1
-          sram: TBD
-        CC35X1:
           flash: TBD
           inference_time_us: TBD
           model_selection_factor: 1
