@@ -40,7 +40,7 @@ from ..base.fx import TinyMLQuantFxBaseModule
 from torch.fx import GraphModule
 from typing import List, Tuple, Optional
 
-from ...surgery.quant_helper_func import remove_identity
+from ...surgery.quant_helper_func import remove_identity, assign_same_observers_for_residual_inputs
 from .quant_utils import TINPUQuantizedReplacementUtils
 
 
@@ -115,6 +115,7 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         _is_x86 = platform.machine() in ('x86_64', 'AMD64', 'x86')
         backend = 'fbgemm' if (platform.system() == 'Windows' or (platform.system() == 'Darwin' and _is_x86)) else 'qnnpack'
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
+        assign_same_observers_for_residual_inputs(self.module)
 
     def convert(self, *args, model_qconfig_format: str = TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
         '''

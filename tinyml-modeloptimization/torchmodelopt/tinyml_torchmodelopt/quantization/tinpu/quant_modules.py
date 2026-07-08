@@ -292,17 +292,20 @@ class AdaptiveAvgPool2d(torch.nn.Module):
         """
         shape = x.shape
         area = shape[2] * shape[3]
-        if(self.output_size[0]*self.output_size[1] == 1):
+        # Handle output_size as int or tuple/list
+        output_size = self.output_size if isinstance(self.output_size, (tuple, list)) else (self.output_size,)
+        output_size_1 = (len(output_size) == 1 and output_size[0] == 1) or (len(output_size) == 2 and output_size[0]*output_size[1] == 1)
+        if(output_size_1):
             offset, mult, shift_mult = compute_offset_scale_shift(self.zero_point, 1 / area, num_bits_scale=self.num_bits_scale)
             oss = TINPUOffsetScaleShift(offset, mult, shift_mult, self.quant_min, self.quant_max, ndim=2, dim=1)
             
             x = self.reduce_sum(x) 
             x = self.round(x)         
             x = oss(x) 
-        elif ((shape[2] % self.output_size[0] == 0) and (shape[3] % self.output_size[1] == 0)):
-            stride_size = (shape[2] // self.output_size[0], shape[3] // self.output_size[1])
-            kernel_size = (shape[2] - (self.output_size[0] - 1) * stride_size[0],
-                           shape[3] - (self.output_size[1] - 1) * stride_size[1])
+        elif ((shape[2] % output_size[0] == 0) and (shape[3] % output_size[1] == 0)):
+            stride_size = (shape[2] // output_size[0], shape[3] // output_size[1])
+            kernel_size = (shape[2] - (output_size[0] - 1) * stride_size[0],
+                           shape[3] - (output_size[1] - 1) * stride_size[1])
             avg_pool_2d = torch.nn.AvgPool2d(kernel_size=kernel_size, stride=stride_size)
             total_kernel_area = kernel_size[0] * kernel_size[1]
             if total_kernel_area <= 0:
@@ -373,11 +376,12 @@ class AddReLUBlock(torch.nn.Module):
             Output tensor after addition, quantization, and optional ReLU
         """
         out = x + y
-        y = self.oss(out)
         if self.with_relu:
-            y = self.relu(y)
-            y = self.clip(y)
-        return y
+            out = self.relu(out)
+            out = self.clip(out)
+        else:
+            out = self.oss(out)
+        return out
 
 class DQAddReLUBlock(torch.nn.Module):
     """Dequantize-Add-ReLU block with optional quantization.
