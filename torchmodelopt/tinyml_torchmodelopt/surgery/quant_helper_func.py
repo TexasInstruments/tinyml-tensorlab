@@ -297,7 +297,7 @@ def replace_call_function_or_method(main_module: GraphModule, start: torch.Node,
             # Remove the original start node
             main_module.graph.erase_node(start)
             lint_and_recompile(main_module)
-            return
+            return new_node
 
     # Get the name of replaced module
     new_node_name = get_name_from_module(replace_module, module_no)
@@ -315,6 +315,7 @@ def replace_call_function_or_method(main_module: GraphModule, start: torch.Node,
         # Remove intermediate nodes
         remove_intermediate_call_modules(main_module, new_node, start, end)
     lint_and_recompile(main_module)
+    return new_node
 
 def replace_call_module(main_module: GraphModule, start: Node, end: Node, replace_module: torch.nn.Module, module_no: int = 0, rename_node_flag: bool = False) -> None:
     """Replace the call_module at start node with replace_module.
@@ -491,24 +492,27 @@ def adjust_residual_inputs_qconfig(model: GraphModule, range_max: int = 0, quant
     model.recompile()
     return model
 
-def assign_same_observers(model: GraphModule, node_1: Node, node_2: Node) -> GraphModule:
+def assign_same_observers(model: GraphModule, node: Node, node_1: Node, node_2: Node) -> GraphModule:
     """Assign the same observers to two nodes' activation quantization.
     
     Args:
         model: GraphModule containing the nodes
-        node_1: First node to get observer from
-        node_2: Second node to assign observer to
+        node:   Node to get observer from
+        node_1: First node to assign observer
+        node_2: Second node to assign observer
         
     Returns:
         Modified GraphModule
     """
     activation_post_proc = None
-    if hasattr(model, node_1.target):
-        module_attr = getattr(model, node_1.target)
+    if hasattr(model, node.next.next.target):
+        module_attr = getattr(model, node.next.next.target)
         if hasattr(module_attr, "activation_post_process"):
             activation_post_proc = module_attr.activation_post_process
 
-    if activation_post_proc and hasattr(model, node_2.target):
+    if activation_post_proc and hasattr(model, node_1.target) and hasattr(model, node_2.target):
+        module_attr = getattr(model, node_1.target)
+        setattr(module_attr, "activation_post_process", activation_post_proc)
         module_attr = getattr(model, node_2.target)
         setattr(module_attr, "activation_post_process", activation_post_proc)
         model.graph.lint()
@@ -525,12 +529,12 @@ def assign_same_observers_for_residual_inputs(model: GraphModule):
     Args:
         model: GraphModule to modify
     """
-    residual_operators = {operator.add, torch.add, "add", torch.cat, torch.stack}
+    residual_operators = {operator.add, torch.add, "add"}
     for node in model.graph.nodes:
         target_name = node.target
         if target_name in residual_operators:
             node_1, node_2 = node.args
-            assign_same_observers(model, node_1, node_2)
+            assign_same_observers(model, node, node_1, node_2)
 
 
 def remove_identity(model: torch.nn.Module, verbose_mode: bool = False, **kwargs) -> torch.fx.GraphModule:
