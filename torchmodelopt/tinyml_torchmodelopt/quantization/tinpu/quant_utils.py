@@ -227,6 +227,8 @@ class TINPUQuantizedReplacementUtils():
         first_quant_nodes = self._find_first_quant_node()
 
         for first_quant_node in first_quant_nodes:
+            if not first_quant_node.users:
+                continue
             user = list(first_quant_node.users)[0]
             named_modules = self._get_named_modules()
 
@@ -525,33 +527,15 @@ class TINPUQuantizedReplacementUtils():
         self.from_flatten(flatten_node, flatten_node)
         return None
     
-    def from_add_relu(self, start: Node, end: Node, with_relu: bool=True):
+    def from_add_relu(self, start: Node, end: Node, with_relu: bool=True):            
         add_scale, zero_point_ = self.get_q_params(start, using='prev')
-        input_scale_1, zero_point_1 = self.get_q_params(start.args[0], using='this')
-        input_scale_2, zero_point_2 = self.get_q_params(start.args[1], using='this')
+        input_scale_1, zero_point_1 = self.get_q_params(start.args[0], using='prev')
+        input_scale_2, zero_point_2 = self.get_q_params(start.args[1], using='prev')
         if input_scale_1 == input_scale_2:
             add_relu_block = AddReLUBlock(0, 2**self.activation_bw - 1, input_scale_1/add_scale, zero_point_, with_relu, num_bits_scale=self.num_bits_scale)
         else:
             add_relu_block = DQAddReLUBlock(self.activation_bw, add_scale, input_scale_1, input_scale_2, zero_point_, zero_point_1, zero_point_2, with_relu, num_bits_scale=self.num_bits_scale) 
-        new_node = replace_call_function_or_method(self.module, start, start, add_relu_block, self._get_module_num())
-        start = new_node
-        # Add the quantization params of the current node
-        if start.name not in self.graph_quant_params.keys():
-            self.graph_quant_params[start.name] = dict()
-        self.graph_quant_params[start.name]['scale'] = add_scale
-        self.graph_quant_params[start.name]['zero_point'] = zero_point_
-        # Add the quantization params for the users of current node
-        for user in start.users:
-            if 'next' in self.graph_quant_params[start.name]:
-                self.graph_quant_params[start.name]['next'].append(user)
-            else:
-                self.graph_quant_params[start.name]['next'] = [user]
-            if user.name not in self.graph_quant_params.keys():
-                self.graph_quant_params[user.name] = dict()
-            if 'prev' in self.graph_quant_params[user.name]:
-                self.graph_quant_params[user.name]['prev'].append(start)
-            else:
-                self.graph_quant_params[user.name]['prev'] = [start]
+        replace_call_function_or_method(self.module, start, start, add_relu_block, self._get_module_num())
         return None
     
     def from_add(self, start: Node, end: Node, with_relu: bool=False):

@@ -164,15 +164,11 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             raise TypeError("qconfig_type must be dict, QConfig, QConfigMapping, or None. "
                           "Got: {}".format(type(qconfig_type)))
 
-        qconfig_mapping = self.apply_quantization_to_supported_layers(qconfig_mapping, model)
         # Prepare model for quantization
         if prepare_qdq:
             self.module = quantize_fx.prepare_qat_fx(model, qconfig_mapping, example_inputs)
         else:
             self.module = quantize_fx.prepare_fx(model, qconfig_mapping, example_inputs)
-
-        # Remove input observer to avoid QuantizeLinear/DequantizeLinear on raw inputs
-        # self._remove_input_observer()
 
     def _configure_ptq_bias_calibration(self):
         """Configure bias calibration for PTQ mode."""
@@ -190,97 +186,6 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             'Freezing BN for subsequent epochs': None,
             'Freezing ranges for subsequent epochs': None
         })
-
-    def apply_quantization_to_supported_layers(self, qconfig_mapping, model):
-        """Remove quantization from layers that are not Conv, BatchNorm, Linear, or Pooling.
-
-        This function keeps the global qconfig but disables it for unsupported layer types,
-        restricting quantization to commonly quantizable layers. Only leaf (non-container)
-        modules are checked - container modules are allowed to propagate quantization to
-        their children.
-
-        Args:
-            qconfig_mapping: QConfigMapping instance to be configured
-            model: Model to iterate over
-
-        Returns:
-            Modified QConfigMapping with unsupported layers set to None
-        """
-        supported_types = (
-            torch.nn.Identity, torch.nn.Dropout,
-            torch.nn.Conv1d, torch.nn.Conv2d, torch.nn.Conv3d,
-            torch.nn.BatchNorm1d, torch.nn.BatchNorm2d, torch.nn.BatchNorm3d,
-            torch.nn.Linear,
-            torch.nn.MaxPool1d, torch.nn.MaxPool2d, torch.nn.MaxPool3d,
-            torch.nn.AvgPool1d, torch.nn.AvgPool2d, torch.nn.AvgPool3d,
-            torch.nn.AdaptiveAvgPool1d, torch.nn.AdaptiveAvgPool2d, torch.nn.AdaptiveAvgPool3d,
-            torch.nn.AdaptiveMaxPool1d, torch.nn.AdaptiveMaxPool2d, torch.nn.AdaptiveMaxPool3d,
-        )
-
-        # Recursively check modules and set unsupported leaf modules to None
-        for name, module in model.named_modules():
-            if name == '':
-                continue
-
-            # Only check leaf modules (modules with no children)
-            if list(module.children()):
-                continue
-
-            # Set qconfig to None for unsupported leaf modules
-            if not isinstance(module, supported_types):
-                qconfig_mapping.set_module_name(name, None)
-        return qconfig_mapping
-
-    def _remove_input_observer(self):
-        """Remove observer attached to input placeholder node.
-
-        After FX model preparation, an observer is attached to the input placeholder
-        (activation_post_process_0). This removes that observer and rewires the graph
-        to pass input directly to the first layer, avoiding QuantizeLinear/DequantizeLinear
-        on raw inputs.
-
-        The graph is recompiled to maintain consistency after rewiring.
-        """
-        if not hasattr(self.module, 'graph'):
-            return
-
-        # Find the first placeholder node (model input)
-        placeholder_node = None
-        for node in self.module.graph.nodes:
-            if node.op == 'placeholder':
-                placeholder_node = node
-                break
-
-        if placeholder_node is None:
-            return
-
-        # Find observer call immediately after placeholder
-        observer_node = None
-        for user in placeholder_node.users:
-            if user.op == 'call_module' and 'activation_post_process' in user.target:
-                observer_node = user
-                break
-
-        if observer_node is None:
-            return
-
-        # Collect users first to avoid modification during iteration
-        observer_users = list(observer_node.users.keys())
-
-        # Rewire users of observer to use placeholder directly
-        for observer_user in observer_users:
-            observer_user.replace_input_with(observer_node, placeholder_node)
-
-        # Remove the observer node from graph
-        self.module.graph.erase_node(observer_node)
-
-        # Remove observer module from model
-        if hasattr(self.module, observer_node.target):
-            delattr(self.module, observer_node.target)
-
-        # Recompile to ensure consistency
-        self.module.graph.lint()
-        self.module.recompile()
 
     # ========================================================================
     # Configuration Management
