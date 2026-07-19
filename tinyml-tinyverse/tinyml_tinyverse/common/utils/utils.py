@@ -77,6 +77,8 @@ from glob import glob
 from logging import getLogger
 from os.path import basename as opb
 
+import matplotlib
+matplotlib.use('Agg')  # Force non-interactive backend for headless training environments
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
@@ -1354,6 +1356,7 @@ def train_one_epoch_anomalydetection(
         amp_autocast=None, grad_scaler=None, **kwargs):
     import contextlib
     amp_ctx = amp_autocast or contextlib.nullcontext()
+    logger = getLogger(f"root.train_utils.train.{phase}")
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
@@ -1405,6 +1408,7 @@ def train_one_epoch_anomalydetection(
 
     if model_ema:
         model_ema.update_parameters(model)
+    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
 
 
 def evaluate_anomalydetection(
@@ -1429,10 +1433,11 @@ def evaluate_anomalydetection(
             else:
                 output = model(data)
 
-            loss = criterion(output, target) 
+            loss = criterion(output, target)
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
     metric_logger.synchronize_between_processes()
+    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
     return metric_logger.loss.global_avg
 
 
