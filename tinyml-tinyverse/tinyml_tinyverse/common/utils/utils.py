@@ -1547,8 +1547,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
             else:
                 output = model(data)
 
-            target_list.append(target)
-            predictions_list.append(output)
+            target_list.append(target.cpu())
+            predictions_list.append(output.cpu())
 
             loss = criterion(output.squeeze(), target)
             acc1 = accuracy(output.squeeze(), target, topk=(1,))
@@ -1567,10 +1567,10 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     logger.info(f'{header} Acc@1 {accuracy(predictions_array.squeeze(), target_array, topk=(1,))[0]:.3f}')
     f1 = get_f1_score(predictions_array.squeeze(), target_array, num_classes)
     logger.info(f'{header} F1-Score {f1:.3f}')
-    auc = get_au_roc(predictions_array, target_array, num_classes)
+    auc = get_au_roc(predictions_array.squeeze(), target_array, num_classes)
     logger.info("AU-ROC Score: {:.3f}".format(auc))
     confusion_matrix_total = get_confusion_matrix(
-        predictions_array.cpu(), target_array.type(dtype=torch.int64).cpu(), num_classes).numpy()
+        predictions_array.squeeze(), target_array.type(dtype=torch.int64), num_classes).numpy()
     logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
         columns=[f"Predicted as: {x}" for x in range(num_classes)],
         index=[f"Ground Truth: {x}" for x in range(num_classes)]), headers="keys", tablefmt='grid')))

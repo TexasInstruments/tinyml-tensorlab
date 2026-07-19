@@ -154,14 +154,14 @@ def resolve_paths(params, target_devices_all):
         params.compilation.compilation_path = absolute_path(params.compilation.compile_output_path)
         params.compilation.model_packaged_path = os.path.join(
             params.compilation.compile_output_path,
-            '_'.join(os.path.split(params.common.run_name))
+            '_'.join(filter(None, os.path.split(params.common.run_name)))
             + f'_{params.common.target_device}.zip')
     else:
         params.compilation.compilation_path = absolute_path(
             os.path.join(params.common.project_run_path, 'compilation'))
         params.compilation.model_packaged_path = os.path.join(
             params.compilation.compilation_path,
-            '_'.join(os.path.split(params.common.run_name))
+            '_'.join(filter(None, os.path.split(params.common.run_name)))
             + f'_{params.common.target_device}.zip')
 
     return params

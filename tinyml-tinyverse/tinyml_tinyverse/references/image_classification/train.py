@@ -426,7 +426,7 @@ def main(gpu, args):
         logger.info(f"Best Epoch: {best['epoch']}")
         logger.info(f"Acc@1 {best['accuracy']:.3f}")
         logger.info(f"F1-Score {best['f1']:.3f}")
-        logger.info(f"AUC ROC Score {best['f1']:.3f}")
+        logger.info(f"AUC ROC Score {best['auc']:.3f}")
         logger.info("")
         logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
                       columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],

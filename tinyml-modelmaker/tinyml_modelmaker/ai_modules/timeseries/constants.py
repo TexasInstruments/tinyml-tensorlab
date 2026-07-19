@@ -166,7 +166,10 @@ def get_default_data_dir_for_task(task_category):
     elif task_category in [TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING]:
         return DATA_DIR_FILES
     else:
-        return DATA_DIR_CLASSES  # Safe fallback
+        raise ValueError(
+            f"Unsupported task_category '{task_category}'. "
+            f"Expected one of: {[TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_ANOMALYDETECTION, TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING]}"
+        )
 
 
 # target_device
