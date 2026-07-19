@@ -98,49 +98,51 @@ def main(gpu, args):
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler,
         num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
+    try:
 
-    logger.info(f"Loading ONNX model: {args.model_path}")
-    ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
+        logger.info(f"Loading ONNX model: {args.model_path}")
+        ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
 
-    predicted = torch.tensor([]).to(device, non_blocking=True)
-    ground_truth = torch.tensor([]).to(device, non_blocking=True)
+        predicted = torch.tensor([]).to(device, non_blocking=True)
+        ground_truth = torch.tensor([]).to(device, non_blocking=True)
 
-    for _, batched_data, batched_target in data_loader:
-        batched_data = batched_data.to(device, non_blocking=True).float()
-        batched_target = batched_target.to(device, non_blocking=True).float()
-        if transform:
-            batched_data = transform(batched_data)
-        for data in batched_data:
-            predicted = torch.cat((predicted, torch.tensor(
-                ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]
-            ).to(device)))
-        ground_truth = torch.cat((ground_truth, batched_target))
+        for _, batched_data, batched_target in data_loader:
+            batched_data = batched_data.to(device, non_blocking=True).float()
+            batched_target = batched_target.to(device, non_blocking=True).float()
+            if transform:
+                batched_data = transform(batched_data)
+            for data in batched_data:
+                predicted = torch.cat((predicted, torch.tensor(
+                    ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]
+                ).to(device)))
+            ground_truth = torch.cat((ground_truth, batched_target))
 
-    mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-    logger.info("Plotting Regressions on dataset")
+        mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
+        logger.info("Plotting Regressions on dataset")
 
-    metric = torcheval.metrics.MeanSquaredError()
-    r2_score = torcheval.metrics.R2Score()
+        metric = torcheval.metrics.MeanSquaredError()
+        r2_score = torcheval.metrics.R2Score()
 
-    df = pd.DataFrame({
-        "predicted": predicted.to('cpu').numpy().flatten(),
-        "ground_truth": ground_truth.to('cpu').numpy().flatten()
-    })
-    df.to_csv(os.path.join(args.output_dir, 'post_training_analysis', "results_on_test_set.csv"), index=False)
-    logger.info(f"Outputs on the test set saved at : {os.path.join(args.output_dir, 'post_training_analysis', 'results_on_test_set.csv')}")
+        df = pd.DataFrame({
+            "predicted": predicted.to('cpu').numpy().flatten(),
+            "ground_truth": ground_truth.to('cpu').numpy().flatten()
+        })
+        df.to_csv(os.path.join(args.output_dir, 'post_training_analysis', "results_on_test_set.csv"), index=False)
+        logger.info(f"Outputs on the test set saved at : {os.path.join(args.output_dir, 'post_training_analysis', 'results_on_test_set.csv')}")
 
-    utils.plot_actual_vs_predicted_regression(ground_truth.to('cpu'), predicted.to('cpu'),
-                                               os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
-    utils.plot_residual_error_regression(ground_truth.to('cpu'), predicted.to('cpu'),
-                                          os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
+        utils.plot_actual_vs_predicted_regression(ground_truth.to('cpu'), predicted.to('cpu'),
+                                                   os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
+        utils.plot_residual_error_regression(ground_truth.to('cpu'), predicted.to('cpu'),
+                                              os.path.join(args.output_dir, 'post_training_analysis'), phase='test')
 
-    metric.update(predicted.to('cpu'), ground_truth.to('cpu'))
-    r2_score.update(predicted.to('cpu'), ground_truth.to('cpu'))
+        metric.update(predicted.to('cpu'), ground_truth.to('cpu'))
+        r2_score.update(predicted.to('cpu'), ground_truth.to('cpu'))
 
-    logger = getLogger("root.main.test_data")
-    logger.info(f"{logger.name}: Test Data Evaluation RMSE: {torch.sqrt(metric.compute()):.2f}")
-    logger.info(f"{logger.name}: Test Data Evaluation R2-Score: {r2_score.compute():.2f}")
-    shutdown_data_loaders(data_loader)
+        logger = getLogger("root.main.test_data")
+        logger.info(f"{logger.name}: Test Data Evaluation RMSE: {torch.sqrt(metric.compute()):.2f}")
+        logger.info(f"{logger.name}: Test Data Evaluation R2-Score: {r2_score.compute():.2f}")
+    finally:
+        shutdown_data_loaders(data_loader)
     return
 
 

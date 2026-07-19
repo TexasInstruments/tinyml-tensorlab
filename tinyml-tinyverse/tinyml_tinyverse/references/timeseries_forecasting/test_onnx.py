@@ -101,91 +101,93 @@ def main(gpu, args):
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=args.batch_size, sampler=test_sampler,
         num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
+    try:
 
-    logger.info(f"Loading ONNX model: {args.model_path}")
-    ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
+        logger.info(f"Loading ONNX model: {args.model_path}")
+        ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
 
-    predicted = torch.tensor([]).to(device, non_blocking=True)
-    ground_truth = torch.tensor([]).to(device, non_blocking=True)
+        predicted = torch.tensor([]).to(device, non_blocking=True)
+        ground_truth = torch.tensor([]).to(device, non_blocking=True)
 
-    for _, batched_data, batched_target in data_loader_test:
-        batched_data = batched_data.to(device, non_blocking=True).float()
-        batched_target = batched_target.to(device, non_blocking=True).float()
-        if transform:
-            batched_data = transform(batched_data)
-        for data in batched_data:
-            predicted = torch.cat((predicted, torch.tensor(
-                ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]
-            ).to(device)))
-        ground_truth = torch.cat((ground_truth, batched_target))
+        for _, batched_data, batched_target in data_loader_test:
+            batched_data = batched_data.to(device, non_blocking=True).float()
+            batched_target = batched_target.to(device, non_blocking=True).float()
+            if transform:
+                batched_data = transform(batched_data)
+            for data in batched_data:
+                predicted = torch.cat((predicted, torch.tensor(
+                    ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]
+                ).to(device)))
+            ground_truth = torch.cat((ground_truth, batched_target))
 
-    predicted = predicted.view_as(ground_truth)
+        predicted = predicted.view_as(ground_truth)
 
-    logger = getLogger("root.main.test_data")
-    for idx, item in enumerate(dataset_test.header_row):
-        for target_variable_name in item:
-            logger.info(f"Variable {target_variable_name}:")
-            logger.info(f"  SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(ground_truth[:, :, idx], predicted[:, :, idx]):.2f}%")
-            logger.info(f"  R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(predicted[:, :, idx], ground_truth[:, :, idx]):.4f}")
-
-            # Log timestep specific metrics
-            for step in range(args.forecast_horizon):
-                logger.info(f"  Timestep {step + 1}:")
-                logger.info(f"      SMAPE: {utils.smape(ground_truth[:, step, idx], predicted[:, step, idx]):.2f}%")
-                logger.info(f"      R²: {utils.get_r2_score(predicted[:, step, idx], ground_truth[:, step, idx]):.4f}")
-
-    # Save final predictions and create visualizations
-    if args.output_dir and ground_truth is not None:
-        results_dir = os.path.join(args.output_dir, 'test_results')
-        os.makedirs(results_dir, exist_ok=True)
-
-        # Save predictions in CSV format
-        utils.save_forecasting_predictions_csv(
-            ground_truth,
-            predicted,
-            results_dir,
-            dataset_test.header_row,
-            args.forecast_horizon,
-        )
-
-        plots_dir = os.path.join(results_dir, 'prediction_plots')
-        os.makedirs(plots_dir, exist_ok=True)
-
-        # Create scatter plots for each variable
+        logger = getLogger("root.main.test_data")
         for idx, item in enumerate(dataset_test.header_row):
             for target_variable_name in item:
-                fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
-                axes = axes.flatten()
+                logger.info(f"Variable {target_variable_name}:")
+                logger.info(f"  SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(ground_truth[:, :, idx], predicted[:, :, idx]):.2f}%")
+                logger.info(f"  R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(predicted[:, :, idx], ground_truth[:, :, idx]):.4f}")
+
+                # Log timestep specific metrics
                 for step in range(args.forecast_horizon):
-                    step_targets = ground_truth[:, step, idx]
-                    step_outputs = predicted[:, step, idx]
+                    logger.info(f"  Timestep {step + 1}:")
+                    logger.info(f"      SMAPE: {utils.smape(ground_truth[:, step, idx], predicted[:, step, idx]):.2f}%")
+                    logger.info(f"      R²: {utils.get_r2_score(predicted[:, step, idx], ground_truth[:, step, idx]):.4f}")
 
-                    step_smape = utils.smape(ground_truth[:, step, idx], predicted[:, step, idx])
-                    step_r2 = utils.get_r2_score(predicted[:, step, idx], ground_truth[:, step, idx])
+        # Save final predictions and create visualizations
+        if args.output_dir and ground_truth is not None:
+            results_dir = os.path.join(args.output_dir, 'test_results')
+            os.makedirs(results_dir, exist_ok=True)
 
-                    # Convert to numpy for matplotlib plotting
-                    step_targets_np = step_targets.detach().cpu().numpy() if isinstance(step_targets, torch.Tensor) else step_targets
-                    step_outputs_np = step_outputs.detach().cpu().numpy() if isinstance(step_outputs, torch.Tensor) else step_outputs
+            # Save predictions in CSV format
+            utils.save_forecasting_predictions_csv(
+                ground_truth,
+                predicted,
+                results_dir,
+                dataset_test.header_row,
+                args.forecast_horizon,
+            )
 
-                    # Scatter plot
-                    ax = axes[step]
-                    ax.scatter(step_targets_np, step_outputs_np, alpha=0.5, label='Predictions')
+            plots_dir = os.path.join(results_dir, 'prediction_plots')
+            os.makedirs(plots_dir, exist_ok=True)
 
-                    # Add perfect prediction line
-                    min_val = min(step_targets_np.min(), step_outputs_np.min())
-                    max_val = max(step_targets_np.max(), step_outputs_np.max())
-                    ax.plot([min_val, max_val], [min_val, max_val], 'k--', label='Perfect Prediction')
+            # Create scatter plots for each variable
+            for idx, item in enumerate(dataset_test.header_row):
+                for target_variable_name in item:
+                    fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
+                    axes = axes.flatten()
+                    for step in range(args.forecast_horizon):
+                        step_targets = ground_truth[:, step, idx]
+                        step_outputs = predicted[:, step, idx]
 
-                    ax.set_xlabel(f"Actual Variable {target_variable_name}")
-                    ax.set_ylabel(f"Predicted Variable {target_variable_name}")
-                    ax.set_title(f"{step + 1}-step ahead\nR² = {step_r2:.4f}, SMAPE = {step_smape:.2f}%")
-                    ax.legend()
+                        step_smape = utils.smape(ground_truth[:, step, idx], predicted[:, step, idx])
+                        step_r2 = utils.get_r2_score(predicted[:, step, idx], ground_truth[:, step, idx])
 
-                plt.tight_layout()
-                plt.savefig(os.path.join(plots_dir, f'{target_variable_name}_predictions.png'))
-                plt.close()
+                        # Convert to numpy for matplotlib plotting
+                        step_targets_np = step_targets.detach().cpu().numpy() if isinstance(step_targets, torch.Tensor) else step_targets
+                        step_outputs_np = step_outputs.detach().cpu().numpy() if isinstance(step_outputs, torch.Tensor) else step_outputs
 
-    shutdown_data_loaders(data_loader_test)
+                        # Scatter plot
+                        ax = axes[step]
+                        ax.scatter(step_targets_np, step_outputs_np, alpha=0.5, label='Predictions')
+
+                        # Add perfect prediction line
+                        min_val = min(step_targets_np.min(), step_outputs_np.min())
+                        max_val = max(step_targets_np.max(), step_outputs_np.max())
+                        ax.plot([min_val, max_val], [min_val, max_val], 'k--', label='Perfect Prediction')
+
+                        ax.set_xlabel(f"Actual Variable {target_variable_name}")
+                        ax.set_ylabel(f"Predicted Variable {target_variable_name}")
+                        ax.set_title(f"{step + 1}-step ahead\nR² = {step_r2:.4f}, SMAPE = {step_smape:.2f}%")
+                        ax.legend()
+
+                    plt.tight_layout()
+                    plt.savefig(os.path.join(plots_dir, f'{target_variable_name}_predictions.png'))
+                    plt.close()
+
+    finally:
+        shutdown_data_loaders(data_loader_test)
 
 
 def run(args):
