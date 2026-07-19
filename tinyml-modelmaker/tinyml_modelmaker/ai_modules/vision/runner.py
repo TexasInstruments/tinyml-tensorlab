@@ -64,9 +64,9 @@ class ModelRunner():
         utils.misc_utils.resolve_paths(self.params, constants.TARGET_DEVICES_ALL)
 
         if self.params.common.target_device in self.params.training.target_devices:
-            inference_time_us_list = {k:v['inference_time_us'] for k,v in self.params.training.target_devices.items()}
-            sram_usage_list = {k: v['sram'] for k, v in self.params.training.target_devices.items()}
-            flash_usage_list = {k: v['flash'] for k, v in self.params.training.target_devices.items()}
+            inference_time_us_list = {k: v.get('inference_time_us') for k, v in self.params.training.target_devices.items()}
+            sram_usage_list = {k: v.get('sram') for k, v in self.params.training.target_devices.items()}
+            flash_usage_list = {k: v.get('flash') for k, v in self.params.training.target_devices.items()}
             logger.info('---------------------------------------------------------------------')
             logger.info(f'Run Name: {self.params.common.run_name}')
             logger.info(f'- Model: {self.params.training.model_name}')

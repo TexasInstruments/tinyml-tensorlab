@@ -96,6 +96,8 @@ def resolve_paths(params, target_devices_all):
 
     # --- dataset name fallback ---
     if not params.dataset.dataset_name:
+        if not params.dataset.input_data_path:
+            raise ValueError('dataset.dataset_name or dataset.input_data_path must be set')
         params.dataset.dataset_name = os.path.splitext(
             os.path.basename(params.dataset.input_data_path))[0]
 
@@ -120,8 +122,8 @@ def resolve_paths(params, target_devices_all):
             params.training.training_path_quantization = absolute_path(
                 os.path.join(params.training.train_output_path, 'training_quantization'))
         params.training.model_packaged_path = os.path.join(
-            params.training.train_output_path,
-            '_'.join(os.path.split(params.common.run_name)) + '.zip')
+            params.common.projects_path,
+            '_'.join(filter(None, os.path.split(params.common.run_name))) + '.zip')
     else:
         # default: nested structure under projects_path/dataset_name/run/run_name
         params.common.projects_path = absolute_path(params.common.projects_path)
@@ -137,7 +139,7 @@ def resolve_paths(params, target_devices_all):
                 os.path.join(params.common.project_run_path, 'training', 'quantization'))
         params.training.model_packaged_path = os.path.join(
             params.training.training_path,
-            '_'.join(os.path.split(params.common.run_name)) + '.zip')
+            '_'.join(filter(None, os.path.split(params.common.run_name))) + '.zip')
 
     # --- target device validation ---
     if params.common.target_device not in target_devices_all:
