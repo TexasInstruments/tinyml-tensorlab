@@ -716,7 +716,7 @@ class SmoothedValue:
         latest = self.deque[-1]
         if isinstance(latest, torch.Tensor) and latest.ndim == 0:
             d = torch.stack(list(self.deque))
-            return d.mean().item()
+            return d.float().mean().item()
         elif isinstance(latest, numbers.Number):
             d = torch.tensor(list(self.deque), dtype=torch.float32)
             return d.mean().item()
