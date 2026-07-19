@@ -93,8 +93,8 @@ def create_inter_file_split(file_list: str, split_list_files: tuple, split_facto
     number_of_splits = len(split_list_files)
     split_factors = []
     if type(split_factor) == float:
-        if split_factor >= 1.0:
-            raise ValueError("split_factor should be less than 1")
+        if not (0.0 < split_factor < 1.0):
+            raise ValueError("split_factor must be in the range (0.0, 1.0)")
         # The default split factor is the fraction for training set.
         split_factors.append(split_factor)
         # The remainder of the set will be equally split between val or val/test
@@ -108,11 +108,11 @@ def create_inter_file_split(file_list: str, split_list_files: tuple, split_facto
         split_factors.extend(split_factor)
         remainder = 1 - sum(split_factor)
 
-    if number_of_splits > len(split_factor):
-        remainder_fraction = remainder / (number_of_splits - len(split_factor))
-        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factor))]
-    if len(split_factor) != len(split_list_files):
-        raise ValueError(f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factor)}")
+    if number_of_splits > len(split_factors):
+        remainder_fraction = remainder / (number_of_splits - len(split_factors))
+        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factors))]
+    if len(split_factors) != len(split_list_files):
+        raise ValueError(f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factors)}")
 
     with open(file_list) as fp:
         list_of_files = [x.strip() for x in fp.readlines()]  # Contains the list of files
@@ -153,8 +153,8 @@ def create_intra_file_split(file_list: str, split_list_files: tuple, split_facto
     number_of_splits = len(split_list_files)
     split_factors = []
     if type(split_factor) == float:
-        if split_factor >= 1.0:
-            raise ValueError("split_factor should be less than 1")
+        if not (0.0 < split_factor < 1.0):
+            raise ValueError("split_factor must be in the range (0.0, 1.0)")
         # The default split factor is the fraction for training set.
         split_factors.append(split_factor)
         # The remainder of the set will be equally split between val or val/test
@@ -168,11 +168,11 @@ def create_intra_file_split(file_list: str, split_list_files: tuple, split_facto
         split_factors.extend(split_factor)
         remainder = 1 - sum(split_factor)
 
-    if number_of_splits > len(split_factor):
-        remainder_fraction = remainder / (number_of_splits - len(split_factor))
-        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factor))]
-    if len(split_factor) != len(split_list_files):
-        raise ValueError(f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factor)}")
+    if number_of_splits > len(split_factors):
+        remainder_fraction = remainder / (number_of_splits - len(split_factors))
+        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factors))]
+    if len(split_factors) != len(split_list_files):
+        raise ValueError(f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factors)}")
 
     with open(file_list) as fp:
         # list_of_files = [os.path.join(os.path.dirname(os.path.dirname(file_list)), data_dir, x.strip()) for x in fp.readlines()]  # Contains the list of files
