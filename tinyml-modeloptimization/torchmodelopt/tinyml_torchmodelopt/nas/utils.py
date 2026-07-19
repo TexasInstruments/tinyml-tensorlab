@@ -73,8 +73,17 @@ def get_device(gpu_index=0):
     """
     logger = logging.getLogger("root.modelopt.nas")
     if torch.cuda.is_available():
-        device = torch.device(f'cuda:{gpu_index}')
-        logger.info('NAS device: %s (%s)', device, torch.cuda.get_device_name(device))
+        device_count = torch.cuda.device_count()
+        if not (0 <= gpu_index < device_count):
+            logger.warning(
+                'gpu_index %d is out of range (device count: %d); falling back to cpu',
+                gpu_index, device_count
+            )
+            device = torch.device('cpu')
+            logger.info('NAS device: cpu (fallback from invalid gpu_index)')
+        else:
+            device = torch.device(f'cuda:{gpu_index}')
+            logger.info('NAS device: %s (%s)', device, torch.cuda.get_device_name(device))
     elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
         device = torch.device('mps')
         logger.info('NAS device: mps (Apple Metal)')

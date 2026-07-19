@@ -73,15 +73,12 @@ def search_and_get_model(args):
     
     architect = Architect(model, args)  # Instantiate the architect for NAS
 
-    best_genotype = None   # Track the best found genotype
-    best_valid_acc = 0.0   # Track the best validation accuracy
+    best_genotype = None          # Track the best found genotype
+    best_valid_acc = float('-inf')  # Track the best validation accuracy
 
     # Main NAS loop
     for epoch in range(args.nas_budget):
         lr = scheduler.get_last_lr()[0]  # Get current learning rate
-
-        genotype = model.genotype()      # Get current architecture genotype
-        logger.info('genotype = %s', genotype)
 
         # Training step (updates model weights and architecture parameters)
         train_acc = train(args, epoch, train_loader, valid_loader, model, architect, criterion, optimizer, lr)
@@ -90,6 +87,10 @@ def search_and_get_model(args):
         # Validation step (evaluate current architecture)
         valid_acc = infer(args, epoch, valid_loader, model, criterion)
         logger.info('Test:  Acc@1 %f', valid_acc)
+
+        # Capture genotype after training so it reflects the updated architecture
+        genotype = model.genotype()
+        logger.info('genotype = %s', genotype)
 
         # Keep the genotype with the best validation accuracy
         if valid_acc > best_valid_acc:
