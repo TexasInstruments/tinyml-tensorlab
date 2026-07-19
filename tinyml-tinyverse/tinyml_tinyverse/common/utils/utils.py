@@ -1505,7 +1505,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
     num_classes = kwargs.get('num_classes')
-    confusion_matrix_total = np.zeros((num_classes, num_classes))
+    if num_classes is None:
+        raise ValueError("evaluate_classification requires 'num_classes' in kwargs")
 
     target_list = []
     predictions_list = []
