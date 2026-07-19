@@ -169,178 +169,180 @@ def main(gpu, args):
 
     logger.info("Loading data:")
     data_loader, data_loader_test = create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args, gpu)
+    try:
 
-    logger.info("Creating model")
-    model = models.get_model(
-        args.model, variables, total_forecast_outputs, input_features=input_features, model_config=args.model_config,
-        model_spec=args.model_spec,
-        dual_op=args.dual_op)
+        logger.info("Creating model")
+        model = models.get_model(
+            args.model, variables, total_forecast_outputs, input_features=input_features, model_config=args.model_config,
+            model_spec=args.model_spec,
+            dual_op=args.dual_op)
 
-    log_model_summary(model, args, variables, input_features, logger)
-    model = load_pretrained_weights(model, args, logger)
+        log_model_summary(model, args, variables, input_features, logger)
+        model = load_pretrained_weights(model, args, logger)
 
-    # if output_int not set by user, then set it to default of task_type
-    if args.output_int == None:
-        args.output_int = False
+        # if output_int not set by user, then set it to default of task_type
+        if args.output_int == None:
+            args.output_int = False
 
-    if handle_export_only(model, args, variables, input_features, logger):
-        return
+        if handle_export_only(model, args, variables, input_features, logger):
+            return
 
-    move_model_to_device(model, device, logger)
-    criterion = nn.HuberLoss()
+        move_model_to_device(model, device, logger)
+        criterion = nn.HuberLoss()
 
-    global _float_best_metric
-    sample_inputs = None
-    sample_targets = None
-    bsearch_float_metric = None
-    bsearch_example_inputs = None
-    if args.auto_quantization and args.quantization:
-        try:
-            sample_data_iter = iter(data_loader)
-            _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
-            sample_inputs = sample_data_fe.float().to(device)
-            sample_targets = sample_targets_raw.float().to(device).reshape(sample_targets_raw.shape[0], -1)
-            logger.info("Obtained sample data for auto quantization analysis")
-        except Exception as e:
-            logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
-        bsearch_float_metric = _float_best_metric
-        try:
-            bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
-        except Exception as e:
-            logger.warning(f"Could not get example inputs for binary search: {e}")
+        global _float_best_metric
+        sample_inputs = None
+        sample_targets = None
+        bsearch_float_metric = None
+        bsearch_example_inputs = None
+        if args.auto_quantization and args.quantization:
+            try:
+                sample_data_iter = iter(data_loader)
+                _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
+                sample_inputs = sample_data_fe.float().to(device)
+                sample_targets = sample_targets_raw.float().to(device).reshape(sample_targets_raw.shape[0], -1)
+                logger.info("Obtained sample data for auto quantization analysis")
+            except Exception as e:
+                logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
+            bsearch_float_metric = _float_best_metric
+            try:
+                bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
+            except Exception as e:
+                logger.warning(f"Could not get example inputs for binary search: {e}")
 
-    model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
-        calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
-        eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
-        task_type='forecasting', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
-        autoquant_tolerance_forecasting=args.autoquant_tolerance_forecasting)
+        model = utils.quantization_wrapped_model(
+            model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+            args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
+            calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
+            eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
+            task_type='forecasting', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
+            autoquant_tolerance_forecasting=args.autoquant_tolerance_forecasting)
 
-    optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
-    model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
-    resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
+        optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
+        model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
+        resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
 
-    phase = 'QuantTrain' if args.quantization else 'FloatTrain'
-    logger.info("Start training")
-    start_time = timeit.default_timer()
+        phase = 'QuantTrain' if args.quantization else 'FloatTrain'
+        logger.info("Start training")
+        start_time = timeit.default_timer()
 
-    best_epoch_values = {
-        'epoch': -1,
-        'true_values': None,
-        'predictions': None,
-        'overall_smape': float('inf'),
-    }
+        best_epoch_values = {
+            'epoch': -1,
+            'true_values': None,
+            'predictions': None,
+            'overall_smape': float('inf'),
+        }
 
-    for epoch in range(args.start_epoch, args.epochs):
-        if args.distributed:
-            train_sampler.set_epoch(epoch)
+        for epoch in range(args.start_epoch, args.epochs):
+            if args.distributed:
+                train_sampler.set_epoch(epoch)
 
-        utils.train_one_epoch_forecasting(
-            model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
-            print_freq=args.print_freq, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op,
-            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
+            utils.train_one_epoch_forecasting(
+                model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
+                print_freq=args.print_freq, phase=phase, num_classes=total_forecast_outputs, dual_op=args.dual_op,
+                is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
 
-        if not (args.quantization_method in ['PTQ'] and args.quantization):
-            lr_scheduler.step()
+            if not (args.quantization_method in ['PTQ'] and args.quantization):
+                lr_scheduler.step()
 
-        target_tensor, prediction_tensor, overall_smape = utils.evaluate_forecasting(
-            model, criterion, data_loader_test, device=device, transform=None, phase=phase,
-            num_classes=total_forecast_outputs, dual_op=args.dual_op)
-
-        if model_ema:
             target_tensor, prediction_tensor, overall_smape = utils.evaluate_forecasting(
-                model_ema, criterion, data_loader_test, device=device, transform=None,
-                log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
+                model, criterion, data_loader_test, device=device, transform=None, phase=phase,
+                num_classes=total_forecast_outputs, dual_op=args.dual_op)
 
-        if overall_smape < best_epoch_values['overall_smape']:
-            best_epoch_values['overall_smape'] = overall_smape
-            best_epoch_values['epoch'] = epoch
-            best_epoch_values['true_values'] = target_tensor.clone()
-            best_epoch_values['predictions'] = prediction_tensor.clone()
+            if model_ema:
+                target_tensor, prediction_tensor, overall_smape = utils.evaluate_forecasting(
+                    model_ema, criterion, data_loader_test, device=device, transform=None,
+                    log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
 
-            if args.output_dir:
-                checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema,
-                                             extra_data={'metrics': {'overall_smape': overall_smape}})
-                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+            if overall_smape < best_epoch_values['overall_smape']:
+                best_epoch_values['overall_smape'] = overall_smape
+                best_epoch_values['epoch'] = epoch
+                best_epoch_values['true_values'] = target_tensor.clone()
+                best_epoch_values['predictions'] = prediction_tensor.clone()
 
-        logger.info(f"Epoch {epoch}: Best Overall SMAPE across all variables across all predicted timesteps so far: {best_epoch_values['overall_smape']:.2f}% (Epoch {best_epoch_values['epoch']})")
+                if args.output_dir:
+                    checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema,
+                                                 extra_data={'metrics': {'overall_smape': overall_smape}})
+                    utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
-    if not args.quantization and args.auto_quantization:
-        _float_best_metric = float(best_epoch_values['overall_smape'])
-        logger.info(f"Stored float best SMAPE for binary search: {_float_best_metric:.4f}")
+            logger.info(f"Epoch {epoch}: Best Overall SMAPE across all variables across all predicted timesteps so far: {best_epoch_values['overall_smape']:.2f}% (Epoch {best_epoch_values['epoch']})")
 
-    # Log best epoch metrics
-    logger = getLogger(f"root.main.{phase}.BestEpoch")
-    logger.info("Printing statistics of best epoch:")
-    logger.info(f"Best epoch:{best_epoch_values['epoch'] + 1}")
-    logger.info(f"Overall SMAPE across all variables: {best_epoch_values['overall_smape']:.2f}%")
-    logger.info("Per-Variable Metrics:")
+        if not args.quantization and args.auto_quantization:
+            _float_best_metric = float(best_epoch_values['overall_smape'])
+            logger.info(f"Stored float best SMAPE for binary search: {_float_best_metric:.4f}")
 
-    for idx, item in enumerate(dataset.header_row):
-        for target_variable_name in item:
-            logger.info(f"  Variable {target_variable_name}:")
-            logger.info(f"      SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(best_epoch_values['true_values'][:, :, idx], best_epoch_values['predictions'][:, :, idx]):.2f}%")
-            logger.info(f"      R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(best_epoch_values['predictions'][:, :, idx], best_epoch_values['true_values'][:, :, idx]):.4f}")
-
-            for step in range(args.forecast_horizon):
-                logger.info(f"      Timestep {step + 1}:")
-                logger.info(f"          SMAPE: {utils.smape(best_epoch_values['true_values'][:, step, idx], best_epoch_values['predictions'][:, step, idx]):.2f}%")
-                logger.info(f"          R²: {utils.get_r2_score(best_epoch_values['predictions'][:, step, idx], best_epoch_values['true_values'][:, step, idx]):.4f}")
-
-    # Save final predictions and create visualizations for best epoch
-    if args.output_dir and best_epoch_values['true_values'] is not None:
-        results_dir = os.path.join(args.output_dir, f'best_epoch_{best_epoch_values["epoch"]}_results')
-        os.makedirs(results_dir, exist_ok=True)
-
-        utils.save_forecasting_predictions_csv(
-            best_epoch_values['true_values'],
-            best_epoch_values['predictions'],
-            results_dir,
-            dataset.header_row,
-            args.forecast_horizon,
-        )
-
-        plots_dir = os.path.join(results_dir, 'prediction_plots')
-        os.makedirs(plots_dir, exist_ok=True)
+        # Log best epoch metrics
+        logger = getLogger(f"root.main.{phase}.BestEpoch")
+        logger.info("Printing statistics of best epoch:")
+        logger.info(f"Best epoch:{best_epoch_values['epoch'] + 1}")
+        logger.info(f"Overall SMAPE across all variables: {best_epoch_values['overall_smape']:.2f}%")
+        logger.info("Per-Variable Metrics:")
 
         for idx, item in enumerate(dataset.header_row):
             for target_variable_name in item:
-                fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
-                axes = axes.flatten()
+                logger.info(f"  Variable {target_variable_name}:")
+                logger.info(f"      SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(best_epoch_values['true_values'][:, :, idx], best_epoch_values['predictions'][:, :, idx]):.2f}%")
+                logger.info(f"      R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(best_epoch_values['predictions'][:, :, idx], best_epoch_values['true_values'][:, :, idx]):.4f}")
+
                 for step in range(args.forecast_horizon):
-                    step_targets = best_epoch_values['true_values'][:, step, idx]
-                    step_outputs = best_epoch_values['predictions'][:, step, idx]
-                    step_smape = utils.smape(best_epoch_values['true_values'][:, step, idx], best_epoch_values['predictions'][:, step, idx])
-                    step_r2 = utils.get_r2_score(best_epoch_values['predictions'][:, step, idx], best_epoch_values['true_values'][:, step, idx])
+                    logger.info(f"      Timestep {step + 1}:")
+                    logger.info(f"          SMAPE: {utils.smape(best_epoch_values['true_values'][:, step, idx], best_epoch_values['predictions'][:, step, idx]):.2f}%")
+                    logger.info(f"          R²: {utils.get_r2_score(best_epoch_values['predictions'][:, step, idx], best_epoch_values['true_values'][:, step, idx]):.4f}")
 
-                    # Convert to numpy for matplotlib plotting
-                    step_targets_np = step_targets.detach().cpu().numpy() if isinstance(step_targets, torch.Tensor) else step_targets
-                    step_outputs_np = step_outputs.detach().cpu().numpy() if isinstance(step_outputs, torch.Tensor) else step_outputs
+        # Save final predictions and create visualizations for best epoch
+        if args.output_dir and best_epoch_values['true_values'] is not None:
+            results_dir = os.path.join(args.output_dir, f'best_epoch_{best_epoch_values["epoch"]}_results')
+            os.makedirs(results_dir, exist_ok=True)
 
-                    ax = axes[step]
-                    ax.scatter(step_targets_np, step_outputs_np, alpha=0.5, label='Predictions')
-                    min_val = min(step_targets_np.min(), step_outputs_np.min())
-                    max_val = max(step_targets_np.max(), step_outputs_np.max())
-                    ax.plot([min_val, max_val], [min_val, max_val], 'k--', label='Perfect Prediction')
-                    ax.set_xlabel(f"Actual Variable {target_variable_name}")
-                    ax.set_ylabel(f"Predicted Variable {target_variable_name}")
-                    ax.set_title(f"{step + 1}-step ahead\nR² = {step_r2:.4f},SMAPE = {step_smape:.2f}%")
-                    ax.legend()
+            utils.save_forecasting_predictions_csv(
+                best_epoch_values['true_values'],
+                best_epoch_values['predictions'],
+                results_dir,
+                dataset.header_row,
+                args.forecast_horizon,
+            )
 
-                plt.tight_layout()
-                plt.savefig(os.path.join(plots_dir, f'{target_variable_name}_predictions.png'))
-                plt.close()
+            plots_dir = os.path.join(results_dir, 'prediction_plots')
+            os.makedirs(plots_dir, exist_ok=True)
 
-    export_trained_model(model, args, dataset)
-    log_training_time(start_time)
+            for idx, item in enumerate(dataset.header_row):
+                for target_variable_name in item:
+                    fig, axes = plt.subplots(int(np.ceil(args.forecast_horizon / 2)), 2, figsize=(12, 5))
+                    axes = axes.flatten()
+                    for step in range(args.forecast_horizon):
+                        step_targets = best_epoch_values['true_values'][:, step, idx]
+                        step_outputs = best_epoch_values['predictions'][:, step, idx]
+                        step_smape = utils.smape(best_epoch_values['true_values'][:, step, idx], best_epoch_values['predictions'][:, step, idx])
+                        step_r2 = utils.get_r2_score(best_epoch_values['predictions'][:, step, idx], best_epoch_values['true_values'][:, step, idx])
 
-    if args.gen_golden_vectors:
-        generate_golden_vector_dir(args.output_dir)
-        output_int = get_output_int_flag(args)
-        generate_golden_vectors(args.output_dir, output_int, dataset, args.generic_model)
+                        # Convert to numpy for matplotlib plotting
+                        step_targets_np = step_targets.detach().cpu().numpy() if isinstance(step_targets, torch.Tensor) else step_targets
+                        step_outputs_np = step_outputs.detach().cpu().numpy() if isinstance(step_outputs, torch.Tensor) else step_outputs
 
-    shutdown_data_loaders(data_loader, data_loader_test)
+                        ax = axes[step]
+                        ax.scatter(step_targets_np, step_outputs_np, alpha=0.5, label='Predictions')
+                        min_val = min(step_targets_np.min(), step_outputs_np.min())
+                        max_val = max(step_targets_np.max(), step_outputs_np.max())
+                        ax.plot([min_val, max_val], [min_val, max_val], 'k--', label='Perfect Prediction')
+                        ax.set_xlabel(f"Actual Variable {target_variable_name}")
+                        ax.set_ylabel(f"Predicted Variable {target_variable_name}")
+                        ax.set_title(f"{step + 1}-step ahead\nR² = {step_r2:.4f},SMAPE = {step_smape:.2f}%")
+                        ax.legend()
+
+                    plt.tight_layout()
+                    plt.savefig(os.path.join(plots_dir, f'{target_variable_name}_predictions.png'))
+                    plt.close()
+
+        export_trained_model(model, args, dataset)
+        log_training_time(start_time)
+
+        if args.gen_golden_vectors:
+            generate_golden_vector_dir(args.output_dir)
+            output_int = get_output_int_flag(args)
+            generate_golden_vectors(args.output_dir, output_int, dataset, args.generic_model)
+
+    finally:
+        shutdown_data_loaders(data_loader, data_loader_test)
 
 
 def run(args):
