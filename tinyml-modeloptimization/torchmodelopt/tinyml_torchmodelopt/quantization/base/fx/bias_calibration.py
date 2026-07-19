@@ -40,20 +40,18 @@ def _bias_calibration_hook(m, x, y, bias_calibration_factor, bias_module):
     if isinstance(x, tuple):
         x = x[0]
     if len(x.shape) == 3:
-        float_mean = x.mean(dim=(0,1))
-        quant_mean = y.mean(dim=(0,1))
+        float_mean = x.mean(dim=(0, 1))
+        quant_mean = y.mean(dim=(0, 1))
         bias_error = float_mean - quant_mean
     elif len(x.shape) == 4:
         if x.shape[1] == bias_module.bias.shape[0]:
-            float_mean = x.mean(dim=(0,2,3))
-            quant_mean = y.mean(dim=(0,2,3))
+            float_mean = x.mean(dim=(0, 2, 3))
+            quant_mean = y.mean(dim=(0, 2, 3))
             bias_error = float_mean - quant_mean
         elif x.shape[3] == bias_module.bias.shape[0]:
-            float_mean = x.mean(dim=(0,1,2))
-            quant_mean = y.mean(dim=(0,1,2))
-            bias_error = (float_mean - quant_mean)
-        #
-    #
+            float_mean = x.mean(dim=(0, 1, 2))
+            quant_mean = y.mean(dim=(0, 1, 2))
+            bias_error = float_mean - quant_mean
     bias_module.bias.data += (bias_error * bias_calibration_factor)
     return y
 
@@ -77,10 +75,6 @@ def _add_bias_calibration_hook(model, total_epochs, num_epochs_tracked):
                     _bias_calibration_hook_bind = partial(_bias_calibration_hook, bias_calibration_factor=bias_calibration_factor*bias_calibration_fraction, bias_module=bias_module)
                     this_hook = fake_quantize_module.register_forward_hook(_bias_calibration_hook_bind)
                     all_hooks.append(this_hook)
-                #
-            #
-        #
-    #
     return all_hooks
 
 
@@ -93,6 +87,5 @@ def insert_bias_calibration_hooks(model, total_epochs, num_epochs_tracked):
 def remove_hooks(model, hooks):
     for hook_handle in hooks:
         hook_handle.remove()
-    #
     hooks = []
     return hooks

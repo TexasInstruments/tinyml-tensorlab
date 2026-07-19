@@ -43,17 +43,15 @@ Quick Reference
      - Description
    * - ``C2000_CG_ROOT``
      - Path to TI C2000 Codegen Tools
-   * - ``C2000WARE_ROOT``
-     - Path to C2000Ware SDK
    * - ``ARM_LLVM_CGT_PATH``
      - Path to TI Arm Clang Compiler
 
 **Version Information**
 
-* Tiny ML Tensorlab: 1.3.0
+* Tiny ML Tensorlab: 1.4.0
 * Python: 3.10.x required
 * PyTorch: 2.7.1
-* TI Neural Network Compiler: 2.1.0
+* TI Neural Network Compiler: 2.1.2
 
 External Links
 --------------

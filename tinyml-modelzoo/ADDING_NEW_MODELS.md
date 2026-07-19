@@ -8,8 +8,8 @@ To add a new model:
 
 1. Add your model class to the appropriate file in `tinyml_modelzoo/models/`
 2. Add the class name to that file's `__all__` list
-3. (Optional) Add device performance info to `device_info/run_info.py`
-4. (Optional) Add a model description to `model_descriptions/` for GUI integration
+3. Add device performance info to `device_info/run_info.py`. You can leave the content 'TBD' if you do not know the real values.
+4. Add a model description to `model_descriptions/` for GUI integration
 
 That's it! The model is automatically registered and available everywhere. **No changes are required in `tinyml-tinyverse` or `tinyml-modelmaker`.**
 

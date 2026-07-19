@@ -58,7 +58,7 @@ def get_target_module(backend_name):
 
 class DatasetHandling:
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = dict(
             dataset=dict(
             )
@@ -139,7 +139,7 @@ class DatasetHandling:
                     
                     #Store the file paths in txt files for processing purpose
                     normal_paths_file = os.path.join(annotations_dir, 'normal_list.txt')
-                    anomaly_paths_file = os.path.join(annotations_dir, 'anomlay_list.txt')
+                    anomaly_paths_file = os.path.join(annotations_dir, 'anomaly_list.txt')
                     with open(normal_paths_file, 'w') as file:
                         file.write('\n'.join(normal_file_list))
                     with open(anomaly_paths_file, 'w') as file:

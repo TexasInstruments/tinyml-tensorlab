@@ -14,7 +14,9 @@ Choose the installation path that best fits your needs.
    developer_installation
    windows_setup
    linux_setup
+   macos_setup
    environment_variables
+   agentic_skill_setup
 
 Which Install Should I Choose?
 -------------------------------
@@ -80,7 +82,14 @@ If you want to customize models, add features, or contribute:
       .. code-block:: powershell
 
          git clone https://github.com/TexasInstruments/tinyml-tensorlab.git
-         cd tinyml-tensorlab\tinyml-modelmaker
-         python -m pip install --editable .
+         python -m pip install --editable tinyml-tensorlab\tinyml-modelmaker
+
+   .. tab:: macOS
+
+      .. code-block:: bash
+
+         git clone https://github.com/TexasInstruments/tinyml-tensorlab.git
+         cd tinyml-tensorlab/tinyml-modelmaker
+         ./setup_all.sh
 
 See the detailed guides in this section for complete instructions.

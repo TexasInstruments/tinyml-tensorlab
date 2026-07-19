@@ -64,7 +64,7 @@ TASK_CATEGORY_TS_FORECASTING = 'timeseries_forecasting'
 
 
 TASK_CATEGORIES = [
-    TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING, TASK_TYPE_GENERIC_TS_ANOMALYDETECTION
+    TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING, TASK_CATEGORY_TS_ANOMALYDETECTION
 ]
 
 # Mapping from task_type to task_category
@@ -81,10 +81,10 @@ TASK_TYPE_TO_CATEGORY = {
 }
 
 
-def get_skip_normalize_and_output_int(task_category, quantization, partial_quantization):
+def get_skip_normalize_and_output_int(task_category, quantization, auto_quantization):
     """
     Compute skip_normalize and output_int based on task_category and quantization level.
-    For partial quantization, skip_normalize will fail during compilation, set it 
+    For auto quantization, skip_normalize will fail during compilation, set it 
     skip_normalize False.
 
     Matrix relationship:
@@ -122,7 +122,7 @@ def get_skip_normalize_and_output_int(task_category, quantization, partial_quant
         skip_normalize = True
         # output_int is True only for classification tasks (both timeseries and image)
         output_int = (task_category == TASK_CATEGORY_TS_CLASSIFICATION or task_category == 'image_classification')
-        if partial_quantization and task_category == TASK_CATEGORY_TS_REGRESSION:
+        if auto_quantization and task_category == TASK_CATEGORY_TS_REGRESSION:
             skip_normalize = False
         return skip_normalize, output_int
 
@@ -174,6 +174,7 @@ TARGET_DEVICE_AM263 = 'AM263'
 TARGET_DEVICE_AM263P = 'AM263P'
 TARGET_DEVICE_AM261 = 'AM261'
 TARGET_DEVICE_F280013 = 'F280013'
+TARGET_DEVICE_F28E12 = 'F28E12'
 TARGET_DEVICE_F280015 = 'F280015'
 TARGET_DEVICE_F28003 = 'F28003'
 TARGET_DEVICE_F28004 = 'F28004'
@@ -190,13 +191,16 @@ TARGET_DEVICE_MSPM33C32 = 'MSPM33C32'
 TARGET_DEVICE_MSPM33C34 = 'MSPM33C34'
 TARGET_DEVICE_AM13E2 = 'AM13E2'
 TARGET_DEVICE_CC2755 = 'CC2755'
+TARGET_DEVICE_CC1312 = 'CC1312'
 TARGET_DEVICE_CC1352 = 'CC1352'
+TARGET_DEVICE_CC1314 = 'CC1314'
 TARGET_DEVICE_CC1354 = 'CC1354'
 TARGET_DEVICE_CC35X1 = 'CC35X1'
 
 
 TARGET_DEVICES = [
     TARGET_DEVICE_F280013,
+    TARGET_DEVICE_F28E12,
     TARGET_DEVICE_F280015,
     TARGET_DEVICE_F28003,
     TARGET_DEVICE_F28004,
@@ -212,7 +216,9 @@ TARGET_DEVICES = [
     TARGET_DEVICE_F29P32,
     TARGET_DEVICE_CC2755,
     TARGET_DEVICE_CC1352,
+    TARGET_DEVICE_CC1312,
     TARGET_DEVICE_CC1354,
+    TARGET_DEVICE_CC1314,
     TARGET_DEVICE_CC35X1,
     TARGET_DEVICE_AM263,
     TARGET_DEVICE_AM263P,
@@ -260,8 +266,8 @@ TRAINING_BATCH_SIZE_DEFAULT = {
     TASK_TYPE_PIR_DETECTION: 64,
 }
 
-TARGET_SDK_VERSION_C2000 = '6.0.1'
-TARGET_SDK_RELEASE_C2000 = '06_00_01'
+TARGET_SDK_VERSION_C2000 = '26.0.0'
+TARGET_SDK_RELEASE_C2000 = '26_00_00'
 
 TARGET_SDK_VERSION_F29H85 = '1.00'
 TARGET_SDK_RELEASE_F29H85 = '01_00_00'
@@ -272,23 +278,29 @@ TARGET_SDK_RELEASE_F29P58 = '01_00_00'
 TARGET_SDK_VERSION_F29P32 = '1.00'
 TARGET_SDK_RELEASE_F29P32 = '01_00_00'
 
-TARGET_SDK_VERSION_MSPM0 = "2.10.00.04"
-TARGET_SDK_RELEASE_MSPM0 = '2_10_00_04'
+TARGET_SDK_VERSION_MSPM0 = "2.11.00.xx"
+TARGET_SDK_RELEASE_MSPM0 = '2_11_00_xx'
 
 TARGET_SDK_VERSION_MSPM33C = "1.02.00.00"
 TARGET_SDK_RELEASE_MSPM33C = '1_02_00_00'
 
-TARGET_SDK_VERSION_CC2755 = '1.00.00.00'
-TARGET_SDK_RELEASE_CC2755 = '01_00_00_00'
+TARGET_SDK_VERSION_CC2755 = '1.10.00.00'
+TARGET_SDK_RELEASE_CC2755 = '01_10_00_00'
 
-TARGET_SDK_VERSION_CC1352 = '1.00.00.00'
-TARGET_SDK_RELEASE_CC1352 = '01_00_00_00'
+TARGET_SDK_VERSION_CC1352 = '1.10.00.00'
+TARGET_SDK_RELEASE_CC1352 = '01_10_00_00'
 
-TARGET_SDK_VERSION_CC1354 = '1.00.00.00'
-TARGET_SDK_RELEASE_CC1354 = '01_00_00_00'
+TARGET_SDK_VERSION_CC1312 = '1.10.00.00'
+TARGET_SDK_RELEASE_CC1312 = '01_10_00_00'
 
-TARGET_SDK_VERSION_CC35X1 = '1.00.00.00'
-TARGET_SDK_RELEASE_CC35X1 = '01_00_00_00'
+TARGET_SDK_VERSION_CC1354 = '1.10.00.00'
+TARGET_SDK_RELEASE_CC1354 = '01_10_00_00'
+
+TARGET_SDK_VERSION_CC1314 = '1.10.00.00'
+TARGET_SDK_RELEASE_CC1314 = '01_10_00_00'
+
+TARGET_SDK_VERSION_CC35X1 = '1.10.00.00'
+TARGET_SDK_RELEASE_CC35X1 = '01_10_00_00'
 
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n'
@@ -374,6 +386,23 @@ TARGET_DEVICE_DETAILS_F280013 = \
 
 Important links:
 {TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F28E12 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F28E12 = \
+    f'''* Product information: https://www.ti.com/product/TMS320F28E12
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28E12X
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F28E12 = \
+    f'''C2000™ 32-bit MCU 160-MHz C28x CPU with FPU, 64-KB Flash, 12-bit ADCs, PGA
+* More details : https://www.ti.com/tool/LAUNCHXL-F28E12X
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28E12}
 
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
@@ -617,7 +646,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2755 = \
     f'''* Product information: https://www.ti.com/product/CC2755R10
 * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19
+* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.20.00.81
 * SDK release: {TARGET_SDK_RELEASE_CC2755}'''
 
 TARGET_DEVICE_DETAILS_CC2755= \
@@ -635,7 +664,7 @@ TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1352 = \
     f'''* Product information: https://www.ti.com/product/CC1352R
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
+* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
 * SDK release: {TARGET_SDK_RELEASE_CC1352}'''
 
 TARGET_DEVICE_DETAILS_CC1352 = \
@@ -648,12 +677,30 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
+##### CC1312 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1312 = \
+    f'''* Product information: https://www.ti.com/product/CC1312PSIP
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
+* SDK release: {TARGET_SDK_RELEASE_CC1312}'''
+
+TARGET_DEVICE_DETAILS_CC1312 = \
+    f'''48MHz SimpleLink™ 32-bit Arm® Cortex®-M4F multiprotocol wireless MCU with 352KB flash
+* More details : https://www.ti.com/product/CC1312PSIP
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1312}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
 ##### CC1354 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354 = \
     f'''* Product information: https://www.ti.com/product/CC1354P10
 * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
+* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
 * SDK release: {TARGET_SDK_RELEASE_CC1354}'''
 
 TARGET_DEVICE_DETAILS_CC1354 = \
@@ -666,12 +713,32 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
+
+##### CC1314 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1314 = \
+    f'''* Product information: https://www.ti.com/product/CC1314R10
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10
+
+* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
+* SDK release: {TARGET_SDK_RELEASE_CC1314}'''
+
+TARGET_DEVICE_DETAILS_CC1314 = \
+    f'''SimpleLink™ 32-bit Arm® Cortex®-M33 Sub-1 GHz wireless MCU
+* More details : https://www.ti.com/product/CC1314R10
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1314}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+
 ##### CC35X1 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_CC35X1 = \
     f'''* Product information: https://www.ti.com/product/CC3551E
 * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15
+* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/10.10.01.08
 * SDK release: {TARGET_SDK_RELEASE_CC35X1}'''
 
 TARGET_DEVICE_DETAILS_CC35X1 = \
@@ -690,15 +757,23 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F280013: {
         'device_name': TARGET_DEVICE_F280013,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 7,
+        'device_selection_factor': 10,
         'device_details': TARGET_DEVICE_DETAILS_F280013,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
+    TARGET_DEVICE_F28E12: {
+        'device_name': TARGET_DEVICE_F28E12,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 9,
+        'device_details': TARGET_DEVICE_DETAILS_F28E12,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
     },
     TARGET_DEVICE_F280015: {
         'device_name': TARGET_DEVICE_F280015,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 8,
+        'device_selection_factor': 11,
         'device_details': TARGET_DEVICE_DETAILS_F280015,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -706,7 +781,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28003: {
         'device_name': TARGET_DEVICE_F28003,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 6,
+        'device_selection_factor': 8,
         'device_details': TARGET_DEVICE_DETAILS_F28003,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -714,7 +789,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28004: {
         'device_name': TARGET_DEVICE_F28004,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 5,
+        'device_selection_factor': 7,
         'device_details': TARGET_DEVICE_DETAILS_F28004,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -722,7 +797,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F2837: {
         'device_name': TARGET_DEVICE_F2837,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 11,
+        'device_selection_factor': 14,
         'device_details': TARGET_DEVICE_DETAILS_F2837,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -730,7 +805,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P65: {
         'device_name': TARGET_DEVICE_F28P65,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 12,
+        'device_selection_factor': 15,
         'device_details': TARGET_DEVICE_DETAILS_F28P65,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -738,15 +813,17 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F28P55: {
         'device_name': TARGET_DEVICE_F28P55,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 14,
+        'device_selection_factor': 17,
         'device_details': TARGET_DEVICE_DETAILS_F28P55,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
+        'flash_size_kb': 1088,
+        'ram_size_kb': 133
     },
     TARGET_DEVICE_AM263: {
         'device_name': TARGET_DEVICE_AM263,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 16,
+        'device_selection_factor': 19,
         'device_details': TARGET_DEVICE_DETAILS_AM263,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -754,7 +831,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM263P: {
         'device_name': TARGET_DEVICE_AM263P,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 17,
+        'device_selection_factor': 20,
         'device_details': TARGET_DEVICE_DETAILS_AM263P,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -762,7 +839,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM261: {
         'device_name': TARGET_DEVICE_AM261,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 15,
+        'device_selection_factor': 18,
         'device_details': TARGET_DEVICE_DETAILS_AM261,
         'sdk_version': TARGET_SDK_VERSION_C2000,
         'sdk_release': TARGET_SDK_RELEASE_C2000,
@@ -770,15 +847,17 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29H85: {
         'device_name': TARGET_DEVICE_F29H85,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 22,
+        'device_selection_factor': 25,
         'device_details': TARGET_DEVICE_DETAILS_F29H85,
         'sdk_version': TARGET_SDK_VERSION_F29H85,
         'sdk_release': TARGET_SDK_RELEASE_F29H85,
+        'flash_size_kb': 4352,
+        'ram_size_kb': 452
     },
     TARGET_DEVICE_F29P58: {
         'device_name': TARGET_DEVICE_F29P58,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 21,
+        'device_selection_factor': 24,
         'device_details': TARGET_DEVICE_DETAILS_F29P58,
         'sdk_version': TARGET_SDK_VERSION_F29P58,
         'sdk_release': TARGET_SDK_RELEASE_F29P58,
@@ -786,7 +865,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_F29P32: {
         'device_name': TARGET_DEVICE_F29P32,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 20,
+        'device_selection_factor': 23,
         'device_details': TARGET_DEVICE_DETAILS_F29P32,
         'sdk_version': TARGET_SDK_VERSION_F29P32,
         'sdk_release': TARGET_SDK_RELEASE_F29P32,
@@ -810,7 +889,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM0G5187: {
         'device_name': TARGET_DEVICE_MSPM0G5187,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 13,
+        'device_selection_factor': 16,
         'device_details': TARGET_DEVICE_DETAILS_MSPM0G5187,
         'sdk_version': TARGET_SDK_VERSION_MSPM0,
         'sdk_release': TARGET_SDK_RELEASE_MSPM0,
@@ -818,7 +897,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM33C32: {
         'device_name': TARGET_DEVICE_MSPM33C32,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 9,
+        'device_selection_factor': 12,
         'device_details': TARGET_DEVICE_DETAILS_MSPM33C32,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -826,7 +905,7 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_MSPM33C34: {
         'device_name': TARGET_DEVICE_MSPM33C34,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 19,
+        'device_selection_factor': 22,
         'device_details': TARGET_DEVICE_DETAILS_MSPM33C34,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
@@ -834,15 +913,17 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_AM13E2: {
         'device_name': TARGET_DEVICE_AM13E2,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 18,
+        'device_selection_factor': 21,
         'device_details': TARGET_DEVICE_DETAILS_AM13E2,
         'sdk_version': TARGET_SDK_VERSION_MSPM33C,
         'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
+        'flash_size_kb': 512,
+        'ram_size_kb': 128
     },
     TARGET_DEVICE_CC2755: {
         'device_name': TARGET_DEVICE_CC2755,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 4,
+        'device_selection_factor': 6,
         'device_details': TARGET_DEVICE_DETAILS_CC2755,
         'sdk_version': TARGET_SDK_VERSION_CC2755,
         'sdk_release': TARGET_SDK_RELEASE_CC2755,
@@ -850,23 +931,40 @@ TARGET_DEVICE_DESCRIPTIONS = {
     TARGET_DEVICE_CC1352: {
         'device_name': TARGET_DEVICE_CC1352,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 2,
+        'device_selection_factor': 3,
         'device_details': TARGET_DEVICE_DETAILS_CC1352,
         'sdk_version': TARGET_SDK_VERSION_CC1352,
         'sdk_release': TARGET_SDK_RELEASE_CC1352,
     },
+    TARGET_DEVICE_CC1312: {
+        'device_name': TARGET_DEVICE_CC1312,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 2,
+        'device_details': TARGET_DEVICE_DETAILS_CC1312,
+        'sdk_version': TARGET_SDK_VERSION_CC1312,
+        'sdk_release': TARGET_SDK_RELEASE_CC1312,
+    },
     TARGET_DEVICE_CC1354: {
         'device_name': TARGET_DEVICE_CC1354,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 3,
+        'device_selection_factor': 5,
         'device_details': TARGET_DEVICE_DETAILS_CC1354,
         'sdk_version': TARGET_SDK_VERSION_CC1354,
         'sdk_release': TARGET_SDK_RELEASE_CC1354,
     },
+
+    TARGET_DEVICE_CC1314: {
+        'device_name': TARGET_DEVICE_CC1314,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 4,
+        'device_details': TARGET_DEVICE_DETAILS_CC1314,
+        'sdk_version': TARGET_SDK_VERSION_CC1314,
+        'sdk_release': TARGET_SDK_RELEASE_CC1314,
+    },
     TARGET_DEVICE_CC35X1: {
         'device_name': TARGET_DEVICE_CC35X1,
         'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 10,
+        'device_selection_factor': 13,
         'device_details': TARGET_DEVICE_DETAILS_CC35X1,
         'sdk_version': TARGET_SDK_VERSION_CC35X1,
         'sdk_release': TARGET_SDK_RELEASE_CC35X1,
@@ -928,6 +1026,12 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F29H85,
             TARGET_DEVICE_AM13E2,
             TARGET_DEVICE_AM263,
+            TARGET_DEVICE_CC2755,
+            TARGET_DEVICE_CC1312,
+            TARGET_DEVICE_CC1352,
+            TARGET_DEVICE_CC1314,
+            TARGET_DEVICE_CC1354,
+            TARGET_DEVICE_CC35X1,
         ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'task_category': TASK_CATEGORY_TS_CLASSIFICATION
@@ -948,6 +1052,10 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_MSPM33C32,
             TARGET_DEVICE_AM13E2,
             TARGET_DEVICE_AM263,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G3519,
+            TARGET_DEVICE_MSPM0G5187,
+            
         ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'task_category': TASK_CATEGORY_TS_CLASSIFICATION
@@ -956,7 +1064,26 @@ TASK_DESCRIPTIONS = {
         'task_name': 'Time Series Classification',
         'task_group': 'timeseries',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G3519,
+            TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_MSPM33C32,
+            TARGET_DEVICE_F29H85,
+            TARGET_DEVICE_F29P58,
+            TARGET_DEVICE_F29P32,
+            TARGET_DEVICE_AM263,
+            TARGET_DEVICE_AM263P,
+            TARGET_DEVICE_AM261,
+            TARGET_DEVICE_AM13E2,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'application_specific': False,
         'checkDataEnough': False,
@@ -966,27 +1093,84 @@ TASK_DESCRIPTIONS = {
         'task_name': 'Time Series Regression',
         'task_group': 'timeseries',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G3519,
+            TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_MSPM33C32,
+            TARGET_DEVICE_F29H85,
+            TARGET_DEVICE_F29P58,
+            TARGET_DEVICE_F29P32,
+            TARGET_DEVICE_AM263,
+            TARGET_DEVICE_AM263P,
+            TARGET_DEVICE_AM261,
+            TARGET_DEVICE_AM13E2,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'application_specific': False,
         'checkDataEnough': False,
         'task_category': TASK_CATEGORY_TS_REGRESSION
     },
-    # TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
-    #     'task_name': 'Time Series Anomaly Detection',
-    #     'task_group': 'timeseries',
-    #     'target_module': 'timeseries',
-    #     'target_devices': TARGET_DEVICES,
-    #     'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
-    #     'application_specific': False,
-    #     'checkDataEnough': False,
-    #     'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
-    # },
+    TASK_TYPE_GENERIC_TS_ANOMALYDETECTION: {
+        'task_name': 'Time Series Anomaly Detection',
+        'task_group': 'timeseries',
+        'target_module': 'timeseries',
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G3519,
+            TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_MSPM33C32,
+            TARGET_DEVICE_F29H85,
+            TARGET_DEVICE_F29P58,
+            TARGET_DEVICE_F29P32,
+            TARGET_DEVICE_AM263,
+            TARGET_DEVICE_AM263P,
+            TARGET_DEVICE_AM261,
+            TARGET_DEVICE_AM13E2,
+        ],
+        'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
+        'application_specific': False,
+        'checkDataEnough': False,
+        'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION
+    },
     TASK_TYPE_GENERIC_TS_FORECASTING: {
         'task_name': 'Time Series Forecasting',
         'task_group': 'timeseries',
         'target_module': 'timeseries',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': [
+            TARGET_DEVICE_F280013,
+            TARGET_DEVICE_F280015,
+            TARGET_DEVICE_F28003,
+            TARGET_DEVICE_F28004,
+            TARGET_DEVICE_F2837,
+            TARGET_DEVICE_F28P55,
+            TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_MSPM0G3507,
+            TARGET_DEVICE_MSPM0G3519,
+            TARGET_DEVICE_MSPM0G5187,
+            TARGET_DEVICE_MSPM33C32,
+            TARGET_DEVICE_F29H85,
+            TARGET_DEVICE_F29P58,
+            TARGET_DEVICE_F29P32,
+            TARGET_DEVICE_AM263,
+            TARGET_DEVICE_AM263P,
+            TARGET_DEVICE_AM261,
+            TARGET_DEVICE_AM13E2,
+        ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'application_specific': False,
         'checkDataEnough': False,
@@ -999,6 +1183,8 @@ TASK_DESCRIPTIONS = {
         'target_devices': [
             TARGET_DEVICE_CC2755,
             TARGET_DEVICE_CC1352,
+            TARGET_DEVICE_CC1312,
+            TARGET_DEVICE_CC1314,
             TARGET_DEVICE_CC1354,
             TARGET_DEVICE_CC35X1,
             TARGET_DEVICE_MSPM0G5187,
@@ -1052,6 +1238,9 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     ECG2500Input_Roundoff_1Frame = dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['ROUND_OFF'],frame_size=2500, variables=1,),
         common=dict(task_type=TASK_TYPE_ECG_CLASSIFICATION), ),
+    HandGesture256Input_RangeNormalize_1Frame = dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=[],frame_size=256, scale=4096.0, variables=3, data_proc_transforms=['SimpleWindow'], stride_size=0.25, sampling_rate=1, new_sr=1,),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     ArcFault_1024Input_256Feature_1Frame_Full_Bandwidth=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=256, num_frame_concat=1, min_bin=1, analysis_bandwidth=1, frame_skip=1, log_mul=10, log_base='e', log_threshold=1e-12, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=1, ),
         common=dict(task_type=TASK_TYPE_ARC_FAULT), ),
@@ -1088,8 +1277,15 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     Input128_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
+    MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_1D=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, min_bin=1, normalize_bin=True, offset=0, scale=1, frame_skip=1, variables=3, q15_scale_factor=5, data_proc_transforms=[], dc_remove=True, stacking='1D', ),  # ch=3,
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
     MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_2D1=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, min_bin=1, normalize_bin=True, offset=0, scale=1, frame_skip=1, variables=3, q15_scale_factor=5, data_proc_transforms=[], dc_remove=True, stacking='2D1', ),  # ch=3,
+        common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
+
+    MotorFault_128Input_RAW_128Feature_1Frame_3InputChannel_removeDC_2D1=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FE_DECIMATE', 'FE_Q15', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=3),  # ch=3,
         common=dict(task_type=[TASK_TYPE_MOTOR_FAULT, TASK_TYPE_BLOWER_IMBALANCE]), ),
 
     Generic_1024Input_FFTBIN_64Feature_8Frame=dict(
@@ -1100,6 +1296,9 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     Generic_256Input_FFTBIN_16Feature_8Frame=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=256, feature_size_per_frame=16, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=1),  # ch=3,
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_32Input_FFTBIN_4Feature_8Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'DC_REMOVE', 'ABS', 'BINNING', 'LOG_DB', 'CONCAT'], frame_size=32, feature_size_per_frame=4, num_frame_concat=8, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     Generic_1024Input_FFT_512Feature_1Frame=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['FFT_FE', 'FFT_POS_HALF', 'ABS', 'DC_REMOVE', 'LOG_DB', 'CONCAT'], frame_size=1024, feature_size_per_frame=512, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, log_mul=20, log_base=10, log_threshold=1e-100, data_proc_transforms=[], sampling_rate=1, variables=1),  # ch=3,
@@ -1119,54 +1318,60 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
     Generic_128Input_RAW_128Feature_1Frame=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['RAW_FE', 'CONCAT'], frame_size=128, feature_size_per_frame=128, num_frame_concat=1, normalize_bin=True, dc_remove=True, offset=0, scale=1, stacking='2D1', frame_skip=1, data_proc_transforms=[], sampling_rate=1, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+    Generic_8Input_ABS_8Feature_1Frame=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['ABS', 'LOG_DB', 'CONCAT'], frame_size=8, feature_size_per_frame=8, num_frame_concat=1, normalize_bin=True, frame_skip=1, data_proc_transforms=[], sampling_rate=1, new_sr=1, variables=11,),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_REGRESSION), ),
     PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=33, variables=1),  # ch=3,
         common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),
     PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D_FixedPoint=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['PIR_FE_Q15'], frame_size=125, window_count=25, chunk_size=8, stride_size=0.032, fft_size=64, sampling_rate=31.25, variables=1),  # ch=3,
-        common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),  
+        common=dict(task_type=TASK_TYPE_PIR_DETECTION), ),
+    FallDetection_256Input_FE_RFFT_8Feature_8Frame_3InputChannel_removeDC_2D1=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=['FFT_Q15', 'Q15_SCALE', 'Q15_MAG', 'DC_REMOVE', 'BIN_Q15', 'CONCAT'], frame_size=256, feature_size_per_frame=8, num_frame_concat=8, variables=3, q15_scale_factor=5, normalize_bin=True, stacking='2D1'),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
 )
 
 DATASET_EXAMPLES = dict(
     default=dict(),
     arc_fault_example_dsi=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsi.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=None, data_proc_transforms=['Downsample', 'SimpleWindow'], sampling_rate=313000, frame_size=3130, stride_size=0.01),
     ),
     dc_arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('FFT1024Input_256Feature_1Frame_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     motor_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsi=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MotorFault_256Input_FE_RFFT_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     fan_blower_imbalance_dsh=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsh.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Input256_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     generic_timeseries_classification=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_classification.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Generic_256Input_FFTBIN_16Feature_8Frame_3InputChannel_removeDC_2D1'), data_proc_transforms=[], sampling_rate=1, variables=3),
     ),
     ac_arc_fault_log300_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault_log300.zip'), 
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('ArcFault_1024Input_FE_RFFT_128Feature_8Frame_1InputChannel_removeDC_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     ac_arc_fault_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault.zip'), 
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('ArcFault_1024Input_FE_RFFT_128Feature_8Frame_1InputChannel_removeDC_Full_Bandwidth'), data_proc_transforms=[], sampling_rate=1),
     ),
     pir_detection_example_dsk=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D'), data_proc_transforms=[], sampling_rate=33, variables=1),
     ),
     ecg_classification_4class=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_4class.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('ECG2500Input_Roundoff_1Frame'), data_proc_transforms=[], sampling_rate=1, variables=1),
     ),
 )
@@ -1183,17 +1388,12 @@ HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
 TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
 # C2000 F28 Compiler
-C2000_CGT_VERSION = 'ti-cgt-c2000_25.11.0.LTS'
+C2000_CGT_VERSION = 'ti-cgt-c2000_25.11.1.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 CL2000_CROSS_COMPILER = os.path.join(C2000_CG_ROOT, 'bin', 'cl2000')
 C2000_CGT_INCLUDE = os.path.join(C2000_CG_ROOT, 'include')
-# C2000 F28 SDK
-C2000WARE_VERSION = 'C2000Ware_6_01_00_00'
-C2000WARE_ROOT = os.path.abspath(os.getenv('C2000WARE_ROOT', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
-C2000WARE_INCLUDE = os.path.join(C2000WARE_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
-C2000_DRIVERLIB_INCLUDE = os.path.join(C2000WARE_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 # C2000 F29 Compiler
-C29_CGT_VERSION = 'ti-cgt-c29_2.0.0.STS'
+C29_CGT_VERSION = 'ti-cgt-c29_2.2.1.LTS'
 CG_TOOL_ROOT = os.path.abspath(os.getenv('CG_TOOL_ROOT', os.path.join(TOOLS_PATH, C29_CGT_VERSION)))
 C29CLANG_CROSS_COMPILER = os.path.join(CG_TOOL_ROOT, 'bin', 'c29clang')
 C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
@@ -1204,7 +1404,7 @@ C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
 # F29H85_DRIVERLIB_INCLUDE = os.path.join(F29H85_SDK_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 
 # MSPM0 Compiler
-MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+MSPM0_CGT_VERSION= 'ti-cgt-armllvm_5.1.1.LTS'
 ARM_LLVM_CGT_PATH = os.path.abspath(os.getenv('ARM_LLVM_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
 MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
@@ -1214,7 +1414,7 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
 
 # CC2755 Compiler
-CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+# CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
 # CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
 CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 CC35X1_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
@@ -1224,10 +1424,12 @@ AM261_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 MSPM33C_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 AM13E2_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 CC1352_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
+CC1312_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 CC1354_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
+CC1314_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 
-CROSS_COMPILER_OPTIONS_C28 = f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I{C2000_DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I."
+CROSS_COMPILER_OPTIONS_C28 = f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I."
 CROSS_COMPILER_OPTIONS_C29 = f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I."
 CROSS_COMPILER_OPTIONS_MSPM0 = f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
 CROSS_COMPILER_OPTIONS_AM263 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
@@ -1236,12 +1438,15 @@ CROSS_COMPILER_OPTIONS_AM261 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfl
 CROSS_COMPILER_OPTIONS_MSPM33C = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
 CROSS_COMPILER_OPTIONS_AM13E2 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
 CROSS_COMPILER_OPTIONS_CC1352 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
+CROSS_COMPILER_OPTIONS_CC1312 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
 CROSS_COMPILER_OPTIONS_CC1354 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
-CROSS_COMPILER_OPTIONS_CC2755 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
-CROSS_COMPILER_OPTIONS_CC35X1 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_CC1314 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
+CROSS_COMPILER_OPTIONS_CC2755 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0 -Wno-incompatible-pointer-types"
+CROSS_COMPILER_OPTIONS_CC35X1 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0 -Wno-incompatible-pointer-types"
 
 
 CROSS_COMPILER_OPTIONS_F280013 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280013.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F28E12 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28E12.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28003 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28003.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28004.lower() + 'x')
@@ -1252,6 +1457,7 @@ CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT=
 COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 COMPILATION_C28_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=false output_int=false", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
+COMPILATION_C28_HARD_TINPU_REG = dict(target="c, ti-npu type=hard skip_normalize=false output_int=false", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 COMPILATION_C28_HARD_TINPU_FORECASTING= dict(target="c, ti-npu type=hard skip_normalize=true output_int=false", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 # Preset for compiling RNN/GRU/LSTM models with quantization. Will be removed in the next TVM NNC release once default preset supports these models.
 COMPILATION_C28_SOFT_TINPU_FORECASTING= dict(target="c, ti-npu type=soft", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
@@ -1277,7 +1483,6 @@ COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", 
 COMPILATION_MSPM33C_SOFT_TINPU_OPT_SPACE = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 COMPILATION_MSPM33C_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 # MSPM33 Forecasting - Preset for RNN/GRU/LSTM models
-COMPILATION_MSPM33C_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 # AM13E2
 COMPILATION_AM13E2_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
 COMPILATION_AM13E2_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
@@ -1289,7 +1494,9 @@ COMPILATION_AM13E2_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=
 COMPILATION_CC2755_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC2755_CROSS_COMPILER, )
 COMPILATION_CC2755_CDE_TINPU = dict(target="c, ti-npu type=m33cde", target_c_mcpu='cortex-m33', cross_compiler=CC2755_CROSS_COMPILER, )
 COMPILATION_CC1352_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m4', cross_compiler=CC1352_CROSS_COMPILER, )
+COMPILATION_CC1312_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m4', cross_compiler=CC1312_CROSS_COMPILER, )
 COMPILATION_CC1354_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC1354_CROSS_COMPILER, )
+COMPILATION_CC1314_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC1314_CROSS_COMPILER, )
 COMPILATION_CC35X1_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC35X1_CROSS_COMPILER, )
 COMPILATION_CC35X1_CDE_TINPU = dict(target="c, ti-npu type=m33cde", target_c_mcpu='cortex-m33', cross_compiler=CC35X1_CROSS_COMPILER, )
 # AM263
@@ -1308,6 +1515,7 @@ COMPILATION_AM261_SOFT_TINPU = dict(target="c", target_c_mcpu='cortex-r5', cross
 # Cross-compiler options lookup
 _CROSS_COMPILER_OPTIONS = {
     TARGET_DEVICE_F280013: CROSS_COMPILER_OPTIONS_F280013,
+    TARGET_DEVICE_F28E12: CROSS_COMPILER_OPTIONS_F28E12,
     TARGET_DEVICE_F280015: CROSS_COMPILER_OPTIONS_F280015,
     TARGET_DEVICE_F28003: CROSS_COMPILER_OPTIONS_F28003,
     TARGET_DEVICE_F28004: CROSS_COMPILER_OPTIONS_F28004,
@@ -1325,7 +1533,9 @@ _CROSS_COMPILER_OPTIONS = {
     TARGET_DEVICE_AM13E2: CROSS_COMPILER_OPTIONS_AM13E2,
     TARGET_DEVICE_CC2755: CROSS_COMPILER_OPTIONS_CC2755,
     TARGET_DEVICE_CC1352: CROSS_COMPILER_OPTIONS_CC1352,
+    TARGET_DEVICE_CC1312: CROSS_COMPILER_OPTIONS_CC1312,
     TARGET_DEVICE_CC1354: CROSS_COMPILER_OPTIONS_CC1354,
+    TARGET_DEVICE_CC1314: CROSS_COMPILER_OPTIONS_CC1314,
     TARGET_DEVICE_CC35X1: CROSS_COMPILER_OPTIONS_CC35X1,
     TARGET_DEVICE_AM263: CROSS_COMPILER_OPTIONS_AM263,
     TARGET_DEVICE_AM263P: CROSS_COMPILER_OPTIONS_AM263P,
@@ -1392,7 +1602,7 @@ _DEVICE_PROFILES = {
         'compilation_base': COMPILATION_C28_HARD_TINPU,
         'compilation_soft': COMPILATION_C28_SOFT_TINPU,
         'compilation_opt_space': COMPILATION_C28_HARD_TINPU_OPT_SPACE,
-        'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
+        'compilation_regression': COMPILATION_C28_HARD_TINPU_REG,
         'compilation_anomaly': COMPILATION_C28_HARD_TINPU_AD,
         'compilation_anomaly_soft': COMPILATION_C28_SOFT_TINPU_AD,
         'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,  # TODO: @Fasna, Once TVM is fixed
@@ -1469,6 +1679,14 @@ _DEVICE_PROFILES = {
     },
     TARGET_DEVICE_CC1352: {
         'compilation_base': COMPILATION_CC1352_SOFT_TINPU,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_CC1312: {
+        'compilation_base': COMPILATION_CC1312_SOFT_TINPU,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_CC1314: {
+        'compilation_base': COMPILATION_CC1314_SOFT_TINPU,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_CC1354: {
@@ -1560,24 +1778,6 @@ def _build_preset_descriptions():
 PRESET_DESCRIPTIONS = _build_preset_descriptions()
 
 SAMPLE_DATASET_DESCRIPTIONS = {
-    # 'arc_fault_example_dsi': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_ARC_FAULT,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'arc_fault_classification_dsi',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsi.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsi.zip',
-    #         'dataset_detailed_name': 'Arc Fault Classification Example1',
-    #         'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
     'dc_arc_fault_example_dsk': {
         'common': {
             'task_type': TASK_TYPE_ARC_FAULT,
@@ -1585,10 +1785,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'dc_arc_fault_classification_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip',
             'dataset_detailed_name': 'DC Arc Fault Classification Example',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
@@ -1603,11 +1803,11 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ac_arc_fault',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault.zip',
-            'dataset_detailed_name': 'Ac Arc Fault Classification Example',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault.zip',
+            'dataset_detailed_name': 'AC Arc Fault Classification Example on public dataset',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
@@ -1621,11 +1821,11 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ac_arc_fault_log300',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault_log300.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ac_arc_fault_log300.zip',
-            'dataset_detailed_name': 'Ac Arc Fault Classification Example',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ac_arc_fault_log300.zip',
+            'dataset_detailed_name': 'AC Arc Fault Classification Example collected on TI Testbed',
             'dataset_description': 'Example arc-fault timeseries classification dataset with 2 categories - arc, normal. The Log300 takes 1-10MHZ filtered signal and envelopes it. This down converts the signal to to a 100kHz equivalent logarithmically scaled power measurement of the energy in the high frequency band.',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
@@ -1639,10 +1839,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'motor_fault_example_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/motor_fault_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip',
             'dataset_detailed_name': 'Motor Bearing Fault Classification Example',
             'dataset_description': 'Example motor-fault timeseries classification dataset with 4 categories - normal, localized, erosion, flaking',
             'dataset_size': None,
@@ -1657,10 +1857,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'fan_blower_imbalance_dsi',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip',
             'dataset_detailed_name': 'Fan Imbalance Classification Example',
             'dataset_description': 'Example fan imbalance timeseries classification dataset with 4 categories-Normal, Blade damage, Blade imbalance and  Blade obstruction',
             'dataset_size': None,
@@ -1675,10 +1875,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'blower_imbalance_example_dsh',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsh.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsh.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsh.zip',
             'dataset_detailed_name': 'Blower Imbalance Classification Example',
             'dataset_description': 'Example blower imbalance timeseries classification dataset with 2 categories - 0 Clips, 1 Clip',
             'dataset_size': None,
@@ -1693,10 +1893,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'generic_timeseries_classification',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_classification.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/generic_timeseries_classification.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_classification.zip',
             'dataset_detailed_name': 'Timeseries Classification Example',
             'dataset_description': 'Example timeseries classification dataset with 3 categories - Sine, Square, Sawtooth',
             'dataset_size': None,
@@ -1711,10 +1911,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'grid_fault_detection',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/grid_fault_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_fault_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/grid_fault_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_fault_dataset.zip',
             'dataset_detailed_name': 'Grid Fault Detection',
             'dataset_description': 'Protect the OBC against adverse grid events, log abnormal events, and potentially safe the OBC',
             'dataset_size': None,
@@ -1729,10 +1929,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'mosfet_temp_prediction',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mosfet_temp_prediction.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mosfet_temp_prediction.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mosfet_temp_prediction.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mosfet_temp_prediction.zip',
             'dataset_detailed_name': 'MOSFET Temperature Prediction',
             'dataset_description': 'Predicting switch temperature based on the power loss of a switch and indirect temperature measurement from a temperature sensor in the vicinity of the switch.',
             'dataset_size': None,
@@ -1747,10 +1947,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'pir_detection_classification_dsk',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pir_detection_classification_dsk.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
             'dataset_detailed_name': 'PIR Detection Classification Example',
             'dataset_description': 'Example PIR sensor based motion detection timeseries classification dataset with 3 categories - human, dog, background motion',
             'dataset_size': None,
@@ -1765,10 +1965,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'ecg_classification_4class',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_4class.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_4class.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_4class.zip',
             'dataset_detailed_name': 'ECG Waveform Classification Example',
             'dataset_description': 'Example ECG Sensor based timeseries classification dataset with 4 classes',
             'dataset_size': None,
@@ -1776,168 +1976,24 @@ SAMPLE_DATASET_DESCRIPTIONS = {
             'dataset_license': 'TI Internal License'
         }
     },
-    # 'ecg_classification_2class': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'ecg',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_2class.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/ecg_classification_2class.zip',
-    #         'dataset_detailed_name': 'ECG Arrhythmia Classification Example',
-    #         'dataset_description': 'Medical timeseries for ECG heartbeat classification dataset',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Public ECG dataset',
-    #         'dataset_license': 'Public Domain'
-    #     }
-    # },
-    # 'gas_sensor_classification': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'gas_sensor',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/gas_sensor_dataset.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/gas_sensor_dataset.zip',
-    #         'dataset_detailed_name': 'Gas Sensor Classification Example',
-    #         'dataset_description': 'Multi-variable gas sensor timeseries classification for detecting different gases',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Gas sensor test bed',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
-    # 'nilm_appliance_usage_classification': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'esda_nilm_2021_5_variable_4_class_dataset',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
-    #         'dataset_detailed_name': 'NILM Appliance Usage Classification Example',
-    #         'dataset_description': 'Non-Intrusive Load Monitoring (NILM) for appliance usage classification from electrical current signatures with 4 appliance categories',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
-    # 'plaid_nilm_classification': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'plaid_submetered',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/plaid_nilm_submetered_dataset.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/plaid_nilm_submetered_dataset.zip',
-    #         'dataset_detailed_name': 'PLAID NILM Classification Example',
-    #         'dataset_description': 'PLAID NILM dataset for submetered appliance classification from electrical signatures',
-    #         'dataset_size': None,
-    #         'dataset_source': 'PLAID dataset adapted by Texas Instruments',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
-    # 'electrical_fault_classification': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'electrical_fault',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/electrical_fault_dataset.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/electrical_fault_dataset.zip',
-    #         'dataset_detailed_name': 'Electrical Fault Classification Example',
-    #         'dataset_description': 'Electrical system fault detection and classification from multi-variable sensor data',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
-    # 'grid_stability_classification': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'grid_stability',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/grid_stability_dataset.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/grid_stability_dataset.zip',
-    #         'dataset_detailed_name': 'Grid Stability Classification Example',
-    #         'dataset_description': 'Power grid stability classification from electrical grid measurements',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
-    # 'fan_blade_fault_classification': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_MOTOR_FAULT,
-    #         'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'fan_blade_fault',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_fault_dsi.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blade_fault_dsi.zip',
-    #         'dataset_detailed_name': 'Fan Blade Fault Classification Example',
-    #         'dataset_description': 'Fan blade imbalance and fault classification using vibration data from accelerometer sensors',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
-    # 'torque_measurement_regression': {
+    # 'washing_machine_load_regression': {
     #     'common': {
     #         'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
     #         'task_category': TASK_CATEGORY_TS_REGRESSION,
     #     },
     #     'dataset': {
-    #         'dataset_name': 'torque_measurement',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/torque_measurement_dataset.zip',
+    #         'dataset_name': 'washing_machine_load_weighing',
+    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip',
     #     },
     #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/torque_measurement_dataset.zip',
-    #         'dataset_detailed_name': 'Torque Measurement Regression Example',
-    #         'dataset_description': 'Example timeseries regression for predicting motor torque from multi-variable sensor readings',
+    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/washing_machine_loading_data.zip',
+    #         'dataset_detailed_name': 'Washing Machine Load Regression Example',
+    #         'dataset_description': 'Regression for estimating washing machine load weight from sensor measurements',
     #         'dataset_size': None,
     #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
     #         'dataset_license': 'TI Internal License'
     #     }
     # },
-    'washing_machine_load_regression': {
-        'common': {
-            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
-            'task_category': TASK_CATEGORY_TS_REGRESSION,
-        },
-        'dataset': {
-            'dataset_name': 'washing_machine_load_weighing',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/washing_machine_loading_data.zip',
-        },
-        'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/washing_machine_loading_data.zip',
-            'dataset_detailed_name': 'Washing Machine Load Regression Example',
-            'dataset_description': 'Regression for estimating washing machine load weight from sensor measurements',
-            'dataset_size': None,
-            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-            'dataset_license': 'TI Internal License'
-        }
-    },
     'hvac_indoor_temp_forecast': {
         'common': {
             'task_type': TASK_TYPE_GENERIC_TS_FORECASTING,
@@ -1945,10 +2001,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'hvac_indoor_temp_forecast',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hvac_indoor_temp_forecast_dataset.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hvac_indoor_temp_forecast_dataset.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/hvac_indoor_temp_forecast_dataset.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hvac_indoor_temp_forecast_dataset.zip',
             'dataset_detailed_name': 'HVAC Indoor Temperature Forecasting Example',
             'dataset_description': 'Example timeseries forecasting for predicting indoor temperature in HVAC systems',
             'dataset_size': None,
@@ -1956,22 +2012,472 @@ SAMPLE_DATASET_DESCRIPTIONS = {
             'dataset_license': 'TI Internal License'
         }
     },
-    # 'pmsm_rotor_temp_forecast': {
-    #     'common': {
-    #         'task_type': TASK_TYPE_GENERIC_TS_FORECASTING,
-    #         'task_category': TASK_CATEGORY_TS_FORECASTING,
-    #     },
-    #     'dataset': {
-    #         'dataset_name': 'pmsm_rotor_temp_prediction_dataset',
-    #         'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip',
-    #     },
-    #     'info': {
-    #         'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip',
-    #         'dataset_detailed_name': 'PMSM Rotor Temperature Forecasting Example',
-    #         'dataset_description': 'Forecasting PMSM (Permanent Magnet Synchronous Motor) rotor temperature from operational parameters',
-    #         'dataset_size': None,
-    #         'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
-    #         'dataset_license': 'TI Internal License'
-    #     }
-    # },
+    'arc_fault_dsi_anomaly_detection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'arc_fault_dsi_anomaly_detection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsi_anomaly_detection.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsi_anomaly_detection.zip',
+            'dataset_detailed_name': 'Arc Fault Anomaly Detection Example with complex dataset',
+            'dataset_description': 'Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'arc_fault_dsk_anomaly_detection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'arc_fault_dsk_anomaly_detection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsk_anomaly_detection.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_dsk_anomaly_detection.zip',
+            'dataset_detailed_name': 'Arc Fault Anomaly Detection Example',
+            'dataset_description': 'Example arc-fault timeseries anomaly detection dataset for identifying abnormal electrical signatures',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'generic_timeseries_anomalydetection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'generic_timeseries_anomalydetection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip',
+            'dataset_detailed_name': 'Timeseries Anomaly Detection Example',
+            'dataset_description': 'Generic timeseries anomaly detection dataset with synthetic signal patterns for anomaly identification',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'motor_fault_anomaly_detection': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'motor_fault_anomaly_detection',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_anomaly_detection_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_anomaly_detection_dataset.zip',
+            'dataset_detailed_name': 'Motor Fault Anomaly Detection Example',
+            'dataset_description': 'Example motor bearing fault timeseries anomaly detection dataset for identifying abnormal vibration patterns',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'ecg_ad_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'ecg_ad_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_ad_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_ad_dataset.zip',
+            'dataset_detailed_name': 'ECG Anomaly Detection Example',
+            'dataset_description': 'Example ECG sensor timeseries anomaly detection dataset for identifying abnormal cardiac patterns',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'fan_blade_ad_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_ANOMALYDETECTION,
+            'task_category': TASK_CATEGORY_TS_ANOMALYDETECTION,
+        },
+        'dataset': {
+            'dataset_name': 'fan_blade_ad_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_ad_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_ad_dataset.zip',
+            'dataset_detailed_name': 'Fan Blade Anomaly Detection Example',
+            'dataset_description': 'Example fan blade fault timeseries anomaly detection dataset for identifying abnormal vibration',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'arc_fault_classification_dsi': {
+        'common': {
+            'task_type': TASK_TYPE_ARC_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'arc_fault_classification_dsi',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip',
+            'dataset_detailed_name': 'Arc Fault Classification DSI Dataset',
+            'dataset_description': 'Arc fault timeseries classification dataset from DSI board for electrical fault detection',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'ecg_classification_2class': {
+        'common': {
+            'task_type': TASK_TYPE_ECG_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'ecg_classification_2class',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/ecg_classification_2class.zip',
+            'dataset_detailed_name': 'ECG 2-Class Classification Dataset',
+            'dataset_description': 'ECG sensor timeseries classification dataset with 2-class arrhythmia detection',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'electrical_fault_6class_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'electrical_fault_6class_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_6class_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_6class_dataset.zip',
+            'dataset_detailed_name': 'Electrical Fault 6-Class Classification Dataset',
+            'dataset_description': 'Electrical fault timeseries classification dataset with 6 fault categories',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'electrical_fault_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'electrical_fault_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip',
+            'dataset_detailed_name': 'Electrical Fault Classification Dataset',
+            'dataset_description': 'Electrical fault timeseries classification dataset for power grid and electrical system monitoring',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'esda_nilm_2021_5_variable_4_class_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'esda_nilm_2021_5_variable_4_class_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/esda_nilm_2021_5_variable_4_class_dataset.zip',
+            'dataset_detailed_name': 'ESDA NILM 2021 5-Variable 4-Class Dataset',
+            'dataset_description': 'Non-Intrusive Load Monitoring (NILM) dataset with 5 variables and 4 appliance classes for energy management',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'fall_detection_classification': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'fall_detection_classification',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fall_detection_classification.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fall_detection_classification.zip',
+            'dataset_detailed_name': 'Fall Detection Classification Dataset',
+            'dataset_description': 'IMU-based timeseries classification dataset for human fall detection and activity recognition',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'fan_blade_fault_dsi': {
+        'common': {
+            'task_type': TASK_TYPE_MOTOR_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'fan_blade_fault_dsi',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_fault_dsi.zip',
+            'dataset_detailed_name': 'Fan Blade Fault DSI Classification Dataset',
+            'dataset_description': 'Fan blade fault timeseries classification dataset from DSI board with vibration sensor data',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'gas_sensor_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'gas_sensor_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gas_sensor_dataset.zip',
+            'dataset_detailed_name': 'Gas Sensor Classification Dataset',
+            'dataset_description': 'Multi-variable gas sensor timeseries classification dataset for gas detection and identification',
+            'dataset_size': None,
+            'dataset_source': 'Gas sensor test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'gearbox_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_MOTOR_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'gearbox_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gearbox_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/gearbox_dataset.zip',
+            'dataset_detailed_name': 'Gearbox Fault Classification Dataset',
+            'dataset_description': 'Gearbox vibration timeseries classification dataset for gearbox fault detection and diagnosis',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'generic_timeseries_forecasting': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_FORECASTING,
+            'task_category': TASK_CATEGORY_TS_FORECASTING,
+        },
+        'dataset': {
+            'dataset_name': 'generic_timeseries_forecasting',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_forecasting.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_forecasting.zip',
+            'dataset_detailed_name': 'Generic Timeseries Forecasting Example',
+            'dataset_description': 'Generic timeseries forecasting dataset for time series prediction and trend forecasting',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'generic_timeseries_regression': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'generic_timeseries_regression',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_regression.zip',
+            'dataset_detailed_name': 'Generic Timeseries Regression Example',
+            'dataset_description': 'Generic timeseries regression dataset for continuous value prediction from temporal data',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'grid_stability_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'grid_stability_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip',
+            'dataset_detailed_name': 'Grid Stability Classification Dataset',
+            'dataset_description': 'Power grid stability timeseries classification dataset from electrical grid measurements',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'induction_motor_speed_prediction_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'induction_motor_speed_prediction_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip',
+            'dataset_detailed_name': 'Induction Motor Speed Prediction Dataset',
+            'dataset_description': 'Induction motor timeseries regression dataset for motor speed prediction from electrical measurements',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'pir_detection_classification_dsk': {
+        'common': {
+            'task_type': TASK_TYPE_PIR_DETECTION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'pir_detection_classification_dsk',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pir_detection_classification_dsk.zip',
+            'dataset_detailed_name': 'PIR Detection Classification DSK Dataset',
+            'dataset_description': 'PIR sensor timeseries classification dataset for motion detection with multiple object categories',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'plaid_nilm_submetered_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'plaid_nilm_submetered_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip',
+            'dataset_detailed_name': 'PLAID NILM Submetered Classification Dataset',
+            'dataset_description': 'PLAID NILM dataset for submetered appliance classification from electrical current signatures',
+            'dataset_size': None,
+            'dataset_source': 'PLAID dataset adapted by Texas Instruments',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'pmsm_rotor_temp': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_FORECASTING,
+            'task_category': TASK_CATEGORY_TS_FORECASTING,
+        },
+        'dataset': {
+            'dataset_name': 'pmsm_rotor_temp',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip',
+            'dataset_detailed_name': 'PMSM Rotor Temperature Forecasting Dataset',
+            'dataset_description': 'PMSM (Permanent Magnet Synchronous Motor) timeseries forecasting dataset for rotor temperature prediction',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'torque_measurement_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_REGRESSION,
+            'task_category': TASK_CATEGORY_TS_REGRESSION,
+        },
+        'dataset': {
+            'dataset_name': 'torque_measurement_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip',
+            'dataset_detailed_name': 'Torque Measurement Regression Dataset',
+            'dataset_description': 'Motor torque timeseries regression dataset for predicting torque from multi-variable sensor readings',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'wisdm_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'wisdm_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wisdm_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wisdm_dataset.zip',
+            'dataset_detailed_name': 'WISDM Activity Recognition Dataset',
+            'dataset_description': 'WISDM timeseries classification dataset for human activity recognition from accelerometer data',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'fan_blower_imbalance_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_MOTOR_FAULT,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'fan_blower_imbalance_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip',
+            'dataset_detailed_name': 'Fan Blower Imbalance Dataset',
+            'dataset_description': 'Example fan blower imbalance',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
+    'hand_gesture_dataset': {
+        'common': {
+            'task_type': TASK_TYPE_GENERIC_TS_CLASSIFICATION,
+            'task_category': TASK_CATEGORY_TS_CLASSIFICATION,
+        },
+        'dataset': {
+            'dataset_name': 'hand_gesture_dataset',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip',
+        },
+        'info': {
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip',
+            'dataset_detailed_name': 'Hand Gesture Dataset',
+            'dataset_description': 'Human hand gesture recognition',
+            'dataset_size': None,
+            'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
+            'dataset_license': 'TI Internal License'
+        }
+    },
 }

@@ -13,8 +13,8 @@ sys.path.insert(0, os.path.abspath('..'))
 project = 'TI Tiny ML Tensorlab'
 copyright = '2026, Texas Instruments Incorporated'
 author = 'Texas Instruments'
-release = '1.3.0'
-version = 'v1.3.0'
+release = '1.4.0'
+version = 'v1.4.0'
 
 # -- General configuration ---------------------------------------------------
 extensions = [

@@ -38,7 +38,7 @@ Running Your First Example
 
    The variables you need depend on which device you're targeting:
 
-   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT`` and ``C2000WARE_ROOT``
+   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT``
    * **F29 devices (F29H85X, etc.)**: Set ``CG_TOOL_ROOT``
    * **MSPM0 devices**: Set ``ARM_LLVM_CGT_PATH``
    * **AM13E devices**: Set ``ARM_LLVM_CGT_PATH``
@@ -48,6 +48,18 @@ Running Your First Example
    See :doc:`environment_variables` for complete device-specific setup instructions.
 
 After setting environment variables for your target device, run the hello world example:
+
+.. note::
+
+   **Windows Users: Enable Long Path Support Before Cloning**
+
+   If you are on Windows, run this command before cloning to enable support for long file paths:
+
+   .. code-block:: powershell
+
+      git config --global core.longpaths true
+
+   This allows Git to handle the deeply nested directory structure in the repository. You only need to run this once per system.
 
 .. code-block:: bash
 

@@ -96,7 +96,11 @@ def download_url(dataset_url, download_root, save_filename=None, progressbar_cre
             print(f'downloading from {dataset_url} to {download_file}')
             progressbar_creator = progressbar_creator or misc_utils.ProgressBar
             resp = requests.get(dataset_url, stream=True, allow_redirects=True)
-            total_size = int(resp.headers.get('content-length'))
+            content_length = resp.headers.get('content-length')
+            try:
+                total_size = int(content_length or 0)
+            except (TypeError, ValueError):
+                total_size = 0
             progressbar_obj = progressbar_creator(total_size, unit='B')
             os.makedirs(download_root, exist_ok=True)
             with open(download_file, 'wb') as fp:
@@ -191,6 +195,8 @@ def download_files(dataset_urls, download_root, extract_root=None, save_filename
         ([None]*len(dataset_urls) if save_filenames is None else [save_filenames])
 
     download_paths = []
+    all_success = True
+    messages = []
     for dataset_url_id, (dataset_url, save_filename) in enumerate(zip(dataset_urls, save_filenames)):
         success_writer(f'Downloading {dataset_url_id+1}/{len(dataset_urls)}: {dataset_url}')
         download_success, message, download_path = download_file(
@@ -199,11 +205,13 @@ def download_files(dataset_urls, download_root, extract_root=None, save_filename
         if download_success:
             success_writer(f'Download done for {dataset_url}')
         else:
+            all_success = False
+            messages.append(f'{dataset_url}: {message}')
             warning_writer(f'Download failed for {dataset_url} {str(message)}')
         #
         download_paths.append(download_path)
     #
-    return download_success, message, download_paths
+    return all_success, '; '.join(messages), download_paths
 
 
 def download_url_entry(download_entry, download_path=None, download_root=None):

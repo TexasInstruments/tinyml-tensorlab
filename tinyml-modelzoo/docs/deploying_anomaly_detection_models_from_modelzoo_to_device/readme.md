@@ -159,7 +159,9 @@ Once all prerequisites are met, follow these steps to deploy the model on your d
 **2. Import the Project**
 
 - Go to **File** > **Import Projects**
-- A dialog box will appear. Click **Browse** to select the project folder.<img src="assets/import_project.png" alt="Import Project Dialog" width="1200">
+- A dialog box will appear. Click **Browse** to select the project folder.
+
+  <img src="assets/import_project.png" alt="Import Project Dialog" width="1200">
 
 - Select the `generic_timeseries_anomalydetection` folder
 
@@ -169,12 +171,14 @@ Once all prerequisites are met, follow these steps to deploy the model on your d
      ```
      {F29H85X_SDK_INSTALL_PATH}/examples/rtlibs/ai/examples/generic_timeseries_anomalydetection
      ```
+
      <img src="assets/f29h85x_select_example_from_sdk.png" alt="Import Project Dialog" width="1200">
 
    - **For C2000 F28x devices** (F28003x, F28004x, F28P55x, F28P65x): Navigate to your C2000Ware installation directory:
      ```
      {C2000WARE_INSTALL_PATH}/libraries/ai/examples/generic_timeseries_anomalydetection
      ```
+     
      <img src="assets/f28p55x_select_example_from_sdk.png" alt="Import Project Dialog" width="1200">
 
 **3. Open the folder and select the example for the device you are using and click finish**
@@ -222,6 +226,7 @@ Connect your TI LaunchPad to your computer using a USB cable.
 **9. Flash the Project**
 
 Right click on target config > **Flash Project**
+
 <img src="assets/flash_view.png" alt="Debug Perspective" width="1200">
 
 ---
@@ -231,6 +236,7 @@ Right click on target config > **Flash Project**
 ### Start Debug Session
 
 After flashing, the debug perspective should open automatically and click the Green resume button on top left corner. If not, go to **Run** > **Debug**.
+
 <img src="assets/debug_view.png" alt="Resume Button in Debug Perspective" width="1200">
 
 ### Run the Program
@@ -246,7 +252,7 @@ The on-device application will:
 4. **Compare to threshold** to determine if the sample is normal or anomalous
 5. **Display results** in the console
 
-<img src="assets/result.png" alt="Anomaly Detection Test Results" width="1200">
+    <img src="assets/result.png" alt="Anomaly Detection Test Results" width="1200">
 
 **Understanding the Results:**
 - **Reconstruction Error**: Mean Squared Error between input and autoencoder output

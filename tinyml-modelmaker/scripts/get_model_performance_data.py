@@ -6,7 +6,7 @@ from tinyml_modelmaker.ai_modules.vision import constants as constants_vision
 valid_model_list = ['MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t',
                     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
                     'TimeSeries_Generic_1k_t', 'TimeSeries_Generic_4k_t', 'TimeSeries_Generic_6k_t',
-                    'TimeSeries_Generic_13k_t', 'Lenet5', 'PIRDetection_model_1_t']
+                    'TimeSeries_Generic_13k_t', 'Lenet5', 'MobileNetV1_58k_NPU', 'MobileNetV2_58k_NPU'. 'PIRDetection_model_1_t']
 soft_tinie_targets = ['c28_soft_int_in_int_out']
 hard_tinie_targets = ['c28_hard_int_in_int_out']
 valid_tinie_targets = soft_tinie_targets + hard_tinie_targets
@@ -29,7 +29,8 @@ relevant_df = relevant_df.set_index(['model'])  # 'cycles',
 
 device_list = [constants.TARGET_DEVICE_F280013, constants.TARGET_DEVICE_F280015, constants.TARGET_DEVICE_F28003, constants.TARGET_DEVICE_F28004,
                constants.TARGET_DEVICE_F2837, constants.TARGET_DEVICE_F28P65, constants.TARGET_DEVICE_MSPM0G3507,
-               constants.TARGET_DEVICE_MSPM0G3519, constants.TARGET_DEVICE_MSPM0G5187, constants.TARGET_DEVICE_CC2755, constants.TARGET_DEVICE_CC1352]
+               constants.TARGET_DEVICE_MSPM0G3519, constants.TARGET_DEVICE_MSPM0G5187, constants.TARGET_DEVICE_CC2755, constants.TARGET_DEVICE_CC1312, constants.TARGET_DEVICE_CC1314,
+               constants.TARGET_DEVICE_CC1352, constants.TARGET_DEVICE_CC1354, constants.TARGET_DEVICE_CC35X1]
 freq_MHz_dict  = {
     constants.TARGET_DEVICE_F280013: 120,
     constants.TARGET_DEVICE_F280015: 120,
@@ -42,7 +43,12 @@ freq_MHz_dict  = {
     constants.TARGET_DEVICE_MSPM0G3519: 80,
     constants.TARGET_DEVICE_MSPM0G5187: 80,
     constants.TARGET_DEVICE_CC2755: 96,
+    constants.TARGET_DEVICE_CC1312: 48,
+    constants.TARGET_DEVICE_CC1314: 48,
     constants.TARGET_DEVICE_CC1352: 48,
+    constants.TARGET_DEVICE_CC1354: 48,
+    constants.TARGET_DEVICE_CC35X1: 160,
+    
 }
 
 hard_tinie_df = relevant_df.loc[relevant_df.tinie_type=='hard']

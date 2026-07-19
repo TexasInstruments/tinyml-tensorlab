@@ -1,9 +1,11 @@
 # tinyml-tensorlab - TI's MCU AI Toolchain
 
 The Tiny ML Tensorlab repository is the starting point to install and explore TI's AI offering for MCUs.
-It supports Time Series Classification, Regression, Forecasting, Anomaly Detection, and Image Classification tasks across 20+ TI microcontrollers.
+It supports Time Series Classification, Regression, Forecasting, Anomaly Detection, and Image Classification tasks across 24+ TI microcontrollers with 31 example applications.
 
-**Detailed User Guide:** [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/user_guide/index.html)
+**Detailed User Guide:**
+- **Online:** [TI Tiny ML Tensorlab User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/user_guide/index.html)
+- **Local:** Open `docs/_build/html/index.html` in your browser after cloning
 
 <hr>
 
@@ -11,8 +13,68 @@ The [TI Tiny ML ModelZoo](./tinyml-modelzoo): Contains the devices supported, a 
 
 <hr>
 
+**Tiny ML Agentic Skill Plugin**
+
+Install and use the tinyml-agent-skill with Claude Code:
+
+1. Register marketplace (tinyml-agent-skills is already in the cloned repo):
+```
+/plugin marketplace add path/to/tinyml-agent-skills 
+# replace path/to/tinyml-agent-skills with your actual path
+```
+2. Install plugin:
+```
+/plugin install tinyml-agent-skills@tinyml-agent-skills
+```
+3. Run setup (first time only):
+```
+/tinyml-agent-skills:setup
+```
+Select update mode: `auto-update` (latest version) or `pinned` (lock to current version).
+
+4. Invoke workflow:
+```
+/tinyml-agent-skills:tinyml-workflow-agent
+```
+
+Or trigger naturally:
+```
+I want to create an ML model for [your-device]
+Train and deploy to embedded device
+Build a Tiny ML model with tinyml-tensorlab
+Deploy a model to [target-device]
+I want to develop an AI solution for...
+```
+
+Learn More - [TI Tiny ML Tensorlab Agent Skill User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/user_guide/installation/agentic_skill_setup.html)
+
 ### Release History
 
+- [2026-Jun] Release version 1.4.0 of the software
+  <details>
+
+    - Agent Skills with Claude Code supported for users to solve Edge AI/Tiny ML problems using natural language!
+    - Device Support: 40 MCU devices supported:
+      - AM1x: AM13E2
+      - C2000 F28: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65
+      - C2000 F29: F29H85, F29P58, F29P32
+      - MSP M0: MSPM0G3507, MSPM0G3519, MSPM0G5187
+      - MSP M33: MSPM33C32,
+      - Connectivity: CC2755, CC1352, CC1354, CC35X1, CC1312, CC1314
+      - AM26x: AM263, AM263P, AM261
+  - Flows:
+    - Timeseries Anomaly Detection flow - More models
+    - On Device Learning Mode Enabled - Expansive functionalities
+  - Applications Supported
+    - 31 (4 generic + 27 specific applications)
+  - Models:
+    - 50+ generic models added over classification, regression, forecasting and anomaly detection tasks.
+  - Model Optimization:
+    - Hessian Aware Quantization for automatic recommendation of quantization bitwidths for weights. 
+  - Compilation:
+      - Upgraded TI MCU Neural Network Compiler for MCUs to 2.1.2
+
+  </details>
 - [2026-Feb] Release version 1.3.0 of the software
   <details>
 

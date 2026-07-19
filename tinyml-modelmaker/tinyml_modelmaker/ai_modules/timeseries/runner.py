@@ -45,7 +45,7 @@ from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 
 class ModelRunner():
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = init_params(*args, **kwargs)
         # set the checkpoint download folder
         # (for the models that are downloaded using torch.hub eg. mmdetection uses that)
@@ -425,3 +425,7 @@ class ModelRunner():
     @staticmethod
     def get_help_url_descriptions(*args, **kwargs):
         return descriptions.get_help_url_descriptions(*args, **kwargs)
+
+    # @staticmethod
+    # def get_rex_dependencies(*args, **kwargs):
+    #     return descriptions.get_rex_dependencies(*args, **kwargs)

@@ -3,7 +3,7 @@ common:
   target_device: F28P55
 dataset:
   dataset_name: forecasting_pmsm_rotor_temp
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/pmsm_rotor_temp.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/pmsm_rotor_temp.zip
 data_processing_feature_extraction:
   data_proc_transforms:
   - SimpleWindow  # 'SimpleWindow' must be specified for forecasting tasks
@@ -19,7 +19,7 @@ training:
   batch_size: 256
   training_epochs: 20
   num_gpus: 0
-  quantization: 1
+  quantization: 2
   optimizer: adam
   learning_rate: 0.005
   output_int: false

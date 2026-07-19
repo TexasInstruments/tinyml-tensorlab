@@ -131,6 +131,18 @@ Classification Examples
      - :doc:`grid_fault_detection` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/grid_fault_detection>`__)
      - Univariate
      - Detect AC grid faults in EV on-board chargers using current measurements.
+   * - 14
+     - :doc:`gearbox_fault_detection` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/gearbox_fault_detection>`__)
+     - Multivariate
+     - Classify gearbox operating conditions (healthy vs. broken tooth) from vibration data.
+   * - 15
+     - :doc:`fall_detection_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/fall_detection_classification>`__)
+     - Multivariate
+     - Detect human falls vs. normal activities (ADL) from accelerometer data for safety monitoring.
+   * - 16
+     - :doc:`dynamic_hand_gesture_recognition` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/dynamic_hand_gesture_recognition>`__)
+     - Multivariate
+     - Classify dynamic hand gestures (circle, wave, tap) from 3-axis accelerometer data on MSPM0G5187.
 
 ----
 
@@ -216,8 +228,26 @@ Anomaly Detection Examples
 
 ----
 
-Image Classification Examples
+Audio Classification Examples
 -----------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 5 25 15 55
+
+   * - No.
+     - Example
+     - Data Type
+     - Description
+   * - 1
+     - :doc:`google_speech_command` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/google_speech_command>`__)
+     - Audio
+     - 12-class keyword spotting from audio using MFCC features and DSCNN model.
+
+----
+
+Image Classification Examples
+------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -231,6 +261,14 @@ Image Classification Examples
      - :doc:`mnist_image_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/MNIST_image_classification>`__)
      - Image
      - Handwritten digit recognition (MNIST dataset).
+   * - 2
+     - :doc:`machine_readable_code_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/machine_readable_code_classification>`__)
+     - Image
+     - Classify QR codes vs barcodes vs other objects from 28×28 grayscale images.
+   * - 3
+     - :doc:`coffee_bean_classification` (`GitHub <https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo/examples/coffee_bean_classification>`__)
+     - Image
+     - Classify coffee bean quality from images using MobileNetV1 on MSPM0G5187.
 
 ----
 
@@ -255,6 +293,9 @@ Image Classification Examples
    nilm_classification
    pir_detection
    grid_fault_detection
+   gearbox_fault_detection
+   fall_detection_classification
+   dynamic_hand_gesture_recognition
    torque_measurement_regression
    induction_motor_speed_prediction
    washing_machine_regression
@@ -264,4 +305,7 @@ Image Classification Examples
    anomaly_detection_example
    forecasting_example
    image_classification_example
+   google_speech_command
    mnist_image_classification
+   machine_readable_code_classification
+   coffee_bean_classification

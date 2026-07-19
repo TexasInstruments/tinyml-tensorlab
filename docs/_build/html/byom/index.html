@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>11. Bring Your Own Model &mdash; TI Tiny ML Tensorlab 1.3.0 documentation</title>
+  <title>11. Bring Your Own Model &mdash; TI Tiny ML Tensorlab 1.4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -16,7 +16,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=1f29e9d3"></script>
+      <script src="../_static/documentation_options.js?v=9172181d"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
 <a href="../index.html">TI Tiny ML Tensorlab</a>
-<div class="version">v1.3.0</div>
+<div class="version">v1.4.0</div>
 
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -126,8 +126,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#directory-structure-after-installation">2.3.6. Directory Structure After Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#updating">2.3.7. Updating</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#common-developer-tasks">2.3.8. Common Developer Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#troubleshooting">2.3.9. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#next-steps">2.3.10. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#speeding-up-installation">2.3.9. Speeding Up Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#troubleshooting">2.3.10. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/developer_installation.html#next-steps">2.3.11. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/windows_setup.html">2.4. Windows Setup</a><ul>
@@ -151,31 +152,61 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#installing-python-3-10">2.5.2. Installing Python 3.10</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#installation">2.5.3. Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#verification">2.5.4. Verification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#gpu-setup-optional">2.5.5. GPU Setup (Optional)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#shell-configuration">2.5.6. Shell Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#permission-issues">2.5.7. Permission Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#multiple-python-versions">2.5.8. Multiple Python Versions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#system-service-optional">2.5.9. System Service (Optional)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#troubleshooting">2.5.10. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#next-steps">2.5.11. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#speeding-up-installation">2.5.5. Speeding Up Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#gpu-setup-optional">2.5.6. GPU Setup (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#shell-configuration">2.5.7. Shell Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#permission-issues">2.5.8. Permission Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#multiple-python-versions">2.5.9. Multiple Python Versions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#system-service-optional">2.5.10. System Service (Optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#troubleshooting">2.5.11. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/linux_setup.html#next-steps">2.5.12. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/environment_variables.html">2.6. Environment Variables</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#required-variables-by-device-family">2.6.1. Required Variables by Device Family</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../installation/environment_variables.html#c2000-devices-f28p55-f28p65-f2837-etc">2.6.1.1. C2000 Devices (F28P55, F28P65, F2837, etc.)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../installation/environment_variables.html#mspm0-devices-mspm0g3507-mspm0g5187-etc">2.6.1.2. MSPM0 Devices (MSPM0G3507, MSPM0G5187, etc.)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../installation/environment_variables.html#am26x-devices-am263-am261-etc">2.6.1.3. AM26x Devices (AM263, AM261, etc.)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/macos_setup.html">2.6. macOS Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#prerequisites">2.6.1. Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#installation">2.6.2. Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#environment-variables-for-compilation">2.6.3. Environment Variables for Compilation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#running-examples">2.6.4. Running Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#verifying-installation">2.6.5. Verifying Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#macos-specific-notes">2.6.6. macOS-Specific Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#troubleshooting">2.6.7. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/macos_setup.html#next-steps">2.6.8. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#setting-environment-variables">2.6.2. Setting Environment Variables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#installing-ti-tools">2.6.3. Installing TI Tools</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#verifying-configuration">2.6.4. Verifying Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#troubleshooting">2.6.5. Troubleshooting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#next-steps">2.6.6. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/environment_variables.html">2.7. Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#required-variables-by-device-family">2.7.1. Required Variables by Device Family</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../installation/environment_variables.html#c2000-devices-f28p55-f28p65-f2837-etc">2.7.1.1. C2000 Devices (F28P55, F28P65, F2837, etc.)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/environment_variables.html#mspm0-devices-mspm0g3507-mspm0g5187-etc">2.7.1.2. MSPM0 Devices (MSPM0G3507, MSPM0G5187, etc.)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/environment_variables.html#am26x-devices-am263-am261-etc">2.7.1.3. AM26x Devices (AM263, AM261, etc.)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#which-install-should-i-choose">2.7. Which Install Should I Choose?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#quick-start">2.8. Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#setting-environment-variables">2.7.2. Setting Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#installing-ti-tools">2.7.3. Installing TI Tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#verifying-configuration">2.7.4. Verifying Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#troubleshooting">2.7.5. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/environment_variables.html#next-steps">2.7.6. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/agentic_skill_setup.html">2.8. Tiny ML Agent Skill — AI-Guided Model Creation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#what-is-this-skill">2.8.1. What Is This Skill?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#prerequisites">2.8.2. Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#installation">2.8.3. Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../installation/agentic_skill_setup.html#step-1-install-tinyml-tensorlab">2.8.3.1. Step 1: Install tinyml-tensorlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/agentic_skill_setup.html#step-2-activate-claude-code-skill">2.8.3.2. Step 2: Activate Claude Code Skill</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/agentic_skill_setup.html#step-3-run-setup-skill-first-time-only">2.8.3.3. Step 3: Run Setup Skill (First Time Only)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/agentic_skill_setup.html#step-4-invoke-the-workflow-skill">2.8.3.4. Step 4: Invoke the Workflow Skill</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../installation/agentic_skill_setup.html#setup-confirmation">2.8.3.5. Setup Confirmation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#workflow-overview">2.8.4. Workflow Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#key-concepts">2.8.5. Key Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#common-questions">2.8.6. Common Questions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#getting-help">2.8.7. Getting Help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation/agentic_skill_setup.html#next-steps">2.8.8. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#which-install-should-i-choose">2.9. Which Install Should I Choose?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#quick-start">2.10. Quick Start</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">3. Getting Started</a><ul>
@@ -483,323 +514,412 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l2"><a class="reference internal" href="../examples/index.html#regression-examples">7.4. Regression Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/index.html#forecasting-examples">7.5. Forecasting Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../examples/index.html#anomaly-detection-examples">7.6. Anomaly Detection Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../examples/index.html#image-classification-examples">7.7. Image Classification Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/generic_classification.html">7.7.1. Generic Time Series Classification</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#overview">7.7.1.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#running-the-example">7.7.1.2. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#understanding-the-dataset">7.7.1.3. Understanding the Dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#dataset-format">7.7.1.4. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#configuration">7.7.1.5. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#feature-extraction">7.7.1.6. Feature Extraction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#evaluation-metrics">7.7.1.7. Evaluation Metrics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#expected-results">7.7.1.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#output-location">7.7.1.9. Output Location</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#variations-to-try">7.7.1.10. Variations to Try</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#next-steps">7.7.1.11. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/index.html#audio-classification-examples">7.7. Audio Classification Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/index.html#image-classification-examples">7.8. Image Classification Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/generic_classification.html">7.8.1. Generic Time Series Classification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#overview">7.8.1.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#running-the-example">7.8.1.2. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#understanding-the-dataset">7.8.1.3. Understanding the Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#dataset-format">7.8.1.4. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#configuration">7.8.1.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#feature-extraction">7.8.1.6. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#evaluation-metrics">7.8.1.7. Evaluation Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#expected-results">7.8.1.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#output-location">7.8.1.9. Output Location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#variations-to-try">7.8.1.10. Variations to Try</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_classification.html#next-steps">7.8.1.11. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/generic_regression.html">7.7.2. Generic Time Series Regression</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#overview">7.7.2.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#running-the-example">7.7.2.2. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#understanding-the-dataset">7.7.2.3. Understanding the Dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#dataset-format">7.7.2.4. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#configuration">7.7.2.5. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#evaluation-metrics">7.7.2.6. Evaluation Metrics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#expected-results">7.7.2.7. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#output-location">7.7.2.8. Output Location</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#next-steps">7.7.2.9. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/generic_regression.html">7.8.2. Generic Time Series Regression</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#overview">7.8.2.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#running-the-example">7.8.2.2. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#understanding-the-dataset">7.8.2.3. Understanding the Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#dataset-format">7.8.2.4. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#configuration">7.8.2.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#evaluation-metrics">7.8.2.6. Evaluation Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#expected-results">7.8.2.7. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#output-location">7.8.2.8. Output Location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_regression.html#next-steps">7.8.2.9. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/generic_forecasting.html">7.7.3. Generic Time Series Forecasting</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#overview">7.7.3.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#running-the-example">7.7.3.2. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#understanding-the-dataset">7.7.3.3. Understanding the Dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#dataset-format">7.7.3.4. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#configuration">7.7.3.5. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#target-variables">7.7.3.6. Target Variables</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#evaluation-metrics">7.7.3.7. Evaluation Metrics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#expected-results">7.7.3.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#output-location">7.7.3.9. Output Location</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#next-steps">7.7.3.10. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/generic_forecasting.html">7.8.3. Generic Time Series Forecasting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#overview">7.8.3.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#running-the-example">7.8.3.2. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#understanding-the-dataset">7.8.3.3. Understanding the Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#dataset-format">7.8.3.4. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#configuration">7.8.3.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#target-variables">7.8.3.6. Target Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#evaluation-metrics">7.8.3.7. Evaluation Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#expected-results">7.8.3.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#output-location">7.8.3.9. Output Location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_forecasting.html#next-steps">7.8.3.10. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/generic_anomaly_detection.html">7.7.4. Generic Time Series Anomaly Detection</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#overview">7.7.4.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#running-the-example">7.7.4.2. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#understanding-the-dataset">7.7.4.3. Understanding the Dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#dataset-format">7.7.4.4. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#configuration">7.7.4.5. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#how-autoencoder-detection-works">7.7.4.6. How Autoencoder Detection Works</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#why-frame-size-matters">7.7.4.7. Why Frame Size Matters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#expected-results">7.7.4.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#output-location">7.7.4.9. Output Location</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#next-steps">7.7.4.10. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/generic_anomaly_detection.html">7.8.4. Generic Time Series Anomaly Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#overview">7.8.4.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#running-the-example">7.8.4.2. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#understanding-the-dataset">7.8.4.3. Understanding the Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#dataset-format">7.8.4.4. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#configuration">7.8.4.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#how-autoencoder-detection-works">7.8.4.6. How Autoencoder Detection Works</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#why-frame-size-matters">7.8.4.7. Why Frame Size Matters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#expected-results">7.8.4.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#output-location">7.8.4.9. Output Location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/generic_anomaly_detection.html#next-steps">7.8.4.10. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/arc_fault.html">7.7.5. Arc Fault Detection</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#overview">7.7.5.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#why-arc-fault-detection">7.7.5.2. Why Arc Fault Detection?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#running-the-example">7.7.5.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#configuration">7.7.5.4. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#dataset-description">7.7.5.5. Dataset Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#feature-extraction">7.7.5.6. Feature Extraction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#available-models">7.7.5.7. Available Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#expected-results">7.7.5.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#interpreting-results">7.7.5.9. Interpreting Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#deployment-considerations">7.7.5.10. Deployment Considerations</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#ac-arc-fault-detection">7.7.5.11. AC Arc Fault Detection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#next-steps">7.7.5.12. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/arc_fault.html">7.8.5. Arc Fault Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#overview">7.8.5.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#why-arc-fault-detection">7.8.5.2. Why Arc Fault Detection?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#running-the-example">7.8.5.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#configuration">7.8.5.4. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#dataset-description">7.8.5.5. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#feature-extraction">7.8.5.6. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#available-models">7.8.5.7. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#expected-results">7.8.5.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#interpreting-results">7.8.5.9. Interpreting Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#deployment-considerations">7.8.5.10. Deployment Considerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#ac-arc-fault-detection">7.8.5.11. AC Arc Fault Detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/arc_fault.html#next-steps">7.8.5.12. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/ac_arc_fault.html">7.7.6. AC Arc Fault</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#overview">7.7.6.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#configuration">7.7.6.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#running-the-example">7.7.6.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#dataset-details">7.7.6.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#recommended-models">7.7.6.5. Recommended Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#see-also">7.7.6.6. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/ac_arc_fault.html">7.8.6. AC Arc Fault</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#overview">7.8.6.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#configuration">7.8.6.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#running-the-example">7.8.6.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#dataset-details">7.8.6.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#recommended-models">7.8.6.5. Recommended Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ac_arc_fault.html#see-also">7.8.6.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/motor_bearing_fault.html">7.7.7. Motor Bearing Fault</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#overview">7.7.7.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#fault-classes">7.7.7.2. Fault Classes</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#running-the-example">7.7.7.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#configuration">7.7.7.4. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#dataset-description">7.7.7.5. Dataset Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#feature-extraction-presets">7.7.7.6. Feature Extraction Presets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#available-models">7.7.7.7. Available Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#expected-results">7.7.7.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#multi-class-evaluation">7.7.7.9. Multi-Class Evaluation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#dataset-quality-analysis">7.7.7.10. Dataset Quality Analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#practical-considerations">7.7.7.11. Practical Considerations</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#anomaly-detection-alternative">7.7.7.12. Anomaly Detection Alternative</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#next-steps">7.7.7.13. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/motor_bearing_fault.html">7.8.7. Motor Bearing Fault</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#overview">7.8.7.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#fault-classes">7.8.7.2. Fault Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#device-support">7.8.7.3. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#running-the-example">7.8.7.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#configuration">7.8.7.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#dataset-description">7.8.7.6. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#feature-extraction-presets">7.8.7.7. Feature Extraction Presets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#available-models">7.8.7.8. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#expected-results">7.8.7.9. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#multi-class-evaluation">7.8.7.10. Multi-Class Evaluation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#dataset-quality-analysis">7.8.7.11. Dataset Quality Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#practical-considerations">7.8.7.12. Practical Considerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#anomaly-detection-alternative">7.8.7.13. Anomaly Detection Alternative</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/motor_bearing_fault.html#next-steps">7.8.7.14. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/blower_imbalance.html">7.7.8. Blower Imbalance</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#overview">7.7.8.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#configuration">7.7.8.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#running-the-example">7.7.8.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#dataset-details">7.7.8.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#recommended-models">7.7.8.5. Recommended Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#see-also">7.7.8.6. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/blower_imbalance.html">7.8.8. Blower Imbalance</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#overview">7.8.8.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#configuration">7.8.8.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#running-the-example">7.8.8.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#dataset-details">7.8.8.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#recommended-models">7.8.8.5. Recommended Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/blower_imbalance.html#see-also">7.8.8.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/fan_blade_fault_classification.html">7.7.9. Fan Blade Fault Classification</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#overview">7.7.9.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#demo-setup">7.7.9.2. Demo Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#fault-types">7.7.9.3. Fault Types</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#configuration">7.7.9.4. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#running-the-example">7.7.9.5. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#dataset-details">7.7.9.6. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#results-and-analysis">7.7.9.7. Results and Analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#anomaly-detection-variant">7.7.9.8. Anomaly Detection Variant</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#see-also">7.7.9.9. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/fan_blade_fault_classification.html">7.8.9. Fan Blade Fault Classification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#overview">7.8.9.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#demo-setup">7.8.9.2. Demo Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#fault-types">7.8.9.3. Fault Types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#device-support">7.8.9.4. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#configuration">7.8.9.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#running-the-example">7.8.9.6. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#dataset-details">7.8.9.7. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#results-and-analysis">7.8.9.8. Results and Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#anomaly-detection-variant">7.8.9.9. Anomaly Detection Variant</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fan_blade_fault_classification.html#see-also">7.8.9.10. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/electrical_fault.html">7.7.10. Electrical Fault</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#overview">7.7.10.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#configuration">7.7.10.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#running-the-example">7.7.10.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#dataset-details">7.7.10.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#see-also">7.7.10.5. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/electrical_fault.html">7.8.10. Electrical Fault</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#overview">7.8.10.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#dataset-variants">7.8.10.2. Dataset Variants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#configuration">7.8.10.3. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#running-the-example">7.8.10.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#dataset-details">7.8.10.5. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/electrical_fault.html#see-also">7.8.10.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/grid_stability.html">7.7.11. Grid Stability</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#overview">7.7.11.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#configuration">7.7.11.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#running-the-example">7.7.11.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#dataset-details">7.7.11.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#see-also">7.7.11.5. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/grid_stability.html">7.8.11. Grid Stability</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#overview">7.8.11.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#configuration">7.8.11.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#running-the-example">7.8.11.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#dataset-details">7.8.11.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_stability.html#see-also">7.8.11.5. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/gas_sensor.html">7.7.12. Gas Sensor</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#overview">7.7.12.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#configuration">7.7.12.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#running-the-example">7.7.12.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#dataset-details">7.7.12.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#quantization-analysis">7.7.12.5. Quantization Analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#see-also">7.7.12.6. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/gas_sensor.html">7.8.12. Gas Sensor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#overview">7.8.12.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#configuration">7.8.12.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#running-the-example">7.8.12.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#dataset-details">7.8.12.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#quantization-analysis">7.8.12.5. Quantization Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gas_sensor.html#see-also">7.8.12.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/har_activity_recognition.html">7.7.13. Human Activity Recognition</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#overview">7.7.13.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#configuration">7.7.13.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#running-the-example">7.7.13.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#dataset-details">7.7.13.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#see-also">7.7.13.5. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/har_activity_recognition.html">7.8.13. Human Activity Recognition</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#overview">7.8.13.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#configuration">7.8.13.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#running-the-example">7.8.13.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#dataset-details">7.8.13.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/har_activity_recognition.html#see-also">7.8.13.5. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/ecg_classification.html">7.7.14. ECG Classification</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#overview">7.7.14.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#key-performance-targets">7.7.14.2. Key Performance Targets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#system-components">7.7.14.3. System Components</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#dataset-details">7.7.14.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#feature-extraction">7.7.14.5. Feature Extraction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#model">7.7.14.6. Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#training-configuration">7.7.14.7. Training Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#configuration-mspm0">7.7.14.8. Configuration (MSPM0)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#running-the-example">7.7.14.9. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#available-configurations">7.7.14.10. Available Configurations</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#anomaly-detection-mode">7.7.14.11. Anomaly Detection Mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#references">7.7.14.12. References</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#see-also">7.7.14.13. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/ecg_classification.html">7.8.14. ECG Classification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#overview">7.8.14.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#key-performance-targets">7.8.14.2. Key Performance Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#system-components">7.8.14.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#dataset-details">7.8.14.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#feature-extraction">7.8.14.5. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#model">7.8.14.6. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#training-configuration">7.8.14.7. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#configuration-mspm0">7.8.14.8. Configuration (MSPM0)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#running-the-example">7.8.14.9. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#available-configurations">7.8.14.10. Available Configurations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#anomaly-detection-mode">7.8.14.11. Anomaly Detection Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#references">7.8.14.12. References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/ecg_classification.html#see-also">7.8.14.13. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/nilm_classification.html">7.7.15. NILM Appliance Usage Classification</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#overview">7.7.15.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#configuration">7.7.15.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#running-the-example">7.7.15.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#dataset-details">7.7.15.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#on-device-results">7.7.15.5. On-Device Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#plaid-dataset-variant">7.7.15.6. PLAID Dataset Variant</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#see-also">7.7.15.7. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/nilm_classification.html">7.8.15. NILM Appliance Usage Classification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#overview">7.8.15.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#configuration">7.8.15.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#running-the-example">7.8.15.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#dataset-details">7.8.15.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#on-device-results">7.8.15.5. On-Device Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#plaid-dataset-variant">7.8.15.6. PLAID Dataset Variant</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/nilm_classification.html#see-also">7.8.15.7. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/pir_detection.html">7.7.16. PIR Detection</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#overview">7.7.16.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#device-support">7.7.16.2. Device Support</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#system-components">7.7.16.3. System Components</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#running-the-example">7.7.16.4. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#dataset-description">7.7.16.5. Dataset Description</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#feature-extraction-pipeline">7.7.16.6. Feature Extraction Pipeline</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#model">7.7.16.7. Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#expected-results">7.7.16.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#training-configuration">7.7.16.9. Training Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#references">7.7.16.10. References</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/pir_detection.html">7.8.16. PIR Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#overview">7.8.16.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#device-support">7.8.16.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#system-components">7.8.16.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#running-the-example">7.8.16.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#dataset-description">7.8.16.5. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#feature-extraction-pipeline">7.8.16.6. Feature Extraction Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#model">7.8.16.7. Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#expected-results">7.8.16.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#training-configuration">7.8.16.9. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/pir_detection.html#references">7.8.16.10. References</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/grid_fault_detection.html">7.7.17. Grid Fault Detection</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#overview">7.7.17.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#configuration">7.7.17.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#running-the-example">7.7.17.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#dataset-details">7.7.17.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#see-also">7.7.17.5. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/grid_fault_detection.html">7.8.17. Grid Fault Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#overview">7.8.17.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#configuration">7.8.17.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#running-the-example">7.8.17.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#dataset-details">7.8.17.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/grid_fault_detection.html#see-also">7.8.17.5. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/torque_measurement_regression.html">7.7.18. Torque Measurement Regression</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#overview">7.7.18.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#configuration">7.7.18.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#running-the-example">7.7.18.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#dataset-details">7.7.18.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#recommended-models">7.7.18.5. Recommended Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#see-also">7.7.18.6. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/gearbox_fault_detection.html">7.8.18. Gearbox Fault Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#overview">7.8.18.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#device-support">7.8.18.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#system-components">7.8.18.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#dataset">7.8.18.4. Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#feature-extraction">7.8.18.5. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#models">7.8.18.6. Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#configuration">7.8.18.7. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#running-the-example">7.8.18.8. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/gearbox_fault_detection.html#see-also">7.8.18.9. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html">7.7.19. Induction Motor Speed Prediction</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#overview">7.7.19.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#configuration">7.7.19.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#running-the-example">7.7.19.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#dataset-details">7.7.19.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#see-also">7.7.19.5. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/fall_detection_classification.html">7.8.19. Human Fall Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#overview">7.8.19.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#device-support">7.8.19.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#system-components">7.8.19.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#running-the-example">7.8.19.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#dataset-description">7.8.19.5. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#data-preprocessing">7.8.19.6. Data Preprocessing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#feature-extraction-pipeline">7.8.19.7. Feature Extraction Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#model-architecture">7.8.19.8. Model Architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#configuration">7.8.19.9. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#deployment-workflow">7.8.19.10. Deployment Workflow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#on-device-training">7.8.19.11. On-Device Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#practical-considerations">7.8.19.12. Practical Considerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#cross-references">7.8.19.13. Cross-References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#troubleshooting">7.8.19.14. Troubleshooting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/fall_detection_classification.html#references">7.8.19.15. References</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/washing_machine_regression.html">7.7.20. Washing Machine Regression</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#overview">7.7.20.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#configuration">7.7.20.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#running-the-example">7.7.20.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#dataset-details">7.7.20.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#results">7.7.20.5. Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#see-also">7.7.20.6. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html">7.8.20. Dynamic Hand Gesture Recognition</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#overview">7.8.20.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#gesture-classes">7.8.20.2. Gesture Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#running-the-example">7.8.20.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#device-support">7.8.20.4. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#configuration">7.8.20.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#dataset-description">7.8.20.6. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#feature-extraction">7.8.20.7. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#available-models">7.8.20.8. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#expected-results">7.8.20.9. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#system-components">7.8.20.10. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/dynamic_hand_gesture_recognition.html#next-steps">7.8.20.11. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/mosfet_temp_prediction.html">7.7.21. MOSFET Junction Temperature Prediction</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#overview">7.7.21.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#configuration">7.7.21.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#running-the-example">7.7.21.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#dataset-details">7.7.21.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#on-device-deployment">7.7.21.5. On-Device Deployment</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#see-also">7.7.21.6. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/torque_measurement_regression.html">7.8.21. Torque Measurement Regression</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#overview">7.8.21.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#configuration">7.8.21.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#running-the-example">7.8.21.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#dataset-details">7.8.21.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#recommended-models">7.8.21.5. Recommended Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/torque_measurement_regression.html#see-also">7.8.21.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html">7.7.22. PMSM Rotor Forecasting</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#overview">7.7.22.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#configuration">7.7.22.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#running-the-example">7.7.22.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#dataset-details">7.7.22.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#recommended-models">7.7.22.5. Recommended Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#results">7.7.22.6. Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#see-also">7.7.22.7. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html">7.8.22. Induction Motor Speed Prediction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#overview">7.8.22.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#configuration">7.8.22.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#running-the-example">7.8.22.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#dataset-details">7.8.22.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/induction_motor_speed_prediction.html#see-also">7.8.22.5. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html">7.7.23. HVAC Indoor Temp Forecast</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#overview">7.7.23.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#configuration">7.7.23.2. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#running-the-example">7.7.23.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#dataset-details">7.7.23.4. Dataset Details</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#results">7.7.23.5. Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#see-also">7.7.23.6. See Also</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/washing_machine_regression.html">7.8.23. Washing Machine Regression</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#overview">7.8.23.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#configuration">7.8.23.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#running-the-example">7.8.23.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#dataset-details">7.8.23.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#results">7.8.23.5. Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/washing_machine_regression.html#see-also">7.8.23.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/anomaly_detection_example.html">7.7.24. Arc Fault Anomaly Detection Example</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#overview">7.7.24.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#running-the-example">7.7.24.2. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#configuration">7.7.24.3. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#dataset-format">7.7.24.4. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#available-models">7.7.24.5. Available Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#expected-results">7.7.24.6. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#threshold-selection">7.7.24.7. Threshold Selection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#interpreting-outputs">7.7.24.8. Interpreting Outputs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#advanced-configuration">7.7.24.9. Advanced Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#practical-applications">7.7.24.10. Practical Applications</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#comparison-with-classification">7.7.24.11. Comparison with Classification</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#troubleshooting">7.7.24.12. Troubleshooting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#next-steps">7.7.24.13. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/mosfet_temp_prediction.html">7.8.24. MOSFET Junction Temperature Prediction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#overview">7.8.24.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#configuration">7.8.24.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#running-the-example">7.8.24.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#dataset-details">7.8.24.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#on-device-deployment">7.8.24.5. On-Device Deployment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mosfet_temp_prediction.html#see-also">7.8.24.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/forecasting_example.html">7.7.25. Forecasting Example</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#overview">7.7.25.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#when-to-use-forecasting">7.7.25.2. When to Use Forecasting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#running-the-example">7.7.25.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#configuration">7.7.25.4. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#how-forecasting-works">7.7.25.5. How Forecasting Works</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#dataset-format">7.7.25.6. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#available-models">7.7.25.7. Available Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#expected-results">7.7.25.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#key-metrics">7.7.25.9. Key Metrics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#forecast-horizon-trade-offs">7.7.25.10. Forecast Horizon Trade-offs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#multi-variable-forecasting">7.7.25.11. Multi-Variable Forecasting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#feature-extraction-options">7.7.25.12. Feature Extraction Options</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#practical-applications">7.7.25.13. Practical Applications</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#deployment-considerations">7.7.25.14. Deployment Considerations</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#troubleshooting">7.7.25.15. Troubleshooting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#comparison-with-regression">7.7.25.16. Comparison with Regression</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#next-steps">7.7.25.17. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html">7.8.25. PMSM Rotor Forecasting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#overview">7.8.25.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#device-support">7.8.25.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#configuration">7.8.25.3. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#running-the-example">7.8.25.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#dataset-details">7.8.25.5. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#recommended-models">7.8.25.6. Recommended Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#results">7.8.25.7. Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_pmsm_rotor.html#see-also">7.8.25.8. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/image_classification_example.html">7.7.26. Image Classification Example</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#overview">7.7.26.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#when-to-use-image-classification">7.7.26.2. When to Use Image Classification</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#running-the-example">7.7.26.3. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#configuration">7.7.26.4. Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#dataset-format">7.7.26.5. Dataset Format</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#image-size-considerations">7.7.26.6. Image Size Considerations</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#available-models">7.7.26.7. Available Models</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#expected-results">7.7.26.8. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#grayscale-vs-rgb">7.7.26.9. Grayscale vs RGB</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#data-augmentation">7.7.26.10. Data Augmentation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#practical-applications">7.7.26.11. Practical Applications</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#memory-constraints">7.7.26.12. Memory Constraints</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#inference-performance">7.7.26.13. Inference Performance</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#transfer-learning">7.7.26.14. Transfer Learning</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#camera-integration">7.7.26.15. Camera Integration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#troubleshooting">7.7.26.16. Troubleshooting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#limitations">7.7.26.17. Limitations</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#next-steps">7.7.26.18. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html">7.8.26. HVAC Indoor Temp Forecast</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#overview">7.8.26.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#configuration">7.8.26.2. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#running-the-example">7.8.26.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#dataset-details">7.8.26.4. Dataset Details</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#results">7.8.26.5. Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/hvac_indoor_temp_forecast.html#see-also">7.8.26.6. See Also</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/mnist_image_classification.html">7.7.27. MNIST Image Classification</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#overview">7.7.27.1. Overview</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#key-targets">7.7.27.2. Key Targets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#system-components">7.7.27.3. System Components</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#running-the-example">7.7.27.4. Running the Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#dataset">7.7.27.5. Dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#feature-extraction">7.7.27.6. Feature Extraction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#model-architecture">7.7.27.7. Model Architecture</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#training-configuration">7.7.27.8. Training Configuration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#expected-results">7.7.27.9. Expected Results</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#supported-devices">7.7.27.10. Supported Devices</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#references">7.7.27.11. References</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/anomaly_detection_example.html">7.8.27. Arc Fault Anomaly Detection Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#overview">7.8.27.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#device-support">7.8.27.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#running-the-example">7.8.27.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#configuration">7.8.27.4. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#dataset-format">7.8.27.5. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#available-models">7.8.27.6. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#expected-results">7.8.27.7. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#threshold-selection">7.8.27.8. Threshold Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#interpreting-outputs">7.8.27.9. Interpreting Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#advanced-configuration">7.8.27.10. Advanced Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#practical-applications">7.8.27.11. Practical Applications</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#comparison-with-classification">7.8.27.12. Comparison with Classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#troubleshooting">7.8.27.13. Troubleshooting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/anomaly_detection_example.html#next-steps">7.8.27.14. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/forecasting_example.html">7.8.28. Forecasting Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#overview">7.8.28.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#when-to-use-forecasting">7.8.28.2. When to Use Forecasting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#running-the-example">7.8.28.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#configuration">7.8.28.4. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#how-forecasting-works">7.8.28.5. How Forecasting Works</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#dataset-format">7.8.28.6. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#available-models">7.8.28.7. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#expected-results">7.8.28.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#key-metrics">7.8.28.9. Key Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#forecast-horizon-trade-offs">7.8.28.10. Forecast Horizon Trade-offs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#multi-variable-forecasting">7.8.28.11. Multi-Variable Forecasting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#feature-extraction-options">7.8.28.12. Feature Extraction Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#practical-applications">7.8.28.13. Practical Applications</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#deployment-considerations">7.8.28.14. Deployment Considerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#troubleshooting">7.8.28.15. Troubleshooting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#comparison-with-regression">7.8.28.16. Comparison with Regression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/forecasting_example.html#next-steps">7.8.28.17. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/image_classification_example.html">7.8.29. Image Classification Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#overview">7.8.29.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#when-to-use-image-classification">7.8.29.2. When to Use Image Classification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#running-the-example">7.8.29.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#configuration">7.8.29.4. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#dataset-format">7.8.29.5. Dataset Format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#image-size-considerations">7.8.29.6. Image Size Considerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#available-models">7.8.29.7. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#expected-results">7.8.29.8. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#grayscale-vs-rgb">7.8.29.9. Grayscale vs RGB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#data-augmentation">7.8.29.10. Data Augmentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#practical-applications">7.8.29.11. Practical Applications</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#memory-constraints">7.8.29.12. Memory Constraints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#inference-performance">7.8.29.13. Inference Performance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#transfer-learning">7.8.29.14. Transfer Learning</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#camera-integration">7.8.29.15. Camera Integration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#troubleshooting">7.8.29.16. Troubleshooting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#limitations">7.8.29.17. Limitations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/image_classification_example.html#next-steps">7.8.29.18. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/google_speech_command.html">7.8.30. Google Speech Command Recognition</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#overview">7.8.30.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#keyword-classes">7.8.30.2. Keyword Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#device-support">7.8.30.3. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#running-the-example">7.8.30.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#configuration">7.8.30.5. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#feature-extraction-mfcc">7.8.30.6. Feature Extraction (MFCC)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#model-dscnn">7.8.30.7. Model: DSCNN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#system-components">7.8.30.8. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/google_speech_command.html#next-steps">7.8.30.9. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/mnist_image_classification.html">7.8.31. MNIST Image Classification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#overview">7.8.31.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#key-targets">7.8.31.2. Key Targets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#system-components">7.8.31.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#running-the-example">7.8.31.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#dataset">7.8.31.5. Dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#feature-extraction">7.8.31.6. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#model-architecture">7.8.31.7. Model Architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#training-configuration">7.8.31.8. Training Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#expected-results">7.8.31.9. Expected Results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#supported-devices">7.8.31.10. Supported Devices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/mnist_image_classification.html#references">7.8.31.11. References</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/machine_readable_code_classification.html">7.8.32. Machine Readable Code Classification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#overview">7.8.32.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#device-support">7.8.32.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#system-components">7.8.32.3. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#running-the-example">7.8.32.4. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#dataset-description">7.8.32.5. Dataset Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#model-architecture">7.8.32.6. Model Architecture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#configuration">7.8.32.7. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#feature-extraction">7.8.32.8. Feature Extraction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#performance">7.8.32.9. Performance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#practical-considerations">7.8.32.10. Practical Considerations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#on-device-training">7.8.32.11. On-Device Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#cross-references">7.8.32.12. Cross-References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#troubleshooting">7.8.32.13. Troubleshooting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/machine_readable_code_classification.html#dependencies">7.8.32.14. Dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/coffee_bean_classification.html">7.8.33. Coffee Bean Classification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../examples/coffee_bean_classification.html#overview">7.8.33.1. Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/coffee_bean_classification.html#device-support">7.8.33.2. Device Support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/coffee_bean_classification.html#running-the-example">7.8.33.3. Running the Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/coffee_bean_classification.html#configuration">7.8.33.4. Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/coffee_bean_classification.html#available-models">7.8.33.5. Available Models</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/coffee_bean_classification.html#system-components">7.8.33.6. System Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../examples/coffee_bean_classification.html#next-steps">7.8.33.7. Next Steps</a></li>
 </ul>
 </li>
 </ul>
@@ -843,8 +963,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#npu-hardware-constraints">8.2.15. NPU Hardware Constraints</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#using-quantization-wrappers-directly">8.2.16. Using Quantization Wrappers Directly</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#wrapper-api-reference">8.2.17. Wrapper API Reference</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#model-surgery">8.2.18. Model Surgery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#next-steps">8.2.19. Next Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/quantization.html#next-steps">8.2.18. Next Steps</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../features/quantization_examples.html">8.3. Standalone Quantization Examples</a><ul>
@@ -858,76 +977,129 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="../features/quantization_examples.html#next-steps">8.3.8. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/feature_extraction.html">8.4. Feature Extraction</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#overview">8.4.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-pipeline">8.4.2. Feature Extraction Pipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#configuration-parameters">8.4.3. Configuration Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#preset-system">8.4.4. Preset System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#available-presets">8.4.5. Available Presets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-processing-transforms">8.4.6. Data Processing Transforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-transforms">8.4.7. Feature Extraction Transforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#custom-feature-extraction">8.4.8. Custom Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#multi-channel-data">8.4.9. Multi-Channel Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#forecasting-configuration">8.4.10. Forecasting Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-augmentation">8.4.11. Data Augmentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#choosing-the-right-preset">8.4.12. Choosing the Right Preset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#performance-impact">8.4.13. Performance Impact</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#on-device-feature-extraction">8.4.14. On-Device Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#example-configurations">8.4.15. Example Configurations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#stacking-modes">8.4.16. Stacking Modes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#gain-variation-augmentation">8.4.17. Gain Variation Augmentation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#q15-fixed-point-transforms">8.4.18. Q15 Fixed-Point Transforms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#frame-offset-overlap-control">8.4.19. Frame Offset (Overlap Control)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#analysis-bandwidth">8.4.20. Analysis Bandwidth</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-only-mode">8.4.21. Feature Extraction Only Mode</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#evaluating-feature-extraction-quality">8.4.22. Evaluating Feature Extraction Quality</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#best-practices">8.4.23. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#next-steps">8.4.24. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/auto_quantization.html">8.4. Automatic Mixed Precision Quantization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/auto_quantization.html#overview">8.4.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/auto_quantization.html#algorithm">8.4.2. Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/auto_quantization.html#tolerance-thresholds">8.4.3. Tolerance Thresholds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/auto_quantization.html#configuration">8.4.4. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/auto_quantization.html#task-specific-behaviour">8.4.5. Task-Specific Behaviour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/auto_quantization.html#example-configs">8.4.6. Example Configs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/auto_quantization.html#next-steps">8.4.7. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/goodness_of_fit.html">8.5. Goodness of Fit</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#overview">8.5.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#enabling-gof-test">8.5.2. Enabling GoF Test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#running-the-test">8.5.3. Running the Test</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#output-files">8.5.4. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#understanding-the-visualizations">8.5.5. Understanding the Visualizations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#interpreting-results">8.5.6. Interpreting Results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#plot-analysis">8.5.7. 8-Plot Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#common-patterns">8.5.8. Common Patterns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#actionable-insights">8.5.9. Actionable Insights</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#frame-size-sweeping">8.5.10. Frame Size Sweeping</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#multi-cluster-analysis">8.5.11. Multi-Cluster Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#example-motor-fault-gof-analysis">8.5.12. Example: Motor Fault GoF Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#gof-without-training">8.5.13. GoF Without Training</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#comparing-feature-extraction">8.5.14. Comparing Feature Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#best-practices">8.5.15. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#limitations">8.5.16. Limitations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#next-steps">8.5.17. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/feature_extraction.html">8.5. Feature Extraction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#overview">8.5.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-pipeline">8.5.2. Feature Extraction Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#configuration-parameters">8.5.3. Configuration Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#preset-system">8.5.4. Preset System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#available-presets">8.5.5. Available Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-processing-transforms">8.5.6. Data Processing Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-transforms">8.5.7. Feature Extraction Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#custom-feature-extraction">8.5.8. Custom Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#multi-channel-data">8.5.9. Multi-Channel Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#forecasting-configuration">8.5.10. Forecasting Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#data-augmentation">8.5.11. Data Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#choosing-the-right-preset">8.5.12. Choosing the Right Preset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#performance-impact">8.5.13. Performance Impact</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#on-device-feature-extraction">8.5.14. On-Device Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#example-configurations">8.5.15. Example Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#stacking-modes">8.5.16. Stacking Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#gain-variation-augmentation">8.5.17. Gain Variation Augmentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#q15-fixed-point-transforms">8.5.18. Q15 Fixed-Point Transforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#frame-offset-overlap-control">8.5.19. Frame Offset (Overlap Control)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#analysis-bandwidth">8.5.20. Analysis Bandwidth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#feature-extraction-only-mode">8.5.21. Feature Extraction Only Mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#evaluating-feature-extraction-quality">8.5.22. Evaluating Feature Extraction Quality</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#best-practices">8.5.23. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/feature_extraction.html#next-steps">8.5.24. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/post_training_analysis.html">8.6. Post-Training Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#overview">8.6.1. Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#enabling-analysis">8.6.2. Enabling Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#output-files">8.6.3. Output Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#confusion-matrix">8.6.4. Confusion Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#roc-curves">8.6.5. ROC Curves</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#class-score-histograms">8.6.6. Class Score Histograms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#fpr-tpr-thresholds">8.6.7. FPR/TPR Thresholds</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#classification-report">8.6.8. Classification Report</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#error-analysis">8.6.9. Error Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#quantized-vs-float-comparison">8.6.10. Quantized vs Float Comparison</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#file-level-classification-summary">8.6.11. File-Level Classification Summary</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#regression-analysis">8.6.12. Regression Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#anomaly-detection-analysis">8.6.13. Anomaly Detection Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#custom-analysis-scripts">8.6.14. Custom Analysis Scripts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#generating-reports">8.6.15. Generating Reports</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#example-complete-analysis-configuration">8.6.16. Example: Complete Analysis Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#best-practices">8.6.17. Best Practices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#troubleshooting-low-accuracy">8.6.18. Troubleshooting Low Accuracy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#next-steps">8.6.19. Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/goodness_of_fit.html">8.6. Goodness of Fit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#overview">8.6.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#enabling-gof-test">8.6.2. Enabling GoF Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#running-the-test">8.6.3. Running the Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#output-files">8.6.4. Output Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#understanding-the-visualizations">8.6.5. Understanding the Visualizations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#interpreting-results">8.6.6. Interpreting Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#plot-analysis">8.6.7. 8-Plot Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#common-patterns">8.6.8. Common Patterns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#actionable-insights">8.6.9. Actionable Insights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#frame-size-sweeping">8.6.10. Frame Size Sweeping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#multi-cluster-analysis">8.6.11. Multi-Cluster Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#example-motor-fault-gof-analysis">8.6.12. Example: Motor Fault GoF Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#gof-without-training">8.6.13. GoF Without Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#comparing-feature-extraction">8.6.14. Comparing Feature Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#best-practices">8.6.15. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#limitations">8.6.16. Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/goodness_of_fit.html#next-steps">8.6.17. Next Steps</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../features/index.html#feature-overview">8.7. Feature Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/post_training_analysis.html">8.7. Post-Training Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#overview">8.7.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#enabling-analysis">8.7.2. Enabling Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#output-files">8.7.3. Output Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#confusion-matrix">8.7.4. Confusion Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#roc-curves">8.7.5. ROC Curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#class-score-histograms">8.7.6. Class Score Histograms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#fpr-tpr-thresholds">8.7.7. FPR/TPR Thresholds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#classification-report">8.7.8. Classification Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#error-analysis">8.7.9. Error Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#quantized-vs-float-comparison">8.7.10. Quantized vs Float Comparison</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#file-level-classification-summary">8.7.11. File-Level Classification Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#regression-analysis">8.7.12. Regression Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#anomaly-detection-analysis">8.7.13. Anomaly Detection Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#custom-analysis-scripts">8.7.14. Custom Analysis Scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#generating-reports">8.7.15. Generating Reports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#example-complete-analysis-configuration">8.7.16. Example: Complete Analysis Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#best-practices">8.7.17. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#troubleshooting-low-accuracy">8.7.18. Troubleshooting Low Accuracy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/post_training_analysis.html#next-steps">8.7.19. Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../features/ondevice_training.html">8.8. On-Device Training (ODT)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#overview">8.8.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#use-cases">8.8.2. Use Cases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#architecture-frozen-trainable-split">8.8.3. Architecture: Frozen + Trainable Split</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#supported-task-types">8.8.4. Supported Task Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#workflow">8.8.5. Workflow</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#configuration">8.8.6. Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#memory-considerations">8.8.7. Memory Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#limitations">8.8.8. Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#best-practices">8.8.9. Best Practices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#examples">8.8.10. Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#related-features">8.8.11. Related Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#faq">8.8.12. FAQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#troubleshooting">8.8.13. Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training.html#further-reading">8.8.14. Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../features/ondevice_training_advanced.html">8.9. On-Device Training — Advanced API &amp; Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#library-architecture">8.9.1. Library Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#modelcontext-t-central-training-state">8.9.2. ModelContext_t — Central Training State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#memory-layout">8.9.3. Memory Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#core-api">8.9.4. Core API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#initialization">8.9.4.1. Initialization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#forward-pass">8.9.4.2. Forward Pass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#backward-pass">8.9.4.3. Backward Pass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#weight-update-sgd">8.9.4.4. Weight Update (SGD)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#loss-functions">8.9.4.5. Loss Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#weight-checkpointing">8.9.4.6. Weight Checkpointing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#trainable-model-configuration">8.9.5. Trainable Model Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#trainable-model-config-h">8.9.5.1. trainable_model_config.h</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../features/ondevice_training_advanced.html#trainable-model-config-c">8.9.5.2. trainable_model_config.c</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#custom-training-loop-example">8.9.6. Custom Training Loop Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#adding-a-new-layer-type">8.9.7. Adding a New Layer Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#batch-size-optimization">8.9.8. Batch Size Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#logging-system">8.9.9. Logging System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#api-quick-reference">8.9.10. API Quick Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../features/ondevice_training_advanced.html#related-documentation">8.9.11. Related Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../features/index.html#feature-overview">8.10. Feature Overview</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../deployment/index.html">9. Device Deployment</a><ul>
@@ -1076,8 +1248,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <li class="toctree-l3"><a class="reference internal" href="adding_models.html#available-layer-types">11.1.5. Available Layer Types</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adding_models.html#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="adding_models.html#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="adding_models.html#step-5-optional-add-device-performance-info">11.1.8. Step 5 (Optional): Add Device Performance Info</a></li>
-<li class="toctree-l3"><a class="reference internal" href="adding_models.html#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adding_models.html#step-5-add-device-performance-info">11.1.8. Step 5: Add Device Performance Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="adding_models.html#step-6-add-model-description">11.1.9. Step 6: Add Model Description</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adding_models.html#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adding_models.html#naming-conventions">11.1.11. Naming Conventions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="adding_models.html#configuring-model-layer-parameters">11.1.12. Configuring Model Layer Parameters</a></li>
@@ -1176,17 +1348,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../appendix/changelog.html">13.3. Changelog</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#version-1-3-0">13.3.1. Version 1.3.0</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#version-1-1-0">13.3.2. Version 1.1.0</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#version-1-0-0">13.3.3. Version 1.0.0</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#migration-guides">13.3.4. Migration Guides</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../appendix/changelog.html#migrating-from-1-1-x-to-1-2-x">13.3.4.1. Migrating from 1.1.x to 1.2.x</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#version-1-4-0">13.3.1. Version 1.4.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#version-1-3-0">13.3.2. Version 1.3.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#version-1-1-0">13.3.3. Version 1.1.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#version-1-0-0">13.3.4. Version 1.0.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#migration-guides">13.3.5. Migration Guides</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../appendix/changelog.html#migrating-from-1-1-x-to-1-2-x">13.3.5.1. Migrating from 1.1.x to 1.2.x</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#deprecation-notices">13.3.5. Deprecation Notices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#known-issues">13.3.6. Known Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#roadmap">13.3.7. Roadmap</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#contributing">13.3.8. Contributing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#deprecation-notices">13.3.6. Deprecation Notices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#known-issues">13.3.7. Known Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#roadmap">13.3.8. Roadmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appendix/changelog.html#contributing">13.3.9. Contributing</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../appendix/index.html#quick-reference">13.4. Quick Reference</a></li>
@@ -1233,8 +1406,8 @@ or use pre-trained models from external sources.</p>
 <li class="toctree-l2"><a class="reference internal" href="adding_models.html#available-layer-types">11.1.5. Available Layer Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adding_models.html#step-3-add-to-all">11.1.6. Step 3: Add to <code class="docutils literal notranslate"><span class="pre">__all__</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="adding_models.html#step-4-verify-your-model">11.1.7. Step 4: Verify Your Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adding_models.html#step-5-optional-add-device-performance-info">11.1.8. Step 5 (Optional): Add Device Performance Info</a></li>
-<li class="toctree-l2"><a class="reference internal" href="adding_models.html#step-6-optional-add-gui-model-description">11.1.9. Step 6 (Optional): Add GUI Model Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_models.html#step-5-add-device-performance-info">11.1.8. Step 5: Add Device Performance Info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adding_models.html#step-6-add-model-description">11.1.9. Step 6: Add Model Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adding_models.html#using-your-custom-model">11.1.10. Using Your Custom Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adding_models.html#naming-conventions">11.1.11. Naming Conventions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adding_models.html#configuring-model-layer-parameters">11.1.12. Configuring Model Layer Parameters</a></li>
@@ -1314,7 +1487,7 @@ and just want to compile it for TI MCUs:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2026, Texas Instruments Incorporated.
-      <span class="lastupdated">Last updated on Mar 24, 2026.
+      <span class="lastupdated">Last updated on Jul 05, 2026.
       </span></p>
   </div>
 

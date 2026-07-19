@@ -408,8 +408,14 @@ These are the devices that are supported currently. As additional devices are su
 ### {constants.TARGET_DEVICE_CC1352}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1352}
 
+### {constants.TARGET_DEVICE_CC1312}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1312}
+
 ### {constants.TARGET_DEVICE_CC1354}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354}
+
+### {constants.TARGET_DEVICE_CC1314}
+{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1314}
 
 ### {constants.TARGET_DEVICE_CC35X1}
 {constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC35X1}
@@ -423,7 +429,7 @@ These are the devices that are supported currently. As additional devices are su
 
 
 ####  Dataset format
-The dataset should have the following structure. 
+The dataset should have the following structure.
 
 <pre>
 data/projects/<dataset_name>/dataset
@@ -441,7 +447,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 
@@ -452,8 +458,8 @@ After the model compilation, the compiled models will be available in a folder i
 The config file can be in .yaml or in .json format
 
 ## Model deployment
-- The deploy page provides a button to download the compiled model artifacts to the development board. 
-- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. 
+- The deploy page provides a button to download the compiled model artifacts to the development board.
+- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.
 - Please see "C2000Ware Reference Design" in the SDK documentation for more information.
 
 ## Glossary of terms
@@ -530,8 +536,8 @@ def get_live_capture_descriptions(params):
                 {
                     'caption': 'device',
                     'id': 'device',
-                    'infoText': 'Current support is F28P55. You can try other device using correct application example and baud rate.',
-                    'options': ['F28P55', 'MSPM0G5187'],
+                    'infoText': 'Current support is F28P55, CC1312, CC1352, CC1314, CC1354, CC2755 and CC35X1. You can try other device using correct application example and baud rate.',
+                    'options': ['F28P55', 'MSPM0G5187', 'CC1312', 'CC1352', 'CC1314', 'CC1354', 'CC2755', 'CC35X1'],
                     'widgetType': 'select'
                 },
                 {
@@ -636,8 +642,8 @@ def get_live_capture_descriptions(params):
                 {
                     'caption': 'device',
                     'id': 'device',
-                    'infoText': 'Current support is CC2755R10, CC1352R1, CC1352P7, CC1354P10 and CC35X1. You can try other device using correct application example and baud rate.',
-                    'options': ['CC2755', 'CC1352', 'CC1354', 'CC35X1'],
+                    'infoText': 'Current support is CC2755, CC1312, CC1314, CC1352, CC1354 and CC35X1. You can try other device using correct application example and baud rate.',
+                    'options': ['CC2755', 'CC1312', 'CC1314', 'CC1352', 'CC1354', 'CC35X1'],
                     'widgetType': 'select'},
                 {
                     'caption': 'sensor',
@@ -687,7 +693,38 @@ def get_live_capture_example_descriptions(params):
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 5820000}
+            },
+            'MSPM33C32': {
+                'ccsProj': 'ac_arc_fault_data_capture_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/ac_arc_fault_data_capture/ticlang/ac_arc_fault_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
+                'transport': {'baudRate': 115200}
             }
+        },
+        'fall_detection_classification': {
+             'MSPM0G5187': {
+                'ccsProj': 'tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 921600}
+            },
+        },
+        'hand_gesture_dataset': {
+             'MSPM0G5187': {
+                'ccsProj': 'tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/tida_010997_data_capture/ticlang/tida_010997_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 921600}
+            },
         },
         'generic_timeseries_classification': {
             'MSPM0G5187': {
@@ -707,6 +744,51 @@ def get_live_capture_example_descriptions(params):
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G3507.ccxml',
                 'transport': {'baudRate': 115200}
+            },
+            'MSPM33C32': {
+                'ccsProj': 'timeseries_data_capture_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/timeseries_data_capture/ticlang/timeseries_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'AM13E2':{
+                'ccsProj':'jerk_detection_am13e230x_lp_m33_nortos_ti_arm_clang',
+                'deviceName':'AM13E2',
+                'files':[],
+                'from':'examples/ai/jerk_detection/am13e230x_lp/m33_nortos/ti_arm_clang/example.projectspec',
+                'pkgId':'AM13E2X-SDK',
+                'targetCfg':'targetConfigs/AM13E23019.ccxml',
+                'transport': {'baudRate':921600}
+            },
+            'F29H85':{
+                'ccsProj':'acc_data_capture_with_preview',
+                'deviceName':'F29H85',
+                'files':[],
+                'from':'examples/ai/acc_data_capture_with_preview/f29h85x/ccs/acc_data_capture_with_preview.projectspec',
+                'pkgId':'f29h85x-sdk',
+                'targetCfg':'targetConfigs/F29H850TU9.ccxml',
+                'transport':{'baudRate':4687500}
+            },
+            'AM263':{
+                'ccsProj':'imu_sensor_data_capture_am263x-lp_r5fss0-0_nortos_ti-arm-clang',
+                'deviceName':'AM263',
+                'files':[],
+                'from':'examples/ai/imu_sensor_data_capture/am263x-lp/r5fss0-0_nortos/ti-arm-clang/example.projectspec',
+                'pkgId':'com.ti.MCU_PLUS_SDK_AM263X',
+                'targetCfg':'targetConfigs/AM263x.ccxml',
+                'transport':{'baudRate':115200}
+            },
+            'AM263P':{
+                'ccsProj':'imu_sensor_data_capture_am263px-lp_r5fss0-0_nortos_ti-arm-clang',
+                'deviceName':'AM263P',
+                'files':[],
+                'from':'examples/ai/imu_sensor_data_capture/am263px-lp/r5fss0-0_nortos/ti-arm-clang/example.projectspec',
+                'pkgId':'com.ti.MCU_PLUS_SDK_AM263PX',
+                'targetCfg':'targetConfigs/AM263Px.ccxml',
+                'transport':{'baudRate':115200}
             }
         },
         'ecg_classification': {
@@ -749,32 +831,95 @@ def get_live_capture_example_descriptions(params):
                 'transport': {'baudRate': 2343750}
             },
             'MSPM0G5187': {
-                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'MSPM0G3507': {
-                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang',
                 'deviceName': 'MSPM0G3507',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G3507/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3507_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G3507.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'MSPM0G3519': {
-                'ccsProj': 'motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang',
                 'deviceName': 'MSPM0G3519',
                 'files': [],
-                'from': 'examples/nortos/LP_MSPM0G3519/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G3519/edgeAI/motor_fan_blade_fault_data_capture/ticlang/motor_fan_blade_fault_data_capture_LP_MSPM0G3519_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G3519.ccxml',
                 'transport': {'baudRate': 115200}
             },
+             'MSPM33C32': {
+                'ccsProj': 'motor_fault_data_capture_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/motor_fault_data_capture/ticlang/motor_fault_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC2755': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang',
+                'deviceName': 'CC2745R10',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC2745R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1312': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang',
+                'deviceName': 'CC1312PSIP',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1314': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang',
+                'deviceName': 'CC1314R10',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1314R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1352': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'deviceName': 'CC1352R1',
+                'files': [],
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1354': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang',
+                'deviceName': 'CC1354P10',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1354P10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC35X1': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang',
+                'deviceName': 'CC3551E',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC35X1E.ccxml',
+                'transport': {'baudRate': 115200}
+            }
         },
         'pir_detection': {
             'CC2755': {
@@ -786,20 +931,38 @@ def get_live_capture_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'CC1312': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang',
+                'deviceName': 'CC1312PSIP',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1314': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang',
+                'deviceName': 'CC1314R10',
+                'files': [],
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1314R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
             'CC1352': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1',
                 'files': [],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection_cc1352/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
                 'files': [],
-                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection_cc1354p10/freertos/ticlang/edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}
@@ -840,8 +1003,17 @@ def get_live_capture_example_descriptions(params):
                 'targetCfg': 'targetConfigs/MSPM0G3519.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'MSPM33C32': {
+                'ccsProj': 'pir_detection_data_capture_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/pir_detection_data_capture/ticlang/pir_detection_data_capture_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
+                'transport': {'baudRate': 115200}
+            },
         }
-        
+
     }
     return live_capture_example_descriptions
 
@@ -921,6 +1093,18 @@ def get_live_preview_example_descriptions(params):
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
                 'transport': {'baudRate': 5820000}
+            },
+            'MSPM33C32': {
+                'ccsProj': 'ac_arc_fault_detection_live_preview_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'artifacts/mod.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'artifacts/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/ac_arc_fault_detection_live_preview/ticlang/ac_arc_fault_detection_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
+                'transport': {'baudRate': 115200}
             }
         },
         'generic_timeseries_classification': {
@@ -934,6 +1118,18 @@ def get_live_preview_example_descriptions(params):
                 'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/timeseries_live_preview/ticlang/timeseries_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
                 'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM33C32': {
+                'ccsProj': 'generic_timeseries_classification_live_preview_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'artifacts/mod.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'artifacts/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/generic_timeseries_classification_live_preview/ticlang/generic_timeseries_classification_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
                 'transport': {'baudRate': 115200}
             }
         },
@@ -964,15 +1160,87 @@ def get_live_preview_example_descriptions(params):
                 'transport': {'baudRate': 2343750}
             },
             'MSPM0G5187': {
-                'ccsProj': 'motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'ccsProj': 'motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang',
                 'deviceName': 'MSPM0G5187',
                 'files': [{'from': 'artifacts/mod.a',
                 'to': 'model/model.a'},
                 {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
                 {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
-                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/motor_fan_blade_fault_live_preview/ticlang/motor_fan_blade_fault_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
-                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml', 
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM33C32': {
+                'ccsProj': 'motor_fault_live_preview_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'artifacts/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'artifacts/tvmgen_default.h'},
+                {'from': 'user_input_config.h', 'to': 'user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/motor_fault_live_preview/ticlang/motor_fault_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC2755': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang',
+                'deviceName': 'CC2745R10',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC2745R10_Q1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC2745R10_Q1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC2745R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1312': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang',
+                'deviceName': 'CC1312PSIP',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1314': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang',
+                'deviceName': 'CC1314R10',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1314R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1352': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'deviceName': 'CC1352R1',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1354': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang',
+                'deviceName': 'CC1354P10',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1354P10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC35X1': {
+                'ccsProj': 'edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang',
+                'deviceName': 'CC3551E',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'},
+                          {'from': 'golden_vectors/user_input_config.h', 'to': 'ai_artifacts/user_input_config.h'}],
+                'from': 'examples/rtos/LP_EM_CC35X1/edgeai/edgeai_fan_blade_fault_detection/freertos/ticlang/edgeai_fan_blade_fault_detection_LP_EM_CC35X1_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC35X1E.ccxml',
                 'transport': {'baudRate': 115200}
             }
         },
@@ -986,20 +1254,38 @@ def get_live_preview_example_descriptions(params):
                 'targetCfg': 'targetConfigs/CC2745R10.ccxml',
                 'transport': {'baudRate': 115200}
             },
+            'CC1312': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang',
+                'deviceName': 'CC1312PSIP',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
+                'from': 'examples/rtos/LP_EM_CC1312PSIP/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1312PSIP_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1312PSIP.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'CC1314': {
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang',
+                'deviceName': 'CC1314R10',
+                'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
+                'from': 'examples/rtos/LP_EM_CC1314R10/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1314R10_freertos_ticlang.projectspec',
+                'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
+                'targetCfg': 'targetConfigs/CC1314R10.ccxml',
+                'transport': {'baudRate': 115200}
+            },
             'CC1352': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang',
                 'deviceName': 'CC1352R1',
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection_cc1352/freertos/ticlang/edgeai_smart_pir_detection_cc1352_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/CC1352R1_LAUNCHXL/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_CC1352R1_LAUNCHXL_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1352R1F3.ccxml',
                 'transport': {'baudRate': 115200}
             },
             'CC1354': {
-                'ccsProj': 'edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang',
+                'ccsProj': 'edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang',
                 'deviceName': 'CC1354P10',
                 'files': [{'from': 'artifacts/', 'to': 'ai_artifacts/'}],
-                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection_cc1354p10/freertos/ticlang/edgeai_smart_pir_detection_cc1354p10_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
+                'from': 'examples/rtos/LP_EM_CC1354P10_1/edgeai/edgeai_smart_pir_detection/freertos/ticlang/edgeai_smart_pir_detection_LP_EM_CC1354P10_1_freertos_ticlang.projectspec',
                 'pkgId': 'SIMPLELINK-SDK-EDGEAI-PLUGIN',
                 'targetCfg': 'targetConfigs/CC1354P10.ccxml',
                 'transport': {'baudRate': 115200}
@@ -1022,9 +1308,51 @@ def get_live_preview_example_descriptions(params):
                 {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
                 'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/pir_detection_live_preview/ticlang/pir_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
                 'pkgId': 'MSPM0-SDK',
-                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml', 
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+            'MSPM33C32': {
+                'ccsProj': 'pir_detection_live_preview_LP_MSPM33C321A_nortos_ticlang',
+                'deviceName': 'MSPM33C32',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'artifacts/mod.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'artifacts/tvmgen_default.h'},
+                {'from': 'artifacts/user_input_config.h', 'to': 'artifacts/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM33C321A/edgeAI/pir_detection_live_preview/ticlang/pir_detection_live_preview_LP_MSPM33C321A_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM33-SDK',
+                'targetCfg': 'targetConfigs/MSPM33C321A.ccxml',
                 'transport': {'baudRate': 115200}
             }
+        },
+        'fall_detection_classification': {
+            'MSPM0G5187': {
+                'ccsProj': 'fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/fall_detection_live_preview/ticlang/fall_detection_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+
+        },
+        'hand_gesture_dataset': {
+            'MSPM0G5187': {
+                'ccsProj': 'dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang',
+                'deviceName': 'MSPM0G5187',
+                'files': [{'from': 'artifacts/mod.a',
+                'to': 'model/model.a'},
+                {'from': 'artifacts/tvmgen_default.h', 'to': 'model/tvmgen_default.h'},
+                {'from': 'golden_vectors/user_input_config.h', 'to': 'model/user_input_config.h'}],
+                'from': 'examples/nortos/LP_MSPM0G5187/edgeAI/dynamic_hand_gesture_recognition_live_preview/ticlang/dynamic_hand_gesture_recognition_live_preview_LP_MSPM0G5187_nortos_ticlang.projectspec',
+                'pkgId': 'MSPM0-SDK',
+                'targetCfg': 'targetConfigs/MSPM0G5187.ccxml',
+                'transport': {'baudRate': 115200}
+            },
+
         }
     }
     return live_preview_example_descriptions
@@ -1088,3 +1416,231 @@ def get_context_help_descriptions(params):
 def get_help_url_descriptions(params):
     help_url_descriptions = "file://help.md"
     return help_url_descriptions
+
+
+# def get_rex_dependencies(params):
+#     rex_dependencies = [
+#         {
+#             "readableName": "AM13E230X SDK",
+#             "installDirName": "am13e230x_sdk_26_00_00_06",
+#             "rexPackageId": "AM13E2X-SDK",
+#             "rexPackageVersion": "26.00.00.06",
+#             "envVarName": "COM_TI_AM13E230X_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "AM13E2"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "SimpleLink CC13xx CC26xx SDK",
+#             "installDirName": "simplelink_cc13xx_cc26xx_sdk_8_31_00_11",
+#             "rexPackageId": "com.ti.SIMPLELINK_CC13XX_CC26XX_SDK",
+#             "rexPackageVersion": "8.31.00.11",
+#             "envVarName": "COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "CC1312",
+#                 "CC1314",
+#                 "CC1352",
+#                 "CC1354"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "SimpleLink Low Power F3 SDK",
+#             "installDirName": "simplelink_lowpower_f3_sdk_9_12_00_19",
+#             "rexPackageId": "com.ti.SIMPLELINK_LOWPOWER_F3_SDK",
+#             "rexPackageVersion": "9.12.00.19",
+#             "envVarName": "COM_TI_SIMPLELINK_LOWPOWER_F3_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "CC2755"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "SimpleLink WiFi SDK",
+#             "installDirName": "simplelink_wifi_sdk_9_21_00_15",
+#             "rexPackageId": "com.ti.SIMPLELINK_WIFI_SDK",
+#             "rexPackageVersion": "9.21.00.15",
+#             "envVarName": "COM_TI_SIMPLELINK_WIFI_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "CC35X1"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MCU+ SDK for AM263x",
+#             "installDirName": "mcu_plus_sdk_am263x_26_00_00_01",
+#             "rexPackageId": "com.ti.MCU_PLUS_SDK_AM263X",
+#             "rexPackageVersion": "26.00.00.01",
+#             "envVarName": "MCU_PLUS_SDK_PATH",
+#             "devices": [
+#                 "AM263"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MCU+ SDK for AM263Px",
+#             "installDirName": "mcu_plus_sdk_am263px_26_00_00_01",
+#             "rexPackageId": "com.ti.MCU_PLUS_SDK_AM263PX",
+#             "rexPackageVersion": "26.00.00.01",
+#             "envVarName": "MCU_PLUS_SDK_PATH",
+#             "devices": [
+#                 "AM263P"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MCU+ SDK for AM261x",
+#             "installDirName": "mcu_plus_sdk_am261x_26_00_00_01",
+#             "rexPackageId": "com.ti.MCU_PLUS_SDK_AM261X",
+#             "rexPackageVersion": "26.00.00.01",
+#             "envVarName": "MCU_PLUS_SDK_PATH",
+#             "devices": [
+#                 "AM261"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MSPM0 SDK",
+#             "installDirName": "mspm0_sdk_2_09_00_01",
+#             "rexPackageId": "MSPM0-SDK",
+#             "rexPackageVersion": "2.09.00.01",
+#             "envVarName": "COM_TI_MSPM0_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "MSPM0G3507",
+#                 "MSPM0G3519",
+#                 "MSPM0G5187"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "C2000Ware",
+#             "installDirName": "C2000Ware_26_00_00_00",
+#             "rexPackageId": "C2000WARE",
+#             "rexPackageVersion": "26.00.00.00",
+#             "envVarName": "C2000WARE_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "C2000Ware_MotorControl_SDK",
+#             "installDirName": "C2000Ware_MotorControl_SDK_5_04_00_00",
+#             "rexPackageId": "motor_control_c2000ware_sdk_software_package",
+#             "rexPackageVersion": "5.04.00.00",
+#             "envVarName": "C2000WARE_MOTOR_CONTROL_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "C2000Ware_DigitalPower_SDK",
+#             "installDirName": "C2000Ware_DigitalPower_SDK_5_06_00_00",
+#             "rexPackageId": "digital_power_c2000ware_sdk_software_package",
+#             "rexPackageVersion": "5.06.00.00",
+#             "envVarName": "C2000WARE_DIGITAL_POWER_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "F29H85X-SDK",
+#             "installDirName": "f29h85x-sdk_26_00_00_00",
+#             "rexPackageId": "f29h85x-sdk",
+#             "rexPackageVersion": "26.00.00.00",
+#             "envVarName": "COM_TI_F29H85X_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "F29H85",
+#                 "F29P58",
+#                 "F29P32"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "MSPM33 SDK",
+#             "installDirName": "mspm33_sdk_1_03_00_01",
+#             "rexPackageId": "MSPM33-SDK",
+#             "rexPackageVersion": "1.03.00.01",
+#             "envVarName": "COM_TI_MSPM33_SDK_INSTALL_DIR",
+#             "devices": [
+#                 "MSPM33C32"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "TI C28x/CLA Compiler",
+#             "installDirName": "ti_cgt_c2000_25.11.0.LTS",
+#             "rexPackageId": "C2000-CGT",
+#             "rexPackageVersion": "25.11.00.00",
+#             "envVarName": "C2000_CG_ROOT",
+#             "devices": [
+#                 "F280013",
+#                 "F280015",
+#                 "F28003",
+#                 "F28004",
+#                 "F2837",
+#                 "F28P65",
+#                 "F28P55"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "TI C29 Clang 2.2.0 LTS Compiler",
+#             "installDirName": "ti-cgt-c29_2.2.0.LTS",
+#             "rexPackageId": "C29-CGT",
+#             "rexPackageVersion": "2.02.00.00",
+#             "envVarName": "CG_TOOL_ROOT",
+#             "devices": [
+#                 "F29H85",
+#                 "F29P58",
+#                 "F29P32"
+#             ],
+#             "task": "compile"
+#         },
+#         {
+#             "readableName": "TI Arm Clang 4.0.3 LTS Compiler",
+#             "installDirName": "ti_cgt_arm_llvm_4.0.3.LTS",
+#             "rexPackageId": "ti_cgt_tiarmclang",
+#             "rexPackageVersion": "4.00.03.00",
+#             "envVarName": "ARM_LLVM_CGT_PATH",
+#             "devices": [
+#                 "CC1312",
+#                 "CC1314",
+#                 "CC1352",
+#                 "CC1354",
+#                 "CC2755",
+#                 "CC35X1",
+#                 "AM13E2",
+#                 "AM263",
+#                 "AM263P",
+#                 "AM261",
+#                 "MSPM0G3507",
+#                 "MSPM0G3519",
+#                 "MSPM0G5187",
+#                 "MSPM33C32"
+#             ],
+#             "task": "compile"
+#         }
+#     ]
+#     return rex_dependencies

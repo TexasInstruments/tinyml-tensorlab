@@ -14,6 +14,12 @@ Welcome to the **Tiny ML ModelZoo** - Texas Instruments' central repository for 
   - [Generic Timeseries Applications](#generic-timeseries-applications)
   - [Application-Specific Examples](#application-specific-examples)
   - [Detailed Examples by Task Type](#detailed-examples-by-task-type)
+    - [Classification Examples](#classification-examples)
+    - [Regression Examples](#regression-examples)
+    - [Forecasting Examples](#forecasting-examples)
+    - [Anomaly Detection Examples](#anomaly-detection-examples)
+    - [Audio Classification Examples](#audio-classification-examples)
+    - [Image Classification Examples](#image-classification-examples)
 - [Available Models](#available-models)
 - [Adding New Models](#adding-new-models)
 - [Additional Resources](#additional-resources)
@@ -105,12 +111,14 @@ tinyml-modelzoo/
 
 ### Connectivity Devices (Wireless)
 
-| Device | NPU | Description | Notes |
+| Device | Hardware Accelerator | Description | Notes |
 |--------|-----|-------------|-------|
-| CC2755 | No | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
-| CC1352 | No | Arm Cortex-M4 wireless MCU | Sub-1GHz and 2.4GHz |
-| CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz and 2.4GHz |
-| CC35X1 | No | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
+| CC2755 | CDE | 96 MHz Arm Cortex-M33 wireless MCU | Optimized for PIR/wireless apps |
+| CC1312 | No | Arm Cortex-M4F wireless MCU | Sub-1GHz |
+| CC1314 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz |
+| CC1352 | No | Arm Cortex-M4F wireless MCU | Sub-1GHz |
+| CC1354 | No | Arm Cortex-M33 wireless MCU | Sub-1GHz |
+| CC35X1 | CDE | Arm Cortex-M33 wireless MCU | Wi-Fi + BLE combo |
 
 ---
 
@@ -172,6 +180,7 @@ Tiny ML ModelZoo supports the following AI task categories:
 | **Time Series Regression**        | Predict continuous values from time-series inputs         | Torque estimation, speed prediction, load measurement         |
 | **Time Series Forecasting**       | Predict future values based on historical patterns        | Temperature prediction, demand forecasting                    |
 | **Time Series Anomaly Detection** | Identify abnormal patterns using autoencoder-based models | Equipment health monitoring, predictive maintenance           |
+| **Audio Classification**          | Classify audio signals from MFCC features                 | Keyword spotting, voice commands, sound event detection       |
 | **Image Classification**          | Categorize images into classes                            | Visual inspection, object recognition                         |
 
 ### Understanding Each Task
@@ -197,6 +206,8 @@ Tiny ML ModelZoo supports the following AI task categories:
   * Using independent variables Xa, Xb, Xc to predict dependent continuous variable (target) **Y** at the **same** time instant --> Regression
   * Using independent variables Xa, Xb, Xc to predict dependent continuous variable (target) **Xa** (or Xb or Xc) for the **next** time instant--> Forecasting
 
+**Audio Classification** - Extracts MFCC features from a fixed-length audio window and classifies into keyword or sound categories. Best for: "What keyword was spoken?", "What sound event occurred?"
+
 ---
 
 There are two ways to proceed using this toolchain. 
@@ -219,8 +230,11 @@ The following ready-to-use examples demonstrate various AI applications for MCUs
 
 ### Generic Timeseries Applications
 
-These applications use generic task types that can be adapted to your custom datasets. All generic timeseries applications support **all 22 target devices.**
-> **All 22 generic timeseries applications support all 22 devices:** F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, CC2755, CC1352, CC1354, CC35X1, AM263, AM263P, AM261, AM13E2
+These applications use generic task types that can be adapted to your custom datasets.
+
+> **Device support for generic timeseries tasks:**
+> - **Classification** — all 22 devices: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1, AM263, AM263P, AM261, AM13E2
+> - **Regression, Forecasting, Anomaly Detection** — C2000, MSPM0, MSPM33C, AM26x, AM13 families. Connectivity devices (CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1) do **not** support these task types.
 
 | Example Name                                                                 | Task Type | Description |
 |------------------------------------------------------------------------------|-----------|-------------|
@@ -230,7 +244,7 @@ These applications use generic task types that can be adapted to your custom dat
 | **generic_timeseries_anomalydetection**                                      | generic_timeseries_anomalydetection | Generic anomaly detection example using autoencoders |
 | The below examples demonstrate the above AI task types with real world data: |                                     |                                                      |
 | **branched_model_parameters**                                                | generic_timeseries_classification | Human Activity Recognition from accelerometer/gyroscope data |
-| **electrical_fault**                                                         | generic_timeseries_classification | Classify transmission line faults using voltage and current |
+| **electrical_fault**                                                         | generic_timeseries_classification | Classify transmission line faults using voltage and current (2-class and 6-class variants) |
 | **gas_sensor**                                                               | generic_timeseries_classification | Identify gas type and concentration from sensor array data |
 | **grid_fault_detection**                                                     | generic_timeseries_classification | Detect electrical grid faults from sensor data |
 | **grid_stability**                                                           | generic_timeseries_classification | Predict power grid stability from node parameters |
@@ -258,21 +272,27 @@ These applications are designed for specific use cases with optimized models and
 | **ac_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect AC arc faults in electrical systems |
 | **dc_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect DC arc faults from current waveforms for electrical safety |
 | **ecg_classification** | ecg_classification | MSPM0G3507, MSPM0G5187, MSPM0G3519 | Classify normal vs anomalous heartbeats from ECG signals |
+| **fall_detection_classification** | classification | MSPM0G5187 | Detect and classify Human Fall vs Activities of Daily Living (ADL) |
+| **gearbox_fault_detection** | classification | MSPM0G3507, MSPM0G3519, MSPM0G5187 | Classify gearbox operating conditions (healthy vs broken tooth) from vibration data |
 | **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
-| **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect faults in BLDC fans from accelerometer data |
+| **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263, CC1312, CC1314, CC1352, CC1354, CC2755, CC35X1 | Detect faults in BLDC fans from accelerometer data |
 | **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
 | **grid_fault_detection** | classification | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect electrical grid faults from sensor data |
 | **mosfet_temp_prediction** | regression | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Predict MOSFET temperature from electrical parameters |
-| **pir_detection** | pir_detection | CC2755, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
+| **pir_detection** | pir_detection | CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
+| **dynamic_hand_gesture_recognition** | ecg_classification | MSPM0G5187 | Classify 4 dynamic hand gestures from 3-axis accelerometer data |
+| **google_speech_command** | audio_classification | MSPM0G5187 | 12-class keyword spotting from audio using MFCC features |
+| **machine_readable_code_classification** | image_classification | MSPM0G5187 | Classify QR codes, barcodes, and other symbols from 28×28 images |
+| **coffee_bean_classification** | image_classification | MSPM0G5187 | Classify coffee bean quality from images |
 | **MNIST_image_classification** | image_classification | MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | Handwritten digit recognition (MNIST dataset) |
 
 ### Summary by Task Type:
-- **Generic Timeseries Tasks** (22 examples): Support all target devices and can be adapted to your custom datasets
-  - Classification: 8 examples (1 base + 7 real-world applications)
-  - Regression: 5 examples (1 base + 4 real-world applications)
-  - Forecasting: 3 examples (1 base + 2 real-world applications)
-  - Anomaly Detection: 6 examples (1 base + 5 application variants)
-- **Application-Specific Tasks** (10 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), image_classification (1)
+- **Generic Timeseries Tasks** (22 examples): Adaptable to custom datasets
+  - Classification: 8 examples (1 base + 7 real-world applications) — all 22 devices
+  - Regression: 5 examples (1 base + 4 real-world applications) — C2000/MSPM0/AM families only
+  - Forecasting: 3 examples (1 base + 2 real-world applications) — C2000/MSPM0/AM families only
+  - Anomaly Detection: 6 examples (1 base + 5 application variants) — C2000/MSPM0/AM families only
+- **Application-Specific Tasks** (16 examples): arc_fault (2), motor_fault (3), grid_fault_detection (1), gearbox_fault_detection (1), mosfet_temp_prediction (1), pir_detection (1), ecg_classification (1), hand_gesture_recognition (1), audio_classification (1), image_classification (3), fall_detection_classification (1)
 
 ---
 
@@ -287,14 +307,17 @@ These applications are designed for specific use cases with optimized models and
 | 3   | [motor_bearing_fault](examples/motor_bearing_fault/)                                 | Multivariate | Classify 5 bearing fault types + normal operation from vibration data.          |
 | 4   | [blower_imbalance](examples/blower_imbalance/)                                       | Multivariate | Detect blade imbalance in HVAC blowers using 3-phase motor currents.            |
 | 5   | [fan_blade_fault_classification](examples/fan_blade_fault_classification/)           | Multivariate | Detect faults in BLDC fans from accelerometer data.                             |
-| 6   | [electrical_fault](examples/electrical_fault/)                                       | Multivariate | Classify transmission line faults using voltage and current.                    |
-| 7   | [grid_stability](examples/grid_stability/)                                           | Multivariate | Predict power grid stability from node parameters.                              |
-| 8   | [gas_sensor](examples/gas_sensor/)                                                   | Multivariate | Identify gas type and concentration from sensor array data.                     |
-| 9   | [branched_model_parameters](examples/branched_model_parameters/)                     | Multivariate | Human Activity Recognition from accelerometer/gyroscope data.                   |
-| 10  | [ecg_classification](examples/ecg_classification/)                                   | Multivariate | Classify normal vs anomalous heartbeats from ECG signals.                       |
-| 11  | [nilm_appliance_usage_classification](examples/nilm_appliance_usage_classification/) | Multivariate | Non-Intrusive Load Monitoring - identify active appliances.                     |
-| 12  | [PLAID_nilm_classification](examples/PLAID_nilm_classification/)                     | Multivariate | Appliance identification using the PLAID dataset.                               |
-| 13  | [pir_detection](examples/pir_detection/)                                             | Multivariate | Detect presence/motion using PIR sensor data.                                   |
+| 6   | [gearbox_fault_detection](examples/gearbox_fault_detection/)                         | Multivariate | Classify gearbox operating conditions (healthy vs broken tooth) from vibration. |
+| 7   | [electrical_fault](examples/electrical_fault/)                                       | Multivariate | Classify transmission line faults using voltage and current (2-class and 6-class variants). |
+| 8   | [grid_stability](examples/grid_stability/)                                           | Multivariate | Predict power grid stability from node parameters.                              |
+| 9   | [gas_sensor](examples/gas_sensor/)                                                   | Multivariate | Identify gas type and concentration from sensor array data.                     |
+| 10  | [branched_model_parameters](examples/branched_model_parameters/)                     | Multivariate | Human Activity Recognition from accelerometer/gyroscope data.                   |
+| 11  | [ecg_classification](examples/ecg_classification/)                                   | Multivariate | Classify normal vs anomalous heartbeats from ECG signals.                       |
+| 12  | [nilm_appliance_usage_classification](examples/nilm_appliance_usage_classification/) | Multivariate | Non-Intrusive Load Monitoring - identify active appliances.                     |
+| 13  | [PLAID_nilm_classification](examples/PLAID_nilm_classification/)                     | Multivariate | Appliance identification using the PLAID dataset.                               |
+| 14  | [pir_detection](examples/pir_detection/)                                             | Multivariate | Detect presence/motion using PIR sensor data.                                   |
+| 15  | [fall_detection_classification](examples/fall_detection_classification/)             | Multivariate | Detect and classify Human Fall vs Activities of Daily Living (ADL).             |
+| 16  | [dynamic_hand_gesture_recognition](examples/dynamic_hand_gesture_recognition/)       | Multivariate | Classify 4 dynamic hand gestures (circle, wave, tap, other) from 3-axis accelerometer. |
 
 ### Regression Examples
 
@@ -306,10 +329,10 @@ These applications are designed for specific use cases with optimized models and
 
 ### Forecasting Examples
 
-| No. | Example                                                          | Data Type    | Description                                  |
-|-----|------------------------------------------------------------------|--------------|----------------------------------------------|
-| 1   | [forecasting_pmsm_rotor](examples/forecasting_pmsm_rotor/)       | Multivariate | Forecast PMSM rotor winding temperature.     |
-| 2   | [hvac_indoor_temp_forecast](examples/hvac_indoor_temp_forecast/) | Multivariate | Predict indoor temperature for HVAC control. |
+| No. | Example                                                                        | Data Type    | Description                                  |
+|-----|--------------------------------------------------------------------------------|--------------|----------------------------------------------|
+| 1   | [forecasting_pmsm_rotor_temp](examples/forecasting_pmsm_rotor_temp/)           | Multivariate | Forecast PMSM rotor winding temperature.     |
+| 2   | [hvac_indoor_temp_forecast](examples/hvac_indoor_temp_forecast/)               | Multivariate | Predict indoor temperature for HVAC control. |
 
 ### Anomaly Detection Examples
 
@@ -322,11 +345,19 @@ These applications are designed for specific use cases with optimized models and
 | 5   | [motor_bearing_fault](examples/motor_bearing_fault/config_anomaly_detection.yaml)                       | Multivariate | Detect anomalous bearing behavior from vibration data.            |
 
 
+### Audio Classification Examples
+
+| No. | Example                                                          | Data Type | Description                                                     |
+|-----|------------------------------------------------------------------|-----------|-----------------------------------------------------------------|
+| 1   | [google_speech_command](examples/google_speech_command/)         | Audio     | 12-class keyword spotting from audio using MFCC + DSCNN model. |
+
 ### Image Classification Examples
 
-| No. | Example                                                            | Data Type | Description                                    |
-|-----|--------------------------------------------------------------------|-----------|------------------------------------------------|
-| 1   | [MNIST_image_classification](examples/MNIST_image_classification/) | Image     | Handwritten digit recognition (MNIST dataset). |
+| No. | Example                                                                                            | Data Type | Description                                                    |
+|-----|----------------------------------------------------------------------------------------------------|-----------|----------------------------------------------------------------|
+| 1   | [MNIST_image_classification](examples/MNIST_image_classification/)                                 | Image     | Handwritten digit recognition (MNIST dataset).                 |
+| 2   | [machine_readable_code_classification](examples/machine_readable_code_classification/)             | Image     | Classify QR codes, barcodes, and other symbols (28×28 images). |
+| 3   | [coffee_bean_classification](examples/coffee_bean_classification/)                                 | Image     | Classify coffee bean quality from images.                      |
 
 ---
 
@@ -354,19 +385,30 @@ For detailed guidelines, see [NPU Configuration Guidelines](docs/NPU_CONFIGURATI
 | `CLS_100_NPU` | ~100 | CNN | Yes | Ultra-compact model |
 | `CLS_500_NPU` | ~500 | CNN | Yes | Compact model |
 | `CLS_1k_NPU` | ~1K | CNN | Yes | Lightweight 2-layer CNN |
+| `CLS_1.2k_NPU` | ~1.2K | CNN | Yes | Compact model for ultra-low power devices |
+| `CLS_1.5k_NPU` | ~1.5K | CNN | Yes | 3-layer model with balanced performance |
+| `CLS_1.9k_NPU` | ~1.9K | CNN | Yes | Efficient 3-layer model |
 | `CLS_2k_NPU` | ~2K | CNN | Yes | 2-layer model |
+| `CLS_2.8k_NPU` | ~2.8K | CNN | Yes | Improved accuracy with compact footprint |
+| `CLS_3.1k_NPU` | ~3.1K | CNN | Yes | Higher accuracy model |
 | `CLS_ResAdd_3k` | ~3K | ResNet (Add) | No | Residual connections with addition |
 | `CLS_ResCat_3k` | ~3K | ResNet (Cat) | No | Residual connections with concatenation |
+| `CLS_3.9k_NPU` | ~3.9K | CNN | Yes | Advanced 3-layer model |
 | `CLS_4k_NPU` | ~4K | CNN | Yes | Balanced model |
+| `CLS_4.2k_NPU` | ~4.2K | CNN | Yes | Optimized 4-layer model |
+| `CLS_5k_NPU` | ~5K | CNN | Yes | Mid-range model |
 | `CLS_6k_NPU` | ~6K | CNN (DW-Sep) | Yes | Depthwise separable |
 | `CLS_8k_NPU` | ~8K | CNN (DW-Sep) | Yes | Depthwise separable |
 | `CLS_13k_NPU` | ~13K | CNN | Yes | Higher capacity |
 | `CLS_20k_NPU` | ~20K | CNN | Yes | High capacity |
+| `CLS_40k_NPU` | ~40K | CNN | Yes | Advanced model for complex tasks |
 | `CLS_55k_NPU` | ~55K | CNN | Yes | Maximum accuracy |
 | `ArcFault_model_200_t` | ~200 | Specialized | No | Arc fault detection |
 | `ArcFault_model_300_t` | ~300 | Specialized | No | Arc fault with more capacity |
 | `ArcFault_model_700_t` | ~700 | Specialized | No | Arc fault medium model |
 | `ArcFault_model_1400_t` | ~1.4K | Specialized | No | Arc fault high accuracy |
+| `GearboxFault_model_1.2k_t` | ~1.2K | CNN | Yes | Gearbox fault detection |
+| `GearboxFault_model_1.5k_t` | ~1.5K | CNN | Yes | Gearbox fault with more capacity |
 | `MotorFault_model_1_t` | Varies | Specialized | No | Motor bearing fault detection |
 | `MotorFault_model_2_t` | Varies | Specialized | No | Motor fault variant 2 |
 | `MotorFault_model_3_t` | Varies | Specialized | No | Motor fault variant 3 |
@@ -428,11 +470,19 @@ Note: LSTM models are not NPU-supported.
 | `FCST_LSTM8` | Varies | LSTM | No | Single LSTM (hidden=8) + Linear |
 | `FCST_LSTM10` | Varies | LSTM | No | Single LSTM (hidden=10) + Linear |
 
+### Audio Classification Models
+
+| Model Name | Parameters | Architecture | NPU | Description |
+|------------|------------|--------------|-----|-------------|
+| `DSCNN_NPU` | ~9K | DSCNN | Yes | Depthwise separable CNN for keyword spotting; input (1, 49, 10) MFCC |
+
 ### Image Classification Models
 
 | Model Name | Parameters | Architecture | NPU | Description |
 |------------|------------|--------------|-----|-------------|
 | `Lenet5` | ~60K | LeNet-5 | No | Classic CNN for image classification |
+| `MobileNetV1_58k_NPU` | ~58K | MobileNetV1-style DW-Sep | Yes | Compact NPU-optimized image classifier |
+| `MobileNetV2_58k_NPU` | ~58K | MobileNetV2-style DW-Sep | Yes | Inverted residual image classifier |
 
 ---
 
@@ -454,9 +504,7 @@ Key steps:
 
 - [TI's Neural Network Compiler Documentation](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
 - [NPU Configuration Guidelines](docs/NPU_CONFIGURATION_GUIDELINES.md) - Design models optimized for TI NPU acceleration
-- [Edge AI Studio Model Composer](https://dev.ti.com/modelcomposer/) - No-code GUI for model development
-- [Understanding the Config File](../tinyml-modelmaker/docs/UnderstandingConfigFile.md)
-- [Dataset Format Guide](../tinyml-modelmaker/docs/DatasetFormat_Timeseries_Classification.md)
+- [Edge AI Studio for MCUs](https://www.ti.com/tool/download/EDGE-AI-STUDIO-MCU/) - No-code GUI for data collection & model development
 
 ---
 

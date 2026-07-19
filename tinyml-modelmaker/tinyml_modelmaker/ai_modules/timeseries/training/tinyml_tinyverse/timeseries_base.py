@@ -40,6 +40,7 @@ This module contains common functionality shared across all timeseries task type
 import os
 import shutil
 from copy import deepcopy
+import logging
 
 import torch.backends.mps
 
@@ -620,6 +621,7 @@ class BaseModelTraining:
     def __init__(self, *args, quit_event=None, **kwargs):
         self.params = self.init_params(*args, **kwargs)
         self.quit_event = quit_event
+        self.logger = logging.getLogger("root.BaseModelTraining")
 
         # Get log summary regex (can be overridden by subclasses)
         log_summary_regex = self._get_log_summary_regex()
@@ -685,6 +687,17 @@ class BaseModelTraining:
                 device = 'cuda'
         return device, distributed
 
+    def _get_device_flash_size(self):
+        """Get flash size in KB for the target device."""
+        device_name = self.params.common.target_device
+        device_info = constants.TARGET_DEVICE_DESCRIPTIONS.get(device_name, {})
+        flash_kb = device_info.get('flash_size_kb', None)
+        
+        if flash_kb is None:
+            self.logger.warning(f"Flash size not defined for device '{device_name}'")
+        
+        return flash_kb
+
     def _build_common_train_argv(self, device, distributed):
         """
         Build common training arguments shared across all task types.
@@ -736,8 +749,15 @@ class BaseModelTraining:
             '--variables', f'{self.params.data_processing_feature_extraction.variables}',
             '--lis', f'{self.params.training.log_file_path}',
             '--ondevice-training', f'{self.params.training.ondevice_training}',
-            '--partial-quantization', f'{self.params.training.partial_quantization}',
+            '--export-samples-per-class', f'{self.params.training.export_samples_per_class}',
+            '--target-device-flash-kb', f'{self._get_device_flash_size()}',
+            '--target-device', f'{self.params.common.target_device}',
+            '--auto-quantization', f'{self.params.training.auto_quantization}',
             '--trainable_layers_from_last', f'{self.params.training.trainable_layers_from_last}',
+            '--autoquant-tolerance-classification', f'{self.params.training.autoquant_tolerance_classification}',
+            '--autoquant-tolerance-regression', f'{self.params.training.autoquant_tolerance_regression}',
+            '--autoquant-tolerance-forecasting', f'{self.params.training.autoquant_tolerance_forecasting}',
+            '--autoquant-tolerance-anomaly', f'{self.params.training.autoquant_tolerance_anomaly}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',
             '--epochs', f'{self.params.training.training_epochs}',
@@ -851,10 +871,22 @@ class BaseModelTraining:
             # Insert task-specific args before the last 10 items
             argv = argv[:-10] + task_argv + argv[-10:]
 
+        # Collect standalone boolean flags (store_true args have no value).
+        # These must be stripped before argv slicing (which uses fixed offsets
+        # for trailing key-value pairs) and re-appended after.
+        bool_flags = []
+        if getattr(self.params.training, 'native_amp', False):
+            bool_flags.append('--native-amp')
+        argv.extend(bool_flags)
+
         args = self.train_module.get_args_parser().parse_args(argv)
         args.quit_event = self.quit_event
 
         if not utils.misc_utils.str2bool(self.params.testing.skip_train):
+            # Strip boolean flags before argv manipulation so fixed offsets remain correct
+            for flag in bool_flags:
+                argv.remove(flag)
+
             if utils.misc_utils.str2bool(self.params.training.run_quant_train_only):
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
                     argv = argv[:-2]  # Remove --output-dir <output-dir>
@@ -865,6 +897,7 @@ class BaseModelTraining:
                         '--weight-bitwidth', f'{self.params.training.quantization_weight_bitwidth}',
                         '--activation-bitwidth', f'{self.params.training.quantization_activation_bitwidth}',
                     ])
+                    argv.extend(bool_flags)
 
                     args = self.train_module.get_args_parser().parse_args(argv)
                     args.quit_event = self.quit_event
@@ -872,6 +905,7 @@ class BaseModelTraining:
                 else:
                     raise ValueError(f"quantization cannot be {TinyMLQuantizationVersion.NO_QUANTIZATION} if run_quant_train_only argument is chosen")
             else:
+                argv.extend(bool_flags)
                 self.train_module.run(args)
 
                 if utils.misc_utils.str2bool(self.params.data_processing_feature_extraction.store_feat_ext_data) and \
@@ -879,6 +913,9 @@ class BaseModelTraining:
                     return self.params
 
                 if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION:
+                    # Strip boolean flags again before quant argv manipulation
+                    for flag in bool_flags:
+                        argv.remove(flag)
                     # Remove trailing arguments for quant training
                     argv = argv[:-8]  # Remove --store-feat-ext-data, --epochs, --lr, --output-dir pairs
 
@@ -899,6 +936,7 @@ class BaseModelTraining:
                         '--lr-warmup-epochs', '0',
                         '--store-feat-ext-data', 'False'
                     ])
+                    argv.extend(bool_flags)
 
                     args = self.train_module.get_args_parser().parse_args(argv)
                     args.quit_event = self.quit_event

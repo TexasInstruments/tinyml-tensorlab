@@ -41,7 +41,21 @@ During installation:
 * Select "Git from the command line and also from 3rd-party software"
 * Select "Checkout as-is, commit Unix-style line endings"
 
-**Step 3: Clone and Install**
+**Step 3: Configure Git for Long Paths (Windows Only)**
+
+.. warning::
+
+   **Windows users must enable long path support before cloning.**
+
+   Windows has a 260-character path limit by default, which can cause issues with the deeply nested directory structure in tinyml-* repositories. Run this command before cloning:
+
+   .. code-block:: powershell
+
+      git config --global core.longpaths true
+
+   This allows Git to handle paths longer than 260 characters globally. You only need to run this once per system.
+
+**Step 4: Clone and Install**
 
 .. code-block:: powershell
 
@@ -53,20 +67,16 @@ During installation:
    python -m venv venv
    .\venv\Scripts\Activate.ps1
 
+   # Upgrade pip and build tools
+   python -m pip install --upgrade pip setuptools wheel
+
    # Install components
-   cd tinyml-modelmaker
-   pip install -e .
+   pip install -e tinyml-modelmaker
+   pip install -e tinyml-tinyverse
+   pip install -e tinyml-modeloptimization\torchmodelopt
+   pip install -e tinyml-modelzoo
 
-   cd ..\tinyml-tinyverse
-   pip install -e .
-
-   cd ..\tinyml-modeloptimization\torchmodelopt
-   pip install -e .
-
-   cd ..\..\tinyml-modelzoo
-   pip install -e .
-
-**Step 4: Configure Environment Variables**
+**Step 5: Configure Environment Variables**
 
 .. warning::
 
@@ -77,7 +87,7 @@ During installation:
 
    The variables you need depend on which device you're targeting:
 
-   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT`` and ``C2000WARE_ROOT``
+   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT``
    * **F29 devices (F29H85X, etc.)**: Set ``CG_TOOL_ROOT``
    * **MSPM0 devices**: Set ``ARM_LLVM_CGT_PATH``
    * **AM13E devices**: Set ``ARM_LLVM_CGT_PATH``
@@ -86,7 +96,7 @@ During installation:
 
    See :doc:`environment_variables` for complete device-specific setup instructions.
 
-**Step 5: Run Example**
+**Step 6: Run Example**
 
 .. code-block:: powershell
 
@@ -184,7 +194,7 @@ or enterprise credentials.
 
    The variables you need depend on which device you're targeting:
 
-   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT`` and ``C2000WARE_ROOT``
+   * **C2000 devices (F28P55, F28P65, etc.)**: Set ``C2000_CG_ROOT``
    * **F29 devices (F29H85X, etc.)**: Set ``CG_TOOL_ROOT``
    * **MSPM0 devices**: Set ``ARM_LLVM_CGT_PATH``
    * **AM13E devices**: Set ``ARM_LLVM_CGT_PATH``
@@ -358,7 +368,6 @@ Set up paths for TI tools (if compiling for devices):
 
    # Add to your profile or set in System Properties
    $env:C2000_CG_ROOT = "C:\ti\ccs\tools\compiler\ti-cgt-c2000_22.6.1.LTS"
-   $env:C2000WARE_ROOT = "C:\ti\c2000\C2000Ware_5_03_00_00"
 
 Common Windows Issues
 ---------------------

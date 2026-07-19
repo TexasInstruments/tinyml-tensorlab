@@ -17,7 +17,7 @@ System Requirements
    * - Windows
      - Windows 10/11 with WSL2 or native support
    * - macOS
-     - macOS 12 or later (limited testing)
+     - macOS 12 or later (fully supported)
 
 **Hardware**
 
@@ -97,11 +97,11 @@ Git is required to clone the repository.
 
 **pip**
 
-pip should be included with Python. Ensure it's up to date:
+pip should be included with Python. Ensure it and core build tools are up to date:
 
 .. code-block:: bash
 
-   python -m pip install --upgrade pip
+   python -m pip install --upgrade pip setuptools wheel
 
 For Compilation (Optional)
 --------------------------
@@ -112,12 +112,10 @@ These are only required if you want to compile models for device deployment.
 **For C2000 Devices**
 
 * TI C2000 Code Generation Tools (CGT)
-* C2000Ware SDK
 
 Download from:
 
 * CGT: https://www.ti.com/tool/C2000-CGT
-* C2000Ware: https://www.ti.com/tool/C2000WARE
 
 **For MSPM0 Devices**
 

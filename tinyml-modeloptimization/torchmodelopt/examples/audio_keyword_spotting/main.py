@@ -10,6 +10,7 @@ import os
 import shutil
 import re
 import random
+import numpy as np
 import torchaudio
 from scipy.io import wavfile
 from pydub import AudioSegment
@@ -1049,7 +1050,6 @@ if __name__ == '__main__':
     
     root = "."
     set_seed(SEED)
-
 
     #Downloading and preparing the dataset
     prepare_dataset(root) 

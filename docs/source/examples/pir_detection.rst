@@ -36,9 +36,12 @@ fully supported:
    * - ``MSPM0G5187``
      - MSPM0 with NPU (primary)
      - ``config_MSPM0.yaml``
+   * - ``CC1312``
+     - Sub-GHz wireless MCU
+     - ``config_CC1312.yaml``
    * - ``CC2755``
      - Wireless MCU
-     - ``config.yaml``
+     - ``config_CC2755.yaml``
    * - ``CC1352``
      - Multi-protocol wireless MCU
      - ``config_CC1352.yaml``
@@ -79,7 +82,8 @@ Running the Example
          ./run_tinyml_modelzoo.sh examples/pir_detection/config_MSPM0.yaml
 
          # Run with other device configurations
-         ./run_tinyml_modelzoo.sh examples/pir_detection/config.yaml
+         ./run_tinyml_modelzoo.sh examples/pir_detection/config_CC1312.yaml
+         ./run_tinyml_modelzoo.sh examples/pir_detection/config_CC2755.yaml
          ./run_tinyml_modelzoo.sh examples/pir_detection/config_CC1352.yaml
          ./run_tinyml_modelzoo.sh examples/pir_detection/config_CC1354.yaml
          ./run_tinyml_modelzoo.sh examples/pir_detection/config_CC35X1.yaml
@@ -93,7 +97,8 @@ Running the Example
          .\run_tinyml_modelzoo.bat examples\pir_detection\config_MSPM0.yaml
 
          # Run with other device configurations
-         .\run_tinyml_modelzoo.bat examples\pir_detection\config.yaml
+         .\run_tinyml_modelzoo.bat examples\pir_detection\config_CC1312.yaml
+         .\run_tinyml_modelzoo.bat examples\pir_detection\config_CC2755.yaml
          .\run_tinyml_modelzoo.bat examples\pir_detection\config_CC1352.yaml
          .\run_tinyml_modelzoo.bat examples\pir_detection\config_CC1354.yaml
          .\run_tinyml_modelzoo.bat examples\pir_detection\config_CC35X1.yaml

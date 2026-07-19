@@ -31,6 +31,7 @@
 import sys
 from . import timeseries
 from . import vision
+from . import audio
 
 def get_target_module(backend_name):
     this_module = sys.modules[__name__]

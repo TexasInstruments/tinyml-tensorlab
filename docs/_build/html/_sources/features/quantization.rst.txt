@@ -691,60 +691,10 @@ accepts the following parameters:
 * ``False`` (default): Observers remain active throughout training
 * Integer value: Freezes observers after the specified epoch
 
-.. tip::
-
-   For best QAT results, set ``num_batch_norm_update_epochs`` to
-   approximately half of ``total_epochs``. This allows the model to
-   learn quantization-aware representations before freezing statistics.
-
-Model Surgery
--------------
-
-The ``tinyml-modeloptimization`` package includes model surgery utilities
-that use ``torch.fx`` to replace unsupported modules with efficient
-alternatives. This is useful for adapting existing models to meet NPU
-constraints.
-
-**Basic Usage:**
-
-.. code-block:: python
-
-   from tinyml_torchmodelopt.surgery import convert_to_lite_fx
-
-   # Replace unsupported layers with default replacements
-   model = convert_to_lite_fx(model)
-
-**Custom Replacements:**
-
-You can define custom replacement rules:
-
-.. code-block:: python
-
-   import copy
-   from tinyml_torchmodelopt.surgery import (
-       convert_to_lite_fx, get_replacement_dict_default
-   )
-
-   # Get and modify the default replacement dictionary
-   replacement_dict = copy.deepcopy(get_replacement_dict_default())
-   replacement_dict.update({torch.nn.GELU: torch.nn.ReLU})
-
-   # Apply with custom replacements
-   model = convert_to_lite_fx(model, replacement_dict=replacement_dict)
-
-The replacement value can also be a function for complex transformations:
-
-.. code-block:: python
-
-   replacement_dict.update({'my_layer': my_replacement_function})
-   model = convert_to_lite_fx(model, replacement_dict=replacement_dict)
-
-Model surgery is applied automatically during the quantization pipeline
-when needed. Direct usage is only necessary for custom workflows.
-
 Next Steps
 ----------
 
 * Explore :doc:`neural_architecture_search` for model optimization
 * Learn about :doc:`feature_extraction` for input preparation
 * Deploy quantized models: :doc:`/deployment/npu_device_deployment`
+* Automatic per-layer bit width assignment: :doc:`auto_quantization`

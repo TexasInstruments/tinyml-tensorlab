@@ -32,6 +32,11 @@
 #################################################################################
 
 #################################################################################
+# Portable realpath for macOS (GNU coreutils realpath not installed by default)
+if ! command -v realpath &>/dev/null; then
+    realpath() { python3 -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"; }
+fi
+
 CUR_DIR=$(pwd)
 PARENT_DIR=$(realpath ${CUR_DIR}/..)
 HOME_DIR=${HOME}
@@ -82,14 +87,9 @@ git config --global --add safe.directory $(pwd)
 
 echo "installing repositories..."
 
-echo "installing: tinyml-modeloptimization"
-cd ${PARENT_DIR}/tinyml-modeloptimization/torchmodelopt
-echo 'installing as a local module'
-python -m pip install --no-input --editable .
-
-echo "installing: tinyml-modelzoo"
-cd ${PARENT_DIR}/tinyml-modelzoo
-echo 'installing as a local module'
+echo "installing tinyml-modelmaker"
+cd ${PARENT_DIR}/tinyml-modelmaker
+echo 'Installing as a local module'
 python -m pip install --no-input --editable .
 
 echo "installing: tinyml-tinyverse"
@@ -99,9 +99,14 @@ cd ${PARENT_DIR}/tinyml-tinyverse
 #./setup.sh
 python -m pip install --no-input --editable .
 
-echo "installing tinyml-modelmaker"
-cd ${PARENT_DIR}/tinyml-modelmaker
-echo 'Installing as a local module'
+echo "installing: tinyml-modeloptimization"
+cd ${PARENT_DIR}/tinyml-modeloptimization/torchmodelopt
+echo 'installing as a local module'
+python -m pip install --no-input --editable .
+
+echo "installing: tinyml-modelzoo"
+cd ${PARENT_DIR}/tinyml-modelzoo
+echo 'installing as a local module'
 python -m pip install --no-input --editable .
 
 #################################################################################

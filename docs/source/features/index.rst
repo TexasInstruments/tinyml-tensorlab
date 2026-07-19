@@ -12,9 +12,12 @@ more accurate and efficient models. This section covers these capabilities in de
    neural_architecture_search
    quantization
    quantization_examples
+   auto_quantization
    feature_extraction
    goodness_of_fit
    post_training_analysis
+   ondevice_training
+   ondevice_training_advanced
 
 Feature Overview
 ----------------
@@ -35,6 +38,16 @@ Reduce model size and improve inference speed through quantization:
 * **QAT** (Quantization-Aware Training) - Best accuracy
 * **PTQ** (Post-Training Quantization) - Faster, no retraining
 * Weight bit-widths: 2-bit, 4-bit, 8-bit
+
+**Automatic Mixed Precision Quantization**
+
+Fully automatic, Hessian-aware per-layer bit width assignment using a
+greedy algorithm. Enabled by setting ``auto_quantization: True``:
+
+* Estimates per-layer sensitivity via Hessian eigenvalue (power iteration)
+* Greedy assignment from ``{2, 4, 8, 32}`` bit widths maximising accuracy per bit
+* Automatic average bit width selection via binary search calibration
+* Fixes regression tasks where uniform 8-bit QAT fails
 
 **Standalone Quantization Examples**
 
@@ -66,3 +79,12 @@ Understand model performance with:
 * Confusion matrices
 * FPR/TPR threshold analysis
 * PCA visualization of feature-extracted data
+
+**On-Device Training (ODT)**
+
+Enable models to continue training directly on microcontrollers:
+
+* Deploy frozen backbone + trainable head
+* Adapt to local data and environment drift
+* Reduce re-deployment costs
+* Support for classification, regression, anomaly detection tasks

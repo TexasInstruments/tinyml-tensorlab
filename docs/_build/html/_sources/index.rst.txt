@@ -67,8 +67,17 @@ Quick Links
       Find your target TI MCU and learn about NPU acceleration options.
 
       +++
-      :bdg-warning:`20+ Devices`
+      :bdg-warning:`23+ Devices`
+   .. grid-item-card:: Tiny ML Agent Skill
+      :link: installation/agentic_skill_setup
+      :link-type: doc
+      :class-card: sd-border-0 sd-shadow-sm
 
+      Use the Tiny ML Agent Skill for end-to-end guidance and development with tinyml-tensorlab.
+
+      +++
+      :bdg-danger:`Agentic-Flow`
+      
 ----
 
 What is Tiny ML Tensorlab?
@@ -138,7 +147,7 @@ Documentation Structure
    The :doc:`byod/index` (Bring Your Own Data) section explains dataset formats and preparation.
 
 **Target Devices**
-   Browse :doc:`devices/index` to find specifications and capabilities for 20+ TI MCUs.
+   Browse :doc:`devices/index` to find specifications and capabilities for 23+ TI MCUs.
 
 **Examples & Applications**
    The :doc:`examples/index` section provides ready-to-run configurations for common applications.

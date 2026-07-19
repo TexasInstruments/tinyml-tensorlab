@@ -20,6 +20,26 @@ but approaches it as an anomaly detection problem. The autoencoder learns to
 reconstruct normal current waveforms and flags arc fault patterns as anomalies
 based on high reconstruction error.
 
+Device Support
+--------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 50 15
+
+   * - Device
+     - Notes
+     - Configuration File
+   * - ``F28P55``
+     - Primary target, NPU-accelerated (DSK dataset)
+     - ``config_anomaly_detection_dsk.yaml``
+   * - ``F28P55``
+     - Primary target, NPU-accelerated (DSI dataset)
+     - ``config_anomaly_detection_dsi.yaml``
+   * - ``MSPM0G5187``
+     - MSPM0 with NPU (motor fault dataset)
+     - ``config_anomaly_detection_MSPM0.yaml``
+
 Running the Example
 -------------------
 
@@ -31,11 +51,14 @@ Running the Example
 
          cd tinyml-modelzoo
 
-         # DSK dataset variant
+         # DSK dataset variant (F28P55)
          ./run_tinyml_modelzoo.sh examples/dc_arc_fault/config_anomaly_detection_dsk.yaml
 
-         # DSI dataset variant
+         # DSI dataset variant (F28P55)
          ./run_tinyml_modelzoo.sh examples/dc_arc_fault/config_anomaly_detection_dsi.yaml
+
+         # MSPM0G5187 variant
+         ./run_tinyml_modelzoo.sh examples/motor_bearing_fault/config_anomaly_detection_MSPM0.yaml
 
    .. tab:: Windows
 
@@ -43,11 +66,14 @@ Running the Example
 
          cd tinyml-modelzoo
 
-         # DSK dataset variant
+         # DSK dataset variant (F28P55)
          run_tinyml_modelzoo.bat examples\dc_arc_fault\config_anomaly_detection_dsk.yaml
 
-         # DSI dataset variant
+         # DSI dataset variant (F28P55)
          run_tinyml_modelzoo.bat examples\dc_arc_fault\config_anomaly_detection_dsi.yaml
+
+         # MSPM0G5187 variant
+         run_tinyml_modelzoo.bat examples\motor_bearing_fault\config_anomaly_detection_MSPM0.yaml
 
 Configuration
 -------------

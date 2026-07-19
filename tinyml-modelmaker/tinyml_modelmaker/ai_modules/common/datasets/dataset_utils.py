@@ -101,10 +101,11 @@ def create_inter_file_split(file_list: str, split_list_files: tuple, split_facto
         split_factors.extend(split_factor)
         remainder = 1 - sum(split_factor)
 
-    if number_of_splits > len(split_factor):
-        remainder_fraction = remainder / (number_of_splits - len(split_factor))
-        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factor))]
-    assert len(split_factor) == len(split_list_files), f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factor)}"
+    if number_of_splits > len(split_factors):
+        remainder_fraction = remainder / (number_of_splits - len(split_factors))
+        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factors))]
+    if len(split_factors) != len(split_list_files):
+        raise ValueError(f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factors)}")
 
     with open(file_list) as fp:
         list_of_files = [x.strip() for x in fp.readlines()]  # Contains the list of files
@@ -156,10 +157,11 @@ def create_intra_file_split(file_list: str, split_list_files: tuple, split_facto
         split_factors.extend(split_factor)
         remainder = 1 - sum(split_factor)
 
-    if number_of_splits > len(split_factor):
-        remainder_fraction = remainder / (number_of_splits - len(split_factor))
-        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factor))]
-    assert len(split_factor) == len(split_list_files), f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factor)}"
+    if number_of_splits > len(split_factors):
+        remainder_fraction = remainder / (number_of_splits - len(split_factors))
+        [split_factors.append(remainder_fraction) for _ in range(number_of_splits - len(split_factors))]
+    if len(split_factors) != len(split_list_files):
+        raise ValueError(f"Number of split files: {len(split_list_files)} should be same as length of split factors: {len(split_factors)}")
 
     with open(file_list) as fp:
         # list_of_files = [os.path.join(os.path.dirname(os.path.dirname(file_list)), data_dir, x.strip()) for x in fp.readlines()]  # Contains the list of files
@@ -546,4 +548,6 @@ def dataset_load(task_type, input_data_path, input_annotation_path, annotation_f
         dataset_store = dataset_load_coco(task_type, input_data_path, input_annotation_path)
     elif annotation_format == 'univ_ts_json':
         dataset_store = dataset_load_univ_ts_json(task_type, input_data_path, input_annotation_path)
+    else:
+        raise ValueError(f"Unsupported annotation_format: '{annotation_format}'. Expected 'coco_json' or 'univ_ts_json'.")
     return dataset_store

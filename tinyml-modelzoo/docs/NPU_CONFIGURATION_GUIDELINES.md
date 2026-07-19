@@ -102,19 +102,20 @@ Use for intermediate convolution layers where input channels > 1.
 |-----------|------------|-------|
 | Input Channels (iC) | **m4** | Will be padded to m4 if not |
 | Output Channels (oC) | **m4** | Must be 4, 8, 12, 16, ... |
-| Kernel Height (kH) | **1-7** | Maximum 7! |
-| Kernel Width (kW) | any | Flexible |
+| Kernel Height (kH) | **any (if kW=1) or specific (if kW>1)** | Can be flexible with certain kW values |
+| Kernel Width (kW) | **any (if kH=1) or specific (if kH>1)** | Can be flexible with certain kH values |
 | Kernel Bit-width (kB) | 2, 4, or 8 | 8-bit most common |
 
-**Critical**: Kernel height is limited to **7 or less**!
+**Rule**: For **1D convolutions (kW=1)**, kH can be **any value** (unlimited). Similar flexibility applies for other configurations where one dimension is constrained.
 
 **Example (PyTorch)**:
 ```python
-# Good: kH=5 within limit
-Conv2d(in_channels=16, out_channels=32, kernel_size=(5, 1))
+# Good: 1D convolution - kW=1 allows any kH
+Conv2d(in_channels=16, out_channels=32, kernel_size=(5, 1))    # kH=5, kW=1
+Conv2d(in_channels=16, out_channels=32, kernel_size=(100, 1))  # kH=any, kW=1 ✓
 
-# Bad: kH=9 exceeds limit of 7
-Conv2d(in_channels=16, out_channels=32, kernel_size=(9, 1))
+# Good: 1D convolution with kH=1
+Conv2d(in_channels=16, out_channels=32, kernel_size=(1, 5))    # kH=1, kW=5
 ```
 
 ### DWCONV (Depth-Wise Convolution Layer)
@@ -125,17 +126,18 @@ Use for efficient spatial filtering with `groups=in_channels`.
 |-----------|------------|-------|
 | Input Channels (iC) | **m4** | Must be 4, 8, 12, 16, ... |
 | Output Channels (oC) | **m4** | Equal to iC for true depthwise |
-| Kernel Height (kH) | any | Flexible |
-| Kernel Width (kW) | **1-7** | Maximum 7! |
+| Kernel Height (kH) | **any (if kW constrained) or specific (if kW=any)** | Can be flexible with certain kW values |
+| Kernel Width (kW) | **any (if kH constrained) or specific (if kH=any)** | Can be flexible with certain kH values |
 | Groups | **iC** | Must equal input channels |
+
+**Rule**: Similar to GCONV, one dimension can often be flexible while the other is constrained. Compiler guide shows configurations like kH=9 with kW=1.
 
 **Example (PyTorch)**:
 ```python
-# Good: Depthwise with kW=1, groups=16
-Conv2d(in_channels=16, out_channels=16, kernel_size=(5, 1), groups=16)
-
-# Bad: kW=9 exceeds limit
-Conv2d(in_channels=16, out_channels=16, kernel_size=(5, 9), groups=16)
+# Good: Depthwise with kW=1, allows various kH
+Conv2d(in_channels=16, out_channels=16, kernel_size=(3, 1), groups=16)  # kH=3, kW=1 ✓
+Conv2d(in_channels=16, out_channels=16, kernel_size=(9, 1), groups=16)  # kH=9, kW=1 ✓
+Conv2d(in_channels=16, out_channels=16, kernel_size=(5, 1), groups=16)  # kH=5, kW=1 ✓
 ```
 
 ### PWCONV (Point-Wise Convolution Layer)
@@ -181,16 +183,26 @@ Linear(in_features=4, out_features=num_classes)
 |-----------|------------|-------|
 | Input Channels (iC) | **m4** | Must be 4, 8, 12, 16, ... |
 | Output Channels (oC) | **m4** | Same as input |
-| Kernel Height (kH) | **1-4** | Maximum 4! |
-| Kernel Width (kW) | **1-4** | Maximum 4! |
+| Kernel Height (kH) | **1-4 or any** | If kW is fixed (1-4), then kH can be any; if kH is fixed, max is 4 |
+| Kernel Width (kW) | **1-4 or any** | If kH is fixed (1-4), then kW can be any; if kW is fixed, max is 4 |
 
-**Example (PyTorch)**:
+**Rule**: At least one dimension must be constrained to 1-4; the other can be flexible (any).
+
+**Valid Examples (PyTorch)**:
 ```python
-# Good: kernel within limits
-MaxPool2d(kernel_size=(3, 1), stride=(2, 1))
+# All valid - one dimension is fixed to 1-4
+MaxPool2d(kernel_size=(3, 1), stride=(2, 1))  # kH=3, kW=1 ✓
+MaxPool2d(kernel_size=(1, 4), stride=(1, 2))  # kH=1, kW=4 ✓
+MaxPool2d(kernel_size=(8, 1), stride=(4, 1))  # kH=any, kW=1 ✓ (VALID!)
+MaxPool2d(kernel_size=(256, 1), stride=(2, 1))  # kH=any, kW=1 ✓
+MaxPool2d(kernel_size=(1, 128), stride=(1, 2))  # kH=1, kW=any ✓
+```
 
-# Bad: kH=8 exceeds limit
-MaxPool2d(kernel_size=(8, 1), stride=(4, 1))
+**Invalid Examples**:
+```python
+# Invalid - both dimensions exceed 4
+MaxPool2d(kernel_size=(8, 8), stride=(4, 4))  # kH=8, kW=8 ✗
+MaxPool2d(kernel_size=(128, 2), stride=(2, 1))  # kH=128, kW=2 (kH > 4) ✗
 ```
 
 ### AVGPOOL (Average Pooling Layer)
@@ -264,18 +276,21 @@ AdaptiveAvgPool2d((4, 1))  # With 4+ channels -> 16+ features
 
 ## Common Pitfalls to Avoid
 
-### 1. Large Kernel Heights (kH > 7)
+### 1. Asymmetric Kernel Constraints (Not Both Dimensions Large)
 
-**Problem**: GCONV only supports kH from 2-7.
+**Problem**: Both kernel dimensions exceed limits simultaneously.
 
 ```python
-# WRONG
-Conv2d(in_channels=16, out_channels=32, kernel_size=(9, 1))
-Conv2d(in_channels=16, out_channels=32, kernel_size=(12, 1))
-Conv2d(in_channels=16, out_channels=32, kernel_size=(16, 1))
+# WRONG - Both dimensions too large
+Conv2d(in_channels=16, out_channels=32, kernel_size=(8, 8))   # kH=8, kW=8 ✗
+Conv2d(in_channels=16, out_channels=32, kernel_size=(128, 5)) # Both > limits ✗
+
+# CORRECT - One dimension can be large if other is fixed
+Conv2d(in_channels=16, out_channels=32, kernel_size=(100, 1)) # kH=any, kW=1 ✓
+Conv2d(in_channels=16, out_channels=32, kernel_size=(1, 100)) # kH=1, kW=any ✓
 ```
 
-**Solution**: Use multiple smaller kernels or strided convolutions.
+**Solution**: Ensure at least one dimension is within bounds. For 1D convolutions (kW=1 or kH=1), the other dimension can be flexible.
 
 ### 2. Non-m4 Channel Counts
 
@@ -302,17 +317,22 @@ Linear(4, num_classes)  # FAILS on NPU!
 
 **Solution**: Increase channels or spatial size before FC.
 
-### 4. Large MaxPool Kernels
+### 4. MaxPool with Both Dimensions > 4
 
-**Problem**: MaxPool kernel > 4.
+**Problem**: MaxPool with both dimensions exceeding the 1-4 limit.
 
 ```python
-# WRONG
-MaxPool2d(kernel_size=(8, 1))  # kH=8 exceeds limit
-MaxPool2d(kernel_size=(5, 1))  # kH=5 exceeds limit
+# WRONG - Both dimensions exceed limit
+MaxPool2d(kernel_size=(8, 8), stride=(4, 4))      # kH=8, kW=8 ✗
+MaxPool2d(kernel_size=(128, 2), stride=(2, 1))    # kH=128, kW=2 ✗ (kH too large)
+
+# CORRECT - One dimension can be large if other is fixed 1-4
+MaxPool2d(kernel_size=(8, 1), stride=(4, 1))      # kH=any, kW=1 ✓
+MaxPool2d(kernel_size=(256, 1), stride=(2, 1))    # kH=any, kW=1 ✓
+MaxPool2d(kernel_size=(1, 128), stride=(1, 2))    # kH=1, kW=any ✓
 ```
 
-**Solution**: Use multiple smaller pooling operations or strided convolutions.
+**Solution**: Ensure at least one dimension is 1-4. The other dimension can be larger if the first is fixed within the limit.
 
 ---
 
@@ -326,10 +346,10 @@ Use this checklist when designing or reviewing models for NPU compatibility:
 - [ ] Output channels of all convolutions are multiples of 4
 
 ### Kernel Sizes
-- [ ] All GCONV kernel heights (kH) are <= 7
-- [ ] All DWCONV kernel widths (kW) are <= 7
-- [ ] All FCONV kernel widths (kW) are <= 8
-- [ ] All MaxPool kernels are <= 4 in each dimension
+- [ ] GCONV: For 1D (kW=1), any kH allowed; for 2D, check constraints per compiler guide
+- [ ] DWCONV: For 1D (kW=1), any kH allowed; for 2D, check constraints per compiler guide
+- [ ] FCONV: Verify kH and kW per compiler guide (examples show kH up to 10)
+- [ ] MaxPool: At least one dimension must be 1-4; other can be any (not both > 4)
 
 ### Fully-Connected Layers
 - [ ] FC input features >= 16 (for 8-bit weights)
@@ -352,13 +372,13 @@ Use this checklist when designing or reviewing models for NPU compatibility:
 
 ## Quick Reference Card
 
-| Layer Type | Max kH | Max kW | iC Constraint | oC Constraint |
+| Layer Type | kH | kW | iC Constraint | oC Constraint |
 |------------|--------|--------|---------------|---------------|
-| FCONV | any | 8 | 1 | m4 |
-| GCONV | **7** | any | m4 (padded) | m4 |
-| DWCONV | any | **7** | m4 | m4 |
+| FCONV | 10 or any | 1, 4, or any | 1 | m4 |
+| GCONV | any (kW=1) or specific | any (kH=1) or specific | m4 (padded) | m4 |
+| DWCONV | any/3/9 | any/1/3 | m4 | m4 |
 | PWCONV | 1 | 1 | m4 | m4 |
-| MAXPOOL | **4** | **4** | m4 | m4 |
+| MAXPOOL | 1-4 or any | 1-4 or any | m4 | m4 |
 | FC | N/A | N/A | >=16 (8-bit) | any |
 
 ---

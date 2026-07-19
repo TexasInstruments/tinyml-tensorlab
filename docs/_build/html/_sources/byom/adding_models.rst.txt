@@ -31,8 +31,8 @@ To add a new model:
 
 1. Add your model class to the appropriate file in ``tinyml_modelzoo/models/``
 2. Add the class name to that file's ``__all__`` list
-3. (Optional) Add device performance info to ``device_info/run_info.py``
-4. (Optional) Add a model description to ``model_descriptions/`` for GUI integration
+3. Add device performance info to ``device_info/run_info.py``
+4. Add a model description to ``model_descriptions/`` to enable training pipeline integration
 
 That's it! The model is automatically registered and available everywhere.
 
@@ -138,6 +138,13 @@ Use this approach for models that can be defined as a sequence of standard layer
 
            return dict(model_spec=layers)
 
+.. tip::
+
+   When using ``AdaptiveAvgPoolLayer``, choose ``output_size=(1, 1)`` for global
+   average pooling to ensure maximum ONNX export compatibility across different
+   input sizes. While other output sizes work in PyTorch, they may fail in ONNX
+   export if the input spatial dimensions are not exact factors of the output size.
+
 Option B: Custom PyTorch Model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -173,9 +180,7 @@ For more complex architectures that cannot be expressed as a layer spec:
 
        def forward(self, x):
            # x shape: (batch, variables, input_features) or (batch, variables, input_features, 1)
-           if x.dim() == 3:
-               x = x.unsqueeze(-1)  # Add channel dimension
-
+           assert x.dim() == 4, f"Expected 4D input, got {x.dim()}D"  
            x = self.conv1(x)
            x = self.bn1(x)
            x = self.relu(x)
@@ -369,9 +374,15 @@ You should see your model in the count. You can also verify interactively:
    import torch
 
    model = get_model('MY_NEW_MODEL_2K', variables=1, num_classes=3, input_features=128)
-   x = torch.randn(1, 1, 128)  # (batch, variables, features)
+   x = torch.randn(1, 1, 128, 1)  # (batch, variables, features, 1)
    y = model(x)
    print(f"Output shape: {y.shape}")  # Should be (1, 3)
+
+.. note::
+
+   Time series classification models use Conv2d and BatchNorm2d layers internally,
+   which require 4D input tensors: ``(batch_size, num_variables, num_features, 1)``.
+   The last dimension (1) represents the channel height in the 2D convolution.
 
 **ONNX Export Test:**
 
@@ -393,11 +404,12 @@ To test with an actual training run, modify an example config to use your model:
 
    ./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
 
-Step 5 (Optional): Add Device Performance Info
-------------------------------------------------
+Step 5: Add Device Performance Info
+------------------------------------
 
-If you have benchmarked your model on target devices, add the info to
-``device_info/run_info.py``:
+Add device performance information to ``device_info/run_info.py`` so the model
+is recognized by the training pipeline. If you have benchmarked your model on
+target devices, provide actual values; otherwise use ``'TBD'``:
 
 .. code-block:: python
 
@@ -413,11 +425,13 @@ If you have benchmarked your model on target devices, add the info to
        },
    }
 
-Step 6 (Optional): Add GUI Model Description
-----------------------------------------------
+Step 6: Add Model Description
+------------------------------
 
-If you want the model to appear in the Tiny ML Studio GUI, add a description to
-the appropriate file in ``tinyml_modelzoo/model_descriptions/``:
+Add a model description to the appropriate file in ``tinyml_modelzoo/model_descriptions/``.
+This step is **mandatory** because it creates the mapping between your model class name
+(defined in ``models/``) and the ``model_name`` used in configuration files. The description
+also enables the model to appear in the Tiny ML Studio GUI:
 
 .. list-table::
    :header-rows: 1
@@ -478,11 +492,17 @@ Add your model to the ``_model_descriptions`` dict and ``enabled_models_list``:
 
 **Important fields:**
 
-* ``model_training_id``: Must exactly match your model class name in ``models/``
-* ``model_name``: The display name shown in the GUI
+* ``model_training_id``: **REQUIRED** - Must exactly match your model class name in ``models/``
+* ``model_name``: The name users will specify in configuration files (e.g., in ``config.yaml``)
 * ``model_details``: Brief description of the model architecture
 * ``target_devices``: Dict of supported devices with performance info from ``DEVICE_RUN_INFO``
 * ``properties``: GUI properties for training parameters (use the template)
+
+.. warning::
+
+   The ``model_training_id`` field **must exactly match** your model class name from Step 2.
+   This is the critical link that allows the training pipeline to find and instantiate your model
+   when users specify ``model_name`` in their configuration files.
 
 After adding, verify the description is generated correctly:
 

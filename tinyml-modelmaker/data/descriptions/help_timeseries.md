@@ -20,89 +20,103 @@ These are the devices that are supported currently. As additional devices are su
 * Product information: https://www.ti.com/product/TMS320F28P550SJ
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F28P65
 * Product information: https://www.ti.com/product/TMS320F28P650DK
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F2837
 * Product information: https://www.ti.com/product/TMS320F28377D
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F28004
 * Product information: https://www.ti.com/product/TMS320F280049C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F28003
 * Product information: https://www.ti.com/product/TMS320F280039C
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F280013
 * Product information: https://www.ti.com/product/TMS320F2800137
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### F280015
 * Product information: https://www.ti.com/product/TMS320F2800157
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157
 * C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: 06_00_01
+* SDK release: 26_00_00
 
 ### MSPM0G3507
 * Product information: https://www.ti.com/product/MSPM0G3507
 * Launchpad: https://www.ti.com/tool/LP-MSPM0G3507
 * MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: 2_10_00_04
+* SDK release: 2_11_00_xx
 
 ### MSPM0G3519
 * Product information: https://www.ti.com/product/MSPM0G3519
 * Launchpad: https://www.ti.com/tool/LP-MSPM0G3519
 * MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: 2_10_00_04
+* SDK release: 2_11_00_xx
 
 ### MSPM0G5187
 * Product information: https://www.ti.com/product/MSPM0G5187
 * Launchpad: https://www.ti.com/tool/LP-MSPM0G5187
 * MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: 2_10_00_04
+* SDK release: 2_11_00_xx
 
 ### CC2755
 * Product information: https://www.ti.com/product/CC2755R10
 * Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.12.00.19
-* SDK release: 01_00_00_00
+* CC2755 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.20.00.81
+* SDK release: 01_10_00_00
 
 ### CC1352
 * Product information: https://www.ti.com/product/CC1352R
 * Launchpad: https://www.ti.com/tool/LAUNCHXL-CC1352R1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
-* SDK release: 01_00_00_00
+* CC1352 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
+* SDK release: 01_10_00_00
+
+### CC1312
+* Product information: https://www.ti.com/product/CC1312PSIP
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1312PSIP
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC1312 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
+* SDK release: 01_10_00_00
 
 ### CC1354
 * Product information: https://www.ti.com/product/CC1354P10
 * Launchpad: https://www.ti.com/tool/LP-EM-CC1354P10
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.31.00.11
-* SDK release: 01_00_00_00
+* CC1354 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
+* SDK release: 01_10_00_00
+
+### CC1314
+* Product information: https://www.ti.com/product/CC1314R10
+* Launchpad: https://www.ti.com/tool/LP-EM-CC1314R10
+
+* CC1314 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F2-SDK/8.33.00.16
+* SDK release: 01_10_00_00
 
 ### CC35X1
 * Product information: https://www.ti.com/product/CC3551E
 * Launchpad: https://www.ti.com/tool/LP-EM-CC35X1
 * Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
-* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/9.21.00.15
-* SDK release: 01_00_00_00
+* CC35X1 SDK: https://www.ti.com/tool/download/SIMPLELINK-WIFI-SDK/10.10.01.08
+* SDK release: 01_10_00_00
 
 
 ## Additional information
@@ -115,7 +129,7 @@ These are the devices that are supported currently. As additional devices are su
 
 
 ####  Dataset format
-The dataset should have the following structure. 
+The dataset should have the following structure.
 
 <pre>
 data/projects/<dataset_name>/dataset
@@ -133,7 +147,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 
@@ -144,8 +158,8 @@ After the model compilation, the compiled models will be available in a folder i
 The config file can be in .yaml or in .json format
 
 ## Model deployment
-- The deploy page provides a button to download the compiled model artifacts to the development board. 
-- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. 
+- The deploy page provides a button to download the compiled model artifacts to the development board.
+- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.
 - Please see "C2000Ware Reference Design" in the SDK documentation for more information.
 
 ## Glossary of terms

@@ -138,14 +138,14 @@ TRAINING_BATCH_SIZE_DEFAULT = {
 
 }
 
-TARGET_SDK_VERSION_C2000 = '6.0'
-TARGET_SDK_RELEASE_C2000 = '06_00_00'
+TARGET_SDK_VERSION_C2000 = '26.0.0'
+TARGET_SDK_RELEASE_C2000 = '26_00_00'
 
 TARGET_SDK_VERSION_F29H85 = '1.00'
 TARGET_SDK_RELEASE_F29H85 = '01_00_00'
 
-TARGET_SDK_VERSION_MSPM0 = "2.10.00.04"
-TARGET_SDK_RELEASE_MSPM0 = '2_10_00_04'
+TARGET_SDK_VERSION_MSPM0 = "2.11.00.xx"
+TARGET_SDK_RELEASE_MSPM0 = '2_11_00_xx'
 
 TARGET_SDK_VERSION_MSPM33C = "2.10.00.04"
 TARGET_SDK_RELEASE_MSPM33C = '2_10_00_04'
@@ -522,15 +522,31 @@ DATA_PREPROCESSING_PRESET_DESCRIPTIONS = dict(
 FEATURE_EXTRACTION_DEFAULT = 'default'
 FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict( 
     Mnist_Default=dict(
-        data_processing_feature_extraction=dict(image_height = 28, image_width = 28, image_num_channel= 1, image_mean= 0.1307, image_scale= 0.3081, variables=1),  
+        data_processing_feature_extraction=dict(feat_ext_transform=['GRAYSCALE', 'RESIZE'], image_height = 28, image_width = 28, image_num_channel= 1, image_mean= 0.1307, image_scale= 0.3081, variables=1, data_proc_transforms=[]),  
+        common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
+    CoffeeBean_Default=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=["RGB","RESIZE"], 
+        image_height = 128, image_width = 128, image_num_channel= 3, image_mean= (0.485,0.456,0.406), image_scale= (0.229, 0.224, 0.225), variables=3, data_proc_transforms=[]),  
+        common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
+    CoffeeBean_Augmentation_Default=dict(data_processing_feature_extraction=dict(feat_ext_transform=["RGB","RESIZE"], augmentation_transform=["RANDOM_HORIZONTAL_FLIP","RANDOM_VERTICAL_FLIP","RANDOM_ROTATION","COLOR_JITTER"], horizontal_flip_prob=0.5, vertical_flip_prob=0.5, random_rotation_deg=10, color_jitter_brightness=0.05, color_jitter_contrast=0.05, color_jitter_saturation=0.02, color_jitter_hue=0.005, image_height=128, image_width=128, image_num_channel=3, image_mean=(0.485,0.456,0.406), image_scale=(0.229,0.224,0.225), variables=3, data_proc_transforms=[]), common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
+    MachineReadable_Default=dict(
+        data_processing_feature_extraction=dict(feat_ext_transform=["GRAYSCALE","RESIZE"], variables=1, image_height=28, image_width=28, image_num_channel=1, image_mean=0.5, image_scale=0.5, data_proc_transforms=[]),
         common=dict(task_type=TASK_TYPE_IMAGE_CLASSIFICATION), ),
 )
 
 DATASET_EXAMPLES = dict(
     default=dict(),
      mnist_image_classification=dict(
-        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mnist_classes.zip'),
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip'),
         data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('Mnist_Default'), variables=1),
+    ),
+    coffee_bean_classification=dict(
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/coffee_bean_classification.zip'),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('CoffeeBean_Default'), variables=1),
+    ),
+    machine_readable_code_classification=dict(
+        dataset=dict(input_data_path='https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/machine_readable_code_classification.zip'),
+        data_processing_feature_extraction=dict(feature_extraction_name=FEATURE_EXTRACTION_PRESET_DESCRIPTIONS.get('MachineReadable_Default'), variables=1),
     ),
 )
 DATASET_DEFAULT = 'default'
@@ -546,17 +562,12 @@ HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
 TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
 # C2000 F28 Compiler
-C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
+C2000_CGT_VERSION = 'ti-cgt-c2000_25.11.0.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
 CL2000_CROSS_COMPILER = os.path.join(C2000_CG_ROOT, 'bin', 'cl2000')
 C2000_CGT_INCLUDE = os.path.join(C2000_CG_ROOT, 'include')
-# C2000 F28 SDK
-C2000WARE_VERSION = 'C2000Ware_6_00_00_00'
-C2000WARE_ROOT = os.path.abspath(os.getenv('C2000WARE_ROOT', os.path.join(TOOLS_PATH, C2000WARE_VERSION)))
-C2000WARE_INCLUDE = os.path.join(C2000WARE_ROOT, 'device_support', '{DEVICE_NAME}', 'common', 'include')
-C2000_DRIVERLIB_INCLUDE = os.path.join(C2000WARE_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 # C2000 F29 Compiler
-C29_CGT_VERSION = 'ti-cgt-c29_2.0.0.STS'
+C29_CGT_VERSION = 'ti-cgt-c29_2.2.1.LTS'
 CG_TOOL_ROOT = os.path.abspath(os.getenv('CG_TOOL_ROOT', os.path.join(TOOLS_PATH, C29_CGT_VERSION)))
 C29CLANG_CROSS_COMPILER = os.path.join(CG_TOOL_ROOT, 'bin', 'c29clang')
 C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
@@ -567,7 +578,7 @@ C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
 # F29H85_DRIVERLIB_INCLUDE = os.path.join(F29H85_SDK_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 
 # MSPM0 Compiler
-MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
 ARM_LLVM_CGT_PATH = os.path.abspath(os.getenv('ARM_LLVM_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
 MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
@@ -577,11 +588,11 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
 
 # MSPM33C Compiler
-MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_4.0.3.LTS'
+MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
 MSPM33C_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 
-CROSS_COMPILER_OPTIONS_C28 = (f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I{C2000_DRIVERLIB_INCLUDE} -I{C2000WARE_INCLUDE} -I. -Iartifacts --obj_directory=.")
+CROSS_COMPILER_OPTIONS_C28 = (f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I.")
 CROSS_COMPILER_OPTIONS_F29H85 = (f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I.")
 CROSS_COMPILER_OPTIONS_MSPM0 = (f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
 CROSS_COMPILER_OPTIONS_MSPM33C = (f"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type")
@@ -706,13 +717,68 @@ SAMPLE_DATASET_DESCRIPTIONS = {
     },
     'dataset': {
         'dataset_name': 'mnist_image_classification',
-        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/mnist_classes.zip',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip',
     },
     'info': {
         'dataset_url': 'http://yann.lecun.com/exdb/mnist/',
         'dataset_detailed_name': 'Modified National Institute of Standards and Technology (MNIST) Database',
         'dataset_description': 'The MNIST dataset is a large database of handwritten digits (0–9) commonly used for training and testing in the field of machine learning. It consists of 60,000 training images and 10,000 test images, each 28x28 grayscale. MNIST was created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges as a benchmark for image classification research.',
         'dataset_size': '60,000 training images, 10,000 test images (28x28 grayscale)',
+        'dataset_source': 'Created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges from NIST data',
+        'dataset_license': 'Freely available for research and educational purposes',
+        'dataset_citation': 'Yann LeCun, Corinna Cortes, and Christopher J.C. Burges. "The MNIST Database of Handwritten Digits." 1998. http://yann.lecun.com/exdb/mnist/',
+    }
+},
+'coffee_bean_classification': {
+    'common': {
+        'task_type': TASK_TYPE_IMAGE_CLASSIFICATION,
+        'task_category': TASK_CATEGORY_IMAGE_CLASSIFICATION,
+    },
+    'dataset': {
+        'dataset_name': 'coffee_bean_classification',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/coffee_bean_classification.zip',
+    },
+    'info': {
+        'dataset_url': 'https://www.kaggle.com/datasets/gpiosenka/coffee-bean-dataset-resized-224-x-224',
+        'dataset_detailed_name': 'Coffee Bean Dataset Resized 224x224',
+        'dataset_description': 'The Coffee Bean dataset is an image classification dataset containing coffee bean images grouped into roast/bean categories such as Dark, Green, Light, and Medium. It can be used to train and evaluate image classification models that distinguish coffee bean roast levels using visual cues such as color, texture, and surface appearance.',
+        'dataset_size': 'Four classes: Dark, Green, Light, and Medium. Images are resized to 224x224 in the original dataset source.',
+        'dataset_source': 'Kaggle dataset published as Coffee Bean Dataset Resized (224 X 224)',
+        'dataset_license': 'Refer to the dataset page for the latest license/usage terms.',
+        'dataset_citation': 'Coffee Bean Dataset Resized (224 X 224), Kaggle. https://www.kaggle.com/datasets/gpiosenka/coffee-bean-dataset-resized-224-x-224',
+    }
+},
+'machine_readable_code_classification': {
+    'common': {
+        'task_type': TASK_TYPE_IMAGE_CLASSIFICATION,
+        'task_category': TASK_CATEGORY_IMAGE_CLASSIFICATION,
+    },
+    'dataset': {
+        'dataset_name': 'machine_readable_code_classification',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/machine_readable_code_classification.zip',
+    },
+    'info': {
+        'dataset_url': 'Generated locally using the repository dataset generation script.',
+        'dataset_detailed_name': 'Synthetic Machine Readable Code 28x28 Dataset',
+        'dataset_description': 'The Machine Readable Code dataset is a synthetic low-resolution image classification dataset created for tiny image classification experiments. It contains three classes: QR code, barcode, and other/non-code images. QR images are generated using random alphanumeric payloads, barcode images are generated as Code128 barcodes without printed text, and the other class contains blank, noise, line, and block-pattern images. All images are converted to 28x28 grayscale binary PNGs.',
+        'dataset_size': '3,000 images per class, 9,000 images total. Each image is 28x28 grayscale binary.',
+        'dataset_source': 'Generated synthetically using Python packages qrcode, python-barcode, Pillow, and NumPy.',
+    }
+},
+'mnist_classes': {
+    'common': {
+        'task_type': TASK_TYPE_IMAGE_CLASSIFICATION,
+        'task_category': TASK_CATEGORY_IMAGE_CLASSIFICATION,
+    },
+    'dataset': {
+        'dataset_name': 'mnist_classes',
+        'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip',
+    },
+    'info': {
+        'dataset_url': 'http://yann.lecun.com/exdb/mnist/',
+        'dataset_detailed_name': 'MNIST Handwritten Digits Classification',
+        'dataset_description': 'MNIST dataset with handwritten digit images (0-9) organized as class folders for image classification workflows. Standard 28x28 grayscale images used for image classification training and evaluation.',
+        'dataset_size': 'Multiple classes of handwritten digit images (28x28 grayscale)',
         'dataset_source': 'Created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges from NIST data',
         'dataset_license': 'Freely available for research and educational purposes',
         'dataset_citation': 'Yann LeCun, Corinna Cortes, and Christopher J.C. Burges. "The MNIST Database of Handwritten Digits." 1998. http://yann.lecun.com/exdb/mnist/',

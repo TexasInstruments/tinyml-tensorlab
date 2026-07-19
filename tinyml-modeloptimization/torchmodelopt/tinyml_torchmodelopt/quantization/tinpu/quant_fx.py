@@ -110,7 +110,10 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
             #
         #
 
-        backend = 'fbgemm' if platform.system() in ['Windows'] else 'qnnpack'
+        # fbgemm is optimal for x86; qnnpack for ARM (Apple Silicon, mobile)
+        # Intel Mac (Darwin + x86_64) also benefits from fbgemm
+        _is_x86 = platform.machine() in ('x86_64', 'AMD64', 'x86')
+        backend = 'fbgemm' if (platform.system() == 'Windows' or (platform.system() == 'Darwin' and _is_x86)) else 'qnnpack'
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
 
     def convert(self, *args, model_qconfig_format: str = TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):

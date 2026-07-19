@@ -55,6 +55,43 @@ The model can identify various fault conditions:
           :alt: Blade Obstruction
      - **Blade Obstruction** - Foreign object interfering with fan operation
 
+Device Support
+--------------
+
+The primary target device is the **F28P55x**. The following devices are also
+fully supported:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 45 30
+
+   * - Device
+     - Description
+     - Configuration File
+   * - ``F28P55``
+     - C2000 with NPU (primary)
+     - ``config.yaml``
+   * - ``CC1312``
+     - Sub-GHz wireless MCU
+     - ``config_CC1312.yaml``
+   * - ``CC1314``
+     - Sub-GHz wireless MCU
+     - ``config_CC1314.yaml``
+   * - ``CC1352``
+     - Multi-protocol wireless MCU
+     - ``config_CC1352.yaml``
+   * - ``CC1354``
+     - Sub-GHz + BLE MCU
+     - ``config_CC1354.yaml``
+   * - ``CC2755``
+     - Bluetooth 5.4 LE / Thread / Zigbee MCU
+     - ``config_CC2755.yaml``
+   * - ``CC35X1``
+     - Wi-Fi MCU
+     - ``config_CC35X1.yaml``
+
+Check the ``config_<device>.yaml`` files for device-specific configurations.
+
 Configuration
 -------------
 

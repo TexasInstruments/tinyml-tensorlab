@@ -51,3 +51,5 @@ data/
 !data/datasets/readme.txt
 !data/checkpoints/readme.txt
 !data/downloads/readme.txt
+# Added by code-review-graph
+.code-review-graph/

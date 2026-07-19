@@ -43,7 +43,7 @@ if [ $# -lt 1 ]; then
     echo "Available example configs:"
     if [ -d "$SCRIPT_DIR/examples" ]; then
         find "$SCRIPT_DIR/examples" -name "*.yaml" -type f | sort | while read -r cfg; do
-            echo "  $(realpath --relative-to=\"$SCRIPT_DIR\" \"$cfg\")"
+            echo "  ${cfg#$SCRIPT_DIR/}"
         done
     fi
     exit 1
