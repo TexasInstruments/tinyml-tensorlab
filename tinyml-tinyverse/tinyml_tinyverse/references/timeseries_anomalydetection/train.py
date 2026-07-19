@@ -77,6 +77,7 @@ from ..common.train_base import (
     get_output_int_flag,
     load_onnx_for_inference,
     create_data_loaders,
+    shutdown_data_loaders,
 )
 
 dataset_loader_dict = {'GenericTSDatasetAD': GenericTSDatasetAD}
@@ -203,123 +204,127 @@ def main(gpu, args):
 
     logger.info("Loading data:")
     data_loader, data_loader_test = create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args, gpu)
+    try:
 
-    logger.info("Creating model")
-    logger.info(f"Variables: {variables}, Input_features: {input_features}")
+        logger.info("Creating model")
+        logger.info(f"Variables: {variables}, Input_features: {input_features}")
 
-    # For anomaly detection, num_classes is input_features (autoencoder output)
-    model = models.get_model(
-        args.model, variables, num_classes=input_features, input_features=input_features, model_config=args.model_config,
-        model_spec=args.model_spec,
-        dual_op=args.dual_op)
+        # For anomaly detection, num_classes is input_features (autoencoder output)
+        model = models.get_model(
+            args.model, variables, num_classes=input_features, input_features=input_features, model_config=args.model_config,
+            model_spec=args.model_spec,
+            dual_op=args.dual_op)
 
-    log_model_summary(model, args, variables, input_features, logger)
-    model = load_pretrained_weights(model, args, logger)
+        log_model_summary(model, args, variables, input_features, logger)
+        model = load_pretrained_weights(model, args, logger)
 
-    # if output_int not set by user, then set it to default of task_type
-    if args.output_int == None:
-        args.output_int = False
+        # if output_int not set by user, then set it to default of task_type
+        if args.output_int == None:
+            args.output_int = False
 
-    if handle_export_only(model, args, variables, input_features, logger):
-        return
+        if handle_export_only(model, args, variables, input_features, logger):
+            return
 
-    move_model_to_device(model, device, logger)
-    criterion = nn.MSELoss()
+        move_model_to_device(model, device, logger)
+        criterion = nn.MSELoss()
 
-    global _float_best_metric
-    sample_inputs = None
-    sample_targets = None
-    bsearch_float_metric = None
-    bsearch_example_inputs = None
-    if args.auto_quantization and args.quantization:
-        try:
-            sample_data_iter = iter(data_loader)
-            _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
-            sample_inputs = sample_data_fe.float().to(device)
-            sample_targets = sample_data_fe.float().to(device)
-            logger.info("Obtained sample data for auto quantization analysis")
-        except Exception as e:
-            logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
-        bsearch_float_metric = _float_best_metric
-        try:
-            bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
-        except Exception as e:
-            logger.warning(f"Could not get example inputs for binary search: {e}")
+        global _float_best_metric
+        sample_inputs = None
+        sample_targets = None
+        bsearch_float_metric = None
+        bsearch_example_inputs = None
+        if args.auto_quantization and args.quantization:
+            try:
+                sample_data_iter = iter(data_loader)
+                _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
+                sample_inputs = sample_data_fe.float().to(device)
+                sample_targets = sample_data_fe.float().to(device)
+                logger.info("Obtained sample data for auto quantization analysis")
+            except Exception as e:
+                logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
+            bsearch_float_metric = _float_best_metric
+            try:
+                bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
+            except Exception as e:
+                logger.warning(f"Could not get example inputs for binary search: {e}")
 
-    model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
-        calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
-        eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
-        task_type='anomalydetection', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
-        autoquant_tolerance_anomaly=args.autoquant_tolerance_anomaly)
+        model = utils.quantization_wrapped_model(
+            model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+            args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
+            calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
+            eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
+            task_type='anomalydetection', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
+            autoquant_tolerance_anomaly=args.autoquant_tolerance_anomaly)
 
-    optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
-    model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
-    resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
+        optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
+        model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
+        resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
 
-    phase = 'QuantTrain' if args.quantization else 'FloatTrain'
-    logger.info("Start training")
-    start_time = timeit.default_timer()
-    best = dict(mse=np.inf, epoch=None)
+        phase = 'QuantTrain' if args.quantization else 'FloatTrain'
+        logger.info("Start training")
+        start_time = timeit.default_timer()
+        best = dict(mse=np.inf, epoch=None)
 
-    for epoch in range(args.start_epoch, args.epochs):
-        if args.distributed:
-            train_sampler.set_epoch(epoch)
-        utils.train_one_epoch_anomalydetection(
-            model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
-            print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
-            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
-        if not (args.quantization_method in ['PTQ'] and args.quantization):
-            lr_scheduler.step()
-        avg_mse = utils.evaluate_anomalydetection(model, criterion, data_loader_test, device=device,
-                                                   transform=None, print_freq=args.print_freq, epoch=epoch,
-                                                   phase=phase, num_classes=num_classes, dual_op=args.dual_op)
-        if model_ema:
-            avg_mse = utils.evaluate_anomalydetection(
-                model_ema, criterion, data_loader_test, device=device, transform=None, epoch=epoch,
-                log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
-        if args.output_dir and avg_mse <= best['mse']:
-            logger.info(f"Epoch[{epoch}]: {avg_mse:.6f} (Val MSE) <= {best['mse']:.6f} (So far least error). Hence updating checkpoint.pth")
-            best['mse'], best['epoch'] = avg_mse, epoch
-            checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
-            utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+        for epoch in range(args.start_epoch, args.epochs):
+            if args.distributed:
+                train_sampler.set_epoch(epoch)
+            utils.train_one_epoch_anomalydetection(
+                model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
+                print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
+                is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
+            if not (args.quantization_method in ['PTQ'] and args.quantization):
+                lr_scheduler.step()
+            avg_mse = utils.evaluate_anomalydetection(model, criterion, data_loader_test, device=device,
+                                                       transform=None, print_freq=args.print_freq, epoch=epoch,
+                                                       phase=phase, num_classes=num_classes, dual_op=args.dual_op)
+            if model_ema:
+                avg_mse = utils.evaluate_anomalydetection(
+                    model_ema, criterion, data_loader_test, device=device, transform=None, epoch=epoch,
+                    log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
+            if args.output_dir and avg_mse <= best['mse']:
+                logger.info(f"Epoch[{epoch}]: {avg_mse:.6f} (Val MSE) <= {best['mse']:.6f} (So far least error). Hence updating checkpoint.pth")
+                best['mse'], best['epoch'] = avg_mse, epoch
+                checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
+                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
-    if not args.quantization and args.auto_quantization:
-        _float_best_metric = best['mse']
-        logger.info(f"Stored float best MSE for binary search: {_float_best_metric:.4f}")
+        if not args.quantization and args.auto_quantization:
+            _float_best_metric = best['mse']
+            logger.info(f"Stored float best MSE for binary search: {_float_best_metric:.4f}")
 
-    # Log best epoch results
-    logger = getLogger(f"root.main.{phase}.BestEpoch")
-    logger.info("")
-    logger.info("Printing statistics of best epoch:")
-    logger.info(f"Best Epoch: {best['epoch']}")
-    logger.info(f"MSE {best['mse']:.3f}")
-    logger.info("")
+        # Log best epoch results
+        logger = getLogger(f"root.main.{phase}.BestEpoch")
+        logger.info("")
+        logger.info("Printing statistics of best epoch:")
+        logger.info(f"Best Epoch: {best['epoch']}")
+        logger.info(f"MSE {best['mse']:.3f}")
+        logger.info("")
 
-    # Export model
-    logger.info('Exporting model after training.')
-    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
-        utils.export_model(
-            model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, example_input=None, generic_model=args.generic_model,
-            remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
-        if args.ondevice_training:
-            saved_onnx_path = os.path.join(args.output_dir, 'model.onnx')
-            ondevice_training.export_for_ondevice_training(saved_onnx_path, args)
-            ondevice_training.export_training_data(dataset, dataset_test, dataset_test_final, args)
+        # Export model
+        logger.info('Exporting model after training.')
+        if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
+            utils.export_model(
+                model, input_shape=(1,) + dataset.X.shape[1:], output_dir=args.output_dir, opset_version=args.opset_version,
+                quantization=args.quantization, example_input=None, generic_model=args.generic_model,
+                remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
+            if args.ondevice_training:
+                saved_onnx_path = os.path.join(args.output_dir, 'model.onnx')
+                ondevice_training.export_for_ondevice_training(saved_onnx_path, args)
+                ondevice_training.export_training_data(dataset, dataset_test, dataset_test_final, args)
 
-    log_training_time(start_time)
+        log_training_time(start_time)
 
-    # Calculate threshold
-    model_path = os.path.join(args.output_dir, 'model.onnx')
-    error_mean, error_std = get_reconstruction_errors_stats(args.generic_model, model_path, args.device, data_loader)
-    threshold = error_mean + 3 * error_std
+        # Calculate threshold
+        model_path = os.path.join(args.output_dir, 'model.onnx')
+        error_mean, error_std = get_reconstruction_errors_stats(args.generic_model, model_path, args.device, data_loader)
+        threshold = error_mean + 3 * error_std
 
-    if args.gen_golden_vectors:
-        generate_golden_vector_dir(args.output_dir)
-        output_int = get_output_int_flag(args)
-        generate_golden_vectors(args.output_dir, dataset, output_int, threshold, args.generic_model)
+        if args.gen_golden_vectors:
+            generate_golden_vector_dir(args.output_dir)
+            output_int = get_output_int_flag(args)
+            generate_golden_vectors(args.output_dir, dataset, output_int, threshold, args.generic_model)
+
+    finally:
+        shutdown_data_loaders(data_loader, data_loader_test)
 
 
 def run(args):

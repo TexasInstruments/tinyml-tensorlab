@@ -76,6 +76,7 @@ from ..common.train_base import (
     get_output_int_flag,
     load_onnx_for_inference,
     create_data_loaders,
+    shutdown_data_loaders,
 )
 
 dataset_loader_dict = {'GenericTSDatasetReg': GenericTSDatasetReg}
@@ -171,98 +172,102 @@ def main(gpu, args):
 
     logger.info("Loading data:")
     data_loader, data_loader_test = create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args, gpu)
+    try:
 
-    logger.info("Creating model")
-    model = create_model(args, variables, num_classes, input_features, logger)
-    log_model_summary(model, args, variables, input_features, logger)
-    model = load_pretrained_weights(model, args, logger)
+        logger.info("Creating model")
+        model = create_model(args, variables, num_classes, input_features, logger)
+        log_model_summary(model, args, variables, input_features, logger)
+        model = load_pretrained_weights(model, args, logger)
 
-    # if output_int not set by user, then set it to default of task_type
-    if args.output_int == None:
-        args.output_int = False
+        # if output_int not set by user, then set it to default of task_type
+        if args.output_int == None:
+            args.output_int = False
 
-    move_model_to_device(model, device, logger)
-    global _float_best_metric
-    sample_inputs = None
-    sample_targets = None
-    bsearch_float_metric = None
-    bsearch_example_inputs = None
-    if args.auto_quantization and args.quantization:
-        try:
-            sample_data_iter = iter(data_loader)
-            _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
-            sample_inputs = sample_data_fe.float().to(device)
-            sample_targets = sample_targets_raw.float().to(device)
-            logger.info("Obtained sample data for auto quantization analysis")
-        except Exception as e:
-            logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
-        bsearch_float_metric = _float_best_metric
-        try:
-            bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
-        except Exception as e:
-            logger.warning(f"Could not get example inputs for binary search: {e}")
-    criterion = nn.MSELoss().to(device)
-    model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
-        calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
-        eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
-        task_type='regression', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
-        autoquant_tolerance_regression=args.autoquant_tolerance_regression)
+        move_model_to_device(model, device, logger)
+        global _float_best_metric
+        sample_inputs = None
+        sample_targets = None
+        bsearch_float_metric = None
+        bsearch_example_inputs = None
+        if args.auto_quantization and args.quantization:
+            try:
+                sample_data_iter = iter(data_loader)
+                _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
+                sample_inputs = sample_data_fe.float().to(device)
+                sample_targets = sample_targets_raw.float().to(device)
+                logger.info("Obtained sample data for auto quantization analysis")
+            except Exception as e:
+                logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
+            bsearch_float_metric = _float_best_metric
+            try:
+                bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
+            except Exception as e:
+                logger.warning(f"Could not get example inputs for binary search: {e}")
+        criterion = nn.MSELoss().to(device)
+        model = utils.quantization_wrapped_model(
+            model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+            args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
+            calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
+            eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
+            task_type='regression', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
+            autoquant_tolerance_regression=args.autoquant_tolerance_regression)
 
-    if handle_export_only(model, args, variables, input_features, logger):
-        return
+        if handle_export_only(model, args, variables, input_features, logger):
+            return
 
-    optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
-    model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
-    resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
+        optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
+        model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
+        resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
 
-    phase = 'QuantTrain' if args.quantization else 'FloatTrain'
-    logger.info("Start training")
-    start_time = timeit.default_timer()
-    best = dict(mse=np.inf, r2=0, epoch=None)
+        phase = 'QuantTrain' if args.quantization else 'FloatTrain'
+        logger.info("Start training")
+        start_time = timeit.default_timer()
+        best = dict(mse=np.inf, r2=0, epoch=None)
 
-    for epoch in range(args.start_epoch, args.epochs):
-        if args.distributed:
-            train_sampler.set_epoch(epoch)
-        utils.train_one_epoch_regression(
-            model, criterion, optimizer, data_loader, device, epoch, None, args.lambda_reg, args.apex, model_ema,
-            print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
-            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
-        if not (args.quantization_method in ['PTQ'] and args.quantization):
-            lr_scheduler.step()
-        avg_mse, avg_r2_score = utils.evaluate_regression(model, criterion, data_loader_test, device=device,
-                                                           transform=None, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
-        if model_ema:
-            avg_mse, avg_r2_score = utils.evaluate_regression(
-                model_ema, criterion, data_loader_test, device=device, transform=None,
-                log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
-        if args.output_dir and avg_mse <= best['mse']:
-            logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) <= {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
-            best['mse'], best['r2'], best['epoch'] = avg_mse, avg_r2_score, epoch
-            checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
-            utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+        for epoch in range(args.start_epoch, args.epochs):
+            if args.distributed:
+                train_sampler.set_epoch(epoch)
+            utils.train_one_epoch_regression(
+                model, criterion, optimizer, data_loader, device, epoch, None, args.lambda_reg, args.apex, model_ema,
+                print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
+                is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False)
+            if not (args.quantization_method in ['PTQ'] and args.quantization):
+                lr_scheduler.step()
+            avg_mse, avg_r2_score = utils.evaluate_regression(model, criterion, data_loader_test, device=device,
+                                                               transform=None, phase=phase, num_classes=num_classes, dual_op=args.dual_op)
+            if model_ema:
+                avg_mse, avg_r2_score = utils.evaluate_regression(
+                    model_ema, criterion, data_loader_test, device=device, transform=None,
+                    log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op)
+            if args.output_dir and avg_mse <= best['mse']:
+                logger.info(f"Epoch {epoch}: {avg_mse:.2f} (Val MSE) <= {best['mse']:.2f} (So far least error). Hence updating checkpoint.pth")
+                best['mse'], best['r2'], best['epoch'] = avg_mse, avg_r2_score, epoch
+                checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
+                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
-    if not args.quantization and args.auto_quantization:
-        _float_best_metric = best['r2']
-        logger.info(f"Stored float best R² for binary search: {_float_best_metric:.4f}")
+        if not args.quantization and args.auto_quantization:
+            _float_best_metric = best['r2']
+            logger.info(f"Stored float best R² for binary search: {_float_best_metric:.4f}")
 
-    # Log best epoch results
-    logger = getLogger(f"root.main.{phase}.BestEpoch")
-    logger.info("")
-    logger.info("Printing statistics of best epoch:")
-    logger.info(f"Best Epoch: {best['epoch']}")
-    logger.info(f"MSE {best['mse']:.3f}")
-    logger.info(f"R2-Score {best['r2']:.3f}")
-    logger.info("")
+        # Log best epoch results
+        logger = getLogger(f"root.main.{phase}.BestEpoch")
+        logger.info("")
+        logger.info("Printing statistics of best epoch:")
+        logger.info(f"Best Epoch: {best['epoch']}")
+        logger.info(f"MSE {best['mse']:.3f}")
+        logger.info(f"R2-Score {best['r2']:.3f}")
+        logger.info("")
 
-    export_trained_model(model, args, dataset)
-    log_training_time(start_time)
+        export_trained_model(model, args, dataset)
+        log_training_time(start_time)
 
-    if args.gen_golden_vectors:
-        generate_golden_vector_dir(args.output_dir)
-        output_int = get_output_int_flag(args)
-        generate_golden_vectors(args.output_dir, output_int, dataset, args.generic_model)
+        if args.gen_golden_vectors:
+            generate_golden_vector_dir(args.output_dir)
+            output_int = get_output_int_flag(args)
+            generate_golden_vectors(args.output_dir, output_int, dataset, args.generic_model)
+
+    finally:
+        shutdown_data_loaders(data_loader, data_loader_test)
 
 
 def run(args):
