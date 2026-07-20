@@ -98,7 +98,8 @@ class Network(nn.Module):
     """
     Network is the full model for architecture search, composed of multiple cells.
     """
-    def __init__(self, C, num_classes, layers, criterion, in_channels, steps=4, multiplier=4, stem_multiplier=3):
+    def __init__(self, C, num_classes, layers, criterion, in_channels,
+                 steps=4, multiplier=4, stem_multiplier=3, device=None):
         """
         Args:
             C (int): Initial number of channels.
@@ -109,6 +110,7 @@ class Network(nn.Module):
             steps (int): Number of intermediate nodes per cell.
             multiplier (int): Number of outputs to concatenate per cell.
             stem_multiplier (int): Multiplier for initial stem channels.
+            device (torch.device): Compute device (cuda, mps, or cpu).
         """
         super(Network, self).__init__()
         self._C = C
@@ -119,10 +121,11 @@ class Network(nn.Module):
         self._multiplier = multiplier
         self._in_channels = in_channels
         self._stem_multiplier = stem_multiplier
+        self._device = device if device is not None else torch.device('cpu')
 
         # Input batchnorm
         self.input_batchnorm = nn.BatchNorm2d(self._in_channels)
-        
+
         # Initial stem convolution to increase channel dimension
         C_curr = stem_multiplier * C
         self.stem = nn.Sequential(
@@ -130,7 +133,7 @@ class Network(nn.Module):
             nn.BatchNorm2d(C_curr),
             nn.ReLU(inplace=False),
         )
-        
+
         C_prev, C_curr = C_curr, C  # Track previous and current channel counts
         self.cells = nn.ModuleList()  # List to hold all cells
         reduction_prev = False  # Track if previous cell was reduction
@@ -145,23 +148,27 @@ class Network(nn.Module):
             reduction_prev = reduction
             self.cells += [cell]
             C_prev = multiplier * C_curr  # Update for next cell
-            
+
         # Global pooling and classifier for final output
         self.global_pooling = nn.AdaptiveAvgPool2d((1, 1))
         self.classifier = nn.Linear(C_prev, num_classes)
-        
+
         self._initialize_alphas()  # Initialize architecture parameters
     
     def _initialize_alphas(self):
         """
         Initialize architecture parameters (alphas) for normal and reduction cells.
         """
-        k = sum(1 for i in range(self._steps) for n in range(1+i))  # Number of edges per cell
+        k = sum(1 for i in range(self._steps) for n in range(1 + i))  # Number of edges per cell
         num_ops = len(PRIMITIVES_CNN)  # Number of possible operations
 
         # Architecture weights for normal and reduction cells (learnable)
-        self.alphas_normal = Variable(1e-3*torch.randn(k, num_ops).cuda(), requires_grad=True)
-        self.alphas_reduce = Variable(1e-3*torch.randn(k, num_ops).cuda(), requires_grad=True)
+        self.alphas_normal = Variable(
+            1e-3 * torch.randn(k, num_ops, device=self._device), requires_grad=True
+        )
+        self.alphas_reduce = Variable(
+            1e-3 * torch.randn(k, num_ops, device=self._device), requires_grad=True
+        )
         self._arch_parameters = [
             self.alphas_normal,
             self.alphas_reduce,
@@ -179,7 +186,11 @@ class Network(nn.Module):
         Returns:
             Network: New network instance with copied architecture parameters.
         """
-        model_new = Network(self._C, self._num_classes, self._layers, self._criterion, self._in_channels, self._steps, self._multiplier, self._stem_multiplier).cuda()
+        model_new = Network(
+            self._C, self._num_classes, self._layers, self._criterion,
+            self._in_channels, self._steps, self._multiplier,
+            self._stem_multiplier, device=self._device,
+        ).to(self._device)
         for x, y in zip(model_new.arch_parameters(), self.arch_parameters()):
             x.data.copy_(y.data)
         return model_new

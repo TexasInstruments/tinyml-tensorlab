@@ -93,7 +93,6 @@ def make_symlink(source, dest):
         base_dir = os.path.dirname(source)
         cur_dir = os.getcwd()
         os.chdir(base_dir)
-        os.symlink(os.path.basename(source), os.path.basename(dest))
         create_link_or_shortcut(os.path.basename(source), os.path.basename(dest))
         os.chdir(cur_dir)
     else:
@@ -181,9 +180,10 @@ def cleanup_special_chars(file_name):
                 log_line = re.sub(r'(\x9B|\x1B[\[\(\=])[0-?]*[ -\/]*([@-~]|$)', '', log_line)
                 new_lines.append(log_line)
             #
-            with open(file_name, 'w', encoding="utf-8") as wfp:
-                wfp.writelines(new_lines)
-            #
+        #
+        # Write after closing the read handle to avoid data loss if write fails mid-way
+        with open(file_name, 'w', encoding="utf-8") as wfp:
+            wfp.writelines(new_lines)
         #
     #
 
