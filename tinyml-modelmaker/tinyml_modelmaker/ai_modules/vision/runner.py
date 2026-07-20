@@ -36,6 +36,8 @@ from zipfile import ZipFile
 
 import yaml
 
+from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+
 from ... import utils
 from . import constants, datasets, descriptions
 from .params import init_params
