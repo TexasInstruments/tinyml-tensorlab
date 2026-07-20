@@ -36,7 +36,6 @@ from argparse import ArgumentParser
 from logging import getLogger
 
 import numpy as np
-import numpy as np
 import onnxruntime as ort
 import pandas as pd
 import torch
