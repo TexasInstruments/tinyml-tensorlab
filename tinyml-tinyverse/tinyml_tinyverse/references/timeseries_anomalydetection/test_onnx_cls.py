@@ -35,6 +35,7 @@ import platform
 from argparse import ArgumentParser
 from logging import getLogger
 
+import numpy as np
 import onnxruntime as ort
 import pandas as pd
 import torch
@@ -47,6 +48,7 @@ from tinyml_tinyverse.common.datasets import GenericTSDataset
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 from tinyml_tinyverse.common.utils.utils import get_confusion_matrix
+from ..common.train_base import shutdown_data_loaders
 
 dataset_loader_dict = {'GenericTSDataset': GenericTSDataset}
 
@@ -142,56 +144,59 @@ def main(gpu, args):
         dataset, batch_size=args.batch_size,
         sampler=train_sampler, num_workers=args.workers, pin_memory=True,
         collate_fn=utils.collate_fn)
-    # data_loader_test = torch.utils.data.DataLoader(
-    #     dataset_test, batch_size=args.batch_size,
-    #     sampler=test_sampler, num_workers=args.workers, pin_memory=True,
-    #     collate_fn=utils.collate_fn, )
-    logger.info(f"Loading ONNX model: {args.model_path}")
-    if not args.generic_model:
-        utils.decrypt(args.model_path, utils.get_crypt_key())
-    ort_sess = ort.InferenceSession(args.model_path)
-    if not args.generic_model:
-        utils.encrypt(args.model_path, utils.get_crypt_key())
+    try:
+        # data_loader_test = torch.utils.data.DataLoader(
+        #     dataset_test, batch_size=args.batch_size,
+        #     sampler=test_sampler, num_workers=args.workers, pin_memory=True,
+        #     collate_fn=utils.collate_fn, )
+        logger.info(f"Loading ONNX model: {args.model_path}")
+        if not args.generic_model:
+            utils.decrypt(args.model_path, utils.get_crypt_key())
+        ort_sess = ort.InferenceSession(args.model_path)
+        if not args.generic_model:
+            utils.encrypt(args.model_path, utils.get_crypt_key())
 
-    input_name = ort_sess.get_inputs()[0].name
-    output_name = ort_sess.get_outputs()[0].name
-    predicted = torch.tensor([]).to(device, non_blocking=True)
-    ground_truth = torch.tensor([]).to(device, non_blocking=True)
-    for batched_raw_data, batched_data, batched_target in data_loader:
-        batched_raw_data = batched_raw_data.to(device, non_blocking=True).long()
-        batched_data = batched_data.to(device, non_blocking=True).float()
-        batched_target = batched_target.to(device, non_blocking=True).long()
-        if transform:
-            batched_data = transform(batched_data)
-        if args.nn_for_feature_extraction:
-            for data in batched_raw_data:
-                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy().astype(np.float32)})[0]).to(device)))
+        input_name = ort_sess.get_inputs()[0].name
+        output_name = ort_sess.get_outputs()[0].name
+        predicted = torch.tensor([]).to(device, non_blocking=True)
+        ground_truth = torch.tensor([]).to(device, non_blocking=True)
+        for batched_raw_data, batched_data, batched_target in data_loader:
+            batched_raw_data = batched_raw_data.to(device, non_blocking=True).long()
+            batched_data = batched_data.to(device, non_blocking=True).float()
+            batched_target = batched_target.to(device, non_blocking=True).long()
+            if transform:
+                batched_data = transform(batched_data)
+            if args.nn_for_feature_extraction:
+                for data in batched_raw_data:
+                    predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy().astype(np.float32)})[0]).to(device)))
+            else:
+                for data in batched_data:
+                    predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
+            ground_truth = torch.cat((ground_truth, batched_target))
+
+        mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
+        # logger.info("Plotting OvR Multiclass ROC score")
+        # utils.plot_multiclass_roc(ground_truth.cpu().numpy(), predicted.cpu().numpy(), os.path.join(args.output_dir, 'post_training_analysis'),
+        #                           label_map=dataset.inverse_label_map, phase='test')
+        # logger.info("Plotting Class difference scores")
+        # utils.plot_pairwise_differenced_class_scores(ground_truth.cpu().numpy(), predicted.cpu().numpy(), os.path.join(args.output_dir, 'post_training_analysis'),
+        #                           label_map=dataset.inverse_label_map, phase='test')
+        metric = torcheval.metrics.MulticlassAccuracy()
+        metric.update(torch.argmax(predicted.squeeze(), dim=1), ground_truth.squeeze())
+        logger = getLogger("root.main.test_data")
+        logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
+        # logger.info(
+        #     f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted.type(torch.int64), ground_truth, num_classes):.3f}")
+        if len(torch.unique(ground_truth)) == 1:
+            logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
         else:
-            for data in batched_data:
-                predicted = torch.cat((predicted, torch.tensor(ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]).to(device)))
-        ground_truth = torch.cat((ground_truth, batched_target))
-
-    mdcl_utils.create_dir(os.path.join(args.output_dir, 'post_training_analysis'))
-    # logger.info("Plotting OvR Multiclass ROC score")
-    # utils.plot_multiclass_roc(ground_truth.cpu().numpy(), predicted.cpu().numpy(), os.path.join(args.output_dir, 'post_training_analysis'),
-    #                           label_map=dataset.inverse_label_map, phase='test')
-    # logger.info("Plotting Class difference scores")
-    # utils.plot_pairwise_differenced_class_scores(ground_truth.cpu().numpy(), predicted.cpu().numpy(), os.path.join(args.output_dir, 'post_training_analysis'),
-    #                           label_map=dataset.inverse_label_map, phase='test')
-    metric = torcheval.metrics.MulticlassAccuracy()
-    metric.update(torch.argmax(predicted.squeeze(), dim=1), ground_truth.squeeze())
-    logger = getLogger("root.main.test_data")
-    logger.info(f"Test Data Evaluation Accuracy: {metric.compute() * 100:.2f}%")
-    # logger.info(
-    #     f"Test Data Evaluation AUC ROC Score: {utils.get_au_roc(predicted.type(torch.int64), ground_truth, num_classes):.3f}")
-    if len(torch.unique(ground_truth)) == 1:
-        logger.warning("Confusion Matrix can not be printed because only items of 1 class was present in test data")
-    else:
-        confusion_matrix = get_confusion_matrix(predicted.squeeze().type(torch.int64), ground_truth.squeeze().type(torch.int64),
-                                                num_classes).cpu().numpy()
-        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
-            confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-            index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
+            confusion_matrix = get_confusion_matrix(predicted.squeeze().type(torch.int64), ground_truth.squeeze().type(torch.int64),
+                                                    num_classes).cpu().numpy()
+            logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(
+                confusion_matrix, columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+                index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]), headers="keys", tablefmt='grid')))
+    finally:
+        shutdown_data_loaders(data_loader)
     return
 
 def run(args):
