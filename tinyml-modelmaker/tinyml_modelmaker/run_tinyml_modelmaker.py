@@ -67,11 +67,22 @@ def main(config):
     params = ai_target_module.runner.ModelRunner.init_params()
     # get pretrained model for the given model_name
     model_name = config['training']['model_name']
+    nas_enabled = config.get('training', {}).get('nas_enabled', False)
     model_description = ai_target_module.runner.ModelRunner.get_model_description(model_name)
     if config.get('training').get('enable', True):
-        if model_description is None:
+        if model_description is None and not nas_enabled:
             logger.error(f"please check if the given model_name is a supported one: {model_name}")
             return False
+    # When NAS is enabled, provide a minimal model description so the pipeline
+    # can locate the correct training module and treat it as a generic model.
+    if nas_enabled and model_description is None:
+        model_description = {
+            'common': {'generic_model': True},
+            'training': {
+                'training_backend': 'tinyml_tinyverse',
+                'model_training_id': model_name,  # e.g. 'NAS_m'
+            },
+        }
 
     dataset_preset_descriptions = ai_target_module.runner.ModelRunner.get_dataset_preset_descriptions(params)
     dataset_preset_name = ai_target_module.constants.DATASET_DEFAULT
@@ -100,7 +111,7 @@ def main(config):
     compilation_preset_description = preset_descriptions[target_device][task_type][compilation_preset_name]
 
     # update the params with model_description, preset and config
-    params = params.update(model_description).update(dataset_preset_description).update(feature_extraction_preset_description).update(compilation_preset_description).update(config)
+    params = params.update(model_description or {}).update(dataset_preset_description).update(feature_extraction_preset_description).update(compilation_preset_description).update(config)
 
     # create the runner
     model_runner = ai_target_module.runner.ModelRunner(params)
