@@ -1232,8 +1232,8 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
     with torch.no_grad():
         for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
             # Move data and target to the specified device
-            data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=True)
+            target = target.float().to(device, non_blocking=True)
 
             # Apply transformation if provided
             if transform:
@@ -1308,8 +1308,8 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
         predictions_list = []
         # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         for _, data, target in data_loader:
-            data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=True)
+            target = target.float().to(device, non_blocking=True)
 
             if transform:
                 data = transform(data)
@@ -1406,7 +1406,7 @@ def evaluate_anomalydetection(
     with torch.no_grad():
         for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
-            data = data.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=True)
             #In anomlay detection with auto encoder, the target and the input data both are same. 
             target = data
             if transform:
@@ -1451,7 +1451,7 @@ def train_one_epoch_classification(
             data = data_raw.float().to(device)
         else:
             data = data_feat_ext.float().to(device)
-        target = target.to(device).long()
+        target = target.long().to(device)
 
         # apply transform and model on whole batch directly on device
         # TODO: If transform is required
@@ -1502,11 +1502,11 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
         for data_raw, data_feat_ext, target  in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
             if nn_for_feature_extraction:
-                data = data_raw.to(device, non_blocking=True).float()
+                data = data_raw.float().to(device, non_blocking=True)
             else:
                 data = data_feat_ext.float().to(device)
 
-            target = target.to(device, non_blocking=True).long()
+            target = target.long().to(device, non_blocking=True)
             if transform:
                 data = transform(data)
 
