@@ -284,17 +284,17 @@ def goodness_of_fit_test(frame_size, classes_dir, output_dir,class_names):
         ("Disclaimer: Not all eight plots need to have separable clusters. Each plot represents a different method to analyze a time-series classification dataset. If any of the plots show separable clusters, it’s a strong sign that the dataset is suitable for classification.",
          ""),
 
-        (f"* Cluster purity matters more than shape or number of clusters",
-        f"If a plot clearly shows the expected number of clusters corresponding to the true number of classes, users should focus on that plot for classification insights. Even if a class splits into multiple clusters in some plots, as long as each cluster maintains high purity (ie, almost all points within a cluster belong to the same class) and is separable from other classes, it is still classifiable and should be fine. The shape of clusters does not always matter—clusters may appear as annular or ring like structures. If they are separable, they are still valid."),
+        ("* Cluster purity matters more than shape or number of clusters",
+        "If a plot clearly shows the expected number of clusters corresponding to the true number of classes, users should focus on that plot for classification insights. Even if a class splits into multiple clusters in some plots, as long as each cluster maintains high purity (ie, almost all points within a cluster belong to the same class) and is separable from other classes, it is still classifiable and should be fine. The shape of clusters does not always matter—clusters may appear as annular or ring like structures. If they are separable, they are still valid."),
         
-        (f"* Overlapping classes indicate potential issues",
-        f"If two or more classes consistently overlap in most plots, it might indicate either a dataset issue (e.g., mislabeled data, inadequate features or noise in the data) or a natural similarity between those classes, leading to a higher risk of misclassification."),
+        ("* Overlapping classes indicate potential issues",
+        "If two or more classes consistently overlap in most plots, it might indicate either a dataset issue (e.g., mislabeled data, inadequate features or noise in the data) or a natural similarity between those classes, leading to a higher risk of misclassification."),
 
-        (f"* Possible reasons why a class splits into multiple clusters",
-        f"One possible reason is different sampling frequencies within the dataset (e.g., points sampled at 10Hz, 20Hz, and 30Hz may result in three separate clusters per class). However, this is just one possibility—multiple clusters could arise due to other factors like different environment setups or data collection inconsistencies."),
+        ("* Possible reasons why a class splits into multiple clusters",
+        "One possible reason is different sampling frequencies within the dataset (e.g., points sampled at 10Hz, 20Hz, and 30Hz may result in three separate clusters per class). However, this is just one possibility—multiple clusters could arise due to other factors like different environment setups or data collection inconsistencies."),
 
-        (f"* Outliers and Noise",
-        f"Small, scattered points appearing outside main clusters might be outliers or noise in the data.")
+        ("* Outliers and Noise",
+        "Small, scattered points appearing outside main clusters might be outliers or noise in the data.")
     ]
 
     # y coordinate

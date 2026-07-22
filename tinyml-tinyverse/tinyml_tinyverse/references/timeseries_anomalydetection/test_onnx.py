@@ -128,8 +128,8 @@ def get_reconstruction_errors_stats(args):
 
         errors = torch.tensor([]).to(device, non_blocking=True)
         for _, data, targets in data_loader:
-            data = data.to(device, non_blocking=True).float()
-            targets = targets.to(device, non_blocking=True).long()
+            data = data.float().to(device, non_blocking=True)
+            targets = targets.long().to(device, non_blocking=True)
             batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
             for input, target_label in zip(data, targets):
                 input = input.unsqueeze(0).cpu().numpy()
@@ -181,8 +181,8 @@ def main(gpu, args):
         ground_truth = torch.tensor([]).to(device, non_blocking=True)
 
         for _, data, targets in data_loader:
-            data = data.to(device, non_blocking=True).float()
-            targets = targets.to(device, non_blocking=True).long()
+            data = data.float().to(device, non_blocking=True)
+            targets = targets.long().to(device, non_blocking=True)
             if transform:
                 data = transform(data)
             batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
@@ -211,7 +211,7 @@ def main(gpu, args):
         normal_test_std = np.std(normal_errors)
 
         # Results
-        logger.info(f"Reconstruction Error Statistics:")
+        logger.info("Reconstruction Error Statistics:")
         logger.info(f"Normal training data - Mean: {normal_train_mean:.6f}, Std: {normal_train_std:.6f}")
         logger.info(f"Anomaly test data - Mean: {anomaly_test_mean:.6f}, Std: {anomaly_test_std:.6f}")
         logger.info(f"Normal test data - Mean: {normal_test_mean:.6f}, Std: {normal_test_std:.6f}")

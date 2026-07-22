@@ -295,6 +295,7 @@ class BaseImageModelTraining:
         if self.params.training.num_gpus > 0:
             if torch.backends.mps.is_available():
                 device = 'mps'
+                os.environ.setdefault('PYTORCH_ENABLE_MPS_FALLBACK', '1')
             else:
                 device = 'cuda'
 

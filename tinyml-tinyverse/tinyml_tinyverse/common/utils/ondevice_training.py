@@ -685,7 +685,7 @@ def extract_frozen_subgraph(graph, split_tensor):
     frozen_graph.toposort()
     frozen_graph.cleanup()
     
-    logger.info(f" Frozen model created:")
+    logger.info(" Frozen model created:")
     logger.info(f" Frozen model Inputs: {[inp.name for inp in frozen_graph.inputs]}")
     logger.info(f" Frozen model Outputs: {[out.name for out in frozen_graph.outputs]}")
     
@@ -1050,7 +1050,7 @@ def flatten_weights(layers):
   
     all_weights_array = np.array(all_weights, dtype=np.float32)
     
-    logger.info(f" Flattening complete:")
+    logger.info(" Flattening complete:")
     logger.info(f" Total parameters: {len(all_weights_array)}")
     logger.info(f" Offsets: {offsets}")
     logger.info(f" Layer weight map: {layer_weight_map}")

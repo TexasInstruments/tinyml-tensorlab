@@ -181,7 +181,7 @@ def main():
                 "function": func_name,
                 "required_params": required,
                 "provided_params": list(kwargs.keys()),
-                "hint": f"Add the missing parameter(s) to your JSON args object.",
+                "hint": "Add the missing parameter(s) to your JSON args object.",
             }))
             sys.exit(1)
 

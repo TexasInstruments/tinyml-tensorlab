@@ -194,7 +194,7 @@ def check_sdk_installation(
             "errors": [
                 f"{sdk_name} not found. Searched: {searched}",
                 f"Download from: {info['download_url']}",
-                f"After installing, pass sdk_path='<install_root>' to create_ccs_project.",
+                "After installing, pass sdk_path='<install_root>' to create_ccs_project.",
             ],
         }
 

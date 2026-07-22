@@ -472,7 +472,7 @@ def plot_regression(ground_truth, predictions, output_dir, phase=''):
         # Add labels, title, and legend
         ax.set_xlabel('Index', fontsize=12)
         ax.set_ylabel('Target', fontsize=12)
-        ax.set_title(f'Regression Scatter Plot', fontsize=14)
+        ax.set_title('Regression Scatter Plot', fontsize=14)
         ax.legend()
         ax.grid(alpha=0.3)
 

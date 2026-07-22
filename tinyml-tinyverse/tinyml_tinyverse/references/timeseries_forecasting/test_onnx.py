@@ -110,8 +110,8 @@ def main(gpu, args):
         ground_truth = torch.tensor([]).to(device, non_blocking=True)
 
         for _, batched_data, batched_target in data_loader_test:
-            batched_data = batched_data.to(device, non_blocking=True).float()
-            batched_target = batched_target.to(device, non_blocking=True).float()
+            batched_data = batched_data.float().to(device, non_blocking=True)
+            batched_target = batched_target.float().to(device, non_blocking=True)
             if transform:
                 batched_data = transform(batched_data)
             for data in batched_data:
