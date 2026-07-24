@@ -183,7 +183,8 @@ def calibrate_and_evaluate(
             if num_calibration_batches is not None and batch_idx >= num_calibration_batches:
                 break
             if device is not None:
-                inputs = inputs.to(device)
+                # MPS does not support float64: cast before moving to device
+                inputs = inputs.float().to(device)
             prepared(inputs.float())
     prepared.eval()
     task_lower = task_type.lower()
@@ -199,7 +200,8 @@ def calibrate_and_evaluate(
     with torch.no_grad():
         for _, inputs, targets in eval_dataloader:
             if device is not None:
-                inputs = inputs.to(device)
+                # MPS does not support float64: cast before moving to device
+                inputs = inputs.float().to(device)
                 targets = targets.to(device)
             inputs_f = inputs.float()
             preds = prepared(inputs_f)

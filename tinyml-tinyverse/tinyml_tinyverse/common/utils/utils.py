@@ -882,15 +882,16 @@ def get_confusion_matrix(output, target, classes):
     Compute multi-class confusion matrix, a matrix of dimension num_classes x num_classes
     where each element at position (i,j) is the number of examples with true class i that were predicted to be class j.
     """
-    return multiclass_confusion_matrix(output, target, classes)
+    # torcheval builds sparse-COO tensors internally, which MPS does not support; compute on CPU.
+    return multiclass_confusion_matrix(output.cpu(), target.cpu(), classes)
 
 
 def get_f1_score(output, target, classes):
-    return multiclass_f1_score(output, target, num_classes=classes)
+    return multiclass_f1_score(output.cpu(), target.cpu(), num_classes=classes)
 
 
 def get_au_roc(output, target, classes):
-    return multiclass_auroc(output, target, num_classes=classes, average='macro')
+    return multiclass_auroc(output.cpu(), target.cpu(), num_classes=classes, average='macro')
 
 
 def get_r2_score(output,target):
@@ -1133,8 +1134,8 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
     # for _, data, target in data_loader:
         start_time = timeit.default_timer()
-        data = data.to(device).float()
-        target = target.to(device).float()
+        data = data.float().to(device)
+        target = target.float().to(device)
         if transform:
             data = transform(data)
 
@@ -1182,8 +1183,8 @@ def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device
     
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.to(device).float()
-        target = target.to(device).float()
+        data = data.float().to(device)
+        target = target.float().to(device)
 
         # apply transform and model on whole batch directly on device
         # TODO: If transform is required
@@ -1231,8 +1232,8 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
     with torch.no_grad():
         for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
             # Move data and target to the specified device
-            data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=True)
+            target = target.float().to(device, non_blocking=True)
 
             # Apply transformation if provided
             if transform:
@@ -1307,8 +1308,8 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
         predictions_list = []
         # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         for _, data, target in data_loader:
-            data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=True)
+            target = target.float().to(device, non_blocking=True)
 
             if transform:
                 data = transform(data)
@@ -1352,7 +1353,7 @@ def train_one_epoch_anomalydetection(
     for _,data, labels in metric_logger.log_every(data_loader, print_freq, header):
         # for batch_idx, (data, target) in enumerate(data_loader):
         start_time = timeit.default_timer()
-        data = data.to(device).float()
+        data = data.float().to(device)
         #In anomlay detection with auto encoder, the target and the input data both are same. 
         target = data.clone()
 
@@ -1405,7 +1406,7 @@ def evaluate_anomalydetection(
     with torch.no_grad():
         for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
-            data = data.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=True)
             #In anomlay detection with auto encoder, the target and the input data both are same. 
             target = data
             if transform:
@@ -1447,10 +1448,10 @@ def train_one_epoch_classification(
         # logger.info(batch_idx)
         start_time = timeit.default_timer()
         if nn_for_feature_extraction:
-            data = data_raw.to(device).float()
+            data = data_raw.float().to(device)
         else:
-            data = data_feat_ext.to(device).float()
-        target = target.to(device).long()
+            data = data_feat_ext.float().to(device)
+        target = target.long().to(device)
 
         # apply transform and model on whole batch directly on device
         # TODO: If transform is required
@@ -1501,11 +1502,11 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
         for data_raw, data_feat_ext, target  in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
             if nn_for_feature_extraction:
-                data = data_raw.to(device, non_blocking=True).float()
+                data = data_raw.float().to(device, non_blocking=True)
             else:
-                data = data_feat_ext.to(device).float()
+                data = data_feat_ext.float().to(device)
 
-            target = target.to(device, non_blocking=True).long()
+            target = target.long().to(device, non_blocking=True)
             if transform:
                 data = transform(data)
 
@@ -1798,8 +1799,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         for data_raw, data_fe, _ in data_loader:
             start_time = timeit.default_timer()
 
-            data_raw = data_raw.to(device).float()
-            data_fe = data_fe.to(device).float()
+            data_raw = data_raw.float().to(device)
+            data_fe = data_fe.float().to(device)
 
             output = model(data_raw)  # (n,1,8000) -> (n,35)
 
@@ -1825,8 +1826,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         with torch.no_grad():
             for data_raw, data_fe, _ in data_loader_test:
                 # Assuming the dataset returns (data, target)
-                data_raw = data_raw.to(device).float()
-                data_fe = data_fe.to(device).float()
+                data_raw = data_raw.float().to(device)
+                data_fe = data_fe.float().to(device)
                 outputs = model(data_raw)
 
                 # Calculate loss
