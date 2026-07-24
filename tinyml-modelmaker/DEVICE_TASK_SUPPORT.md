@@ -163,14 +163,18 @@ These devices support **all** timeseries tasks (classification, regression, anom
 - Pattern recognition in sensor data
 
 **Available Models:**
-- TimeSeries_Generic_13k_t (13K parameters)
-- TimeSeries_Generic_6k_t (6K parameters)
-- TimeSeries_Generic_4k_t (4K parameters)
-- TimeSeries_Generic_1k_t (1K parameters)
-- TimeSeries_Generic_100_t (100 parameters)
-- TimeSeries_Generic_55k_t (55K parameters)
-- Res_Add_TimeSeries_Generic_3k_t (Residual addition, 3K parameters)
-- Res_Cat_TimeSeries_Generic_3k_t (Residual concatenation, 3K parameters)
+- CLS_100_NPU (100 parameters)
+- CLS_500_NPU (500 parameters)
+- CLS_1k_NPU (1K parameters)
+- CLS_2k_NPU (2K parameters)
+- CLS_4k_NPU (4K parameters)
+- CLS_6k_NPU (6K parameters)
+- CLS_8k_NPU (8K parameters)
+- CLS_13k_NPU (13K parameters)
+- CLS_20k_NPU (20K parameters)
+- CLS_55k_NPU (55K parameters)
+- CLS_ResAdd_3k (Residual addition, 3K parameters)
+- CLS_ResCat_3k (Residual concatenation, 3K parameters)
 
 **Key Features:**
 - Multiple model sizes for different memory constraints
@@ -189,11 +193,17 @@ These devices support **all** timeseries tasks (classification, regression, anom
 - Sensor calibration
 
 **Available Models:**
-- TimeSeries_Generic_Regr_13k_t (13K parameters, CNN-based)
-- TimeSeries_Generic_Regr_10k_t (10K parameters)
-- TimeSeries_Generic_Regr_4k_t (4K parameters, CNN-based)
-- TimeSeries_Generic_Regr_3k_t (3K parameters, MLP-based)
-- TimeSeries_Generic_Regr_1k_t (1K parameters)
+- REGR_1k (1K parameters)
+- REGR_2k (2K parameters)
+- REGR_3k (3K parameters, MLP-based)
+- REGR_4k (4K parameters, CNN-based)
+- REGR_10k (10K parameters)
+- REGR_13k (13K parameters, CNN-based)
+- REGR_500_NPU (500 parameters, NPU)
+- REGR_2k_NPU (2K parameters, NPU)
+- REGR_6k_NPU (6K parameters, NPU)
+- REGR_8k_NPU (8K parameters, NPU)
+- REGR_20k_NPU (20K parameters, NPU)
 
 **Key Features:**
 - Multiple architectures (CNN, MLP)
@@ -212,12 +222,18 @@ These devices support **all** timeseries tasks (classification, regression, anom
 - Security monitoring
 
 **Available Models:**
-- TimeSeries_Generic_AD_17k_t (17K parameters)
-- TimeSeries_Generic_AD_16k_t (16K parameters)
-- TimeSeries_Generic_AD_4k_t (4K parameters)
-- TimeSeries_Generic_AD_1k_t (1K parameters)
-- TimeSeries_Generic_Linear_AD (Linear model)
-- Ondevice_Trainable_TimeSeries_Generic_Linear_AD (On-device trainable)
+- AD_1k (1K parameters)
+- AD_4k (4K parameters)
+- AD_16k (16K parameters)
+- AD_17k (17K parameters)
+- AD_Linear (Linear model)
+- AD_500_NPU (500 parameters, NPU)
+- AD_2k_NPU (2K parameters, NPU)
+- AD_6k_NPU (6K parameters, NPU)
+- AD_8k_NPU (8K parameters, NPU)
+- AD_10k_NPU (10K parameters, NPU)
+- AD_20k_NPU (20K parameters, NPU)
+- Ondevice_Trainable_AD_Linear (On-device trainable)
 
 **Key Features:**
 - Unsupervised and semi-supervised approaches
@@ -236,10 +252,18 @@ These devices support **all** timeseries tasks (classification, regression, anom
 - Trend prediction
 
 **Available Models:**
-- TimeSeries_Generic_Forecasting_13k_t (13K parameters, CNN-based)
-- TimeSeries_Generic_Forecasting_3k_t (3K parameters, MLP-based)
-- TimeSeries_Generic_Forecasting_LSTM10 (LSTM with hidden size 10)
-- TimeSeries_Generic_Forecasting_LSTM8 (LSTM with hidden size 8)
+- FCST_3k (3K parameters, MLP-based)
+- FCST_13k (13K parameters, CNN-based)
+- FCST_LSTM8 (LSTM with hidden size 8)
+- FCST_LSTM10 (LSTM with hidden size 10)
+- FCST_500_NPU (500 parameters, NPU)
+- FCST_1k_NPU (1K parameters, NPU)
+- FCST_2k_NPU (2K parameters, NPU)
+- FCST_4k_NPU (4K parameters, NPU)
+- FCST_6k_NPU (6K parameters, NPU)
+- FCST_8k_NPU (8K parameters, NPU)
+- FCST_10k_NPU (10K parameters, NPU)
+- FCST_20k_NPU (20K parameters, NPU)
 
 **Key Features:**
 - Multiple forecasting horizons

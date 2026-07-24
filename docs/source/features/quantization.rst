@@ -81,8 +81,8 @@ Uses standard PyTorch quantization APIs (``GenericTinyMLQATFxModule`` /
      quantization_weight_bitwidth: 8
      quantization_activation_bitwidth: 8
 
-For more details on the underlying wrappers, see
-:ref:`quantization-wrapper-architecture` below.
+For more details on the underlying wrappers, see the
+`tinyml-modeloptimization documentation <https://bitbucket.itg.ti.com/projects/TINYML-ALGO/repos/tinyml-modeloptimization/browse/torchmodelopt/README.md>`_.
 
 **TI Style Optimised Quantization (quantization: 2)**
 
@@ -331,7 +331,7 @@ Example: Full Quantization Workflow
      variables: 1
 
    training:
-     model_name: 'CLS_4k_NPU'
+     model_name: 'ArcFault_model_400_t'
      training_epochs: 30
      batch_size: 256
      quantization: 2
@@ -410,69 +410,69 @@ Even without NPU, integer operations are faster:
    Float32: ~5000 µs
    INT8:    ~2000 µs
 
-.. _quantization-wrapper-architecture:
-
-Quantization Wrapper Architecture
-----------------------------------
-
-Under the hood, Tiny ML Tensorlab uses quantization wrapper classes from
-the ``tinyml-modeloptimization`` package. Understanding the wrapper
-architecture helps when customizing quantization or debugging.
-
-**Class Hierarchy:**
-
-.. code-block:: text
-
-   TinyMLQuantFxBaseModule (base class)
-       ├── TINPUTinyMLQuantFxModule
-       │   ├── TINPUTinyMLQATFxModule   (quantization: 2, QAT)
-       │   └── TINPUTinyMLPTQFxModule   (quantization: 2, PTQ)
-       │
-       └── GenericTinyMLQuantFxModule
-           ├── GenericTinyMLQATFxModule  (quantization: 1, QAT)
-           └── GenericTinyMLPTQFxModule  (quantization: 1, PTQ)
-
-**TINPUTinyML wrappers** (``quantization: 2``) incorporate the constraints
-of TI NPU Hardware accelerator. They perform extensive graph transformations
-including 13+ layer pattern replacements to produce NPU-compatible integer
-operations. Key characteristics:
-
-* Enforces power-of-2 scale factors (mandatory for 8-bit quantization)
-* Transforms convolution, pooling, linear, and batch normalization layers
-  to NPU-compatible patterns
-* Implements the NPU BNORM sequence:
-  ``Add (bias) → Mul (scale) → Div (2^n, right shift) → Floor → Clip``
-* All operations in integer domain, no dequantization step
-
-**GenericTinyML wrappers** (``quantization: 1``) use standard PyTorch
-quantization APIs with minimal modifications, relying on ONNX Runtime for
-optimization. Key characteristics:
-
-* Flexible scaling (no power-of-2 constraint)
-* Only 1 pattern replacement (permute + unsqueeze)
-* Uses PyTorch's native quantized operations
-* Relies on ONNX Runtime optimization for deployment
-
-.. note::
-
-   When using the toolchain via YAML configs, you do not need to interact
-   with these wrapper classes directly. Setting ``quantization: 1`` or
-   ``quantization: 2`` in the config selects the appropriate wrapper
-   automatically.
-
-NPU Hardware Constraints
+QAT Training Performance
 ------------------------
 
-When using TI style optimised quantization (``quantization: 2``), the
-following hardware constraints are enforced automatically by the TINPU
-wrapper:
+Quantization-Aware Training is significantly slower than float training.
+This section explains why, and which factors dominate the overhead.
 
-**Channel Alignment:**
+**FakeQuantize Nodes in the Forward Pass**
 
-Input and output channels must be multiples of 4. The NPU processes data
-in SIMD fashion with 4-channel vectors.
+``prepare_qat_fx`` rewrites the model's FX graph by inserting a
+``FakeQuantize`` module at every weight tensor and every activation
+output.  For an N-layer model this adds at least ``2N + 1`` extra
+operations to both the forward and backward pass, on every batch.
 
-.. list-table::
+Each ``FakeQuantize`` node performs, per batch:
+
+1. **Observer forward** — runs a ``torch.min`` / ``torch.max`` reduction
+   over the full activation or weight tensor to update running statistics.
+2. **Scale computation** (``_calculate_qparams``) — derives ``scale`` and
+   ``zero_point`` from the stored statistics.
+3. **Power-of-2 scale snapping** — TI's NPU requires power-of-2 scales.
+   ``ceil2_tensor`` computes ``torch.pow(2, torch.ceil(torch.log2(x)))``
+   and also calls ``x.data.abs().sum()`` which **forces a device-to-host
+   synchronisation** — the same class of GPU pipeline stall that the
+   deferred ``.item()`` optimisation eliminates for metric logging, but
+   here it occurs in every layer, every batch.
+4. **Fake-quantize operation** — ``torch.fake_quantize_per_tensor_affine``
+   performs ``round(x / scale) * scale`` with STE gradient propagation.
+
+**Soft-Quantize Variants (4-bit and 2-bit)**
+
+Lower bit widths use ``SoftSigmoidFakeQuantize`` (4-bit) or
+``SoftTanhFakeQuantize`` (2-bit), which run the standard ``FakeQuantize``
+forward AND then a second full quantize-dequantize pass with
+sigmoid- or tanh-based differentiable rounding over the flattened
+activation tensor.  This roughly triples the per-node cost compared
+to standard 8-bit ``FakeQuantize``.
+
+**Backward Pass Complexity**
+
+Every ``FakeQuantize`` node adds autograd nodes to the computation
+graph.  The soft-quantize variants additionally record ``floor``,
+``detach``, ``sigmoid`` / ``tanh``, ``clone``, and STE propagation
+nodes.  The backward graph is substantially larger than the float
+model's graph.
+
+**Per-Epoch Module Traversals**
+
+The QAT wrapper overrides ``model.train()`` to perform three full
+module-tree traversals every epoch:
+
+1. ``self.apply(enable_observer)`` or ``self.apply(disable_observer)``
+2. ``self.apply(update_bn_stats)`` or ``self.apply(freeze_bn_stats)``
+3. ``for m in self.modules()`` to update soft-quantize temperatures
+
+**torch.compile Ordering**
+
+In the current training flow, ``torch.compile`` is applied to the float
+model *before* ``prepare_qat_fx`` rewrites the graph.  The FX graph
+transformation discards the compiled version, so the QAT model runs
+in eager mode while the float model benefits from fused kernels.
+This is likely the single largest factor in the speed difference.
+
+.. list-table:: QAT Overhead Summary
    :header-rows: 1
    :widths: 25 35 40
 
@@ -690,6 +690,47 @@ accepts the following parameters:
 
 * ``False`` (default): Observers remain active throughout training
 * Integer value: Freezes observers after the specified epoch
+
+.. list-table:: QAT Training Overhead Factors
+   :header-rows: 1
+   :widths: 40 20 40
+
+   * - Factor
+     - Frequency
+     - Impact
+   * - ``torch.compile`` only applies to float model
+     - All batches
+     - High — float gets fused kernels, QAT runs eager
+   * - ``2N+1`` FakeQuantize forward + backward ops
+     - Per batch, per layer
+     - High — doubles+ the computation graph
+   * - Observer min/max tensor reductions
+     - Per batch, per layer
+     - Medium — full-tensor reduction per observer
+   * - ``ceil2_tensor`` ``.sum()`` GPU syncs
+     - Per batch, per layer
+     - Medium — forces ``2N+1`` pipeline stalls
+   * - Soft-round sigmoid/tanh pass (4-bit / 2-bit)
+     - Per batch, per layer
+     - High — triples per-node cost
+   * - ``model.train()`` triple module traversal
+     - Per epoch
+     - Low — amortised over batches
+
+**Key Source Files**
+
+* ``tinyml-modeloptimization/torchmodelopt/.../quantization/base/fx/quant_base.py``
+  — ``TinyMLQuantFxBaseModule``: wraps the model, drives ``train()``/``freeze()``
+  lifecycle, epoch counter, temperature schedule.
+* ``tinyml-modeloptimization/torchmodelopt/.../quantization/base/fx/fake_quant_types.py``
+  — ``SoftSigmoidFakeQuantize``, ``SoftTanhFakeQuantize``: the most
+  expensive per-batch ops.
+* ``tinyml-modeloptimization/torchmodelopt/.../quantization/base/fx/functional_utils.py``
+  — ``ceil2_tensor``, ``_propagate_quant_ste``: power-of-2 scale snapping
+  with the ``.sum()`` sync.
+* ``tinyml-modeloptimization/torchmodelopt/.../quantization/base/fx/observer_types.py``
+  — ``SimplePerChannelWeightObserver``, ``SimpleActivationObserver``:
+  per-batch statistics with ``power2_scale`` call.
 
 Next Steps
 ----------
