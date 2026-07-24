@@ -240,7 +240,7 @@ def main(gpu, args):
 
     logger.info("Creating model")
     if args.load_saved_model == 'None':
-        if args.nas_enabled == 'True':
+        if args.nas_enabled:
             if args.quantization:
                 model = torch.load(os.path.join(os.path.dirname(args.output_dir), os.path.join('base', 'nas_model.pt')), weights_only=False)
             else:
