@@ -706,9 +706,19 @@ def compile_model_if_enabled(model, args, logger, input_shape=None):
                 dummy_input = torch.rand(size=input_shape, device=device)
                 was_training = compiled_model.training
                 compiled_model.eval()
-                with torch.no_grad():
-                    compiled_model(dummy_input)
-                compiled_model.train(was_training)
+                try:
+                    with torch.no_grad():
+                        compiled_model(dummy_input)
+                finally:
+                    # Must run on BOTH success and failure: torch.compile's
+                    # OptimizedModule wraps the original model BY REFERENCE
+                    # (shares its parameters/state), so compiled_model.eval()
+                    # above also flips the ORIGINAL model's .training flag.
+                    # If the warmup forward pass raises, control jumps to the
+                    # outer except block and returns original_model — if we
+                    # hadn't restored here first, that fallback model would
+                    # be returned stuck in eval mode.
+                    compiled_model.train(was_training)
             model = compiled_model
         except Exception as e:
             logger.warning(f"torch.compile failed (or failed its warmup pass), falling back to eager mode: {e}")

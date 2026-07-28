@@ -45,19 +45,52 @@ def test_compile_success_with_warmup_returns_compiled_model():
 
 
 def test_warmup_failure_falls_back_to_original_model():
+    """Regression test for: torch.compile's OptimizedModule wraps the
+    original model BY REFERENCE (shares its parameters/state), so calling
+    .eval() on the compiled wrapper also flips the ORIGINAL model's
+    .training flag. If the warmup forward pass then raises, the original
+    model must still come back with its training mode restored — not
+    stuck in eval() because the restore step got skipped on the failure
+    path.
+
+    A plain mock that returns an unrelated standalone nn.Module does NOT
+    reproduce this, because it doesn't share state with the original model
+    the way OptimizedModule does. To actually catch a regression of this
+    bug, this test wraps the original model as a genuine child submodule
+    (registered via a real nn.Module attribute) so that calling
+    .train()/.eval() on the wrapper recurses into and mutates the original
+    model's .training flag too — exactly like OptimizedModule._orig_mod.
+    """
     from tinyml_tinyverse.references.common.train_base import compile_model_if_enabled
     model = _TinyModel()
+    model.train()  # known starting state
     args = _FakeArgs(compile_model=1)
 
-    class _BrokenCompiledModel(nn.Module):
+    class _SharedStateBrokenCompiledModel(nn.Module):
+        def __init__(self, wrapped):
+            super().__init__()
+            # Registering the original model as a real submodule means
+            # nn.Module.train()/.eval() on this wrapper recurses into it,
+            # mutating wrapped.training too — mirroring how
+            # torch._dynamo.OptimizedModule wraps the original model by
+            # reference via self._orig_mod.
+            self._orig_mod = wrapped
+
         def forward(self, x):
             raise RuntimeError("simulated Inductor/Triton compile failure")
 
-    with patch('torch.compile', return_value=_BrokenCompiledModel()):
+    broken = _SharedStateBrokenCompiledModel(model)
+
+    with patch('torch.compile', return_value=broken):
         result = compile_model_if_enabled(model, args, _get_logger(), input_shape=(1, 4))
 
     # Must fall back to the ORIGINAL model, not the broken compiled one.
     assert result is model
+    # Must be restored to its pre-call training state, not left in eval()
+    # mode from the failed warmup pass — this is the exact defect a naive
+    # mock (that doesn't share state/reference with the original model)
+    # would fail to catch.
+    assert model.training is True
     out = result(torch.rand(1, 4))
     assert out.shape == (1, 2)
 
