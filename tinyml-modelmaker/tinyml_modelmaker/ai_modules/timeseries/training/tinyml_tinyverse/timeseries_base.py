@@ -527,7 +527,7 @@ def create_template_model_description(task_category, task_type, dataset_loader=N
     """
     training_dict = dict(
         quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-        training_backend='tinyml_tinyverse',
+        training_backend=constants.TRAINING_BACKEND_TINYML_TINYVERSE,
         model_training_id='',
         model_name='',
         learning_rate=2e-3,
