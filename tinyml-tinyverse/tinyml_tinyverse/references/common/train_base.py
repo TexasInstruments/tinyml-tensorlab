@@ -658,17 +658,31 @@ def move_model_to_device(model, device, logger):
         sys.exit(1)
 
 
-def compile_model_if_enabled(model, args, logger):
+def compile_model_if_enabled(model, args, logger, input_shape=None):
     """
     Apply torch.compile to the model if --compile-model is enabled.
 
     torch.compile (PyTorch 2.0+) fuses operations into optimized kernels,
     which can significantly speed up training (15-30% on supported backends).
 
+    torch.compile() itself is lazy — it does not compile anything until the
+    first forward call. To catch compile failures (e.g. a Triton/ptxas
+    version that doesn't yet support the GPU's compute capability) before
+    training starts rather than mid-epoch, this function runs one warmup
+    forward pass through the compiled model when input_shape is provided.
+    A failure at either the wrap step or the warmup step falls back to the
+    original, uncompiled model.
+
     Args:
         model: The model to potentially compile
         args: Parsed arguments (uses args.compile_model)
         logger: Logger instance
+        input_shape: Shape (including batch dim) of a representative input
+            tensor, e.g. (1,) + dataset.X.shape[1:]. Used to run a warmup
+            forward pass that validates compilation actually works on this
+            hardware/toolchain. If None, no warmup is performed and a
+            compile failure will surface later, unguarded, on the training
+            loop's first real forward pass (legacy behavior).
 
     Returns:
         The (possibly compiled) model
@@ -684,10 +698,21 @@ def compile_model_if_enabled(model, args, logger):
         else:
             backend = 'aot_eager'
         logger.info(f"Compiling model with torch.compile (backend={backend})")
+        original_model = model
         try:
-            model = torch.compile(model, backend=backend)
+            compiled_model = torch.compile(model, backend=backend)
+            if input_shape is not None:
+                device = next(compiled_model.parameters()).device if len(list(compiled_model.parameters())) > 0 else torch.device('cpu')
+                dummy_input = torch.rand(size=input_shape, device=device)
+                was_training = compiled_model.training
+                compiled_model.eval()
+                with torch.no_grad():
+                    compiled_model(dummy_input)
+                compiled_model.train(was_training)
+            model = compiled_model
         except Exception as e:
-            logger.warning(f"torch.compile failed, falling back to eager mode: {e}")
+            logger.warning(f"torch.compile failed (or failed its warmup pass), falling back to eager mode: {e}")
+            model = original_model
     return model
 
 
