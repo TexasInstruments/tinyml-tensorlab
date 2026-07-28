@@ -152,6 +152,12 @@ def init_params(*args, **kwargs):
             autoquant_tolerance_regression=0.05,      # fraction  — 0.05 = 5% R² drop tolerated
             autoquant_tolerance_forecasting=2.0,      # max tolerated SMAPE = float_SMAPE × (1 + 2.0) = 3× float baseline, 200% increase tolerated
             autoquant_tolerance_anomaly=2.0,          # max tolerated MSE   = float_MSE   × (1 + 2.0) = 3× float baseline, 200% increase tolerated
+
+            partial_quantization = False,
+
+            # Performance optimization (opt-in, primarily beneficial on CUDA)
+            compile_model=0,    # 1 to enable torch.compile (inductor on CUDA, aot_eager on MPS)
+            native_amp=False,   # True to enable PyTorch native AMP (autocast)
         ),
 
         testing=dict(
