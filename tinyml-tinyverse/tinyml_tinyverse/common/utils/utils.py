@@ -1530,8 +1530,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
             target_list.append(target)
             predictions_list.append(output)
 
-            loss = criterion(output.squeeze(), target)
-            acc1 = accuracy(output.squeeze(), target, topk=(1,))
+            loss = criterion(output.squeeze(-1), target)
+            acc1 = accuracy(output.squeeze(-1), target, topk=(1,))
 
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
@@ -1544,8 +1544,8 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     predictions_array = torch.cat(predictions_list)
 
     # Compute all metrics at epoch-end instead of per-batch
-    logger.info(f'{header} Acc@1 {accuracy(predictions_array.squeeze(), target_array, topk=(1,))[0]:.3f}')
-    f1 = get_f1_score(predictions_array.squeeze(), target_array, num_classes)
+    logger.info(f'{header} Acc@1 {accuracy(predictions_array.squeeze(-1), target_array, topk=(1,))[0]:.3f}')
+    f1 = get_f1_score(predictions_array.squeeze(-1), target_array, num_classes)
     logger.info(f'{header} F1-Score {f1:.3f}')
     auc = get_au_roc(predictions_array, target_array, num_classes)
     logger.info("AU-ROC Score: {:.3f}".format(auc))
