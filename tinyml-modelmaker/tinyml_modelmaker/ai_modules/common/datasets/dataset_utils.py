@@ -560,4 +560,6 @@ def dataset_load(task_type, input_data_path, input_annotation_path, annotation_f
         dataset_store = dataset_load_coco(task_type, input_data_path, input_annotation_path)
     elif annotation_format == 'univ_ts_json':
         dataset_store = dataset_load_univ_ts_json(task_type, input_data_path, input_annotation_path)
+    else:
+        raise ValueError(f"Unsupported annotation_format: '{annotation_format}'. Expected 'coco_json' or 'univ_ts_json'.")
     return dataset_store

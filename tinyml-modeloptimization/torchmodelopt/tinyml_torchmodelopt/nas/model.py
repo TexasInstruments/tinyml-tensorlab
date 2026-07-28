@@ -118,7 +118,11 @@ class Network(nn.Module):
             cell = Cell(genotype, C_prev, C_curr, reduction, reduction_prev)
             reduction_prev = reduction
             self.cells += [cell]
-            C_prev = multiplier * C_curr  # Update for next cell
+            if cell.multiplier != multiplier:
+                raise ValueError(
+                    f"Network multiplier ({multiplier}) does not match genotype concat width ({cell.multiplier})"
+                )
+            C_prev = cell.multiplier * C_curr  # Use actual concat width from genotype
 
         self.global_pooling = nn.AdaptiveAvgPool2d((1, 1))  # Global average pooling
         self.flat = nn.Flatten()                            # Flatten for classifier

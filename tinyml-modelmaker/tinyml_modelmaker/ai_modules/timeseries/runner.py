@@ -47,7 +47,7 @@ logger = logging.getLogger(__name__)
 
 class ModelRunner():
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = init_params(*args, **kwargs)
         # set the checkpoint download folder
         # (for the models that are downloaded using torch.hub eg. mmdetection uses that)

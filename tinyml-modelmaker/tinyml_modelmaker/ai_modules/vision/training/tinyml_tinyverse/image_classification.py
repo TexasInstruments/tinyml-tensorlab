@@ -145,7 +145,6 @@ def get_model_description(model_name):
         model_name,
     )
 
-
 class ModelTraining(BaseImageModelTraining):
     """
     Image classification-specific model training class.
