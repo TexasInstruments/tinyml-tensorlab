@@ -44,7 +44,6 @@ body {
     left: 0;
     right: 0;
     z-index: 1001;
-    height: 80px;
     display: flex;
     align-items: center;
     border-bottom: 40px solid var(--ti-red);
@@ -62,7 +61,7 @@ body {
 
 /* Adjust content for fixed header (80px banner + 40px red line = 120px) */
 .wy-nav-side {
-    top: 120px !important;
+    top: 100px !important;
     height: calc(100% - 120px) !important;
 }
 

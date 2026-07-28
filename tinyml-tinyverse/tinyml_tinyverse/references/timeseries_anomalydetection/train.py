@@ -166,7 +166,7 @@ def get_reconstruction_errors_stats(generic_model, model_path, device, data_load
 
     input_name = ort_sess.get_inputs()[0].name
     output_name = ort_sess.get_outputs()[0].name
-    errors = torch.tensor([]).to(device, non_blocking=True)
+    errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
     for _, data, targets in data_loader:
         data = data.float().to(device, non_blocking=True)
         targets = targets.long().to(device, non_blocking=True)

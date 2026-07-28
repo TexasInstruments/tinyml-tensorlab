@@ -29,9 +29,12 @@
 #################################################################################
 
 import copy
+import logging
 import sys
 
 from .. import constants
+
+logger = logging.getLogger(__name__)
 
 # list all the modules here to add pretrained models
 _model_descriptions = {}
