@@ -32,7 +32,7 @@ def _read_env_vars() -> Dict:
             print(f"[setup] ERROR reading .env from {ENV_FILE}: {e}", file=__import__('sys').stderr)
     else:
         print(f"[setup] ERROR: .env NOT FOUND at {ENV_FILE}", file=__import__('sys').stderr)
-        print(f"[setup] This file must be created by /tinyml-agent-skills:setup first", file=__import__('sys').stderr)
+        print("[setup] This file must be created by /tinyml-agent-skills:setup first", file=__import__('sys').stderr)
     return vars_dict
 
 

@@ -89,7 +89,7 @@ tinyml-modelmaker  --->  tinyml-tinyverse
 
 | Method | Command |
 |---|---|
-| CLI | `python tinyml_modelmaker/run_tinyml_modelmaker.py config.yaml` |
+| CLI | `cd tinyml-modelmaker && python tinyml_modelmaker/run_tinyml_modelmaker.py config.yaml` |
 | Shell | `run_tinyml_modelmaker.sh config.yaml` |
 | Python API | `import tinyml_modelmaker; tinyml_modelmaker.get_set_go(config)` |
 | GUI | Edge AI Studio Model Composer (uses `tinyml-mlbackend` Docker wrapper) |
@@ -522,12 +522,12 @@ graph TB
 
 | # | Category | Issue | Severity | Effort |
 |---|---|---|---|---|
-| 1 | Testing | No test suite | Critical | High |
+| 1 | Testing | No test suite (protocol conformance tests added; unit/integration/CI gaps remain) | Medium | High |
 | 2 | Architecture | Monolithic descriptions file | Critical | Medium |
 | 3 | Architecture | Overloaded constructor | High | Low |
 | 4 | Architecture | Tight cross-repo coupling | High | High |
 | 5 | Architecture | Duplicated task-type code | Medium | Medium |
-| 6 | Architecture | No ABCs/Protocols | Medium | Low |
+| 6 | Architecture | No ABCs/Protocols (Protocols added for modelmaker; tinyverse/torchmodelopt remain) | Low | Low |
 | 7 | Code Quality | Magic strings | Medium | Low |
 | 8 | Code Quality | Commented-out code | Low | Low |
 | 9 | Code Quality | Inconsistent error handling | High | Medium |

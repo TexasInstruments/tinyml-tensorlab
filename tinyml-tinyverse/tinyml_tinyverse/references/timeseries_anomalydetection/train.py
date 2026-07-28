@@ -170,7 +170,7 @@ def get_reconstruction_errors_stats(generic_model, model_path, device, data_load
     for _, data, targets in data_loader:
         data = data.float().to(device, non_blocking=True)
         targets = targets.long().to(device, non_blocking=True)
-        batch_reconstruction_errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+        batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
         for input, target_label in zip(data, targets):
             input = input.unsqueeze(0).cpu().numpy()
             output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)

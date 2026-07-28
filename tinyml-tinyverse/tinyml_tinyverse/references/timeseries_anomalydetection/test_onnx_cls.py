@@ -158,8 +158,8 @@ def main(gpu, args):
 
         input_name = ort_sess.get_inputs()[0].name
         output_name = ort_sess.get_outputs()[0].name
-        predicted = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
-        ground_truth = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+        predicted = torch.tensor([]).to(device, non_blocking=True)
+        ground_truth = torch.tensor([]).to(device, non_blocking=True)
         for batched_raw_data, batched_data, batched_target in data_loader:
             batched_raw_data = batched_raw_data.long().to(device, non_blocking=True)
             batched_data = batched_data.float().to(device, non_blocking=True)

@@ -461,7 +461,7 @@ def _check_regression(path: str, is_zip: bool) -> Tuple[List[str], List[str], bo
                 return errors, warnings, True, ""
 
             errors.append(
-                f"ZIP missing top-level 'files/' directory. "
+                "ZIP missing top-level 'files/' directory. "
                 "Regression/forecasting data must be in a 'files/' subdirectory."
             )
             return errors, warnings, False, "Create a 'files/' directory at ZIP top level and place all CSV files inside it."

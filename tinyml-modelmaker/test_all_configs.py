@@ -145,24 +145,24 @@ def save_failure_log(config_path, result, timestamp):
     log_file = LOGS_DIR / f"{timestamp}_{config_name}_FAILED.log"
 
     with open(log_file, 'w') as f:
-        f.write(f"=" * 80 + "\n")
-        f.write(f"FAILED CONFIG TEST\n")
-        f.write(f"=" * 80 + "\n\n")
+        f.write("=" * 80 + "\n")
+        f.write("FAILED CONFIG TEST\n")
+        f.write("=" * 80 + "\n\n")
         f.write(f"Config:         {config_path}\n")
         f.write(f"Timestamp:      {timestamp}\n")
         f.write(f"Duration:       {result['duration']:.2f}s\n")
         f.write(f"Return Code:    {result['return_code']}\n")
         f.write(f"Timeout:        {result['timeout_exceeded']}\n")
         f.write(f"Error Detected: {result.get('error_detected', False)}\n")
-        f.write(f"\n" + "=" * 80 + "\n")
-        f.write(f"STDOUT:\n")
-        f.write(f"=" * 80 + "\n")
+        f.write("\n" + "=" * 80 + "\n")
+        f.write("STDOUT:\n")
+        f.write("=" * 80 + "\n")
         f.write(result['stdout'])
-        f.write(f"\n\n" + "=" * 80 + "\n")
-        f.write(f"STDERR:\n")
-        f.write(f"=" * 80 + "\n")
+        f.write("\n\n" + "=" * 80 + "\n")
+        f.write("STDERR:\n")
+        f.write("=" * 80 + "\n")
         f.write(result['stderr'])
-        f.write(f"\n")
+        f.write("\n")
 
     return log_file
 
@@ -205,7 +205,7 @@ def main():
     start_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     print("=" * 80)
-    print(f"ModelMaker Config Test Suite")
+    print("ModelMaker Config Test Suite")
     print("=" * 80)
     print(f"Timeout:        {args.timeout}s")
     print(f"Total Configs:  {len(all_configs)}")
@@ -265,7 +265,7 @@ def main():
 
         # Stop on first failure if flag is set
         if args.stop_on_error and not result['success']:
-            print(f"\n✗ Stopping on first failure (--stop-on-error flag set).")
+            print("\n✗ Stopping on first failure (--stop-on-error flag set).")
             break
 
     # Summary
@@ -304,7 +304,7 @@ def main():
         f.write(f"Passed:         {passed}\n")
         f.write(f"Failed:         {failed}\n")
         f.write(f"Total Time:     {format_duration(total_duration)}\n")
-        f.write(f"\n" + "=" * 80 + "\n")
+        f.write("\n" + "=" * 80 + "\n")
         f.write("DETAILED RESULTS\n")
         f.write("=" * 80 + "\n\n")
 

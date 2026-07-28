@@ -106,8 +106,8 @@ def main(gpu, args):
         logger.info(f"Loading ONNX model: {args.model_path}")
         ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
 
-        predicted = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
-        ground_truth = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+        predicted = torch.tensor([]).to(device, non_blocking=True)
+        ground_truth = torch.tensor([]).to(device, non_blocking=True)
 
         for _, batched_data, batched_target in data_loader_test:
             batched_data = batched_data.float().to(device, non_blocking=True)

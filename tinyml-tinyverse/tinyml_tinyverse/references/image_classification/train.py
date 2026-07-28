@@ -278,7 +278,7 @@ def main(gpu, args):
                     gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), classes_dir=args.data_path,
                                                    output_dir=args.output_dir, class_names=dataset.classes)
                 else:
-                    logger.warning(f"Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
+                    logger.warning("Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
         except Exception as e:
             logger.warning(f"Feature Extraction plots will not be generated because: {e}")
 
@@ -298,7 +298,7 @@ def main(gpu, args):
         logger.info("Creating model")
 
         if args.load_saved_model == 'None':
-            if args.nas_enabled:
+            if args.nas_enabled == 'True':
                 if args.quantization:
                     model = torch.load(os.path.join(os.path.dirname(args.output_dir), os.path.join('base', 'nas_model.pt')), weights_only=False)
                 else:
@@ -426,7 +426,7 @@ def main(gpu, args):
         logger.info(f"Best Epoch: {best['epoch']}")
         logger.info(f"Acc@1 {best['accuracy']:.3f}")
         logger.info(f"F1-Score {best['f1']:.3f}")
-        logger.info(f"AUC ROC Score {best['f1']:.3f}")
+        logger.info(f"AUC ROC Score {best['auc']:.3f}")
         logger.info("")
         logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
                       columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],

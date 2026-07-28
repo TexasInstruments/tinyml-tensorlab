@@ -126,11 +126,11 @@ def get_reconstruction_errors_stats(args):
         logger.info(f"Loading ONNX model: {args.model_path}")
         ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
 
-        errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+        errors = torch.tensor([]).to(device, non_blocking=True)
         for _, data, targets in data_loader:
             data = data.float().to(device, non_blocking=True)
             targets = targets.long().to(device, non_blocking=True)
-            batch_reconstruction_errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+            batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
             for input, target_label in zip(data, targets):
                 input = input.unsqueeze(0).cpu().numpy()
                 output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
@@ -177,16 +177,16 @@ def main(gpu, args):
         logger.info(f"Loading ONNX model: {args.model_path}")
         ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
 
-        errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
-        ground_truth = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+        errors = torch.tensor([]).to(device, non_blocking=True)
+        ground_truth = torch.tensor([]).to(device, non_blocking=True)
 
         for _, data, targets in data_loader:
             data = data.float().to(device, non_blocking=True)
             targets = targets.long().to(device, non_blocking=True)
             if transform:
                 data = transform(data)
-            batch_reconstruction_errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
-            batch_target_labels = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+            batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
+            batch_target_labels = torch.tensor([]).to(device, non_blocking=True)
             for input, target_label in zip(data, targets):
                 input = input.unsqueeze(0).cpu().numpy()
                 output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
@@ -211,7 +211,7 @@ def main(gpu, args):
         normal_test_std = np.std(normal_errors)
 
         # Results
-        logger.info(f"Reconstruction Error Statistics:")
+        logger.info("Reconstruction Error Statistics:")
         logger.info(f"Normal training data - Mean: {normal_train_mean:.6f}, Std: {normal_train_std:.6f}")
         logger.info(f"Anomaly test data - Mean: {anomaly_test_mean:.6f}, Std: {anomaly_test_std:.6f}")
         logger.info(f"Normal test data - Mean: {normal_test_mean:.6f}, Std: {normal_test_std:.6f}")

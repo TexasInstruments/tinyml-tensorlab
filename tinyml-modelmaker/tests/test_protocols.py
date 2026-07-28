@@ -2,14 +2,7 @@
 
 Uses ``@runtime_checkable`` isinstance checks to verify that every component
 implementation provides the methods required by its corresponding protocol.
-
-Requires TVM (compilation backend) which is not available on all platforms.
 """
-
-import pytest
-
-# TVM is required transitively via tinyml_benchmark → compilation.py
-tvm = pytest.importorskip("tvm", reason="TVM not available on this platform")
 
 from tinyml_modelmaker.ai_modules.protocols import (
     Compiler,

@@ -227,7 +227,7 @@ def main(gpu, args):
                     gof_utils.goodness_of_fit_test(frame_size=int(args.frame_size), classes_dir=args.data_path,
                                                    output_dir=args.output_dir, class_names=dataset.classes)
                 else:
-                    logger.warning(f"Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
+                    logger.warning("Goodness of Fit plots will not be generated because frame_size was not given in the YAML file.")
         except Exception as e:
             logger.warning(f"Feature Extraction plots will not be generated because: {e}")
 
@@ -245,7 +245,7 @@ def main(gpu, args):
 
         logger.info("Creating model")
         if args.load_saved_model == 'None':
-            if args.nas_enabled:
+            if args.nas_enabled == 'True':
                 if args.quantization:
                     model = torch.load(os.path.join(os.path.dirname(args.output_dir), os.path.join('base', 'nas_model.pt')), weights_only=False)
                 else:

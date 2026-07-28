@@ -482,20 +482,38 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
     def _simplify_onnx_model(self, filename, skipped_optimizers):
         """Simplify exported ONNX model.
 
+        On macOS ARM64, onnxsim's C++ destructor causes a SIGSEGV during Python
+        interpreter shutdown. We isolate it in a subprocess so a crash there cannot
+        propagate to the main process — packaging and compilation continue normally.
+
         Args:
             filename: ONNX model filename
             skipped_optimizers: Optimizers to skip
         """
-        try:
-            import onnx
-            from onnxsim import simplify
+        import sys
+        import platform
+        import subprocess as _sp
 
-            onnx_model = onnx.load(filename)
-            onnx_model, check = simplify(onnx_model, skipped_optimizers=skipped_optimizers)
-            onnx.save(onnx_model, filename)
-        except Exception as e:
-            print(f"Warning: ONNX model simplification failed "
-                  f"(possibly due to multi-process issues): {e}")
+        script = (
+            'import onnx, sys; from onnxsim import simplify as _s; '
+            f'm,_ = _s(onnx.load(sys.argv[1]), skipped_optimizers={repr(skipped_optimizers)}); '
+            'onnx.save(m, sys.argv[1])'
+        )
+        if sys.platform == 'darwin' and platform.machine() == 'arm64':
+            result = _sp.run([sys.executable, '-c', script, filename], capture_output=True)
+            if result.returncode not in (0, -11):  # -11 = SIGSEGV; both mean simplification ran
+                print(f"Warning: ONNX model simplification failed: {result.stderr.decode()}")
+        else:
+            try:
+                import onnx
+                from onnxsim import simplify
+
+                onnx_model = onnx.load(filename)
+                onnx_model, check = simplify(onnx_model, skipped_optimizers=skipped_optimizers)
+                onnx.save(onnx_model, filename)
+            except Exception as e:
+                print(f"Warning: ONNX model simplification failed "
+                      f"(possibly due to multi-process issues): {e}")
 
     # ========================================================================
     # PTQ-Specific Utilities

@@ -220,9 +220,8 @@ def infer(args, epoch, valid_loader, model, criterion):
         with torch.no_grad():
             input = input.to(device).float()   # Move input to device
             target = target.to(device).long()  # Move target to device
-
-        logits = model(input)              # Forward pass
-        loss = criterion(logits, target)   # Compute loss
+            logits = model(input)              # Forward pass
+            loss = criterion(logits, target)   # Compute loss
 
         prec1, prec5 = accuracy(logits, target, topk=(1, 1))  # Compute accuracy
         n = input.size(0)

@@ -251,7 +251,7 @@ class ModelRunner():
             self.model_compilation.clear()
             exit_flag = self.model_compilation.run()
             if exit_flag:
-                print(f'Compilation failed')
+                print('Compilation failed')
                 with open(self.params.compilation.log_file_path, 'a') as lfp:
                     lfp.write('FAILURE: ModelMaker - Compilation failed.')
                 return self.params

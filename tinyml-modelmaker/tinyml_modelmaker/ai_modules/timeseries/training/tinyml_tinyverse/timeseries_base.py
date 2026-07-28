@@ -683,6 +683,10 @@ class BaseModelTraining:
         if self.params.training.num_gpus > 0:
             if torch.backends.mps.is_available():
                 device = 'mps'
+                # MPS doesn't implement every op; unknown ops fall back to CPU
+                # when this flag is set. Must be in os.environ before the first
+                # MPS-dispatched kernel runs.
+                os.environ.setdefault('PYTORCH_ENABLE_MPS_FALLBACK', '1')
             else:
                 device = 'cuda'
         return device, distributed
