@@ -35,6 +35,7 @@ from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQ
 
 from ... import utils
 from . import constants
+from ...utils.hardware_defaults import apply_hardware_defaults
 
 
 def init_params(*args, **kwargs):
@@ -222,5 +223,7 @@ def init_params(*args, **kwargs):
         ),
     )
 
+    user_training_keys = set(args[0].get('training', {}).keys()) if args else set()
     params = utils.ConfigDict(default_params, *args, **kwargs)
+    apply_hardware_defaults(params, user_training_keys)
     return params
