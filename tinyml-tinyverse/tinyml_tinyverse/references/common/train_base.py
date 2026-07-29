@@ -673,16 +673,25 @@ def compile_model_if_enabled(model, args, logger, input_shape=None):
     A failure at either the wrap step or the warmup step falls back to the
     original, uncompiled model.
 
+    Note: the warmup runs in eval mode, no_grad, batch size 1, outside any
+    autocast context — it does not exercise the training-mode graph (with
+    gradients, the real batch size, and AMP autocast if enabled), which
+    dynamo compiles separately on first real use. This warmup catches
+    hardware/toolchain-level failures that occur regardless of graph
+    variant (e.g. ptxas rejecting the GPU architecture for any kernel), but
+    does not guarantee the training-mode graph will also compile cleanly.
+
     Args:
         model: The model to potentially compile
         args: Parsed arguments (uses args.compile_model)
         logger: Logger instance
         input_shape: Shape (including batch dim) of a representative input
             tensor, e.g. (1,) + dataset.X.shape[1:]. Used to run a warmup
-            forward pass that validates compilation actually works on this
-            hardware/toolchain. If None, no warmup is performed and a
-            compile failure will surface later, unguarded, on the training
-            loop's first real forward pass (legacy behavior).
+            forward pass that validates compilation works on this
+            hardware/toolchain for at least one graph variant. If None, no
+            warmup is performed and a compile failure will surface later,
+            unguarded, on the training loop's first real forward pass
+            (legacy behavior).
 
     Returns:
         The (possibly compiled) model
