@@ -12,6 +12,8 @@ work mechanically but would mean compile provides no benefit for the rest
 of a quantized run's training, so this fix skips compiling entirely
 whenever quantization is enabled.
 """
+from unittest.mock import patch
+
 import torch
 import torch.nn as nn
 
@@ -40,11 +42,25 @@ def test_compile_skipped_when_quantization_enabled():
     from tinyml_tinyverse.references.common.train_base import compile_model_if_enabled
     model = _TinyModel()
     args = _FakeArgs(compile_model=1, quantization=2)
-    result = compile_model_if_enabled(model, args, _get_logger(), input_shape=(1, 4))
+    with patch('torch.compile') as mock_compile:
+        result = compile_model_if_enabled(model, args, _get_logger(), input_shape=(1, 4))
     # Must be the ORIGINAL model, not compiled -- an OptimizedModule here
     # would go on to crash prepare_qat_fx's FX symbolic trace.
     assert result is model
-    assert not hasattr(result, '_orig_mod')
+    # Proves the skip happens BEFORE compilation is attempted, not that
+    # compilation happened to fail or get discarded afterward.
+    mock_compile.assert_not_called()
+
+
+def test_compile_skip_logs_why(caplog):
+    import logging
+    from tinyml_tinyverse.references.common.train_base import compile_model_if_enabled
+    model = _TinyModel()
+    args = _FakeArgs(compile_model=1, quantization=2)
+    logger = _get_logger()
+    with caplog.at_level(logging.INFO, logger=logger.name):
+        compile_model_if_enabled(model, args, logger, input_shape=(1, 4))
+    assert any('quantization' in record.message.lower() for record in caplog.records)
 
 
 def test_compile_skipped_when_quantization_is_ptq_mode():
