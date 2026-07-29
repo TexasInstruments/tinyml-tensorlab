@@ -43,3 +43,27 @@ def test_init_params_no_change_without_cuda():
         params = init_params(user_config)
     assert params.training.compile_model == 0
     assert params.training.native_amp is False
+
+
+def test_init_params_does_not_crash_on_non_dict_first_arg():
+    """ConfigDict documents a YAML path string (or None) as valid first
+    positional input, not just a dict. init_params's own explicitly-set-key
+    detection must not assume args[0] is dict-like and crash instead."""
+    from tinyml_modelmaker.ai_modules.timeseries.params import init_params
+    with patch('torch.cuda.is_available', return_value=True):
+        # A bogus path is fine here -- ConfigDict's *args merge loop only
+        # merges dict/ConfigDict values and silently ignores strings, so
+        # this never actually attempts to read the file. The point of this
+        # test is solely that passing a string doesn't crash init_params's
+        # own explicitly-set-key detection before ConfigDict is even built.
+        params = init_params('/nonexistent/path/to/config.yaml')
+    assert params.training.compile_model == 1
+    assert params.training.native_amp is True
+
+
+def test_init_params_does_not_crash_on_none_first_arg():
+    from tinyml_modelmaker.ai_modules.timeseries.params import init_params
+    with patch('torch.cuda.is_available', return_value=True):
+        params = init_params(None)
+    assert params.training.compile_model == 1
+    assert params.training.native_amp is True
