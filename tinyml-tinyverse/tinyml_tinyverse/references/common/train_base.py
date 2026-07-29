@@ -696,6 +696,19 @@ def compile_model_if_enabled(model, args, logger, input_shape=None):
     Returns:
         The (possibly compiled) model
     """
+    if getattr(args, 'quantization', 0):
+        # FX-based quantization (prepare_qat_fx) symbolically traces the model,
+        # which cannot trace a torch.compile-wrapped module at all -- a different
+        # incompatibility than the ONNX/TorchScript export tracing issue handled
+        # separately in export_model(). Skip compiling rather than compile and
+        # then immediately discard the benefit before quantization prep runs.
+        if getattr(args, 'compile_model', 0):
+            logger.info(
+                "compile_model is enabled but quantization is also enabled "
+                "(FX-based quantization cannot trace a compiled model) -- "
+                "skipping torch.compile for this run."
+            )
+        return model
     if getattr(args, 'compile_model', 0) and hasattr(torch, 'compile'):
         # Determine the best backend for the current device
         device_type = str(next(model.parameters()).device).split(':')[0] if len(list(model.parameters())) > 0 else 'cpu'
