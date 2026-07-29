@@ -14,6 +14,7 @@ import torch
 import torch.nn as nn
 
 from tinyml_tinyverse.references.common.train_base import save_checkpoint, resume_from_checkpoint
+from tinyml_tinyverse.common.utils.utils import ExponentialMovingAverage
 
 
 class _TinyModel(nn.Module):
@@ -118,3 +119,61 @@ def test_resume_from_checkpoint_symmetric_with_compiled_model():
         resume_from_checkpoint(compiled_fresh, _FakeOptimizer(), _FakeScheduler(), None, args)
 
     assert torch.allclose(fresh.linear.weight, torch.full_like(fresh.linear.weight, 2.71))
+
+
+def test_save_checkpoint_strips_orig_mod_prefix_from_compiled_ema():
+    """ExponentialMovingAverage (AveragedModel) deep-copies its source model
+    into self.module -- so when the source was already compiled, the
+    OptimizedModule wrapper ends up nested at model_ema.module._orig_mod,
+    not at model_ema._orig_mod itself. A top-level unwrap can't reach it."""
+    model = _TinyModel()
+    compiled_model = torch.compile(model, backend='aot_eager')
+    compiled_model(torch.rand(1, 4))
+    model_ema = ExponentialMovingAverage(compiled_model, decay=0.99)
+
+    checkpoint = save_checkpoint(
+        compiled_model, _FakeOptimizer(), _FakeScheduler(), epoch=0,
+        args=_FakeArgs(resume=None), model_ema=model_ema,
+    )
+    keys = list(checkpoint['model_ema'].keys())
+    assert keys, "ema checkpoint has no keys at all"
+    assert not any('_orig_mod' in k for k in keys), keys
+
+
+def test_resume_from_checkpoint_symmetric_with_compiled_ema():
+    """The EMA analogue of test_resume_from_checkpoint_symmetric_with_compiled_model:
+    a checkpoint saved from a compiled model+EMA must load back into a fresh
+    compiled model+EMA, restoring the real EMA weight values."""
+    import tempfile
+    import os
+
+    source = _TinyModel()
+    with torch.no_grad():
+        source.linear.weight.fill_(1.5)
+    compiled_source = torch.compile(source, backend='aot_eager')
+    compiled_source(torch.rand(1, 4))
+    source_ema = ExponentialMovingAverage(compiled_source, decay=0.99)
+    with torch.no_grad():
+        for p in source_ema.module.parameters():
+            p.fill_(1.5)
+
+    checkpoint = save_checkpoint(
+        compiled_source, _FakeOptimizer(), _FakeScheduler(), epoch=3,
+        args=_FakeArgs(resume=None), model_ema=source_ema,
+    )
+
+    fresh = _TinyModel()
+    compiled_fresh = torch.compile(fresh, backend='aot_eager')
+    compiled_fresh(torch.rand(1, 4))
+    fresh_ema = ExponentialMovingAverage(compiled_fresh, decay=0.99)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        ckpt_path = os.path.join(tmpdir, 'checkpoint.pth')
+        torch.save(checkpoint, ckpt_path)
+        args = _FakeArgs(resume=ckpt_path)
+        args.device = 'cpu'
+        resume_from_checkpoint(compiled_fresh, _FakeOptimizer(), _FakeScheduler(), fresh_ema, args)
+
+    ema_weight = dict(fresh_ema.module.named_parameters())['_orig_mod.linear.weight'] \
+        if hasattr(fresh_ema.module, '_orig_mod') else dict(fresh_ema.module.named_parameters())['linear.weight']
+    assert torch.allclose(ema_weight, torch.full_like(ema_weight, 1.5))

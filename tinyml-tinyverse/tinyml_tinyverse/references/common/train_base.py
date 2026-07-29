@@ -619,8 +619,21 @@ def resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema
         lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
         args.start_epoch = checkpoint['epoch'] + 1
         if model_ema:
-            resume_ema = getattr(model_ema, '_orig_mod', model_ema)
-            resume_ema.load_state_dict(checkpoint['model_ema'])
+            # Symmetric with the save-side key-substring strip: checkpoint
+            # keys never carry _orig_mod., but model_ema's OWN current keys
+            # might (if it's still compiled at resume time). Build a mapping
+            # from each of model_ema's current keys, stripped the same way,
+            # back to its real current key -- an identity mapping when
+            # uncompiled, a prefix-restoring one when compiled -- so the
+            # checkpoint's stripped keys land on whatever model_ema actually
+            # calls them right now.
+            live_keys_by_stripped_name = {
+                k.replace('_orig_mod.', ''): k for k in model_ema.state_dict().keys()
+            }
+            remapped_ema_state = {
+                live_keys_by_stripped_name.get(k, k): v for k, v in checkpoint['model_ema'].items()
+            }
+            model_ema.load_state_dict(remapped_ema_state)
     return args
 
 
@@ -838,8 +851,16 @@ def save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, mod
         'args': args
     }
     if model_ema:
-        checkpoint_ema = getattr(model_ema, '_orig_mod', model_ema)
-        checkpoint['model_ema'] = checkpoint_ema.state_dict()
+        # ExponentialMovingAverage (AveragedModel) deep-copies its source model
+        # into self.module -- so when the source was already compiled, the
+        # OptimizedModule wrapper ends up nested at model_ema.module._orig_mod,
+        # not at model_ema._orig_mod itself. A top-level getattr unwrap (as
+        # used for the main model above) can't reach it; strip the substring
+        # from the resulting state_dict keys instead, which handles the
+        # wrapper at whatever depth it's nested at.
+        checkpoint['model_ema'] = {
+            k.replace('_orig_mod.', ''): v for k, v in model_ema.state_dict().items()
+        }
     if extra_data:
         checkpoint.update(extra_data)
     return checkpoint
