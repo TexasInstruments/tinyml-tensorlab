@@ -44,3 +44,9 @@ class TestConfigDict:
         cfg = ConfigDict(None)
         # Should create an empty config without error
         assert isinstance(cfg, ConfigDict)
+
+    def test_constructor_args_deep_merge_nested_dict(self):
+        default = dict(training=dict(a=1, b=2))
+        user = dict(training=dict(b=99))
+        cfg = ConfigDict(default, user)
+        assert dict(cfg.training) == {"a": 1, "b": 99}

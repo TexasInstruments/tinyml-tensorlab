@@ -57,7 +57,7 @@ class ConfigDict(dict):
         # override the entries with args
         for value in args:
             if isinstance(value, (dict, ConfigDict)):
-                input_dict.update(value)
+                self._deep_merge(input_dict, value)
             #
         #
         # override the entries with kwargs
@@ -94,6 +94,17 @@ class ConfigDict(dict):
 
     def _initialize(self):
         pass
+
+    @staticmethod
+    def _deep_merge(target, source):
+        for key, value in source.items():
+            if key in target and isinstance(target[key], (dict, ConfigDict)) and isinstance(value, (dict, ConfigDict)):
+                ConfigDict._deep_merge(target[key], value)
+            else:
+                target[key] = value
+            #
+        #
+        return target
 
     def _parse_include_files(self, include_files, include_base_path):
         input_dict = {}
