@@ -35,6 +35,15 @@ def _filled(value):
     return model
 
 
+def _assert_all_params_equal(model, value):
+    """Check every parameter, not just .weight -- a bug that only corrupted
+    .bias handling (a differently-shaped tensor, so a distinct code path
+    through key matching) would otherwise pass undetected."""
+    for name, param in model.named_parameters():
+        assert torch.allclose(param, torch.full_like(param, value)), \
+            f"{name} was not correctly transferred (expected all {value})"
+
+
 def test_existing_module_prefix_alignment_still_works():
     """Backward compatibility: the pre-existing 'module.' (DDP) prefix
     realignment must be unaffected by the new _orig_mod. handling."""
@@ -44,7 +53,7 @@ def test_existing_module_prefix_alignment_still_works():
     target = _TinyModel()
     load_weights(target, data, state_dict_name=None)
 
-    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 7.0))
+    _assert_all_params_equal(target, 7.0)
 
 
 def test_orig_mod_prefix_in_checkpoint_data_is_stripped():
@@ -57,7 +66,7 @@ def test_orig_mod_prefix_in_checkpoint_data_is_stripped():
     target = _TinyModel()
     load_weights(target, data, state_dict_name=None)
 
-    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 5.5))
+    _assert_all_params_equal(target, 5.5)
 
 
 def test_loading_into_a_currently_compiled_model():
@@ -75,7 +84,7 @@ def test_loading_into_a_currently_compiled_model():
 
     load_weights(compiled_target, data, state_dict_name=None)
 
-    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 2.25))
+    _assert_all_params_equal(target, 2.25)
 
 
 def test_orig_mod_in_both_data_and_live_model():
@@ -91,4 +100,4 @@ def test_orig_mod_in_both_data_and_live_model():
 
     load_weights(compiled_target, data, state_dict_name=None)
 
-    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 9.0))
+    _assert_all_params_equal(target, 9.0)

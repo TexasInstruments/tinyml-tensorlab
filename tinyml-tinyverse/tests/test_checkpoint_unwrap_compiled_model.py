@@ -48,6 +48,21 @@ class _FakeArgs:
         self.resume = resume
 
 
+def _fill(model, value):
+    with torch.no_grad():
+        model.linear.weight.fill_(value)
+        model.linear.bias.fill_(value)
+    return model
+
+
+def _assert_all_params_equal(model, value):
+    """Check every parameter, not just .weight -- a bug that only corrupted
+    .bias handling would otherwise pass undetected."""
+    for name, param in model.named_parameters():
+        assert torch.allclose(param, torch.full_like(param, value)), \
+            f"{name} was not correctly transferred (expected all {value})"
+
+
 def test_save_checkpoint_strips_orig_mod_prefix_from_compiled_model():
     model = _TinyModel()
     compiled_model = torch.compile(model, backend='aot_eager')
@@ -75,9 +90,7 @@ def test_checkpoint_round_trips_into_a_fresh_uncompiled_model():
     """The actual failure mode: save from a compiled model, load into the
     (uncompiled) model used for the next training phase, and confirm the
     real trained weights -- not random-init defaults -- are what land."""
-    source = _TinyModel()
-    with torch.no_grad():
-        source.linear.weight.fill_(3.14)
+    source = _fill(_TinyModel(), 3.14)
     compiled_source = torch.compile(source, backend='aot_eager')
     compiled_source(torch.rand(1, 4))
 
@@ -88,7 +101,7 @@ def test_checkpoint_round_trips_into_a_fresh_uncompiled_model():
     target = _TinyModel()  # fresh, randomly initialized, NOT compiled
     assert not torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 3.14))
     target.load_state_dict(checkpoint['model'], strict=True)  # must not need strict=False
-    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 3.14))
+    _assert_all_params_equal(target, 3.14)
 
 
 def test_checkpoint_round_trips_through_the_real_load_weights_consumer():
@@ -99,9 +112,7 @@ def test_checkpoint_round_trips_through_the_real_load_weights_consumer():
     This is the function whose silent strict=False fallback originally
     masked the bug (it printed a yellow warning and continued with 100% of
     weights discarded, no exception, pipeline reported success)."""
-    source = _TinyModel()
-    with torch.no_grad():
-        source.linear.weight.fill_(6.28)
+    source = _fill(_TinyModel(), 6.28)
     compiled_source = torch.compile(source, backend='aot_eager')
     compiled_source(torch.rand(1, 4))
 
@@ -112,7 +123,7 @@ def test_checkpoint_round_trips_through_the_real_load_weights_consumer():
     target = _TinyModel()  # fresh, randomly initialized, NOT compiled
     assert not torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 6.28))
     load_weights(target, checkpoint['model'], state_dict_name=None)
-    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 6.28))
+    _assert_all_params_equal(target, 6.28)
 
 
 def test_resume_from_checkpoint_symmetric_with_compiled_model():
@@ -122,9 +133,7 @@ def test_resume_from_checkpoint_symmetric_with_compiled_model():
     import tempfile
     import os
 
-    source = _TinyModel()
-    with torch.no_grad():
-        source.linear.weight.fill_(2.71)
+    source = _fill(_TinyModel(), 2.71)
     compiled_source = torch.compile(source, backend='aot_eager')
     compiled_source(torch.rand(1, 4))
 
@@ -143,7 +152,7 @@ def test_resume_from_checkpoint_symmetric_with_compiled_model():
         args.device = 'cpu'
         resume_from_checkpoint(compiled_fresh, _FakeOptimizer(), _FakeScheduler(), None, args)
 
-    assert torch.allclose(fresh.linear.weight, torch.full_like(fresh.linear.weight, 2.71))
+    _assert_all_params_equal(fresh, 2.71)
 
 
 def test_save_checkpoint_strips_orig_mod_prefix_from_compiled_ema():
@@ -199,9 +208,9 @@ def test_resume_from_checkpoint_symmetric_with_compiled_ema():
         args.device = 'cpu'
         resume_from_checkpoint(compiled_fresh, _FakeOptimizer(), _FakeScheduler(), fresh_ema, args)
 
-    ema_weight = dict(fresh_ema.module.named_parameters())['_orig_mod.linear.weight'] \
-        if hasattr(fresh_ema.module, '_orig_mod') else dict(fresh_ema.module.named_parameters())['linear.weight']
-    assert torch.allclose(ema_weight, torch.full_like(ema_weight, 1.5))
+    for name, param in fresh_ema.module.named_parameters():
+        assert torch.allclose(param, torch.full_like(param, 1.5)), \
+            f"{name} was not correctly transferred (expected all 1.5)"
 
 
 def test_resume_from_checkpoint_ema_compiled_save_uncompiled_load():
@@ -239,5 +248,82 @@ def test_resume_from_checkpoint_ema_compiled_save_uncompiled_load():
         args.device = 'cpu'
         resume_from_checkpoint(fresh, _FakeOptimizer(), _FakeScheduler(), fresh_ema, args)
 
-    ema_weight = dict(fresh_ema.module.named_parameters())['linear.weight']
-    assert torch.allclose(ema_weight, torch.full_like(ema_weight, 4.2))
+    for name, param in fresh_ema.module.named_parameters():
+        assert torch.allclose(param, torch.full_like(param, 4.2)), \
+            f"{name} was not correctly transferred (expected all 4.2)"
+
+
+def test_resume_from_checkpoint_loads_old_format_checkpoint_with_orig_mod_keys():
+    """Backward compatibility: a checkpoint written before this fix existed
+    (or by any other torch.compile-using caller) has raw _orig_mod.-prefixed
+    keys in checkpoint['model'] -- resume_from_checkpoint must still load it
+    into a plain, uncompiled model, not raise a strict key-mismatch error."""
+    import tempfile
+    import os
+
+    old_style_checkpoint = {
+        'model': {'_orig_mod.linear.weight': torch.full((2, 4), 8.5),
+                   '_orig_mod.linear.bias': torch.full((2,), 8.5)},
+        'optimizer': {},
+        'lr_scheduler': {},
+        'epoch': 7,
+    }
+
+    target = _TinyModel()  # NOT compiled -- the real shape once a compile-hardening fix skips compile for this phase
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        ckpt_path = os.path.join(tmpdir, 'checkpoint.pth')
+        torch.save(old_style_checkpoint, ckpt_path)
+        args = _FakeArgs(resume=ckpt_path)
+        args.device = 'cpu'
+        resume_from_checkpoint(target, _FakeOptimizer(), _FakeScheduler(), None, args)
+
+    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 8.5))
+    assert torch.allclose(target.linear.bias, torch.full_like(target.linear.bias, 8.5))
+    assert args.start_epoch == 8
+
+
+def test_resume_from_checkpoint_rejects_untrusted_pickle_payload():
+    """Security regression guard: resume_from_checkpoint must NOT accept
+    arbitrary pickled objects wholesale (i.e. must not silently be
+    weights_only=False in spirit). Only the one non-tensor type the
+    checkpoint legitimately needs (argparse.Namespace, for checkpoint['args'])
+    is allowlisted -- anything else in the pickle stream must still be
+    rejected by torch's weights_only safety check."""
+    import tempfile
+    import os
+
+    class _NotOnTheAllowlist:
+        """Standin for an attacker-controlled class with a malicious
+        __reduce__; the actual payload doesn't matter for this test, only
+        that torch.load refuses to construct instances of arbitrary,
+        non-allowlisted classes."""
+        def __reduce__(self):
+            return (self.__class__, ())
+
+    malicious_checkpoint = {
+        'model': _TinyModel().state_dict(),
+        'optimizer': {},
+        'lr_scheduler': {},
+        'epoch': 0,
+        'payload': _NotOnTheAllowlist(),
+    }
+
+    target = _TinyModel()
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        ckpt_path = os.path.join(tmpdir, 'checkpoint.pth')
+        torch.save(malicious_checkpoint, ckpt_path)
+        args = _FakeArgs(resume=ckpt_path)
+        args.device = 'cpu'
+        try:
+            resume_from_checkpoint(target, _FakeOptimizer(), _FakeScheduler(), None, args)
+            raised = False
+        except Exception:
+            raised = True
+
+    assert raised, (
+        "resume_from_checkpoint accepted a pickle payload containing a "
+        "non-allowlisted class -- the weights_only safety check is not "
+        "actually restricting unpickling."
+    )

@@ -72,7 +72,7 @@ import os
 import platform
 import sys
 import timeit
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
 import numpy as np
@@ -604,36 +604,41 @@ def resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema
         Updated args with start_epoch
     """
     if args.resume:
-        # weights_only=False: checkpoint['args'] is an argparse.Namespace (or,
-        # in tests, an equivalent stand-in), which is not on torch's default
-        # weights_only safe-globals list. Matches the convention already used
-        # for every other non-tensor-only torch.load() in this codebase (see
-        # load_weights.py and the per-task train.py load_saved_model paths).
-        checkpoint = torch.load(args.resume, map_location=args.device, weights_only=False)
-        # Symmetric with save_checkpoint's unwrap: checkpoints always carry
-        # uncompiled key names, so load into the unwrapped model regardless
-        # of whether it's currently wrapped by torch.compile.
-        resume_model = getattr(model_without_ddp, '_orig_mod', model_without_ddp)
-        resume_model.load_state_dict(checkpoint['model'])
+        # checkpoint['args'] is an argparse.Namespace (or, in tests, an
+        # equivalent stand-in). torch >=2.6 defaults torch.load to
+        # weights_only=True, which refuses to unpickle it -- but disabling
+        # the check entirely (weights_only=False) would also accept an
+        # attacker-crafted checkpoint's arbitrary __reduce__ payload as code
+        # to execute. Allowlist only the one non-tensor type this checkpoint
+        # actually needs instead.
+        with torch.serialization.safe_globals([Namespace]):
+            checkpoint = torch.load(args.resume, map_location=args.device)
+
+        # Checkpoints from any era may or may not carry a torch.compile
+        # _orig_mod. prefix on their keys (old saves did, when the model was
+        # compiled; save_checkpoint no longer writes it, but a checkpoint
+        # from before that fix, or from some other caller, still might).
+        # Strip it from the incoming data unconditionally -- it's never
+        # meaningful to preserve -- then remap onto whatever the live model
+        # actually calls its own keys right now, which carries _orig_mod.
+        # itself if it's currently compiled. Mirrors load_weights.py's
+        # identical handling for the same reason.
+        def _load_symmetric(live_module, checkpoint_state):
+            checkpoint_state = {k.replace('_orig_mod.', ''): v for k, v in checkpoint_state.items()}
+            live_keys = list(live_module.state_dict().keys())
+            if any('_orig_mod.' in k for k in live_keys):
+                live_keys_by_stripped_name = {k.replace('_orig_mod.', ''): k for k in live_keys}
+                checkpoint_state = {
+                    live_keys_by_stripped_name.get(k, k): v for k, v in checkpoint_state.items()
+                }
+            live_module.load_state_dict(checkpoint_state)
+
+        _load_symmetric(model_without_ddp, checkpoint['model'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
         args.start_epoch = checkpoint['epoch'] + 1
         if model_ema:
-            # Symmetric with the save-side key-substring strip: checkpoint
-            # keys never carry _orig_mod., but model_ema's OWN current keys
-            # might (if it's still compiled at resume time). Build a mapping
-            # from each of model_ema's current keys, stripped the same way,
-            # back to its real current key -- an identity mapping when
-            # uncompiled, a prefix-restoring one when compiled -- so the
-            # checkpoint's stripped keys land on whatever model_ema actually
-            # calls them right now.
-            live_keys_by_stripped_name = {
-                k.replace('_orig_mod.', ''): k for k in model_ema.state_dict().keys()
-            }
-            remapped_ema_state = {
-                live_keys_by_stripped_name.get(k, k): v for k, v in checkpoint['model_ema'].items()
-            }
-            model_ema.load_state_dict(remapped_ema_state)
+            _load_symmetric(model_ema, checkpoint['model_ema'])
     return args
 
 
