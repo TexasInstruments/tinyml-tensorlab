@@ -1626,6 +1626,12 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
     logger.debug(f"Quantization Mode: {quantization}, {type(quantization)}")
     logger.info(f'Exporting ONNX model from: {onnx_file}')
 
+    # torch.compile() wraps a model in torch._dynamo.OptimizedModule, exposing
+    # the original module at ._orig_mod. Neither torch.jit.trace (used below
+    # for quantized export) nor torch.onnx.export (used for float export) can
+    # trace a dynamo-optimized module directly, so unwrap first. This is a
+    # no-op for uncompiled models (getattr falls back to model itself).
+    model = getattr(model, '_orig_mod', model)
     model_copy = copy.deepcopy(model)
     model_copy = model_copy.to(device)
     if quantization:
