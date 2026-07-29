@@ -5,11 +5,13 @@ on:
     branches: [platypus_dev_1.3, main]
     paths:
       - 'tinyml-modelmaker/**'
+      - 'tinyml-modeloptimization/**'
       - '.github/workflows/test-modelmaker.yml'
   pull_request:
     branches: [platypus_dev_1.3, main]
     paths:
       - 'tinyml-modelmaker/**'
+      - 'tinyml-modeloptimization/**'
   workflow_dispatch:  # manual trigger
 
 jobs:
@@ -61,6 +63,10 @@ jobs:
           pip install -e tinyml-modelmaker --no-deps
           pip install defusedxml==0.7.1 "numpy==2.2.6" "PyYAML==6.0.3" "tqdm==4.67.1" "requests==2.32.5" "torch==2.7.1"
           pip install pytest
+
+      - name: torchmodelopt — Component Tests
+        working-directory: tinyml-modeloptimization/torchmodelopt
+        run: python -m pytest tests/ -v --tb=short
 
       - name: Tier 1 — Component Tests
         working-directory: tinyml-modelmaker
