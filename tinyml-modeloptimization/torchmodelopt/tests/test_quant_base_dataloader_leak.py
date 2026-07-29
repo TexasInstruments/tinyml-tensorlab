@@ -79,6 +79,27 @@ def test_wrapper_drops_dataloader_references_after_construction():
     assert 'eval_dataloader' not in model.qconfig_type
 
 
+def test_callers_own_qconfig_type_dict_is_not_mutated():
+    """self.qconfig_type = qconfig_type (a reference assignment) means the
+    wrapper's dict and the caller's dict are the same object unless
+    explicitly copied. Popping keys from self.qconfig_type must not remove
+    them from the caller's own dict too -- a caller that constructs
+    qconfig_type once and reuses it (e.g. across a retry, or for logging
+    after construction) would otherwise see it silently emptied by a
+    constructor call it doesn't own."""
+    calibration_loader = _make_persistent_loader()
+    eval_loader = _make_persistent_loader()
+    qconfig_type = _make_qconfig_type(calibration_loader, eval_loader)
+
+    TINPUTinyMLQATFxModule(
+        _TinyModel(), total_epochs=1, qconfig_type=qconfig_type, example_inputs=torch.randn(1, 4),
+    )
+
+    assert 'calibration_dataloader' in qconfig_type
+    assert 'eval_dataloader' in qconfig_type
+    assert qconfig_type['calibration_dataloader'] is calibration_loader
+
+
 def test_deepcopy_survives_persistent_worker_dataloaders():
     calibration_loader = _make_persistent_loader()
     eval_loader = _make_persistent_loader()

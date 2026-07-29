@@ -137,7 +137,11 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         # keep a live DataLoader (and, with persistent_workers, its multiprocessing
         # iterator) reachable from self.qconfig_type — that reference chain breaks
         # copy.deepcopy()/pickling of the model, e.g. during ONNX export.
+        # Copy first: self.qconfig_type otherwise aliases the caller's own dict
+        # (assigned by reference above), so popping from it would mutate an
+        # object the caller may still hold a reference to and reuse.
         if isinstance(self.qconfig_type, dict):
+            self.qconfig_type = self.qconfig_type.copy()
             self.qconfig_type.pop('calibration_dataloader', None)
             self.qconfig_type.pop('eval_dataloader', None)
 
