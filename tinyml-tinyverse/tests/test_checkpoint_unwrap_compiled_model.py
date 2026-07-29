@@ -15,6 +15,7 @@ import torch.nn as nn
 
 from tinyml_tinyverse.references.common.train_base import save_checkpoint, resume_from_checkpoint
 from tinyml_tinyverse.common.utils.utils import ExponentialMovingAverage
+from tinyml_tinyverse.common.utils.load_weights import load_weights
 
 
 class _TinyModel(nn.Module):
@@ -88,6 +89,30 @@ def test_checkpoint_round_trips_into_a_fresh_uncompiled_model():
     assert not torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 3.14))
     target.load_state_dict(checkpoint['model'], strict=True)  # must not need strict=False
     assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 3.14))
+
+
+def test_checkpoint_round_trips_through_the_real_load_weights_consumer():
+    """Same scenario as test_checkpoint_round_trips_into_a_fresh_uncompiled_model,
+    but through the ACTUAL production consumer of these checkpoints --
+    load_weights.load_weights(), used for the float->quantization --weights
+    transfer in timeseries_base.py -- rather than a raw load_state_dict call.
+    This is the function whose silent strict=False fallback originally
+    masked the bug (it printed a yellow warning and continued with 100% of
+    weights discarded, no exception, pipeline reported success)."""
+    source = _TinyModel()
+    with torch.no_grad():
+        source.linear.weight.fill_(6.28)
+    compiled_source = torch.compile(source, backend='aot_eager')
+    compiled_source(torch.rand(1, 4))
+
+    checkpoint = save_checkpoint(
+        compiled_source, _FakeOptimizer(), _FakeScheduler(), epoch=0, args=_FakeArgs(resume=None),
+    )
+
+    target = _TinyModel()  # fresh, randomly initialized, NOT compiled
+    assert not torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 6.28))
+    load_weights(target, checkpoint['model'], state_dict_name=None)
+    assert torch.allclose(target.linear.weight, torch.full_like(target.linear.weight, 6.28))
 
 
 def test_resume_from_checkpoint_symmetric_with_compiled_model():
