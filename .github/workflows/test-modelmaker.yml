@@ -5,11 +5,13 @@ on:
     branches: [platypus_dev_1.3, main]
     paths:
       - 'tinyml-modelmaker/**'
+      - 'tinyml-tinyverse/**'
       - '.github/workflows/test-modelmaker.yml'
   pull_request:
     branches: [platypus_dev_1.3, main]
     paths:
       - 'tinyml-modelmaker/**'
+      - 'tinyml-tinyverse/**'
   workflow_dispatch:  # manual trigger
 
 jobs:
