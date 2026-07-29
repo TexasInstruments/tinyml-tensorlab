@@ -177,3 +177,42 @@ def test_resume_from_checkpoint_symmetric_with_compiled_ema():
     ema_weight = dict(fresh_ema.module.named_parameters())['_orig_mod.linear.weight'] \
         if hasattr(fresh_ema.module, '_orig_mod') else dict(fresh_ema.module.named_parameters())['linear.weight']
     assert torch.allclose(ema_weight, torch.full_like(ema_weight, 1.5))
+
+
+def test_resume_from_checkpoint_ema_compiled_save_uncompiled_load():
+    """The actual production shape: EMA saved from a compiled source (keys
+    stripped at save time), then resumed into a run where EMA is NOT
+    compiled -- e.g. a later quantization phase that (per the separate
+    skip-compile-under-quantization fix) never compiles at all. The old
+    load-side code's top-level getattr couldn't reach EMA's nested wrapper,
+    so this asymmetric direction is the real discriminating case."""
+    import tempfile
+    import os
+
+    source = _TinyModel()
+    with torch.no_grad():
+        source.linear.weight.fill_(4.2)
+    compiled_source = torch.compile(source, backend='aot_eager')
+    compiled_source(torch.rand(1, 4))
+    source_ema = ExponentialMovingAverage(compiled_source, decay=0.99)
+    with torch.no_grad():
+        for p in source_ema.module.parameters():
+            p.fill_(4.2)
+
+    checkpoint = save_checkpoint(
+        compiled_source, _FakeOptimizer(), _FakeScheduler(), epoch=3,
+        args=_FakeArgs(resume=None), model_ema=source_ema,
+    )
+
+    fresh = _TinyModel()  # NOT compiled this time
+    fresh_ema = ExponentialMovingAverage(fresh, decay=0.99)
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        ckpt_path = os.path.join(tmpdir, 'checkpoint.pth')
+        torch.save(checkpoint, ckpt_path)
+        args = _FakeArgs(resume=ckpt_path)
+        args.device = 'cpu'
+        resume_from_checkpoint(fresh, _FakeOptimizer(), _FakeScheduler(), fresh_ema, args)
+
+    ema_weight = dict(fresh_ema.module.named_parameters())['linear.weight']
+    assert torch.allclose(ema_weight, torch.full_like(ema_weight, 4.2))
