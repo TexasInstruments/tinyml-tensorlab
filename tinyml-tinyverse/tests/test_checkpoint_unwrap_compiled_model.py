@@ -10,6 +10,8 @@ using DDP, so when compile_model_if_enabled succeeded upstream,
 model_without_ddp IS the torch._dynamo.OptimizedModule wrapper. state_dict()
 on it emits every key prefixed _orig_mod.
 """
+from argparse import Namespace
+
 import torch
 import torch.nn as nn
 
@@ -46,6 +48,18 @@ class _FakeScheduler:
 class _FakeArgs:
     def __init__(self, resume):
         self.resume = resume
+
+
+class _NotOnTheSafeGlobalsAllowlist:
+    """Standin for an attacker-controlled class with a malicious __reduce__;
+    the actual payload doesn't matter for the pickle-rejection test below,
+    only that torch.load refuses to construct instances of arbitrary,
+    non-allowlisted classes. Must be module-level, not defined inside the
+    test function -- pickle cannot serialize local/nested classes at all,
+    which would make the test fail for an unrelated reason before it ever
+    reached the weights_only check it's meant to exercise."""
+    def __reduce__(self):
+        return (self.__class__, ())
 
 
 def _fill(model, value):
@@ -138,7 +152,10 @@ def test_resume_from_checkpoint_symmetric_with_compiled_model():
     compiled_source(torch.rand(1, 4))
 
     checkpoint = save_checkpoint(
-        compiled_source, _FakeOptimizer(), _FakeScheduler(), epoch=5, args=_FakeArgs(resume=None),
+        # Namespace, not _FakeArgs: this ends up as checkpoint['args'], which
+        # torch.load's weights_only safety check must unpickle -- only
+        # argparse.Namespace is allowlisted, matching real production usage.
+        compiled_source, _FakeOptimizer(), _FakeScheduler(), epoch=5, args=Namespace(),
     )
 
     fresh = _TinyModel()
@@ -192,8 +209,10 @@ def test_resume_from_checkpoint_symmetric_with_compiled_ema():
             p.fill_(1.5)
 
     checkpoint = save_checkpoint(
+        # Namespace, not _FakeArgs: see the identical note in
+        # test_resume_from_checkpoint_symmetric_with_compiled_model.
         compiled_source, _FakeOptimizer(), _FakeScheduler(), epoch=3,
-        args=_FakeArgs(resume=None), model_ema=source_ema,
+        args=Namespace(), model_ema=source_ema,
     )
 
     fresh = _TinyModel()
@@ -234,8 +253,10 @@ def test_resume_from_checkpoint_ema_compiled_save_uncompiled_load():
             p.fill_(4.2)
 
     checkpoint = save_checkpoint(
+        # Namespace, not _FakeArgs: see the identical note in
+        # test_resume_from_checkpoint_symmetric_with_compiled_model.
         compiled_source, _FakeOptimizer(), _FakeScheduler(), epoch=3,
-        args=_FakeArgs(resume=None), model_ema=source_ema,
+        args=Namespace(), model_ema=source_ema,
     )
 
     fresh = _TinyModel()  # NOT compiled this time
@@ -293,20 +314,12 @@ def test_resume_from_checkpoint_rejects_untrusted_pickle_payload():
     import tempfile
     import os
 
-    class _NotOnTheAllowlist:
-        """Standin for an attacker-controlled class with a malicious
-        __reduce__; the actual payload doesn't matter for this test, only
-        that torch.load refuses to construct instances of arbitrary,
-        non-allowlisted classes."""
-        def __reduce__(self):
-            return (self.__class__, ())
-
     malicious_checkpoint = {
         'model': _TinyModel().state_dict(),
         'optimizer': {},
         'lr_scheduler': {},
         'epoch': 0,
-        'payload': _NotOnTheAllowlist(),
+        'payload': _NotOnTheSafeGlobalsAllowlist(),
     }
 
     target = _TinyModel()
