@@ -604,13 +604,23 @@ def resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema
         Updated args with start_epoch
     """
     if args.resume:
-        checkpoint = torch.load(args.resume, map_location=args.device)
-        model_without_ddp.load_state_dict(checkpoint['model'])
+        # weights_only=False: checkpoint['args'] is an argparse.Namespace (or,
+        # in tests, an equivalent stand-in), which is not on torch's default
+        # weights_only safe-globals list. Matches the convention already used
+        # for every other non-tensor-only torch.load() in this codebase (see
+        # load_weights.py and the per-task train.py load_saved_model paths).
+        checkpoint = torch.load(args.resume, map_location=args.device, weights_only=False)
+        # Symmetric with save_checkpoint's unwrap: checkpoints always carry
+        # uncompiled key names, so load into the unwrapped model regardless
+        # of whether it's currently wrapped by torch.compile.
+        resume_model = getattr(model_without_ddp, '_orig_mod', model_without_ddp)
+        resume_model.load_state_dict(checkpoint['model'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
         args.start_epoch = checkpoint['epoch'] + 1
         if model_ema:
-            model_ema.load_state_dict(checkpoint['model_ema'])
+            resume_ema = getattr(model_ema, '_orig_mod', model_ema)
+            resume_ema.load_state_dict(checkpoint['model_ema'])
     return args
 
 
@@ -811,15 +821,25 @@ def save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, mod
     Returns:
         dict: The checkpoint dictionary
     """
+    # torch.compile() wraps a model in torch._dynamo.OptimizedModule; when
+    # not using DDP, model_without_ddp IS that wrapper (setup_distributed_model
+    # only assigns model_without_ddp = model.module under DDP). state_dict() on
+    # a compiled model emits every key prefixed _orig_mod., which downstream
+    # weight-loading (load_weights.py, used for the float->quantization
+    # transfer) cannot match -- it silently falls back to strict=False and
+    # discards the entire result. Unwrap before saving so checkpoints always
+    # carry the original, uncompiled key names.
+    checkpoint_model = getattr(model_without_ddp, '_orig_mod', model_without_ddp)
     checkpoint = {
-        'model': model_without_ddp.state_dict(),
+        'model': checkpoint_model.state_dict(),
         'optimizer': optimizer.state_dict(),
         'lr_scheduler': lr_scheduler.state_dict(),
         'epoch': epoch,
         'args': args
     }
     if model_ema:
-        checkpoint['model_ema'] = model_ema.state_dict()
+        checkpoint_ema = getattr(model_ema, '_orig_mod', model_ema)
+        checkpoint['model_ema'] = checkpoint_ema.state_dict()
     if extra_data:
         checkpoint.update(extra_data)
     return checkpoint
