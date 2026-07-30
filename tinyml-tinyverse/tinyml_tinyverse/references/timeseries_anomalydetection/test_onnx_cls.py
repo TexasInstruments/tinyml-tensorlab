@@ -158,12 +158,14 @@ def main(gpu, args):
 
         input_name = ort_sess.get_inputs()[0].name
         output_name = ort_sess.get_outputs()[0].name
-        predicted = torch.tensor([]).to(device, non_blocking=True)
-        ground_truth = torch.tensor([]).to(device, non_blocking=True)
+        # See evaluate_classification (common/utils/utils.py) for why non_blocking must be gated on CUDA.
+        non_blocking = (device.type == 'cuda')
+        predicted = torch.tensor([]).to(device, non_blocking=non_blocking)
+        ground_truth = torch.tensor([]).to(device, non_blocking=non_blocking)
         for batched_raw_data, batched_data, batched_target in data_loader:
-            batched_raw_data = batched_raw_data.long().to(device, non_blocking=True)
-            batched_data = batched_data.float().to(device, non_blocking=True)
-            batched_target = batched_target.long().to(device, non_blocking=True)
+            batched_raw_data = batched_raw_data.long().to(device, non_blocking=non_blocking)
+            batched_data = batched_data.float().to(device, non_blocking=non_blocking)
+            batched_target = batched_target.long().to(device, non_blocking=non_blocking)
             if transform:
                 batched_data = transform(batched_data)
             if args.nn_for_feature_extraction:
