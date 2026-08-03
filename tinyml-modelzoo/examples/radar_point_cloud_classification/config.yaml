@@ -1,0 +1,32 @@
+common:
+  task_type: radar_classification
+  target_module: radar
+  target_device: MSPM0G3507
+dataset:
+  dataset_name: pose_fall
+  # Local path to the dataset zip. Replace with a URL if hosted remotely.
+  input_data_path: "C:/Users/a1256120/OneDrive - TEXAS INSTRUMENTS/Documents/CodePrototyping/dataset"
+  # data_dir: '.'
+  # loader_type: classification
+  split_type: within_files
+  split_factor: [0.8, 0.1, 0.1]
+data_processing_feature_extraction:
+  frame_size: 8         
+  stride_size: 0.5
+training:
+  model_name: Pose_and_Fall_model
+  model_config: ''
+  batch_size: 64
+  training_epochs: 1600
+  num_gpus: 0
+  quantization: 0
+  learning_rate: 0.0001
+  lr_scheduler: none
+  weight_decay: 0
+  momentum: 0
+  warmup_epochs: 0
+  optimizer: SGD
+
+  output_int: true
+testing: {}
+compilation: {}

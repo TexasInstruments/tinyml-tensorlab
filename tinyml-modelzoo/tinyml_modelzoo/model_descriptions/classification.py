@@ -1305,6 +1305,26 @@ _model_descriptions = {
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
+    'Pose_and_Fall_model': deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            generic_model=False,
+            task_type=constants.TASK_TYPE_RADAR_CLASSIFICATION,
+            model_details='Pose and Fall Detection model for Radar Point Cloud data. '
+        ),
+        'training': dict(
+            model_training_id='LINEAR_4L_PC',  # Must match class name in models/!
+            model_name='Pose_and_Fall_model',
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py",
+                           name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties,
+            target_devices={
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) |
+                    (DEVICE_RUN_INFO['Pose_and_Fall_model'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) |
+                    (DEVICE_RUN_INFO['Pose_and_Fall_model'][constants.TARGET_DEVICE_F28P65]),
+                # ... add other target devices ...
+            },
+        ),
+    }),
 }
 
 enabled_models_list = [
@@ -1331,7 +1351,7 @@ enabled_models_list = [
     # Application-specific models
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
     'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t', 'PIRDetection_model_1_t',
-    'FanImbalance_model_1_t', 'FanImbalance_model_2_t', 'FanImbalance_model_3_t', 'ElectricalFault_model_40k_t',
+    'FanImbalance_model_1_t', 'FanImbalance_model_2_t', 'FanImbalance_model_3_t', 'Pose_and_Fall_model', 'ElectricalFault_model_40k_t',
     'GearboxFault_model_1.2k_t', 'GearboxFault_model_1.5k_t',
 ]
 
