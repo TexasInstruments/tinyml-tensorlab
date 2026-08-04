@@ -157,9 +157,32 @@ def get_model(model_name, variables, num_classes, input_features=None,
     Returns:
         Instantiated model
     """
+    if model_config is not None:
+        # model_config is documented as an "Optional path to model config file"
+        # and threaded all the way down from --model-config on the training CLI,
+        # but nothing in this function (or the config_dict it builds) has ever
+        # read it -- any customization a caller expects from it is silently
+        # dropped, with every built-in model constructed from only
+        # variables/num_classes/input_features/dual_op regardless. Fail loud
+        # instead of silently ignoring a config the user explicitly set.
+        import warnings
+        warnings.warn(
+            f"model_config ({model_config}) was provided but is not implemented -- "
+            "it will NOT be applied. The model will be constructed with its "
+            "default architecture.",
+            stacklevel=2,
+        )
+
     config_dict = dict(
         variables=variables,
         num_classes=num_classes,
+        # Regression models' constructors use the parameter name 'num_outputs'
+        # (not 'num_classes'); GenericModelWithSpec._init_args() resolves each
+        # constructor kwarg via config.get(key, value), so without this alias
+        # 'num_outputs' is never found here and every regression model silently
+        # falls back to its hardcoded default (1) regardless of what was
+        # actually requested via num_classes.
+        num_outputs=num_classes,
         input_features=input_features,
         dual_op=dual_op
     )

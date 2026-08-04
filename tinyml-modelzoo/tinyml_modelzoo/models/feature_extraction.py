@@ -167,28 +167,59 @@ class NeuralNetworkWithPreprocess(torch.nn.Module):
         super().__init__()
         self.preprocess = preprocess
         self.model = model
+        # Only freeze preprocess when it's genuinely acting as a frozen feature
+        # extractor ahead of a trainable model -- matches the original
+        # conditional (the old code only detached/eval'd preprocess when
+        # self.model was also set).
+        self._freeze_preprocess = self.preprocess is not None and self.model is not None
+        if self._freeze_preprocess:
+            for p in self.preprocess.parameters():
+                p.requires_grad = False  # was `p.requires_grad_ = False`, which
+                # assigns over the bound method instead of calling it -- a no-op
+                # that never actually disabled gradients.
+
+    def train(self, mode=True):
+        # preprocess must stay in eval mode permanently once frozen, regardless
+        # of how many times the outer container's train()/eval() is toggled.
+        # Without this override, the standard per-epoch model.train() call
+        # recursively resets preprocess back to train mode too (nn.Module.train()
+        # propagates to all child modules by default) -- silently corrupting its
+        # BatchNorm running stats on the very next forward pass, since the old
+        # code only called m.eval() *after* running preprocess once, and only
+        # within forward(), so the fix couldn't survive the next train() call.
+        super().train(mode)
+        if self._freeze_preprocess:
+            self.preprocess.eval()
+        return self
 
     def forward(self, x):
         if self.preprocess:
-            x = self.preprocess(x)
-            if self.model:
-                x = x.detach()
-                for p in self.preprocess.parameters():
-                    p.requires_grad_ = False
-                for m in self.preprocess.modules():
-                    if isinstance(m, torch.nn.BatchNorm2d):
-                        m.eval()
+            if self._freeze_preprocess:
+                with torch.no_grad():
+                    x = self.preprocess(x)
+            else:
+                x = self.preprocess(x)
         if self.model:
             x = self.model(x)
         return x
 
 
 # Export all feature extraction models
-__all__ = [
-    'FEModel1',
-    'FEModel2',
-    'FEModel',
-    'FEModelLinear',
-    'CombinedModel',
-    'NeuralNetworkWithPreprocess',
-]
+# None of these classes are meant to be selected by name through the public
+# model registry (get_model()) -- they're composition/helper classes with
+# positional-arg constructors (e.g. FEModel1(variables, out_features, ...),
+# CombinedModel(model1, model2)) that don't accept get_model()'s
+# config=<dict> calling convention, unlike real registry models. The
+# registry's auto-discovery loop (_register_models_from_module in
+# models/__init__.py) previously registered every name in __all__
+# regardless, so selecting one of these by --model/model_name (they appeared
+# as legitimate entries in list_models()/model_dict.keys()) raised a raw
+# TypeError: __init__() got an unexpected keyword argument 'config' instead
+# of the intended "model not found" error. Deliberately empty: keeps this
+# module's own import (and the registry loader's __all__-presence check)
+# working, without the fallback "discover every model-shaped class" path
+# re-registering these classes anyway. They remain directly importable
+# (e.g. `from tinyml_modelzoo.models.feature_extraction import FEModel1`,
+# which real callers already use) -- __all__ only affects `from module
+# import *` and this registry's own discovery loop.
+__all__ = []
