@@ -37,15 +37,9 @@ from .base import GenericModelWithSpec
 
 class LINEAR_4L_PC(GenericModelWithSpec): #can come back to naming convention later
     def __init__(self, config, input_features= 176, variables=1, num_classes=5):
-        print(f"DEBUG RADAR MODEL __init__ START: input_features={input_features}, variables={variables}, num_classes={num_classes}")
-        print(f"DEBUG RADAR MODEL config keys: {list(config.keys()) if config else 'None'}")
-        if config:
-            print(f"DEBUG RADAR MODEL config values: { {k: v for k, v in config.items()} }")
         super().__init__(config, input_features=input_features, variables=variables,
                          num_classes=num_classes)
-        print(f"DEBUG RADAR MODEL after super(): self.input_features={self.input_features}, self.variables={self.variables}")
         input_size = self.input_features * self.variables #(just int for now)
-        print(f"DEBUG RADAR MODEL: input_size = {input_size}")
         self.bn1 = torch.nn.BatchNorm1d(num_features= input_size)
         self.fc1 = torch.nn.Linear(in_features=input_size, out_features=64)
         self.bn2 = torch.nn.BatchNorm1d(num_features= 64)

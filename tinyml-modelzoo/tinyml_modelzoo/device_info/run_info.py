@@ -1823,5 +1823,9 @@ DEVICE_RUN_INFO = {
         'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+    },
+    'Pose_and_Fall_model': {
+        'F28P55': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
     }
 }
