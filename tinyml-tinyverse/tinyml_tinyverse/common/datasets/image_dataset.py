@@ -207,9 +207,6 @@ class GenericImageDataset(Dataset):
                 self.logger.info(f"Parsing {self.augment_config} to form augmentation pipeline")
                 try:
                     with open(self.augment_config) as fp:
-                        # yaml.CLoader is the C-accelerated equivalent of the unsafe
-                        # yaml.Loader (not yaml.SafeLoader) -- it can instantiate
-                        # arbitrary Python objects via !!python/object/apply:... tags.
                         augment_config = yaml.safe_load(fp)
                     self.augment_pipeline = augment_config
                     # Unlike BaseGenericTSDataset (timeseries_dataset.py), there is no

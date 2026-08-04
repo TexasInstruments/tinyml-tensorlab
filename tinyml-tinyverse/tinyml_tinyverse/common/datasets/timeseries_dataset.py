@@ -118,12 +118,10 @@ class BaseGenericTSDataset(Dataset):
                 self.logger.info(f"Parsing {self.augment_config} to form Augmentation Pipeline")
                 try:
                     with open(self.augment_config) as fp:
-                        # yaml.CLoader is the C-accelerated equivalent of the unsafe
-                        # yaml.Loader (not yaml.SafeLoader) -- it can instantiate
-                        # arbitrary Python objects via !!python/object/apply:... tags.
-                        augment_config = yaml.safe_load(fp)
+                        augment_config = yaml.safe_load(fp) or {}
                 except yaml.YAMLError as exc:
                     self.logger.critical(f"{exc} error parsing {self.augment_config}")
+                    augment_config = {}
                 # Create a pipeline of augmenters
                 self.augment_pipeline = [create_augmenter(name, params) for name, params in augment_config.items()]
 
