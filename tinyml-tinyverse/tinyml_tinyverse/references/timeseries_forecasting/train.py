@@ -283,21 +283,25 @@ def main(gpu, args):
 
         # Log best epoch metrics
         logger = getLogger(f"root.main.{phase}.BestEpoch")
-        logger.info("Printing statistics of best epoch:")
-        logger.info(f"Best epoch:{best_epoch_values['epoch'] + 1}")
-        logger.info(f"Overall SMAPE across all variables: {best_epoch_values['overall_smape']:.2f}%")
-        logger.info("Per-Variable Metrics:")
+        if best_epoch_values['true_values'] is not None:
+            logger.info("Printing statistics of best epoch:")
+            logger.info(f"Best epoch:{best_epoch_values['epoch'] + 1}")
+            logger.info(f"Overall SMAPE across all variables: {best_epoch_values['overall_smape']:.2f}%")
+            logger.info("Per-Variable Metrics:")
 
-        for idx, item in enumerate(dataset.header_row):
-            for target_variable_name in item:
-                logger.info(f"  Variable {target_variable_name}:")
-                logger.info(f"      SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(best_epoch_values['true_values'][:, :, idx], best_epoch_values['predictions'][:, :, idx]):.2f}%")
-                logger.info(f"      R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(best_epoch_values['predictions'][:, :, idx], best_epoch_values['true_values'][:, :, idx]):.4f}")
+            for idx, item in enumerate(dataset.header_row):
+                for target_variable_name in item:
+                    logger.info(f"  Variable {target_variable_name}:")
+                    logger.info(f"      SMAPE of {target_variable_name} across all predicted timesteps: {utils.smape(best_epoch_values['true_values'][:, :, idx], best_epoch_values['predictions'][:, :, idx]):.2f}%")
+                    logger.info(f"      R² of {target_variable_name} across all predicted timesteps: {utils.get_r2_score(best_epoch_values['predictions'][:, :, idx], best_epoch_values['true_values'][:, :, idx]):.4f}")
 
-                for step in range(args.forecast_horizon):
-                    logger.info(f"      Timestep {step + 1}:")
-                    logger.info(f"          SMAPE: {utils.smape(best_epoch_values['true_values'][:, step, idx], best_epoch_values['predictions'][:, step, idx]):.2f}%")
-                    logger.info(f"          R²: {utils.get_r2_score(best_epoch_values['predictions'][:, step, idx], best_epoch_values['true_values'][:, step, idx]):.4f}")
+                    for step in range(args.forecast_horizon):
+                        logger.info(f"      Timestep {step + 1}:")
+                        logger.info(f"          SMAPE: {utils.smape(best_epoch_values['true_values'][:, step, idx], best_epoch_values['predictions'][:, step, idx]):.2f}%")
+                        logger.info(f"          R²: {utils.get_r2_score(best_epoch_values['predictions'][:, step, idx], best_epoch_values['true_values'][:, step, idx]):.4f}")
+        else:
+            logger.warning("No epoch was run in this invocation (e.g. --resume to a checkpoint that already "
+                            "satisfied --epochs); skipping best-epoch metrics summary.")
 
         # Save final predictions and create visualizations for best epoch
         if args.output_dir and best_epoch_values['true_values'] is not None:

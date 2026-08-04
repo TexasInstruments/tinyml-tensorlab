@@ -361,24 +361,28 @@ def main(gpu, args):
 
         # Log best epoch results
         logger = getLogger(f"root.main.{phase}.BestEpoch")
-        logger.info("")
-        logger.info("Printing statistics of best epoch:")
-        logger.info(f"Best Epoch: {best['epoch']}")
-        logger.info(f"Acc@1 {best['accuracy']:.3f}")
-        logger.info(f"F1-Score {best['f1']:.3f}")
-        logger.info(f"AUC ROC Score {best['f1']:.3f}")
-        logger.info("")
-        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
-                      columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-                      index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
-                                                             headers="keys", tablefmt='grid')))
+        if best['epoch'] is not None:
+            logger.info("")
+            logger.info("Printing statistics of best epoch:")
+            logger.info(f"Best Epoch: {best['epoch']}")
+            logger.info(f"Acc@1 {best['accuracy']:.3f}")
+            logger.info(f"F1-Score {best['f1']:.3f}")
+            logger.info(f"AUC ROC Score {best['auc']:.3f}")
+            logger.info("")
+            logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
+                          columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+                          index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
+                                                                 headers="keys", tablefmt='grid')))
 
-        Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG,
-               name="root.utils.print_file_level_classification_summary",
-               append_log=True if args.quantization else False, console_log=False)
-        getLogger("root.utils.print_file_level_classification_summary").propagate = False
-        utils.print_file_level_classification_summary(dataset_test, best['predictions'], best['ground_truth'], phase)
-        logger.info(f"Generated file-level classification summary in: {args.file_level_classification_log}")
+            Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG,
+                   name="root.utils.print_file_level_classification_summary",
+                   append_log=True if args.quantization else False, console_log=False)
+            getLogger("root.utils.print_file_level_classification_summary").propagate = False
+            utils.print_file_level_classification_summary(dataset_test, best['predictions'], best['ground_truth'], phase)
+            logger.info(f"Generated file-level classification summary in: {args.file_level_classification_log}")
+        else:
+            logger.warning("No epoch was run in this invocation (e.g. --resume to a checkpoint that already "
+                            "satisfied --epochs); skipping best-epoch and file-level classification summaries.")
 
         # Export model
         logger.info('Exporting model after training.')
