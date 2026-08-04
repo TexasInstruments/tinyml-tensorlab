@@ -120,7 +120,7 @@ def get_reconstruction_errors_stats(args):
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler,
-        num_workers=args.workers, pin_memory=True if args.gpu > 0 else False, collate_fn=utils.collate_fn)
+        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
     try:
 
         logger.info(f"Loading ONNX model: {args.model_path}")
@@ -173,7 +173,7 @@ def main(gpu, args):
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler,
-        num_workers=args.workers, pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn)
+        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
     try:
 
         logger.info(f"Loading ONNX model: {args.model_path}")
