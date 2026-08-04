@@ -203,7 +203,13 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_train from {}".format(cache_path))
-        dataset, _ = torch.load(cache_path)
+        # weights_only=False is safe here: cache_path is a purely local cache this
+        # same process wrote moments earlier (derived from a hash of datadir, never
+        # fetched from a URL or otherwise externally supplied), and the cached object
+        # is one of this project's own Dataset subclasses -- not the kind of type
+        # torch's weights_only=True default (PyTorch 2.6+) allowlists, so loading
+        # this cache without the override raises UnpicklingError on every run.
+        dataset, _ = torch.load(cache_path, weights_only=False)
     else:
         if args.dataset == 'modelmaker':
             train_folders = os.path.normpath(datadir).split(os.sep)
@@ -224,7 +230,8 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_test from {}".format(cache_path))
-        dataset_test, _ = torch.load(cache_path)
+        # See the training-cache load above for why weights_only=False is safe here.
+        dataset_test, _ = torch.load(cache_path, weights_only=False)
     else:
         # val_transform = presets.ClassificationPresetEval(crop_size=crop_size, resize_size=resize_size,
         #                                      interpolation=interpolation,
