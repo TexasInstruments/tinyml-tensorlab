@@ -118,10 +118,14 @@ def gen_artifacts(args):
     try:
         logger.info("Calling TVM to generate artifacts: ")
         drive_compile(Namespace(**input_args))
-    except Exception:
-        raise
-    logger.info("Changing directory back to: {}".format(curr_dir))
-    os.chdir(curr_dir)
+    finally:
+        # Must restore cwd even on failure -- this runs in-process inside the
+        # training orchestrator (called from tinyml_benchmark.py), not a
+        # subprocess, so a compile failure previously left the whole process's
+        # cwd pointed at args.output_dir for the rest of its lifetime, breaking
+        # every subsequent relative-path default elsewhere in the pipeline.
+        logger.info("Changing directory back to: {}".format(curr_dir))
+        os.chdir(curr_dir)
     # We also need to delete the devc.o file as it is not required
     try:
         os.remove(os.path.join(artifacts_dir, 'devc.o'))
@@ -225,19 +229,27 @@ def main(args):
     args.target_example_target_hook_target_device_type = None
     args.target_cmsis_nn_mcpu = None if args.target_cmsis_nn_mcpu=='None' else args.target_cmsis_nn_mcpu
     args.target_cmsis_nn_mattr = None if args.target_cmsis_nn_mattr == 'None' else args.target_cmsis_nn_mattr
+    # Track whether decryption actually succeeded -- previously a failed decrypt()
+    # was silently swallowed and execution proceeded as if it had worked, so
+    # gen_artifacts() would fail confusingly against the still-encrypted file, and
+    # either outcome unconditionally re-encrypted args.FILE regardless of whether
+    # it had ever actually been decrypted, permanently corrupting it via
+    # double-encryption. Only encrypt back if we genuinely decrypted first.
+    decrypted = False
     if not args.generic_model:
         try:
             utils.decrypt(args.FILE, utils.get_crypt_key())
-        except Exception:
-            pass
+            decrypted = True
+        except Exception as exc:
+            logger.error(
+                f"Could not decrypt {args.FILE}: {exc}. "
+                "Compilation will likely fail against the still-encrypted file."
+            )
     try:
         gen_artifacts(args)
-    except Exception:
-        if not args.generic_model:
+    finally:
+        if decrypted:
             utils.encrypt(args.FILE, utils.get_crypt_key())
-        raise
-    if not args.generic_model:
-        utils.encrypt(args.FILE, utils.get_crypt_key())
 
     if not args.keep_intermittent_files:
         remove_intermittent_files(args.output_dir)
