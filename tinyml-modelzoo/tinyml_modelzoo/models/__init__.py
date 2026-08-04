@@ -93,6 +93,11 @@ def _register_models_from_module(module_name):
                             if not name.startswith('_') and
                             _is_model_class(getattr(module, name, None))]
 
+        # Names a submodule opts out of model_dict registration (e.g.
+        # composition/helper classes with a non-registry constructor
+        # signature) while still wanting to be exported/importable.
+        registry_exclude = getattr(module, '_REGISTRY_EXCLUDE', ())
+
         # Register each exported model
         for name in exported_names:
             obj = getattr(module, name, None)
@@ -102,7 +107,7 @@ def _register_models_from_module(module_name):
                 _all_exports.append(name)
 
                 # Add model classes to model_dict
-                if _is_model_class(obj):
+                if name not in registry_exclude and _is_model_class(obj):
                     model_dict[name] = obj
 
     except ImportError as e:
@@ -176,13 +181,6 @@ def get_model(model_name, variables, num_classes, input_features=None,
     config_dict = dict(
         variables=variables,
         num_classes=num_classes,
-        # Regression models' constructors use the parameter name 'num_outputs'
-        # (not 'num_classes'); GenericModelWithSpec._init_args() resolves each
-        # constructor kwarg via config.get(key, value), so without this alias
-        # 'num_outputs' is never found here and every regression model silently
-        # falls back to its hardcoded default (1) regardless of what was
-        # actually requested via num_classes.
-        num_outputs=num_classes,
         input_features=input_features,
         dual_op=dual_op
     )

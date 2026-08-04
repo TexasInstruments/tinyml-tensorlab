@@ -205,21 +205,40 @@ class NeuralNetworkWithPreprocess(torch.nn.Module):
 
 
 # Export all feature extraction models
-# None of these classes are meant to be selected by name through the public
-# model registry (get_model()) -- they're composition/helper classes with
-# positional-arg constructors (e.g. FEModel1(variables, out_features, ...),
-# CombinedModel(model1, model2)) that don't accept get_model()'s
+__all__ = [
+    'FEModel1',
+    'FEModel2',
+    'FEModel',
+    'FEModelLinear',
+    'CombinedModel',
+    'NeuralNetworkWithPreprocess',
+]
+
+# None of the classes above are meant to be selected by name through the
+# public model registry (get_model()) -- they're composition/helper classes
+# with positional-arg constructors (e.g. FEModel1(variables, out_features,
+# ...), CombinedModel(model1, model2)) that don't accept get_model()'s
 # config=<dict> calling convention, unlike real registry models. The
 # registry's auto-discovery loop (_register_models_from_module in
-# models/__init__.py) previously registered every name in __all__
-# regardless, so selecting one of these by --model/model_name (they appeared
-# as legitimate entries in list_models()/model_dict.keys()) raised a raw
-# TypeError: __init__() got an unexpected keyword argument 'config' instead
-# of the intended "model not found" error. Deliberately empty: keeps this
-# module's own import (and the registry loader's __all__-presence check)
-# working, without the fallback "discover every model-shaped class" path
-# re-registering these classes anyway. They remain directly importable
-# (e.g. `from tinyml_modelzoo.models.feature_extraction import FEModel1`,
-# which real callers already use) -- __all__ only affects `from module
-# import *` and this registry's own discovery loop.
-__all__ = []
+# models/__init__.py) registers every name in __all__ into model_dict as
+# long as it looks model-shaped (has .forward()), so selecting one of these
+# by --model/model_name (they appeared as legitimate entries in
+# list_models()/model_dict.keys()) raised a raw TypeError: __init__() got
+# an unexpected keyword argument 'config' instead of the intended "model
+# not found" error.
+#
+# __all__ can't be emptied to fix this: models/__init__.py's package-level
+# `from tinyml_modelzoo.models import *` (used by
+# tinyml_tinyverse/common/models/__init__.py) and direct attribute access
+# like `models.FEModelLinear` both go through the SAME __all__-driven
+# auto-discovery loop that builds model_dict -- an empty __all__ here also
+# makes these names vanish from the package's own namespace, breaking
+# `from tinyml_tinyverse.common.models import NeuralNetworkWithPreprocess`
+# and `models.FEModelLinear(...)`, both of which real callers use
+# (train.py in timeseries/audio/image_classification).
+#
+# So __all__ stays populated (imports keep working), and
+# _register_models_from_module instead checks this module-level opt-out
+# set before adding a name to model_dict -- decoupling "importable" from
+# "selectable as --model <name>".
+_REGISTRY_EXCLUDE = set(__all__)
