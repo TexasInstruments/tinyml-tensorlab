@@ -207,8 +207,24 @@ class GenericImageDataset(Dataset):
                 self.logger.info(f"Parsing {self.augment_config} to form augmentation pipeline")
                 try:
                     with open(self.augment_config) as fp:
-                        augment_config = yaml.load(fp, Loader=yaml.CLoader)
+                        # yaml.CLoader is the C-accelerated equivalent of the unsafe
+                        # yaml.Loader (not yaml.SafeLoader) -- it can instantiate
+                        # arbitrary Python objects via !!python/object/apply:... tags.
+                        augment_config = yaml.safe_load(fp)
                     self.augment_pipeline = augment_config
+                    # Unlike BaseGenericTSDataset (timeseries_dataset.py), there is no
+                    # augmenter dispatch table for image data -- create_augmenter() only
+                    # knows timeseries-specific augmenters (AddNoise, Crop, TimeWarp,
+                    # etc.), which don't apply to image tensors. self.augment_pipeline is
+                    # therefore never consumed anywhere in this class; parsing succeeds
+                    # but the requested augmentation is silently never applied. Fail loud
+                    # instead of silently ignoring a config the user explicitly set.
+                    self.logger.warning(
+                        f"augment_config ({self.augment_config}) was parsed but image "
+                        "dataset augmentation via augment_config is not implemented -- "
+                        "it will NOT be applied. Use the 'augmentation_transform' "
+                        "parameter instead."
+                    )
                 except yaml.YAMLError as exc:
                     self.logger.critical(f"{exc} error parsing {self.augment_config}")
 
