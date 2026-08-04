@@ -339,19 +339,18 @@ class BaseImageModelTraining:
             '--generic-model', f'{self.params.common.generic_model}',
             '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
             # Transform
-            # Pass the raw list (not stringified) -- matches the test argv builder
+            # Pass raw lists (not stringified) -- matches the test argv builder
             # below and timeseries_base.py's reference implementation.
-            # prepare_transforms() (train_base.py) only combines data_proc_transforms
-            # into args.transforms when isinstance(args.data_proc_transforms, list) is
-            # true; the stringified form previously used here made that check false
-            # every time, so args.transforms was silently never set for training,
-            # while the (correctly raw) test-time argv still applied it -- a real
-            # train/test skew for anyone customizing this parameter. feat_ext_transform
-            # doesn't have this defect: it's parsed via _normalize_transform_list's
-            # literal_eval fallback, which tolerates both string and list forms.
+            # prepare_transforms() (train_base.py) does
+            # `args.data_proc_transforms + args.feat_ext_transform` whenever
+            # isinstance(args.data_proc_transforms, list) is true. Both operands
+            # must therefore be actual lists at that point, not just
+            # data_proc_transforms: a stringified feat_ext_transform (e.g. "[]")
+            # makes this `list + str`, raising TypeError on every training run
+            # once data_proc_transforms itself was made a raw list.
             '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,
-            '--feat-ext-transform', f'{self.params.data_processing_feature_extraction.feat_ext_transform}',
-            '--augmentation-transform', f'{self.params.data_processing_feature_extraction.augmentation_transform}',
+            '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
+            '--augmentation-transform', self.params.data_processing_feature_extraction.augmentation_transform,
             '--feat-ext-store-dir', f'{self.params.data_processing_feature_extraction.feat_ext_store_dir}',
             '--dont-train-just-feat-ext', f'{self.params.data_processing_feature_extraction.dont_train_just_feat_ext}',
             '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',
