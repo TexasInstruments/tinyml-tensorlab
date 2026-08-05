@@ -118,9 +118,18 @@ class BaseGenericTSDataset(Dataset):
                 self.logger.info(f"Parsing {self.augment_config} to form Augmentation Pipeline")
                 try:
                     with open(self.augment_config) as fp:
-                        augment_config = yaml.safe_load(fp) or {}
+                        augment_config = yaml.safe_load(fp)
                 except yaml.YAMLError as exc:
                     self.logger.critical(f"{exc} error parsing {self.augment_config}")
+                    augment_config = None
+                if augment_config is None:
+                    augment_config = {}
+                elif not isinstance(augment_config, dict):
+                    # A list/scalar root would crash .items() below.
+                    self.logger.critical(
+                        f"{self.augment_config} must contain a YAML mapping of "
+                        f"augmenter-name -> params, got {type(augment_config).__name__}; "
+                        "ignoring it.")
                     augment_config = {}
                 # Create a pipeline of augmenters
                 self.augment_pipeline = [create_augmenter(name, params) for name, params in augment_config.items()]

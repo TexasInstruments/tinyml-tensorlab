@@ -41,3 +41,17 @@ def test_augment_config_empty_yaml_does_not_crash():
         dataset = _make_dataset(yaml_path)
 
     assert dataset.augment_pipeline == []
+
+
+def test_augment_config_non_mapping_root_does_not_crash():
+    """Valid YAML whose root is a list (or scalar) parses fine but would
+    crash the `.items()` call that builds the pipeline -- must degrade to
+    no augmenters instead."""
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        yaml_path = os.path.join(tmp_dir, "list_root.yaml")
+        with open(yaml_path, "w") as fp:
+            fp.write("- AddNoise\n- Crop\n")
+
+        dataset = _make_dataset(yaml_path)
+
+    assert dataset.augment_pipeline == []
