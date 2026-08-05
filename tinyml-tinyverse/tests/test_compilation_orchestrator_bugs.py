@@ -63,19 +63,24 @@ def _minimal_main_args(tmp_path, generic_model):
     )
 
 
-def test_main_does_not_encrypt_when_decrypt_failed(tmp_path):
-    """A failed decrypt() must not be followed by an encrypt() -- the file was
-    never actually decrypted, so re-encrypting it would corrupt it."""
+def test_main_aborts_without_encrypting_when_decrypt_failed(tmp_path):
+    """A failed decrypt() must not be followed by an encrypt() (the file was
+    never actually decrypted, so re-encrypting it would corrupt it), must not
+    proceed into gen_artifacts() (compiling the still-encrypted blob can only
+    produce garbage), and must report failure via a nonzero exit flag --
+    matching the contract the modelmaker runners consume
+    (exit_flag = compile_scr.run(args))."""
     args = _minimal_main_args(tmp_path, generic_model=False)
 
     with patch.object(compilation.utils, "decrypt", side_effect=RuntimeError("bad key")), \
          patch.object(compilation.utils, "encrypt") as mock_encrypt, \
          patch.object(compilation.utils, "get_crypt_key", return_value="key"), \
-         patch.object(compilation, "gen_artifacts"), \
+         patch.object(compilation, "gen_artifacts") as mock_gen_artifacts, \
          patch.object(compilation, "remove_intermittent_files"):
-        compilation.main(args)
+        assert compilation.main(args) == 1
 
     mock_encrypt.assert_not_called()
+    mock_gen_artifacts.assert_not_called()
 
 
 def test_main_encrypts_after_successful_decrypt_and_successful_compile(tmp_path):

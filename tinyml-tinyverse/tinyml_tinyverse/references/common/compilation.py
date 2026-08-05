@@ -234,17 +234,17 @@ def main(args):
     # gen_artifacts() would fail confusingly against the still-encrypted file, and
     # either outcome unconditionally re-encrypted args.FILE regardless of whether
     # it had ever actually been decrypted, permanently corrupting it via
-    # double-encryption. Only encrypt back if we genuinely decrypted first.
+    # double-encryption. Only encrypt back if we genuinely decrypted first, and
+    # abort before gen_artifacts() on failure -- compiling the still-encrypted
+    # blob can only produce garbage or a confusing downstream error.
     decrypted = False
     if not args.generic_model:
         try:
             utils.decrypt(args.FILE, utils.get_crypt_key())
             decrypted = True
         except Exception as exc:
-            logger.error(
-                f"Could not decrypt {args.FILE}: {exc}. "
-                "Compilation will likely fail against the still-encrypted file."
-            )
+            logger.error(f"Could not decrypt {args.FILE}: {exc}. Compilation cannot continue.")
+            return 1
     try:
         gen_artifacts(args)
     finally:
