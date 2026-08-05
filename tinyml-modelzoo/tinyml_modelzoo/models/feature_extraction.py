@@ -177,6 +177,12 @@ class NeuralNetworkWithPreprocess(torch.nn.Module):
                 p.requires_grad = False  # was `p.requires_grad_ = False`, which
                 # assigns over the bound method instead of calling it -- a no-op
                 # that never actually disabled gradients.
+            # Freeze mode immediately too: nn.Module constructs in train mode,
+            # and a forward pass before any train()/eval() call would still
+            # update BatchNorm running stats (torch.no_grad() in forward()
+            # blocks gradients but not running-stat updates). The train()
+            # override below keeps this in force across later train() calls.
+            self.preprocess.eval()
 
     def train(self, mode=True):
         # preprocess must stay in eval mode permanently once frozen, regardless

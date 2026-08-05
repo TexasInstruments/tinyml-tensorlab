@@ -130,6 +130,27 @@ def test_neural_network_with_preprocess_bn_running_stats_unchanged_by_forward():
     assert torch.equal(wrapper.preprocess.bn.running_var, running_var_before)
 
 
+def test_neural_network_with_preprocess_is_frozen_immediately_after_construction():
+    """nn.Module constructs in train mode, so without an explicit eval() in
+    __init__ a forward pass made before any train()/eval() call would still
+    update the frozen preprocess's BatchNorm running stats (torch.no_grad()
+    blocks gradients, not running-stat updates)."""
+    preprocess = _TinyPreprocess()
+    model = _TinyModel()
+    wrapper = NeuralNetworkWithPreprocess(preprocess, model)
+
+    assert wrapper.preprocess.training is False
+
+    running_mean_before = wrapper.preprocess.bn.running_mean.clone()
+    running_var_before = wrapper.preprocess.bn.running_var.clone()
+
+    x = torch.randn(4, 3, 8, 8)
+    wrapper(x)  # no train()/eval() call first -- straight after construction
+
+    assert torch.equal(wrapper.preprocess.bn.running_mean, running_mean_before)
+    assert torch.equal(wrapper.preprocess.bn.running_var, running_var_before)
+
+
 def test_neural_network_with_preprocess_without_model_is_not_frozen():
     """Matches the real call pattern NeuralNetworkWithPreprocess(fe_model, None)
     -- preprocess used standalone should remain trainable, preserving the
