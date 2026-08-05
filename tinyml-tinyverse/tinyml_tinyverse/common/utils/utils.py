@@ -162,9 +162,9 @@ def collate_fn(batch):
     return raw_tensors, tensors, targets
 
 
-def _get_cache_path(filepath):
+def _get_cache_path(filepath, tag='train'):
     import hashlib
-    h = hashlib.sha1(filepath.encode()).hexdigest()
+    h = hashlib.sha1(f'{tag}:{filepath}'.encode()).hexdigest()
     cache_path = os.path.join("~", ".torch", "audio_classification", "datasets", "audiofolder", h[:10] + ".pt")
     cache_path = os.path.expanduser(cache_path)
     return cache_path
@@ -199,7 +199,7 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
 
     logger.info("Loading training data")
     st = timeit.default_timer()
-    cache_path = _get_cache_path(datadir)
+    cache_path = _get_cache_path(datadir, tag='train')
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_train from {}".format(cache_path))
@@ -226,7 +226,7 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
 
     logger.info("Loading validation data")
     st = timeit.default_timer()
-    cache_path = _get_cache_path(datadir)
+    cache_path = _get_cache_path(datadir, tag='val')
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_test from {}".format(cache_path))
@@ -243,11 +243,10 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             dataset_test = dataset_loader("val", dataset_dir=args.data_path, validation_list=val_list, **vars(args)).prepare(**vars(args))
         else:
             dataset_test = dataset_loader("val", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        # TODO: Add utils and uncomment the if block
-        # if args.cache_dataset:
-        #     logger.info("Saving dataset_test to {}".format(cache_path))
-        #     utils.mkdir(os.path.dirname(cache_path))
-        #     utils.save_on_master((dataset_test, datadir), cache_path)
+        if args.cache_dataset:
+            logger.info("Saving dataset_test to {}".format(cache_path))
+            mkdir(os.path.dirname(cache_path))
+            save_on_master((dataset_test, datadir), cache_path)
     logger.info("Took {:.2f} seconds".format(timeit.default_timer() - st))
     logger.info("\nCreating data loaders")
     if args.distributed:

@@ -1,12 +1,26 @@
-"""Regression test for load_data()'s --cache-dataset torch.load() crash.
+"""Regression tests for two --cache-dataset bugs in load_data().
 
-Both cache-hit branches in load_data() (training data and validation data)
-called torch.load(cache_path) with no weights_only argument. The cached
-object is a (dataset, datadir) tuple where dataset is one of this project's
-own Dataset subclasses -- not the kind of type torch's weights_only=True
-default (PyTorch 2.6+) allowlists, so any second run using --cache-dataset
-(after the first run wrote the cache) failed with
-UnpicklingError: Weights only load failed.
+1. Both cache-hit branches called torch.load(cache_path) with no
+   weights_only argument. The cached object is a (dataset, datadir) tuple
+   where dataset is one of this project's own Dataset subclasses -- not the
+   kind of type torch's weights_only=True default (PyTorch 2.6+)
+   allowlists, so any run reusing a --cache-dataset cache failed with
+   UnpicklingError: Weights only load failed.
+
+2. An independent peer review of the fix for (1) caught a second, more
+   serious bug _get_cache_path(datadir) exposed: it computed the SAME
+   cache path for the training dataset and the validation dataset (both
+   derived only from datadir), and only the training branch ever wrote its
+   cache -- the validation write-back was dead code, commented out with
+   "TODO: Add utils and uncomment the if block". On the very first run
+   with --cache-dataset enabled, the validation cache-hit check
+   (os.path.exists(cache_path)) became true immediately after the training
+   branch's write (same path), so dataset_test silently became a
+   torch.load() of the TRAINING dataset -- not a crash, just meaningless
+   validation metrics (train==val) from that point on. Fixed by giving
+   _get_cache_path a `tag` parameter ('train'/'val') folded into the hash,
+   producing distinct paths, and by enabling the validation cache
+   write-back that was dead code.
 """
 import os
 import tempfile
@@ -31,19 +45,71 @@ class _FakeDataset:
         return 4
 
 
-def test_load_data_reads_a_cached_dataset_without_weights_only_error():
+class _StubPreparable:
+    """Stands in for what dataset_loader(subset, dataset_dir=..., **kwargs)
+    returns -- load_data() immediately calls .prepare(**kwargs) on it."""
+
+    def __init__(self, dataset):
+        self._dataset = dataset
+
+    def prepare(self, **kwargs):
+        return self._dataset
+
+
+def _fake_cache_path(tmp_dir):
+    def _get(datadir, tag='train'):
+        return os.path.join(tmp_dir, f"cache_{tag}.pt")
+    return _get
+
+
+def test_get_cache_path_differs_between_train_and_val_for_the_same_datadir():
+    train_path = utils._get_cache_path("/some/datadir", tag='train')
+    val_path = utils._get_cache_path("/some/datadir", tag='val')
+    assert train_path != val_path
+
+
+def test_load_data_reads_distinct_cached_train_and_val_datasets_without_weights_only_error():
     with tempfile.TemporaryDirectory() as tmp_dir:
-        cache_path = os.path.join(tmp_dir, "cache.pt")
-        torch.save((_FakeDataset("cached"), "/some/datadir"), cache_path)
+        get_cache_path = _fake_cache_path(tmp_dir)
+        torch.save((_FakeDataset("cached-train"), "/some/datadir"),
+                   get_cache_path("/some/datadir", tag='train'))
+        torch.save((_FakeDataset("cached-val"), "/some/datadir"),
+                   get_cache_path("/some/datadir", tag='val'))
 
         args = Namespace(cache_dataset=True, dataset_loader="unused",
                           distributed=False, loader_type="regression")
 
-        with patch.object(utils, "_get_cache_path", return_value=cache_path):
+        with patch.object(utils, "_get_cache_path", side_effect=get_cache_path):
             dataset, dataset_test, train_sampler, test_sampler = utils.load_data(
                 "/some/datadir", args, dataset_loader_dict={}
             )
 
-    assert isinstance(dataset, _FakeDataset)
-    assert dataset.tag == "cached"
-    assert isinstance(dataset_test, _FakeDataset)
+    assert dataset.tag == "cached-train"
+    assert dataset_test.tag == "cached-val"
+
+
+def test_load_data_writes_a_validation_cache_when_missing():
+    """The validation cache write-back was dead code, so --cache-dataset
+    never actually cached the validation dataset even after a successful
+    training-cache write. Confirm the val cache file gets written now."""
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        get_cache_path = _fake_cache_path(tmp_dir)
+        train_cache_path = get_cache_path("/some/datadir", tag='train')
+        val_cache_path = get_cache_path("/some/datadir", tag='val')
+        torch.save((_FakeDataset("cached-train"), "/some/datadir"), train_cache_path)
+        assert not os.path.exists(val_cache_path)
+
+        def _fake_loader(subset, dataset_dir, **kwargs):
+            return _StubPreparable(_FakeDataset(f"loaded-{subset}"))
+
+        args = Namespace(cache_dataset=True, dataset_loader="fake", dataset="local",
+                          data_path="/some/datadir", distributed=False, loader_type="regression")
+
+        with patch.object(utils, "_get_cache_path", side_effect=get_cache_path):
+            dataset, dataset_test, _, _ = utils.load_data(
+                "/some/datadir", args, dataset_loader_dict={"fake": _fake_loader}
+            )
+
+        assert dataset.tag == "cached-train"
+        assert dataset_test.tag == "loaded-val"
+        assert os.path.exists(val_cache_path)
