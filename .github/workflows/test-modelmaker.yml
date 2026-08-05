@@ -94,7 +94,7 @@ jobs:
       - name: tinyml-tinyverse Tests
         working-directory: tinyml-tinyverse
         run: |
-          if [ -d tests ] && find tests -name 'test_*.py' -print -quit | grep -q .; then
+          if [ -d tests ] && find tests \( -name 'test_*.py' -o -name '*_test.py' \) -print -quit | grep -q .; then
             python -m pytest tests/ -v --tb=short
           else
             echo "No tests found in tinyml-tinyverse/tests/ yet -- skipping."
@@ -103,7 +103,7 @@ jobs:
       - name: tinyml-modelzoo Tests
         working-directory: tinyml-modelzoo
         run: |
-          if [ -d tests ] && find tests -name 'test_*.py' -print -quit | grep -q .; then
+          if [ -d tests ] && find tests \( -name 'test_*.py' -o -name '*_test.py' \) -print -quit | grep -q .; then
             python -m pytest tests/ -v --tb=short
           else
             echo "No tests found in tinyml-modelzoo/tests/ yet -- skipping."
@@ -112,7 +112,7 @@ jobs:
       - name: torchmodelopt — Component Tests
         working-directory: tinyml-modeloptimization/torchmodelopt
         run: |
-          if [ -d tests ] && find tests -name 'test_*.py' -print -quit | grep -q .; then
+          if [ -d tests ] && find tests \( -name 'test_*.py' -o -name '*_test.py' \) -print -quit | grep -q .; then
             python -m pytest tests/ -v --tb=short
           else
             echo "No tests found in tinyml-modeloptimization/torchmodelopt/tests/ yet -- skipping."
