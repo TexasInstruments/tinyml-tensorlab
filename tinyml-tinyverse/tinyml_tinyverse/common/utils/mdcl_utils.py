@@ -242,7 +242,10 @@ def read_yaml_file(my_file, log_name='root.utils.RYML'):
         log.error("file/dir path does not exist : {}".format(str(my_file)))
         return
     with open(my_file, 'r') as fp:
-        read_data = yaml.load(fp, Loader=yaml.CLoader)
+        # yaml.CLoader is the C-accelerated equivalent of the unsafe yaml.Loader
+        # (not yaml.SafeLoader) -- it can instantiate arbitrary Python objects via
+        # !!python/object/apply:... tags. safe_load() uses SafeLoader instead.
+        read_data = yaml.safe_load(fp)
     return read_data
 
 
