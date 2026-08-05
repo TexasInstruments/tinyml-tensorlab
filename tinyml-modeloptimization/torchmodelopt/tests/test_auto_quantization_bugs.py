@@ -79,13 +79,28 @@ def test_apply_mixed_precision_does_not_mutate_callers_qconfig_dict():
 
 def test_apply_mixed_precision_still_applies_the_requested_bitwidth_per_layer():
     """Regression safety: the mutation fix must not break the actual mixed-
-    precision assignment -- set_module_name must still be called with a
-    qconfig built at the requested bitwidth for each layer."""
+    precision assignment. bit_width < 32 takes the branch the fix rewrote
+    (the local bw_qconfig_dict construction), so assert the produced qconfig
+    genuinely reflects the requested 4-bit width -- signed 4-bit weights span
+    [-7, 7] and unsigned 4-bit activations span [0, 15]."""
+    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig())
+
+    result = apply_mixed_precision(
+        qconfig_mapping, {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}, {4: ["fc"]}
+    )
+
+    qconfig = result.module_name_qconfigs["fc"]
+    assert qconfig is not None
+    assert qconfig.weight().quant_max == 7
+    assert qconfig.activation().quant_max == 15
+
+
+def test_apply_mixed_precision_bitwidth_32_disables_quantization_for_the_layer():
+    """bit_width == 32 takes the separate "disable quantization" path."""
     qconfig_mapping = QConfigMapping().set_global(get_default_qconfig())
 
     result = apply_mixed_precision(
         qconfig_mapping, {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}, {32: ["fc"]}
     )
 
-    # bit_width == 32 takes the "disable quantization for this layer" path.
     assert result.module_name_qconfigs["fc"] is None
