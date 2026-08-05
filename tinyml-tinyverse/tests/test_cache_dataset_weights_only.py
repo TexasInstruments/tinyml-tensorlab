@@ -57,7 +57,7 @@ class _StubPreparable:
 
 
 def _fake_cache_path(tmp_dir):
-    def _get(datadir, tag='train'):
+    def _get(datadir, tag='train', args=None):
         return os.path.join(tmp_dir, f"cache_{tag}.pt")
     return _get
 
@@ -66,6 +66,36 @@ def test_get_cache_path_differs_between_train_and_val_for_the_same_datadir():
     train_path = utils._get_cache_path("/some/datadir", tag='train')
     val_path = utils._get_cache_path("/some/datadir", tag='val')
     assert train_path != val_path
+
+
+def test_get_cache_path_differs_when_dataset_config_changes():
+    """The cached object is the fully PREPARED dataset -- transforms and
+    loader settings are baked in ("Attention, as the transforms are also
+    cached!"). A run with a different transform pipeline against the same
+    datadir must therefore miss the cache, not silently reuse a dataset
+    prepared under the old configuration."""
+    args_a = Namespace(feat_ext_transform=["MFCC"], dataset_loader="GenericTSDataset")
+    args_b = Namespace(feat_ext_transform=["RAW"], dataset_loader="GenericTSDataset")
+
+    path_a = utils._get_cache_path("/some/datadir", tag='train', args=args_a)
+    path_a_again = utils._get_cache_path("/some/datadir", tag='train', args=args_a)
+    path_b = utils._get_cache_path("/some/datadir", tag='train', args=args_b)
+
+    assert path_a == path_a_again  # stable for an equivalent configuration
+    assert path_a != path_b  # any config change invalidates
+
+
+def test_save_cache_atomically_publishes_only_a_complete_file(tmp_path):
+    """A reader that sees cache_path exist must never read a partial file:
+    the write goes to a .tmp sibling and is published via os.replace."""
+    cache_path = str(tmp_path / "sub" / "cache_train.pt")
+
+    utils._save_cache_atomically((_FakeDataset("payload"), "/some/datadir"), cache_path)
+
+    assert os.path.exists(cache_path)
+    assert not os.path.exists(cache_path + ".tmp")
+    dataset, _ = torch.load(cache_path, weights_only=False)
+    assert dataset.tag == "payload"
 
 
 def test_load_data_reads_distinct_cached_train_and_val_datasets_without_weights_only_error():
