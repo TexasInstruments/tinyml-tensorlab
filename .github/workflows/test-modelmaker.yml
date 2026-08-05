@@ -16,6 +16,9 @@ on:
       - 'tinyml-tinyverse/**'
       - 'tinyml-modelzoo/**'
       - 'tinyml-modeloptimization/**'
+      # Without this, a PR that only changes this workflow (like the one
+      # introducing this line) never triggers the very CI it modifies.
+      - '.github/workflows/test-modelmaker.yml'
   workflow_dispatch:  # manual trigger
 
 jobs:
