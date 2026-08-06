@@ -166,11 +166,13 @@ def get_reconstruction_errors_stats(generic_model, model_path, device, data_load
 
     input_name = ort_sess.get_inputs()[0].name
     output_name = ort_sess.get_outputs()[0].name
-    errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=True)
+    # See evaluate_classification (common/utils/utils.py) for why non_blocking must be gated on CUDA.
+    non_blocking = (device.type == 'cuda')
+    errors = torch.tensor([], dtype=torch.float32).to(device, non_blocking=non_blocking)
     for _, data, targets in data_loader:
-        data = data.float().to(device, non_blocking=True)
-        targets = targets.long().to(device, non_blocking=True)
-        batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
+        data = data.float().to(device, non_blocking=non_blocking)
+        targets = targets.long().to(device, non_blocking=non_blocking)
+        batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=non_blocking)
         for input, target_label in zip(data, targets):
             input = input.unsqueeze(0).cpu().numpy()
             output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
@@ -322,7 +324,7 @@ def main(gpu, args):
 
         # Calculate threshold
         model_path = os.path.join(args.output_dir, 'model.onnx')
-        error_mean, error_std = get_reconstruction_errors_stats(args.generic_model, model_path, args.device, data_loader)
+        error_mean, error_std = get_reconstruction_errors_stats(args.generic_model, model_path, device, data_loader)
         threshold = error_mean + 3 * error_std
 
         if args.gen_golden_vectors:

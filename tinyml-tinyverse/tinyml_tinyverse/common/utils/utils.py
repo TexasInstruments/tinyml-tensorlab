@@ -1294,11 +1294,13 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
     targets=[]
     outputs=[]
 
+    # See evaluate_classification for why non_blocking must be gated on CUDA.
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
         for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
             # Move data and target to the specified device
-            data = data.float().to(device, non_blocking=True)
-            target = target.float().to(device, non_blocking=True)
+            data = data.float().to(device, non_blocking=non_blocking)
+            target = target.float().to(device, non_blocking=non_blocking)
 
             # Apply transformation if provided
             if transform:
@@ -1365,14 +1367,16 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
 
+    # See evaluate_classification for why non_blocking must be gated on CUDA.
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
         val_loss = 0
         target_list = []
         predictions_list = []
         # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         for _, data, target in data_loader:
-            data = data.float().to(device, non_blocking=True)
-            target = target.float().to(device, non_blocking=True)
+            data = data.float().to(device, non_blocking=non_blocking)
+            target = target.float().to(device, non_blocking=non_blocking)
 
             if transform:
                 data = transform(data)
@@ -1472,11 +1476,13 @@ def evaluate_anomalydetection(
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Validation{log_suffix} - Epoch[{epoch}]: '
 
+    # See evaluate_classification for why non_blocking must be gated on CUDA.
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
         for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
-            data = data.float().to(device, non_blocking=True)
-            #In anomlay detection with auto encoder, the target and the input data both are same. 
+            data = data.float().to(device, non_blocking=non_blocking)
+            #In anomlay detection with auto encoder, the target and the input data both are same.
             target = data
             if transform:
                 data = transform(data)
@@ -1564,14 +1570,20 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     target_list = []
     predictions_list = []
 
+    # non_blocking H2D transfers are only safe/beneficial with pinned source memory.
+    # create_data_loaders() only pins memory for CUDA (pin_memory=False for MPS/CPU),
+    # so non_blocking must be disabled on those backends -- otherwise the async copy
+    # can race with reuse of the source buffer, corrupting the transferred tensor
+    # (observed on MPS as NaN activations reaching the quantization observers).
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
         for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
             if nn_for_feature_extraction:
-                data = data_raw.float().to(device, non_blocking=True)
+                data = data_raw.float().to(device, non_blocking=non_blocking)
             else:
-                data = data_feat_ext.float().to(device, non_blocking=True)
+                data = data_feat_ext.float().to(device, non_blocking=non_blocking)
 
-            target = target.long().to(device, non_blocking=True)
+            target = target.long().to(device, non_blocking=non_blocking)
             if transform:
                 data = transform(data)
 

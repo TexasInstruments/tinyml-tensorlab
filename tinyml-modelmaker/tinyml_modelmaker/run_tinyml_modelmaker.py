@@ -34,6 +34,14 @@ import logging
 import os
 import sys
 
+# PyTorch's MPS-fallback flag is read once when its MPS backend is registered
+# (during `import torch`, pulled in transitively below by `import tinyml_modelmaker`)
+# -- setting it later via os.environ from within already-running Python code has no
+# effect. It must be in the process environment before torch is ever imported, so it
+# is set here, at the top of this script, ahead of any project import. Harmless on
+# CUDA/CPU since it only changes MPS dispatch behavior.
+os.environ.setdefault('PYTORCH_ENABLE_MPS_FALLBACK', '1')
+
 import yaml
 
 logger = logging.getLogger(__name__)

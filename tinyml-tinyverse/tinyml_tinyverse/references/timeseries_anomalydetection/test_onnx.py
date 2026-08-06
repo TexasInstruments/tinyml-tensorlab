@@ -120,17 +120,19 @@ def get_reconstruction_errors_stats(args):
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler,
-        num_workers=args.workers, pin_memory=True if args.gpu > 0 else False, collate_fn=utils.collate_fn)
+        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
     try:
 
         logger.info(f"Loading ONNX model: {args.model_path}")
         ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
 
-        errors = torch.tensor([]).to(device, non_blocking=True)
+        # See evaluate_classification (common/utils/utils.py) for why non_blocking must be gated on CUDA.
+        non_blocking = (device.type == 'cuda')
+        errors = torch.tensor([]).to(device, non_blocking=non_blocking)
         for _, data, targets in data_loader:
-            data = data.float().to(device, non_blocking=True)
-            targets = targets.long().to(device, non_blocking=True)
-            batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
+            data = data.float().to(device, non_blocking=non_blocking)
+            targets = targets.long().to(device, non_blocking=non_blocking)
+            batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=non_blocking)
             for input, target_label in zip(data, targets):
                 input = input.unsqueeze(0).cpu().numpy()
                 output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
@@ -171,22 +173,24 @@ def main(gpu, args):
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler,
-        num_workers=args.workers, pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn)
+        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
     try:
 
         logger.info(f"Loading ONNX model: {args.model_path}")
         ort_sess, input_name, output_name = load_onnx_model(args.model_path, args.generic_model)
 
-        errors = torch.tensor([]).to(device, non_blocking=True)
-        ground_truth = torch.tensor([]).to(device, non_blocking=True)
+        # See evaluate_classification (common/utils/utils.py) for why non_blocking must be gated on CUDA.
+        non_blocking = (device.type == 'cuda')
+        errors = torch.tensor([]).to(device, non_blocking=non_blocking)
+        ground_truth = torch.tensor([]).to(device, non_blocking=non_blocking)
 
         for _, data, targets in data_loader:
-            data = data.float().to(device, non_blocking=True)
-            targets = targets.long().to(device, non_blocking=True)
+            data = data.float().to(device, non_blocking=non_blocking)
+            targets = targets.long().to(device, non_blocking=non_blocking)
             if transform:
                 data = transform(data)
-            batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=True)
-            batch_target_labels = torch.tensor([]).to(device, non_blocking=True)
+            batch_reconstruction_errors = torch.tensor([]).to(device, non_blocking=non_blocking)
+            batch_target_labels = torch.tensor([]).to(device, non_blocking=non_blocking)
             for input, target_label in zip(data, targets):
                 input = input.unsqueeze(0).cpu().numpy()
                 output = torch.tensor(ort_sess.run([output_name], {input_name: input})[0]).to(device)
