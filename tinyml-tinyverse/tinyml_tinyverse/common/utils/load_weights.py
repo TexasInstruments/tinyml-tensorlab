@@ -32,6 +32,7 @@
 import re
 import torch
 import copy
+from argparse import Namespace
 from collections import OrderedDict
 from . import print_utils
 from . import data_utils
@@ -62,7 +63,15 @@ def load_weights(model, pretrained, change_names_dict=None, keep_original_names=
         else:
             pretrained_file = pretrained
         #
-        data = torch.load(pretrained_file, map_location=device, weights_only=False)
+        # weights_only=False fully disables PyTorch's deserialization safety check --
+        # pretrained_file can be a URL fetched with no integrity check (download_url
+        # above), so an untrusted/spoofed checkpoint would get arbitrary code
+        # execution during unpickling. Namespace is allow-listed because checkpoints
+        # written by this project's own save_checkpoint() (train_base.py) legitimately
+        # carry one under the 'args' key, and such a checkpoint is a plausible
+        # 'pretrained' input here too.
+        with torch.serialization.safe_globals([Namespace]):
+            data = torch.load(pretrained_file, map_location=device)
     else:
         data = pretrained
     #

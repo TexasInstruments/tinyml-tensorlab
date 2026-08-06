@@ -455,6 +455,22 @@ def run_auto_quantization(model, qconfig_dict, qconfig_mapping, get_default_qcon
         bsearch_threshold = None
         higher_is_better = None
 
+    if optimal_bitwidth is None:
+        # Either no calibration_dataloader was supplied, or compute_hessian_sensitivity
+        # couldn't compute sensitivities (e.g. sample inputs/targets/criterion weren't
+        # available -- callers like audio_classification/train.py already anticipate
+        # this and try to degrade gracefully, logging "Proceeding without it" before
+        # calling in here). Without a sensitivity-driven bitwidth search there is
+        # nothing to allocate, so fall back to the qconfig_mapping the caller already
+        # built from the manually-specified uniform bitwidth, unchanged, instead of
+        # crashing on `None * total_params` a few lines below.
+        logger.warning(
+            "Hessian-based auto-quantization could not run (no calibration_dataloader "
+            "or no computable sensitivities) -- falling back to the manually-specified "
+            "uniform bitwidth qconfig instead of a mixed-precision search."
+        )
+        return qconfig_mapping
+
     total_params = sum(module_params.values())
     total_bit_budget = optimal_bitwidth * total_params
     logger.info(f"Total parameters: {total_params}")

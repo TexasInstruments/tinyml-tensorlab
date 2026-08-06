@@ -162,12 +162,41 @@ def collate_fn(batch):
     return raw_tensors, tensors, targets
 
 
-def _get_cache_path(filepath):
+# Dataset-shaping args folded into the cache key: the cached object is the
+# fully PREPARED dataset ("Attention, as the transforms are also cached!"), so
+# a run that changes any of these against the same datadir must miss the cache
+# rather than silently reuse a dataset prepared under the old configuration.
+# Not exhaustive -- prepare(**vars(args)) passes everything through, so an
+# exotic loader could consume an arg not listed here; extend as needed.
+# Over-invalidation (a needless cache miss) is safe; under-invalidation is not.
+_CACHE_KEY_ARGS = (
+    'dataset', 'dataset_loader', 'annotation_prefix', 'loader_type',
+    'data_proc_transforms', 'feat_ext_transform', 'augmentation_transform',
+    'transforms', 'frame_size', 'stride_size', 'sampling_rate', 'new_sr',
+    'variables', 'resampling_factor',
+)
+
+
+def _get_cache_path(filepath, tag='train', args=None):
     import hashlib
-    h = hashlib.sha1(filepath.encode()).hexdigest()
+    key = f'{tag}:{filepath}'
+    if args is not None:
+        config = [(k, repr(getattr(args, k, None))) for k in _CACHE_KEY_ARGS]
+        key += f':{config!r}'
+    h = hashlib.sha1(key.encode()).hexdigest()
     cache_path = os.path.join("~", ".torch", "audio_classification", "datasets", "audiofolder", h[:10] + ".pt")
     cache_path = os.path.expanduser(cache_path)
     return cache_path
+
+
+def _save_cache_atomically(payload, cache_path):
+    """Write to a temp file in the target directory, then atomically publish
+    via os.replace -- a reader that sees cache_path exist never reads a
+    partially-written file (e.g. another rank, or a run killed mid-save)."""
+    mkdir(os.path.dirname(cache_path))
+    tmp_path = cache_path + '.tmp'
+    torch.save(payload, tmp_path)
+    os.replace(tmp_path, cache_path)
 
 
 def load_data(datadir, args, dataset_loader_dict, test_only=False):
@@ -199,11 +228,17 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
 
     logger.info("Loading training data")
     st = timeit.default_timer()
-    cache_path = _get_cache_path(datadir)
+    cache_path = _get_cache_path(datadir, tag='train', args=args)
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_train from {}".format(cache_path))
-        dataset, _ = torch.load(cache_path)
+        # weights_only=False is safe here: cache_path is a purely local cache this
+        # same process wrote moments earlier (derived from a hash of datadir, never
+        # fetched from a URL or otherwise externally supplied), and the cached object
+        # is one of this project's own Dataset subclasses -- not the kind of type
+        # torch's weights_only=True default (PyTorch 2.6+) allowlists, so loading
+        # this cache without the override raises UnpicklingError on every run.
+        dataset, _ = torch.load(cache_path, weights_only=False)
     else:
         if args.dataset == 'modelmaker':
             train_folders = os.path.normpath(datadir).split(os.sep)
@@ -212,19 +247,19 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             dataset = dataset_loader("training", dataset_dir=args.data_path, training_list=training_list, **vars(args)).prepare(**vars(args))
         else:
             dataset = dataset_loader("training", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        if args.cache_dataset:
+        if args.cache_dataset and is_main_process():
             logger.info("Saving dataset_train to {}".format(cache_path))
-            mkdir(os.path.dirname(cache_path))
-            save_on_master((dataset, datadir), cache_path)
+            _save_cache_atomically((dataset, datadir), cache_path)
     logger.info("Took {0:.2f} seconds".format(timeit.default_timer() - st))
 
     logger.info("Loading validation data")
     st = timeit.default_timer()
-    cache_path = _get_cache_path(datadir)
+    cache_path = _get_cache_path(datadir, tag='val', args=args)
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_test from {}".format(cache_path))
-        dataset_test, _ = torch.load(cache_path)
+        # See the training-cache load above for why weights_only=False is safe here.
+        dataset_test, _ = torch.load(cache_path, weights_only=False)
     else:
         # val_transform = presets.ClassificationPresetEval(crop_size=crop_size, resize_size=resize_size,
         #                                      interpolation=interpolation,
@@ -236,11 +271,9 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             dataset_test = dataset_loader("val", dataset_dir=args.data_path, validation_list=val_list, **vars(args)).prepare(**vars(args))
         else:
             dataset_test = dataset_loader("val", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        # TODO: Add utils and uncomment the if block
-        # if args.cache_dataset:
-        #     logger.info("Saving dataset_test to {}".format(cache_path))
-        #     utils.mkdir(os.path.dirname(cache_path))
-        #     utils.save_on_master((dataset_test, datadir), cache_path)
+        if args.cache_dataset and is_main_process():
+            logger.info("Saving dataset_test to {}".format(cache_path))
+            _save_cache_atomically((dataset_test, datadir), cache_path)
     logger.info("Took {:.2f} seconds".format(timeit.default_timer() - st))
     logger.info("\nCreating data loaders")
     if args.distributed:
