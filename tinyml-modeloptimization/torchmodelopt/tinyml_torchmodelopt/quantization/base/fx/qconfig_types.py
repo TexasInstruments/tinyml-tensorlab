@@ -166,9 +166,19 @@ def apply_mixed_precision(qconfig_mapping, qconfig_dict, mixed_precision):
             for layer in layers:
                 qconfig_mapping.set_module_name(layer, None)
         else:
-            qconfig_dict['weight']['bitwidth'] = bit_width
-            qconfig_dict['activation']['bitwidth'] = bit_width
-            qconfig = get_default_qconfig(qconfig_dict=qconfig_dict)
+            # Build a local copy instead of mutating the caller's qconfig_dict in
+            # place. qconfig_dict is frequently the same dict object retained as
+            # self.qconfig_type on the model wrapper (quant_base.py) -- writing
+            # qconfig_dict['weight']['bitwidth'] directly here left that live,
+            # retained object holding whichever bitwidth tier this loop processed
+            # last, rather than the model's actual/intended default. Some callers
+            # already built their own throwaway copy before calling in here as a
+            # workaround; fixing it in this function protects every caller.
+            bw_qconfig_dict = {
+                'weight': {**qconfig_dict.get('weight', {}), 'bitwidth': bit_width},
+                'activation': {**qconfig_dict.get('activation', {}), 'bitwidth': bit_width},
+            }
+            qconfig = get_default_qconfig(qconfig_dict=bw_qconfig_dict)
             for layer in layers:
                 qconfig_mapping.set_module_name(layer, qconfig)
     return qconfig_mapping

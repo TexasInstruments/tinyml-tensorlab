@@ -88,12 +88,19 @@ def str2int_or_float(v):
             return False
         elif v == 'True':
             return True
-        elif not v.isdigit():
-            return str(v)
         elif '.' in v:
-            return float(v)
-        else:
+            # Must be checked before isdigit(): isdigit() is False for any string
+            # containing '.' (e.g. '31.25'), so checking it first made this branch
+            # unreachable -- every float-like string fell through to the
+            # not-isdigit() string passthrough below instead of being converted.
+            try:
+                return float(v)
+            except ValueError:
+                return v
+        elif v.isdigit():
             return int(v)
+        else:
+            return v
     else:
         return v
 

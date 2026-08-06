@@ -58,7 +58,7 @@ class TestCreateInterFileSplit:
         fl = tmp_path / "file_list.txt"
         fl.write_text("a.csv\nb.csv\n")
         split_files = (str(tmp_path / "train.txt"), str(tmp_path / "val.txt"))
-        with pytest.raises(ValueError, match="less than 1"):
+        with pytest.raises(ValueError, match=r"range \(0\.0, 1\.0\)"):
             dataset_utils.create_inter_file_split(str(fl), split_files, 1.5)
 
     def test_split_factor_list_sum_too_large(self, tmp_path):
