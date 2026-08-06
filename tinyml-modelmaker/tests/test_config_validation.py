@@ -10,6 +10,8 @@ from pathlib import Path
 import pytest
 import yaml
 
+from tinyml_modelmaker.ai_modules.audio import training as audio_training
+from tinyml_modelmaker.ai_modules.audio import constants as audio_constants
 from tinyml_modelmaker.ai_modules.timeseries import training, constants
 
 
@@ -38,8 +40,12 @@ def _find_example_configs():
 
 EXAMPLE_CONFIGS = _find_example_configs()
 
-# Known valid task types (timeseries + vision)
-KNOWN_TASK_TYPES = set(constants.TASK_TYPE_TO_CATEGORY.keys()) | {"image_classification"}
+# Known valid task types (timeseries + vision + audio)
+KNOWN_TASK_TYPES = (
+    set(constants.TASK_TYPE_TO_CATEGORY.keys())
+    | set(audio_constants.TASK_TYPES)
+    | {"image_classification"}
+)
 
 # Required top-level keys in every config
 REQUIRED_SECTIONS = {"common", "training"}
@@ -150,7 +156,8 @@ class TestExampleConfigsModelReferences:
         if task_type == "image_classification":
             pytest.skip("Vision model registry not tested here")
 
-        desc = training.get_model_description(model_name)
+        registry = audio_training if task_type in audio_constants.TASK_TYPES else training
+        desc = registry.get_model_description(model_name)
         assert desc is not None, (
             f"Config references model '{model_name}' which is not in the registry"
         )
