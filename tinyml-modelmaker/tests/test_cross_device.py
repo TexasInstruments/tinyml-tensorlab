@@ -355,7 +355,7 @@ class TestQuantizationFlags:
     def test_float_mode_no_normalize(self, task_category):
         """Quantization=0 (float) should set skip_normalize=False, output_int=False."""
         skip, output = constants.get_skip_normalize_and_output_int(
-            task_category, quantization=0, partial_quantization=False
+            task_category, quantization=0, auto_quantization=False
         )
         assert skip is False
         assert output is False
@@ -364,7 +364,7 @@ class TestQuantizationFlags:
         """Classification with quantization should set output_int=True."""
         skip, output = constants.get_skip_normalize_and_output_int(
             constants.TASK_CATEGORY_TS_CLASSIFICATION,
-            quantization=1, partial_quantization=False,
+            quantization=1, auto_quantization=False,
         )
         assert skip is True
         assert output is True
@@ -373,7 +373,7 @@ class TestQuantizationFlags:
         """Regression with quantization should set output_int=False."""
         skip, output = constants.get_skip_normalize_and_output_int(
             constants.TASK_CATEGORY_TS_REGRESSION,
-            quantization=1, partial_quantization=False,
+            quantization=1, auto_quantization=False,
         )
         assert skip is True
         assert output is False
@@ -382,16 +382,16 @@ class TestQuantizationFlags:
         """Forecasting with quantization should set output_int=False."""
         skip, output = constants.get_skip_normalize_and_output_int(
             constants.TASK_CATEGORY_TS_FORECASTING,
-            quantization=1, partial_quantization=False,
+            quantization=1, auto_quantization=False,
         )
         assert skip is True
         assert output is False
 
-    def test_partial_quant_regression_override(self):
-        """Partial quantization for regression should set skip_normalize=False."""
+    def test_auto_quant_regression_override(self):
+        """Auto quantization for regression should set skip_normalize=False."""
         skip, output = constants.get_skip_normalize_and_output_int(
             constants.TASK_CATEGORY_TS_REGRESSION,
-            quantization=1, partial_quantization=True,
+            quantization=1, auto_quantization=True,
         )
         assert skip is False
         assert output is False

@@ -92,8 +92,9 @@ class TestGetDefaultDataDir:
             == ts_constants.DATA_DIR_CLASSES
         )
 
-    def test_unknown_category_returns_classes(self):
-        assert ts_constants.get_default_data_dir_for_task("something_else") == ts_constants.DATA_DIR_CLASSES
+    def test_unknown_category_raises(self):
+        with pytest.raises(ValueError, match="Unsupported task_category"):
+            ts_constants.get_default_data_dir_for_task("something_else")
 
     def test_vision_returns_classes(self):
         # Vision module always returns 'classes'

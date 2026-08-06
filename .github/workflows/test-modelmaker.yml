@@ -6,12 +6,19 @@ on:
     paths:
       - 'tinyml-modelmaker/**'
       - 'tinyml-tinyverse/**'
+      - 'tinyml-modelzoo/**'
+      - 'tinyml-modeloptimization/**'
       - '.github/workflows/test-modelmaker.yml'
   pull_request:
     branches: [platypus_dev_1.3, main]
     paths:
       - 'tinyml-modelmaker/**'
       - 'tinyml-tinyverse/**'
+      - 'tinyml-modelzoo/**'
+      - 'tinyml-modeloptimization/**'
+      # Without this, a PR that only changes this workflow (like the one
+      # introducing this line) never triggers the very CI it modifies.
+      - '.github/workflows/test-modelmaker.yml'
   workflow_dispatch:  # manual trigger
 
 jobs:
@@ -76,6 +83,37 @@ jobs:
         working-directory: tinyml-modelmaker
         run: python -m pytest tests/test_pipeline_smoke.py -v --tb=short
 
+      # tinyml-tinyverse, tinyml-modelzoo, and torchmodelopt have no
+      # equivalent of the Tier steps above -- until now, nothing ran their
+      # tests/ directories in CI at all, so every regression test added
+      # there was silently never checked on push/PR. Guarded with a
+      # find-based existence check (rather than a plain `test -d tests`)
+      # since an empty tests/ directory makes pytest exit non-zero with "no
+      # tests collected", which would otherwise fail CI on packages that
+      # temporarily have no tests.
       - name: tinyml-tinyverse Tests
         working-directory: tinyml-tinyverse
-        run: python -m pytest tests/ -v --tb=short
+        run: |
+          if [ -d tests ] && find tests \( -name 'test_*.py' -o -name '*_test.py' \) -print -quit | grep -q .; then
+            python -m pytest tests/ -v --tb=short
+          else
+            echo "No tests found in tinyml-tinyverse/tests/ yet -- skipping."
+          fi
+
+      - name: tinyml-modelzoo Tests
+        working-directory: tinyml-modelzoo
+        run: |
+          if [ -d tests ] && find tests \( -name 'test_*.py' -o -name '*_test.py' \) -print -quit | grep -q .; then
+            python -m pytest tests/ -v --tb=short
+          else
+            echo "No tests found in tinyml-modelzoo/tests/ yet -- skipping."
+          fi
+
+      - name: torchmodelopt — Component Tests
+        working-directory: tinyml-modeloptimization/torchmodelopt
+        run: |
+          if [ -d tests ] && find tests \( -name 'test_*.py' -o -name '*_test.py' \) -print -quit | grep -q .; then
+            python -m pytest tests/ -v --tb=short
+          else
+            echo "No tests found in tinyml-modeloptimization/torchmodelopt/tests/ yet -- skipping."
+          fi
