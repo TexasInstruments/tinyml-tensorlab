@@ -324,7 +324,7 @@ def main(gpu, args):
 
         # Calculate threshold
         model_path = os.path.join(args.output_dir, 'model.onnx')
-        error_mean, error_std = get_reconstruction_errors_stats(args.generic_model, model_path, args.device, data_loader)
+        error_mean, error_std = get_reconstruction_errors_stats(args.generic_model, model_path, device, data_loader)
         threshold = error_mean + 3 * error_std
 
         if args.gen_golden_vectors:
