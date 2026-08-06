@@ -272,7 +272,7 @@ def main(gpu, args):
             return
 
         move_model_to_device(model, device, logger)
-        model = compile_model_if_enabled(model, args, logger)
+        model = compile_model_if_enabled(model, args, logger, input_shape=(1,) + dataset.X.shape[1:])
         criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
 
         model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)

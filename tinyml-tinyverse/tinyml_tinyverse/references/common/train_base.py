@@ -72,7 +72,7 @@ import os
 import platform
 import sys
 import timeit
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
 import numpy as np
@@ -604,13 +604,41 @@ def resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema
         Updated args with start_epoch
     """
     if args.resume:
-        checkpoint = torch.load(args.resume, map_location=args.device)
-        model_without_ddp.load_state_dict(checkpoint['model'])
+        # checkpoint['args'] is an argparse.Namespace (or, in tests, an
+        # equivalent stand-in). torch >=2.6 defaults torch.load to
+        # weights_only=True, which refuses to unpickle it -- but disabling
+        # the check entirely (weights_only=False) would also accept an
+        # attacker-crafted checkpoint's arbitrary __reduce__ payload as code
+        # to execute. Allowlist only the one non-tensor type this checkpoint
+        # actually needs instead.
+        with torch.serialization.safe_globals([Namespace]):
+            checkpoint = torch.load(args.resume, map_location=args.device)
+
+        # Checkpoints from any era may or may not carry a torch.compile
+        # _orig_mod. prefix on their keys (old saves did, when the model was
+        # compiled; save_checkpoint no longer writes it, but a checkpoint
+        # from before that fix, or from some other caller, still might).
+        # Strip it from the incoming data unconditionally -- it's never
+        # meaningful to preserve -- then remap onto whatever the live model
+        # actually calls its own keys right now, which carries _orig_mod.
+        # itself if it's currently compiled. Mirrors load_weights.py's
+        # identical handling for the same reason.
+        def _load_symmetric(live_module, checkpoint_state):
+            checkpoint_state = {k.replace('_orig_mod.', ''): v for k, v in checkpoint_state.items()}
+            live_keys = list(live_module.state_dict().keys())
+            if any('_orig_mod.' in k for k in live_keys):
+                live_keys_by_stripped_name = {k.replace('_orig_mod.', ''): k for k in live_keys}
+                checkpoint_state = {
+                    live_keys_by_stripped_name.get(k, k): v for k, v in checkpoint_state.items()
+                }
+            live_module.load_state_dict(checkpoint_state)
+
+        _load_symmetric(model_without_ddp, checkpoint['model'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
         args.start_epoch = checkpoint['epoch'] + 1
         if model_ema:
-            model_ema.load_state_dict(checkpoint['model_ema'])
+            _load_symmetric(model_ema, checkpoint['model_ema'])
     return args
 
 
@@ -658,21 +686,57 @@ def move_model_to_device(model, device, logger):
         sys.exit(1)
 
 
-def compile_model_if_enabled(model, args, logger):
+def compile_model_if_enabled(model, args, logger, input_shape=None):
     """
     Apply torch.compile to the model if --compile-model is enabled.
 
     torch.compile (PyTorch 2.0+) fuses operations into optimized kernels,
     which can significantly speed up training (15-30% on supported backends).
 
+    torch.compile() itself is lazy — it does not compile anything until the
+    first forward call. To catch compile failures (e.g. a Triton/ptxas
+    version that doesn't yet support the GPU's compute capability) before
+    training starts rather than mid-epoch, this function runs one warmup
+    forward pass through the compiled model when input_shape is provided.
+    A failure at either the wrap step or the warmup step falls back to the
+    original, uncompiled model.
+
+    Note: the warmup runs in eval mode, no_grad, batch size 1, outside any
+    autocast context — it does not exercise the training-mode graph (with
+    gradients, the real batch size, and AMP autocast if enabled), which
+    dynamo compiles separately on first real use. This warmup catches
+    hardware/toolchain-level failures that occur regardless of graph
+    variant (e.g. ptxas rejecting the GPU architecture for any kernel), but
+    does not guarantee the training-mode graph will also compile cleanly.
+
     Args:
         model: The model to potentially compile
         args: Parsed arguments (uses args.compile_model)
         logger: Logger instance
+        input_shape: Shape (including batch dim) of a representative input
+            tensor, e.g. (1,) + dataset.X.shape[1:]. Used to run a warmup
+            forward pass that validates compilation works on this
+            hardware/toolchain for at least one graph variant. If None, no
+            warmup is performed and a compile failure will surface later,
+            unguarded, on the training loop's first real forward pass
+            (legacy behavior).
 
     Returns:
         The (possibly compiled) model
     """
+    if getattr(args, 'quantization', 0):
+        # FX-based quantization (prepare_qat_fx) symbolically traces the model,
+        # which cannot trace a torch.compile-wrapped module at all -- a different
+        # incompatibility than the ONNX/TorchScript export tracing issue handled
+        # separately in export_model(). Skip compiling rather than compile and
+        # then immediately discard the benefit before quantization prep runs.
+        if getattr(args, 'compile_model', 0):
+            logger.info(
+                "compile_model is enabled but quantization is also enabled "
+                "(FX-based quantization cannot trace a compiled model) -- "
+                "skipping torch.compile for this run."
+            )
+        return model
     if getattr(args, 'compile_model', 0) and hasattr(torch, 'compile'):
         # Determine the best backend for the current device
         device_type = str(next(model.parameters()).device).split(':')[0] if len(list(model.parameters())) > 0 else 'cpu'
@@ -684,10 +748,31 @@ def compile_model_if_enabled(model, args, logger):
         else:
             backend = 'aot_eager'
         logger.info(f"Compiling model with torch.compile (backend={backend})")
+        original_model = model
         try:
-            model = torch.compile(model, backend=backend)
+            compiled_model = torch.compile(model, backend=backend)
+            if input_shape is not None:
+                device = next(compiled_model.parameters()).device if len(list(compiled_model.parameters())) > 0 else torch.device('cpu')
+                dummy_input = torch.rand(size=input_shape, device=device)
+                was_training = compiled_model.training
+                compiled_model.eval()
+                try:
+                    with torch.no_grad():
+                        compiled_model(dummy_input)
+                finally:
+                    # Must run on BOTH success and failure: torch.compile's
+                    # OptimizedModule wraps the original model BY REFERENCE
+                    # (shares its parameters/state), so compiled_model.eval()
+                    # above also flips the ORIGINAL model's .training flag.
+                    # If the warmup forward pass raises, control jumps to the
+                    # outer except block and returns original_model — if we
+                    # hadn't restored here first, that fallback model would
+                    # be returned stuck in eval mode.
+                    compiled_model.train(was_training)
+            model = compiled_model
         except Exception as e:
-            logger.warning(f"torch.compile failed, falling back to eager mode: {e}")
+            logger.warning(f"torch.compile failed (or failed its warmup pass), falling back to eager mode: {e}")
+            model = original_model
     return model
 
 
@@ -754,15 +839,33 @@ def save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, mod
     Returns:
         dict: The checkpoint dictionary
     """
+    # torch.compile() wraps a model in torch._dynamo.OptimizedModule; when
+    # not using DDP, model_without_ddp IS that wrapper (setup_distributed_model
+    # only assigns model_without_ddp = model.module under DDP). state_dict() on
+    # a compiled model emits every key prefixed _orig_mod., which downstream
+    # weight-loading (load_weights.py, used for the float->quantization
+    # transfer) cannot match -- it silently falls back to strict=False and
+    # discards the entire result. Unwrap before saving so checkpoints always
+    # carry the original, uncompiled key names.
+    checkpoint_model = getattr(model_without_ddp, '_orig_mod', model_without_ddp)
     checkpoint = {
-        'model': model_without_ddp.state_dict(),
+        'model': checkpoint_model.state_dict(),
         'optimizer': optimizer.state_dict(),
         'lr_scheduler': lr_scheduler.state_dict(),
         'epoch': epoch,
         'args': args
     }
     if model_ema:
-        checkpoint['model_ema'] = model_ema.state_dict()
+        # ExponentialMovingAverage (AveragedModel) deep-copies its source model
+        # into self.module -- so when the source was already compiled, the
+        # OptimizedModule wrapper ends up nested at model_ema.module._orig_mod,
+        # not at model_ema._orig_mod itself. A top-level getattr unwrap (as
+        # used for the main model above) can't reach it; strip the substring
+        # from the resulting state_dict keys instead, which handles the
+        # wrapper at whatever depth it's nested at.
+        checkpoint['model_ema'] = {
+            k.replace('_orig_mod.', ''): v for k, v in model_ema.state_dict().items()
+        }
     if extra_data:
         checkpoint.update(extra_data)
     return checkpoint

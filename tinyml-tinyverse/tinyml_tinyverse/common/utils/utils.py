@@ -1660,6 +1660,24 @@ def print_file_level_classification_summary(dataset, predicted, ground_truth,pha
     df = pd.DataFrame(results)
     logger_flcs.info(f'File-Level Classification Summary of {phase}:\n {tabulate(df, headers="keys", tablefmt="pretty")}')
 
+
+def unwrap_compiled_submodules(model):
+    """Recursively replace any torch.compile-wrapped module (including the
+    top-level model itself) with its original, uncompiled module.
+
+    torch.compile() wraps a module in torch._dynamo.OptimizedModule, which
+    exposes the original module at ._orig_mod. The compiled module isn't
+    always the top-level model passed in -- some reference scripts wrap an
+    already-compiled model inside another module afterward -- so this walks
+    the full submodule tree rather than only checking the top level. It is
+    a no-op wherever no torch.compile wrapping is present.
+    """
+    model = getattr(model, '_orig_mod', model)
+    for name, child in list(model.named_children()):
+        setattr(model, name, unwrap_compiled_submodules(child))
+    return model
+
+
 def export_model(model, input_shape, output_dir, opset_version=17, quantization=0,
                  example_input=None, generic_model=False, remove_hooks_for_jit=False):
     logger = getLogger("root.export_model")
@@ -1671,6 +1689,15 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
     logger.debug(f"Quantization Mode: {quantization}, {type(quantization)}")
     logger.info(f'Exporting ONNX model from: {onnx_file}')
 
+    # torch.compile() wraps a model in torch._dynamo.OptimizedModule, exposing
+    # the original module at ._orig_mod. Neither torch.jit.trace (used below
+    # for quantized export) nor torch.onnx.export (used for float export) can
+    # trace a dynamo-optimized module directly, so unwrap first. The compiled
+    # module isn't always at the top level -- e.g. timeseries_classification
+    # wraps it inside NeuralNetworkWithPreprocess.model after compiling -- so
+    # this walks the full submodule tree, not just the outermost model. It is
+    # a no-op wherever no torch.compile wrapping is present.
+    model = unwrap_compiled_submodules(model)
     model_copy = copy.deepcopy(model)
     model_copy = model_copy.to(device)
     if quantization:

@@ -187,7 +187,7 @@ def main(gpu, args):
             args.output_int = False
 
         move_model_to_device(model, device, logger)
-        model = compile_model_if_enabled(model, args, logger)
+        model = compile_model_if_enabled(model, args, logger, input_shape=(1,) + dataset.X.shape[1:])
         global _float_best_metric
         sample_inputs = None
         sample_targets = None

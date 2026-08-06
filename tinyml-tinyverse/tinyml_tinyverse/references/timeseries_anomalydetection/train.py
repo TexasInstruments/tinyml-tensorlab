@@ -231,7 +231,7 @@ def main(gpu, args):
             return
 
         move_model_to_device(model, device, logger)
-        model = compile_model_if_enabled(model, args, logger)
+        model = compile_model_if_enabled(model, args, logger, input_shape=(1,) + dataset.X.shape[1:])
         criterion = nn.MSELoss()
 
         global _float_best_metric
