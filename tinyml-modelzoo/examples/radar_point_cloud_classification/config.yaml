@@ -4,9 +4,11 @@ common:
   target_device: MSPM0G3507
 dataset:
   dataset_name: pose_fall
-  # Local path to the dataset zip. Replace with a URL if hosted remotely.
-  input_data_path: "C:/Users/a1256120/OneDrive - TEXAS INSTRUMENTS/Documents/CodePrototyping/dataset"
-  # data_dir: '.'
+  # Public dataset URL. If download fails on corporate network,
+  # manually download the zip and replace this with the local path to the extracted dataset folder.
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/radar_human_pose_detection.zip
+  # data_dir is auto-detected as 'classes' for radar_classification (matches zip root folder structure)
+  # data_dir: 'classes'
   # loader_type: classification
   split_type: within_files
   split_factor: [0.8, 0.1, 0.1]

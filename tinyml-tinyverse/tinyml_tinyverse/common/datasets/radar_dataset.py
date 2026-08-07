@@ -230,7 +230,7 @@ class GenericRadarDataset(Dataset):
         for cls, df in class_data.items():
             windows = self._create_windows(df)
             if len(windows) == 0:
-                self.logger.warning(f"No windows created for class '{cls}' — file may be shorter than window_size={self.window_size}")
+                self.logger.warning(f"No windows created for class '{cls}' — file may be shorter than frame_size={self.frame_size}")
                 continue
             X_list.append(windows)
             y_list.extend([self.label_map[cls]] * len(windows))
