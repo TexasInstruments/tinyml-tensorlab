@@ -17,6 +17,10 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
+# Fix Unicode output on Windows (CP1252 can't encode checkmark/cross characters)
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8')
+    sys.stderr.reconfigure(encoding='utf-8')
 # Configuration
 SCRIPT_DIR = Path(__file__).parent.absolute()
 EXAMPLES_DIR = SCRIPT_DIR / "examples"

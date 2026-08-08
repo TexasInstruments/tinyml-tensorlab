@@ -28,14 +28,44 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import sys
-from . import protocols
-from . import timeseries
-from . import vision
-from . import radar
-from . import audio
+"""Radar Point Cloud models."""
 
-def get_target_module(backend_name):
-    this_module = sys.modules[__name__]
-    target_module = getattr(this_module, backend_name)
-    return target_module
+import torch
+
+from ..utils import py_utils
+from .base import GenericModelWithSpec
+
+class LINEAR_4L_PC(GenericModelWithSpec): #can come back to naming convention later
+    def __init__(self, config, input_features= 176, variables=1, num_classes=5):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
+        input_size = self.input_features * self.variables #(just int for now)
+        self.bn1 = torch.nn.BatchNorm1d(num_features= input_size)
+        self.fc1 = torch.nn.Linear(in_features=input_size, out_features=64)
+        self.bn2 = torch.nn.BatchNorm1d(num_features= 64)
+        self.fc2 = torch.nn.Linear(in_features=64, out_features=32)
+        self.bn3 = torch.nn.BatchNorm1d(num_features=32)
+        self.fc3 = torch.nn.Linear(in_features=32, out_features=16)
+        self.bn4 = torch.nn.BatchNorm1d(num_features=16)
+        self.fc4 = torch.nn.Linear(in_features=16, out_features=self.num_classes)
+        self.relu = torch.nn.ReLU()
+    def forward(self, x):
+        x = x.view(x.size(0), -1) #flatten
+        x = self.bn1(x)
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.bn2(x)
+        x = self.fc2(x)
+        x = self.relu(x)
+        x = self.bn3(x)
+        x = self.fc3(x)
+        x = self.bn4(x)
+        x = self.fc4(x)
+        x = torch.softmax(x, dim=1)
+        return x
+
+
+# Export all classification models
+__all__ = [
+    'LINEAR_4L_PC',
+]
