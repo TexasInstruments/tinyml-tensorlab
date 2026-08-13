@@ -8,6 +8,8 @@
 
 **Tech Stack:** Python 3.10, PyTorch 2.7.1, pytest
 
+> **Correction (see ## Results below):** the Goal and Architecture above assumed `main()` was already wired to `compile_model_if_enabled`/`apply_hardware_defaults`. It is not. Task 1's fix is real (quantization and checkpoint-resume now work) but does **not** close the MPS-vs-CPU gap — see Results for the actual post-fix numbers and root cause.
+
 ## Global Constraints
 
 - Python `==3.10.*`
