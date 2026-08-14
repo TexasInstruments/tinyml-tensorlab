@@ -109,6 +109,7 @@ from ..common.train_base import (
     save_checkpoint,
     handle_export_only,
     move_model_to_device,
+    compile_model_if_enabled,
     log_training_time,
     apply_output_int_default,
     get_output_int_flag,
@@ -128,7 +129,6 @@ def get_args_parser():
 
     parser = get_base_args_parser("This script loads audio wav data and trains an classification model")
 
-    parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
     parser.add_argument('--audio-duration-ms', help='Audio clip duration in milliseconds', default=1000, type=int)
     parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, or RAW', default='MFCC', type=str)
 
@@ -309,6 +309,7 @@ def main(gpu, args):
         return
 
     move_model_to_device(model, device, logger)
+    model = compile_model_if_enabled(model, args, logger, input_shape=(1,) + dataset.X.shape[1:])
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
     model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
     optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)

@@ -103,8 +103,9 @@ def init_params(*args, **kwargs):
             lambda_reg=0,
             optimizer='sgd',
             weight_decay=0,
-            lr_scheduler='constantlr',
+            lr_scheduler='none',  # constant LR -- 'constantlr' is not a valid value for init_lr_scheduler
             momentum=0,
+            compile_model=0,    # 1 to enable torch.compile (inductor on CUDA, aot_eager on MPS)
             training_device='cuda',  # 'cpu', 'cuda'
             num_gpus=1,  # 0,1
             distributed=True,

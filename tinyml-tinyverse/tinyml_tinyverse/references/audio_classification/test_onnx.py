@@ -64,9 +64,8 @@ dataset_loader_dict = {'GoogleSpeechCommandsDataset': GoogleSpeechCommandsDatase
 def get_args_parser():
     DESCRIPTION = "This script loads time series dataset and tests it against a onnx model using ONNX RT"
     parser = get_base_test_args_parser("This script loads an audio wav dataset and tests a classification model")
-   
+
     # Audio preprocessing / feature extraction params
-    parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
     parser.add_argument('--audio-duration-ms', help='Audio clip duration in milliseconds', default=1000, type=int)
     parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, or RAW', default='MFCC', type=str)
     # MFCC params
