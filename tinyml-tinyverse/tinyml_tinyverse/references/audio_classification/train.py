@@ -129,7 +129,6 @@ def get_args_parser():
 
     parser = get_base_args_parser("This script loads audio wav data and trains an classification model")
 
-    parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
     parser.add_argument('--audio-duration-ms', help='Audio clip duration in milliseconds', default=1000, type=int)
     parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, or RAW', default='MFCC', type=str)
 
