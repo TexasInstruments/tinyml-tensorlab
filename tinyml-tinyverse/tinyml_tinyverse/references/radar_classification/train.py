@@ -82,6 +82,7 @@ from ..common.train_base import (
     save_checkpoint,
     handle_export_only,
     move_model_to_device,
+    compile_model_if_enabled,
     log_training_time,
     apply_output_int_default,
     get_output_int_flag,
@@ -250,6 +251,7 @@ def main(gpu, args):
         return
 
     move_model_to_device(model, device, logger)
+    model = compile_model_if_enabled(model, args, logger, input_shape=(1,) + dataset.X.shape[1:])
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
 
     model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
@@ -521,7 +523,7 @@ def main_debug(gpu, args):
 
 def run(args):
     """Run training with optional distributed mode."""
-    run_distributed(main_debug, args)
+    run_distributed(main, args)
 
 
 if __name__ == "__main__":
