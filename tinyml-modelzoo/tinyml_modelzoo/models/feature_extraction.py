@@ -205,7 +205,7 @@ class NeuralNetworkWithPreprocess(torch.nn.Module):
                     x = self.preprocess(x)
             else:
                 x = self.preprocess(x)
-        if self.model:
+        if self.model is not None:
             x = self.model(x)
         return x
 

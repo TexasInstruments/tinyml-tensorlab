@@ -73,11 +73,17 @@ tinyml-modelzoo/
 | F29H85 | No | C2000 64-bit MCU with C29x core | High capacity |
 | F29P58 | No | C2000 64-bit MCU with C29x core | High capacity |
 | F29P32 | No | C2000 64-bit MCU with C29x core | High capacity |
-| F2837 | No | C2000 32-bit dual-core MCU, 200 MHz | General purpose |
+| F2837 | No | C2000 32-bit dual-core MCU, 200 MHz (xD) | General purpose |
+| F2837xS | No | C2000 32-bit single-core MCU, 200 MHz (xS) | General purpose |
+| F2838x | No | C2000 32-bit dual-core MCU, 200 MHz C28x+Cortex-M4 | Heterogeneous dual-core |
+| F28P551x | No | C2000 32-bit MCU, 150 MHz C28x+CLA, 1.1-MB Flash | High performance |
 | F28003 | No | C2000 32-bit MCU, 100 MHz | Cost-optimized |
 | F28004 | No | C2000 32-bit MCU, 100 MHz | Cost-optimized |
+| F2807x | No | C2000 32-bit MCU, 120 MHz C28x+CLA, 512-KB Flash | General purpose |
+| F28002x | No | C2000 32-bit MCU, 100 MHz C28x+CLA, 256-KB Flash | Cost-optimized |
 | F280013 | No | C2000 32-bit MCU, 100 MHz | Entry-level |
 | F280015 | No | C2000 32-bit MCU, 120 MHz | Entry-level |
+| F28E12 | No | C2000 32-bit MCU, 160 MHz, 64 KB flash | Entry-level |
 
 ### MSPM0 Family (Arm Cortex-M0+)
 
@@ -233,8 +239,8 @@ The following ready-to-use examples demonstrate various AI applications for MCUs
 These applications use generic task types that can be adapted to your custom datasets.
 
 > **Device support for generic timeseries tasks:**
-> - **Classification** — all 22 devices: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1, AM263, AM263P, AM261, AM13E2
-> - **Regression, Forecasting, Anomaly Detection** — C2000, MSPM0, MSPM33C, AM26x, AM13 families. Connectivity devices (CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1) do **not** support these task types.
+> - **Classification** — all 27 devices: F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, CC2755, CC2745, CC1312, CC1314, CC1352, CC1354, CC35X1, AM263, AM263P, AM261, AM13E2
+> - **Regression, Forecasting, Anomaly Detection** — C2000 (including F2807x, F28002x, F28P551x, F2837xS, F2838x), MSPM0, MSPM33C, AM26x, AM13 families. Connectivity devices do **not** support these task types.
 
 | Example Name                                                                 | Task Type | Description |
 |------------------------------------------------------------------------------|-----------|-------------|
@@ -269,16 +275,16 @@ These applications are designed for specific use cases with optimized models and
 
 | Example Name | Task Type | Supported Devices | Description |
 |-------------|-----------|-------------------|-------------|
-| **ac_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect AC arc faults in electrical systems |
-| **dc_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect DC arc faults from current waveforms for electrical safety |
+| **ac_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect AC arc faults in electrical systems |
+| **dc_arc_fault** | arc_fault | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect DC arc faults from current waveforms for electrical safety |
 | **ecg_classification** | ecg_classification | MSPM0G3507, MSPM0G5187, MSPM0G3519 | Classify normal vs anomalous heartbeats from ECG signals |
 | **fall_detection_classification** | classification | MSPM0G5187 | Detect and classify Human Fall vs Activities of Daily Living (ADL) |
 | **gearbox_fault_detection** | classification | MSPM0G3507, MSPM0G3519, MSPM0G5187 | Classify gearbox operating conditions (healthy vs broken tooth) from vibration data |
-| **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
-| **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263, CC1312, CC1314, CC1352, CC1354, CC2755, CC35X1 | Detect faults in BLDC fans from accelerometer data |
-| **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
-| **grid_fault_detection** | classification | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect electrical grid faults from sensor data |
-| **mosfet_temp_prediction** | regression | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Predict MOSFET temperature from electrical parameters |
+| **blower_imbalance** | motor_fault | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect blade imbalance in HVAC blowers using 3-phase motor currents |
+| **fan_blade_fault_classification** | motor_fault | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263, CC1312, CC1314, CC1352, CC1354, CC2755, CC2745, CC35X1 | Detect faults in BLDC fans from accelerometer data |
+| **motor_bearing_fault** | motor_fault | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Classify 5 bearing fault types + normal operation from vibration data |
+| **grid_fault_detection** | classification | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Detect electrical grid faults from sensor data |
+| **mosfet_temp_prediction** | regression | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, AM13E2, AM263 | Predict MOSFET temperature from electrical parameters |
 | **pir_detection** | pir_detection | CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1, MSPM0G5187, MSPM0G3507, MSPM0G3519, MSPM33C32 | Detect presence/motion using PIR sensor data |
 | **dynamic_hand_gesture_recognition** | ecg_classification | MSPM0G5187 | Classify 4 dynamic hand gestures from 3-axis accelerometer data |
 | **google_speech_command** | audio_classification | MSPM0G5187 | 12-class keyword spotting from audio using MFCC features |

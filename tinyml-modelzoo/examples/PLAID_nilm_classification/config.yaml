@@ -5,18 +5,18 @@ dataset:
   dataset_name: plaid_submetered
   input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/plaid_nilm_submetered_dataset.zip
 data_processing_feature_extraction:
-  feat_ext_transform:
-  - FFT_FE
-  - FFT_POS_HALF
-  - WINDOWING
-  - BINNING
-  - NORMALIZE
-  - ABS
-  - LOG_DB
-  - CONCAT
-  frame_size: 32
-  feature_size_per_frame: 8
-  num_frame_concat: 8
+  #feat_ext_transform:
+  #- FFT_FE
+  #- FFT_POS_HALF
+  #- DC_REMOVE
+  #- ABS
+  #- BINNING
+  #- LOG_DB
+  #- CONCAT
+  #frame_size: 32
+  #feature_size_per_frame: 4
+  #num_frame_concat: 8
+  feature_extraction_name: Generic_32Input_FFTBIN_4Feature_8Frame
   variables: 2
 training:
   model_name: CLS_13k_NPU
