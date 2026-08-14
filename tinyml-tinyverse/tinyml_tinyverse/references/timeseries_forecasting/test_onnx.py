@@ -39,6 +39,7 @@ import matplotlib
 matplotlib.use('Agg') # Force non-interactive backend
 import matplotlib.pyplot as plt
 import numpy as np
+import platform
 import torch
 
 from tinyml_tinyverse.common.datasets import GenericTSDatasetForecasting
@@ -100,7 +101,9 @@ def main(gpu, args):
     logger.info("Loading data:")
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=args.batch_size, sampler=test_sampler,
-        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
+        num_workers=args.workers, pin_memory=True,
+        multiprocessing_context='fork' if platform.system() == 'Linux' and args.workers > 0 else None,
+        collate_fn=utils.collate_fn)
     try:
 
         logger.info(f"Loading ONNX model: {args.model_path}")

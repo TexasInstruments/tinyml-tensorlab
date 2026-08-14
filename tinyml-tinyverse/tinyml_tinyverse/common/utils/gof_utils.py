@@ -320,7 +320,7 @@ def goodness_of_fit_test(frame_size, classes_dir, output_dir,class_names):
             '''
             #Keeping this for loop here just in case if you want to bold certain segments of notes
 
-            bold_segments = re.split(r"(\*\*.*?\*\*)", line)  # Split at bold markers
+            bold_segments = re.split("([*]{2}.*?[*]{2})", line)  # Split at bold markers
             
             for segment in bold_segments:
                 if segment.startswith("**") and segment.endswith("**"):  # Bold text

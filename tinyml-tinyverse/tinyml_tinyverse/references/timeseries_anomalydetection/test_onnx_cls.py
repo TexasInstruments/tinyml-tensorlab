@@ -143,6 +143,7 @@ def main(gpu, args):
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size,
         sampler=train_sampler, num_workers=args.workers, pin_memory=True,
+        multiprocessing_context='fork' if platform.system() == 'Linux' and args.workers > 0 else None,
         collate_fn=utils.collate_fn)
     try:
         # data_loader_test = torch.utils.data.DataLoader(

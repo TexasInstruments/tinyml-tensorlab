@@ -36,6 +36,7 @@ import csv
 import os
 
 import numpy as np
+import platform
 import torch
 import pandas as pd
 from tabulate import tabulate
@@ -120,7 +121,9 @@ def get_reconstruction_errors_stats(args):
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler,
-        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
+        num_workers=args.workers, pin_memory=True,
+        multiprocessing_context='fork' if platform.system() == 'Linux' and args.workers > 0 else None,
+        collate_fn=utils.collate_fn)
     try:
 
         logger.info(f"Loading ONNX model: {args.model_path}")
@@ -173,7 +176,9 @@ def main(gpu, args):
     logger.info("Loading data:")
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler,
-        num_workers=args.workers, pin_memory=True, collate_fn=utils.collate_fn)
+        num_workers=args.workers, pin_memory=True,
+        multiprocessing_context='fork' if platform.system() == 'Linux' and args.workers > 0 else None,
+        collate_fn=utils.collate_fn)
     try:
 
         logger.info(f"Loading ONNX model: {args.model_path}")

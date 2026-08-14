@@ -310,7 +310,7 @@ def plot_feature_components_graph(dataset_instance, graph_type, instance_type, o
     n_clusters = len(dataset_instance.classes)
     fig = plt.figure(figsize=(10, 7))
     ax = plt.axes(projection='3d')
-    colors = plt.cm.get_cmap("tab10", n_clusters)
+    colors = plt.colormaps["tab10"].resampled(n_clusters)
     for i in range(n_clusters):
         xdata = time_series_data[np.where(np.array(dataset_instance.Y) == i)][:, 0]
         ydata = time_series_data[np.where(np.array(dataset_instance.Y) == i)][:, 1]
@@ -354,7 +354,7 @@ def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, pha
     fig = plt.figure(figsize=(10, 8))
 
     # Colors for each class
-    colors = plt.cm.get_cmap("tab10", num_classes)
+    colors = plt.colormaps["tab10"].resampled(num_classes)
 
     # Loop through each class
     fpr_list = []
@@ -1689,29 +1689,86 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
     logger.debug(f"Quantization Mode: {quantization}, {type(quantization)}")
     logger.info(f'Exporting ONNX model from: {onnx_file}')
 
-    # torch.compile() wraps a model in torch._dynamo.OptimizedModule, exposing
-    # the original module at ._orig_mod. Neither torch.jit.trace (used below
-    # for quantized export) nor torch.onnx.export (used for float export) can
-    # trace a dynamo-optimized module directly, so unwrap first. The compiled
-    # module isn't always at the top level -- e.g. timeseries_classification
-    # wraps it inside NeuralNetworkWithPreprocess.model after compiling -- so
-    # this walks the full submodule tree, not just the outermost model. It is
-    # a no-op wherever no torch.compile wrapping is present.
+    # torch.compile() wraps a model in torch._dynamo.OptimizedModule; unwrap
+    # before export since neither torch.onnx.export nor jit.trace can trace it.
     model = unwrap_compiled_submodules(model)
-    model_copy = copy.deepcopy(model)
+
+    # Python 3.14 deepcopy fails on models with stored non-picklable objects
+    # (e.g. _MultiProcessingDataLoaderIter inside QAT models). Strip them first.
+    def _strip_non_picklable(obj, saved):
+        for name in list(obj.__dict__.keys()):
+            attr = obj.__dict__[name]
+            cls_name = type(attr).__name__
+            if 'DataLoader' in cls_name or 'Iter' in cls_name or 'iter' in cls_name.lower():
+                saved.append((obj, name, attr))
+                object.__setattr__(obj, name, None)
+
+    saved_state = []
+    for _, module in model.named_modules():
+        _strip_non_picklable(module, saved_state)
+        for h_dict in (module._forward_hooks, module._forward_pre_hooks, module._backward_hooks):
+            saved_state.append((h_dict, '__clear__', dict(h_dict)))
+            h_dict.clear()
+
+    try:
+        model_copy = copy.deepcopy(model)
+    except Exception:
+        model_copy = copy.copy(model)
+        model_copy.load_state_dict(copy.deepcopy(model.state_dict()))
+    finally:
+        for item in saved_state:
+            if item[1] == '__clear__':
+                item[0].update(item[2])
+            else:
+                object.__setattr__(item[0], item[1], item[2])
     model_copy = model_copy.to(device)
     if quantization:
         if example_input is not None and hasattr(model_copy, 'measure_stats'):
             example_input = example_input.to(dtype=torch.float, device=device)
-            model_copy_for_log = copy.deepcopy(model_copy)         
-            qdq_model_output = model_copy_for_log(example_input)
-            model_copy_for_log = model_copy_for_log.convert()
-            int_model_output = model_copy_for_log(example_input)
+            # For logging, we need to convert a copy - but this might fail too
+            # So we'll just skip the logging if it fails
             try:
-                convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output, int_model_output)
-            except TypeError:
-                convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output[0], int_model_output[0])
-            logger.info(f"Quantization Convert Diff: {convert_diff_stats}")
+                # Strip non-picklable objects from model_copy and all sub-modules.
+                # Also null out any dict values that reference DataLoaders/iterators,
+                # since qconfig_type stores the calibration_dataloader.
+                _mc_saved = []
+                for _, _mc_mod in model_copy.named_modules():
+                    _strip_non_picklable(_mc_mod, _mc_saved)
+                    # Also recurse into dict attributes (e.g. qconfig_type)
+                    for _attr_name in list(_mc_mod.__dict__.keys()):
+                        _attr = _mc_mod.__dict__.get(_attr_name)
+                        if isinstance(_attr, dict):
+                            for _k, _v in list(_attr.items()):
+                                _cls = type(_v).__name__
+                                if 'DataLoader' in _cls or 'Iter' in _cls or 'iter' in _cls.lower():
+                                    _mc_saved.append((_attr, _k, _v))
+                                    _attr[_k] = None
+                    for _hd in (_mc_mod._forward_hooks, _mc_mod._forward_pre_hooks, _mc_mod._backward_hooks):
+                        _mc_saved.append((_hd, '__clear__', dict(_hd)))
+                        _hd.clear()
+                try:
+                    model_copy_for_log = copy.deepcopy(model_copy)
+                finally:
+                    for _item in _mc_saved:
+                        if _item[1] == '__clear__':
+                            _item[0].update(_item[2])
+                        elif isinstance(_item[0], dict):
+                            _item[0][_item[1]] = _item[2]
+                        else:
+                            object.__setattr__(_item[0], _item[1], _item[2])
+            except Exception as _dc_err:
+                logger.warning(f"Skipping quantization convert diff stats - deepcopy failed: {_dc_err}")
+                model_copy_for_log = None
+
+            if model_copy_for_log is not None:
+                qdq_model_output = model_copy_for_log(example_input)
+                model_copy_for_log = model_copy_for_log.convert()
+                int_model_output = model_copy_for_log(example_input)
+                try:
+                    convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output, int_model_output)
+                except TypeError:
+                    convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output[0], int_model_output[0])
+                logger.info(f"Quantization Convert Diff: {convert_diff_stats}")
 
         # convert the model
         model_copy = model_copy.convert()
@@ -1725,7 +1782,7 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
         if not generic_model:
             encrypt(os.path.splitext(onnx_file)[0]+"_ts.pth", get_crypt_key())
     else:
-        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version)
+        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version, verbose=False)
 
     onnx.shape_inference.infer_shapes_path(onnx_file, onnx_file)
     if not generic_model:

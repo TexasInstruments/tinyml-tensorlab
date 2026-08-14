@@ -75,6 +75,7 @@ import timeit
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
+
 import numpy as np
 import onnxruntime as ort
 import torchinfo
@@ -219,7 +220,7 @@ def get_base_args_parser(description="This script loads time series data and tra
 
     # Model compilation and export arguments
     parser.add_argument("--compile-model", default=0, type=int, help="Compile the model using PyTorch2.0 functionality")
-    parser.add_argument("--opset-version", default=17, type=int, help="ONNX Opset version")
+    parser.add_argument("--opset-version", default=18, type=int, help="ONNX Opset version")
 
     # Quantization arguments
     parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int,
@@ -526,13 +527,23 @@ def create_model(args, variables, num_classes, input_features, logger):
 
 
 def log_model_summary(model, args, variables, input_features, logger):
-    """Log model summary using torchinfo."""
-    if args.generic_model:
+    """Log model summary. Uses torchinfo if available, falls back to torch's repr."""
+    if args.generic_model and not args.quantization:
         try:
-            if not args.quantization:
-                logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
-        except UnicodeEncodeError as e:
-            logger.warning(f"Model Information/summary could not be provided because of {e}")
+            # Try torchinfo first for detailed summary
+            _orig_device = next(model.parameters()).device if any(model.parameters()) else torch.device('cpu')
+            model_on_cpu = model.cpu()
+            try:
+                logger.info(f"{torchinfo.summary(model_on_cpu, (1, variables, input_features, 1))}")
+            finally:
+                model.to(_orig_device)
+        except (UnicodeEncodeError, RuntimeError) as e:
+            # Fall back to PyTorch's built-in model representation
+            logger.info(f"Model architecture:\n{model}")
+            # Count parameters
+            _total = sum(p.numel() for p in model.parameters())
+            _trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+            logger.info(f"Total params: {_total:,} | Trainable: {_trainable:,}")
 
 
 def load_pretrained_weights(model, args, logger):
@@ -992,12 +1003,21 @@ def create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args
     # persistent_workers avoids the overhead of respawning worker processes each epoch
     # (especially significant on macOS where the 'spawn' start method is used)
     use_persistent_workers = args.workers > 0
+    # On Linux with Python >=3.12, the default multiprocessing start method changed
+    # from 'fork' to 'forkserver', which requires a resource_tracker subprocess.
+    # Python 3.12 changed resource_tracker to use set.remove() instead of discard(),
+    # causing spurious KeyError tracebacks when joblib/loky cleans up its semaphores.
+    # Using 'fork' avoids the forkserver entirely and matches Python 3.10 behaviour.
+    # On macOS 'fork' is unsafe with some frameworks; fall back to the system default.
+    mp_context = 'fork' if platform.system() == 'Linux' and args.workers > 0 else None
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler, num_workers=args.workers,
-        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers, collate_fn=utils.collate_fn)
+        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers,
+        multiprocessing_context=mp_context, collate_fn=utils.collate_fn)
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=args.batch_size, sampler=test_sampler, num_workers=args.workers,
-        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers, collate_fn=utils.collate_fn)
+        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers,
+        multiprocessing_context=mp_context, collate_fn=utils.collate_fn)
     return data_loader, data_loader_test
 
 
