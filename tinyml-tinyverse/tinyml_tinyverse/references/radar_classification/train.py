@@ -191,7 +191,7 @@ def main(gpu, args):
     prepare_transforms(args)
 
     # Load or reuse datasets
-    if args.quantization:
+    if args.quantization and dataset_load_state['dataset'] is not None:
         dataset, dataset_test, train_sampler, test_sampler = (dataset_load_state['dataset'], dataset_load_state['dataset_test'],
                                                                dataset_load_state['train_sampler'], dataset_load_state['test_sampler'])
     else:
