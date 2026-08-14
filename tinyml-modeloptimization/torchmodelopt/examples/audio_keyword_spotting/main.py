@@ -1092,7 +1092,9 @@ if __name__ == '__main__':
     if MODEL_TRAINING:
         nn_model = train_model(nn_model, train_loader, NUM_EPOCHS, LEARNING_RATE)
 
+    accuracies = {"float": None, "qat": None, "exported": None}
     accuracy = validate_model(nn_model, test_loader, NUM_CATEGORIES , CATEGORIES_NAME)
+    accuracies['float'] = accuracy
     # export_model(nn_model, example_input, MODEL_NAME, with_quant=False)
     print("OG model accuracy is", accuracy)
 
@@ -1114,6 +1116,7 @@ if __name__ == '__main__':
             quant_model = calibrate_model(quant_model, calibration_loader, quant_epochs)
         
         accuracy = validate_model(quant_model, test_loader, NUM_CATEGORIES, CATEGORIES_NAME)
+        accuracies['qat'] = accuracy
         print(f"{QUANTIZATION_METHOD} Model Accuracy: {round(accuracy, 5)}\n")
         if WEIGHT_BITWIDTH == 8 and False:
             export_model(quant_model.module, example_input, 'qdq_' + MODEL_NAME, with_quant=False)
@@ -1130,5 +1133,6 @@ if __name__ == '__main__':
     ds_test_subset = Subset(ds_test, random_indices)
     ds_test_loader = DataLoader(dataset=ds_test_subset, batch_size=BATCH_SIZE, shuffle=False, drop_last=True)
     accuracy = validate_saved_model(MODEL_NAME, ds_test_loader)
+    accuracies['exported'] = accuracy
     print(f"Exported ONNX Quant Model Accuracy on 1000 samples: {accuracy}")
-    #
+    print(accuracies)

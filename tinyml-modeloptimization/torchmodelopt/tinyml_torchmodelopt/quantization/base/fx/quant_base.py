@@ -56,7 +56,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
     # Initialization
     # ========================================================================
 
-    def __init__(self, model, total_epochs, qconfig_type=None, example_inputs=None, is_qat=True, backend="qnnpack",
+    def __init__(self, model: torch.nn.Module, total_epochs: int, qconfig_type=None, example_inputs=None, is_qat=True, backend="qnnpack",
                  num_batch_norm_update_epochs=None, num_observer_update_epochs=None,
                  prepare_qdq=True, bias_calibration_factor=0.0, verbose=True, float_ops=[]):
         """Initialize the TinyML quantization wrapper.
@@ -177,11 +177,15 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             raise TypeError("qconfig_type must be dict, QConfig, QConfigMapping, or None. "
                           "Got: {}".format(type(qconfig_type)))
 
+        qconfig_mapping = self.apply_quantization_to_supported_layers(qconfig_mapping, model)
         # Prepare model for quantization
         if prepare_qdq:
             self.module = quantize_fx.prepare_qat_fx(model, qconfig_mapping, example_inputs)
         else:
             self.module = quantize_fx.prepare_fx(model, qconfig_mapping, example_inputs)
+
+        # Remove input observer to avoid QuantizeLinear/DequantizeLinear on raw inputs
+        self._remove_input_observer()
 
     def _configure_ptq_bias_calibration(self):
         """Configure bias calibration for PTQ mode."""
@@ -199,6 +203,138 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             'Freezing BN for subsequent epochs': None,
             'Freezing ranges for subsequent epochs': None
         })
+
+    def apply_quantization_to_supported_layers(self, qconfig_mapping, model):
+        """Remove quantization from layers that are not Conv, BatchNorm, Linear, or Pooling.
+
+        This function keeps the global qconfig but disables it for unsupported layer types,
+        restricting quantization to commonly quantizable layers. Only leaf (non-container)
+        modules are checked - container modules are allowed to propagate quantization to
+        their children.
+
+        Args:
+            qconfig_mapping: QConfigMapping instance to be configured
+            model: Model to iterate over
+
+        Returns:
+            Modified QConfigMapping with unsupported layers set to None
+        """
+        supported_types = (
+            torch.nn.Identity, torch.nn.Dropout,
+            torch.nn.Conv1d, torch.nn.Conv2d, torch.nn.Conv3d,
+            torch.nn.BatchNorm1d, torch.nn.BatchNorm2d, torch.nn.BatchNorm3d,
+            torch.nn.Linear,
+            torch.nn.MaxPool1d, torch.nn.MaxPool2d, torch.nn.MaxPool3d,
+            torch.nn.AvgPool1d, torch.nn.AvgPool2d, torch.nn.AvgPool3d,
+            torch.nn.AdaptiveAvgPool1d, torch.nn.AdaptiveAvgPool2d, torch.nn.AdaptiveAvgPool3d,
+            torch.nn.AdaptiveMaxPool1d, torch.nn.AdaptiveMaxPool2d, torch.nn.AdaptiveMaxPool3d,
+        )
+
+        # Recursively check modules and set unsupported leaf modules to None
+        for name, module in model.named_modules():
+            if name == '':
+                continue
+
+            # Only check leaf modules (modules with no children)
+            if list(module.children()):
+                continue
+
+            # Set qconfig to None for unsupported leaf modules
+            if not isinstance(module, supported_types):
+                qconfig_mapping.set_module_name(name, None)
+        return qconfig_mapping
+
+    def _has_batch_norm_after_observer(self, observer_node):
+        """Check if batch norm exists in the data flow after observer node.
+
+        Traverses the graph from observer node to find batch norm layers,
+        accounting for QuantizeLinear/DequantizeLinear operations.
+
+        Args:
+            observer_node: The observer node to check from
+
+        Returns:
+            bool: True if batch norm is found in the data flow
+        """
+        visited = set()
+        to_visit = list(observer_node.users.keys())
+
+        while to_visit:
+            node = to_visit.pop(0)
+            if node in visited:
+                continue
+            visited.add(node)
+
+            if node.op == 'call_module':
+                module = dict(self.module.named_modules()).get(node.target)
+                if isinstance(module, (torch.nn.BatchNorm1d, torch.nn.BatchNorm2d, torch.nn.BatchNorm3d, torch.nn.Identity)):
+                    return True
+                # Continue traversing through non-BN modules
+                to_visit.extend(node.users.keys())
+            elif node.op == 'call_function':
+                # Skip through function calls (e.g., quantize/dequantize operations)
+                to_visit.extend(node.users.keys())
+
+        return False
+
+    def _remove_input_observer(self):
+        """Remove observer attached to input placeholder node.
+
+        After FX model preparation, an observer is attached to the input placeholder
+        (activation_post_process_0). This removes that observer and rewires the graph
+        to pass input directly to the first layer, avoiding QuantizeLinear/DequantizeLinear
+        on raw inputs.
+
+        Only removes the observer if there is a batch normalization after it.
+        The graph is recompiled to maintain consistency after rewiring.
+        """
+        if not hasattr(self.module, 'graph'):
+            return
+
+        # Find the first placeholder node (model input)
+        placeholder_node = None
+        for node in self.module.graph.nodes:
+            if node.op == 'placeholder':
+                placeholder_node = node
+                break
+
+        if placeholder_node is None:
+            return
+
+        # Find observer call immediately after placeholder
+        observer_node = None
+        for user in placeholder_node.users:
+            if user.op == 'call_module' and 'activation_post_process' in user.target:
+                observer_node = user
+                break
+
+        if observer_node is None:
+            return
+
+        # Check if observer is followed by batch normalization (possibly through QDQ operations)
+        has_bn_after = self._has_batch_norm_after_observer(observer_node)
+
+        # Only remove observer if batch norm follows it
+        if not has_bn_after:
+            return
+
+        # Collect users first to avoid modification during iteration
+        observer_users = list(observer_node.users.keys())
+
+        # Rewire users of observer to use placeholder directly
+        for observer_user in observer_users:
+            observer_user.replace_input_with(observer_node, placeholder_node)
+
+        # Remove the observer node from graph
+        self.module.graph.erase_node(observer_node)
+
+        # Remove observer module from model
+        if hasattr(self.module, observer_node.target):
+            delattr(self.module, observer_node.target)
+
+        # Recompile to ensure consistency
+        self.module.graph.lint()
+        self.module.recompile()
 
     # ========================================================================
     # Configuration Management
@@ -361,7 +497,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         """Apply DBQ quantization logic to weights being quantized by DBQFakeQuantize modules.
 
         For each DBQFakeQuantize module, finds the parent module whose weight it quantizes
-        and applies DBQ thresholding before convert_fx, preserving DBQ semantics.
+        and applies DBQ thresholds before convert_fx, preserving DBQ semantics.
         """
         for name, dbq_module in model.named_modules():
             if isinstance(dbq_module, fake_quant_types.DBQFakeQuantize):
@@ -378,6 +514,48 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                             with torch.no_grad():
                                 quantized_weight = dbq_module._explicit_quantize_dequantize_dbq(weight)
                                 parent_module.weight.data = quantized_weight
+
+    def _apply_scale_attr_to_modules(self, model):
+        """Attach quantization scales from fake_quant modules as attributes to corresponding modules.
+
+        After convert_fx, the fake_quant modules are removed but we need to preserve their scale
+        information. This function extracts scales from weight_fake_quant modules in the original
+        model and attaches them to the corresponding converted modules for easy access during
+        inference and export.
+
+        Args:
+            model: Converted model (fake_quant modules already removed by convert_fx)
+        """
+        # Get the original model before conversion (has fake_quant modules)
+        original_modules = dict(self.module.named_modules())
+        converted_modules = dict(model.named_modules())
+
+        # Iterate through all modules and attach scales from fake_quant modules
+        for name, module in converted_modules.items():
+            # Check if this module has a corresponding weight_fake_quant in original model
+            if hasattr(module, 'scale'):
+                continue
+            
+            weight_fake_quant_name = f"{name}.weight_fake_quant"
+            if weight_fake_quant_name in original_modules:
+                fake_quant_module = original_modules[weight_fake_quant_name]
+
+                # Extract and attach scale
+                if hasattr(fake_quant_module, 'scale'):
+                    scale_tensor = fake_quant_module.scale
+                    if isinstance(scale_tensor, torch.Tensor):
+                        module.scale = scale_tensor.detach().cpu()
+                    else:
+                        module.scale = scale_tensor
+
+                # Extract and attach zero_point
+                if hasattr(fake_quant_module, 'zero_point'):
+
+                    zero_point_tensor = fake_quant_module.zero_point
+                    if isinstance(zero_point_tensor, torch.Tensor):
+                        module.zero_point = zero_point_tensor.detach().cpu()
+                    else:
+                        module.zero_point = zero_point_tensor
 
     def _is_observed_module(self) -> bool:
         """Check if model is still in observed state (before conversion).
@@ -414,7 +592,9 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         self._apply_dbq_quantization_to_weights(model)
 
         # Convert model using PyTorch's convert_fx
-        self.module = quantize_fx.convert_fx(model)
+        model = quantize_fx.convert_fx(model)
+        self._apply_scale_attr_to_modules(model)
+        self.module = model
         return self
 
     def export(self, example_inputs, filename='model.onnx', opset_version=17, model_qconfig_format=None,
@@ -455,7 +635,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                                  preserve_qdq_model, device, export_kwargs)
         else:
             torch.onnx.export(model, example_inputs.to(device=device), filename,
-                            opset_version=opset_version, **export_kwargs)
+                            opset_version=opset_version, verbose=False, **export_kwargs)
 
         # Optionally simplify the exported model
         if simplify:
@@ -478,9 +658,11 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
 
         qdq_filename = os.path.splitext(filename)[0] + '_qdq.onnx'
 
-        # Export with QDQ nodes
+        # INT_MODEL uses legacy quantized ops (Conv2dPackedParamsBase etc.) that
+        # lack __obj_flatten__ and cannot be traced by torch.export. Use the
+        # legacy JIT-based exporter.
         torch.onnx.export(model, example_inputs.to(device=device), qdq_filename,
-                        opset_version=opset_version, **export_kwargs)
+                        opset_version=opset_version, dynamo=False, verbose=False, **export_kwargs)
 
         # Use ONNX Runtime to optimize and convert to INT format
         session_options = ort.SessionOptions()

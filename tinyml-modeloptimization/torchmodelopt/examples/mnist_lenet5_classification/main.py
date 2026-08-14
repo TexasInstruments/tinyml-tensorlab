@@ -39,7 +39,8 @@ from tinyml_torchmodelopt.quantization import (
     TINPUTinyMLQATFxModule, 
     TINPUTinyMLPTQFxModule, 
     GenericTinyMLQATFxModule, 
-    GenericTinyMLPTQFxModule
+    GenericTinyMLPTQFxModule,
+    TinyMLQConfigType
 )
 
 # ONNX
@@ -194,89 +195,7 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
     The api being called doesn't actually pass qconfig_type - so it will be defined inside. 
     But if you need to pass, it can be defined.
     '''
-    is_qat = (quantization_method == 'QAT')
-
-    if weight_bitwidth is None or activation_bitwidth is None:
-        '''
-        # 8bit weight / activation is default - no need to specify inside.
-        qconfig_type = {
-            'weight': {
-                'bitwidth': 8,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False
-            },
-            'activation': {
-                'bitwidth': 8,
-                'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False
-            }
-        }
-        '''
-        qconfig_type = None
-    elif weight_bitwidth == 8:
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': True,
-                'range_max': None,
-                'fixed_range': False,
-                'histogram_range': 1
-            },
-        }
-    elif weight_bitwidth == 4:
-     
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': False,
-                'range_max': None,
-                'fixed_range': False,
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': False,
-                'range_max': None,
-                'fixed_range': False,
-                'histogram_range': 1
-            },
-        }
-    elif weight_bitwidth == 2:
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': False,
-                'range_max': None,
-                'fixed_range': False,
-                'quant_min': -1,
-                'quant_max': 1,
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': torch.per_tensor_symmetric,
-                'power2_scale': False,
-                'range_max': None,
-                'fixed_range': False,
-                'histogram_range': 1
-            }
-        }
-    else:
-        raise RuntimeError("unsupported quantization parameters")
- 
+    qconfig_type = TinyMLQConfigType(weight_bitwidth=weight_bitwidth, activation_bitwidth=activation_bitwidth, auto_quantization=False).qconfig_type
     if quantization_device_type == 'TINPU':
         if quantization_method == 'QAT':
             quant_model = TINPUTinyMLQATFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs)
@@ -490,8 +409,8 @@ if __name__ == '__main__':
     
     transform = transforms.Compose([transforms.ToTensor(),
                                     transforms.Normalize((0.1307,),(0.3081,))])
-    train_ds = datasets.MNIST('../data', train=True, download=True, transform=transform)
-    test_ds = datasets.MNIST('../data', train=False, transform=transform)
+    train_ds = datasets.MNIST('data', train=True, download=True, transform=transform)
+    test_ds = datasets.MNIST('data', train=False, transform=transform)
 
     train_loader = torch.utils.data.DataLoader(train_ds, batch_size=BATCH_SIZE,
                                                shuffle=True, num_workers=1)
@@ -524,10 +443,12 @@ if __name__ == '__main__':
         nn_model.load_state_dict(checkpoint)
 
     #Train and Validate fp32 model
+    accuracies = {"float": None, "qat": None, "exported": None}
     if MODEL_TRAINING:
         nn_model = train_model(nn_model, train_loader, NUM_EPOCHS, LEARNING_RATE)
     print("Validating FP32 Model")
     accuracy = validate_model(nn_model, test_loader, NUM_CATEGORIES , CATEGORIES_NAME)
+    accuracies['float'] = accuracy
     export_model(nn_model, example_input, MODEL_NAME, with_quant=False)
     print("FP32 model accuracy is", accuracy)
 
@@ -549,6 +470,7 @@ if __name__ == '__main__':
             quant_model = calibrate_model(quant_model, train_loader, quant_epochs)
         
         accuracy = validate_model(quant_model, test_loader, NUM_CATEGORIES, CATEGORIES_NAME)
+        accuracies['qat'] = accuracy
         print(f"{QUANTIZATION_METHOD} Model Accuracy: {round(accuracy, 5)}\n")
         if WEIGHT_BITWIDTH == 8 and False:
             export_model(quant_model.module, example_input, 'qdq_' + MODEL_NAME, with_quant=False)
@@ -559,6 +481,7 @@ if __name__ == '__main__':
         print("No Quantization method is specified. Will not do quantization.")
      
     test_loader_onnx  = torch.utils.data.DataLoader(test_ds,  batch_size=1, num_workers=1,drop_last=True)
-    accuracy = validate_saved_model(
-        "quant_mnist.onnx", test_loader_onnx)
+    accuracy = validate_saved_model("quant_mnist.onnx", test_loader_onnx)
+    accuracies['exported'] = accuracy
     print(f"Exported ONNX Quant Model Accuracy: {round(accuracy, 5)}")
+    print(accuracies)

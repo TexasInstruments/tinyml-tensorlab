@@ -12,7 +12,7 @@ import random
 
 # ti, onnx imports
 from tinyml_torchmodelopt.quantization import \
-    TINPUTinyMLQATFxModule, TINPUTinyMLPTQFxModule, GenericTinyMLQATFxModule, GenericTinyMLPTQFxModule
+    TINPUTinyMLQATFxModule, TINPUTinyMLPTQFxModule, GenericTinyMLQATFxModule, GenericTinyMLPTQFxModule, TinyMLQConfigType
 
 import onnx
 import onnxruntime as ort
@@ -249,71 +249,8 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
     The api being called doesn't actually pass qconfig_type - so it will be defined inside. 
     But if you need to pass, it can be defined.
     '''
-    if weight_bitwidth is None or activation_bitwidth is None:
-        '''
-        # 8bit weight / activation is default - no need to specify inside.
-        qconfig_type = {
-            'weight': {
-                'bitwidth': 8,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu,
-            },
-            'activation': {
-                'bitwidth': 8,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu,
-            }
-        }
-        '''
-        qconfig_type = None
-    elif weight_bitwidth == 8:
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu
-            }
-        }
-    elif weight_bitwidth == 4:
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu,
-                'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu,
-                'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
-            }
-        }
-    elif weight_bitwidth == 2:
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu,
-                'quant_min': -1,
-                'quant_max': 1,
-                'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu,
-                'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
-            }
-        }
-    else:
-        raise RuntimeError("unsupported quantization parameters")
-    #
+    qconfig_type = TinyMLQConfigType(weight_bitwidth=weight_bitwidth, activation_bitwidth=activation_bitwidth, auto_quantization=False).qconfig_type
+
     if quantization_device_type == 'TINPU':
         if quantization_method == 'QAT':
             quant_model = TINPUTinyMLQATFxModule(nn_model, qconfig_type=qconfig_type, example_inputs=example_input, total_epochs=total_epochs, output_int=False)
@@ -512,7 +449,9 @@ if __name__ == '__main__':
     torchinfo.summary(nn_model, input_data=example_input.to(DEVICE))
 
     nn_model = train_model(nn_model, train_loader, NUM_EPOCHS, LEARNING_RATE)
+    accuracies = {"float": None, "qat": None, "exported": None}
     r2_score, mape_score = validate_model(nn_model, test_loader)
+    accuracies['float'] = r2_score
     export_model(nn_model, example_input, MODEL_NAME)
     print(f"Trained Model R2-Score: {round(r2_score, 5)}  SMAPE: {round(mape_score, 3)}\n")
 
@@ -531,6 +470,7 @@ if __name__ == '__main__':
         #
 
         r2_score, mape_score = validate_model(quant_model, test_loader)
+        accuracies['qat'] = r2_score
         print(f"{QUANTIZATION_METHOD} Model R2-Score: {round(r2_score, 5)}  SMAPE: {round(mape_score, 3)}\n")
 
         quant_model = export_model(quant_model, example_input, MODEL_NAME, with_quant=True)
@@ -538,4 +478,6 @@ if __name__ == '__main__':
         print("No Quantization method is specified. Will not do quantization.")
 
     r2_score, mape_score = validate_saved_model(MODEL_NAME, test_loader)
+    accuracies['exported'] = r2_score
     print(f"Exported ONNX Quant Model R2-Score: {round(r2_score, 5)}  SMAPE: {round(mape_score, 3)}")
+    print(accuracies)
