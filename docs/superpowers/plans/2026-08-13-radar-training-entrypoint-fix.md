@@ -1,7 +1,5 @@
 # Radar Training Entrypoint Fix Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Wire the radar classification training script's `run()` entrypoint to the fully-featured `main()` function instead of the leftover `main_debug()` harness, then confirm on real hardware that this closes the MPS-vs-CPU performance gap it currently causes.
 
 **Architecture:** `run_distributed(main_debug, args)` becomes `run_distributed(main, args)` in `radar_classification/train.py`. `main()` already exists and is fully wired to the shared, hardened training infrastructure (`quantization_wrapped_model`, `compile_model_if_enabled`/`apply_hardware_defaults`, `resume_from_checkpoint`, `create_data_loaders`) — it is simply never called today. No new code is needed for the fix itself; the risk is regression in radar-specific behavior that only `main_debug` currently exercises, which Task 1's test and manual run guard against.
@@ -62,7 +60,7 @@ MPS being slower than CPU is the expected signature of a small-op-heavy graph wi
 **Interfaces:**
 - Consumes: `tinyml_tinyverse.references.radar_classification.train.main`, `.main_debug`, `.run`, `.run_distributed` (all already defined in the module — no new interfaces)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: radar_classification.train.run() must dispatch to main(),
@@ -91,12 +89,12 @@ def test_run_dispatches_to_main_not_main_debug():
     assert dispatched_args is fake_args
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_entrypoint_uses_main.py -v`
 Expected: FAIL — `dispatched_fn` is `main_debug`, not `main`
 
-- [ ] **Step 3: Fix the dispatch target**
+- [x] **Step 3: Fix the dispatch target**
 
 In `tinyml-tinyverse/tinyml_tinyverse/references/radar_classification/train.py`, change:
 
@@ -114,16 +112,16 @@ def run(args):
     run_distributed(main, args)
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_entrypoint_uses_main.py -v`
 Expected: PASS
 
-- [ ] **Step 5: Manual end-to-end sanity check**
+- [x] **Step 5: Manual end-to-end sanity check**
 
 `main()` has never actually executed for radar before — confirm it runs clean on a real (if synthetic) dataset before trusting the unit test alone. Build a small fixture (5 class dirs of CSVs under `<root>/classes/`, balanced `annotations/instances_{train,test,val}_list.txt`) and drive `train.get_args_parser().parse_args([...]); train.run(args)` directly with `--device cpu`, a few epochs, `--quantization 0`. Confirm it completes and exports `model.onnx` without error. Then repeat with `--quantization 1` (previously silently a no-op under `main_debug`) and confirm the log now shows `QuantTrain` phase entries and a second exported model under the quantization output dir.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 cd tinyml-tinyverse
@@ -141,18 +139,18 @@ git commit -m "fix: radar_classification run() was dispatching to main_debug, no
 **Interfaces:**
 - Consumes: `radar_classification.train.run(args)` (now dispatching to `main`, per Task 1)
 
-- [ ] **Step 1: Re-run the same benchmark used to characterize the bug**
+- [x] **Step 1: Re-run the same benchmark used to characterize the bug**
 
 Using the same synthetic fixture (5 classes, balanced annotation lists, `LINEAR_4L_PC`, batch size 16, 30 epochs) and the same driver pattern that produced the pre-fix numbers (constructs `argv`, calls `train.get_args_parser().parse_args(argv)`, times `train.run(args)`), run once with `--device cpu` and once with `--device mps`.
 
 Run: `python bench_radar.py cpu` then `python bench_radar.py mps` (with `PYTORCH_ENABLE_MPS_FALLBACK=1` set)
 Expected: both complete without error; timing printed as `total=...s for N epochs -> ...s/epoch`
 
-- [ ] **Step 2: Record the comparison**
+- [x] **Step 2: Record the comparison**
 
 Append a short results table to this plan (or a sibling `RESULTS.md` next to it) with pre-fix vs post-fix CPU and MPS per-epoch timing, and note whether `apply_hardware_defaults` actually enabled `torch.compile`/AMP for this run (check the training log for the relevant INFO lines from `compile_model_if_enabled`/`apply_hardware_defaults`).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-08-13-radar-training-entrypoint-fix.md
