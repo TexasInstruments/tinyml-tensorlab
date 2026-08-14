@@ -308,6 +308,7 @@ class BaseRadarModelTraining:
             '--lr-warmup-epochs', f'{getattr(self.params.training, "lr_warmup_epochs", 0)}',
             '--distributed', f'{distributed}',
             '--device', f'{device}',
+            '--compile-model', f'{getattr(self.params.training, "compile_model", 0)}',
 
             '--generic-model', f'{self.params.common.generic_model}',
 
