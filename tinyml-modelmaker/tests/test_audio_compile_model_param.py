@@ -1,9 +1,15 @@
 """Regression test: audio's modelmaker params must carry a compile_model
-field, and apply_hardware_defaults must be invoked so it can auto-enable
-compile on CUDA -- matching the pattern timeseries already has. Without
-this, --compile-model is unreachable from the modelmaker (product) path
-even though tinyml-tinyverse's audio_classification.train.main() already
-supports it."""
+field, reachable via explicit user config -- matching the pattern
+timeseries already has. Without this, --compile-model is unreachable from
+the modelmaker (product) path even though tinyml-tinyverse's
+audio_classification.train.main() already supports it.
+
+radar/vision/audio deliberately do NOT call apply_hardware_defaults: it
+auto-raises compile_model to 1 on CUDA even when a caller passed an
+explicit config (e.g. a YAML path, which apply_hardware_defaults can't
+introspect for "user explicitly set" keys), silently overriding an
+explicit compile_model=0. See docs/superpowers/plans/
+2026-08-14-wire-compile-model-into-modelmaker.md's Decision section."""
 from unittest.mock import patch
 
 from tinyml_modelmaker.ai_modules.audio.params import init_params
@@ -11,19 +17,27 @@ from tinyml_modelmaker.ai_modules.audio.training.tinyml_tinyverse.audio_base imp
 
 
 def test_init_params_carries_compile_model_field():
-    # apply_hardware_defaults auto-raises compile_model to 1 when CUDA is
-    # available -- mock it False so this test asserts the static default,
-    # not whatever value the CI/dev machine's hardware happens to produce.
-    with patch('torch.cuda.is_available', return_value=False):
-        params = init_params()
+    params = init_params()
     assert hasattr(params.training, "compile_model"), (
         "audio's params.training has no compile_model field -- "
-        "apply_hardware_defaults can't act on it (it's hasattr-guarded), "
-        "and the field never reaches the --compile-model argv flag."
+        "it never reaches the --compile-model argv flag."
     )
     assert params.training.compile_model == 0, (
-        "compile_model must default to 0 (matching timeseries) -- "
-        "apply_hardware_defaults is what conditionally raises it, not the static default."
+        "compile_model must default to 0 (matching timeseries)."
+    )
+
+
+def test_compile_model_not_auto_enabled_on_cuda():
+    """Guards the revert: radar/vision/audio must NOT auto-raise
+    compile_model on CUDA (unlike timeseries). apply_hardware_defaults
+    can silently override an explicit compile_model=0 for YAML-path
+    configs it can't introspect -- see the module docstring above."""
+    with patch('torch.cuda.is_available', return_value=True):
+        params = init_params()
+    assert params.training.compile_model == 0, (
+        "compile_model changed even though nothing should auto-enable it "
+        "on CUDA for this module anymore -- did apply_hardware_defaults "
+        "get wired back in?"
     )
 
 

@@ -35,7 +35,6 @@ from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQ
 
 from ... import utils
 from . import constants
-from ...utils.hardware_defaults import apply_hardware_defaults
 
 
 def init_params(*args, **kwargs):
@@ -225,11 +224,5 @@ def init_params(*args, **kwargs):
         ),
     )
 
-    # args[0] is usually a user config dict, but ConfigDict itself also
-    # accepts a YAML path string or None as a first positional argument --
-    # only inspect it as a mapping when it actually is one.
-    user_training_keys = set(args[0].get('training', {}).keys()) \
-        if args and isinstance(args[0], dict) else set()
     params = utils.ConfigDict(default_params, *args, **kwargs)
-    apply_hardware_defaults(params, user_training_keys)
     return params
