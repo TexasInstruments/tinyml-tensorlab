@@ -1,7 +1,5 @@
 # Extend compile_model_if_enabled to Radar, Image, and Audio Classification Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Wire `compile_model_if_enabled` (the `torch.compile` warmup-and-fallback helper added by PR #22, currently only called from the four `timeseries_*` reference scripts) into `radar_classification`, `image_classification`, and `audio_classification`'s `main()` functions, so all seven reference training scripts get the same hardware-acceleration path — and measure whether it actually helps each one.
 
 **Architecture:** Each of the three target `main()` functions already has the exact structural shape `compile_model_if_enabled` expects: `move_model_to_device(model, device, logger)` immediately followed by `setup_distributed_model(model, args, device)`, with `dataset.X` (post feature-extraction) available in scope. The fix is the same one-line insertion in all three files, matching `timeseries_classification/train.py:275` verbatim:
@@ -62,7 +60,7 @@ Rather than fix radar alone and leave image/audio in the same state, this plan c
 - Consumes: `tinyml_tinyverse.references.common.train_base.compile_model_if_enabled` (existing, unmodified — signature `compile_model_if_enabled(model, args, logger, input_shape=None)`, returns the (possibly compiled) model)
 - Produces: nothing new consumed by later tasks — Tasks 2 and 3 are independent, same pattern applied to different files
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: radar_classification.train.main() must call
@@ -82,12 +80,12 @@ def test_main_calls_compile_model_if_enabled():
     )
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_compile_wired.py -v`
 Expected: FAIL — `"compile_model_if_enabled("` not present in `main`'s source
 
-- [ ] **Step 3: Add the import and the call**
+- [x] **Step 3: Add the import and the call**
 
 In `tinyml-tinyverse/tinyml_tinyverse/references/radar_classification/train.py`, add `compile_model_if_enabled` to the existing import from `..common.train_base` (around line 65-89 — find the multi-line `from ..common.train_base import (...)` block and add it as a new entry, alphabetically or grouped with `move_model_to_device`/`compile_model_if_enabled`-adjacent imports per the file's existing style).
 
@@ -107,20 +105,20 @@ to:
     model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_compile_wired.py -v`
 Expected: PASS
 
-- [ ] **Step 5: Manual end-to-end sanity check with --compile-model 1**
+- [x] **Step 5: Manual end-to-end sanity check with --compile-model 1**
 
 Using the synthetic radar fixture from the entrypoint-fix plan (regenerate via `make_radar_fixture.py` if not present — see that plan's Task 1 for the recipe), drive `train.run(args)` directly with `--device cpu --compile-model 1`, a few epochs. Confirm it completes without error and the log shows `compile_model_if_enabled`'s own INFO lines (check `train_base.py`'s `compile_model_if_enabled` for the exact log message text first — grep the run log for it). Then confirm `--compile-model 0` (the default) still behaves identically to before this change — no compile-related log lines, same training behavior.
 
-- [ ] **Step 6: Benchmark CPU vs MPS with compile now enabled**
+- [x] **Step 6: Benchmark CPU vs MPS with compile now enabled**
 
 Reuse the benchmark driver pattern from the entrypoint-fix plan (`bench_radar.py` in the session scratchpad), but add `--compile-model 1` to the argv. Run once on `cpu`, once on `mps` (`PYTORCH_ENABLE_MPS_FALLBACK=1`), same 30 epochs / batch size 16 / `LINEAR_4L_PC` as the entrypoint-fix plan's benchmark, so the numbers are directly comparable. Record: does compile change the CPU number, the MPS number, or the ratio between them, versus the entrypoint-fix plan's post-fix-no-compile numbers (CPU 0.621s/epoch, MPS 1.066s/epoch, 1.72x)? Report what you measure even if compile makes things worse or has no effect — that's a legitimate finding for a model this small, not a task failure.
 
-- [ ] **Step 7: Record results and commit**
+- [x] **Step 7: Record results and commit**
 
 Append a `## Results (Task 1: radar)` section to this plan doc with the benchmark table and a short explanation.
 
@@ -142,7 +140,7 @@ git commit -m "feat: wire compile_model_if_enabled into radar_classification mai
 **Interfaces:**
 - Consumes: same `compile_model_if_enabled` as Task 1 — independent of Task 1, do not wait for it or reuse its branch
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: image_classification.train.main() must call
@@ -160,12 +158,12 @@ def test_main_calls_compile_model_if_enabled():
     )
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_image_classification_compile_wired.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Add the import and the call**
+- [x] **Step 3: Add the import and the call**
 
 Add `compile_model_if_enabled` to the existing `from ..common.train_base import (...)` block (~line 92-111). Then change:
 ```python
@@ -186,20 +184,20 @@ to:
 
 **Watch for:** this file has an `args.nn_for_feature_extraction` branch elsewhere (used at export time, line ~450-454) that chooses between `dataset.X_raw.shape` and `dataset.X.shape` depending on whether an NN is used for feature extraction. Confirm which shape the model actually consumes *at the point where you're inserting the compile call* (before or after any feature-extraction wrapping) — if `nn_for_feature_extraction` changes what the raw model's forward() expects at this point in `main()`, use the matching shape instead of assuming `dataset.X.shape` unconditionally. If unsure after reading the surrounding ~50 lines, ask before proceeding — this is exactly the kind of task-specific judgment call the brief can't resolve for you.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_image_classification_compile_wired.py -v`
 Expected: PASS
 
-- [ ] **Step 5: Manual end-to-end sanity check with --compile-model 1**
+- [x] **Step 5: Manual end-to-end sanity check with --compile-model 1**
 
 Build or reuse a small synthetic image classification fixture (check `tinyml-tinyverse/tests/` for an existing image dataset test fixture/helper before building one from scratch — this repo likely already has one given image_classification has existing tests). Drive `train.run(args)` with `--device cpu --compile-model 1`, a few epochs. Confirm completion and compile-related log lines present. Confirm `--compile-model 0` still behaves as before.
 
-- [ ] **Step 6: Benchmark CPU vs MPS with compile enabled**
+- [x] **Step 6: Benchmark CPU vs MPS with compile enabled**
 
 Same methodology as Task 1 Step 6, adapted to whichever image model this benchmark uses (pick the smallest/fastest registered image model available, to keep iteration time reasonable) and image_classification's own CLI args. This is the first CPU-vs-MPS benchmark for image classification in either plan — there's no prior "no-compile" baseline to compare against from the earlier work, so also run once with `--compile-model 0` on both devices first to get that baseline, then `--compile-model 1` to see the delta, in the same benchmark session.
 
-- [ ] **Step 7: Record results and commit**
+- [x] **Step 7: Record results and commit**
 
 Append `## Results (Task 2: image_classification)` to this plan doc.
 
@@ -221,7 +219,7 @@ git commit -m "feat: wire compile_model_if_enabled into image_classification mai
 **Interfaces:**
 - Consumes: same `compile_model_if_enabled` — independent of Tasks 1 and 2
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: audio_classification.train.main() must call
@@ -239,12 +237,12 @@ def test_main_calls_compile_model_if_enabled():
     )
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_audio_classification_compile_wired.py -v`
 Expected: FAIL
 
-- [ ] **Step 3: Add the import and the call**
+- [x] **Step 3: Add the import and the call**
 
 Add `compile_model_if_enabled` to the existing `from ..common.train_base import (...)` block (~line 92-111). Then change:
 ```python
@@ -262,20 +260,20 @@ to:
 
 Same caveat as Task 2 applies here — audio_classification also has an `nn_for_feature_extraction` / `X_raw` vs `X` distinction at export time (line ~424-427). Check whether it affects what shape the model expects at this earlier insertion point before assuming `dataset.X.shape` unconditionally.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_audio_classification_compile_wired.py -v`
 Expected: PASS
 
-- [ ] **Step 5: Manual end-to-end sanity check with --compile-model 1**
+- [x] **Step 5: Manual end-to-end sanity check with --compile-model 1**
 
 Same approach as Task 2 Step 5, adapted to audio_classification's dataset/CLI. Check `tinyml-tinyverse/tests/` for existing audio fixture helpers first.
 
-- [ ] **Step 6: Benchmark CPU vs MPS with compile enabled**
+- [x] **Step 6: Benchmark CPU vs MPS with compile enabled**
 
 Same methodology as Task 2 Step 6 (baseline `--compile-model 0` then `--compile-model 1`, both devices), adapted to audio_classification's smallest registered model.
 
-- [ ] **Step 7: Record results and commit**
+- [x] **Step 7: Record results and commit**
 
 Append `## Results (Task 3: audio_classification)` to this plan doc.
 
@@ -325,11 +323,11 @@ WARNING: root.main: torch.compile failed (or failed its warmup pass), falling ba
 CalledProcessError: Command '['/usr/bin/gcc', '.../cuda_utils.c', '-O3', '-shared', '-fPIC', ...
 -lcuda', '-L.../triton/backends/nvidia/lib', ...]' returned non-zero exit status 1.
 ```
-Triton's CUDA-kernel codegen fails to build `cuda_utils.c` via `gcc` on this box — a toolchain issue local to this environment (missing header/lib path for Triton's nvidia backend), not a `compile_model_if_enabled` defect. The `compile_model_if_enabled` warmup-and-fallback mechanism (built earlier this session, `docs/superpowers/plans/2026-07-28-compile-warmup-fallback.md`) caught the failure exactly as designed and fell back cleanly — training was not interrupted. This means the measured "compile=1, CUDA, 0.943s/epoch" number is **eager mode plus the one-time cost of a failed compile attempt**, not a real compiled-vs-uncompiled comparison; the CUDA compile question remains genuinely open on this hardware until the Triton/gcc toolchain issue is fixed here.
+Triton's CUDA-kernel codegen fails to build `cuda_utils.c` via `gcc` on this box — a toolchain issue local to this environment (missing header/lib path for Triton's nvidia backend), not a `compile_model_if_enabled` defect. The `compile_model_if_enabled` warmup-and-fallback mechanism (built earlier this session, `docs/superpowers/plans/2026-07-28-compile-warmup-fallback.md`) caught the failure exactly as designed and fell back cleanly — training was not interrupted. This means the measured "compile=1, CUDA, 0.943s/epoch" number is **eager mode plus the one-time cost of a failed compile attempt**, not a real compiled-vs-uncompiled comparison. (**Update 2026-08-14:** the toolchain issue was fixed — see the Addendum in Task 3's Results section below for the real `inductor`-on-CUDA numbers.)
 
 **Finding: CPU's `aot_eager` backend did engage successfully on GX10** (`INFO: root.main: Compiling model with torch.compile (backend=aot_eager)`, no fallback warning) and produced a small apparent win (4.093 -> 3.972s/epoch, ~3%) — versus the Mac's own CPU result, a clear ~23% *loss* for the same model/backend. This is a single-shot measurement on both sides (see the whole-plan methodology caveat), and ~3% is well within the ~7-9% run-to-run wobble this session's benchmarking has otherwise documented, so treat this as "the two machines may not agree on aot_eager's sign for this model" rather than a confirmed win — it would need repeated runs on both machines to distinguish a real effect from noise.
 
-**Net implication for the "should compile be on by default" question:** no clean "yes" or "no" emerges. Mac CPU/MPS: compile hurts on both. GX10 CPU: compile helps marginally. GX10 CUDA: unknown — the only device compile theoretically helps most (via `inductor`, not `aot_eager`) is the one device where it couldn't even run here. Recommend leaving `--compile-model` opt-in (its current default) rather than drawing a default-on conclusion from this data, and separately investigating the GX10 Triton/gcc build failure if CUDA compile behavior is worth knowing for real.
+**Net implication for the "should compile be on by default" question:** no clean "yes" or "no" emerges. Mac CPU/MPS: compile hurts on both. GX10 CPU: a ~3% apparent win, single-shot and within this session's documented run-to-run noise — not confirmed real (see caveat below). GX10 CUDA: unmeasured at the time this was written — see the Addendum in Task 3's Results section for the real `inductor` numbers, obtained after the GX10 toolchain issue was fixed. Recommend leaving `--compile-model` opt-in (its current default); nothing in the full dataset (including the later `inductor` numbers) argues for changing it.
 
 ---
 
@@ -354,9 +352,18 @@ Triton's CUDA-kernel codegen fails to build `cuda_utils.c` via `gcc` on this box
 
 **Finding: `torch.compile` makes image_classification training slower on both devices, same direction as radar, but with a smaller relative hit on MPS than on CPU.** CPU regresses ~124% (0.037s -> 0.083s/epoch) — proportionally worse than radar's ~23% CPU regression. MPS regresses only ~29% (0.073s -> 0.094s/epoch) — close in magnitude to radar's ~22% MPS regression, but here the CPU/MPS gap actually **narrows** with compile on: 0.073/0.037 = 1.98x (MPS slower, no compile) vs. 0.094/0.083 = 1.13x (MPS slower, with compile). CPU still wins in absolute terms either way, but compile shrinks rather than preserves the ratio — the opposite of radar, where the ratio stayed essentially flat (1.72x -> 1.70x). This is driven by the CPU/MPS *asymmetry* (CPU regresses far more than MPS does), not by MPS itself improving — no causal mechanism for that asymmetry was established here (see the whole-plan review's note that a competing "conv work narrows the GPU's relative advantage" story doesn't hold up against the GX10 data below, so this is reported as an observed pattern, not an explained one).
 
+**Correction (2026-08-14, per independent peer review): the numbers above conflate one-time compile warmup with steady-state cost, and the "net loss" conclusion below does not survive isolating them.** `s/epoch` here is whole-`train.run()` time ÷ 30, and Task 3's own MPS-dropout finding already showed compile's one-time warmup (~1.4s there) can be large relative to a 30-epoch total when each epoch is fast. Re-ran with the 1-epoch-vs-30-epoch isolation Task 3 used, fresh runs, same fixture/model/batch-size:
+
+| Config | Device | 1-epoch total | 30-epoch total | steady-state (solved) | fresh no-compile baseline |
+|---|---|---|---|---|---|
+| `--compile-model 1` | CPU | 1.519s | 1.860s | ~0.012s/epoch (warmup ~1.51s) | 0.019s/epoch |
+| `--compile-model 1` | MPS | 1.310s | 2.011s | ~0.024s/epoch (warmup ~1.29s) | 0.048s/epoch |
+
+Once warmup is excluded, compiled steady-state is **faster than eager on both devices** — roughly 37% faster on CPU, roughly 50% faster on MPS — the opposite sign from the naive 30-epoch-averaged "CPU regresses ~124%, MPS regresses ~29%" finding above. The original numbers weren't wrong as measurements of a 30-epoch run; they're wrong as a proxy for steady-state training cost, because a 30-epoch run this fast (~0.6-1.4s total) barely amortizes a ~1.3-1.5s one-time compile cost. (These are fresh runs in a new session, not re-runs of the exact original data — but the no-compile baselines were measured fresh in the same pass for a fair within-session comparison.) This reverses the "Bottom line" below for any training run long enough to amortize the warmup — see the whole-plan synthesis for how this changes the cross-task picture.
+
 **Methodology note — MPS cold-start artifact:** the very first MPS invocation of the whole benchmark session (`--compile-model 0`, run 1) measured 0.171s/epoch, 2.3-4.6x slower than every subsequent MPS run (compile-0 or compile-1) in the same session, each a fresh process. All later MPS runs (4 for compile-0, 4 for compile-1, alternating) clustered tightly (0.069-0.077 and 0.090-0.096 respectively). This looks like a one-time cost paid on the first-ever MPS/Metal invocation in the session (e.g. Metal shader compilation cache being cold on disk, not per-process) rather than genuine compile-vs-no-compile signal, since it appeared on a `--compile-model 0` run. The table above reports the steady-state average (excluding that one outlier); the raw run-by-run numbers are preserved in the session scratchpad driver output for reference. This is the same class of measurement caveat Task 1 flagged for GX10 (environment-specific first-run cost, not part of the compile question itself) — worth keeping in mind for any future single-shot MPS benchmark on this or other modules.
 
-**Bottom line:** wiring `compile_model_if_enabled` into `image_classification` is correct and makes `--compile-model` functional for this script, matching the other reference scripts and Task 1's radar wiring. As with radar, the evidence here does not support turning `--compile-model` on by default for this small a model: it's a net loss on both CPU and MPS for `CNN_LENET5` at this input size/batch size, though the loss is proportionally smaller on MPS than on CPU (unlike radar, where both devices regressed by a similar percentage). A larger, more compute-bound image model (e.g. `CNN_IMG_MOBILENETV1_58K_NPU`/`CNN_IMG_MOBILENETV2_58K_NPU`) was not benchmarked here (the brief calls for the smallest/fastest model to keep iteration time reasonable) and might show a different tradeoff, since more per-op dispatch overhead in eager mode gives kernel fusion more to recoup.
+**Bottom line (revised 2026-08-14):** wiring `compile_model_if_enabled` into `image_classification` is correct and makes `--compile-model` functional for this script, matching the other reference scripts and Task 1's radar wiring. Unlike the original conclusion, the warmup-isolated evidence does *not* argue against compile for `CNN_LENET5` — steady-state throughput improves on both CPU and MPS. It does argue against `--compile-model` defaulting on for *short* runs (a handful of epochs), where the one-time warmup cost dominates and compile is a net loss in wall-clock terms even though it's faster per-epoch once warmup is paid. Whether `--compile-model` should default on depends entirely on typical training-run length, which this benchmark's fixture (a few dozen epochs on a tiny synthetic dataset) doesn't represent — real training runs are likely long enough to amortize the ~1.3-1.5s warmup easily. A larger, more compute-bound image model (e.g. `CNN_IMG_MOBILENETV1_58K_NPU`/`CNN_IMG_MOBILENETV2_58K_NPU`) was not benchmarked here.
 
 **GX10 leg (controller-run):** same fixture/model/batch-size, 30 epochs, GX10's Python venv (torch 2.9.0+cu130), `NVIDIA GB10`. GX10's clone fast-forwarded cleanly to `bf261a7` this time (no reset needed, unlike Task 1's stale-clone situation). Same `cmsisdsp`/`torchaudio` `sys.modules` stubs as Task 1 (still unrelated to image_classification's own code path); no new missing packages this time — everything Task 1 installed already covered it.
 
@@ -371,7 +378,7 @@ Triton's CUDA-kernel codegen fails to build `cuda_utils.c` via `gcc` on this box
 
 **Finding: `aot_eager` on CPU is a bigger loss on GX10 than on the Mac for this model** — 0.097 -> 0.198s/epoch is a ~104% regression on GX10's CPU, roughly consistent in direction and rough magnitude with the Mac's own CPU regression for image_classification (~124%) and both are much worse than either machine's CPU regression for radar. Small-CNN `aot_eager` compilation overhead appears to be a bigger relative cost than small-linear-net overhead was, on both machines.
 
-**Finding: the same CUDA/Triton/gcc build failure from Task 1 reproduces identically here** — confirms it's an environment-level GX10 toolchain issue (Triton's nvidia backend `cuda_utils.c` failing to compile via `gcc`), not something specific to radar's model or code path. This will block any real `inductor`-backend measurement on GX10 across all modules until fixed there; worth investigating separately if CUDA compile behavior needs to be known for real, rather than re-discovering the same failure in Task 3's audio benchmark.
+**Finding: the same CUDA/Triton/gcc build failure from Task 1 reproduces identically here** — confirms it's an environment-level GX10 toolchain issue (Triton's nvidia backend `cuda_utils.c` failing to compile via `gcc`), not something specific to radar's model or code path. (**Update 2026-08-14:** fixed — see the Addendum in Task 3's Results section.)
 
 ---
 
@@ -419,15 +426,19 @@ This patch does feed `_load_audio`'s MFCC feature extraction (`audio_dataset.py:
 
 **Finding: the Triton/gcc `inductor` build failure reproduces identically for the third module in a row** — now confirmed systemic across all of radar, image_classification, and audio_classification on this GX10 environment, not tied to any particular model or code path.
 
-**Net across all three tasks and two machines, all nine measured `aot_eager` deltas:**
+**Revised 2026-08-14, following independent peer review and the image warmup-isolation re-check above.** The original version of this section claimed "`aot_eager` is a consistent net loss... across every device class actually measured, with two exceptions near the noise floor." That claim doesn't survive scrutiny — one of the "exceptions" was itself mischaracterized, and two of the seven "regressions" turned out to be warmup-dilution artifacts, not steady-state cost, once actually isolated.
+
+**All nine naive 30-epoch-averaged `aot_eager` deltas** (the raw numbers as originally measured, before any warmup isolation):
 
 | module | Mac CPU | Mac MPS | GX10 CPU |
 |---|---|---|---|
-| radar | +23% | +22% | -3.0% |
+| radar | +23% | +22% | -3.0% (single-shot, within documented ~7-9% noise — not confirmed real) |
 | image | +124% | +29% | +104% |
-| audio | -4.5% | +88% | +75% |
+| audio | -4.5% (n=3, non-overlapping ranges — real) | +88% (~56% steady-state, isolated) | +75% |
 
-Seven of nine are large regressions (22-124%); the other two (radar Mac CPU... no, radar GX10 CPU at -3.0%, and audio Mac CPU at -4.5%) are both under 5% — smaller than the ~7-9% run-to-run wobble this session's own prior benchmarking documented, and neither was re-run enough times to rule out noise (see methodology caveat below). The honest summary is not "no story holds" but the stronger and better-supported one: **`aot_eager` is a consistent net loss for models this small across every device class actually measured, with two exceptions near the noise floor.** `inductor`-on-CUDA is the one configuration genuinely unmeasured across all three modules, blocked by a single reproducible GX10 environment issue (Triton/`gcc` `cuda_utils.c` build failure). `--compile-model` staying opt-in (its current default) is the conclusion that holds up regardless of how the two borderline cases are read.
+**What changes when warmup is actually isolated (only done for image and audio's MPS leg — radar and the other legs were not re-checked this way):** image's naive CPU/MPS deltas (+124%/+29%) reverse sign entirely once the ~1.3-1.5s one-time compile cost is excluded — steady-state compile is ~37% faster on CPU and ~50% faster on MPS (see the warmup-isolation correction in Task 2's Results above). Audio's Mac MPS delta shrinks from +88% (naive) to ~+56% (steady-state) but stays a large real loss. Audio's Mac CPU -4.5% was run n=3 with non-overlapping ranges (1.222-1.254s vs 1.170-1.204s) — a small but genuine, controlled result, not noise; treating it as "near the noise floor" (the original version of this section did) was itself an error, since a noise-floor figure derived from single uncontrolled runs elsewhere in this plan was applied to discount a result that was actually more rigorously measured than the figure used to discount it.
+
+**Net honest picture:** there is no clean "compile helps" or "compile hurts" story, and — unlike the original version of this section claimed — the data doesn't support a "consistent net loss" story either. What actually holds up: (1) radar and audio's Mac MPS regressions are large and were not explained away by warmup (audio's mechanism — a dropout op falling back to CPU under compile — is a real, identified cause); (2) image's apparent regressions were mostly or entirely warmup dilution and reverse to a real win in steady state; (3) whether `--compile-model` helps depends heavily on model architecture, device, and training-run length, none of which this benchmark holds constant enough to generalize from. `inductor`-on-CUDA is no longer unmeasured — see the Addendum immediately below, obtained after the GX10 toolchain issue was fixed. `--compile-model` staying opt-in (its current default) is still the right call given how mixed and run-length-dependent this data is — but not because "compile is a consistent loss."
 
 **Addendum (2026-08-14): the GX10 `inductor` block is resolved, all three modules re-measured.** Root cause: GX10's system Python 3.12 was missing its `python3.12-dev` package, so `Python.h` didn't exist anywhere on the box — Triton's `cuda_utils.c` needs it to build the CUDA extension it compiles per-kernel. Fixed by installing `python3.12-dev` (`sudo apt install python3.12-dev`, done by the repo owner directly on GX10 — outside what this session could do without their password). Re-ran the `--compile-model 1`/CUDA config for all three modules; `inductor` now builds and engages with zero fallback warnings on all three (previously it failed and silently fell back to eager every time, so none of the numbers below existed until now):
 
