@@ -1,0 +1,29 @@
+common:
+  task_type: radar_classification
+  target_module: radar
+  target_device: MSPM0G3507
+dataset:
+  dataset_name: radar_human_pose_detection
+  # Public dataset URL. If download fails on corporate network,
+  # manually download the zip and replace this with the local path to the extracted dataset folder.
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_05_00/datasets/radar_human_pose_detection.zip
+  # data_dir is auto-detected as 'classes' for radar_classification (matches zip root folder structure)
+  # data_dir: 'classes'
+  # loader_type: classification
+  split_type: within_files
+  split_factor: [0.8, 0.1, 0.1]
+data_processing_feature_extraction:
+  data_proc_transforms:
+    - SimpleWindow
+  frame_size: 8         
+  stride_size: 0.5
+training:
+  model_name: Pose_and_Fall_model
+  batch_size: 64
+  training_epochs: 160
+  num_gpus: 0
+  quantization: 0
+  learning_rate: 0.0001
+  optimizer: SGD
+testing: {}
+compilation: {}

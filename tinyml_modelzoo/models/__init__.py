@@ -57,6 +57,7 @@ _MODEL_MODULES = [
     'forecasting',
     'feature_extraction',
     'image',
+    'radar',
     'audio'
 ]
 
@@ -93,6 +94,11 @@ def _register_models_from_module(module_name):
                             if not name.startswith('_') and
                             _is_model_class(getattr(module, name, None))]
 
+        # Names a submodule opts out of model_dict registration (e.g.
+        # composition/helper classes with a non-registry constructor
+        # signature) while still wanting to be exported/importable.
+        registry_exclude = getattr(module, '_REGISTRY_EXCLUDE', ())
+
         # Register each exported model
         for name in exported_names:
             obj = getattr(module, name, None)
@@ -102,7 +108,7 @@ def _register_models_from_module(module_name):
                 _all_exports.append(name)
 
                 # Add model classes to model_dict
-                if _is_model_class(obj):
+                if name not in registry_exclude and _is_model_class(obj):
                     model_dict[name] = obj
 
     except ImportError as e:
@@ -157,6 +163,22 @@ def get_model(model_name, variables, num_classes, input_features=None,
     Returns:
         Instantiated model
     """
+    if model_config is not None:
+        # model_config is documented as an "Optional path to model config file"
+        # and threaded all the way down from --model-config on the training CLI,
+        # but nothing in this function (or the config_dict it builds) has ever
+        # read it -- any customization a caller expects from it is silently
+        # dropped, with every built-in model constructed from only
+        # variables/num_classes/input_features/dual_op regardless. Fail loud
+        # instead of silently ignoring a config the user explicitly set.
+        import warnings
+        warnings.warn(
+            f"model_config ({model_config}) was provided but is not implemented -- "
+            "it will NOT be applied. The model will be constructed with its "
+            "default architecture.",
+            stacklevel=2,
+        )
+
     config_dict = dict(
         variables=variables,
         num_classes=num_classes,

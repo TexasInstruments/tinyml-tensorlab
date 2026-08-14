@@ -167,18 +167,45 @@ class NeuralNetworkWithPreprocess(torch.nn.Module):
         super().__init__()
         self.preprocess = preprocess
         self.model = model
+        # Only freeze preprocess when it's genuinely acting as a frozen feature
+        # extractor ahead of a trainable model -- matches the original
+        # conditional (the old code only detached/eval'd preprocess when
+        # self.model was also set).
+        self._freeze_preprocess = self.preprocess is not None and self.model is not None
+        if self._freeze_preprocess:
+            for p in self.preprocess.parameters():
+                p.requires_grad = False  # was `p.requires_grad_ = False`, which
+                # assigns over the bound method instead of calling it -- a no-op
+                # that never actually disabled gradients.
+            # Freeze mode immediately too: nn.Module constructs in train mode,
+            # and a forward pass before any train()/eval() call would still
+            # update BatchNorm running stats (torch.no_grad() in forward()
+            # blocks gradients but not running-stat updates). The train()
+            # override below keeps this in force across later train() calls.
+            self.preprocess.eval()
+
+    def train(self, mode=True):
+        # preprocess must stay in eval mode permanently once frozen, regardless
+        # of how many times the outer container's train()/eval() is toggled.
+        # Without this override, the standard per-epoch model.train() call
+        # recursively resets preprocess back to train mode too (nn.Module.train()
+        # propagates to all child modules by default) -- silently corrupting its
+        # BatchNorm running stats on the very next forward pass, since the old
+        # code only called m.eval() *after* running preprocess once, and only
+        # within forward(), so the fix couldn't survive the next train() call.
+        super().train(mode)
+        if self._freeze_preprocess:
+            self.preprocess.eval()
+        return self
 
     def forward(self, x):
         if self.preprocess:
-            x = self.preprocess(x)
-            if self.model:
-                x = x.detach()
-                for p in self.preprocess.parameters():
-                    p.requires_grad_ = False
-                for m in self.preprocess.modules():
-                    if isinstance(m, torch.nn.BatchNorm2d):
-                        m.eval()
-        if self.model:
+            if self._freeze_preprocess:
+                with torch.no_grad():
+                    x = self.preprocess(x)
+            else:
+                x = self.preprocess(x)
+        if self.model is not None:
             x = self.model(x)
         return x
 
@@ -192,3 +219,32 @@ __all__ = [
     'CombinedModel',
     'NeuralNetworkWithPreprocess',
 ]
+
+# None of the classes above are meant to be selected by name through the
+# public model registry (get_model()) -- they're composition/helper classes
+# with positional-arg constructors (e.g. FEModel1(variables, out_features,
+# ...), CombinedModel(model1, model2)) that don't accept get_model()'s
+# config=<dict> calling convention, unlike real registry models. The
+# registry's auto-discovery loop (_register_models_from_module in
+# models/__init__.py) registers every name in __all__ into model_dict as
+# long as it looks model-shaped (has .forward()), so selecting one of these
+# by --model/model_name (they appeared as legitimate entries in
+# list_models()/model_dict.keys()) raised a raw TypeError: __init__() got
+# an unexpected keyword argument 'config' instead of the intended "model
+# not found" error.
+#
+# __all__ can't be emptied to fix this: models/__init__.py's package-level
+# `from tinyml_modelzoo.models import *` (used by
+# tinyml_tinyverse/common/models/__init__.py) and direct attribute access
+# like `models.FEModelLinear` both go through the SAME __all__-driven
+# auto-discovery loop that builds model_dict -- an empty __all__ here also
+# makes these names vanish from the package's own namespace, breaking
+# `from tinyml_tinyverse.common.models import NeuralNetworkWithPreprocess`
+# and `models.FEModelLinear(...)`, both of which real callers use
+# (train.py in timeseries/audio/image_classification).
+#
+# So __all__ stays populated (imports keep working), and
+# _register_models_from_module instead checks this module-level opt-out
+# set before adding a name to model_dict -- decoupling "importable" from
+# "selectable as --model <name>".
+_REGISTRY_EXCLUDE = set(__all__)
