@@ -79,9 +79,19 @@ def test_main_calls_compile_model_if_enabled_and_uses_its_return_value():
         stack.enter_context(patch.object(radar_train, "log_model_summary"))
         stack.enter_context(patch.object(radar_train, "load_pretrained_weights", side_effect=lambda m, a, l: m))
         stack.enter_context(patch.object(radar_train, "handle_export_only", return_value=False))
-        stack.enter_context(patch.object(radar_train, "move_model_to_device"))
+        # Shared recorder so we can assert move_model_to_device runs BEFORE
+        # compile_model_if_enabled. move_model_to_device mutates the model
+        # in-place (model.to(device)) and has no captured return value in
+        # production code, so a bare no-op mock has no observable side
+        # effect that distinguishes call order -- side_effect here is what
+        # makes the order observable.
+        call_order = []
+        stack.enter_context(patch.object(
+            radar_train, "move_model_to_device",
+            side_effect=lambda *a, **kw: call_order.append("move_model_to_device")))
         mock_compile = stack.enter_context(patch.object(
-            radar_train, "compile_model_if_enabled", return_value=compiled_model_sentinel))
+            radar_train, "compile_model_if_enabled",
+            side_effect=lambda *a, **kw: (call_order.append("compile_model_if_enabled"), compiled_model_sentinel)[1]))
         mock_setup_distributed = stack.enter_context(patch.object(
             radar_train, "setup_distributed_model", side_effect=lambda m, a, d: (m, m, None)))
         stack.enter_context(patch.object(
@@ -124,4 +134,10 @@ def test_main_calls_compile_model_if_enabled_and_uses_its_return_value():
         "value, but received something else -- the compiled model's return value "
         "looks like it was discarded (model = compile_model_if_enabled(...) not "
         "assigned back to `model`)."
+    )
+
+    # Order matters: compile must run on a model that's already on its
+    # target device, not before.
+    assert call_order == ["move_model_to_device", "compile_model_if_enabled"], (
+        f"Expected move_model_to_device to run before compile_model_if_enabled, got order: {call_order}"
     )
