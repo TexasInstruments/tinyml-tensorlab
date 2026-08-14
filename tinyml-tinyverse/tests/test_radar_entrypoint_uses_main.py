@@ -16,9 +16,10 @@ def test_run_dispatches_to_main_not_main_debug():
 
     assert dispatched_fn is radar_train.main, (
         f"run() dispatched to {dispatched_fn.__name__!r}, expected 'main'. "
-        "main_debug() never applies quantization_wrapped_model, "
-        "compile_model_if_enabled/apply_hardware_defaults, or "
+        "main_debug() never applies quantization_wrapped_model or "
         "resume_from_checkpoint -- wiring run() to it silently drops quantized "
-        "training and hardware acceleration for every radar run."
+        "training and checkpoint resume for every radar run. main() is also the "
+        "only one of the two that can be extended with compile_model_if_enabled/"
+        "apply_hardware_defaults (added in a follow-up change)."
     )
     assert dispatched_args is fake_args
