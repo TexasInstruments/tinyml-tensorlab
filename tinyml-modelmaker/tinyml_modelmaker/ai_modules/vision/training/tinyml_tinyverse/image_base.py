@@ -335,6 +335,7 @@ class BaseImageModelTraining:
             '--lr-warmup-epochs', '1',
             '--distributed', f'{distributed}',
             '--device', f'{device}',
+            '--compile-model', f'{getattr(self.params.training, "compile_model", 0)}',
 
             '--generic-model', f'{self.params.common.generic_model}',
             '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
