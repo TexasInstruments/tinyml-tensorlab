@@ -1,7 +1,5 @@
 # Wire compile_model into modelmaker for Radar, Vision, and Audio Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Make `--compile-model` reachable from the supported `tinyml-modelmaker` production path for `radar`, `vision` (image), and `audio` — closing the gap an independent peer review found in the `compile-hardening-radar-image-audio` plan: `compile_model_if_enabled` was wired into all three `tinyml-tinyverse` scripts, but none of the three modules' `tinyml-modelmaker` orchestration layers ever pass `--compile-model`, so the flag is permanently `0` (its default) for anyone using the actual product, not just direct script invocation.
 
 **Architecture:** `timeseries` already has this wiring end to end and is the template: a `compile_model=0` field in its `params.py` training dict, an `apply_hardware_defaults(params, user_training_keys)` call at the end of `init_params()` (which auto-flips `compile_model` to `1` when CUDA is available and the user hasn't explicitly set it), and a `'--compile-model', f'{getattr(self.params.training, "compile_model", 0)}'` entry in its argv builder. `apply_hardware_defaults` itself (`tinyml-modelmaker/tinyml_modelmaker/utils/hardware_defaults.py`) already guards every field access with `hasattr`, and its own docstring says it was built for exactly this rollout ("hasattr guards keep this safe for params that don't carry these fields yet (vision, audio — Phase 2)") — so `apply_hardware_defaults` itself needs no changes, only the three modules' own params.py/argv-builder files.
@@ -47,7 +45,7 @@ This plan closes that gap using the exact pattern `timeseries` and `apply_hardwa
 **Interfaces:**
 - Consumes: `tinyml_modelmaker.utils.hardware_defaults.apply_hardware_defaults` (existing, unmodified, already imported this way in `timeseries/params.py:38`)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: radar's modelmaker params must carry a compile_model
@@ -72,12 +70,12 @@ def test_init_params_carries_compile_model_field():
     )
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-modelmaker && python -m pytest tests/test_radar_compile_model_param.py -v`
 Expected: FAIL — `AttributeError` or `hasattr` returns `False`, `compile_model` not present
 
-- [ ] **Step 3: Add the field to radar/params.py's training dict**
+- [x] **Step 3: Add the field to radar/params.py's training dict**
 
 In `tinyml-modelmaker/tinyml_modelmaker/ai_modules/radar/params.py`, in the `training=dict(...)` block, add `compile_model=0,` immediately before the `training_device='cuda',  # 'cpu', 'cuda'` line:
 
@@ -87,7 +85,7 @@ In `tinyml-modelmaker/tinyml_modelmaker/ai_modules/radar/params.py`, in the `tra
             training_device='cuda',  # 'cpu', 'cuda'
 ```
 
-- [ ] **Step 4: Add the apply_hardware_defaults call**
+- [x] **Step 4: Add the apply_hardware_defaults call**
 
 Add the import near the top of the file (matching `timeseries/params.py:38`'s exact form):
 ```python
@@ -109,12 +107,12 @@ to:
 ```
 (matching `timeseries/params.py:227-232` exactly, including the comment above `user_training_keys` in that file explaining why the `isinstance` check exists — copy it verbatim for consistency.)
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `cd tinyml-modelmaker && python -m pytest tests/test_radar_compile_model_param.py -v`
 Expected: PASS
 
-- [ ] **Step 6: Wire --compile-model into radar_base.py's train argv**
+- [x] **Step 6: Wire --compile-model into radar_base.py's train argv**
 
 In `tinyml-modelmaker/tinyml_modelmaker/ai_modules/radar/training/tinyml_tinyverse/radar_base.py`'s `_build_common_train_argv`, change:
 ```python
@@ -132,7 +130,7 @@ to:
             '--generic-model', f'{self.params.common.generic_model}',
 ```
 
-- [ ] **Step 7: Write a test confirming the argv actually carries it**
+- [x] **Step 7: Write a test confirming the argv actually carries it**
 
 ```python
 """Regression test: radar_base.py's train argv must include --compile-model,
@@ -164,11 +162,11 @@ def test_build_common_train_argv_includes_compile_model():
 Run: `cd tinyml-modelmaker && python -m pytest tests/test_radar_compile_model_param.py -v` (add this test to the same file)
 Expected: PASS after Step 6's change, would FAIL before it
 
-- [ ] **Step 8: Manual end-to-end verification through the modelmaker layer**
+- [x] **Step 8: Manual end-to-end verification through the modelmaker layer**
 
 This is the layer prior plans' direct-script-only testing has already missed real bugs in twice — verify for real, not just via unit tests. Using the synthetic radar fixture (`make_radar_fixture.py` from the session scratchpad, or regenerate per `docs/superpowers/plans/2026-08-13-radar-training-entrypoint-fix.md`'s Task 1), drive radar training through `BaseRadarModelTraining.run()` (not directly through `tinyml_tinyverse.references.radar_classification.train`) with `params.training.compile_model = 1` set explicitly, `--device cpu`, a couple of epochs. Confirm the run log shows `compile_model_if_enabled`'s own `Compiling model with torch.compile` INFO line — proving the flag's value actually reaches the trainer through the full modelmaker → tinyverse argv-passing chain, not just that the argv list contains the right string.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 cd tinyml-modelmaker
@@ -187,7 +185,7 @@ git commit -m "feat: wire compile_model into radar's modelmaker params/argv/hard
 **Interfaces:**
 - Same as Task 1, applied to the vision module. Independent of Task 1 — same pattern, different files.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: vision's modelmaker params must carry a compile_model
@@ -209,24 +207,24 @@ def test_init_params_carries_compile_model_field():
     )
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-modelmaker && python -m pytest tests/test_vision_compile_model_param.py -v`
 Expected: FAIL — `compile_model` not present on `params.training`
 
-- [ ] **Step 3: Add `compile_model=0,` to vision/params.py's training dict**, immediately before `training_device=constants.TRAINING_DEVICE_CUDA,`.
+- [x] **Step 3: Add `compile_model=0,` to vision/params.py's training dict**, immediately before `training_device=constants.TRAINING_DEVICE_CUDA,`.
 
-- [ ] **Step 4: Add the `apply_hardware_defaults` import and call**, same exact pattern as Task 1 Step 4, applied to `vision/params.py`'s `init_params`.
+- [x] **Step 4: Add the `apply_hardware_defaults` import and call**, same exact pattern as Task 1 Step 4, applied to `vision/params.py`'s `init_params`.
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
-- [ ] **Step 6: Wire `--compile-model` into image_base.py's train argv.** In `_build_common_train_argv` (line 337 area), insert after `'--device', f'{device}',` — same pattern as Task 1 Step 6, adapted to this file's exact surrounding lines (confirm the exact `--generic-model`/next-line context before editing, since `image_base.py` also has a `--sampling-rate` line here per the file map already inspected — insert `--compile-model` right after `--device`, before those).
+- [x] **Step 6: Wire `--compile-model` into image_base.py's train argv.** In `_build_common_train_argv` (line 337 area), insert after `'--device', f'{device}',` — same pattern as Task 1 Step 6, adapted to this file's exact surrounding lines (confirm the exact `--generic-model`/next-line context before editing, since `image_base.py` also has a `--sampling-rate` line here per the file map already inspected — insert `--compile-model` right after `--device`, before those).
 
-- [ ] **Step 7: Write the argv-carries-it test**, mirroring Task 1 Step 7, targeting `ModelTraining`/`BaseModelTraining` in `image_base.py` (check the exact base class name in this file — it likely differs from radar's `BaseRadarModelTraining`, confirm before writing).
+- [x] **Step 7: Write the argv-carries-it test**, mirroring Task 1 Step 7, targeting `ModelTraining`/`BaseModelTraining` in `image_base.py` (check the exact base class name in this file — it likely differs from radar's `BaseRadarModelTraining`, confirm before writing).
 
-- [ ] **Step 8: Manual end-to-end verification.** Reuse the image fixture pattern from `docs/superpowers/plans/2026-08-13-compile-hardening-radar-image-audio.md` Task 2 (`make_image_fixture.py`), drive training through vision's modelmaker `run()` (not directly through `tinyml_tinyverse.references.image_classification.train`) with `compile_model = 1` set, confirm the compile INFO log line appears.
+- [x] **Step 8: Manual end-to-end verification.** Reuse the image fixture pattern from `docs/superpowers/plans/2026-08-13-compile-hardening-radar-image-audio.md` Task 2 (`make_image_fixture.py`), drive training through vision's modelmaker `run()` (not directly through `tinyml_tinyverse.references.image_classification.train`) with `compile_model = 1` set, confirm the compile INFO log line appears.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 cd tinyml-modelmaker
@@ -245,7 +243,7 @@ git commit -m "feat: wire compile_model into vision's modelmaker params/argv/har
 **Interfaces:**
 - Same as Tasks 1/2, applied to the audio module. Independent of both.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: audio's modelmaker params must carry a compile_model
@@ -267,24 +265,24 @@ def test_init_params_carries_compile_model_field():
     )
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-modelmaker && python -m pytest tests/test_audio_compile_model_param.py -v`
 Expected: FAIL — `compile_model` not present on `params.training`
 
-- [ ] **Step 3: Add `compile_model=0,` to audio/params.py's training dict**, immediately before `training_device='cuda',  # 'cpu', 'cuda'`.
+- [x] **Step 3: Add `compile_model=0,` to audio/params.py's training dict**, immediately before `training_device='cuda',  # 'cpu', 'cuda'`.
 
-- [ ] **Step 4: Add the `apply_hardware_defaults` import and call**, same pattern as Tasks 1/2.
+- [x] **Step 4: Add the `apply_hardware_defaults` import and call**, same pattern as Tasks 1/2.
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
-- [ ] **Step 6: Wire `--compile-model` into audio_base.py's train argv.** In `_build_common_train_argv` (line 317 area), insert after `'--device', f'{device}',`, matching this file's exact surrounding structure (confirmed identical to radar's at this point per the earlier file map inspection — `'--generic-model'` follows).
+- [x] **Step 6: Wire `--compile-model` into audio_base.py's train argv.** In `_build_common_train_argv` (line 317 area), insert after `'--device', f'{device}',`, matching this file's exact surrounding structure (confirmed identical to radar's at this point per the earlier file map inspection — `'--generic-model'` follows).
 
-- [ ] **Step 7: Write the argv-carries-it test**, mirroring Task 1 Step 7.
+- [x] **Step 7: Write the argv-carries-it test**, mirroring Task 1 Step 7.
 
-- [ ] **Step 8: Manual end-to-end verification.** Reuse the audio fixture pattern from `docs/superpowers/plans/2026-08-13-compile-hardening-radar-image-audio.md` Task 3 (`make_audio_fixture.py`), drive training through audio's modelmaker `run()` with `compile_model = 1` set, confirm the compile INFO log line appears. Watch for the `--sampling-rate` requirement (`required=True` on the base parser) — audio_base.py already supplies it correctly (per the separately-fixed `--sample-rate` dead-flag plan), so this should just work, but confirm rather than assume.
+- [x] **Step 8: Manual end-to-end verification.** Reuse the audio fixture pattern from `docs/superpowers/plans/2026-08-13-compile-hardening-radar-image-audio.md` Task 3 (`make_audio_fixture.py`), drive training through audio's modelmaker `run()` with `compile_model = 1` set, confirm the compile INFO log line appears. Watch for the `--sampling-rate` requirement (`required=True` on the base parser) — audio_base.py already supplies it correctly (per the separately-fixed `--sample-rate` dead-flag plan), so this should just work, but confirm rather than assume.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 cd tinyml-modelmaker

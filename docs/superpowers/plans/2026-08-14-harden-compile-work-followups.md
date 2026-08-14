@@ -1,7 +1,5 @@
 # Harden Compile-Hardening Follow-ups Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Fix three issues an independent peer code review found in the compile-hardening plan's aftermath: a live crash reachable through a supported radar/timeseries config, three regression tests too weak to catch the failures they're meant to guard, and a DataLoader resource leak newly reachable now that `radar_classification/train.py`'s `main()` is the live entrypoint.
 
 **Architecture:** Three independent tasks, each touching different files with no shared state:
@@ -53,7 +51,7 @@ An independent peer code review of the compile-hardening plan (`docs/superpowers
 **Interfaces:**
 - Consumes: `load_datasets` (already imported in both files, unchanged signature)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: radar_classification.train.main() must not crash when
@@ -137,12 +135,12 @@ def test_main_does_not_crash_when_quantization_cache_is_empty():
         radar_train.main(0, args)
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_quant_only_no_crash.py -v`
 Expected: FAIL with `AttributeError: 'NoneType' object has no attribute 'classes'`
 
-- [ ] **Step 3: Fix radar_classification/train.py**
+- [x] **Step 3: Fix radar_classification/train.py**
 
 Change:
 ```python
@@ -159,21 +157,21 @@ to:
     else:
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_quant_only_no_crash.py -v`
 Expected: PASS
 
-- [ ] **Step 5: Apply the identical fix to timeseries_classification/train.py**
+- [x] **Step 5: Apply the identical fix to timeseries_classification/train.py**
 
 Same one-word condition change at line 214 (`if args.quantization:` → `if args.quantization and dataset_load_state['dataset'] is not None:`). Write an analogous test (`tests/test_timeseries_classification_quant_only_no_crash.py`), adapting the mock args/dataset shape to `timeseries_classification`'s `main()` signature (check its existing tests, e.g. any in `tests/` already driving this `main()`, for the right fake-dataset shape before writing from scratch).
 
-- [ ] **Step 6: Run both new tests plus the full suite**
+- [x] **Step 6: Run both new tests plus the full suite**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/ -v`
 Expected: both new tests pass; the one pre-existing unrelated failure (`test_anomalydetection_train_device_crash.py::test_main_passes_a_torch_device_not_the_raw_args_device_string`, broken since PR #22, unrelated to this change) is the only failure, if any
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 cd tinyml-tinyverse
@@ -193,11 +191,11 @@ git commit -m "fix: run_quant_train_only crashed when the dataset-reuse cache wa
 **Interfaces:**
 - Consumes: `tinyml_tinyverse.references.common.train_base.compile_model_if_enabled` (patch target), each module's own `main()`
 
-- [ ] **Step 1: Read the two reference patterns before writing anything**
+- [x] **Step 1: Read the two reference patterns before writing anything**
 
 `tinyml-tinyverse/tests/test_anomalydetection_train_device_crash.py` (specifically its third test, the one driving `anomaly_train.main(0, args)` with the full dependency chain mocked) is the template for "drive the real `main()`, assert on what a specific patched call received." `tinyml-tinyverse/tests/test_train_best_epoch_bugs_vision_audio.py` already contains complete, working mock harnesses for `image_classification.train.main()` and `audio_classification.train.main()` — reuse those fixtures/mocking setups rather than rebuilding them; only the specific assertion (on `compile_model_if_enabled`) is new.
 
-- [ ] **Step 2: Rewrite test_radar_compile_wired.py**
+- [x] **Step 2: Rewrite test_radar_compile_wired.py**
 
 Replace the `inspect.getsource` substring check with a test that patches `compile_model_if_enabled` on the `radar_train` module, drives `main(0, args)` with everything else mocked (adapt the mock harness from Task 1's new radar test above, which already has a complete working mock set for `main()` — reuse it directly), and asserts:
 - `compile_model_if_enabled` was called exactly once
@@ -205,24 +203,24 @@ Replace the `inspect.getsource` substring check with a test that patches `compil
 - with `input_shape=(1,) + dataset.X.shape[1:]` (assert the actual kwarg value, not just its presence)
 - that its return value was what got passed into `setup_distributed_model` (i.e., the compiled/wrapped model is what continues through the rest of `main()`, not silently discarded)
 
-- [ ] **Step 3: Run it, verify RED then GREEN**
+- [x] **Step 3: Run it, verify RED then GREEN**
 
 Temporarily verify this test fails against the *pre-Task-1-of-the-original-compile-hardening-plan* code shape (e.g. by checking it would fail if the `model = compile_model_if_enabled(...)` line were reverted to not exist, or not reassign `model`) — the simplest way is to comment out the assignment locally, confirm the new test fails, then restore it and confirm it passes. Document this RED/GREEN evidence in the report even though the underlying fix already shipped weeks ago; the point is proving the *new test* has teeth, not re-doing the original fix.
 
-- [ ] **Step 4: Repeat Steps 2-3 for test_image_classification_compile_wired.py**
+- [x] **Step 4: Repeat Steps 2-3 for test_image_classification_compile_wired.py**
 
 Adapt using `test_train_best_epoch_bugs_vision_audio.py`'s existing `image_classification.train.main()` mock harness as the base.
 
-- [ ] **Step 5: Repeat Steps 2-3 for test_audio_classification_compile_wired.py**
+- [x] **Step 5: Repeat Steps 2-3 for test_audio_classification_compile_wired.py**
 
 Adapt using `test_train_best_epoch_bugs_vision_audio.py`'s existing `audio_classification.train.main()` mock harness as the base.
 
-- [ ] **Step 6: Run the full suite**
+- [x] **Step 6: Run the full suite**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/ -v`
 Expected: all pass except the one known pre-existing unrelated failure
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 cd tinyml-tinyverse
@@ -240,7 +238,7 @@ git commit -m "test: replace source-text compile_model_if_enabled checks with re
 **Interfaces:**
 - Consumes: `shutdown_data_loaders` from `..common.train_base` (already used by `image_classification/train.py` and the four `timeseries_*` scripts — not yet imported in radar's file)
 
-- [ ] **Step 1: Write a test that verifies shutdown_data_loaders is called**
+- [x] **Step 1: Write a test that verifies shutdown_data_loaders is called**
 
 ```python
 """Regression test: radar_classification.train.main() must call
@@ -321,16 +319,16 @@ def test_main_calls_shutdown_data_loaders():
     mock_shutdown.assert_called_once_with(*fake_loaders)
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_shutdown_data_loaders.py -v`
 Expected: FAIL — `shutdown_data_loaders` is never imported or called, so patching it and asserting `assert_called_once_with` fails (or the import patch itself fails since the name doesn't exist yet — either failure mode confirms the gap)
 
-- [ ] **Step 3: Add the import**
+- [x] **Step 3: Add the import**
 
 Add `shutdown_data_loaders` to the existing `from ..common.train_base import (...)` block in `radar_classification/train.py`.
 
-- [ ] **Step 4: Wrap the training body in try/finally**
+- [x] **Step 4: Wrap the training body in try/finally**
 
 Change the structure from (data loaders created, then everything else at the same indentation level through end of function) to:
 ```python
@@ -344,18 +342,18 @@ Change the structure from (data loaders created, then everything else at the sam
 ```
 Match `image_classification/train.py:297-473`'s exact wrapping boundaries and style — the `try:` opens right after `create_data_loaders`, the `finally:` closes right before the function ends (after the `gen_golden_vectors` block, which is the last statement in `main()`).
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_radar_shutdown_data_loaders.py -v`
 Expected: PASS
 
-- [ ] **Step 6: Run the full suite plus a real (non-mocked) manual check**
+- [x] **Step 6: Run the full suite plus a real (non-mocked) manual check**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/ -v` — expect only the known pre-existing unrelated failure.
 
 Then run an actual training pass on the synthetic radar fixture (reuse `make_radar_fixture.py`/the argv pattern from `docs/superpowers/plans/2026-08-13-radar-training-entrypoint-fix.md`'s Task 1) for a couple of epochs, `--device cpu`, to confirm the re-indented function still runs correctly end to end (the re-indentation is mechanical but touches ~110 lines — a real run is the best check that nothing was mis-indented into the wrong scope).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 cd tinyml-tinyverse
