@@ -141,7 +141,9 @@ def compute_offset_scale_shift(offset: torch.Tensor, weight: torch.Tensor, round
     mask = torch.isnan(scaled_weights)
     scaled_weights[mask], shift[mask] = 0, 1
 
-    if torch.any(scaled_weights > scale_max):
+    # Skip this eager validation during torch.export/dynamo tracing — the check
+    # is data-dependent and cannot be represented in a static graph.
+    if not torch.compiler.is_compiling() and torch.any(scaled_weights > scale_max):
         raise RuntimeError(
             f"Error in quantization.convert :: compute_offset_scale_shift. Scaling could not be converted.\n"
             f"Invalid scale values: {weight.cpu().detach().numpy()}\n"
@@ -297,7 +299,7 @@ def replace_call_function_or_method(main_module: GraphModule, start: torch.Node,
             # Remove the original start node
             main_module.graph.erase_node(start)
             lint_and_recompile(main_module)
-            return
+            return new_node
 
     # Get the name of replaced module
     new_node_name = get_name_from_module(replace_module, module_no)
@@ -315,6 +317,7 @@ def replace_call_function_or_method(main_module: GraphModule, start: torch.Node,
         # Remove intermediate nodes
         remove_intermediate_call_modules(main_module, new_node, start, end)
     lint_and_recompile(main_module)
+    return new_node
 
 def replace_call_module(main_module: GraphModule, start: Node, end: Node, replace_module: torch.nn.Module, module_no: int = 0, rename_node_flag: bool = False) -> None:
     """Replace the call_module at start node with replace_module.
@@ -491,46 +494,75 @@ def adjust_residual_inputs_qconfig(model: GraphModule, range_max: int = 0, quant
     model.recompile()
     return model
 
-def assign_same_observers(model: GraphModule, node_1: Node, node_2: Node) -> GraphModule:
-    """Assign the same observers to two nodes' activation quantization.
-    
+ACTIVATION_POST_PROCESS = "activation_post_process"
+ACTIVATION_POST_PROCESS_SOURCE = "activation_post_process_source"
+
+def _find_observer_for_nodes(model: GraphModule, input_nodes: List[Node], fallback_node: Node):
+    """Find observer from priority: input node sources → fallback_node.next.next.
+
     Args:
         model: GraphModule containing the nodes
-        node_1: First node to get observer from
-        node_2: Second node to assign observer to
-        
+        input_nodes: List of nodes to check for observer source
+        fallback_node: Node to get fallback observer from (fallback_node.next.next)
+
+    Returns:
+        Observer object or None if not found
+    """
+    for node in input_nodes:
+        module_attr = getattr(model, str(node.target), None)
+        if module_attr and hasattr(module_attr, ACTIVATION_POST_PROCESS_SOURCE):
+            return getattr(module_attr, ACTIVATION_POST_PROCESS_SOURCE)
+
+    module_attr = getattr(model, str(fallback_node.next.next.target), None)
+    if module_attr and hasattr(module_attr, ACTIVATION_POST_PROCESS):
+        return getattr(module_attr, ACTIVATION_POST_PROCESS)
+    return None
+
+def assign_same_observers(model: GraphModule, node: Node, input_nodes: List[Node]) -> GraphModule:
+    """Assign the same observer to multiple input nodes' activation quantization.
+
+    Synchronizes the observer (activation post-processor) across all input nodes
+    using priority: input node sources → node.next.next observer.
+
+    Args:
+        model: GraphModule containing the nodes
+        node: Node to get fallback observer from (traverses node.next.next)
+        input_nodes: List of nodes to assign the same observer
+
     Returns:
         Modified GraphModule
     """
-    activation_post_proc = None
-    if hasattr(model, node_1.target):
-        module_attr = getattr(model, node_1.target)
-        if hasattr(module_attr, "activation_post_process"):
-            activation_post_proc = module_attr.activation_post_process
+    activation_post_proc = _find_observer_for_nodes(model, input_nodes, node)
 
-    if activation_post_proc and hasattr(model, node_2.target):
-        module_attr = getattr(model, node_2.target)
-        setattr(module_attr, "activation_post_process", activation_post_proc)
+    if activation_post_proc:
+        node_targets = [n.target for n in input_nodes] + [node.next.next.target]
+        for node_target in node_targets:
+            module_attr = getattr(model, str(node_target), None)
+            if module_attr:
+                setattr(module_attr, ACTIVATION_POST_PROCESS, activation_post_proc)
+                setattr(module_attr, ACTIVATION_POST_PROCESS_SOURCE, activation_post_proc)
+
         model.graph.lint()
         model.recompile()
-        
+
     return model
 
-def assign_same_observers_for_residual_inputs(model: GraphModule):
-    """Assign same observers to all residual input node pairs.
-    
+def assign_same_observers_for_residual_inputs(model: GraphModule) -> None:
+    """Assign same observers to all residual input nodes.
+
     Finds nodes with residual operators and assigns matching observers
-    to their input nodes.
-    
+    to all their input nodes (supports operators with 2+ node inputs).
+
     Args:
         model: GraphModule to modify
     """
     residual_operators = {operator.add, torch.add, "add", torch.cat, torch.stack}
+    residual_operators = {operator.add, torch.add, "add", torch.cat, torch.stack}
     for node in model.graph.nodes:
-        target_name = node.target
-        if target_name in residual_operators:
-            node_1, node_2 = node.args
-            assign_same_observers(model, node_1, node_2)
+        if node.target in residual_operators and len(node.args) >= 2:
+            input_nodes = [arg for arg in node.args if isinstance(arg, Node)]
+            if len(input_nodes) >= 2:
+                assign_same_observers(model, node, input_nodes)
 
 
 def remove_identity(model: torch.nn.Module, verbose_mode: bool = False, **kwargs) -> torch.fx.GraphModule:

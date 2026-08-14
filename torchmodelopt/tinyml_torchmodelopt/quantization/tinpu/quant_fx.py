@@ -40,7 +40,7 @@ from ..base.fx import TinyMLQuantFxBaseModule
 from torch.fx import GraphModule
 from typing import List, Tuple, Optional
 
-from ...surgery.quant_helper_func import remove_identity
+from ...surgery.quant_helper_func import remove_identity, assign_same_observers_for_residual_inputs
 from .quant_utils import TINPUQuantizedReplacementUtils
 
 
@@ -115,6 +115,7 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         _is_x86 = platform.machine() in ('x86_64', 'AMD64', 'x86')
         backend = 'fbgemm' if (platform.system() == 'Windows' or (platform.system() == 'Darwin' and _is_x86)) else 'qnnpack'
         super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
+        assign_same_observers_for_residual_inputs(self.module)
 
     def convert(self, *args, model_qconfig_format: str = TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
         '''
@@ -169,6 +170,10 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
     def replacement_rules(self, replacement_utils: TINPUQuantizedReplacementUtils, is_batch_normalized: bool, output_int: bool) -> List[Tuple]:
         # List to store the pattern and corresponding replacement function
         replacement_rules = [
+            ([torch.nn.BatchNorm2d, torch.quantize_per_tensor], replacement_utils.from_bnq),
+            ([torch.ao.nn.intrinsic.modules.fused.ConvReLU2d], replacement_utils.from_conv_bn_relu),
+            ([torch.ao.nn.intrinsic.modules.fused.ConvBn2d], replacement_utils.from_conv_bn),
+            ([torch.ao.nn.intrinsic.modules.fused.LinearReLU], replacement_utils.from_linear_relu),
             ([torch.ao.nn.quantized.modules.batchnorm.BatchNorm2d], replacement_utils.from_qbn),
             # Pooling Modules
             ([torch.nn.AvgPool2d], replacement_utils.from_avg_pool2d),                              # OSS required

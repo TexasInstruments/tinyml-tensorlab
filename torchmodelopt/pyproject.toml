@@ -8,16 +8,14 @@ name = "tinyml_torchmodelopt"
 version = "1.4.0"
 description = "Tiny ML Model Optimization ToolKit For Torch"
 readme = "README.md"
-requires-python = "==3.10.*"
-classifiers = [ "Development Status :: 4 - Beta",
-	"Programming Language :: Python :: 3.10",]
+
 dependencies = [
-	"numpy==2.2.6",
-	"onnxsim==0.4.36",
-	"onnx==1.19.1",
-	"onnxruntime==1.23.2",
-	"colorama==0.4.6",
-	"torch==2.7.1",
+	# "numpy==2.2.6",
+	# "onnxsim==0.4.36",
+	# "onnx==1.19.1",
+	# "onnxruntime==1.23.2",
+	# "colorama==0.4.6",
+	# "torch==2.7.1",
 ]
 [[project.authors]]
 name = "Adithya Thonse"

@@ -1,4 +1,6 @@
 torchmodelopt/examples/audio_keyword_spotting/SpeechCommands/
+*.dat
+*data
 *.pyc
 *.egg-info
 *.onnx

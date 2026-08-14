@@ -282,7 +282,8 @@ epochs=10
 Wrap the model in the TI quantization module for NPU.
 #####################################################
 '''
-ti_model = tinpu_quantization.TINPUTinyMLQATFxModule(model, total_epochs=epochs)
+qconfig_type = tinpu_quantization.TinyMLQConfigType(weight_bitwidth=8, activation_bitwidth=8, auto_quantization=False).qconfig_type
+ti_model = tinpu_quantization.TINPUTinyMLQATFxModule(model, total_epochs=epochs, qconfig_type=qconfig_type)
 print(ti_model)
 
 # Perform Quantization Aware Training.
