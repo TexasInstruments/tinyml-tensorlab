@@ -29,8 +29,10 @@
 #################################################################################
 
 import sys
+from . import protocols
 from . import timeseries
 from . import vision
+from . import radar
 from . import audio
 
 def get_target_module(backend_name):

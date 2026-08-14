@@ -32,6 +32,7 @@ import os
 import re
 
 from tinyml_tinyverse.references.common import compilation as compile_scr
+from tinyml_tinyverse.references.common.fel_memory import compilation_fel as compile_fel_scr
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 
 import tinyml_modelmaker
@@ -46,7 +47,7 @@ from ...timeseries import constants
 
 class ModelCompilation():
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = dict(
             compilation=dict(
             )
@@ -109,6 +110,31 @@ class ModelCompilation():
         # clear the dirs
         # shutil.rmtree(self.params.compilation.compilation_path, ignore_errors=True)
         return
+
+    def get_device_fel_function(self, device_name: str):
+        devices = {
+            'AM13E2': ('get_memory_am13', constants.ARM_LLVM_CGT_PATH, 'am13e230x'),
+            'MSPM0G5187': ('get_memory_mspm0', constants.ARM_LLVM_CGT_PATH, 'mspm0g5187x'),
+            'MSPM0G3507': ('get_memory_mspm0', constants.ARM_LLVM_CGT_PATH, 'mspm0g3507x'),
+            'F28E12': ('get_memory_c28', constants.C2000_CG_ROOT, 'f28e12x'),
+            'F28P55': ('get_memory_c28', constants.C2000_CG_ROOT, 'f28p55x'),
+            'F28P65': ('get_memory_c28', constants.C2000_CG_ROOT, 'f28p65x'),
+            'F28P551': ('get_memory_c28', constants.C2000_CG_ROOT, 'f28p551x'),
+            'F2807': ('get_memory_c28', constants.C2000_CG_ROOT, 'f2807x'),
+            'F2837': ('get_memory_c28', constants.C2000_CG_ROOT, 'f2837xd'),
+            'F2838': ('get_memory_c28', constants.C2000_CG_ROOT, 'f2838x'),
+            'F28002': ('get_memory_c28', constants.C2000_CG_ROOT, 'f28002x'),
+            'F28003': ('get_memory_c28', constants.C2000_CG_ROOT, 'f28003x'),
+            'F28004': ('get_memory_c28', constants.C2000_CG_ROOT, 'f28004x'),
+            'F280013': ('get_memory_c28', constants.C2000_CG_ROOT, 'f280013x'),
+            'F280015': ('get_memory_c28', constants.C2000_CG_ROOT, 'f280015x'),
+            'F29H85': ('get_memory_c29', constants.CG_TOOL_ROOT, 'f29h85x'),
+        }
+
+        if device_name not in devices:
+            return None
+        config = devices[device_name]
+        return config
 
     def run(self, **kwargs):
         ''''
@@ -188,9 +214,12 @@ class ModelCompilation():
         ]
         # compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
         args = compile_scr.get_args_parser().parse_args(argv)
+        args.quit_event = self.quit_event
         compile_scr.modify_user_input_config(user_input_config_h, target)
         exit_flag = compile_scr.run(args)
-        args.quit_event = self.quit_event
+        config = self.get_device_fel_function(self.params.common.target_device)
+        if config:
+            compile_fel_scr.run(self.params.common.project_run_path, config[0], config[1], config[2])
         return exit_flag
 
     def _get_compiled_artifact_dir(self):

@@ -120,6 +120,12 @@ TARGET_DEVICE_TYPES = [
     TARGET_DEVICE_TYPE_MCU
 ]
 
+# training backend
+TRAINING_BACKEND_TINYML_TINYVERSE = 'tinyml_tinyverse'
+
+# data directory names
+DATA_DIR_IMAGES = 'images'
+
 # training_device
 TRAINING_DEVICE_CPU = 'cpu'
 TRAINING_DEVICE_CUDA = 'cuda'
@@ -560,7 +566,7 @@ COMPILATION_DEFAULT = 'default_preset'
 
 HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
-TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
+TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'ti')))
 # C2000 F28 Compiler
 C2000_CGT_VERSION = 'ti-cgt-c2000_25.11.0.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
@@ -578,7 +584,7 @@ C29_CGT_INCLUDE = os.path.join(CG_TOOL_ROOT, 'include')
 # F29H85_DRIVERLIB_INCLUDE = os.path.join(F29H85_SDK_ROOT, 'driverlib', '{DEVICE_NAME}', 'driverlib')
 
 # MSPM0 Compiler
-MSPM0_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
+MSPM0_CGT_VERSION= 'ti-cgt-armllvm_5.1.1.LTS'
 ARM_LLVM_CGT_PATH = os.path.abspath(os.getenv('ARM_LLVM_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
 MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
@@ -588,14 +594,14 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
 
 # MSPM33C Compiler
-MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
+MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_5.1.1.LTS'
 MSPM33C_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 
 CROSS_COMPILER_OPTIONS_C28 = (f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I.")
 CROSS_COMPILER_OPTIONS_F29H85 = (f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I.")
-CROSS_COMPILER_OPTIONS_MSPM0 = (f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
-CROSS_COMPILER_OPTIONS_MSPM33C = (f"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type")
+CROSS_COMPILER_OPTIONS_MSPM0 = ("-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
+CROSS_COMPILER_OPTIONS_MSPM33C = ("-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type")
 
 CROSS_COMPILER_OPTIONS_F280013 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280013.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')

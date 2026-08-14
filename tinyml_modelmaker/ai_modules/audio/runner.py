@@ -251,7 +251,7 @@ class ModelRunner():
             self.model_compilation.clear()
             exit_flag = self.model_compilation.run()
             if exit_flag:
-                print(f'Compilation failed')
+                print('Compilation failed')
                 with open(self.params.compilation.log_file_path, 'a') as lfp:
                     lfp.write('FAILURE: ModelMaker - Compilation failed.')
                 return self.params
@@ -335,10 +335,6 @@ class ModelRunner():
         tarfile_size = os.path.getsize(compressed_file_name)
         return tarfile_size
 
-
-    @staticmethod
-    def get_training_module_descriptions(*args, **kwargs):
-        return descriptions.get_training_module_descriptions(*args, **kwargs)
 
     @staticmethod
     def get_model_descriptions(*args, **kwargs):

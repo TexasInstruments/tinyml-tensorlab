@@ -286,6 +286,7 @@ class BaseAudioModelTraining:
         if self.params.training.num_gpus > 0:
             if torch.backends.mps.is_available():
                 device = 'mps'
+                os.environ.setdefault('PYTORCH_ENABLE_MPS_FALLBACK', '1')
             else:
                 device = 'cuda'
 
@@ -340,9 +341,6 @@ class BaseAudioModelTraining:
             '--normalize-audio', f'{self.params.data_processing_feature_extraction.normalize_audio}',
             '--mono', f'{self.params.data_processing_feature_extraction.mono}',
 
-            '--data-proc-transforms', f'{self.params.data_processing_feature_extraction.data_proc_transforms}',
-            '--feat-ext-transform', f'{self.params.data_processing_feature_extraction.feat_ext_transform}',
-
             '--output-int', f'{self.params.training.output_int}',
             '--variables', f'{self.params.data_processing_feature_extraction.variables}',
             '--lis', f'{self.params.training.log_file_path}',
@@ -391,8 +389,6 @@ class BaseAudioModelTraining:
             '--normalize-audio', f'{self.params.data_processing_feature_extraction.normalize_audio}',
             '--mono', f'{self.params.data_processing_feature_extraction.mono}',
 
-            '--data-proc-transforms', f'{self.params.data_processing_feature_extraction.data_proc_transforms}',
-            '--feat-ext-transform', f'{self.params.data_processing_feature_extraction.feat_ext_transform}',
             '--nn-for-feature-extraction', f'{self.params.data_processing_feature_extraction.nn_for_feature_extraction}',
             '--output-int', f'{self.params.training.output_int}',
 

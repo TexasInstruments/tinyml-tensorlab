@@ -30,6 +30,7 @@
 
 import copy
 import gzip
+import logging
 import os
 import shutil
 import tarfile
@@ -40,6 +41,8 @@ import zipfile
 import requests
 
 from . import misc_utils
+
+logger = logging.getLogger(__name__)
 
 
 def copy_file(file_path, file_path_local):
@@ -93,10 +96,14 @@ def download_url(dataset_url, download_root, save_filename=None, progressbar_cre
         save_filename = save_filename if save_filename else os.path.basename(dataset_url)
         download_file = os.path.join(download_root, save_filename)
         if not os.path.exists(download_file):
-            print(f'downloading from {dataset_url} to {download_file}')
+            logger.info(f'downloading from {dataset_url} to {download_file}')
             progressbar_creator = progressbar_creator or misc_utils.ProgressBar
             resp = requests.get(dataset_url, stream=True, allow_redirects=True)
-            total_size = int(resp.headers.get('content-length'))
+            content_length = resp.headers.get('content-length')
+            try:
+                total_size = int(content_length or 0)
+            except (TypeError, ValueError):
+                total_size = 0
             progressbar_obj = progressbar_creator(total_size, unit='B')
             os.makedirs(download_root, exist_ok=True)
             with open(download_file, 'wb') as fp:
@@ -111,15 +118,15 @@ def download_url(dataset_url, download_root, save_filename=None, progressbar_cre
     except urllib.error.URLError as message:
         download_success = False
         exception_message = str(message)
-        print(exception_message)
+        logger.error(exception_message)
     except urllib.error.HTTPError as message:
         download_success = False
         exception_message = str(message)
-        print(exception_message)
+        logger.error(exception_message)
     except NameError as message:
         download_success = False
         exception_message = str(message)
-        print(exception_message)
+        logger.error(exception_message)
     # except Exception as message:
     #     # sometimes getting exception even though download succeeded.
     #     download_path = download_file
@@ -184,13 +191,15 @@ def download_files(dataset_urls, download_root, extract_root=None, save_filename
     if log_writer is not None:
         success_writer, warning_writer = log_writer[:2]
     else:
-        success_writer, warning_writer = print, print
+        success_writer, warning_writer = logger.info, logger.warning
     #
     dataset_urls = dataset_urls if isinstance(dataset_urls, (list,tuple)) else [dataset_urls]
     save_filenames = save_filenames if isinstance(save_filenames, (list,tuple)) else \
         ([None]*len(dataset_urls) if save_filenames is None else [save_filenames])
 
     download_paths = []
+    all_success = True
+    messages = []
     for dataset_url_id, (dataset_url, save_filename) in enumerate(zip(dataset_urls, save_filenames)):
         success_writer(f'Downloading {dataset_url_id+1}/{len(dataset_urls)}: {dataset_url}')
         download_success, message, download_path = download_file(
@@ -199,11 +208,13 @@ def download_files(dataset_urls, download_root, extract_root=None, save_filename
         if download_success:
             success_writer(f'Download done for {dataset_url}')
         else:
+            all_success = False
+            messages.append(f'{dataset_url}: {message}')
             warning_writer(f'Download failed for {dataset_url} {str(message)}')
         #
         download_paths.append(download_path)
     #
-    return download_success, message, download_paths
+    return all_success, '; '.join(messages), download_paths
 
 
 def download_url_entry(download_entry, download_path=None, download_root=None):
@@ -229,7 +240,7 @@ def download_url_entry(download_entry, download_path=None, download_root=None):
             return None
         #
     elif isinstance(download_entry, str):
-        print(f'assuming the given download_url is a valid path: {download_entry}')
+        logger.info(f'assuming the given download_url is a valid path: {download_entry}')
     else:
         warnings.warn(f'unrecognized download_url: {download_entry}')
     #

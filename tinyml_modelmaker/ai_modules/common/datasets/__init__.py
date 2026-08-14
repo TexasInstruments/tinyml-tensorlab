@@ -47,7 +47,7 @@ def get_datasets_list(task_type=None):
     elif task_type == 'audio_classification':
         return ['SpeechCommands']  # ['oxford_flowers102']
     else:
-        assert False, 'unknown task type for get_datasets_list'
+        raise ValueError(f'unknown task type for get_datasets_list: {task_type}')
 
 
 def get_target_module(backend_name):
@@ -58,7 +58,7 @@ def get_target_module(backend_name):
 
 class DatasetHandling:
     @classmethod
-    def init_params(self, *args, **kwargs):
+    def init_params(cls, *args, **kwargs):
         params = dict(
             dataset=dict(
             )
@@ -93,7 +93,7 @@ class DatasetHandling:
                 extract_root = os.path.dirname(self.params.dataset.input_data_path)
                 extract_success = utils.extract_files(self.params.dataset.input_data_path, extract_root)
                 if not extract_success:
-                    raise "Dataset could not be extracted"
+                    raise RuntimeError("Dataset could not be extracted")
                 self.params.dataset.input_data_path = os.path.dirname(self.params.dataset.input_data_path)
 
             for split_name in self.params.dataset.split_names:
@@ -139,7 +139,7 @@ class DatasetHandling:
                     
                     #Store the file paths in txt files for processing purpose
                     normal_paths_file = os.path.join(annotations_dir, 'normal_list.txt')
-                    anomaly_paths_file = os.path.join(annotations_dir, 'anomlay_list.txt')
+                    anomaly_paths_file = os.path.join(annotations_dir, 'anomaly_list.txt')
                     with open(normal_paths_file, 'w') as file:
                         file.write('\n'.join(normal_file_list))
                     with open(anomaly_paths_file, 'w') as file:
@@ -184,14 +184,16 @@ class DatasetHandling:
                         # self.out_files = dataset_utils.create_simple_split(self.file_list, self.params.common.project_run_path + '/dataset', self.params.dataset.split_names, self.params.dataset.split_factor, shuffle_items=True, random_seed=42)
                     self.logger.info('Splits of the dataset can be found at: {}'.format(self.params.dataset.annotation_path_splits))
         else:
-            assert False, f'invalid dataset provided at {self.params.dataset.input_data_path}'
+            raise FileNotFoundError(f'invalid dataset provided at {self.params.dataset.input_data_path}')
 
     def get_max_num_files(self):
         if isinstance(self.params.dataset.max_num_files, (list, tuple)):
             max_num_files = self.params.dataset.max_num_files
         elif isinstance(self.params.dataset.max_num_files, int):
-            assert (0.0 < self.params.dataset.split_factor < 1.0), 'split_factor must be between 0 and 1.0'
-            assert len(self.params.dataset.split_names) > 1, 'split_names must have at least two entries'
+            if not (0.0 < self.params.dataset.split_factor < 1.0):
+                raise ValueError('split_factor must be between 0 and 1.0')
+            if len(self.params.dataset.split_names) <= 1:
+                raise ValueError('split_names must have at least two entries')
             max_num_files = [None] * len(self.params.dataset.split_names)
             for split_id, split_name in enumerate(self.params.dataset.split_names):
                 if split_id == 0:
@@ -202,7 +204,8 @@ class DatasetHandling:
             #
         else:
             warnings.warn('unrecognized value for max_num_files - must be int, list or tuple')
-            assert len(self.params.dataset.split_names) > 1, 'split_names must have at least two entries'
+            if len(self.params.dataset.split_names) <= 1:
+                raise ValueError('split_names must have at least two entries')
             max_num_files = [None] * len(self.params.dataset.split_names)
         #
         return max_num_files

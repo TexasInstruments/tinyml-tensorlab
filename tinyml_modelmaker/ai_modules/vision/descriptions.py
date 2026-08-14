@@ -149,15 +149,6 @@ def set_model_selection_factor(model_descriptions):
     #
 
 
-def get_training_module_descriptions(params):
-    # populate a good pretrained model for the given task
-    training_module_descriptions = training.get_training_module_descriptions(target_device=params.common.target_device,
-                                                                             training_device=params.training.training_device)
-    #
-    training_module_descriptions = utils.ConfigDict(training_module_descriptions)
-    return training_module_descriptions
-
-
 def get_model_descriptions(params):
     # populate a good pretrained model for the given task
     model_descriptions = training.get_model_descriptions(task_type=params.common.task_type,
@@ -175,16 +166,20 @@ def get_model_descriptions(params):
 
 
 def get_model_description(model_name):
-    assert model_name, 'model_name must be specified for get_model_description().' \
-                       'if model_name is not known, use the method get_model_descriptions() that returns supported models.'
+    if not model_name:
+        raise ValueError(
+            'model_name must be specified for get_model_description(). '
+            'If model_name is not known, use get_model_descriptions() that returns supported models.')
     model_description = training.get_model_description(model_name)
     return model_description
 
 
 def set_model_description(params, model_description):
-    assert model_description is not None, f'could not find pretrained model for {params.training.model_name}'
-    assert params.common.task_type == model_description['common']['task_type'], \
-        f'task_type: {params.common.task_type} does not match the pretrained model'
+    if model_description is None:
+        raise ValueError(f'could not find pretrained model for {params.training.model_name}')
+    if params.common.task_type != model_description['common']['task_type']:
+        raise ValueError(
+            f'task_type: {params.common.task_type} does not match the pretrained model')
     # get pretrained model checkpoint and other details
     params.update(model_description)
     return params

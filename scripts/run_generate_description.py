@@ -46,9 +46,6 @@ def run(config):
     # get params for the given config
     params = ai_target_module.runner.ModelRunner.init_params()
 
-    # get_training_module_descriptions
-    training_module_descriptions = ai_target_module.runner.ModelRunner.get_training_module_descriptions(params)
-
     # get supported pretrained models for the given params
     model_descriptions = ai_target_module.runner.ModelRunner.get_model_descriptions(params)
     feature_extraction_preset_descriptions = ai_target_module.runner.ModelRunner.get_feature_extraction_preset_descriptions(params)
@@ -94,10 +91,6 @@ def run(config):
 
     # tooltip descriptions
     tooltip_descriptions = ai_target_module.runner.ModelRunner.get_tooltip_descriptions(params)
-    live_capture_descriptions = ai_target_module.runner.ModelRunner.get_live_capture_descriptions(params)
-    live_capture_example_descriptions = ai_target_module.runner.ModelRunner.get_live_capture_example_descriptions(params)
-    live_preview_descriptions = ai_target_module.runner.ModelRunner.get_live_preview_descriptions(params)
-    live_preview_example_descriptions = ai_target_module.runner.ModelRunner.get_live_preview_example_descriptions(params)
     context_help_descriptions = ai_target_module.runner.ModelRunner.get_context_help_descriptions(params)
 
     # help descriptions - to be written to markdown (.md) file
@@ -107,18 +100,13 @@ def run(config):
     # rex dependencies
     # rex_dependencies = ai_target_module.runner.ModelRunner.get_rex_dependencies(params)
 
-    description = dict(training_module_descriptions=training_module_descriptions,
-                       model_descriptions=model_descriptions_desc,
+    description = dict(model_descriptions=model_descriptions_desc,
                        preset_descriptions=preset_descriptions,
                        target_device_descriptions=target_device_descriptions,
                        task_descriptions=task_descriptions,
                        sample_dataset_descriptions=sample_dataset_descriptions,
                        version_descriptions=version_descriptions,
                        tooltip_descriptions=tooltip_descriptions,
-                       live_capture=live_capture_descriptions,
-                       live_capture_example=live_capture_example_descriptions,
-                       live_preview=live_preview_descriptions,
-                       live_preview_example=live_preview_example_descriptions,
                        context_help=context_help_descriptions,
                        help_descriptions=help_descriptions,
                        help_url=help_url_descriptions,

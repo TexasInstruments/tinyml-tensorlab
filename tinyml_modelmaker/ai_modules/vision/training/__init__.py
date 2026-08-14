@@ -29,23 +29,19 @@
 #################################################################################
 
 import copy
+import logging
 import sys
 
 from .. import constants
 
+logger = logging.getLogger(__name__)
+
 # list all the modules here to add pretrained models
 _model_descriptions = {}
-_training_module_descriptions = {}
-
 from .tinyml_tinyverse import image_classification
 
 ## image classification
 _model_descriptions.update(image_classification.get_model_descriptions())
-_training_module_descriptions.update({'image_classification':[constants.TASK_CATEGORY_IMAGE_CLASSIFICATION]})
-
-def get_training_module_descriptions(target_device=None, training_device=None):
-    return _training_module_descriptions
-
 
 def get_model_descriptions(task_type=None, target_device=None, training_device=None):
     model_descriptions_selected = copy.deepcopy(_model_descriptions)
@@ -71,14 +67,18 @@ def get_target_module(backend_name, task_category):
     this_module = sys.modules[__name__]
     try:
         backend_package = getattr(this_module, backend_name)
-    except Exception as e:
-        print(f"get_target_module(): The requested module could not be found: {backend_name}. {str(e)}")
-        return None
+    except AttributeError:
+        raise ValueError(
+            f"Training backend '{backend_name}' not found. "
+            f"Available backends: {[name for name in dir(this_module) if not name.startswith('_')]}"
+        )
     #
     try:
         target_module = getattr(backend_package, task_category)
-    except Exception as e:
-        print(f"get_target_module(): The task_category {task_category} could not be found in the module {backend_name}. {str(e)}")
-        return None
+    except AttributeError:
+        raise ValueError(
+            f"Task category '{task_category}' not found in backend '{backend_name}'. "
+            f"Available categories: {[name for name in dir(backend_package) if not name.startswith('_')]}"
+        )
     #
     return target_module

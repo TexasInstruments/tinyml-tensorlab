@@ -295,6 +295,7 @@ class BaseImageModelTraining:
         if self.params.training.num_gpus > 0:
             if torch.backends.mps.is_available():
                 device = 'mps'
+                os.environ.setdefault('PYTORCH_ENABLE_MPS_FALLBACK', '1')
             else:
                 device = 'cuda'
 
@@ -338,9 +339,18 @@ class BaseImageModelTraining:
             '--generic-model', f'{self.params.common.generic_model}',
             '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
             # Transform
-            '--data-proc-transforms', f'{self.params.data_processing_feature_extraction.data_proc_transforms}',
-            '--feat-ext-transform', f'{self.params.data_processing_feature_extraction.feat_ext_transform}',
-            '--augmentation-transform', f'{self.params.data_processing_feature_extraction.augmentation_transform}',
+            # Pass raw lists (not stringified) -- matches the test argv builder
+            # below and timeseries_base.py's reference implementation.
+            # prepare_transforms() (train_base.py) does
+            # `args.data_proc_transforms + args.feat_ext_transform` whenever
+            # isinstance(args.data_proc_transforms, list) is true. Both operands
+            # must therefore be actual lists at that point, not just
+            # data_proc_transforms: a stringified feat_ext_transform (e.g. "[]")
+            # makes this `list + str`, raising TypeError on every training run
+            # once data_proc_transforms itself was made a raw list.
+            '--data-proc-transforms', self.params.data_processing_feature_extraction.data_proc_transforms,
+            '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
+            '--augmentation-transform', self.params.data_processing_feature_extraction.augmentation_transform,
             '--feat-ext-store-dir', f'{self.params.data_processing_feature_extraction.feat_ext_store_dir}',
             '--dont-train-just-feat-ext', f'{self.params.data_processing_feature_extraction.dont_train_just_feat_ext}',
             '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',

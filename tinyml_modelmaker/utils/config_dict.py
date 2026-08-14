@@ -43,7 +43,8 @@ class ConfigDict(dict):
         settings_file = None
         if isinstance(input, str):
             ext = os.path.splitext(input)[1]
-            assert ext == '.yaml', f'unrecognized file type for: {input}'
+            if ext != '.yaml':
+                raise ValueError(f'unrecognized file type for: {input}')
             with open(input) as fp:
                 input_dict = yaml.safe_load(fp)
             #
@@ -51,12 +52,12 @@ class ConfigDict(dict):
         elif isinstance(input, dict):
             input_dict = input
         elif input is not None:
-            assert False, 'got invalid input'
+            raise TypeError('got invalid input')
         #
         # override the entries with args
         for value in args:
             if isinstance(value, (dict, ConfigDict)):
-                input_dict.update(value)
+                self._deep_merge(input_dict, value)
             #
         #
         # override the entries with kwargs
@@ -85,7 +86,7 @@ class ConfigDict(dict):
 
     # pickling used by multiprocessing did not work without defining __getstate__
     def __getstate__(self):
-        self.__dict__.copy()
+        return self.__dict__.copy()
 
     # this seems to be not required by multiprocessing
     def __setstate__(self, state):
@@ -94,11 +95,22 @@ class ConfigDict(dict):
     def _initialize(self):
         pass
 
+    @staticmethod
+    def _deep_merge(target, source):
+        for key, value in source.items():
+            if key in target and isinstance(target[key], (dict, ConfigDict)) and isinstance(value, (dict, ConfigDict)):
+                ConfigDict._deep_merge(target[key], value)
+            else:
+                target[key] = value
+            #
+        #
+        return target
+
     def _parse_include_files(self, include_files, include_base_path):
         input_dict = {}
         include_files = list(include_files)
         for include_file in include_files:
-            append_base = not (include_file.startswith('/') and include_file.startswith('./'))
+            append_base = not (os.path.isabs(include_file) or include_file.startswith(('./', '.\\')))
             include_file = os.path.join(include_base_path, include_file) if append_base else include_file
             with open(include_file) as ifp:
                 idict = yaml.safe_load(ifp)

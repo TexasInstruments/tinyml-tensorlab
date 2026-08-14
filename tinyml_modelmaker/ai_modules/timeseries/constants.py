@@ -64,7 +64,7 @@ TASK_CATEGORY_TS_FORECASTING = 'timeseries_forecasting'
 
 
 TASK_CATEGORIES = [
-    TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING, TASK_TYPE_GENERIC_TS_ANOMALYDETECTION
+    TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING, TASK_CATEGORY_TS_ANOMALYDETECTION
 ]
 
 # Mapping from task_type to task_category
@@ -162,11 +162,14 @@ def get_default_data_dir_for_task(task_category):
         str: 'classes' for classification/anomaly tasks, 'files' for regression/forecasting
     """
     if task_category in [TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_ANOMALYDETECTION]:
-        return 'classes'
+        return DATA_DIR_CLASSES
     elif task_category in [TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING]:
-        return 'files'
+        return DATA_DIR_FILES
     else:
-        return 'classes'  # Safe fallback
+        raise ValueError(
+            f"Unsupported task_category '{task_category}'. "
+            f"Expected one of: {[TASK_CATEGORY_TS_CLASSIFICATION, TASK_CATEGORY_TS_ANOMALYDETECTION, TASK_CATEGORY_TS_REGRESSION, TASK_CATEGORY_TS_FORECASTING]}"
+        )
 
 
 # target_device
@@ -190,7 +193,13 @@ TARGET_DEVICE_MSPM0G5187 = 'MSPM0G5187'
 TARGET_DEVICE_MSPM33C32 = 'MSPM33C32'
 TARGET_DEVICE_MSPM33C34 = 'MSPM33C34'
 TARGET_DEVICE_AM13E2 = 'AM13E2'
+TARGET_DEVICE_F2807x = 'F2807x'
+TARGET_DEVICE_F28002x = 'F28002x'
+TARGET_DEVICE_F28P551x = 'F28P551x'
+TARGET_DEVICE_F2837xS = 'F2837xS'
+TARGET_DEVICE_F2838x = 'F2838x'
 TARGET_DEVICE_CC2755 = 'CC2755'
+TARGET_DEVICE_CC2745 = 'CC2745'
 TARGET_DEVICE_CC1312 = 'CC1312'
 TARGET_DEVICE_CC1352 = 'CC1352'
 TARGET_DEVICE_CC1314 = 'CC1314'
@@ -214,7 +223,13 @@ TARGET_DEVICES = [
     TARGET_DEVICE_F29H85,
     TARGET_DEVICE_F29P58,
     TARGET_DEVICE_F29P32,
+    TARGET_DEVICE_F2807x,
+    TARGET_DEVICE_F28002x,
+    TARGET_DEVICE_F28P551x,
+    TARGET_DEVICE_F2837xS,
+    TARGET_DEVICE_F2838x,
     TARGET_DEVICE_CC2755,
+    TARGET_DEVICE_CC2745,
     TARGET_DEVICE_CC1352,
     TARGET_DEVICE_CC1312,
     TARGET_DEVICE_CC1354,
@@ -241,6 +256,13 @@ TARGET_DEVICE_TYPE_MCU = 'MCU'
 TARGET_DEVICE_TYPES = [
     TARGET_DEVICE_TYPE_MCU
 ]
+
+# training backend
+TRAINING_BACKEND_TINYML_TINYVERSE = 'tinyml_tinyverse'
+
+# data directory names
+DATA_DIR_CLASSES = 'classes'
+DATA_DIR_FILES = 'files'
 
 # training_device
 TRAINING_DEVICE_CPU = 'cpu'
@@ -286,6 +308,9 @@ TARGET_SDK_RELEASE_MSPM33C = '1_02_00_00'
 
 TARGET_SDK_VERSION_CC2755 = '1.10.00.00'
 TARGET_SDK_RELEASE_CC2755 = '01_10_00_00'
+
+TARGET_SDK_VERSION_CC2745 = '1.10.00.00'
+TARGET_SDK_RELEASE_CC2745 = '01_10_00_00'
 
 TARGET_SDK_VERSION_CC1352 = '1.10.00.00'
 TARGET_SDK_RELEASE_CC1352 = '01_10_00_00'
@@ -641,6 +666,91 @@ Important links:
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
 
+##### F2807x ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F2807x = \
+    f'''* Product information: https://www.ti.com/product/TMS320F28075
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28075
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F2807x = \
+    f'''C2000™ 32-bit MCU 120-MHz C28x + CLA, FPU, 512-KB Flash, 12-bit ADCs, EMIF
+* More details : https://www.ti.com/product/TMS320F28075
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F2807x}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F28002x ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F28002x = \
+    f'''* Product information: https://www.ti.com/product/TMS320F280025C
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280025C
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F28002x = \
+    f'''C2000™ 32-bit MCU 100-MHz C28x + CLA, FPU32, 256-KB Flash, 12-bit ADCs
+* More details : https://www.ti.com/product/TMS320F280025C
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28002x}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F28P551x ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P551x = \
+    f'''* Product information: https://www.ti.com/product/TMS320F28P550SK
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F28P551x = \
+    f'''C2000™ 32-bit MCU 150-MHz C28x + CLA, FPU32, 1.1-MB Flash, 5x ADCs, CLB
+* More details : https://www.ti.com/product/TMS320F28P550SK
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P551x}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F2837xS ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837xS = \
+    f'''* Product information: https://www.ti.com/product/TMS320F28377S
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379S
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F2837xS = \
+    f'''C2000™ 32-bit MCU 200-MHz single C28x + CLA, FPU, TMU, 1-MB Flash, EMIF, 16-bit ADC
+* More details : https://www.ti.com/product/TMS320F28377S
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837xS}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### F2838x ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_F2838x = \
+    f'''* Product information: https://www.ti.com/product/TMS320F28384D
+* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2838x
+* C2000 SDK: https://www.ti.com/tool/C2000WARE
+* SDK release: {TARGET_SDK_RELEASE_C2000}'''
+
+TARGET_DEVICE_DETAILS_F2838x = \
+    f'''C2000™ 32-bit dual-core MCU 200-MHz C28x + Arm Cortex-M4, FPU, TMU, 1-MB Flash
+* More details : https://www.ti.com/product/TMS320F28384D
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_F2838x}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
 ##### CC2755 ######
 TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2755 = \
     f'''* Product information: https://www.ti.com/product/CC2755R10
@@ -655,6 +765,24 @@ TARGET_DEVICE_DETAILS_CC2755= \
 
 Important links:
 {TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2755}
+
+Additional information:
+{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
+
+##### CC2745 ######
+TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2745 = \
+    f'''* Product information: https://www.ti.com/product/CC2745R10-Q1
+* Launchpad: https://www.ti.com/tool/LP-EM-CC2745R10-Q1
+* Plugin SDK: https://www.ti.com/tool/download/SIMPLELINK-SDK-EDGEAI-PLUGIN
+* CC2745 SDK: https://www.ti.com/tool/download/SIMPLELINK-LOWPOWER-F3-SDK/9.20.00.81
+* SDK release: {TARGET_SDK_RELEASE_CC2745}'''
+
+TARGET_DEVICE_DETAILS_CC2745 = \
+    f'''96MHz SimpleLink™ 32-bit Arm® Cortex®-M33 multiprotocol wireless MCU with 1MB flash, HSM, APU, NPU-CDE (Automotive)
+* More details : https://www.ti.com/product/CC2745R10-Q1
+
+Important links:
+{TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2745}
 
 Additional information:
 {TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
@@ -920,6 +1048,46 @@ TARGET_DEVICE_DESCRIPTIONS = {
         'flash_size_kb': 512,
         'ram_size_kb': 128
     },
+    TARGET_DEVICE_F2807x: {
+        'device_name': TARGET_DEVICE_F2807x,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 23,
+        'device_details': TARGET_DEVICE_DETAILS_F2807x,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
+    TARGET_DEVICE_F28002x: {
+        'device_name': TARGET_DEVICE_F28002x,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 24,
+        'device_details': TARGET_DEVICE_DETAILS_F28002x,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
+    TARGET_DEVICE_F28P551x: {
+        'device_name': TARGET_DEVICE_F28P551x,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 26,
+        'device_details': TARGET_DEVICE_DETAILS_F28P551x,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
+    TARGET_DEVICE_F2837xS: {
+        'device_name': TARGET_DEVICE_F2837xS,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 27,
+        'device_details': TARGET_DEVICE_DETAILS_F2837xS,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
+    TARGET_DEVICE_F2838x: {
+        'device_name': TARGET_DEVICE_F2838x,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 28,
+        'device_details': TARGET_DEVICE_DETAILS_F2838x,
+        'sdk_version': TARGET_SDK_VERSION_C2000,
+        'sdk_release': TARGET_SDK_RELEASE_C2000,
+    },
     TARGET_DEVICE_CC2755: {
         'device_name': TARGET_DEVICE_CC2755,
         'device_type': TARGET_DEVICE_TYPE_MCU,
@@ -927,6 +1095,14 @@ TARGET_DEVICE_DESCRIPTIONS = {
         'device_details': TARGET_DEVICE_DETAILS_CC2755,
         'sdk_version': TARGET_SDK_VERSION_CC2755,
         'sdk_release': TARGET_SDK_RELEASE_CC2755,
+    },
+    TARGET_DEVICE_CC2745: {
+        'device_name': TARGET_DEVICE_CC2745,
+        'device_type': TARGET_DEVICE_TYPE_MCU,
+        'device_selection_factor': 7,
+        'device_details': TARGET_DEVICE_DETAILS_CC2745,
+        'sdk_version': TARGET_SDK_VERSION_CC2745,
+        'sdk_release': TARGET_SDK_RELEASE_CC2745,
     },
     TARGET_DEVICE_CC1352: {
         'device_name': TARGET_DEVICE_CC1352,
@@ -984,6 +1160,11 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F2807x,
+            TARGET_DEVICE_F28002x,
+            TARGET_DEVICE_F28P551x,
+            TARGET_DEVICE_F2837xS,
+            TARGET_DEVICE_F2838x,
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
@@ -1019,6 +1200,11 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F2807x,
+            TARGET_DEVICE_F28002x,
+            TARGET_DEVICE_F28P551x,
+            TARGET_DEVICE_F2837xS,
+            TARGET_DEVICE_F2838x,
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
@@ -1027,6 +1213,7 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_AM13E2,
             TARGET_DEVICE_AM263,
             TARGET_DEVICE_CC2755,
+            TARGET_DEVICE_CC2745,
             TARGET_DEVICE_CC1312,
             TARGET_DEVICE_CC1352,
             TARGET_DEVICE_CC1314,
@@ -1048,6 +1235,11 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F2807x,
+            TARGET_DEVICE_F28002x,
+            TARGET_DEVICE_F28P551x,
+            TARGET_DEVICE_F2837xS,
+            TARGET_DEVICE_F2838x,
             TARGET_DEVICE_F29H85,
             TARGET_DEVICE_MSPM33C32,
             TARGET_DEVICE_AM13E2,
@@ -1072,6 +1264,11 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F2807x,
+            TARGET_DEVICE_F28002x,
+            TARGET_DEVICE_F28P551x,
+            TARGET_DEVICE_F2837xS,
+            TARGET_DEVICE_F2838x,
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
@@ -1083,6 +1280,13 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_AM263P,
             TARGET_DEVICE_AM261,
             TARGET_DEVICE_AM13E2,
+            TARGET_DEVICE_CC2755,
+            TARGET_DEVICE_CC2745,
+            TARGET_DEVICE_CC1312,
+            TARGET_DEVICE_CC1352,
+            TARGET_DEVICE_CC1314,
+            TARGET_DEVICE_CC1354,
+            TARGET_DEVICE_CC35X1,
         ],
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
         'application_specific': False,
@@ -1101,6 +1305,11 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F2807x,
+            TARGET_DEVICE_F28002x,
+            TARGET_DEVICE_F28P551x,
+            TARGET_DEVICE_F2837xS,
+            TARGET_DEVICE_F2838x,
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
@@ -1130,6 +1339,11 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F2807x,
+            TARGET_DEVICE_F28002x,
+            TARGET_DEVICE_F28P551x,
+            TARGET_DEVICE_F2837xS,
+            TARGET_DEVICE_F2838x,
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
@@ -1159,6 +1373,11 @@ TASK_DESCRIPTIONS = {
             TARGET_DEVICE_F2837,
             TARGET_DEVICE_F28P55,
             TARGET_DEVICE_F28P65,
+            TARGET_DEVICE_F2807x,
+            TARGET_DEVICE_F28002x,
+            TARGET_DEVICE_F28P551x,
+            TARGET_DEVICE_F2837xS,
+            TARGET_DEVICE_F2838x,
             TARGET_DEVICE_MSPM0G3507,
             TARGET_DEVICE_MSPM0G3519,
             TARGET_DEVICE_MSPM0G5187,
@@ -1182,6 +1401,7 @@ TASK_DESCRIPTIONS = {
         'target_module': 'timeseries',
         'target_devices': [
             TARGET_DEVICE_CC2755,
+            TARGET_DEVICE_CC2745,
             TARGET_DEVICE_CC1352,
             TARGET_DEVICE_CC1312,
             TARGET_DEVICE_CC1314,
@@ -1386,7 +1606,7 @@ COMPILATION_DEFAULT = 'default_preset'
 
 HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
-TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
+TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'ti')))
 # C2000 F28 Compiler
 C2000_CGT_VERSION = 'ti-cgt-c2000_25.11.1.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))
@@ -1414,9 +1634,10 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
 
 # CC2755 Compiler
-# CC2755_CGT_VERSION= 'ti-cgt-armllvm_4.0.4.LTS'
+# CC2755_CGT_VERSION= 'ti-cgt-armllvm_5.1.1.LTS'
 # CC2755_CGT_PATH = os.path.abspath(os.getenv('CC2755_CGT_PATH', os.path.join(TOOLS_PATH, CC2755_CGT_VERSION)))
 CC2755_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
+CC2745_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 CC35X1_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 AM263_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 AM263P_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
@@ -1431,18 +1652,19 @@ CC1314_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 CROSS_COMPILER_OPTIONS_C28 = f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I."
 CROSS_COMPILER_OPTIONS_C29 = f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I."
-CROSS_COMPILER_OPTIONS_MSPM0 = f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_AM263 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_AM263P = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_AM261 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
-CROSS_COMPILER_OPTIONS_MSPM33C = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-CROSS_COMPILER_OPTIONS_AM13E2 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
-CROSS_COMPILER_OPTIONS_CC1352 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
-CROSS_COMPILER_OPTIONS_CC1312 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
-CROSS_COMPILER_OPTIONS_CC1354 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
-CROSS_COMPILER_OPTIONS_CC1314 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
-CROSS_COMPILER_OPTIONS_CC2755 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0 -Wno-incompatible-pointer-types"
-CROSS_COMPILER_OPTIONS_CC35X1 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0 -Wno-incompatible-pointer-types"
+CROSS_COMPILER_OPTIONS_MSPM0 = "-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_AM263 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_AM263P = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_AM261 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-r5 -mfloat-abi=hard -mfpu=vfpv3-d16 -mlittle-endian -O3 -I. -Wno-return-type"
+CROSS_COMPILER_OPTIONS_MSPM33C = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_AM13E2 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
+CROSS_COMPILER_OPTIONS_CC1352 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
+CROSS_COMPILER_OPTIONS_CC1312 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
+CROSS_COMPILER_OPTIONS_CC1354 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
+CROSS_COMPILER_OPTIONS_CC1314 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian  -O3 -I. -Wno-return-type -march=armv8-m.main"
+CROSS_COMPILER_OPTIONS_CC2755 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0 -Wno-incompatible-pointer-types"
+CROSS_COMPILER_OPTIONS_CC2745 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0 -Wno-incompatible-pointer-types"
+CROSS_COMPILER_OPTIONS_CC35X1 = "-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type  -march=thumbv8.1-m.main+cdecp0 -Wno-incompatible-pointer-types"
 
 
 CROSS_COMPILER_OPTIONS_F280013 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280013.lower() + 'x')
@@ -1453,6 +1675,11 @@ CROSS_COMPILER_OPTIONS_F28004 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT=
 CROSS_COMPILER_OPTIONS_F2837 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F2837.lower() + 'xd')
 CROSS_COMPILER_OPTIONS_F28P65 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu64', DEVICE_NAME=TARGET_DEVICE_F28P65.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F28P55 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28P55.lower() + 'x')
+CROSS_COMPILER_OPTIONS_F2807x = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F2807x.lower())
+CROSS_COMPILER_OPTIONS_F28002x = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28002x.lower())
+CROSS_COMPILER_OPTIONS_F28P551x = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F28P551x.lower())
+CROSS_COMPILER_OPTIONS_F2837xS = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F2837xS.lower())
+CROSS_COMPILER_OPTIONS_F2838x = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F2838x.lower())
 # C28
 COMPILATION_C28_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
 COMPILATION_C28_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='c28', cross_compiler=CL2000_CROSS_COMPILER, )
@@ -1493,6 +1720,8 @@ COMPILATION_AM13E2_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=
 # Connectivity Devices
 COMPILATION_CC2755_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC2755_CROSS_COMPILER, )
 COMPILATION_CC2755_CDE_TINPU = dict(target="c, ti-npu type=m33cde", target_c_mcpu='cortex-m33', cross_compiler=CC2755_CROSS_COMPILER, )
+COMPILATION_CC2745_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC2745_CROSS_COMPILER, )
+COMPILATION_CC2745_CDE_TINPU = dict(target="c, ti-npu type=m33cde", target_c_mcpu='cortex-m33', cross_compiler=CC2745_CROSS_COMPILER, )
 COMPILATION_CC1352_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m4', cross_compiler=CC1352_CROSS_COMPILER, )
 COMPILATION_CC1312_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m4', cross_compiler=CC1312_CROSS_COMPILER, )
 COMPILATION_CC1354_SOFT_TINPU = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=CC1354_CROSS_COMPILER, )
@@ -1522,6 +1751,11 @@ _CROSS_COMPILER_OPTIONS = {
     TARGET_DEVICE_F28P65: CROSS_COMPILER_OPTIONS_F28P65,
     TARGET_DEVICE_F2837: CROSS_COMPILER_OPTIONS_F2837,
     TARGET_DEVICE_F28P55: CROSS_COMPILER_OPTIONS_F28P55,
+    TARGET_DEVICE_F2807x: CROSS_COMPILER_OPTIONS_F2807x,
+    TARGET_DEVICE_F28002x: CROSS_COMPILER_OPTIONS_F28002x,
+    TARGET_DEVICE_F28P551x: CROSS_COMPILER_OPTIONS_F28P551x,
+    TARGET_DEVICE_F2837xS: CROSS_COMPILER_OPTIONS_F2837xS,
+    TARGET_DEVICE_F2838x: CROSS_COMPILER_OPTIONS_F2838x,
     TARGET_DEVICE_F29H85: CROSS_COMPILER_OPTIONS_C29,
     TARGET_DEVICE_F29P58: CROSS_COMPILER_OPTIONS_C29,
     TARGET_DEVICE_F29P32: CROSS_COMPILER_OPTIONS_C29,
@@ -1532,6 +1766,7 @@ _CROSS_COMPILER_OPTIONS = {
     TARGET_DEVICE_MSPM33C34: CROSS_COMPILER_OPTIONS_MSPM33C,
     TARGET_DEVICE_AM13E2: CROSS_COMPILER_OPTIONS_AM13E2,
     TARGET_DEVICE_CC2755: CROSS_COMPILER_OPTIONS_CC2755,
+    TARGET_DEVICE_CC2745: CROSS_COMPILER_OPTIONS_CC2745,
     TARGET_DEVICE_CC1352: CROSS_COMPILER_OPTIONS_CC1352,
     TARGET_DEVICE_CC1312: CROSS_COMPILER_OPTIONS_CC1312,
     TARGET_DEVICE_CC1354: CROSS_COMPILER_OPTIONS_CC1354,
@@ -1593,6 +1828,36 @@ _DEVICE_PROFILES = {
         'has_hard_npu': False,
     },
     TARGET_DEVICE_F2837: {
+        'compilation_base': COMPILATION_C28_SOFT_TINPU,
+        'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
+        'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_F2807x: {
+        'compilation_base': COMPILATION_C28_SOFT_TINPU,
+        'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
+        'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_F28002x: {
+        'compilation_base': COMPILATION_C28_SOFT_TINPU,
+        'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
+        'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_F28P551x: {
+        'compilation_base': COMPILATION_C28_SOFT_TINPU,
+        'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
+        'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_F2837xS: {
+        'compilation_base': COMPILATION_C28_SOFT_TINPU,
+        'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
+        'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_F2838x: {
         'compilation_base': COMPILATION_C28_SOFT_TINPU,
         'compilation_regression': COMPILATION_C28_SOFT_TINPU_REG,
         'compilation_forecasting': COMPILATION_C28_SOFT_TINPU_FORECASTING,
@@ -1675,6 +1940,11 @@ _DEVICE_PROFILES = {
     TARGET_DEVICE_CC2755: {
         'compilation_base': COMPILATION_CC2755_CDE_TINPU,
         'compilation_soft': COMPILATION_CC2755_SOFT_TINPU,
+        'has_hard_npu': False,
+    },
+    TARGET_DEVICE_CC2745: {
+        'compilation_base': COMPILATION_CC2745_CDE_TINPU,
+        'compilation_soft': COMPILATION_CC2745_SOFT_TINPU,
         'has_hard_npu': False,
     },
     TARGET_DEVICE_CC1352: {
@@ -2131,8 +2401,8 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'info': {
             'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip',
-            'dataset_detailed_name': 'Arc Fault Classification DSI Dataset',
-            'dataset_description': 'Arc fault timeseries classification dataset from DSI board for electrical fault detection',
+            'dataset_detailed_name': 'DC Arc Fault Classification DSI Dataset',
+            'dataset_description': 'DC Arc fault timeseries classification dataset from DSI board for electrical fault detection',
             'dataset_size': None,
             'dataset_source': 'Generated by Texas Instruments at a specialised test bed',
             'dataset_license': 'TI Internal License'
