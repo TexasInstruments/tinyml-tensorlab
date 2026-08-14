@@ -130,7 +130,7 @@ def test_main_passes_a_torch_device_not_the_raw_args_device_string():
         stack.enter_context(patch.object(anomaly_train, "load_pretrained_weights", side_effect=lambda model, a, l: model))
         stack.enter_context(patch.object(anomaly_train, "handle_export_only", return_value=False))
         stack.enter_context(patch.object(anomaly_train, "move_model_to_device"))
-        stack.enter_context(patch.object(anomaly_train, "compile_model_if_enabled", side_effect=lambda model, a, l: model))
+        stack.enter_context(patch.object(anomaly_train, "compile_model_if_enabled", side_effect=lambda model, a, l, **kw: model))
         stack.enter_context(patch.object(anomaly_train.utils, "quantization_wrapped_model", side_effect=lambda model, *a, **kw: model))
         stack.enter_context(patch.object(anomaly_train, "setup_optimizer_and_scheduler", return_value=(MagicMock(), MagicMock())))
         stack.enter_context(patch.object(
