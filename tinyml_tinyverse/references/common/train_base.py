@@ -72,8 +72,9 @@ import os
 import platform
 import sys
 import timeit
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from logging import getLogger
+
 
 import numpy as np
 import onnxruntime as ort
@@ -197,6 +198,9 @@ def get_base_args_parser(description="This script loads time series data and tra
     parser.add_argument('--apex', action='store_true', help='Use apex for mixed precision training')
     parser.add_argument('--apex-opt-level', default='O1', type=str,
                         help='For apex mixed precision training O0 for FP32 training, O1 for mixed precision training.')
+    parser.add_argument('--native-amp', action='store_true',
+                        help='Use PyTorch native AMP (torch.amp.autocast) for mixed precision training. '
+                             'Works on CUDA and MPS backends. Preferred over --apex for non-NVIDIA hardware.')
 
     # Distributed training parameters
     parser.add_argument('--world-size', default=1, type=int, help='number of distributed processes')
@@ -216,7 +220,7 @@ def get_base_args_parser(description="This script loads time series data and tra
 
     # Model compilation and export arguments
     parser.add_argument("--compile-model", default=0, type=int, help="Compile the model using PyTorch2.0 functionality")
-    parser.add_argument("--opset-version", default=17, type=int, help="ONNX Opset version")
+    parser.add_argument("--opset-version", default=18, type=int, help="ONNX Opset version")
 
     # Quantization arguments
     parser.add_argument("--quantization", "--quantize", dest="quantization", default=0, type=int,
@@ -523,13 +527,23 @@ def create_model(args, variables, num_classes, input_features, logger):
 
 
 def log_model_summary(model, args, variables, input_features, logger):
-    """Log model summary using torchinfo."""
-    if args.generic_model:
+    """Log model summary. Uses torchinfo if available, falls back to torch's repr."""
+    if args.generic_model and not args.quantization:
         try:
-            if not args.quantization:
-                logger.info(f"{torchinfo.summary(model, (1, variables, input_features, 1))}")
-        except UnicodeEncodeError as e:
-            logger.warning(f"Model Information/summary could not be provided because of {e}")
+            # Try torchinfo first for detailed summary
+            _orig_device = next(model.parameters()).device if any(model.parameters()) else torch.device('cpu')
+            model_on_cpu = model.cpu()
+            try:
+                logger.info(f"{torchinfo.summary(model_on_cpu, (1, variables, input_features, 1))}")
+            finally:
+                model.to(_orig_device)
+        except (UnicodeEncodeError, RuntimeError) as e:
+            # Fall back to PyTorch's built-in model representation
+            logger.info(f"Model architecture:\n{model}")
+            # Count parameters
+            _total = sum(p.numel() for p in model.parameters())
+            _trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+            logger.info(f"Total params: {_total:,} | Trainable: {_trainable:,}")
 
 
 def load_pretrained_weights(model, args, logger):
@@ -601,13 +615,41 @@ def resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema
         Updated args with start_epoch
     """
     if args.resume:
-        checkpoint = torch.load(args.resume, map_location=args.device)
-        model_without_ddp.load_state_dict(checkpoint['model'])
+        # checkpoint['args'] is an argparse.Namespace (or, in tests, an
+        # equivalent stand-in). torch >=2.6 defaults torch.load to
+        # weights_only=True, which refuses to unpickle it -- but disabling
+        # the check entirely (weights_only=False) would also accept an
+        # attacker-crafted checkpoint's arbitrary __reduce__ payload as code
+        # to execute. Allowlist only the one non-tensor type this checkpoint
+        # actually needs instead.
+        with torch.serialization.safe_globals([Namespace]):
+            checkpoint = torch.load(args.resume, map_location=args.device)
+
+        # Checkpoints from any era may or may not carry a torch.compile
+        # _orig_mod. prefix on their keys (old saves did, when the model was
+        # compiled; save_checkpoint no longer writes it, but a checkpoint
+        # from before that fix, or from some other caller, still might).
+        # Strip it from the incoming data unconditionally -- it's never
+        # meaningful to preserve -- then remap onto whatever the live model
+        # actually calls its own keys right now, which carries _orig_mod.
+        # itself if it's currently compiled. Mirrors load_weights.py's
+        # identical handling for the same reason.
+        def _load_symmetric(live_module, checkpoint_state):
+            checkpoint_state = {k.replace('_orig_mod.', ''): v for k, v in checkpoint_state.items()}
+            live_keys = list(live_module.state_dict().keys())
+            if any('_orig_mod.' in k for k in live_keys):
+                live_keys_by_stripped_name = {k.replace('_orig_mod.', ''): k for k in live_keys}
+                checkpoint_state = {
+                    live_keys_by_stripped_name.get(k, k): v for k, v in checkpoint_state.items()
+                }
+            live_module.load_state_dict(checkpoint_state)
+
+        _load_symmetric(model_without_ddp, checkpoint['model'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
         args.start_epoch = checkpoint['epoch'] + 1
         if model_ema:
-            model_ema.load_state_dict(checkpoint['model_ema'])
+            _load_symmetric(model_ema, checkpoint['model_ema'])
     return args
 
 
@@ -655,6 +697,143 @@ def move_model_to_device(model, device, logger):
         sys.exit(1)
 
 
+def compile_model_if_enabled(model, args, logger, input_shape=None):
+    """
+    Apply torch.compile to the model if --compile-model is enabled.
+
+    torch.compile (PyTorch 2.0+) fuses operations into optimized kernels,
+    which can significantly speed up training (15-30% on supported backends).
+
+    torch.compile() itself is lazy — it does not compile anything until the
+    first forward call. To catch compile failures (e.g. a Triton/ptxas
+    version that doesn't yet support the GPU's compute capability) before
+    training starts rather than mid-epoch, this function runs one warmup
+    forward pass through the compiled model when input_shape is provided.
+    A failure at either the wrap step or the warmup step falls back to the
+    original, uncompiled model.
+
+    Note: the warmup runs in eval mode, no_grad, batch size 1, outside any
+    autocast context — it does not exercise the training-mode graph (with
+    gradients, the real batch size, and AMP autocast if enabled), which
+    dynamo compiles separately on first real use. This warmup catches
+    hardware/toolchain-level failures that occur regardless of graph
+    variant (e.g. ptxas rejecting the GPU architecture for any kernel), but
+    does not guarantee the training-mode graph will also compile cleanly.
+
+    Args:
+        model: The model to potentially compile
+        args: Parsed arguments (uses args.compile_model)
+        logger: Logger instance
+        input_shape: Shape (including batch dim) of a representative input
+            tensor, e.g. (1,) + dataset.X.shape[1:]. Used to run a warmup
+            forward pass that validates compilation works on this
+            hardware/toolchain for at least one graph variant. If None, no
+            warmup is performed and a compile failure will surface later,
+            unguarded, on the training loop's first real forward pass
+            (legacy behavior).
+
+    Returns:
+        The (possibly compiled) model
+    """
+    if getattr(args, 'quantization', 0):
+        # FX-based quantization (prepare_qat_fx) symbolically traces the model,
+        # which cannot trace a torch.compile-wrapped module at all -- a different
+        # incompatibility than the ONNX/TorchScript export tracing issue handled
+        # separately in export_model(). Skip compiling rather than compile and
+        # then immediately discard the benefit before quantization prep runs.
+        if getattr(args, 'compile_model', 0):
+            logger.info(
+                "compile_model is enabled but quantization is also enabled "
+                "(FX-based quantization cannot trace a compiled model) -- "
+                "skipping torch.compile for this run."
+            )
+        return model
+    if getattr(args, 'compile_model', 0) and hasattr(torch, 'compile'):
+        # Determine the best backend for the current device
+        device_type = str(next(model.parameters()).device).split(':')[0] if len(list(model.parameters())) > 0 else 'cpu'
+        if device_type == 'mps':
+            # MPS supports torch.compile via the 'aot_eager' backend
+            backend = 'aot_eager'
+        elif device_type == 'cuda':
+            backend = 'inductor'
+        else:
+            backend = 'aot_eager'
+        logger.info(f"Compiling model with torch.compile (backend={backend})")
+        original_model = model
+        try:
+            compiled_model = torch.compile(model, backend=backend)
+            if input_shape is not None:
+                device = next(compiled_model.parameters()).device if len(list(compiled_model.parameters())) > 0 else torch.device('cpu')
+                dummy_input = torch.rand(size=input_shape, device=device)
+                was_training = compiled_model.training
+                compiled_model.eval()
+                try:
+                    with torch.no_grad():
+                        compiled_model(dummy_input)
+                finally:
+                    # Must run on BOTH success and failure: torch.compile's
+                    # OptimizedModule wraps the original model BY REFERENCE
+                    # (shares its parameters/state), so compiled_model.eval()
+                    # above also flips the ORIGINAL model's .training flag.
+                    # If the warmup forward pass raises, control jumps to the
+                    # outer except block and returns original_model — if we
+                    # hadn't restored here first, that fallback model would
+                    # be returned stuck in eval mode.
+                    compiled_model.train(was_training)
+            model = compiled_model
+        except Exception as e:
+            logger.warning(f"torch.compile failed (or failed its warmup pass), falling back to eager mode: {e}")
+            model = original_model
+    return model
+
+
+def get_amp_context(args, device):
+    """
+    Get the appropriate AMP (Automatic Mixed Precision) autocast context manager.
+
+    When --native-amp is enabled, returns a torch.amp.autocast context manager
+    configured for the current device. This enables float16/bfloat16 computation
+    for compatible operations, reducing memory usage and improving throughput.
+
+    Args:
+        args: Parsed arguments (uses args.native_amp)
+        device: The torch device being used for training
+
+    Returns:
+        A context manager: torch.amp.autocast if enabled, or contextlib.nullcontext
+    """
+    import contextlib
+    if getattr(args, 'native_amp', False):
+        device_type = str(device).split(':')[0]
+        if device_type in ('cuda', 'mps'):
+            return torch.amp.autocast(device_type=device_type)
+        else:
+            # CPU autocast is available but typically not beneficial
+            return contextlib.nullcontext()
+    return contextlib.nullcontext()
+
+
+def get_grad_scaler(args, device):
+    """
+    Get a GradScaler for native AMP training.
+
+    GradScaler is only useful for CUDA with float16 (prevents gradient underflow).
+    On MPS or with bfloat16, scaling is unnecessary.
+
+    Args:
+        args: Parsed arguments (uses args.native_amp)
+        device: The torch device being used for training
+
+    Returns:
+        torch.amp.GradScaler if CUDA + native_amp, else None
+    """
+    if getattr(args, 'native_amp', False):
+        device_type = str(device).split(':')[0]
+        if device_type == 'cuda':
+            return torch.amp.GradScaler()
+    return None
+
+
 def save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema=None, extra_data=None):
     """
     Save training checkpoint.
@@ -671,15 +850,33 @@ def save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, mod
     Returns:
         dict: The checkpoint dictionary
     """
+    # torch.compile() wraps a model in torch._dynamo.OptimizedModule; when
+    # not using DDP, model_without_ddp IS that wrapper (setup_distributed_model
+    # only assigns model_without_ddp = model.module under DDP). state_dict() on
+    # a compiled model emits every key prefixed _orig_mod., which downstream
+    # weight-loading (load_weights.py, used for the float->quantization
+    # transfer) cannot match -- it silently falls back to strict=False and
+    # discards the entire result. Unwrap before saving so checkpoints always
+    # carry the original, uncompiled key names.
+    checkpoint_model = getattr(model_without_ddp, '_orig_mod', model_without_ddp)
     checkpoint = {
-        'model': model_without_ddp.state_dict(),
+        'model': checkpoint_model.state_dict(),
         'optimizer': optimizer.state_dict(),
         'lr_scheduler': lr_scheduler.state_dict(),
         'epoch': epoch,
         'args': args
     }
     if model_ema:
-        checkpoint['model_ema'] = model_ema.state_dict()
+        # ExponentialMovingAverage (AveragedModel) deep-copies its source model
+        # into self.module -- so when the source was already compiled, the
+        # OptimizedModule wrapper ends up nested at model_ema.module._orig_mod,
+        # not at model_ema._orig_mod itself. A top-level getattr unwrap (as
+        # used for the main model above) can't reach it; strip the substring
+        # from the resulting state_dict keys instead, which handles the
+        # wrapper at whatever depth it's nested at.
+        checkpoint['model_ema'] = {
+            k.replace('_orig_mod.', ''): v for k, v in model_ema.state_dict().items()
+        }
     if extra_data:
         checkpoint.update(extra_data)
     return checkpoint
@@ -801,10 +998,110 @@ def create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args
     Returns:
         tuple: (data_loader, data_loader_test)
     """
+    # pin_memory accelerates CUDA host-to-device transfers but is not useful for MPS or CPU
+    use_pin_memory = torch.cuda.is_available() and gpu >= 0
+    # persistent_workers avoids the overhead of respawning worker processes each epoch
+    # (especially significant on macOS where the 'spawn' start method is used)
+    use_persistent_workers = args.workers > 0
+    # On Linux with Python >=3.12, the default multiprocessing start method changed
+    # from 'fork' to 'forkserver', which requires a resource_tracker subprocess.
+    # Python 3.12 changed resource_tracker to use set.remove() instead of discard(),
+    # causing spurious KeyError tracebacks when joblib/loky cleans up its semaphores.
+    # Using 'fork' avoids the forkserver entirely and matches Python 3.10 behaviour.
+    # On macOS 'fork' is unsafe with some frameworks; fall back to the system default.
+    mp_context = 'fork' if platform.system() == 'Linux' and args.workers > 0 else None
     data_loader = torch.utils.data.DataLoader(
         dataset, batch_size=args.batch_size, sampler=train_sampler, num_workers=args.workers,
-        pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn)
+        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers,
+        multiprocessing_context=mp_context, collate_fn=utils.collate_fn)
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=args.batch_size, sampler=test_sampler, num_workers=args.workers,
-        pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn)
+        pin_memory=use_pin_memory, persistent_workers=use_persistent_workers,
+        multiprocessing_context=mp_context, collate_fn=utils.collate_fn)
     return data_loader, data_loader_test
+
+
+def _unregister_tracked_semaphores(*objects):
+    """Unregister multiprocessing semaphores from Python's resource_tracker.
+
+    On Python <=3.11, ``_multiprocessing.SemLock``'s C dealloc calls
+    ``sem_close()`` but never ``resource_tracker.unregister()``.  The
+    resource_tracker's ``atexit`` handler therefore reports every
+    semaphore ever created as "leaked".  (Fixed in Python 3.12+ where
+    SemLock.__del__ calls unregister.)
+
+    This function walks known multiprocessing container attributes
+    (Queue._rlock, Queue._wlock, Queue._sem, Event._cond, Event._flag,
+    etc.) to find underlying SemLock objects and unregisters their named
+    semaphores so the resource_tracker stays quiet.
+    """
+    try:
+        from multiprocessing.resource_tracker import unregister
+    except ImportError:
+        return
+
+    seen = set()
+
+    def _scan(obj):
+        obj_id = id(obj)
+        if obj_id in seen:
+            return
+        seen.add(obj_id)
+        # Leaf: a Lock / Semaphore / BoundedSemaphore wrapping a SemLock
+        semlock = getattr(obj, '_semlock', None)
+        if semlock is not None:
+            name = getattr(semlock, 'name', None)
+            if name:
+                try:
+                    unregister(name, "semaphore")
+                except Exception:
+                    pass
+            return
+        # Recurse into known container attributes
+        for attr in ('_rlock', '_wlock', '_sem', '_lock', '_cond', '_flag'):
+            child = getattr(obj, attr, None)
+            if child is not None:
+                _scan(child)
+
+    for obj in objects:
+        if obj is None:
+            continue
+        if isinstance(obj, (list, tuple)):
+            for item in obj:
+                _scan(item)
+        else:
+            _scan(obj)
+
+
+def shutdown_data_loaders(*loaders):
+    """Explicitly shut down DataLoader worker processes to avoid leaked semaphore warnings.
+
+    Must be called before exit when DataLoaders use num_workers > 0 (especially
+    on macOS where the 'spawn' start method tracks semaphores via resource_tracker).
+    Works for both persistent_workers=True and False.
+
+    After joining workers, we explicitly unregister all POSIX named semaphores
+    owned by the iterator's multiprocessing Queues and Events from the
+    resource_tracker.  On Python <=3.11, this unregister never happens
+    automatically (the C SemLock dealloc only calls sem_close, not
+    resource_tracker.unregister), so without this step the resource_tracker
+    warns about "leaked semaphore objects" at shutdown.
+    """
+    import gc
+    for loader in loaders:
+        if not (hasattr(loader, '_iterator') and loader._iterator is not None):
+            continue
+        it = loader._iterator
+        try:
+            it._shutdown_workers()
+        except Exception:
+            pass
+        # Unregister all POSIX named semaphores from the resource_tracker
+        # so it does not report them as leaked at exit.
+        _unregister_tracked_semaphores(
+            getattr(it, '_index_queues', None),
+            getattr(it, '_data_queue', None),
+            getattr(it, '_workers_done_event', None),
+        )
+        loader._iterator = None
+    gc.collect()

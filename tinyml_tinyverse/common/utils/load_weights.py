@@ -32,6 +32,7 @@
 import re
 import torch
 import copy
+from argparse import Namespace
 from collections import OrderedDict
 from . import print_utils
 from . import data_utils
@@ -62,7 +63,15 @@ def load_weights(model, pretrained, change_names_dict=None, keep_original_names=
         else:
             pretrained_file = pretrained
         #
-        data = torch.load(pretrained_file, map_location=device, weights_only=False)
+        # weights_only=False fully disables PyTorch's deserialization safety check --
+        # pretrained_file can be a URL fetched with no integrity check (download_url
+        # above), so an untrusted/spoofed checkpoint would get arbitrary code
+        # execution during unpickling. Namespace is allow-listed because checkpoints
+        # written by this project's own save_checkpoint() (train_base.py) legitimately
+        # carry one under the 'args' key, and such a checkpoint is a plausible
+        # 'pretrained' input here too.
+        with torch.serialization.safe_globals([Namespace]):
+            data = torch.load(pretrained_file, map_location=device)
     else:
         data = pretrained
     #
@@ -84,12 +93,31 @@ def load_weights(model, pretrained, change_names_dict=None, keep_original_names=
     if load_error:
         # model did not load correctly. do any translation required.
         model_dict = model.state_dict()
+        model_keys = list(model_dict.keys())
+
+        # Strip torch.compile's _orig_mod. wrapper-artifact prefix from the
+        # incoming data first (e.g. a checkpoint saved by older code, before
+        # save_checkpoint started unwrapping it). Unlike 'module.' below,
+        # _orig_mod. is never meaningful to preserve or match against -- it's
+        # leftover from whichever side was torch.compile-wrapped when its
+        # state_dict was captured, not a real structural distinction.
+        data = {k.replace('_orig_mod.', ''): v for k, v in data.items()}
 
         # align the prefix 'module.' between model and data
-        model_prefix = 'module.' if 'module.' in list(model_dict.keys())[0] else ''
+        model_prefix = 'module.' if 'module.' in model_keys[0] else ''
         data_prefix = 'module.' if 'module.' in list(data.keys())[0] else ''
         data = {k.replace(data_prefix,model_prefix):v for k,v in data.items()} if data_prefix != '' \
             else {model_prefix+k:v for k,v in data.items()}
+
+        # If the live model being loaded INTO is itself currently
+        # torch.compile-wrapped, its real key names carry _orig_mod. too --
+        # remap data's (now wrapper-free) keys onto whatever the model
+        # actually calls them right now, mirroring the symmetric save/load
+        # unwrap already applied to the checkpoint main-model and EMA paths
+        # in train_base.py's save_checkpoint/resume_from_checkpoint.
+        if any('_orig_mod.' in k for k in model_keys):
+            live_keys_by_stripped_name = {k.replace('_orig_mod.', ''): k for k in model_keys}
+            data = {live_keys_by_stripped_name.get(k, k): v for k, v in data.items()}
 
         # change the name in pretrained data name to the given names
         if change_names_dict is not None:

@@ -78,7 +78,7 @@ from logging import getLogger
 from os.path import basename as opb
 
 import matplotlib
-matplotlib.use('Agg') # Force non-interactive backend
+matplotlib.use('Agg')  # Force non-interactive backend for headless training environments
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
@@ -162,12 +162,41 @@ def collate_fn(batch):
     return raw_tensors, tensors, targets
 
 
-def _get_cache_path(filepath):
+# Dataset-shaping args folded into the cache key: the cached object is the
+# fully PREPARED dataset ("Attention, as the transforms are also cached!"), so
+# a run that changes any of these against the same datadir must miss the cache
+# rather than silently reuse a dataset prepared under the old configuration.
+# Not exhaustive -- prepare(**vars(args)) passes everything through, so an
+# exotic loader could consume an arg not listed here; extend as needed.
+# Over-invalidation (a needless cache miss) is safe; under-invalidation is not.
+_CACHE_KEY_ARGS = (
+    'dataset', 'dataset_loader', 'annotation_prefix', 'loader_type',
+    'data_proc_transforms', 'feat_ext_transform', 'augmentation_transform',
+    'transforms', 'frame_size', 'stride_size', 'sampling_rate', 'new_sr',
+    'variables', 'resampling_factor',
+)
+
+
+def _get_cache_path(filepath, tag='train', args=None):
     import hashlib
-    h = hashlib.sha1(filepath.encode()).hexdigest()
+    key = f'{tag}:{filepath}'
+    if args is not None:
+        config = [(k, repr(getattr(args, k, None))) for k in _CACHE_KEY_ARGS]
+        key += f':{config!r}'
+    h = hashlib.sha1(key.encode()).hexdigest()
     cache_path = os.path.join("~", ".torch", "audio_classification", "datasets", "audiofolder", h[:10] + ".pt")
     cache_path = os.path.expanduser(cache_path)
     return cache_path
+
+
+def _save_cache_atomically(payload, cache_path):
+    """Write to a temp file in the target directory, then atomically publish
+    via os.replace -- a reader that sees cache_path exist never reads a
+    partially-written file (e.g. another rank, or a run killed mid-save)."""
+    mkdir(os.path.dirname(cache_path))
+    tmp_path = cache_path + '.tmp'
+    torch.save(payload, tmp_path)
+    os.replace(tmp_path, cache_path)
 
 
 def load_data(datadir, args, dataset_loader_dict, test_only=False):
@@ -199,11 +228,17 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
 
     logger.info("Loading training data")
     st = timeit.default_timer()
-    cache_path = _get_cache_path(datadir)
+    cache_path = _get_cache_path(datadir, tag='train', args=args)
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_train from {}".format(cache_path))
-        dataset, _ = torch.load(cache_path)
+        # weights_only=False is safe here: cache_path is a purely local cache this
+        # same process wrote moments earlier (derived from a hash of datadir, never
+        # fetched from a URL or otherwise externally supplied), and the cached object
+        # is one of this project's own Dataset subclasses -- not the kind of type
+        # torch's weights_only=True default (PyTorch 2.6+) allowlists, so loading
+        # this cache without the override raises UnpicklingError on every run.
+        dataset, _ = torch.load(cache_path, weights_only=False)
     else:
         if args.dataset == 'modelmaker':
             train_folders = os.path.normpath(datadir).split(os.sep)
@@ -212,19 +247,19 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             dataset = dataset_loader("training", dataset_dir=args.data_path, training_list=training_list, **vars(args)).prepare(**vars(args))
         else:
             dataset = dataset_loader("training", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        if args.cache_dataset:
+        if args.cache_dataset and is_main_process():
             logger.info("Saving dataset_train to {}".format(cache_path))
-            mkdir(os.path.dirname(cache_path))
-            save_on_master((dataset, datadir), cache_path)
+            _save_cache_atomically((dataset, datadir), cache_path)
     logger.info("Took {0:.2f} seconds".format(timeit.default_timer() - st))
 
     logger.info("Loading validation data")
     st = timeit.default_timer()
-    cache_path = _get_cache_path(datadir)
+    cache_path = _get_cache_path(datadir, tag='val', args=args)
     if args.cache_dataset and os.path.exists(cache_path):
         # Attention, as the transforms are also cached!
         logger.info("Loading dataset_test from {}".format(cache_path))
-        dataset_test, _ = torch.load(cache_path)
+        # See the training-cache load above for why weights_only=False is safe here.
+        dataset_test, _ = torch.load(cache_path, weights_only=False)
     else:
         # val_transform = presets.ClassificationPresetEval(crop_size=crop_size, resize_size=resize_size,
         #                                      interpolation=interpolation,
@@ -236,11 +271,9 @@ def load_data(datadir, args, dataset_loader_dict, test_only=False):
             dataset_test = dataset_loader("val", dataset_dir=args.data_path, validation_list=val_list, **vars(args)).prepare(**vars(args))
         else:
             dataset_test = dataset_loader("val", dataset_dir=args.data_path, **vars(args)).prepare(**vars(args))
-        # TODO: Add utils and uncomment the if block
-        # if args.cache_dataset:
-        #     logger.info("Saving dataset_test to {}".format(cache_path))
-        #     utils.mkdir(os.path.dirname(cache_path))
-        #     utils.save_on_master((dataset_test, datadir), cache_path)
+        if args.cache_dataset and is_main_process():
+            logger.info("Saving dataset_test to {}".format(cache_path))
+            _save_cache_atomically((dataset_test, datadir), cache_path)
     logger.info("Took {:.2f} seconds".format(timeit.default_timer() - st))
     logger.info("\nCreating data loaders")
     if args.distributed:
@@ -277,7 +310,7 @@ def plot_feature_components_graph(dataset_instance, graph_type, instance_type, o
     n_clusters = len(dataset_instance.classes)
     fig = plt.figure(figsize=(10, 7))
     ax = plt.axes(projection='3d')
-    colors = plt.cm.get_cmap("tab10", n_clusters)
+    colors = plt.colormaps["tab10"].resampled(n_clusters)
     for i in range(n_clusters):
         xdata = time_series_data[np.where(np.array(dataset_instance.Y) == i)][:, 0]
         ydata = time_series_data[np.where(np.array(dataset_instance.Y) == i)][:, 1]
@@ -321,7 +354,7 @@ def plot_multiclass_roc(ground_truth, predicted, output_dir, label_map=None, pha
     fig = plt.figure(figsize=(10, 8))
 
     # Colors for each class
-    colors = plt.cm.get_cmap("tab10", num_classes)
+    colors = plt.colormaps["tab10"].resampled(num_classes)
 
     # Loop through each class
     fpr_list = []
@@ -472,7 +505,7 @@ def plot_regression(ground_truth, predictions, output_dir, phase=''):
         # Add labels, title, and legend
         ax.set_xlabel('Index', fontsize=12)
         ax.set_ylabel('Target', fontsize=12)
-        ax.set_title(f'Regression Scatter Plot', fontsize=14)
+        ax.set_title('Regression Scatter Plot', fontsize=14)
         ax.legend()
         ax.grid(alpha=0.3)
 
@@ -671,15 +704,27 @@ class SmoothedValue:
         self.fmt = fmt
 
     def update(self, value, n=1):
+        if isinstance(value, torch.Tensor):
+            # Store detached tensor without calling .item() — avoids forcing
+            # a GPU sync (MPS command-buffer flush) on every batch.  The
+            # scalar conversion is deferred to the property accessors which
+            # are only evaluated at print time (every print_freq iterations).
+            value = value.detach()
+
         self.deque.append(value)
         self.count += n
-        self.total += value * n
+        if isinstance(value, torch.Tensor):
+            # Keep total as a tensor so the addition stays on-device.
+            self.total = self.total + (value * n)
+        else:
+            self.total += value * n
 
     def synchronize_between_processes(self):
         """
         Warning: does not synchronize the deque!
         """
-        t = reduce_across_processes([self.count, self.total])
+        total = self.total.item() if isinstance(self.total, torch.Tensor) else self.total
+        t = reduce_across_processes([self.count, total])
         try:
             t = t.tolist()
         except AttributeError:
@@ -690,10 +735,10 @@ class SmoothedValue:
     @property
     def median(self):
         latest = self.deque[-1]
-        if isinstance(latest, numbers.Number):
-            d = torch.tensor(list(self.deque))
+        if isinstance(latest, torch.Tensor) and latest.ndim == 0:
+            d = torch.stack(list(self.deque))
             return d.median().item()
-        elif isinstance(latest, torch.Tensor) and latest.ndim == 0:
+        elif isinstance(latest, numbers.Number):
             d = torch.tensor(list(self.deque))
             return d.median().item()
         else:
@@ -702,27 +747,35 @@ class SmoothedValue:
     @property
     def avg(self):
         latest = self.deque[-1]
-        if isinstance(latest, numbers.Number):
-            d = torch.tensor(list(self.deque), dtype=torch.float32)
-            return d.mean().item()
-        elif isinstance(latest, torch.Tensor) and latest.ndim == 0:
+        if isinstance(latest, torch.Tensor) and latest.ndim == 0:
+            d = torch.stack(list(self.deque))
+            return d.float().mean().item()
+        elif isinstance(latest, numbers.Number):
             d = torch.tensor(list(self.deque), dtype=torch.float32)
             return d.mean().item()
         else:
             return latest
 
-
     @property
     def global_avg(self):
-        return self.total / self.count
+        total = self.total
+        if isinstance(total, torch.Tensor):
+            total = total.item()
+        return total / self.count
 
     @property
     def max(self):
+        latest = self.deque[-1]
+        if isinstance(latest, torch.Tensor) and latest.ndim == 0:
+            return torch.stack(list(self.deque)).max().item()
         return max(self.deque)
 
     @property
     def value(self):
-        return self.deque[-1]
+        v = self.deque[-1]
+        if isinstance(v, torch.Tensor):
+            return v.item()
+        return v
 
     def __str__(self):
         latest = self.deque[-1]
@@ -882,15 +935,19 @@ def get_confusion_matrix(output, target, classes):
     Compute multi-class confusion matrix, a matrix of dimension num_classes x num_classes
     where each element at position (i,j) is the number of examples with true class i that were predicted to be class j.
     """
-    return multiclass_confusion_matrix(output, target, classes)
+    # torcheval uses sparse COO tensors internally, which are not supported
+    # on MPS.  Move to CPU for this computation.
+    return multiclass_confusion_matrix(output.cpu(), target.cpu(), classes)
 
 
 def get_f1_score(output, target, classes):
-    return multiclass_f1_score(output, target, num_classes=classes)
+    # Move to CPU — torcheval may use ops unsupported on MPS
+    return multiclass_f1_score(output.cpu(), target.cpu(), num_classes=classes)
 
 
 def get_au_roc(output, target, classes):
-    return multiclass_auroc(output, target, num_classes=classes, average='macro')
+    # Move to CPU — torcheval may use ops unsupported on MPS
+    return multiclass_auroc(output.cpu(), target.cpu(), num_classes=classes, average='macro')
 
 
 def get_r2_score(output,target):
@@ -1120,44 +1177,50 @@ def seed_everything(seed: int):
 
 
 def train_one_epoch_regression(model, criterion, optimizer, data_loader, device, epoch, transform, lambda_reg=0.01,
-                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
+                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
+                    amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     model.train()
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
     print_freq = print_freq if print_freq else len(data_loader)
     header = f"Epoch: [{epoch}]"
-    # TODO: If transform is required
     if transform:
         transform = transform.to(device)
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
-    # for _, data, target in data_loader:
         start_time = timeit.default_timer()
-        data = data.to(device).float()
-        target = target.to(device).float()
+        data = data.float().to(device)
+        target = target.float().to(device)
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            loss = criterion(output, target)
 
-        loss = criterion(output, target)
         if not is_ptq:
-            optimizer.zero_grad()
+            optimizer.zero_grad(set_to_none=True)
             if lambda_reg:
                 l1_norm = sum(p.abs().sum() for p in model.parameters())
                 l2_norm = sum(p.pow(2.0).sum() for p in model.parameters())
-
                 loss += (lambda_reg*(l1_norm))
                 loss += (lambda_reg*(l2_norm))
-            if apex:
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
         mse = get_mse(output, target).squeeze()
         batch_size = output.shape[0]
         metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
@@ -1168,7 +1231,10 @@ def train_one_epoch_regression(model, criterion, optimizer, data_loader, device,
         model_ema.update_parameters(model)
 
 def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device, epoch, transform,
-                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
+                    apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
+                    amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
@@ -1176,47 +1242,47 @@ def train_one_epoch_forecasting(model, criterion, optimizer, data_loader, device
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
 
     header = f"Epoch: [{epoch}]"
-    # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    
+
     for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.to(device).float()
-        target = target.to(device).float()
+        data = data.float().to(device)
+        target = target.float().to(device)
 
-        # apply transform and model on whole batch directly on device
-        # TODO: If transform is required
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)"
-
-        output = output.view_as(target)
-
-        loss = criterion(output, target)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            output = output.view_as(target)
+            loss = criterion(output, target)
 
         if not is_ptq:
-            optimizer.zero_grad()
-            if apex:
+            optimizer.zero_grad(set_to_none=True)
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
 
-        smape_score = smape(target.detach(), output.detach()).item()
         batch_size = output.shape[0]
         metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
-        metric_logger.meters['smape'].update(smape_score, n=batch_size)
+        metric_logger.meters['smape'].update(smape(target.detach(), output.detach()).item(), n=batch_size)
         metric_logger.meters['samples/s'].update(batch_size / (timeit.default_timer() - start_time))
 
     if model_ema:
         model_ema.update_parameters(model)
-    
+
 
 def evaluate_forecasting(model, criterion, data_loader, device, transform=None, log_suffix='', print_freq=None, phase='', dual_op=True, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
@@ -1228,11 +1294,13 @@ def evaluate_forecasting(model, criterion, data_loader, device, transform=None, 
     targets=[]
     outputs=[]
 
+    # See evaluate_classification for why non_blocking must be gated on CUDA.
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
         for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
             # Move data and target to the specified device
-            data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=non_blocking)
+            target = target.float().to(device, non_blocking=non_blocking)
 
             # Apply transformation if provided
             if transform:
@@ -1299,16 +1367,16 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
 
-    target_array = torch.Tensor([]).to(device, non_blocking=True)
-    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
+    # See evaluate_classification for why non_blocking must be gated on CUDA.
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
         val_loss = 0
         target_list = []
         predictions_list = []
         # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
         for _, data, target in data_loader:
-            data = data.to(device, non_blocking=True).float()
-            target = target.to(device, non_blocking=True).float()
+            data = data.float().to(device, non_blocking=non_blocking)
+            target = target.float().to(device, non_blocking=non_blocking)
 
             if transform:
                 data = transform(data)
@@ -1341,32 +1409,32 @@ def evaluate_regression(model, criterion, data_loader, device, transform, log_su
 
 def train_one_epoch_anomalydetection(
         model, criterion, optimizer, data_loader, device, epoch, transform,
-        apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False, **kwargs):
+        apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
+        amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     logger = getLogger(f"root.train_utils.train.{phase}")
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
-    header = f"Training   - Epoch[{epoch}]: "
+    header = f"Training   - Epoch[{epoch}]:"
     if transform:
         transform = transform.to(device)
-    for _,data, labels in metric_logger.log_every(data_loader, print_freq, header):
-        # for batch_idx, (data, target) in enumerate(data_loader):
+    for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
         start_time = timeit.default_timer()
-        data = data.to(device).float()
-        #In anomlay detection with auto encoder, the target and the input data both are same. 
+        data = data.float().to(device)
+        # In anomaly detection with autoencoder, the target and the input data are the same
         target = data.clone()
 
-        # apply transform and model on whole batch directly on device
-        # TODO: If transform is required
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)
-
-        loss = criterion(output, target)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            loss = criterion(output, target)
 
         # Check for NaN/Inf loss (training instability)
         if torch.isnan(loss) or torch.isinf(loss):
@@ -1380,18 +1448,24 @@ def train_one_epoch_anomalydetection(
             raise RuntimeError(error_msg)
 
         if not is_ptq:
-            optimizer.zero_grad()
-            if apex:
+            optimizer.zero_grad(set_to_none=True)
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
 
         metric_logger.update(loss=loss.item())
-    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
+
     if model_ema:
         model_ema.update_parameters(model)
+    logger.info(f'{header} MSE {metric_logger.loss.global_avg:.6f}')
 
 
 def evaluate_anomalydetection(
@@ -1402,11 +1476,13 @@ def evaluate_anomalydetection(
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Validation{log_suffix} - Epoch[{epoch}]: '
 
+    # See evaluate_classification for why non_blocking must be gated on CUDA.
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
         for _, data, labels in metric_logger.log_every(data_loader, print_freq, header):
             # for data, target in data_loader:
-            data = data.to(device, non_blocking=True).float()
-            #In anomlay detection with auto encoder, the target and the input data both are same. 
+            data = data.float().to(device, non_blocking=non_blocking)
+            #In anomlay detection with auto encoder, the target and the input data both are same.
             target = data
             if transform:
                 data = transform(data)
@@ -1416,7 +1492,7 @@ def evaluate_anomalydetection(
             else:
                 output = model(data)
 
-            loss = criterion(output, target) 
+            loss = criterion(output, target)
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
     metric_logger.synchronize_between_processes()
@@ -1427,55 +1503,51 @@ def evaluate_anomalydetection(
 def train_one_epoch_classification(
         model, criterion, optimizer, data_loader, device, epoch, transform,
         apex=False, model_ema=None, print_freq=None, phase="", dual_op=True, is_ptq=False,
-        nn_for_feature_extraction=False, **kwargs):
+        nn_for_feature_extraction=False, amp_autocast=None, grad_scaler=None, **kwargs):
+    import contextlib
+    amp_ctx = amp_autocast or contextlib.nullcontext()
     model.train()
     print_freq = print_freq if print_freq else len(data_loader)
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     metric_logger.add_meter("lr", window_size=1, fmt="{value}")
     metric_logger.add_meter("samples/s", window_size=10, fmt="{value}")
-    #
-    # new_sample_rate = 8000
-    # transform = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=new_sample_rate)
 
     header = f"Epoch: [{epoch}]"
-    # TODO: If transform is required
     if transform:
         transform = transform.to(device)
-    # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
     for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
-        # for batch_idx, (data, target) in enumerate(data_loader):
-        # logger.info(batch_idx)
         start_time = timeit.default_timer()
         if nn_for_feature_extraction:
-            data = data_raw.to(device).float()
+            data = data_raw.float().to(device)
         else:
-            data = data_feat_ext.to(device).float()
-        target = target.to(device).long()
+            data = data_feat_ext.float().to(device)
+        target = target.long().to(device)
 
-        # apply transform and model on whole batch directly on device
-        # TODO: If transform is required
         if transform:
             data = transform(data)
 
-        if dual_op:
-            output, secondary_output = model(data)  # (n,1,8000) -> (n,35)
-        else:
-            output = model(data)  # (n,1,8000) -> (n,35)
-
-        # negative log-likelihood for a tensor of size (batch x 1 x n_output)
-        loss = criterion(output, target)
+        with amp_ctx:
+            if dual_op:
+                output, secondary_output = model(data)
+            else:
+                output = model(data)
+            loss = criterion(output, target)
 
         if not is_ptq:
-            optimizer.zero_grad()
-            if apex:
+            optimizer.zero_grad(set_to_none=True)
+            if grad_scaler is not None:
+                grad_scaler.scale(loss).backward()
+                grad_scaler.step(optimizer)
+                grad_scaler.update()
+            elif apex:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
                     scaled_loss.backward()
+                optimizer.step()
             else:
                 loss.backward()
-            optimizer.step()
+                optimizer.step()
 
         acc1 = accuracy(output, target, topk=(1,))
-        # f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
         batch_size = output.shape[0]
         metric_logger.update(loss=loss.item(), lr=optimizer.param_groups[0]["lr"])
         metric_logger.meters['acc1'].update(acc1[0], n=batch_size)
@@ -1491,21 +1563,27 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
     metric_logger = MetricLogger(delimiter="  ", phase=phase)
     print_freq = print_freq if print_freq else len(data_loader)
     header = f'Test: {log_suffix}'
-    confusion_matrix_total = np.zeros((kwargs.get('num_classes'), kwargs.get('num_classes')))
+    num_classes = kwargs.get('num_classes')
+    if num_classes is None:
+        raise ValueError("evaluate_classification requires 'num_classes' in kwargs")
 
-    target_array = torch.Tensor([]).to(device, non_blocking=True)
-    predictions_array = torch.Tensor([]).to(device, non_blocking=True)
+    target_list = []
+    predictions_list = []
 
+    # non_blocking H2D transfers are only safe/beneficial with pinned source memory.
+    # create_data_loaders() only pins memory for CUDA (pin_memory=False for MPS/CPU),
+    # so non_blocking must be disabled on those backends -- otherwise the async copy
+    # can race with reuse of the source buffer, corrupting the transferred tensor
+    # (observed on MPS as NaN activations reaching the quantization observers).
+    non_blocking = (device.type == 'cuda')
     with torch.no_grad():
-        # for _, data, target in metric_logger.log_every(data_loader, print_freq, header):
-        for data_raw, data_feat_ext, target  in metric_logger.log_every(data_loader, print_freq, header):
-            # for data, target in data_loader:
+        for data_raw, data_feat_ext, target in metric_logger.log_every(data_loader, print_freq, header):
             if nn_for_feature_extraction:
-                data = data_raw.to(device, non_blocking=True).float()
+                data = data_raw.float().to(device, non_blocking=non_blocking)
             else:
-                data = data_feat_ext.to(device).float()
+                data = data_feat_ext.float().to(device, non_blocking=non_blocking)
 
-            target = target.to(device, non_blocking=True).long()
+            target = target.long().to(device, non_blocking=non_blocking)
             if transform:
                 data = transform(data)
 
@@ -1514,51 +1592,35 @@ def evaluate_classification(model, criterion, data_loader, device, transform, lo
             else:
                 output = model(data)
 
-            target_array = torch.cat((target_array, target))
-            predictions_array = torch.cat((predictions_array, output))
+            target_list.append(target.cpu())
+            predictions_list.append(output.cpu())
 
-            loss = criterion(output, target)
-            acc1 = accuracy(output, target, topk=(1,))
-            f1_score = get_f1_score(output, target, kwargs.get('num_classes'))
+            loss = criterion(output.squeeze(), target)
+            acc1 = accuracy(output.squeeze(), target, topk=(1,))
 
-            confusion_matrix = get_confusion_matrix(output, target, kwargs.get('num_classes')).cpu().numpy()
-            confusion_matrix_total += confusion_matrix
-
-            # au_roc = get_au_roc(output, target, kwargs.get('num_classes')) # .cpu().numpy()
-            # au_roc_total += au_roc
-            # FIXME need to take into account that the datasets could have been padded in distributed setup
             batch_size = data.shape[0]
             metric_logger.update(loss=loss.item())
             metric_logger.meters['acc1'].update(acc1[0], n=batch_size)
-            metric_logger.meters['f1'].update(f1_score, n=batch_size)
-            # metric_logger.meters['auroc'].update(au_roc, n=batch_size)
-            # metric_logger.meters['cm'].update(confusion_matrix, n=batch_size)
-            # metric_logger.meters['acc5'].update(acc5.item(), n=batch_size)
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
 
-    # logger.info(f'{header} Acc@1 {metric_logger.acc1.global_avg:.3f} Acc@5 {metric_logger.acc5.global_avg:.3f}')
-    logger.info(f'{header} Acc@1 {accuracy(predictions_array, target_array, topk=(1,))[0]:.3f}')
-    logger.info(f'{header} F1-Score {get_f1_score(predictions_array, target_array, kwargs.get("num_classes")):.3f}')
-    # auc = get_au_roc_from_conf_matrix(confusion_matrix_total)
-    # logger.info('AU-ROC Score: {:.3f}'.format(auc))
-    auc = get_au_roc(predictions_array, target_array, kwargs.get('num_classes'))
+    # Concatenate all predictions/targets once (O(n) instead of O(n²) per-batch torch.cat)
+    target_array = torch.cat(target_list)
+    predictions_array = torch.cat(predictions_list)
+
+    # Compute all metrics at epoch-end instead of per-batch
+    logger.info(f'{header} Acc@1 {accuracy(predictions_array.squeeze(), target_array, topk=(1,))[0]:.3f}')
+    f1 = get_f1_score(predictions_array.squeeze(), target_array, num_classes)
+    logger.info(f'{header} F1-Score {f1:.3f}')
+    auc = get_au_roc(predictions_array.squeeze(), target_array, num_classes)
     logger.info("AU-ROC Score: {:.3f}".format(auc))
-    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(get_confusion_matrix(
-        predictions_array.cpu(), target_array.type(dtype=torch.int64).cpu(), kwargs.get('num_classes')),
-        columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
-        index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]), headers="keys", tablefmt='grid')))
+    confusion_matrix_total = get_confusion_matrix(
+        predictions_array.squeeze(), target_array.type(dtype=torch.int64), num_classes).numpy()
+    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
+        columns=[f"Predicted as: {x}" for x in range(num_classes)],
+        index=[f"Ground Truth: {x}" for x in range(num_classes)]), headers="keys", tablefmt='grid')))
 
-    # logger.info(f'{header} AUROC {metric_logger.auroc.global_avg:.3f}')
-    # logger.info('\n' + '\n'.join([f"Ground Truth:(Class {i}), Predicted:(Class {j}): {int(confusion_matrix_total[i][j])}" for j in range(kwargs.get('num_classes')) for i in range(kwargs.get('num_classes'))]))
-
-    # logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(confusion_matrix_total,
-    #               columns=[f"Predicted as: {x}" for x in range(kwargs.get('num_classes'))],
-    #               index=[f"Ground Truth: {x}" for x in range(kwargs.get('num_classes'))]),
-    #                                                      headers="keys", tablefmt='grid')))
-
-    # logger.info(f'AU-ROC: {au_roc_total}')
-    return metric_logger.acc1.global_avg, metric_logger.f1.global_avg, auc, confusion_matrix_total, predictions_array, target_array
+    return metric_logger.acc1.global_avg, f1, auc, confusion_matrix_total, predictions_array, target_array
 
 def print_file_level_classification_summary(dataset, predicted, ground_truth,phase):
     logger_flcs = getLogger(f"root.utils.print_file_level_classification_summary.{phase}")
@@ -1598,6 +1660,24 @@ def print_file_level_classification_summary(dataset, predicted, ground_truth,pha
     df = pd.DataFrame(results)
     logger_flcs.info(f'File-Level Classification Summary of {phase}:\n {tabulate(df, headers="keys", tablefmt="pretty")}')
 
+
+def unwrap_compiled_submodules(model):
+    """Recursively replace any torch.compile-wrapped module (including the
+    top-level model itself) with its original, uncompiled module.
+
+    torch.compile() wraps a module in torch._dynamo.OptimizedModule, which
+    exposes the original module at ._orig_mod. The compiled module isn't
+    always the top-level model passed in -- some reference scripts wrap an
+    already-compiled model inside another module afterward -- so this walks
+    the full submodule tree rather than only checking the top level. It is
+    a no-op wherever no torch.compile wrapping is present.
+    """
+    model = getattr(model, '_orig_mod', model)
+    for name, child in list(model.named_children()):
+        setattr(model, name, unwrap_compiled_submodules(child))
+    return model
+
+
 def export_model(model, input_shape, output_dir, opset_version=17, quantization=0,
                  example_input=None, generic_model=False, remove_hooks_for_jit=False):
     logger = getLogger("root.export_model")
@@ -1609,20 +1689,86 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
     logger.debug(f"Quantization Mode: {quantization}, {type(quantization)}")
     logger.info(f'Exporting ONNX model from: {onnx_file}')
 
-    model_copy = copy.deepcopy(model)
+    # torch.compile() wraps a model in torch._dynamo.OptimizedModule; unwrap
+    # before export since neither torch.onnx.export nor jit.trace can trace it.
+    model = unwrap_compiled_submodules(model)
+
+    # Python 3.14 deepcopy fails on models with stored non-picklable objects
+    # (e.g. _MultiProcessingDataLoaderIter inside QAT models). Strip them first.
+    def _strip_non_picklable(obj, saved):
+        for name in list(obj.__dict__.keys()):
+            attr = obj.__dict__[name]
+            cls_name = type(attr).__name__
+            if 'DataLoader' in cls_name or 'Iter' in cls_name or 'iter' in cls_name.lower():
+                saved.append((obj, name, attr))
+                object.__setattr__(obj, name, None)
+
+    saved_state = []
+    for _, module in model.named_modules():
+        _strip_non_picklable(module, saved_state)
+        for h_dict in (module._forward_hooks, module._forward_pre_hooks, module._backward_hooks):
+            saved_state.append((h_dict, '__clear__', dict(h_dict)))
+            h_dict.clear()
+
+    try:
+        model_copy = copy.deepcopy(model)
+    except Exception:
+        model_copy = copy.copy(model)
+        model_copy.load_state_dict(copy.deepcopy(model.state_dict()))
+    finally:
+        for item in saved_state:
+            if item[1] == '__clear__':
+                item[0].update(item[2])
+            else:
+                object.__setattr__(item[0], item[1], item[2])
     model_copy = model_copy.to(device)
     if quantization:
         if example_input is not None and hasattr(model_copy, 'measure_stats'):
             example_input = example_input.to(dtype=torch.float, device=device)
-            model_copy_for_log = copy.deepcopy(model_copy)         
-            qdq_model_output = model_copy_for_log(example_input)
-            model_copy_for_log = model_copy_for_log.convert()
-            int_model_output = model_copy_for_log(example_input)
+            # For logging, we need to convert a copy - but this might fail too
+            # So we'll just skip the logging if it fails
             try:
-                convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output, int_model_output)
-            except TypeError:
-                convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output[0], int_model_output[0])
-            logger.info(f"Quantization Convert Diff: {convert_diff_stats}")
+                # Strip non-picklable objects from model_copy and all sub-modules.
+                # Also null out any dict values that reference DataLoaders/iterators,
+                # since qconfig_type stores the calibration_dataloader.
+                _mc_saved = []
+                for _, _mc_mod in model_copy.named_modules():
+                    _strip_non_picklable(_mc_mod, _mc_saved)
+                    # Also recurse into dict attributes (e.g. qconfig_type)
+                    for _attr_name in list(_mc_mod.__dict__.keys()):
+                        _attr = _mc_mod.__dict__.get(_attr_name)
+                        if isinstance(_attr, dict):
+                            for _k, _v in list(_attr.items()):
+                                _cls = type(_v).__name__
+                                if 'DataLoader' in _cls or 'Iter' in _cls or 'iter' in _cls.lower():
+                                    _mc_saved.append((_attr, _k, _v))
+                                    _attr[_k] = None
+                    for _hd in (_mc_mod._forward_hooks, _mc_mod._forward_pre_hooks, _mc_mod._backward_hooks):
+                        _mc_saved.append((_hd, '__clear__', dict(_hd)))
+                        _hd.clear()
+                try:
+                    model_copy_for_log = copy.deepcopy(model_copy)
+                finally:
+                    for _item in _mc_saved:
+                        if _item[1] == '__clear__':
+                            _item[0].update(_item[2])
+                        elif isinstance(_item[0], dict):
+                            _item[0][_item[1]] = _item[2]
+                        else:
+                            object.__setattr__(_item[0], _item[1], _item[2])
+            except Exception as _dc_err:
+                logger.warning(f"Skipping quantization convert diff stats - deepcopy failed: {_dc_err}")
+                model_copy_for_log = None
+
+            if model_copy_for_log is not None:
+                qdq_model_output = model_copy_for_log(example_input)
+                model_copy_for_log = model_copy_for_log.convert()
+                int_model_output = model_copy_for_log(example_input)
+                try:
+                    convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output, int_model_output)
+                except TypeError:
+                    convert_diff_stats = model_copy_for_log.measure_stats(qdq_model_output[0], int_model_output[0])
+                logger.info(f"Quantization Convert Diff: {convert_diff_stats}")
 
         # convert the model
         model_copy = model_copy.convert()
@@ -1636,7 +1782,7 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
         if not generic_model:
             encrypt(os.path.splitext(onnx_file)[0]+"_ts.pth", get_crypt_key())
     else:
-        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version)
+        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version, verbose=False)
 
     onnx.shape_inference.infer_shapes_path(onnx_file, onnx_file)
     if not generic_model:
@@ -1798,8 +1944,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         for data_raw, data_fe, _ in data_loader:
             start_time = timeit.default_timer()
 
-            data_raw = data_raw.to(device).float()
-            data_fe = data_fe.to(device).float()
+            data_raw = data_raw.float().to(device)
+            data_fe = data_fe.float().to(device)
 
             output = model(data_raw)  # (n,1,8000) -> (n,35)
 
@@ -1807,7 +1953,7 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
             loss = criterion(output, data_fe)
 
             if not is_ptq:
-                optimizer.zero_grad()
+                optimizer.zero_grad(set_to_none=True)
                 loss.backward()
                 optimizer.step()
         if not is_ptq:
@@ -1825,8 +1971,8 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         with torch.no_grad():
             for data_raw, data_fe, _ in data_loader_test:
                 # Assuming the dataset returns (data, target)
-                data_raw = data_raw.to(device).float()
-                data_fe = data_fe.to(device).float()
+                data_raw = data_raw.float().to(device)
+                data_fe = data_fe.float().to(device)
                 outputs = model(data_raw)
 
                 # Calculate loss
