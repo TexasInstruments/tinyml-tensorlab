@@ -1,7 +1,5 @@
 # Remove Dead --sample-rate Flag from audio_classification Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Remove the `--sample-rate` CLI flag from `audio_classification`'s `train.py` and `test_onnx.py` — confirmed dead code that silently does nothing while looking like the thing that controls audio sample rate, trapping anyone who reads or invokes these scripts directly.
 
 **Architecture:** Two `parser.add_argument('--sample-rate', ...)` calls deleted (one per file, each script has its own independent `get_args_parser()`). No other code changes. `--sampling-rate` — a separate, shared flag defined once in `train_base.py`'s base parser, already `required=True`, already the only thing `GoogleSpeechCommandsDataset` actually reads, and already what `tinyml-modelmaker`'s production orchestration (`audio_base.py`) passes — continues unchanged as the sole real control for audio sample rate. Two regression tests confirm the dead flag is gone from each parser.
@@ -50,7 +48,7 @@ Discovered during the `compile-hardening-radar-image-audio` plan's Task 3 (audio
 **Interfaces:**
 - Consumes: `tinyml_tinyverse.references.audio_classification.train.get_args_parser`, `tinyml_tinyverse.references.audio_classification.test_onnx.get_args_parser` (both already exist, no signature change)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 """Regression test: audio_classification's train.py and test_onnx.py must NOT
@@ -94,12 +92,12 @@ def test_test_onnx_parser_has_no_dead_sample_rate_flag():
     )
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_audio_sample_rate_dead_flag_removed.py -v`
 Expected: FAIL — both `test_..._has_no_dead_sample_rate_flag` tests fail, `"sample_rate"` is present in `dests`
 
-- [ ] **Step 3: Remove the dead flag from train.py**
+- [x] **Step 3: Remove the dead flag from train.py**
 
 In `tinyml-tinyverse/tinyml_tinyverse/references/audio_classification/train.py`, delete line 132:
 
@@ -107,7 +105,7 @@ In `tinyml-tinyverse/tinyml_tinyverse/references/audio_classification/train.py`,
     parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
 ```
 
-- [ ] **Step 4: Remove the dead flag from test_onnx.py**
+- [x] **Step 4: Remove the dead flag from test_onnx.py**
 
 In `tinyml-tinyverse/tinyml_tinyverse/references/audio_classification/test_onnx.py`, delete line 69:
 
@@ -115,21 +113,21 @@ In `tinyml-tinyverse/tinyml_tinyverse/references/audio_classification/test_onnx.
     parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/test_audio_sample_rate_dead_flag_removed.py -v`
 Expected: PASS
 
-- [ ] **Step 6: Run the full existing test suite for this module to confirm no collateral breakage**
+- [x] **Step 6: Run the full existing test suite for this module to confirm no collateral breakage**
 
 Run: `cd tinyml-tinyverse && python -m pytest tests/ -v -k "audio"`
 Expected: all pass (or only the same pre-existing failures already known from the compile-hardening plan's Task 3 report, if any — confirm via `git stash` on this task's own diff that any failure pre-exists and is unrelated, the same verification pattern used in that plan's Task 1-3 reports)
 
-- [ ] **Step 7: Manual sanity check — confirm --sampling-rate alone still drives the real sample rate correctly**
+- [x] **Step 7: Manual sanity check — confirm --sampling-rate alone still drives the real sample rate correctly**
 
 Reuse the synthetic audio fixture from the compile-hardening plan's Task 3 (`make_audio_fixture.py` in the session scratchpad — regenerate if not present) and drive `train.get_args_parser().parse_args([...]); train.run(args)` with `--sampling-rate 16000` (no `--sample-rate`, since it no longer exists), a couple of epochs, `--device cpu`. Confirm it completes cleanly and produces the same MFCC feature shape as before (spot-check `n_fft`/`hop_length` implied by the log or a quick shape print) — this is the same invocation this session's own benchmark driver already used successfully, now with one less (dead) flag in its argv.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 cd tinyml-tinyverse
