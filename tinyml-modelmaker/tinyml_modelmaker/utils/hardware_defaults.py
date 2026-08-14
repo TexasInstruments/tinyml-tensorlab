@@ -11,6 +11,10 @@ def apply_hardware_defaults(params, explicitly_set: set) -> None:
     """
     if not torch.cuda.is_available():
         return
+    # Respect num_gpus=0 — user explicitly opted out of GPU acceleration.
+    num_gpus = getattr(params.training, 'num_gpus', None)
+    if num_gpus is not None and int(num_gpus) == 0:
+        return
     if 'compile_model' not in explicitly_set and hasattr(params.training, 'compile_model'):
         if getattr(params.training, 'compile_model', 0) == 0:
             params.training.compile_model = 1

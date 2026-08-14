@@ -9,7 +9,7 @@ ENV USER_NAME=tinyml
 ENV HOME=/opt/tinyml
 ENV HOME_DIR=${HOME}
 
-ENV TOOLS_PATH=${HOME_DIR}/bin
+ENV TOOLS_PATH=${HOME_DIR}/ti
 ENV INSTALLER_PATH=${HOME_DIR}/installer
 RUN mkdir -p ${HOME_DIR} && \
     mkdir -p ${TOOLS_PATH} && \

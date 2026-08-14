@@ -38,26 +38,17 @@ logger = logging.getLogger(__name__)
 
 # list all the modules here to add pretrained models
 _model_descriptions = {}
-_training_module_descriptions = {}
 
 from .tinyml_tinyverse import timeseries_classification, timeseries_regression, timeseries_anomalydetection, timeseries_forecasting
 
 ## classification
 _model_descriptions.update(timeseries_classification.get_model_descriptions())
-_training_module_descriptions.update({'timeseries_classification':[constants.TASK_CATEGORY_TS_CLASSIFICATION]})
 ## regression
 _model_descriptions.update(timeseries_regression.get_model_descriptions())
-_training_module_descriptions.update({'timeseries_regression':[constants.TASK_CATEGORY_TS_REGRESSION]})
 ## anomalydetection
 _model_descriptions.update(timeseries_anomalydetection.get_model_descriptions())
-_training_module_descriptions.update({'timeseries_anomalydetection':[constants.TASK_CATEGORY_TS_ANOMALYDETECTION]})
 ## forecasting
 _model_descriptions.update(timeseries_forecasting.get_model_descriptions())
-_training_module_descriptions.update({'timeseries_forecasting':[constants.TASK_CATEGORY_TS_FORECASTING]})
-
-def get_training_module_descriptions(target_device=None, training_device=None):
-    return _training_module_descriptions
-
 
 def get_model_descriptions(task_type=None, target_device=None, training_device=None):
     model_descriptions_selected = copy.deepcopy(_model_descriptions)

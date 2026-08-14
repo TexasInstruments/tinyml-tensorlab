@@ -40,9 +40,14 @@ The Tiny ML framework supports the following task categories:
 - **F280015** - C2000 32-bit MCU with 120 MHz, FPU, CLA
 - **F28003** - C2000 32-bit MCU with 100 MHz, FPU, CLA
 - **F28004** - C2000 32-bit MCU with 100 MHz, FPU, CLA
-- **F2837** - C2000 32-bit dual-core MCU with 200 MHz
+- **F2837** - C2000 32-bit dual-core MCU with 200 MHz (xD variant)
+- **F2837xS** - C2000 32-bit single-core MCU with 200 MHz (xS variant)
+- **F2838x** - C2000 32-bit dual-core MCU 200 MHz C28x + Arm Cortex-M4
+- **F2807x** - C2000 32-bit MCU 120 MHz C28x + CLA, 512-KB Flash
+- **F28002x** - C2000 32-bit MCU 100 MHz C28x + CLA, 256-KB Flash
 - **F28P55** - C2000 32-bit MCU with hardware NPU
 - **F28P65** - C2000 32-bit MCU with 150 MHz, hardware NPU
+- **F28P551x** - C2000 32-bit MCU 150 MHz C28x + CLA, 1.1-MB Flash
 - **F29H85** - C2000 64-bit MCU with C29x core
 - **F29P58** - C2000 64-bit MCU with C29x core
 - **F29P32** - C2000 64-bit MCU with C29x core
@@ -65,6 +70,7 @@ The Tiny ML framework supports the following task categories:
 
 ### Connectivity Devices (Wireless)
 - **CC2755** - 96 MHz Arm Cortex-M33 2.4 GHz wireless MCU with CDE (Custom Datapath Extension)
+- **CC2745** - 96 MHz Arm Cortex-M33 2.4 GHz wireless MCU with CDE (Custom Datapath Extension, Automotive)
 - **CC1312** - Arm Cortex-M4F sub-1 GHz wireless MCU
 - **CC1314** - Arm Cortex-M33 sub-1 GHz wireless MCU
 - **CC1352** - Arm Cortex-M4F sub-1 GHz wireless MCU
@@ -79,14 +85,14 @@ The Tiny ML framework supports the following task categories:
 
 | Task / Application | Supported Devices | Example Projects |
 |-------------------|-------------------|-----------------|
-| **Arc Fault Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `ac_arc_fault`, `dc_arc_fault` |
-| **Motor Fault Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261, CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1 | `motor_bearing_fault`, `fan_blade_fault_classification`, `blower_imbalance` |
-| **Blower Imbalance Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `blower_imbalance` |
-| **PIR Detection** | CC2755, CC1312, CC1352, CC1314, CC1354, CC35X1 | `pir_detection` |
-| **Generic Timeseries Classification** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `hello_world`, `ecg_classification`, `electrical_fault`, `gas_sensor`, `grid_stability`, `nilm_appliance_usage_classification`, `PLAID_nilm_classification`, `branched_model_parameters` |
-| **Generic Timeseries Regression** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `induction_motor_speed_prediction`, `reg_washing_machine`, `torque_measurement_regression` |
-| **Generic Timeseries Anomaly Detection** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `dc_arc_fault_anomaly_detection`, `motor_bearing_fault_anomaly_detection`, `fan_blade_anomaly_detection`, `ecg_anomaly_detection` |
-| **Generic Timeseries Forecasting** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, CC2755, CC1352, AM263, AM263P, AM261 | `forecasting_pmsm_rotor`, `hvac_indoor_temp_forecast` |
+| **Arc Fault Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `ac_arc_fault`, `dc_arc_fault` |
+| **Motor Fault Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261, CC2755, CC2745, CC1312, CC1314, CC1352, CC1354, CC35X1 | `motor_bearing_fault`, `fan_blade_fault_classification`, `blower_imbalance` |
+| **Blower Imbalance Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `blower_imbalance` |
+| **PIR Detection** | CC2755, CC2745, CC1312, CC1352, CC1314, CC1354, CC35X1 | `pir_detection` |
+| **Generic Timeseries Classification** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, AM13E2, CC2755, CC2745, CC1312, CC1352, CC1314, CC1354, CC35X1, AM263, AM263P, AM261 | `hello_world`, `ecg_classification`, `electrical_fault`, `gas_sensor`, `grid_stability`, `nilm_appliance_usage_classification`, `PLAID_nilm_classification`, `branched_model_parameters` |
+| **Generic Timeseries Regression** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `induction_motor_speed_prediction`, `reg_washing_machine`, `torque_measurement_regression` |
+| **Generic Timeseries Anomaly Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `dc_arc_fault_anomaly_detection`, `motor_bearing_fault_anomaly_detection`, `fan_blade_anomaly_detection`, `ecg_anomaly_detection` |
+| **Generic Timeseries Forecasting** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `forecasting_pmsm_rotor`, `hvac_indoor_temp_forecast` |
 | **Image Classification** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32 | `MNIST_image_classification` |
 
 ### Summary by Device Capability
@@ -94,6 +100,9 @@ The Tiny ML framework supports the following task categories:
 | Device Category | All Generic Tasks | Specialized Tasks | Hardware NPU |
 |----------------|-------------------|-------------------|--------------|
 | **C2000 F28x (non-NPU)** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
+| **C2000 F2807x, F28002x** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
+| **C2000 F2837xS, F2838x** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
+| **C2000 F28P551x** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
 | **C2000 F28Px (NPU)** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ✅ (Hard) |
 | **C2000 F29x (C29 core)** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
 | **MSPM0G (NPU)** | Classification only | Arc Fault, Motor Fault | ✅ (Hard) |
@@ -101,12 +110,13 @@ The Tiny ML framework supports the following task categories:
 | **MSPM33C34** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ✅ (Hard) |
 | **AM13E2** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ (Soft) |
 | **AM26x Series** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **CC2755** | ❌ | PIR Detection, Motor Fault | ✅ (CDE) |
-| **CC1312** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC1314** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC1352** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC1354** | ❌ | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC35X1** | ❌ | PIR Detection, Motor Fault | ✅ (CDE) |
+| **CC2755** | ✅ Classification | PIR Detection, Motor Fault | ✅ (CDE) |
+| **CC2745** | ✅ Classification | PIR Detection, Motor Fault | ✅ (CDE) |
+| **CC1312** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
+| **CC1314** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
+| **CC1352** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
+| **CC1354** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
+| **CC35X1** | ✅ Classification | PIR Detection, Motor Fault | ✅ (CDE) |
 
 ---
 

@@ -281,10 +281,7 @@ class ModelRunner():
         return tarfile_size
 
 
-    @staticmethod
-    def get_training_module_descriptions(*args, **kwargs):
-        return descriptions.get_training_module_descriptions(*args, **kwargs)
-
+    
     @staticmethod
     def get_model_descriptions(*args, **kwargs):
         return descriptions.get_model_descriptions(*args, **kwargs)

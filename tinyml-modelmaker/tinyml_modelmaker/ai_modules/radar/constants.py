@@ -543,7 +543,7 @@ COMPILATION_DEFAULT = 'default_preset'
 
 HOME_DIR = os.getenv('HOME', os.path.expanduser("~"))
 
-TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'bin')))
+TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}', 'ti')))
 # C2000 F28 Compiler
 C2000_CGT_VERSION = 'ti-cgt-c2000_22.6.1.LTS'
 C2000_CG_ROOT = os.path.abspath(os.getenv('C2000_CG_ROOT', os.path.join(TOOLS_PATH, C2000_CGT_VERSION)))

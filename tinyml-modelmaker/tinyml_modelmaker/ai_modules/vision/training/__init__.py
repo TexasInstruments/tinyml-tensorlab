@@ -38,17 +38,10 @@ logger = logging.getLogger(__name__)
 
 # list all the modules here to add pretrained models
 _model_descriptions = {}
-_training_module_descriptions = {}
-
 from .tinyml_tinyverse import image_classification
 
 ## image classification
 _model_descriptions.update(image_classification.get_model_descriptions())
-_training_module_descriptions.update({'image_classification':[constants.TASK_CATEGORY_IMAGE_CLASSIFICATION]})
-
-def get_training_module_descriptions(target_device=None, training_device=None):
-    return _training_module_descriptions
-
 
 def get_model_descriptions(task_type=None, target_device=None, training_device=None):
     model_descriptions_selected = copy.deepcopy(_model_descriptions)

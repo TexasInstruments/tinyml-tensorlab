@@ -34,6 +34,11 @@ import logging
 import os
 import sys
 
+
+# Suppress FutureWarning from copyreg about LeafSpec (torch internal deprecation).
+import warnings
+warnings.filterwarnings('ignore', message=r'.*isinstance.*LeafSpec.*', category=FutureWarning)
+
 # PyTorch's MPS-fallback flag is read once when its MPS backend is registered
 # (during `import torch`, pulled in transitively below by `import tinyml_modelmaker`)
 # -- setting it later via os.environ from within already-running Python code has no
@@ -45,6 +50,26 @@ os.environ.setdefault('PYTORCH_ENABLE_MPS_FALLBACK', '1')
 import yaml
 
 logger = logging.getLogger(__name__)
+
+# Quiet down third-party loggers that produce verbose output irrelevant to users.
+# onnx_ir INFO lines (unused node removal, constant folding skipped, etc.) and
+# onnxscript optimizer lines clutter the terminal without adding diagnostic value.
+# torch.onnx INFO progress lines ([torch.onnx] Obtain model graph...) are already
+# indicated by the export_model INFO line above them.
+for _noisy_logger in (
+    'onnx_ir',
+    'onnx_ir.passes',
+    'onnx_ir.passes.common',
+    'onnx_ir.passes._pass_infra',
+    'onnxscript',
+    'onnxscript.optimizer',
+    'onnxscript.rewriter',
+    'onnxscript.version_converter',
+    'torch.onnx',
+    'torch.onnx._internal',
+    'torch.onnx._internal.exporter',
+):
+    logging.getLogger(_noisy_logger).setLevel(logging.WARNING)
 
 
 def main(config):
@@ -112,6 +137,16 @@ def main(config):
     compilation_preset_name = ai_target_module.constants.COMPILATION_DEFAULT  # 'default_preset'
     if 'compile_preset_name' in config['compilation']:
         compilation_preset_name = config['compilation']['compile_preset_name']
+    if target_device not in preset_descriptions:
+        raise ValueError(
+            f"target_device '{target_device}' is not supported. "
+            f"Supported devices: {sorted(preset_descriptions.keys())}"
+        )
+    if task_type not in preset_descriptions[target_device]:
+        raise ValueError(
+            f"task_type '{task_type}' is not supported for device '{target_device}'. "
+            f"Supported task types for this device: {sorted(preset_descriptions[target_device].keys())}"
+        )
     if compilation_preset_name not in preset_descriptions[target_device][task_type].keys():
         logger.warning(f'Using "default_preset" for compilation since user choice-"{compilation_preset_name}" is unavailable')
         compilation_preset_name = 'default_preset'
@@ -189,4 +224,6 @@ if __name__ == '__main__':
         config['training']['learning_rate'] = kwargs['learning_rate']
     #
 
-    main(config)
+    result = main(config)
+    if result is False:
+        sys.exit(1)
