@@ -4,12 +4,19 @@ compile on CUDA -- matching the pattern timeseries already has. Without
 this, --compile-model is unreachable from the modelmaker (product) path
 even though tinyml-tinyverse's radar_classification.train.main() already
 supports it."""
+from unittest.mock import patch
+
 from tinyml_modelmaker.ai_modules.radar.params import init_params
 from tinyml_modelmaker.ai_modules.radar.training.tinyml_tinyverse.radar_base import BaseRadarModelTraining
 
 
 def test_init_params_carries_compile_model_field():
-    params = init_params()
+    # apply_hardware_defaults auto-raises compile_model to 1 when CUDA is
+    # available -- mock it False so this test asserts the static default,
+    # not whatever value the CI/dev machine's hardware happens to produce
+    # (matches the existing pattern in test_hardware_defaults_integration.py).
+    with patch('torch.cuda.is_available', return_value=False):
+        params = init_params()
     assert hasattr(params.training, "compile_model"), (
         "radar's params.training has no compile_model field -- "
         "apply_hardware_defaults can't act on it (it's hasattr-guarded), "
