@@ -302,3 +302,29 @@ git commit -m "feat: wire compile_model_if_enabled into audio_classification mai
 **Finding: `torch.compile` makes radar training slower on both devices, and does not close the CPU/MPS gap.** With compile enabled, CPU slows by ~23% (0.621s -> 0.765s/epoch) and MPS slows by ~22% (1.066s -> 1.303s/epoch). The CPU/MPS ratio is essentially unchanged (1.72x -> 1.70x) since both devices use the same `aot_eager` backend (the backend-selection logic in `compile_model_if_enabled` only routes CUDA to `inductor`; both CPU and MPS get `aot_eager`) and both slow down by a similar proportion.
 
 This is consistent with `LINEAR_4L_PC` being a tiny 4-layer linear/BatchNorm model: `torch.compile`'s per-call dynamo tracing, guard-checking, and graph-dispatch overhead is fixed cost per training step, and for a model this small there isn't enough per-op dispatch overhead in the eager path for kernel fusion to recoup that cost. The theory in this plan's "Known unresolved question" (fused kernels reducing dispatch overhead) does not hold for this model size — compile is a net loss here, not neutral or beneficial. Wiring it in is still correct (it makes `--compile-model` functional, matching the other reference scripts, and lets a caller opt in for larger/more compute-bound models where the tradeoff may differ), but the flag should not be turned on by default for radar's small linear models based on this evidence.
+
+**GX10 leg (controller-run, per Global Constraints):** same fixture/model/batch-size/epochs, `~/jupyterlab/.venv` (torch 2.9.0+cu130), `NVIDIA GB10`. GX10's clone was stale (`5035057`, pre-dating this whole plan) — updated to `origin/integration` (`e472749`) first. Environment needed several missing leaf packages installed (`--no-deps`, no `torch`/`torchvision` touched): `tabulate`, `torcheval`, `torchinfo`, `colorama`, `onnx`, `onnxruntime`, `protobuf`, `ml_dtypes`, `cryptography`, `PyWavelets`, `opencv-python`, `onnxscript`, `onnx_ir`. `cmsisdsp` and `torchaudio` were stubbed via `sys.modules` in the benchmark driver instead of installed for real — both are only needed transitively (by `timeseries_dataset.py`'s FFT path and `audio_dataset.py` respectively, eagerly imported by `datasets/__init__.py`) and never touched by radar's own code path; `cmsisdsp` in particular requires a multi-minute native CMSIS-DSP C build with no prebuilt ARM64 wheel, unrelated to what this benchmark measures.
+
+| Config | Device | s/epoch |
+|---|---|---|
+| No compile | CPU | 4.093 |
+| No compile | CUDA | 0.856 |
+| `--compile-model 1` | CPU | 3.972 |
+| `--compile-model 1` | CUDA | 0.943 |
+
+CPU and CUDA aren't directly comparable to the Mac's CPU/MPS numbers (different, much less GX10-tuned CPU vs Apple Silicon CPU) — the useful comparison is each device against itself, with vs. without compile, on the same machine.
+
+**Finding: on GX10, CUDA beats CPU by 4.8x even with no compile** (0.856s vs 4.093s/epoch) — a completely different picture from the Mac, where MPS lost to CPU. GX10's GPU has enough throughput advantage over its CPU that it wins decisively on this tiny model without any fusion help.
+
+**Finding: `torch.compile` on CUDA never actually ran — it failed and silently fell back to eager.** The run log (`~/bench_radar/radar_out_cuda_compile1/run.log`) shows:
+```
+INFO: root.main: Compiling model with torch.compile (backend=inductor)
+WARNING: root.main: torch.compile failed (or failed its warmup pass), falling back to eager mode:
+CalledProcessError: Command '['/usr/bin/gcc', '.../cuda_utils.c', '-O3', '-shared', '-fPIC', ...
+-lcuda', '-L.../triton/backends/nvidia/lib', ...]' returned non-zero exit status 1.
+```
+Triton's CUDA-kernel codegen fails to build `cuda_utils.c` via `gcc` on this box — a toolchain issue local to this environment (missing header/lib path for Triton's nvidia backend), not a `compile_model_if_enabled` defect. The `compile_model_if_enabled` warmup-and-fallback mechanism (built earlier this session, `docs/superpowers/plans/2026-07-28-compile-warmup-fallback.md`) caught the failure exactly as designed and fell back cleanly — training was not interrupted. This means the measured "compile=1, CUDA, 0.943s/epoch" number is **eager mode plus the one-time cost of a failed compile attempt**, not a real compiled-vs-uncompiled comparison; the CUDA compile question remains genuinely open on this hardware until the Triton/gcc toolchain issue is fixed here.
+
+**Finding: CPU's `aot_eager` backend did engage successfully on GX10** (`INFO: root.main: Compiling model with torch.compile (backend=aot_eager)`, no fallback warning) and produced a small, real win (4.093 -> 3.972s/epoch, ~3%) — consistent in direction with the Mac's CPU-side aot_eager numbers being a similarly fixed-cost/small-model regime, though the Mac's own CPU result was a ~23% *loss*, not a ~3% gain — the two machines don't even agree on aot_eager's sign for this model, underscoring how workload-and-hardware-specific this tradeoff is.
+
+**Net implication for the "should compile be on by default" question:** no clean "yes" or "no" emerges. Mac CPU/MPS: compile hurts on both. GX10 CPU: compile helps marginally. GX10 CUDA: unknown — the only device compile theoretically helps most (via `inductor`, not `aot_eager`) is the one device where it couldn't even run here. Recommend leaving `--compile-model` opt-in (its current default) rather than drawing a default-on conclusion from this data, and separately investigating the GX10 Triton/gcc build failure if CUDA compile behavior is worth knowing for real.
