@@ -521,7 +521,7 @@ def main_debug(gpu, args):
 
 def run(args):
     """Run training with optional distributed mode."""
-    run_distributed(main_debug, args)
+    run_distributed(main, args)
 
 
 if __name__ == "__main__":
