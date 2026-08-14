@@ -42,20 +42,23 @@ class ConfigDict(dict):
         input_dict = dict()
         settings_file = None
         if isinstance(input, str):
-            ext = os.path.splitext(input)[1]
-            if ext != '.yaml':
-                raise ValueError(f'unrecognized file type for: {input}')
-            with open(input) as fp:
-                input_dict = yaml.safe_load(fp)
-            #
+            input_dict = self.resolve_config_value(input)
             settings_file = input
         elif isinstance(input, dict):
             input_dict = input
         elif input is not None:
             raise TypeError('got invalid input')
         #
-        # override the entries with args
+        # override the entries with args -- a positional arg may also be a
+        # .yaml path string (not just a dict), matching what `input` itself
+        # accepts. Resolve it the same way so a path-based override is
+        # actually merged in, instead of silently discarded because it
+        # isn't a dict/ConfigDict.
         for value in args:
+            if isinstance(value, str):
+                settings_file = value
+                value = self.resolve_config_value(value)
+            #
             if isinstance(value, (dict, ConfigDict)):
                 self._deep_merge(input_dict, value)
             #
@@ -94,6 +97,23 @@ class ConfigDict(dict):
 
     def _initialize(self):
         pass
+
+    @staticmethod
+    def resolve_config_value(value):
+        """Resolve a .yaml path string into its loaded dict; pass
+        dicts/ConfigDicts through unchanged. Shared by both the `input`
+        position and the `*args` positions of the constructor so a
+        path-based config is loaded consistently no matter which position
+        it's passed in."""
+        if isinstance(value, str):
+            ext = os.path.splitext(value)[1]
+            if ext != '.yaml':
+                raise ValueError(f'unrecognized file type for: {value}')
+            with open(value) as fp:
+                return yaml.safe_load(fp)
+            #
+        #
+        return value
 
     @staticmethod
     def _deep_merge(target, source):

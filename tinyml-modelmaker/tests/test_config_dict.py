@@ -50,3 +50,21 @@ class TestConfigDict:
         user = dict(training=dict(b=99))
         cfg = ConfigDict(default, user)
         assert dict(cfg.training) == {"a": 1, "b": 99}
+
+    def test_constructor_args_path_string_is_loaded_and_merged(self, tmp_path):
+        """A .yaml path passed as a positional arg *after* `input` (e.g.
+        ConfigDict(default_params, user_yaml_path), the shape init_params
+        uses) must actually be read and merged -- not silently discarded
+        because it's a string rather than a dict/ConfigDict."""
+        default = dict(training=dict(a=1, b=2))
+        user_file = tmp_path / "user.yaml"
+        user_file.write_text(yaml.dump(dict(training=dict(b=99))))
+        cfg = ConfigDict(default, str(user_file))
+        assert dict(cfg.training) == {"a": 1, "b": 99}
+
+    def test_constructor_args_bad_extension_raises(self, tmp_path):
+        default = dict(training=dict(a=1))
+        bad_file = tmp_path / "user.txt"
+        bad_file.write_text("a: 1")
+        with pytest.raises(ValueError, match="unrecognized file type"):
+            ConfigDict(default, str(bad_file))
