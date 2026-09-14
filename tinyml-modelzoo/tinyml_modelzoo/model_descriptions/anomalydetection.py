@@ -97,6 +97,37 @@ _model_descriptions = {
                         dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
+    'AD_11k_NPU': deep_update_dict(deepcopy(template_model_description), {
+        'common': dict(
+            model_details='Fan blade Anomaly Detection Model with 17k params. 4 Conv+BatchNorm+Relu layers and then inversion of the same',
+        ),
+        'training': dict(
+            model_training_id='AD_CNN_TS_11K_NPU',
+            model_name='AD_11k_NPU',
+            target_devices={
+                constants.TARGET_DEVICE_F280013: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F280013]),
+                constants.TARGET_DEVICE_F280015: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F280015]),
+                constants.TARGET_DEVICE_F28003: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F28003]),
+                constants.TARGET_DEVICE_F28004: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F28004]),
+                constants.TARGET_DEVICE_F2837: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F2837]),
+                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F28P55]),
+                constants.TARGET_DEVICE_F29H85: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F29H85]),
+                constants.TARGET_DEVICE_F29P58: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F29P58]),
+                constants.TARGET_DEVICE_F29P32: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_F29P32]),
+                constants.TARGET_DEVICE_MSPM33C32: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_MSPM33C32]),
+                constants.TARGET_DEVICE_AM13E2: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_AM13E2]),
+                constants.TARGET_DEVICE_AM263: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_AM263]),
+                constants.TARGET_DEVICE_AM263P: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_AM263P]),
+                constants.TARGET_DEVICE_AM261: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_AM261]),
+                constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_MSPM0G3507]),
+                constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_MSPM0G3519]),
+                constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=0) | (DEVICE_RUN_INFO['AD_17k'][constants.TARGET_DEVICE_MSPM0G5187]),
+            },
+            properties=[dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
+                        dict(type="group", dynamic=True, script="generictimeseriesanomalydetection.py", name="train_group", label="Training Parameters", default=[])]
+        ),
+    }),
     'Ondevice_Trainable_AD_Linear': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             model_details='Anomaly Detection Model with 3 encoder layers and 3 decoder layers. Each layer in enocder and decoder is a Linear layer and the last layer can be trained on device',
@@ -444,6 +475,7 @@ _model_descriptions = {
 enabled_models_list = [
     # Existing models
     'AD_17k',
+    'AD_11k_NPU',
     'Ondevice_Trainable_AD_Linear',
     'AD_Linear',
     'AD_16k',

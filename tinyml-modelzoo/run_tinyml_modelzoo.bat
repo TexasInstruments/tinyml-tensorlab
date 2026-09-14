@@ -1,6 +1,8 @@
 @echo off
 REM Tiny ML ModelZoo Training Wrapper for Windows
-REM Delegates training to tinyml-modelmaker
+REM Delegates training to tinyml-modelmaker, installed as a Python package
+REM (wheel or editable install) - it does NOT need to be cloned as a sibling
+REM directory.
 REM
 REM Usage:
 REM   run_tinyml_modelzoo.bat examples\hello_world\config.yaml
@@ -13,14 +15,13 @@ set "SCRIPT_DIR=%~dp0"
 REM Remove trailing backslash
 if "%SCRIPT_DIR:~-1%"=="\" set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 
-REM ModelMaker location (sibling directory)
-set "MODELMAKER_DIR=%SCRIPT_DIR%\..\tinyml-modelmaker"
-set "RUN_SCRIPT=%MODELMAKER_DIR%\tinyml_modelmaker\run_tinyml_modelmaker.py"
-
-REM Check if modelmaker exists
-if not exist "%RUN_SCRIPT%" (
-    echo Error: ModelMaker not found at %RUN_SCRIPT%
-    echo Make sure tinyml-modelmaker is installed alongside tinyml-modelzoo
+REM tinyml_modelmaker is a dependency of this repo's pyproject.toml, so
+REM `pip install -e .` here pulls it in (and transitively tinyverse +
+REM torchmodelopt) automatically.
+python -c "import tinyml_modelmaker" >nul 2>&1
+if errorlevel 1 (
+    echo Error: tinyml_modelmaker is not installed in this Python environment.
+    echo Run: pip install -e "%SCRIPT_DIR%"
     exit /b 1
 )
 
@@ -73,11 +74,15 @@ if not exist "%CONFIG_FILE%" (
 
 echo Tiny ML ModelZoo Training
 echo ========================================
-echo Config:      %CONFIG_FILE%
-echo ModelMaker:  %RUN_SCRIPT%
+echo Config: %CONFIG_FILE%
 echo ========================================
 echo.
+echo Output artifacts will be written under .\data\projects relative to
+echo the directory you ran this script from (override with common.projects_path
+echo in the config).
+echo.
 
-REM Run training via modelmaker
-cd /d "%MODELMAKER_DIR%"
-python "%RUN_SCRIPT%" "%CONFIG_FILE%"
+REM Run training via modelmaker. Invoked as a module (-m), not by script path -
+REM run_tinyml_modelmaker.py has a chdir('..') special-case for the latter that
+REM assumes a repo-checkout layout and would land in the wrong directory here.
+python -m tinyml_modelmaker.run_tinyml_modelmaker "%CONFIG_FILE%"

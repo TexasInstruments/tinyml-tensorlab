@@ -625,6 +625,75 @@ class AE_CNN_TS_GEN_BASE_20K_NPU(torch.nn.Module):
         return x
 
 
+class AD_CNN_TS_11K_NPU(torch.nn.Module):
+    def __init__(self, config):
+        super(AD_CNN_TS_11K_NPU, self).__init__()
+
+        output_channels = 8
+
+        self.bn = torch.nn.BatchNorm2d(config['variables'])
+
+        self.enc1 = torch.nn.Sequential(
+            torch.nn.Conv2d(config['variables'], output_channels, kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.BatchNorm2d(output_channels),
+            torch.nn.ReLU()
+        )
+        self.enc2 = torch.nn.Sequential(
+            torch.nn.Conv2d(output_channels, output_channels*2, kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.BatchNorm2d(output_channels*2),
+            torch.nn.ReLU()
+        )
+        self.enc3 = torch.nn.Sequential(
+            torch.nn.Conv2d(output_channels*2, output_channels*4, kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.BatchNorm2d(output_channels*4),
+            torch.nn.ReLU()
+        )
+        self.enc4 = torch.nn.Sequential(
+            torch.nn.Conv2d(output_channels*4, output_channels*8, kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.BatchNorm2d(output_channels*8),
+            torch.nn.ReLU()
+        )
+
+        # Decoder layers
+        self.dec4 = torch.nn.Sequential(
+            torch.nn.ConvTranspose2d(output_channels*8, output_channels*4, kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.BatchNorm2d(output_channels*4),
+            torch.nn.ReLU()
+        )
+        self.dec3 = torch.nn.Sequential(
+            torch.nn.ConvTranspose2d(output_channels*4, output_channels*2, kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.BatchNorm2d(output_channels*2),
+            torch.nn.ReLU()
+        )
+        self.dec2 = torch.nn.Sequential(
+            torch.nn.ConvTranspose2d(output_channels*2, output_channels, kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.BatchNorm2d(output_channels),
+            torch.nn.ReLU()
+        )
+        self.dec1 = torch.nn.Sequential(
+            torch.nn.ConvTranspose2d(output_channels, config['variables'], kernel_size=(2, 1), stride=(2, 1)),
+            # torch.nn.BatchNorm2d(config['variables']),
+        )
+
+    def forward(self, x):
+        # Batch Normalization
+        x = self.bn(x)
+
+        # Encoder
+        x = self.enc1(x)
+        x = self.enc2(x)
+        x = self.enc3(x)
+        x = self.enc4(x)
+
+        # Decoder with exact size matching
+        x = self.dec4(x)
+        x = self.dec3(x)
+        x = self.dec2(x)
+        x = self.dec1(x)
+
+        return x
+
+
 # Export all anomaly detection models
 __all__ = [
     # Existing models
@@ -632,6 +701,7 @@ __all__ = [
     'AE_CNN_TS_GEN_BASE_4K',
     'AE_CNN_TS_GEN_BASE_16K',
     'AD_CNN_TS_17K',
+    'AD_CNN_TS_11K_NPU',
     'AD_3_LAYER_DEEP_LINEAR_MODEL_TS',
     'AD_3_LAYER_DEEP_ONDEVICE_TRAINABLE_MODEL_TS',
     # NPU-Optimized gap-filling models

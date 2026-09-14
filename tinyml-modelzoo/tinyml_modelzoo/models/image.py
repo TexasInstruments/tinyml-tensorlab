@@ -59,21 +59,21 @@ class CNN_LENET5(GenericModelWithSpec):
         return model_spec
 
 
-class CNN_IMG_MOBILENETV1_58K_NPU(GenericModelWithSpec):
+class CNN_IMG_MOBILENETV1_28K_NPU(GenericModelWithSpec):
     """
     NPU-compliant MobileNetV1-inspired tiny model.
-    - ~58K parameters
-   
+    - ~28K parameters
+
     Similarity to MobileNetV1:
     - Uses MobileNetV1-style depthwise separable blocks:
-    Depthwise 3x3 convolution followed by Pointwise 1x1 convolution
+      Depthwise 3x3 convolution followed by Pointwise 1x1 convolution
     - Uses repeated DWCONV + PWCONV blocks for efficient spatial filtering and channel mixing
     - Uses progressive downsampling and global average pooling before the final classifier
 
     Architecture:
-    BatchNorm -> Conv3x3/s2 ->[DWConv3x3 + PWConv1x1] ->[DWConv3x3/s2 + PWConv1x1] ->[DWConv3x3 + PWConv1x1] ->[DWConv3x3/s2 + PWConv1x1] ->[DWConv3x3 + PWConv1x1] ->[DWConv3x3/s2 + PWConv1x1] -> [DWConv3x3 + PWConv1x1] ->AdaptiveAvgPool -> FC
+    BatchNorm -> Conv3x3/s2 -> [DWConv3x3/s2 + PWConv1x1] -> [DWConv3x3 + PWConv1x1] -> [DWConv3x3/s2 + PWConv1x1] -> [DWConv3x3 + PWConv1x1] -> [DWConv3x3/s2 + PWConv1x1] -> [DWConv3x3 + PWConv1x1] -> AdaptiveAvgPool -> FC
     """
-    def __init__(self, config, input_features=(128, 128), variables=3, num_classes=10):
+    def __init__(self, config, input_features=(96, 128), variables=3, num_classes=10):
         super().__init__(config, input_features=input_features, variables=variables,
                          num_classes=num_classes)
         self.model_spec = self.gen_model_spec()
@@ -82,36 +82,46 @@ class CNN_IMG_MOBILENETV1_58K_NPU(GenericModelWithSpec):
 
     def gen_model_spec(self):
         layers = py_utils.DictPlus()
-        # Input: variables x 128 x 128
-        layers += {'0' :dict(type='BatchNormLayer', num_features=self.variables)}
-        # Stem conv: 128x128 -> 64x64
-        layers += {'1' :dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=16,  kernel_size=(3,3), stride=(2,2), padding=(1,1))}
-        # Depthwise separable block 1: 64x64 -> 64x64
-        layers += {'2' :dict(type='ConvBNReLULayer', in_channels=16,  out_channels=16,  kernel_size=(3,3), stride=(1,1), padding=(1,1), groups=16)}
-        layers += {'3' :dict(type='ConvBNReLULayer', in_channels=16,  out_channels=32,  kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        # Depthwise separable block 2: 64x64 -> 32x32
-        layers += {'4' :dict(type='ConvBNReLULayer', in_channels=32,  out_channels=32,  kernel_size=(3,3), stride=(2,2), padding=(1,1), groups=32)}
-        layers += {'5' :dict(type='ConvBNReLULayer', in_channels=32,  out_channels=64,  kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        # Depthwise separable block 3: 32x32 -> 32x32
-        layers += {'6' :dict(type='ConvBNReLULayer', in_channels=64,  out_channels=64,  kernel_size=(3,3), stride=(1,1), padding=(1,1), groups=64)}
-        layers += {'7' :dict(type='ConvBNReLULayer', in_channels=64,  out_channels=64,  kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        # Depthwise separable block 4: 32x32 -> 16x16
-        layers += {'8' :dict(type='ConvBNReLULayer', in_channels=64,  out_channels=64,  kernel_size=(3,3), stride=(2,2), padding=(1,1), groups=64)}
-        layers += {'9' :dict(type='ConvBNReLULayer', in_channels=64,  out_channels=96,  kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        # Depthwise separable block 5: 16x16 -> 16x16
-        layers += {'10':dict(type='ConvBNReLULayer', in_channels=96,  out_channels=96,  kernel_size=(3,3), stride=(1,1), padding=(1,1), groups=96)}
-        layers += {'11':dict(type='ConvBNReLULayer', in_channels=96,  out_channels=96,  kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        # Depthwise separable block 6: 16x16 -> 8x8
-        layers += {'12':dict(type='ConvBNReLULayer', in_channels=96,  out_channels=96,  kernel_size=(3,3), stride=(2,2), padding=(1,1), groups=96)}
-        layers += {'13':dict(type='ConvBNReLULayer', in_channels=96,  out_channels=128, kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        # Depthwise separable block 7: 8x8 -> 8x8
-        layers += {'14':dict(type='ConvBNReLULayer', in_channels=128, out_channels=128, kernel_size=(3,3), stride=(1,1), padding=(1,1), groups=128)}
-        layers += {'15':dict(type='ConvBNReLULayer', in_channels=128, out_channels=128, kernel_size=(1,1), stride=(1,1), padding=(0,0))}
-        # Global average pooling: 128 x 8 x 8 -> 128 x 1 x 1
-        layers += {'16':dict(type='AdaptiveAvgPoolLayer', output_size=(1,1))}
-        layers += {'17':dict(type='ReshapeLayer', ndim=2)}
+
+        # Input: variables x 96 x 128
+        layers += {'0' : dict(type='BatchNormLayer', num_features=self.variables)}
+
+        # Stem: 96x128 -> 48x64
+        # Reduced from 16 output channels to 8.
+        layers += {'1' : dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8,   kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))}
+
+        # Block 1: 48x64 -> 24x32
+        # Downsample before channel expansion.
+        layers += {'2' : dict(type='ConvBNReLULayer', in_channels=8,   out_channels=8,   kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), groups=8)}
+        layers += {'3' : dict(type='ConvBNReLULayer', in_channels=8,   out_channels=16,  kernel_size=(1, 1), stride=(1, 1), padding=(0, 0))}
+
+        # Block 2: 24x32 -> 24x32
+        layers += {'4' : dict(type='ConvBNReLULayer', in_channels=16,  out_channels=16,  kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=16)}
+        layers += {'5' : dict(type='ConvBNReLULayer', in_channels=16,  out_channels=32,  kernel_size=(1, 1), stride=(1, 1), padding=(0, 0))}
+
+        # Block 3: 24x32 -> 12x16
+        layers += {'6' : dict(type='ConvBNReLULayer', in_channels=32,  out_channels=32,  kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), groups=32)}
+        layers += {'7' : dict(type='ConvBNReLULayer', in_channels=32,  out_channels=48,  kernel_size=(1, 1), stride=(1, 1), padding=(0, 0))}
+
+        # Block 4: 12x16 -> 12x16
+        layers += {'8' : dict(type='ConvBNReLULayer', in_channels=48,  out_channels=48,  kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=48)}
+        layers += {'9' : dict(type='ConvBNReLULayer', in_channels=48,  out_channels=64,  kernel_size=(1, 1), stride=(1, 1), padding=(0, 0))}
+
+        # Block 5: 12x16 -> 6x8
+        layers += {'10': dict(type='ConvBNReLULayer', in_channels=64,  out_channels=64,  kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), groups=64)}
+        layers += {'11': dict(type='ConvBNReLULayer', in_channels=64,  out_channels=96,  kernel_size=(1, 1), stride=(1, 1), padding=(0, 0))}
+
+        # Block 6: 6x8 -> 6x8
+        layers += {'12': dict(type='ConvBNReLULayer', in_channels=96,  out_channels=96,  kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=96)}
+        layers += {'13': dict(type='ConvBNReLULayer', in_channels=96,  out_channels=128, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0))}
+
+        # Global average pooling: 128 x 6 x 8 -> 128 x 1 x 1
+        layers += {'14': dict(type='AdaptiveAvgPoolLayer', output_size=(1, 1))}
+        layers += {'15': dict(type='ReshapeLayer', ndim=2)}
+
         # Classifier: in_features=128
-        layers += {'18':dict(type='LinearLayer', in_features=128, out_features=self.num_classes)}
+        layers += {'16': dict(type='LinearLayer', in_features=128, out_features=self.num_classes)}
+
         model_spec = dict(model_spec=layers)
         return model_spec
 
@@ -246,6 +256,6 @@ class InvertedResidualBlockTinyQuantFriendly(torch.nn.Module):
 # Export all image classification models
 __all__ = [
     'CNN_LENET5',
-    'CNN_IMG_MOBILENETV1_58K_NPU',
+    'CNN_IMG_MOBILENETV1_28K_NPU',
     'CNN_IMG_MOBILENETV2_58K_NPU',
 ]

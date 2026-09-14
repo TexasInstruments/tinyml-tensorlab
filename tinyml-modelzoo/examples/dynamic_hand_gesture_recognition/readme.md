@@ -39,7 +39,7 @@
     - Class 3 — Tap
     - Class 4 — Others (non-gesture or unrecognized motion)
   - **Sensor:** 3-axis accelerometer (X, Y, Z) from TI Sensor BoosterPack
-  - **Download:** [hand_gesture_dataset.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip)
+  - **Download:** [hand_gesture_dataset.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_05_00/datasets/hand_gesture_dataset.zip)
 
 ## Feature Extraction Pipeline
 
