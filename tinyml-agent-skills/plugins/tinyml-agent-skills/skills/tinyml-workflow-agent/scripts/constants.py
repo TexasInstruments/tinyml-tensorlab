@@ -49,7 +49,7 @@ ALL_TARGET_DEVICES = [
     # AM26x Family
     "AM263", "AM263P", "AM261",
     # Connectivity Devices
-    "CC2755", "CC1352", "CC1354", "CC35X1",
+    "CC2755", "CC2745", "CC1352", "CC1354", "CC35X1", "CC1312", "CC1314",
 ]
 
 ### Dataset section constants

@@ -38,7 +38,7 @@ NPU_DEVICES = {
     "F28P55", "F28P65",           # C2000 with TI-NNPU
     "MSPM0G5187",                  # MSPM0 with TI-NPU
     "MSPM33C34",                   # MSPM33 with TI-NPU
-    "CC2755", "CC35X1",            # Connectivity with TI-NPU
+    "CC2755", "CC2745", "CC35X1",  # Connectivity with TI-NPU (CDE)
     "AM13E2",                      # AM13 with TI-NPU
 }
 
