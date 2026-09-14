@@ -50,6 +50,39 @@ Learn More - [TI Tiny ML Tensorlab Agent Skill User Guide](https://software-dl.t
 
 ### Release History
 
+- [2026-Sep] Release version 1.5.0 of the software
+  <details>
+
+  - Device Support:
+    - Added AM13E2 support for vision classification and radar tasks
+    - Added fel_memory support (feature-extraction library) for AM13 and C28x (F280013x, F280015x, F28002x) devices — enables on-device RAM/Flash estimation
+  - Models:
+    - Added TCDSResNet and a compressed DSCNN for audio classification (cough detection), both NPU-compliant
+    - Compressed MobileNet_v1 to fit AM13 memory budget
+    - Added Radar Point Cloud Classification support (new model + dataset flow across ModelMaker/TinyVerse/ModelZoo)
+  - Flows:
+    - ModelMaker can now report estimated RAM & Flash usage for Feature Extraction before training
+    - Support for preprocessing and publicly-available datasets in audio/radar flows
+    - NAS: can now accept a NAS model id directly
+  - Model Optimization:
+    - Residual connection support added to quantization (TINPU)
+    - Replaced qconfig_dict with a cleaner API to toggle auto-quantization on/off
+    - Hessian-aware auto-quantization bug fixes
+  - Reliability & Compatibility:
+    - Python 3.14 / PyTorch 2.13 compatibility across ModelMaker, ModelOptimization, TinyVerse
+    - macOS ARM64 (MPS/Apple Silicon) compatibility fixes across training, evaluation, and quantization
+    - torch.compile safety: unwraps compiled models correctly before ONNX/checkpoint export, falls back to eager on failure
+    - Security/robustness hardening: safe checkpoint deserialization, safe YAML loading, safer cache-dataset handling
+    - Training performance: torch.compile, AMP, persistent workers, more efficient eval loop
+    - Large expansion of automated test coverage (functional test tiers, pytest suites) across all repos
+  - Packaging:
+    - Added build_wheels.sh to build TinyVerse/ModelOptimization/ModelMaker wheels from local source
+    - ModelZoo and TinyVerse examples now runnable standalone via published ModelMaker wheel dependency (TI official wheel CDN)
+  - Documentation:
+    - DEVICE_TASK_SUPPORT.md and NPU_CONFIGURATION_GUIDELINES.md updated
+    - New how-to: publishing shared wheels
+
+  </details>
 - [2026-Jun] Release version 1.4.0 of the software
   <details>
 
