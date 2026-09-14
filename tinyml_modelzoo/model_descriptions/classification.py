@@ -1527,6 +1527,8 @@ _model_descriptions = {
                     (DEVICE_RUN_INFO['Pose_and_Fall_model'][constants.TARGET_DEVICE_F28P55]),
                 constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) |
                     (DEVICE_RUN_INFO['Pose_and_Fall_model'][constants.TARGET_DEVICE_F28P65]),
+                constants.TARGET_DEVICE_IWRL6432: dict(model_selection_factor=None) |
+                    (DEVICE_RUN_INFO['Pose_and_Fall_model'][constants.TARGET_DEVICE_IWRL6432]),
                 # ... add other target devices ...
             },
         ),

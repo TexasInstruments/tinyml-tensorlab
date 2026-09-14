@@ -333,13 +333,10 @@ class YOLO_Classifier_8K(GenericModelWithSpec):
 
 
 class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
-    def __init__(self, config, input_features=(25,25), variables=1, num_classes=3, use_bn: bool = False):
+    def __init__(self, config, input_features=(25, 25), variables=1, num_classes=3, use_bn: bool = False):
         super().__init__(config, input_features=input_features, variables=variables, num_classes=num_classes)
         # Define the layers of the CNN
-        C_in = variables
         H, W = input_features
-        self.input_scale = torch.nn.Parameter(torch.tensor(1/1024.0), requires_grad=False)
-        self.input_clamp = torch.nn.Hardtanh(min_val=-1.0, max_val=1.0)
         self.bn0   = torch.nn.BatchNorm2d(num_features=1) if use_bn else torch.nn.Identity()
         self.conv1 = torch.nn.Conv2d(in_channels=1, out_channels=8, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.bn1   = torch.nn.BatchNorm2d(num_features=8) if use_bn else torch.nn.Identity()
@@ -387,7 +384,6 @@ class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
         self.fc2 = torch.nn.Linear(in_features=128, out_features=self.num_classes)
 
     def forward(self, x):
-        x = x.view(x.shape[0], -1, x.shape[-2], x.shape[-1])
         x = self.bn0(x)
         x = self.conv1(x)
         x = self.bn1(x)
@@ -398,12 +394,9 @@ class CNN_TS_PIR2D_BASE(GenericModelWithSpec):
         x = self.relu2(x)
         x = self.pool(x)
         x = self.flatten(x)
-        if self.fc1 is None:
-            self.fc1 = torch.nn.Linear(x.shape[1],128).to(x.device)
-
         x = self.fc1(x)
-        fe = self.relu3(x)
-        x = self.dropout(fe)
+        x = self.relu3(x)
+        x = self.dropout(x)
         x = self.fc2(x)
         return x
 

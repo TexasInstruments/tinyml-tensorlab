@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_modelzoo"
-version = "1.4.0"
+version = "1.5.0"
 description = "TI's TinyML Model Zoo - Centralized model definitions for microcontrollers"
 readme = "README.md"
 requires-python = "==3.10.*"
@@ -23,6 +23,10 @@ dependencies = [
     "torch==2.7.1",
     "PyYAML==6.0.3",
     "numpy==2.2.6",
+    # Pulls in tinyverse + torchmodelopt transitively. Hosted on TI's official
+    # CDN (same host modelmaker/tinyverse use for their own sibling deps) -
+    # modelzoo installs itself editable, so this must NOT also depend on modelzoo.
+    "tinyml_modelmaker @ https://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_modelmaker-1.5.0-py3-none-any.whl",
 ]
 
 [[project.authors]]

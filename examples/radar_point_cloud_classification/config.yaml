@@ -1,12 +1,12 @@
 common:
   task_type: radar_classification
   target_module: radar
-  target_device: MSPM0G3507
+  target_device: IWRL6432
 dataset:
   dataset_name: radar_human_pose_detection
   # Public dataset URL. If download fails on corporate network,
   # manually download the zip and replace this with the local path to the extracted dataset folder.
-  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/01_05_00/datasets/radar_human_pose_detection.zip
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/radar_human_pose_detection.zip
   # data_dir is auto-detected as 'classes' for radar_classification (matches zip root folder structure)
   # data_dir: 'classes'
   # loader_type: classification

@@ -1680,17 +1680,29 @@ DEVICE_RUN_INFO = {
         'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
     },
 
-    'MobileNetV1_58k_NPU': {
+    'MobileNetV1_28k_NPU': {
         'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
-        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'AM13E2': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
     },
     'MobileNetV2_58k_NPU': {
         'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
-        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'AM13E2': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
     },     
     'DSCNN_NPU': {
+        'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+    },
+    'DSCNN_32K_NPU': {
+        'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+    },
+    'TCDS_ResNet_NPU': {
         'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G3519': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
         'MSPM0G5187': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
@@ -2272,6 +2284,7 @@ DEVICE_RUN_INFO = {
     },
     'Pose_and_Fall_model': {
         'F28P55': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
-        'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
+        'F28P65': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
+        'IWRL6432': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'}
     }
 }

@@ -130,7 +130,7 @@ class REG_TS_GEN_BASE_2K(GenericModelWithSpec):
 
 class REG_TS_GEN_BASE_13K(GenericModelWithSpec):
     def __init__(self, config, input_features=6, variables=4, kernel=3, num_outputs=1):
-        super().__init__(config, input_features=input_features, variables=4, kernel=kernel, num_outputs=num_outputs)
+        super().__init__(config, input_features=input_features, variables=variables, kernel=kernel, num_outputs=num_outputs)
         self.model_spec = self.gen_model_spec()
         self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
                                     input_features=self.input_features, num_classes=self.num_outputs)
@@ -154,7 +154,7 @@ class REG_TS_GEN_BASE_13K(GenericModelWithSpec):
 
 class REG_TS_GEN_BASE_4K(GenericModelWithSpec):
     def __init__(self, config, input_features=6, variables=4, kernel=3, num_outputs=1):
-        super().__init__(config, input_features=input_features, variables=4, kernel=kernel, num_outputs=num_outputs)
+        super().__init__(config, input_features=input_features, variables=variables, kernel=kernel, num_outputs=num_outputs)
         self.model_spec = self.gen_model_spec()
         self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
                                     input_features=self.input_features, num_classes=self.num_outputs)

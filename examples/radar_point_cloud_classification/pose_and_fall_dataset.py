@@ -2,7 +2,7 @@
 This script is intented to be run as an optional preprocessing step for data filtering
 and organization for the radar pose and fall model. This code may be needed only if 
 the user is not using the publically available dataset at: 
-https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/radar_human_pose_detection.zip
+https://software-dl.ti.com/C2000/esd/mcu_ai/01_05_00/datasets/radar_human_pose_detection.zip
 
 """
 
