@@ -87,6 +87,7 @@ from sklearn.manifold import TSNE
 
 import numpy as np
 import onnx
+from onnx import numpy_helper, helper
 import pandas as pd
 import torch
 import torch.distributed as dist
@@ -1557,6 +1558,35 @@ def train_one_epoch_classification(
         model_ema.update_parameters(model)
 
 
+class EarlyStopping:
+    """
+    Tracks a validation metric across epochs and flags when to stop.
+
+    mode='max' for metrics where higher is better (accuracy), 'min' for
+    metrics where lower is better (mse, smape). Call step(metric) once per
+    epoch after evaluation, then check should_stop.
+    """
+    def __init__(self, patience, mode='max', min_delta=0.0, enabled=True):
+        self.patience, self.mode, self.min_delta, self.enabled = patience, mode, min_delta, enabled
+        self.best = None
+        self.num_bad_epochs = 0
+        self.should_stop = False
+
+    def step(self, metric):
+        if not self.enabled:
+            return
+        improved = (
+            self.best is None
+            or (self.mode == 'max' and metric > self.best + self.min_delta)
+            or (self.mode == 'min' and metric < self.best - self.min_delta)
+        )
+        if improved:
+            self.best, self.num_bad_epochs = metric, 0
+        else:
+            self.num_bad_epochs += 1
+            self.should_stop = self.num_bad_epochs >= self.patience
+
+
 def evaluate_classification(model, criterion, data_loader, device, transform, log_suffix='', print_freq=None, phase='', dual_op=True, nn_for_feature_extraction=False, **kwargs):
     logger = getLogger(f"root.train_utils.evaluate.{phase}")
     model.eval()
@@ -1777,12 +1807,12 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
 
         if remove_hooks_for_jit:   
             remove_hooks(model_copy)
-        ts_model = torch.jit.trace(model_copy, dummy_input)
-        torch.jit.save(ts_model, os.path.splitext(onnx_file)[0]+"_ts.pth")
         if not generic_model:
+            ts_model = torch.jit.trace(model_copy.module, dummy_input)
+            torch.jit.save(ts_model, os.path.splitext(onnx_file)[0]+"_ts.pth")
             encrypt(os.path.splitext(onnx_file)[0]+"_ts.pth", get_crypt_key())
     else:
-        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version, verbose=False)
+        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version, verbose=False, dynamo=False)
 
     onnx.shape_inference.infer_shapes_path(onnx_file, onnx_file)
     if not generic_model:
@@ -1909,22 +1939,24 @@ def init_lr_scheduler(
 
 
 def quantization_wrapped_model(model, quantization=0, quantization_method='QAT', weight_bitwidth=8, activation_bitwidth=8, epochs=10, output_int=True, auto_quantization=True, inputs=None, targets=None, criterion=None,
-                               calibration_dataloader=None, eval_dataloader=None, task_type=None, float_metric=None, example_inputs=None, **kwargs):
+                               calibration_dataloader=None, eval_dataloader=None, task_type=None, float_metric=None, example_inputs=None, weight_mixed_precision=None, activation_mixed_precision=None, **kwargs):
     logger = getLogger('root.utils.quantization_wrapped_model')
     qconfig_kwargs = dict(inputs=inputs, targets=targets, criterion=criterion,
                           calibration_dataloader=calibration_dataloader, eval_dataloader=eval_dataloader,
                           task_type=task_type, float_metric=float_metric, example_inputs=example_inputs,
+                          weight_mixed_precision=weight_mixed_precision, activation_mixed_precision=activation_mixed_precision,
                           **kwargs)
+    qconfig_type = TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs)
     if quantization == TinyMLQuantizationVersion.QUANTIZATION_GENERIC:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = GenericTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs)
+            model = GenericTinyMLQATFxModule(model, example_inputs=example_inputs, qconfig_type=qconfig_type, total_epochs=epochs)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = GenericTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs)
+            model = GenericTinyMLPTQFxModule(model, example_inputs=example_inputs, qconfig_type=qconfig_type, total_epochs=epochs)
     elif quantization == TinyMLQuantizationVersion.QUANTIZATION_TINPU:
         if quantization_method == TinyMLQuantizationMethod.QAT:
-            model = TINPUTinyMLQATFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs, output_int=output_int)
+            model = TINPUTinyMLQATFxModule(model, example_inputs=example_inputs, qconfig_type=qconfig_type, total_epochs=epochs, output_int=output_int)
         if quantization_method == TinyMLQuantizationMethod.PTQ:
-            model = TINPUTinyMLPTQFxModule(model, qconfig_type=TinyMLQConfigType(weight_bitwidth, activation_bitwidth, auto_quantization, **qconfig_kwargs).qconfig_type, total_epochs=epochs, output_int=output_int)
+            model = TINPUTinyMLPTQFxModule(model, example_inputs=example_inputs, qconfig_type=qconfig_type, total_epochs=epochs, output_int=output_int)
     if quantization:
         logger.info(f"Proceeding with {quantization_method} quantization")
     return model
@@ -1991,3 +2023,276 @@ def get_trained_feature_extraction_model(model, args, data_loader, data_loader_t
         # Print evaluation results
         logger.info(f'{header}: MSE: {mse:.2f}, RMSE: {rmse:.2f}, MAE: {mae:.2f} lr: {optimizer.param_groups[0]["lr"]}')
     return model
+
+
+def validate_filterbank_params(args):
+    errors = []
+    if args.fb_conv_kernel not in (16, 32, 64, 128, 256):
+        errors.append(f"fb_conv_kernel={args.fb_conv_kernel} must be one of 16, 32, 64, 128, 256")
+    if args.fb_output_channel not in (16, 32, 64, 128):
+        errors.append(f"fb_output_channel={args.fb_output_channel} must be one of 16, 32, 64, 128")
+    if args.fb_bitwidth not in (2, 4, 8):
+        errors.append(f"fb_bitwidth={args.fb_bitwidth} must be one of 2, 4, 8")
+    if args.input_bit_depth not in (12, 14, 16):
+        errors.append(f"input_bit_depth={args.input_bit_depth} must be one of 12, 14, 16")
+    if (args.fb_conv_stride % 4) != 0:
+        errors.append(f"fb_conv_stride={args.fb_conv_stride} must be a multiple of 4")
+    fb_num_samples = (args.sampling_rate * args.fb_context_ms) / 1000
+    if (args.sampling_rate * args.fb_context_ms) % 1000 != 0:
+        errors.append(f"The calculated number of samples ((sampling_rate * fb_context_ms) / 1000)={fb_num_samples} must be an integer")
+    fb_num_samples = int(fb_num_samples)
+    fb_maxpool_kernel = (fb_num_samples / args.fb_conv_stride)
+    if (fb_num_samples % args.fb_conv_stride) != 0:
+        errors.append(f"The calculated maxpool kernel ((sampling_rate * fb_context_ms/1000) / fb_conv_stride)={fb_maxpool_kernel} must be an integer")
+    if errors:
+        raise ValueError("Invalid filterbank configuration:\n  " + "\n  ".join(errors))
+
+def resolve_mixed_precision_names(model, mixed_precision_config):
+    """Resolve model_spec layer keys (e.g. '1', 'block0') to full module paths in `model`.
+
+    Each layer key names a submodule at model.features.<key> (see
+    GenericModelWithSpec._init_model_from_spec). We match by suffix and take the
+    shortest hit, so the caller never needs to know about wrapper prefixes
+    (NeuralNetworkWithPreprocess, DDP's 'module.', ...) sitting in front of
+    'features'. A key with no match is passed through unresolved.
+
+    Args:
+        model: The (possibly wrapped) nn.Module about to be quantized.
+        mixed_precision_config: {bitwidth: [layer_key, ...]} or None.
+
+    Returns:
+        {bitwidth: [full_module_path, ...]} or None.
+    """
+    if mixed_precision_config is None:
+        return None
+
+    module_paths = [path for path, _ in model.named_modules()]
+
+    def resolve_one(layer_key):
+        target = f'features.{layer_key}'
+        matches = sorted((p for p in module_paths if p == target or p.endswith(f'.{target}')), key=len)
+        return matches[0] if matches else layer_key
+
+    return {bw: [resolve_one(key) for key in keys] for bw, keys in mixed_precision_config.items()}
+
+
+def prepare_mixed_precision(source_model, wrapped_model):
+    """Build the weight_mixed_precision config to hand to the quantization library.
+
+    source_model is the unwrapped model (before quantization wrapping); it exposes
+    mixed_precision_config = {bitwidth: [layer_key, ...]} using model_spec keys
+    (see resolve_mixed_precision_names).
+
+    Two model shapes are supported:
+      - A plain model: layer keys are resolved directly against `wrapped_model`.
+      - nn.Sequential(filterbank_model, main_model): either submodel may define
+        its own mixed_precision_config. Layer keys are resolved against the
+        submodel itself (as it looked before wrapping) and prefixed with
+        'model.<index>.', matching how quantization_wrapped_model nests the
+        pair under `self.model`.
+    """
+    if isinstance(source_model, torch.nn.Sequential) and len(source_model) >= 2:
+        merged = {}
+        for index, submodel in enumerate((source_model[0], source_model[1])):
+            resolved = resolve_mixed_precision_names(submodel, getattr(submodel, 'mixed_precision_config', None))
+            if not resolved:
+                continue
+            for bw, paths in resolved.items():
+                merged.setdefault(bw, []).extend(f'model.{index}.{p}' for p in paths)
+        return merged or None
+
+    config = getattr(source_model, 'mixed_precision_config', None)
+    return resolve_mixed_precision_names(wrapped_model, config)
+
+
+def split_filterbank_onnx(output_dir, quantization=False):
+    """
+    Splits 'model.onnx' from output_dir into two separate ONNX models: a filterbank 
+    model and a main model.
+
+    The split is performed at the first 'Relu' layer found in the graph.
+    - The filterbank model contains all layers from the original input up to the 
+      output of the first ReLU.
+    - The main model contains the remainder of the graph, starting from the 
+      output of that first ReLU.
+
+    If `quantization` is True, a dummy Batch Normalization (OSS) layer is prepended 
+    to the main model. This allows the first convolutional layer of the main model 
+    to be correctly offloaded to the NPU by providing the necessary quantization 
+    context.
+
+    Args:
+        output_dir (str): Directory containing the original 'model.onnx'.
+        quantization (bool): If True, applies dummy OSS (Batch Norm) to the main model 
+            to facilitate NPU offloading. Defaults to False.
+
+    Raises:
+        ValueError: If no ReLU layer is found in the model, or if the ONNX extraction 
+            process fails.
+    """
+    model_path_combined_orig = os.path.join(output_dir, 'model.onnx')
+    model_path_combined_new = os.path.join(output_dir, 'model_combined.onnx')
+
+    filterbank_path = os.path.join(output_dir, 'model_fb.onnx')
+    tvm_model_path_temp = os.path.join(output_dir, 'model_tvm_temp.onnx')
+    main_model_path = os.path.join(output_dir, 'model_tvm.onnx')
+    
+    try:
+        # Load the original model
+        model = onnx.load(model_path_combined_orig)
+        graph = model.graph
+
+        # 1. Find the first ReLU node and its output tensor name
+        relu_node = None
+        for node in graph.node:
+            if node.op_type == "Relu":
+                relu_node = node
+                break
+
+        if relu_node is None:
+            raise ValueError("No ReLU layer found in the provided ONNX model.")
+
+        # The split point is the output tensor of the first ReLU node
+        split_tensor_name = relu_node.output[0]
+
+        # 2. Extract the first part (from original inputs to the split tensor)
+        orig_inputs = [i.name for i in model.graph.input]
+
+        # 3. Extract the second part (from the split tensor to original outputs)
+        orig_outputs = [o.name for o in model.graph.output]
+
+        # Part 1: from original inputs -> split_tensor_name
+        onnx.utils.extract_model(model_path_combined_orig, filterbank_path,
+                                  input_names=orig_inputs,
+                                  output_names=[split_tensor_name])
+
+        # Part 2: from split_tensor_name -> original outputs
+        onnx.utils.extract_model(model_path_combined_orig, tvm_model_path_temp,
+                                  input_names=[split_tensor_name],
+                                  output_names=orig_outputs)
+
+    except Exception as e:
+        raise ValueError(
+            f"Failed to split model on tensor '{split_tensor_name}'."
+            f"Ensure it is a valid intermediate tensor name in the graph.\n"
+            f"Original error: {e}"
+        )
+
+    if quantization:
+        append_dummy_OSS_to_onnx(tvm_model_path_temp, main_model_path)
+        if os.path.exists(tvm_model_path_temp):
+            os.remove(tvm_model_path_temp)
+    else:
+        os.replace(tvm_model_path_temp, main_model_path)
+
+    os.replace(model_path_combined_orig, model_path_combined_new)
+    os.replace(main_model_path, model_path_combined_orig)
+
+
+def append_dummy_OSS_to_onnx(input_model_path, output_model_path, num_channels=-1, input_min=0.0, input_max=255.0):
+    """
+    Prepend a dummy integer batch normalization to an ONNX model.
+
+    The dummy BN is represented as:
+      (input + offset) * mult * shift_mult → floor → clip [min, max]
+
+    For identity, we use:
+      offset=0, mult=128, shift_mult=1/128, which preserves values
+      but documents the quantization scale for hardware compilation.
+
+    Args:
+        input_model_path: Path to input ONNX model
+        output_model_path: Path to save modified ONNX model
+        num_channels: Number of channels in the input
+        input_min: Minimum value of input range (e.g., 0 for uint8)
+        input_max: Maximum value of input range (e.g., 255 for uint8)
+    """
+    logger = getLogger("root.utils.append_dummy_OSS_to_onnx")
+    model = onnx.load(input_model_path)
+    graph = model.graph
+
+    # Get original input info
+    orig_input = graph.input[0]
+    orig_input_name = orig_input.name
+    orig_input_shape = [d.dim_value for d in orig_input.type.tensor_type.shape.dim]
+
+    if num_channels == -1:
+        if orig_input_shape[1] is None or orig_input_shape[1] == 0:
+            raise ValueError("Cannot infer num_channels from dynamic ONNX input shape. Please provide num_channels explicitly.")
+        num_channels = orig_input_shape[1]
+
+    # Rename original input to a new "raw" input
+    raw_input_name = orig_input_name + "_raw"
+    graph.input[0].name = raw_input_name
+
+    # Create initializers for dummy BN parameters
+    # Shape: (1, num_channels, 1, 1) for per-channel operations
+    offset_array = np.zeros((1, num_channels, 1, 1), dtype=np.float32)
+    mult_array = np.full((1, num_channels, 1, 1), 128.0, dtype=np.float32)
+    shift_array = np.full((1, num_channels, 1, 1), 1.0 / 128.0, dtype=np.float32)
+    min_array = np.array(input_min, dtype=np.float32)
+    max_array = np.array(input_max, dtype=np.float32)
+
+    offset_init = numpy_helper.from_array(offset_array, name="dummy_bn_offset")
+    mult_init = numpy_helper.from_array(mult_array, name="dummy_bn_mult")
+    shift_init = numpy_helper.from_array(shift_array, name="dummy_bn_shift")
+    min_init = numpy_helper.from_array(min_array, name="dummy_bn_min")
+    max_init = numpy_helper.from_array(max_array, name="dummy_bn_max")
+
+    # Add initializers to the graph
+    for init in [offset_init, mult_init, shift_init, min_init, max_init]:
+        graph.initializer.append(init)
+
+    # Create nodes for the dummy BN:
+    # 1. Add: input + offset
+    # 2. Mul: result * mult
+    # 3. Mul: result * shift_mult
+    # 4. Floor: floor(result)
+    # 5. Clip: clip(result, min, max)
+
+    nodes_to_insert = [
+        helper.make_node(
+            "Add",
+            inputs=[raw_input_name, "dummy_bn_offset"],
+            outputs=["_dummy_bn_add"],
+            name="dummy_bn_add"
+        ),
+        helper.make_node(
+            "Mul",
+            inputs=["_dummy_bn_add", "dummy_bn_mult"],
+            outputs=["_dummy_bn_mul1"],
+            name="dummy_bn_mul1"
+        ),
+        helper.make_node(
+            "Mul",
+            inputs=["_dummy_bn_mul1", "dummy_bn_shift"],
+            outputs=["_dummy_bn_mul2"],
+            name="dummy_bn_mul2"
+        ),
+        helper.make_node(
+            "Floor",
+            inputs=["_dummy_bn_mul2"],
+            outputs=["_dummy_bn_floor"],
+            name="dummy_bn_floor"
+        ),
+        helper.make_node(
+            "Clip",
+            inputs=["_dummy_bn_floor", "dummy_bn_min", "dummy_bn_max"],
+            outputs=[orig_input_name],
+            name="dummy_bn_clip"
+        ),
+    ]
+
+    # Insert nodes at the beginning of the graph
+    for i, node in enumerate(nodes_to_insert):
+        graph.node.insert(i, node)
+
+    # Validate the modified model
+    try:
+        onnx.checker.check_model(model)
+    except onnx.checker.ValidationError as e:
+        logger.warning(f"Model validation failed: {e}")
+        raise
+
+    # Save the modified model
+    onnx.save(model, output_model_path)

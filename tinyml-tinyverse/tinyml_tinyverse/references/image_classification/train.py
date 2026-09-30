@@ -102,6 +102,7 @@ from ..common.train_base import (
     prepare_transforms,
     create_data_loaders,
     log_model_summary,
+    run_memory_preflight,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
     setup_distributed_model,
@@ -316,6 +317,8 @@ def main(gpu, args):
         else:
             model = torch.load(args.load_saved_model, weights_only=False)
 
+        run_memory_preflight(model, args, (1,) + dataset.X.shape[1:], logger)
+
         if args.generic_model or args.nas_enabled:
             summary_input_shape = (1,) + tuple(dataset.X.shape[1:])
             logger.info(f"Model summary input shape: {summary_input_shape}")
@@ -381,6 +384,9 @@ def main(gpu, args):
             task_type='classification', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
             autoquant_tolerance_classification=args.autoquant_tolerance_classification)
 
+        early_stopper = utils.EarlyStopping(patience=args.early_stopping_patience, mode='max',
+                                             min_delta=args.early_stopping_min_delta, enabled=args.early_stopping)
+
         for epoch in range(args.start_epoch, args.epochs):
             if args.distributed:
              train_sampler.set_epoch(epoch)
@@ -412,6 +418,11 @@ def main(gpu, args):
                 best['predictions'], best['ground_truth'] = predictions, ground_truth
                 checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
                 utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+
+            early_stopper.step(avg_accuracy)
+            if early_stopper.should_stop:
+                logger.info(f"Early stopping at epoch {epoch}: no improvement for {args.early_stopping_patience} epochs.")
+                break
 
         if not args.quantization and args.auto_quantization:
             _float_best_metric = best['accuracy'] / 100.0

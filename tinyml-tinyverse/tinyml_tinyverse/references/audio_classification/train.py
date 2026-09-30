@@ -84,7 +84,7 @@ import torchinfo
 from tabulate import tabulate
 
 from tinyml_tinyverse.common import models
-from tinyml_tinyverse.common.datasets import GoogleSpeechCommandsDataset
+from tinyml_tinyverse.common.datasets import GenericAudioDataset
 from tinyml_tinyverse.common.utils import misc_utils, utils, gof_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 
@@ -101,7 +101,9 @@ from ..common.train_base import (
     setup_training_environment,
     prepare_transforms,
     create_data_loaders,
+    shutdown_data_loaders,
     log_model_summary,
+    run_memory_preflight,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
     setup_distributed_model,
@@ -109,13 +111,16 @@ from ..common.train_base import (
     save_checkpoint,
     handle_export_only,
     move_model_to_device,
+    compile_model_if_enabled,
+    get_amp_context,
+    get_grad_scaler,
     log_training_time,
     apply_output_int_default,
     get_output_int_flag,
     load_onnx_for_inference,
 )
 
-dataset_loader_dict = {'GoogleSpeechCommandsDataset':GoogleSpeechCommandsDataset}
+dataset_loader_dict = {'GenericAudioDataset': GenericAudioDataset}
 dataset_load_state = {'dataset': None, 'dataset_test': None, 'train_sampler': None, 'test_sampler': None}
 _float_best_metric = None  # best float accuracy; set on float run, read on QAT run
 
@@ -130,7 +135,7 @@ def get_args_parser():
 
     parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
     parser.add_argument('--audio-duration-ms', help='Audio clip duration in milliseconds', default=1000, type=int)
-    parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, or RAW', default='MFCC', type=str)
+    parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, FB, or RAW', default='MFCC', type=str)
 
     # MFCC params
     parser.add_argument('--n-mfcc', help='Number of MFCC coefficients', default=10, type=int)
@@ -139,21 +144,29 @@ def get_args_parser():
     parser.add_argument('--frame-step-ms', help='Frame step/hop length in milliseconds', default=20, type=int)
 
     # LPC params
-    parser.add_argument('--nlpc', help='Number of LPC output features/filterbank energies', default=14, type=int)
-    parser.add_argument('--lpc-order', help='LPC analysis order', default=14, type=int)
+    parser.add_argument('--nlpc', help='Number of LPC output features/filterbank energies', default=70, type=int)
+    parser.add_argument('--lpc-order', help='LPC analysis order', default=10, type=int)
+
+    # Filterbank params
+    parser.add_argument("--fb-conv-kernel", default=64, type=int, help="Filterbank conv kernel size: 16, 32, 64, 128, 256")
+    parser.add_argument("--fb-output-channel", default=64, type=int, help="Filterbank output channels: 16, 32, 64, 128")
+    parser.add_argument("--fb-bitwidth", default=8, type=int, help="Filterbank conv layer bitwidth: 2, 4, 8")
+    parser.add_argument("--fb-conv-stride", default=4, type=int, help="Filterbank conv stride: Multiple of 4")
+    parser.add_argument("--fb-context-ms", default=20, type=int, help="Filterbank context in ms")
+    parser.add_argument('--input-bit-depth', help='Bit depth for FB audio loading (16=int16, 14=int14, 12=int12). Only used when --audio-feature=FB', default=16, type=int)
 
     # Audio loading params
     parser.add_argument('--normalize-audio', help='Normalize waveform by max absolute value', default=True, type=misc_utils.str2bool)
     parser.add_argument('--mono', help='Convert multi-channel audio to mono', default=True, type=misc_utils.str2bool)
-    
+
     parser.add_argument('--gof-test', type=misc_utils.str2bool, default=False, help='Enable goodness-of-fit test') 
-    
+
     parser.add_argument("--nn-for-feature-extraction", default=False, type=misc_utils.str2bool, help="Use an AI model for preprocessing")
     parser.add_argument('--file-level-classification-log', help='File level classification log file', type=str)
     #######################################
     # nas args
     #######################################
-    parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS")
+    parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS", type=misc_utils.str2bool)
     parser.add_argument("--nas_optimization_mode", default="Memory", type=str,  help="Optimize model for compute or storage efficiency")
     parser.add_argument("--nas_model_size", default='None', choices=['s', 'm', 'l', 'xl', 'None'], help="Proxy for model size")
     parser.add_argument("--nas_epochs", default=10, type=int, help="Iterations for search")
@@ -276,167 +289,197 @@ def main(gpu, args):
     input_features = tuple(dataset.X.shape[2:])
     logger.info("Loading data:")
     data_loader, data_loader_test = create_data_loaders(dataset, dataset_test, train_sampler, test_sampler, args, gpu)
+    try:
 
-    logger.info("Creating model")
-
-    if args.load_saved_model == 'None':
-        if args.nas_enabled:
-            if args.quantization:
-                model = torch.load(os.path.join(os.path.dirname(args.output_dir), os.path.join('base', 'nas_model.pt')), weights_only=False)
+        logger.info("Creating model")
+        if args.load_saved_model == 'None':
+            if args.nas_enabled == 'True':
+                if args.quantization:
+                    model = torch.load(os.path.join(os.path.dirname(args.output_dir), os.path.join('base', 'nas_model.pt')), weights_only=False)
+                else:
+                    nas_args = get_nas_args(args, data_loader, data_loader_test, num_classes, variables)
+                    model = search_and_get_model(nas_args)
+                    if not model:
+                        logger.error("Please check on prior errors. NAS wasn't able to create a model")
+                        sys.exit(1)
+                    torch.save(model, os.path.join(args.output_dir, 'nas_model.pt'))
+            elif args.audio_feature == 'FB':
+                utils.validate_filterbank_params(args)
+                fb_num_samples = int((args.sampling_rate * args.fb_context_ms) // 1000)
+                fb_maxpool_kernel = (int(fb_num_samples // args.fb_conv_stride), 1)
+                fe_model = models.FilterBank(in_channels=variables, conv_kernel=(args.fb_conv_kernel, 1),
+                                             n_out_channel=args.fb_output_channel, fb_bitwidth=args.fb_bitwidth,
+                                         conv_stride=args.fb_conv_stride, maxpool_kernel=fb_maxpool_kernel)
+                fb_conv_out = (input_features[0] - args.fb_conv_kernel) // args.fb_conv_stride + 1
+                fb_output_features = fb_conv_out // fb_maxpool_kernel[0]
+                main_model = models.get_model(args.model, args.fb_output_channel, num_classes, input_features=fb_output_features,
+                                            model_config=args.model_config, model_spec=args.model_spec, dual_op=args.dual_op)
+                model = nn.Sequential(fe_model, main_model)
             else:
-                nas_args = get_nas_args(args, data_loader, data_loader_test, num_classes, variables)
-                model = search_and_get_model(nas_args)
-                if not model:
-                    logger.error("Please check on prior errors. NAS wasn't able to create a model")
-                    sys.exit(1)
-                torch.save(model, os.path.join(args.output_dir, 'nas_model.pt'))
+                model = models.get_model(
+                    args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
+                    model_spec=args.model_spec,
+                    dual_op=args.dual_op)
         else:
-            model = models.get_model(
-                args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
-                model_spec=args.model_spec,
-                dual_op=args.dual_op)
-    else:
-        model = torch.load(args.load_saved_model, weights_only=False)
+            model = torch.load(args.load_saved_model, weights_only=False)
 
-    if args.generic_model or args.nas_enabled:
-        summary_input_shape = (1,) + tuple(dataset.X.shape[1:])
-        logger.info(f"Model summary input shape: {summary_input_shape}")
-        logger.info(f"{torchinfo.summary(model, summary_input_shape)}")
+        run_memory_preflight(model, args, (1,) + dataset.X.shape[1:], logger)
 
-    model = load_pretrained_weights(model, args, logger)
+        if args.generic_model or args.nas_enabled:
+            if isinstance(variables, (list, tuple, np.ndarray)):
+                variables = int(variables[0])
+            else:
+                variables = int(variables)
 
-    if handle_export_only(model, args, variables, input_features, logger):
-        return
+            if isinstance(input_features, (list, tuple, np.ndarray)):
+                input_features = int(input_features[0])
+            else:
+                input_features = int(input_features)
+            log_model_summary(model, args, variables, input_features, logger)
 
-    move_model_to_device(model, device, logger)
-    criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
-    model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
-    optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
-    resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
+        model = load_pretrained_weights(model, args, logger)
 
-    phase = 'QuantTrain' if args.quantization else 'FloatTrain'
-    logger.info("Start training")
-    start_time = timeit.default_timer()
-    best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
+        if handle_export_only(model, args, variables, input_features, logger):
+            return
 
-    # model = NeuralNetworkWithPreprocess
-    if args.nn_for_feature_extraction:
-        fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2]).to(device)
-        fe_model = NeuralNetworkWithPreprocess(fe_model, None)
-        optimizer, lr_scheduler = setup_optimizer_and_scheduler(fe_model, args)
-        fe_model = utils.get_trained_feature_extraction_model(
-            fe_model, args, data_loader, data_loader_test, device, lr_scheduler, optimizer)
-        model = NeuralNetworkWithPreprocess(fe_model, model)
-    else:
-        model = NeuralNetworkWithPreprocess(None, model)
+        move_model_to_device(model, device, logger)
+        model = compile_model_if_enabled(model, args, logger, input_shape=(1,) + dataset.X.shape[1:])
+        criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
 
-    # if output_int not set by user, then set it to default of task_type
-    if args.output_int == None:
-        args.output_int = True
+        model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
+        optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
+        resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
 
-    global _float_best_metric
-    sample_inputs = None
-    sample_targets = None
-    bsearch_float_metric = None
-    bsearch_example_inputs = None
-    if args.auto_quantization and args.quantization:
-        try:
-            sample_data_iter = iter(data_loader)
-            _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
-            sample_inputs = sample_data_fe.float().to(device)
-            sample_targets = sample_targets_raw.long().to(device)
-            logger.info("Obtained sample data for auto quantization analysis")
-        except Exception as e:
-            logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
-        bsearch_float_metric = _float_best_metric
-        try:
-            bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
-        except Exception as e:
-            logger.warning(f"Could not get example inputs for binary search: {e}")
+        phase = 'QuantTrain' if args.quantization else 'FloatTrain'
+        amp_autocast = get_amp_context(args, device)
+        grad_scaler = get_grad_scaler(args, device)
+        logger.info("Start training")
+        start_time = timeit.default_timer()
+        best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
 
-    model = utils.quantization_wrapped_model(
-        model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
-        args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
-        calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
-        eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
-        task_type='classification', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
-        autoquant_tolerance_classification=args.autoquant_tolerance_classification)
-
-    for epoch in range(args.start_epoch, args.epochs):
-        if args.distributed:
-            train_sampler.set_epoch(epoch)
-        utils.train_one_epoch_classification(
-            model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
-            print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
-            is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False,
-            nn_for_feature_extraction=args.nn_for_feature_extraction)
-        if not (args.quantization_method in ['PTQ'] and args.quantization):
-            lr_scheduler.step()
-        avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(
-            model, criterion, data_loader_test, device=device, transform=None, phase=phase,
-            num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
-        if model_ema:
-            avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(
-                model_ema, criterion, data_loader_test, device=device, transform=None,
-                log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op,
-                nn_for_feature_extraction=args.nn_for_feature_extraction)
-        if args.output_dir and avg_accuracy >= best['accuracy']:
-            logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) >= {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
-            best['accuracy'], best['f1'], best['auc'], best['conf_matrix'], best['epoch'] = avg_accuracy, avg_f1, auc, avg_conf_matrix, epoch
-            best['predictions'], best['ground_truth'] = predictions, ground_truth
-            checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
-            utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
-
-    if not args.quantization and args.auto_quantization:
-        _float_best_metric = best['accuracy'] / 100.0
-        logger.info(f"Stored float best accuracy for binary search: {_float_best_metric:.4f}")
-
-    # Log best epoch results
-    logger = getLogger(f"root.main.{phase}.BestEpoch")
-    if best['epoch'] is not None:
-        logger.info("")
-        logger.info("Printing statistics of best epoch:")
-        logger.info(f"Best Epoch: {best['epoch']}")
-        logger.info(f"Acc@1 {best['accuracy']:.3f}")
-        logger.info(f"F1-Score {best['f1']:.3f}")
-        logger.info(f"AUC ROC Score {best['auc']:.3f}")
-        logger.info("")
-        logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
-                      columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-                      index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
-                                                             headers="keys", tablefmt='grid')))
-
-        Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG,
-               name="root.utils.print_file_level_classification_summary",
-               append_log=True if args.quantization else False, console_log=False)
-        getLogger("root.utils.print_file_level_classification_summary").propagate = False
-        utils.print_file_level_classification_summary(dataset_test, best['predictions'], best['ground_truth'], phase)
-        logger.info(f"Generated file-level classification summary in: {args.file_level_classification_log}")
-    else:
-        logger.warning("No epoch was run in this invocation (e.g. --resume to a checkpoint that already "
-                        "satisfied --epochs); skipping best-epoch and file-level classification summaries.")
-
-    # Export model
-    logger.info('Exporting model after training.')
-    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
+        # Handle nn_for_feature_extraction
         if args.nn_for_feature_extraction:
-            example_input = next(iter(data_loader_test))[0]
-            input_shape = (1,) + dataset.X_raw.shape[1:]
+            fe_model = models.FEModelLinear(dataset.X.shape[1], dataset.X_raw.shape[2], dataset.X.shape[2]).to(device)
+            fe_model = NeuralNetworkWithPreprocess(fe_model, None)
+            optimizer, lr_scheduler = setup_optimizer_and_scheduler(fe_model, args)
+            fe_model = utils.get_trained_feature_extraction_model(
+                fe_model, args, data_loader, data_loader_test, device, lr_scheduler, optimizer)
+            model = NeuralNetworkWithPreprocess(fe_model, model)
         else:
-            example_input = next(iter(data_loader_test))[1]
-            input_shape = (1,) + dataset.X.shape[1:]
-        utils.export_model(
-            model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
-            remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
+            model = NeuralNetworkWithPreprocess(None, model)
 
-    log_training_time(start_time)
-    
-    if args.gen_golden_vectors:
-        
-        generate_golden_vector_dir(args.output_dir)
-        output_int = get_output_int_flag(args)
-        generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
+        # if output_int not set by user, then set it to default of task_type
+        if args.output_int == None:
+            args.output_int = True
+
+        global _float_best_metric
+        sample_inputs = None
+        sample_targets = None
+        bsearch_float_metric = None
+        bsearch_example_inputs = None
+        if args.auto_quantization and args.quantization:
+            try:
+                sample_data_iter = iter(data_loader)
+                _, sample_data_fe, sample_targets_raw = next(sample_data_iter)
+                sample_inputs = sample_data_fe.float().to(device)
+                sample_targets = sample_targets_raw.long().to(device)
+                logger.info("Obtained sample data for auto quantization analysis")
+            except Exception as e:
+                logger.warning(f"Could not obtain sample data for auto quantization: {e}. Proceeding without it.")
+            bsearch_float_metric = _float_best_metric
+            try:
+                bsearch_example_inputs = next(iter(data_loader_test))[1][:1].float().to(device)
+            except Exception as e:
+                logger.warning(f"Could not get example inputs for binary search: {e}")
+
+        model = utils.quantization_wrapped_model(
+            model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
+            args.epochs, args.output_int, args.auto_quantization, inputs=sample_inputs, targets=sample_targets, criterion=criterion,
+            calibration_dataloader=data_loader if (args.auto_quantization and args.quantization) else None,
+            eval_dataloader=data_loader_test if (args.auto_quantization and args.quantization) else None,
+            task_type='classification', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
+            autoquant_tolerance_classification=args.autoquant_tolerance_classification, 
+            weight_mixed_precision=utils.prepare_mixed_precision(model_without_ddp, model))
+
+        for epoch in range(args.start_epoch, args.epochs):
+            if args.distributed:
+                train_sampler.set_epoch(epoch)
+            utils.train_one_epoch_classification(
+                model, criterion, optimizer, data_loader, device, epoch, None, args.apex, model_ema,
+                print_freq=args.print_freq, phase=phase, num_classes=num_classes, dual_op=args.dual_op,
+                is_ptq=True if (args.quantization_method in ['PTQ'] and args.quantization) else False,
+                nn_for_feature_extraction=args.nn_for_feature_extraction,
+                amp_autocast=amp_autocast, grad_scaler=grad_scaler)
+            if not (args.quantization_method in ['PTQ'] and args.quantization):
+                lr_scheduler.step()
+            avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(
+                model, criterion, data_loader_test, device=device, transform=None, phase=phase,
+                num_classes=num_classes, dual_op=args.dual_op, nn_for_feature_extraction=args.nn_for_feature_extraction)
+            if model_ema:
+                avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(
+                    model_ema, criterion, data_loader_test, device=device, transform=None,
+                    log_suffix='EMA', print_freq=args.print_freq, phase=phase, dual_op=args.dual_op,
+                    nn_for_feature_extraction=args.nn_for_feature_extraction)
+            if args.output_dir and avg_accuracy >= best['accuracy']:
+                logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) >= {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
+                best['accuracy'], best['f1'], best['auc'], best['conf_matrix'], best['epoch'] = avg_accuracy, avg_f1, auc, avg_conf_matrix, epoch
+                best['predictions'], best['ground_truth'] = predictions, ground_truth
+                checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
+                utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+
+        if not args.quantization and args.auto_quantization:
+            _float_best_metric = best['accuracy'] / 100.0
+            logger.info(f"Stored float best accuracy for binary search: {_float_best_metric:.4f}")
+
+        # Log best epoch results
+        logger = getLogger(f"root.main.{phase}.BestEpoch")
+        if best['epoch'] is not None:
+            logger.info("")
+            logger.info("Printing statistics of best epoch:")
+            logger.info(f"Best Epoch: {best['epoch']}")
+            logger.info(f"Acc@1 {best['accuracy']:.3f}")
+            logger.info(f"F1-Score {best['f1']:.3f}")
+            logger.info(f"AUC ROC Score {best['auc']:.3f}")
+            logger.info("")
+            logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
+                        columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
+                        index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
+                                                                headers="keys", tablefmt='grid')))
+
+            Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG,
+                name="root.utils.print_file_level_classification_summary",
+                append_log=True if args.quantization else False, console_log=False)
+            getLogger("root.utils.print_file_level_classification_summary").propagate = False
+            utils.print_file_level_classification_summary(dataset_test, best['predictions'], best['ground_truth'], phase)
+            logger.info(f"Generated file-level classification summary in: {args.file_level_classification_log}")
+        else:
+            logger.warning("No epoch was run in this invocation (e.g. --resume to a checkpoint that already "
+                            "satisfied --epochs); skipping best-epoch and file-level classification summaries.")
+
+        # Export model
+        logger.info('Exporting model after training.')
+        if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
+            if args.nn_for_feature_extraction:
+                example_input = next(iter(data_loader_test))[0]
+                input_shape = (1,) + dataset.X_raw.shape[1:]
+            else:
+                example_input = next(iter(data_loader_test))[1]
+                input_shape = (1,) + dataset.X.shape[1:]
+            utils.export_model(
+                model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
+                quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
+                remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
+
+        log_training_time(start_time)
+
+        if args.gen_golden_vectors:
+            generate_golden_vector_dir(args.output_dir)
+            output_int = get_output_int_flag(args)
+            generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model, args.nn_for_feature_extraction)
+
+    finally:
+        shutdown_data_loaders(data_loader, data_loader_test)
+
 
 
 def run(args):

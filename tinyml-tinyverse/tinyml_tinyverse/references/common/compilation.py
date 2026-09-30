@@ -39,6 +39,7 @@ from tvm.driver.tvmc.compiler import drive_compile
 from tinyml_tinyverse.common.compilation.tvm_input_config import default_tvm_args
 from tinyml_tinyverse.common.utils import misc_utils, utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
+from tinyml_tinyverse.common.utils.tinyml_header import tinyml_header_str
 
 np.set_printoptions(threshold=np.inf)
 
@@ -97,6 +98,10 @@ def get_args_parser():
     parser.add_argument('--runtime', help="The runtime configuration.", type=str, default='crt', )
     parser.add_argument('--keep_libc_files', help='Keep lib0.c, lib1.c, lib2.c... files', action=BooleanOptionalAction)
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
+    parser.add_argument('--filterbank_enabled', help='Run filterbank post-compilation step', action=BooleanOptionalAction, default=False)
+    parser.add_argument('--fb_bitwidth', help='Filterbank bitwidth', type=int, default=8)
+    parser.add_argument('--fb_conv_stride', help='Filterbank conv stride', type=int, default=4)
+    parser.add_argument('--fb_branched_bits', help='Filterbank input bit depth', type=int, default=16)
 
     return parser
 
@@ -131,6 +136,9 @@ def gen_artifacts(args):
         os.remove(os.path.join(artifacts_dir, 'devc.o'))
     except FileNotFoundError:
         pass
+    if args.filterbank_enabled:
+        from .fb_compilation import apply_fb_zero_pad
+        apply_fb_zero_pad(artifacts_dir, input_args['output'], args.cross_compiler, args.cross_compiler_options)
     if not(args.keep_libc_files):
         libc_files = glob(os.path.join(artifacts_dir, 'lib*.c'))
         for filename in libc_files:
@@ -161,12 +169,19 @@ def modify_user_input_config(user_input_config: str, target: str):
             compilation_lines += ["#define FE_NUM_FRAME_CONCAT 1\n"]
     if output_int:
         compilation_lines += ["#define OUTPUT_INT\n"]
-    if len(lines) > 5:
-        lines = lines[:3] + compilation_lines + lines[3:]
+
+    HEADER_DEFINES = 4
+    header_line_count = len(tinyml_header_str.split('\n'))
+    insertion_point = HEADER_DEFINES // 2 + header_line_count
+
+    if len(lines) > HEADER_DEFINES + header_line_count:
+        lines = lines[:insertion_point] + compilation_lines + lines[insertion_point:]
         with open(user_input_config, 'w') as f:
             f.writelines(lines)
     else:
-        lines = ["#ifndef INPUT_CONFIG_H_\n", "#define INPUT_CONFIG_H_\n\n"]  + compilation_lines + ["\n\n#endif /* INPUT_CONFIG_H_ */\n"]
+        lines = [tinyml_header_str, "#ifndef INPUT_CONFIG_H_\n", "#define INPUT_CONFIG_H_\n\n"]  + compilation_lines + ["\n\n#endif /* INPUT_CONFIG_H_ */\n"]
+        with open(user_input_config, 'w') as f:
+            f.writelines(lines)
     return 0
 
 def remove_intermittent_files(dir):
@@ -253,6 +268,10 @@ def main(args):
 
     if not args.keep_intermittent_files:
         remove_intermittent_files(args.output_dir)
+
+    if args.filterbank_enabled:
+        from .fb_compilation import run_filterbank_compilation
+        run_filterbank_compilation(args.FILE, args.output_dir, args.fb_bitwidth, args.fb_conv_stride, args.fb_branched_bits, args.cross_compiler, args.cross_compiler_options)
     return exit_flag
 
 

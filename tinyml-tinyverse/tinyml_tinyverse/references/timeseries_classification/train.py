@@ -42,6 +42,7 @@ import sys
 import timeit
 from argparse import Namespace
 from logging import getLogger
+from tinyml_tinyverse.common.utils import integer_ondevice_training
 
 import numpy as np
 import pandas as pd
@@ -75,6 +76,7 @@ from ..common.train_base import (
     create_data_loaders,
     shutdown_data_loaders,
     log_model_summary,
+    run_memory_preflight,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
     setup_distributed_model,
@@ -263,6 +265,8 @@ def main(gpu, args):
         else:
             model = torch.load(args.load_saved_model, weights_only=False)
 
+        run_memory_preflight(model, args, (1,) + dataset.X.shape[1:], logger)
+
         if args.generic_model or args.nas_enabled:
             log_model_summary(model, args, variables, input_features, logger)
 
@@ -329,6 +333,9 @@ def main(gpu, args):
             task_type='classification', float_metric=bsearch_float_metric, example_inputs=bsearch_example_inputs,
             autoquant_tolerance_classification=args.autoquant_tolerance_classification)
 
+        early_stopper = utils.EarlyStopping(patience=args.early_stopping_patience, mode='max',
+                                             min_delta=args.early_stopping_min_delta, enabled=args.early_stopping)
+
         for epoch in range(args.start_epoch, args.epochs):
             if args.distributed:
                 train_sampler.set_epoch(epoch)
@@ -354,6 +361,11 @@ def main(gpu, args):
                 best['predictions'], best['ground_truth'] = predictions, ground_truth
                 checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
                 utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+
+            early_stopper.step(avg_accuracy)
+            if early_stopper.should_stop:
+                logger.info(f"Early stopping at epoch {epoch}: no improvement for {args.early_stopping_patience} epochs.")
+                break
 
         if not args.quantization and args.auto_quantization:
             _float_best_metric = best['accuracy'] / 100.0
@@ -397,6 +409,14 @@ def main(gpu, args):
                 model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
                 quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
                 remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
+
+            # Integer ODL artifact generation
+            if getattr(args, 'ondevice_training', False) and args.quantization == 2:
+                saved_onnx = os.path.join(args.output_dir, 'model.onnx')
+                dataset_eval, _, _, _ = utils.load_data(args.data_path, args, dataset_loader_dict, test_only=True)
+                target_mags_correct, target_mags_wrong = integer_ondevice_training.export_training_data(dataset, dataset_test, dataset_eval, args, onnx_path=saved_onnx)
+                integer_ondevice_training.export_for_ondevice_training(saved_onnx, args,target_mags_correct=target_mags_correct,target_mags_wrong=target_mags_wrong)
+                integer_ondevice_training.export_frozen_model(saved_onnx, args)
 
         log_training_time(start_time)
 
