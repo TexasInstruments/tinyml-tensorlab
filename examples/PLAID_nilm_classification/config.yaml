@@ -23,6 +23,8 @@ training:
   model_config: ''
   batch_size: 256
   training_epochs: 30
+  early_stopping: true
+  early_stopping_patience: 5
   num_gpus: 0
   quantization: 2
   learning_rate: 0.04

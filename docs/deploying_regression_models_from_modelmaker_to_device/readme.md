@@ -254,7 +254,7 @@ With this workflow, you can create your own generic time series regression appli
 
 To explore more regression examples refer to the following examples:
 
-- [Washing Machine load weighing](../../examples/reg_washing_machine/readme.md) - Washing machine load weighing using current, voltage, speed data
+- [Washing Machine load weighing](../../examples/washing_machine_load_weighing/readme.md) - Washing machine load weighing using current, voltage, speed data
 - [Torque Measurement](../../examples/torque_measurement_regression/readme.md) - Predicting torque of motor using current, voltage, collant temperature and other features.
 - [Induction Motor Speed Prediction](../../examples/induction_motor_speed_prediction/readme.md) Induction motor speed prediction
 

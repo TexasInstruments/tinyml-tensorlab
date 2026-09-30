@@ -1,0 +1,38 @@
+common:
+  target_module: audio
+  task_type: audio_classification
+  target_device: MSPM0G5187
+
+dataset:
+  dataset_name: glass_break_detection
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/glass_break_detection.zip
+  
+data_processing_feature_extraction:
+  feature_extraction_name: GlassBreakDetection_512FFT_Default
+  sampling_rate: 44100
+  audio_duration_ms: 1000
+  # audio_feature: "FFT"
+  # mono: True
+  # normalize_audio: False
+  # variables: 1
+
+  # # FFT parameters
+  # feat_ext_transform: ["FFT_Q15", "Q15_SCALE", "Q15_MAG", "BINNING", "CONCAT"]
+  # frame_size: 512
+  # feature_size_per_frame: 32
+  # num_frame_concat: 86
+  # q15_scale_factor: 8
+
+training:
+  model_name: DSCNN_GB_NPU
+  batch_size: 32
+  training_epochs: 20
+  num_gpus: 0
+  quantization: 2
+  learning_rate: 0.001
+  weight_decay: 1e-5
+  auto_quantization: False
+
+testing: {}
+
+compilation: {}

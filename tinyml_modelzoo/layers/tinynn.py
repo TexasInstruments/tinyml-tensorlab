@@ -213,6 +213,70 @@ def ReluLayer(input_tensor_size=None):
     output_tensor_size = copy.deepcopy(input_tensor_size)
     return layer, output_tensor_size
 
+def DropoutLayer(dropout_prob, input_tensor_size=None):
+    layer = torch.nn.Dropout(dropout_prob)
+    output_tensor_size = copy.deepcopy(input_tensor_size)
+    return layer, output_tensor_size
+
+
+class TCDSBasicBlock(torch.nn.Module):
+    """
+    Depthwise-separable residual block with 4-conv main branch and 1-conv projection skip.
+
+    Main branch: DW(k) -> BN -> ReLU -> PW(1) -> BN -> ReLU -> DW(k) -> BN -> ReLU -> PW(1) -> BN
+    Skip branch: Conv1x1 -> BN  (projection when stride != 1 or channels change), else Identity
+    Output: ReLU(main + skip)
+    """
+    def __init__(self, in_channels, out_channels, kernel_t, stride_t):
+        super().__init__()
+        pad = (kernel_t - 1) // 2
+
+        if stride_t != 1 or in_channels != out_channels:
+            self.skip = torch.nn.Sequential(
+                torch.nn.Conv2d(in_channels, out_channels, 1, stride=(stride_t, 1)),
+                torch.nn.BatchNorm2d(out_channels),
+                torch.nn.ReLU()
+            )
+        else:
+            self.skip = torch.nn.Identity()
+
+        self.dw1 = torch.nn.Conv2d(in_channels, in_channels, (kernel_t, 1),
+                                   stride=(stride_t, 1), padding=(pad, 0), groups=in_channels)
+        self.bn_dw1 = torch.nn.BatchNorm2d(in_channels)
+        self.act_dw1 = torch.nn.ReLU()
+        self.pw1 = torch.nn.Conv2d(in_channels, out_channels, 1)
+        self.bn_pw1 = torch.nn.BatchNorm2d(out_channels)
+        self.act_pw1 = torch.nn.ReLU()
+        self.dw2 = torch.nn.Conv2d(out_channels, out_channels, (kernel_t, 1),
+                                   padding=(pad, 0), groups=out_channels)
+        self.bn_dw2 = torch.nn.BatchNorm2d(out_channels)
+        self.act_dw2 = torch.nn.ReLU()
+        self.pw2 = torch.nn.Conv2d(out_channels, out_channels, 1)
+        self.bn_pw2 = torch.nn.BatchNorm2d(out_channels)
+        self.act_out = torch.nn.ReLU()
+
+    def forward(self, x):
+        skip = self.skip(x)
+        x = self.act_dw1(self.bn_dw1(self.dw1(x)))
+        x = self.act_pw1(self.bn_pw1(self.pw1(x)))
+        x = self.act_dw2(self.bn_dw2(self.dw2(x)))
+        x = self.bn_pw2(self.pw2(x))
+        return self.act_out(x + skip)
+
+
+def TCDSBasicBlockLayer(in_channels, out_channels, kernel_size, stride=2, input_tensor_size=None, **kwargs):
+    assert isinstance(kernel_size, tuple) and len(kernel_size) == 2, 'kernel_size must be a tuple of size 2'
+    if isinstance(stride, int):
+        stride = (stride, 1)
+    kernel_t, stride_t = kernel_size[0], stride[0]
+    pad = (kernel_t - 1) // 2
+
+    layer = TCDSBasicBlock(in_channels, out_channels, kernel_t, stride_t)
+    output_tensor_size = copy.deepcopy(input_tensor_size)
+    output_tensor_size[1] = out_channels
+    output_tensor_size[2] = (input_tensor_size[2] + 2 * pad - kernel_t) // stride_t + 1
+    return layer, output_tensor_size
+
 
 def RNNLayer(input_size, hidden_size, return_last_timestep=False, input_tensor_size=None, num_layers=1, dropout=0.1, batch_first=True, rnn_type='RNN', **kwargs):
 

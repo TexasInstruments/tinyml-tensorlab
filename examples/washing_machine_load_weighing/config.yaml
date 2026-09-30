@@ -16,6 +16,8 @@ training:
   model_name: REGR_13k
   batch_size: 128
   training_epochs: 100  # use 500 epochs for a better R2 score, RMSE
+  early_stopping: true
+  early_stopping_patience: 5
   lambda_reg: 0.01
   num_gpus: 1
   quantization: 2

@@ -180,9 +180,10 @@ purpose-built config for that specific use case.
 | [electrical_fault](examples/electrical_fault/) | Voltage/Current | Classify transmission line faults using voltage and current (2-class and 6-class variants). |
 | [grid_stability](examples/grid_stability/) | Simulated grid parameters | Predict power grid stability from node parameters. |
 | [gas_sensor](examples/gas_sensor/) | Gas sensor array | Identify gas type and concentration from sensor array data. |
-| [branched_model_parameters](examples/branched_model_parameters/) | Accelerometer/Gyroscope | Human Activity Recognition from accelerometer/gyroscope data. |
+| [human_activity_recognition](examples/human_activity_recognition/) | Accelerometer/Gyroscope | Human Activity Recognition from accelerometer/gyroscope data. |
 | [nilm_appliance_usage_classification](examples/nilm_appliance_usage_classification/) | Voltage/Current | Non-Intrusive Load Monitoring - identify active appliances. |
 | [PLAID_nilm_classification](examples/PLAID_nilm_classification/) | Voltage/Current | Appliance identification using the PLAID dataset. |
+| [wifi_csi_presence_detection](examples/wifi_csi_presence_detection/) | Wi-Fi CSI | Device-free human presence detection from Wi-Fi Channel State Information. |
 
 ### Regression
 
@@ -192,7 +193,7 @@ purpose-built config for that specific use case.
 | [mosfet_temp_prediction](examples/mosfet_temp_prediction/) | Temperature/Power | Predict MOSFET temperature from electrical parameters. |
 | [torque_measurement_regression](examples/torque_measurement_regression/) | Voltage/Current/Speed/Temperature | Predict PMSM motor torque from current measurements. |
 | [induction_motor_speed_prediction](examples/induction_motor_speed_prediction/) | Voltage/Current | Predict induction motor speed from electrical signals. |
-| [reg_washing_machine](examples/reg_washing_machine/) | Voltage/Current/Speed | Predict washing machine load weight. |
+| [washing_machine_load_weighing](examples/washing_machine_load_weighing/) | Voltage/Current/Speed | Predict washing machine load weight. |
 
 ### Forecasting
 
@@ -218,6 +219,7 @@ purpose-built config for that specific use case.
 | Example | Data Type | Description |
 |---------|-----------|--------------|
 | [google_speech_command](examples/google_speech_command/) | Audio | 12-class keyword spotting from audio using MFCC + DSCNN model. |
+| [cough_detection](examples/cough_detection/) | Audio | Binary cough vs. other-sound detection using LPC features + ResNet model. |
 
 ### Image Classification
 
@@ -231,7 +233,7 @@ purpose-built config for that specific use case.
 
 | Example | Data Type | Description |
 |---------|-----------|--------------|
-| [radar_point_cloud_classification](examples/radar_point_cloud_classification/) | Radar point cloud | Human pose and fall detection from radar point-cloud frames. |
+| [radar_pose_and_fall_detection](examples/radar_pose_and_fall_detection/) | Radar point cloud | Human pose and fall detection from radar point-cloud frames. |
 
 ---
 
@@ -290,6 +292,7 @@ For detailed guidelines, see [NPU Configuration Guidelines](docs/NPU_CONFIGURATI
 | `FanImbalance_model_2_t` | Varies | Specialized | No | Fan imbalance variant 2 |
 | `FanImbalance_model_3_t` | Varies | Specialized | No | Fan imbalance variant 3 |
 | `PIRDetection_model_1_t` | Varies | Specialized | No | PIR-based presence detection |
+| `SimpleCNN2D_BN_t` | ~3K | CNN | No | Wi-Fi CSI presence detection (2-layer 2D CNN over time-frequency features). CC35X1 only. |
 
 ### Regression Models
 
@@ -349,6 +352,7 @@ Note: LSTM models are not NPU-supported.
 | Model Name | Parameters | Architecture | NPU | Description |
 |------------|------------|--------------|-----|-------------|
 | `DSCNN_NPU` | ~9K | DSCNN | Yes | Depthwise separable CNN for keyword spotting; input (1, 49, 10) MFCC |
+| `TCDS_ResNet_NPU` | ~24K | Temporal Channel-Decoupled Separable CNN | Yes | Cough detection from LPC features; input (1, 100, 70), SRAM-efficient (no 2D spatial buffers) |
 
 ### Image Classification Models
 
@@ -402,35 +406,40 @@ These categories can look similar from a distance, so here's how to tell them ap
 
 ## Release History
 
-Until **1.4.0** (2026-Jun), this history lived in the [tinyml-tensorlab](https://github.com/TexasInstruments/tinyml-tensorlab)
-repository on GitHub; that repository's source is now private. Starting with
-**1.5.0** (2026-Sep), `tinyml-modelzoo` (this repo) is the standalone, pip-installable
-entry point to TI's MCU AI flow — a simplified, easy-to-install replacement
-for what previously required cloning `tinyml-tensorlab`'s full set of
-component repos.
+
 
 - [2026-Sep] Release version 1.5.0 of the software
   <details>
 
-  - Device Support:
-    - Added AM13E2 support for vision classification and radar tasks
+  - Until **1.4.0** (2026-Jun), this history lived in the [tinyml-tensorlab](https://github.com/TexasInstruments/tinyml-tensorlab) repository on GitHub; that repository's source is now private. Starting with **1.5.0** (2026-Sep), `tinyml-modelzoo` (this repo) is the standalone, pip-installable entry point to TI's MCU AI flow — a simplified, easy-to-install replacement for what previously required cloning `tinyml-tensorlab`'s full set of component repos.
+  - Device Support: 30 MCU/wireless devices supported
+    - Added AM13E2 support for vision classification and added radar tasks
     - Added fel_memory support (feature-extraction library) for AM13 and C28x (F280013x, F280015x, F28002x) devices — enables on-device RAM/Flash estimation
-  - Models:
+    - Gen3 F28x device support reconciled: F2838x, F28P551x, F28002x, and new F28E12x device profile added across regression, forecasting, and anomaly-detection models; over-broad device lists tightened (e.g. arc fault, generic timeseries classification) to match verified per-model support
+    - Task-level target device lists for radar, image, and audio classification are now derived from each model's real device support instead of a hand-maintained list, fixing several tasks (e.g. radar classification) that had advertised devices no model actually supported
+  - Applications Supported: 34 example applications (4 generic timeseries tasks + 30 specific applications)
+  - Models: 81 models across classification/regression/forecasting/anomaly-detection (timeseries + radar) plus vision and audio classification
     - Added TCDSResNet and a compressed DSCNN for audio classification (cough detection), both NPU-compliant
     - Compressed MobileNet_v1 to fit AM13 memory budget
-    - Added Radar Point Cloud Classification support (new model + dataset flow across ModelMaker/TinyVerse/ModelZoo)
+    - Added Radar Point Cloud Classification support (new model + dataset flow )
+    - New example applications: cough detection (audio), WiFi CSI presence detection, Google speech command
+    - Re-enabled and renamed the washing machine load weighing regression example (`washing_machine_load_weighing`, was `reg_washing_machine`)
   - Flows:
-    - ModelMaker can now report estimated RAM & Flash usage for Feature Extraction before training
+    - Added early stopping for training (patience + min-delta, on by default) across all task types — timeseries classification/regression/forecasting/anomaly-detection and image classification
+    - ModelMaker can now report estimated RAM & Flash usage for Feature Extraction before training, including a standalone `estimate_memory` CLI that runs without a full training pass
     - Support for preprocessing and publicly-available datasets in audio/radar flows
-    - NAS: can now accept a NAS model id directly
+    - NaN-loss detection during training to catch instability early
   - Model Optimization:
     - Residual connection support added to quantization (TINPU)
     - Replaced qconfig_dict with a cleaner API to toggle auto-quantization on/off
-    - Hessian-aware auto-quantization bug fixes
+    - Hessian-aware (HAWQ) automatic mixed-precision quantization, plus bug fixes to the qconfig mapping and mixed-precision paths
+    - Automated Ternary-weight / 8-bit-activation QAT support
+    - NPU quantization enabled for anomaly-detection models
   - Reliability & Compatibility:
-    - Python 3.14 / PyTorch 2.13 compatibility across ModelMaker, ModelOptimization, TinyVerse
+    - Python 3.14 / PyTorch 2.11 compatibility
     - macOS ARM64 (MPS/Apple Silicon) compatibility fixes across training, evaluation, and quantization
     - torch.compile safety: unwraps compiled models correctly before ONNX/checkpoint export, falls back to eager on failure
+    - Fixed ONNX export crashing inside PyInstaller/frozen builds
     - Security/robustness hardening: safe checkpoint deserialization, safe YAML loading, safer cache-dataset handling
     - Training performance: torch.compile, AMP, persistent workers, more efficient eval loop
     - Large expansion of automated test coverage (functional test tiers, pytest suites) across all repos
@@ -438,9 +447,6 @@ component repos.
     - Added build_wheels.sh to build TinyVerse/ModelOptimization/ModelMaker wheels from local source
     - ModelZoo and TinyVerse examples now runnable standalone via published ModelMaker wheel dependency (TI official wheel CDN)
     - `tinyml-tensorlab` deprecated as the public entry point; `tinyml-modelzoo` takes over as the standalone, pip-installable way to use TI's MCU AI flow
-  - Documentation:
-    - DEVICE_TASK_SUPPORT.md and NPU_CONFIGURATION_GUIDELINES.md updated
-    - New how-to: publishing shared wheels
   - Special Acknowledgement:
     - Shoutout to [@musicalplatypus](https://github.com/musicalplatypus) for contributing towards a better, neater and more feature-rich toolchain by their additions such as full macOS/Apple Silicon (MPS) support, torch.compile+AMP training-performance optimizations, and NAS bug fixes. They also hardened the codebase with security fixes for unsafe deserialization/YAML loading, overhauled CI so tests actually run across all four packages, and expanded the test suite and architecture docs.
 

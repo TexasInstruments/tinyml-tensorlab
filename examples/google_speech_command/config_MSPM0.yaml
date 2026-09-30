@@ -7,11 +7,13 @@ dataset:
   input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/google_speech_commands_12class.zip
 data_processing_feature_extraction:
   feature_extraction_name: GoogleSpeechCommands_MFCC_Default
+  sampling_rate: 16000
+  audio_duration_ms: 1000
 training:
   model_name: DSCNN_NPU
   batch_size: 64
   training_epochs: 20
-  num_gpus: 0
+  num_gpus: 1
   quantization: 2
   learning_rate: 0.1
   weight_decay: 1e-5

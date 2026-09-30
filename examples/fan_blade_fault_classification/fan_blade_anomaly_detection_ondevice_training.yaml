@@ -31,6 +31,9 @@ training:
     ondevice_training: True
     trainable_layers_from_last: 6
     export_samples_per_class: [10, 10, 10] #[Train, Val, Test]
+    # Default (100) is sized for small MSPM0-class flash; F29H85 has 4MB flash,
+    # so reserve a slice of that instead of the generic MSPM0-scale default.
+    target_device_flash_kb: 256
 
 testing:
     enable: True

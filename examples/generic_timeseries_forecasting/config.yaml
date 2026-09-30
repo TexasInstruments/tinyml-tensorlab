@@ -18,7 +18,9 @@ training:
   model_config: ''
   batch_size: 32
   training_epochs: 50
-  num_gpus: 1
+  early_stopping: true
+  early_stopping_patience: 5
+  num_gpus: 0
   quantization: 2
   optimizer: adam
   output_int: false
