@@ -81,6 +81,7 @@ TARGET_DEVICE_MSPM0G5187 = 'MSPM0G5187'
 TARGET_DEVICE_MSPM0G3519 = 'MSPM0G3519'
 TARGET_DEVICE_MSPM33C32 = 'MSPM33C32'
 TARGET_DEVICE_MSPM33C34 = 'MSPM33C34'
+TARGET_DEVICE_AM13E2 = 'AM13E2'
 TARGET_DEVICE_CC2755 = 'CC2755'
 TARGET_DEVICE_CC1352 = 'CC1352'
 TARGET_DEVICE_CC1354 = 'CC1354'
@@ -103,7 +104,8 @@ TARGET_DEVICES = [
     TARGET_DEVICE_CC2755,
     TARGET_DEVICE_CC1352,
     TARGET_DEVICE_CC35X1,
-    TARGET_DEVICE_CC1354
+    TARGET_DEVICE_CC1354,
+    TARGET_DEVICE_AM13E2
 ]
 
 # will not be listed in the GUI, but can be used in command line
@@ -114,11 +116,7 @@ TARGET_DEVICES_ADDITIONAL = [
 # include additional devices that are not currently supported in release.
 TARGET_DEVICES_ALL = TARGET_DEVICES + TARGET_DEVICES_ADDITIONAL
 
-TARGET_DEVICE_TYPE_MCU = 'MCU'
 
-TARGET_DEVICE_TYPES = [
-    TARGET_DEVICE_TYPE_MCU
-]
 
 # training backend
 TRAINING_BACKEND_TINYML_TINYVERSE = 'tinyml_tinyverse'
@@ -144,380 +142,33 @@ TRAINING_BATCH_SIZE_DEFAULT = {
 
 }
 
-TARGET_SDK_VERSION_C2000 = '26.0.0'
-TARGET_SDK_RELEASE_C2000 = '26_00_00'
 
-TARGET_SDK_VERSION_F29H85 = '1.00'
-TARGET_SDK_RELEASE_F29H85 = '01_00_00'
 
-TARGET_SDK_VERSION_MSPM0 = "2.11.00.xx"
-TARGET_SDK_RELEASE_MSPM0 = '2_11_00_xx'
 
-TARGET_SDK_VERSION_MSPM33C = "2.10.00.04"
-TARGET_SDK_RELEASE_MSPM33C = '2_10_00_04'
 
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n'
 
-##### AM263 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_AM263 = \
-    f'''* Product information: https://www.ti.com/product/AM2634
-* Development board: https://www.ti.com/tool/LP-AM263
-* SDK: https://www.ti.com/tool/MCU-PLUS-SDK-AM263X
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
 
-TARGET_DEVICE_DETAILS_AM263 = \
-    f'''Quad-core Arm® Cortex®-R5F MCU up to 400 MHz with real-time control and security
-* More details : https://www.ti.com/product/AM2634
+def _task_target_devices(task_type):
+    """
+    Derive target_devices for task_type from the vision model registry
+    (vision has no tinyml_modelzoo backing, so models live under
+    ai_modules/vision/training/tinyml_tinyverse/*.py). Deferred import
+    avoids the constants <-> training import cycle.
+    """
+    from .training import get_model_descriptions as _get_model_descriptions
+    devices = set()
+    for model_desc in _get_model_descriptions(task_type=task_type).values():
+        devices.update(model_desc['training'].get('target_devices', []))
+    return sorted(devices)
 
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_AM263}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F280015 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015 = \
-    f'''* Product information: https://www.ti.com/product/TMS320F2800157
-* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800157
-* C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
-
-TARGET_DEVICE_DETAILS_F280015 = \
-    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
-* More details : https://www.ti.com/tool/LAUNCHXL-F2800157
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F280013 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013 = \
-    f'''* Product information: https://www.ti.com/product/TMS320F2800137
-* Launchpad: https://www.ti.com/tool/LAUNCHXL-F2800137
-* C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
-
-TARGET_DEVICE_DETAILS_F280013 = \
-    f'''C2000™ 120-MHz C28x CPU with FPU and TMU, 256-KB Flash, two 12-bit ADCs, 14 PWM channels, CAN (DCAN), one encoder module (eQEP), UART, and more
-* More details : https://www.ti.com/tool/LAUNCHXL-F2800137
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F28003 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F28003 = \
-    f'''* Product information: https://www.ti.com/product/TMS320F280039C
-* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280039C
-* C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
-
-TARGET_DEVICE_DETAILS_F28003 = \
-    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
-* More details : https://www.ti.com/product/TMS320F280039C
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28003}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F28004 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F28004 = \
-    f'''* Product information: https://www.ti.com/product/TMS320F280049C
-* Launchpad: https://www.ti.com/tool/LAUNCHXL-F280049C
-* C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
-
-TARGET_DEVICE_DETAILS_F28004 = \
-    f'''C2000™ 32-bit MCU 120-MHz 384-KB flash, FPU, TMU with CLA, CLB, AES and CAN-FD
-* More details : https://www.ti.com/product/TMS320F280049C
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28004}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F2837 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837 = \
-    f'''* Product information: https://www.ti.com/product/TMS320F28377D
-* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28379D
-* C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
-
-TARGET_DEVICE_DETAILS_F2837 = \
-    f'''C2000™ 32-bit MCU with 800 MIPS, 2xCPU, 2xCLA, FPU, TMU, 1024 KB flash, EMIF, 16b ADC
-* More details : https://www.ti.com/product/TMS320F28377D
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F28P65 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P65 = \
-    f'''* Product information: https://www.ti.com/product/TMS320F28P650DK
-* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P65X
-* C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
-
-TARGET_DEVICE_DETAILS_F28P65 = \
-    f'''C2000™ 32-bit MCU, 2x C28x+CLA CPU, Lock Step, 1.28-MB flash, 16-b ADC, HRPWM, EtherCAT, CAN-FD, AES
-* More details : https://www.ti.com/product/TMS320F28P650DK
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P65}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F28P55 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55 = \
-    f'''* Product information: https://www.ti.com/product/TMS320F28P550SJ
-* Launchpad: https://www.ti.com/tool/LAUNCHXL-F28P55X
-* C2000 SDK: https://www.ti.com/tool/C2000WARE
-* SDK release: {TARGET_SDK_RELEASE_C2000}'''
-
-TARGET_DEVICE_DETAILS_F28P55 = \
-    f'''C2000™ 32-bit MCU, 1x C28x + 1x CLA, 150-MHz, 1.1-MB flash, 5x ADCs, CLB, AES and NNPU
-* More details : https://www.ti.com/product/TMS320F28P550SJ
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### F29H85 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_F29H85 = \
-    f'''* Product information: https://www.ti.com/product/F29H850TU
-* SOM EVM: https://www.ti.com/tool/F29H85X-SOM-EVM
-* C2000 SDK: https://www.ti.com/tool/download/F29H85X-SDK/
-* SDK release: {TARGET_SDK_RELEASE_F29H85}'''
-
-TARGET_DEVICE_DETAILS_F29H85 = \
-    f'''C2000™ 64-bit MCU with C29x 200MHz tri-core, lockstep, functional safety compliance, 4MB
-* More details : https://www.ti.com/product/F29H850TU
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_F29H85}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### M0G3507 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3507 = \
-    f'''* Product information: https://www.ti.com/product/MSPM0G3507
-* Launchpad: https://www.ti.com/tool/LP-MSPM0G3507
-* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: {TARGET_SDK_RELEASE_MSPM0}'''
-
-TARGET_DEVICE_DETAILS_MSPM0G3507= \
-    f'''80MHz Arm® Cortex®-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD, MATHA
-* More details : https://www.ti.com/product/MSPM0G3507
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3507}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### M0G3519 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3519 = \
-    f'''* Product information: https://www.ti.com/product/MSPM0G3519
-* Launchpad: https://www.ti.com/tool/LP-MSPM0G3519
-* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: {TARGET_SDK_RELEASE_MSPM0}'''
-
-TARGET_DEVICE_DETAILS_MSPM0G3519= \
-    f'''80MHz Arm® Cortex®-M0+ MCU with 512KB flash 128KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, 2xCAN-FD, MATHA
-* More details : https://www.ti.com/product/MSPM0G3519
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3519}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### M0G5187 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G5187 = \
-    f'''* Product information: https://www.ti.com/product/MSPM0G5187
-* Launchpad: https://www.ti.com/tool/LP-MSPM0G5187
-* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: {TARGET_SDK_RELEASE_MSPM0}'''
-
-TARGET_DEVICE_DETAILS_MSPM0G5187= \
-    f'''80MHz Arm® Cortex®-M0+ MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, USB, TI-NPU
-* More details : https://www.ti.com/product/MSPM0G5187
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G5187}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### MSPM33C32 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM33C32 = \
-    f'''* Product information: https://www.ti.com/product/MSPM33C32
-* Launchpad: https://www.ti.com/tool/LP-MSPM33C32
-* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: {TARGET_SDK_RELEASE_MSPM33C}'''
-
-TARGET_DEVICE_DETAILS_MSPM33C32= \
-    f'''80MHz Arm® Cortex®-M33 MCU with 128KB flash 32KB SRAM 2x4Msps ADC, DAC, 3xCOMP, 2xOPA, CAN-FD
-* More details : https://www.ti.com/product/MSPM33C32
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM33C32}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-##### MSPM33C34 ######
-TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM33C34 = \
-    f'''* Product information: https://www.ti.com/product/MSPM33C34
-* Launchpad: https://www.ti.com/tool/LP-MSPM33C34
-* MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
-* SDK release: {TARGET_SDK_RELEASE_MSPM33C}'''
-
-TARGET_DEVICE_DETAILS_MSPM33C34= \
-    f'''80MHz Arm® Cortex®-M33 MCU with 128KB flash 32KB SRAM 2x4Msps ADC, USB, TI-NPU
-* More details : https://www.ti.com/product/MSPM33C34
-
-Important links:
-{TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM33C34}
-
-Additional information:
-{TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION}'''
-
-# higher device_selection_factor indicates higher performance device.
-TARGET_DEVICE_DESCRIPTIONS = {
-    TARGET_DEVICE_F280013: {
-        'device_name': TARGET_DEVICE_F280013,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 0,
-        'device_details': TARGET_DEVICE_DETAILS_F280013,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_F280015: {
-        'device_name': TARGET_DEVICE_F280015,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 1,
-        'device_details': TARGET_DEVICE_DETAILS_F280015,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_F28003: {
-        'device_name': TARGET_DEVICE_F28003,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 2,
-        'device_details': TARGET_DEVICE_DETAILS_F28003,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_F28004: {
-        'device_name': TARGET_DEVICE_F28004,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 3,
-        'device_details': TARGET_DEVICE_DETAILS_F28004,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_F2837: {
-        'device_name': TARGET_DEVICE_F2837,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 4,
-        'device_details': TARGET_DEVICE_DETAILS_F2837,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_F28P65: {
-        'device_name': TARGET_DEVICE_F28P65,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 5,
-        'device_details': TARGET_DEVICE_DETAILS_F28P65,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_F28P55: {
-        'device_name': TARGET_DEVICE_F28P55,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 6,
-        'device_details': TARGET_DEVICE_DETAILS_F28P55,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_AM263: {
-        'device_name': TARGET_DEVICE_AM263,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 7,
-        'device_details': TARGET_DEVICE_DETAILS_AM263,
-        'sdk_version': TARGET_SDK_VERSION_C2000,
-        'sdk_release': TARGET_SDK_RELEASE_C2000,
-    },
-    TARGET_DEVICE_F29H85: {
-        'device_name': TARGET_DEVICE_F29H85,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 8,
-        'device_details': TARGET_DEVICE_DETAILS_F29H85,
-        'sdk_version': TARGET_SDK_VERSION_F29H85,
-        'sdk_release': TARGET_SDK_RELEASE_F29H85,
-    },
-     TARGET_DEVICE_MSPM0G3507: {
-        'device_name': TARGET_DEVICE_MSPM0G3507,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 9,
-        'device_details': TARGET_DEVICE_DETAILS_MSPM0G3507,
-        'sdk_version': TARGET_SDK_VERSION_MSPM0,
-        'sdk_release': TARGET_SDK_RELEASE_MSPM0,
-    },
-    TARGET_DEVICE_MSPM0G3519: {
-        'device_name': TARGET_DEVICE_MSPM0G3519,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 10,
-        'device_details': TARGET_DEVICE_DETAILS_MSPM0G3519,
-        'sdk_version': TARGET_SDK_VERSION_MSPM0,
-        'sdk_release': TARGET_SDK_RELEASE_MSPM0,
-    },
-    TARGET_DEVICE_MSPM0G5187: {
-        'device_name': TARGET_DEVICE_MSPM0G5187,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 11,
-        'device_details': TARGET_DEVICE_DETAILS_MSPM0G5187,
-        'sdk_version': TARGET_SDK_VERSION_MSPM0,
-        'sdk_release': TARGET_SDK_RELEASE_MSPM0,
-    },
-    TARGET_DEVICE_MSPM33C32: {
-        'device_name': TARGET_DEVICE_MSPM33C32,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 12,
-        'device_details': TARGET_DEVICE_DETAILS_MSPM33C32,
-        'sdk_version': TARGET_SDK_VERSION_MSPM33C,
-        'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
-    },
-    TARGET_DEVICE_MSPM33C34: {
-        'device_name': TARGET_DEVICE_MSPM33C34,
-        'device_type': TARGET_DEVICE_TYPE_MCU,
-        'device_selection_factor': 13,
-        'device_details': TARGET_DEVICE_DETAILS_MSPM33C34,
-        'sdk_version': TARGET_SDK_VERSION_MSPM33C,
-        'sdk_release': TARGET_SDK_RELEASE_MSPM33C,
-    },
-}
 
 TASK_DESCRIPTIONS = {
-  
+
     TASK_TYPE_IMAGE_CLASSIFICATION: {
         'task_name': 'MNIST Classification',
         'target_module': 'vision',
-        'target_devices': TARGET_DEVICES,
+        'target_devices': _task_target_devices(TASK_TYPE_IMAGE_CLASSIFICATION),
         'stages': ['dataset', 'data_processing_feature_extraction', 'training', 'compilation'],
     },
 
@@ -596,12 +247,13 @@ MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 # MSPM33C Compiler
 MSPM33C_CGT_VERSION= 'ti-cgt-armllvm_5.1.1.LTS'
 MSPM33C_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
-
+AM13E2_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
 
 CROSS_COMPILER_OPTIONS_C28 = (f"--abi=eabi -O3 --opt_for_speed=5 --c99 -v28 -ml -mt --gen_func_subsections --float_support={{FLOAT_SUPPORT}} -I{C2000_CGT_INCLUDE} -I.")
 CROSS_COMPILER_OPTIONS_F29H85 = (f"-O3 -ffast-math -I{C29_CGT_INCLUDE} -I.")
-CROSS_COMPILER_OPTIONS_MSPM0 = ("-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
-CROSS_COMPILER_OPTIONS_MSPM33C = ("-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type")
+CROSS_COMPILER_OPTIONS_MSPM0 = (f"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
+CROSS_COMPILER_OPTIONS_MSPM33C = (f"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type")
+CROSS_COMPILER_OPTIONS_AM13E2 = f"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m33 -mfloat-abi=hard -mfpu=fpv5-sp-d16 -mlittle-endian -O3 -I. -Wno-return-type -march=thumbv8.1-m.main+cdecp0"
 
 CROSS_COMPILER_OPTIONS_F280013 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280013.lower() + 'x')
 CROSS_COMPILER_OPTIONS_F280015 = CROSS_COMPILER_OPTIONS_C28.format(FLOAT_SUPPORT='fpu32', DEVICE_NAME=TARGET_DEVICE_F280015.lower() + 'x')
@@ -621,7 +273,28 @@ COMPILATION_MSPM33C_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize
 COMPILATION_MSPM33C_HARD_TINPU = dict(target="c, ti-npu skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 COMPILATION_MSPM33C_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=MSPM33C_CROSS_COMPILER, )
 
+# AM13E2
+COMPILATION_AM13E2_SOFT_TINPU = dict(target="c, ti-npu type=soft skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_HARD_TINPU = dict(target="c, ti-npu type=hard skip_normalize=true output_int=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_SOFT_TINPU_REG = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_SOFT_TINPU_AD = dict(target="c, ti-npu type=soft skip_normalize=true output_int=false", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_SOFT_TINPU_FORECASTING = dict(target="c, ti-npu type=soft", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+COMPILATION_AM13E2_HARD_TINPU_OPT_SPACE = dict(target="c, ti-npu skip_normalize=true output_int=true opt_for_space=true", target_c_mcpu='cortex-m33', cross_compiler=AM13E2_CROSS_COMPILER, )
+
 PRESET_DESCRIPTIONS = {
+    TARGET_DEVICE_AM13E2: {
+        TASK_TYPE_IMAGE_CLASSIFICATION: {
+            COMPILATION_DEFAULT: dict(
+                compilation=dict(**COMPILATION_MSPM0_HARD_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0, )
+            ),
+            COMPILATION_FORCED_SOFT_NPU: dict(
+                compilation=dict(**COMPILATION_MSPM0_SOFT_TINPU, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0, )
+            ),
+              COMPILATION_NPU_OPT_FOR_SPACE: dict(
+                compilation=dict(**COMPILATION_MSPM0_HARD_TINPU_OPT_SPACE, cross_compiler_options=CROSS_COMPILER_OPTIONS_MSPM0, )
+            ),
+        }
+    },
     TARGET_DEVICE_AM263: {
        
     },

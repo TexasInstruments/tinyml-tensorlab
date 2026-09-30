@@ -1,0 +1,959 @@
+{
+  "model_descriptions":{
+    "Lenet5":{
+      "common":{
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"image_classification",
+        "task_category":"image_classification",
+        "target_device":null,
+        "target_module":"vision",
+        "run_name":"{date-time}/{model_name}",
+        "generic_model":true,
+        "model_details":"Lenet5.\nCNN for image classification.\n2 Conv+BatchNorm+Relu+MaxPool layers + 3 Linear layers."
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":null,
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"Lenet5",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericImageDataset",
+        "model_training_id":"CNN_LENET5",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "MSPM0G3507":{},
+          "MSPM0G3519":{},
+          "MSPM0G5187":{}
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "early_stopping":true,
+        "early_stopping_patience":5,
+        "early_stopping_min_delta":0.0,
+        "batch_size":64,
+        "learning_rate":0.04,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_int":null,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "ondevice_training":false,
+        "auto_quantization":false,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "variables":1,
+        "feature_extraction_name":null,
+        "sampling_rate":1,
+        "image_height":28,
+        "image_width":28,
+        "image_num_channel":1,
+        "image_mean":0.1307,
+        "image_scale":0.3081,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "augmentation_transform":[],
+        "nn_for_feature_extraction":false,
+        "feature_size_per_frame":null,
+        "gof_test":false,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "pad_value":0,
+        "binary_threshold":128,
+        "clahe_clip_limit":2.0,
+        "clahe_tile_grid_size":[
+          8,
+          8
+        ],
+        "sobel_mode":"magnitude",
+        "sobel_ksize":3,
+        "laplacian_ksize":3,
+        "horizontal_flip_prob":0.5,
+        "vertical_flip_prob":0.5,
+        "random_rotation_deg":15,
+        "color_jitter_brightness":0.1,
+        "color_jitter_contrast":0.1,
+        "color_jitter_saturation":0.05,
+        "color_jitter_hue":0.01
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "MobileNetV1_28k_NPU":{
+      "common":{
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"image_classification",
+        "task_category":"image_classification",
+        "target_device":null,
+        "target_module":"vision",
+        "run_name":"{date-time}/{model_name}",
+        "generic_model":true,
+        "model_details":"MobileNetV1_28k_NPU.\n NPU-compliant MobileNetV1-inspired tiny model.\n2 Conv+BatchNorm+Relu+MaxPool layers + 3 Linear layers."
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":null,
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"MobileNetV1_28k_NPU",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericImageDataset",
+        "model_training_id":"CNN_IMG_MOBILENETV1_28K_NPU",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "MSPM0G3507":{},
+          "MSPM0G3519":{},
+          "MSPM0G5187":{},
+          "AM13E2":{}
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "early_stopping":true,
+        "early_stopping_patience":5,
+        "early_stopping_min_delta":0.0,
+        "batch_size":64,
+        "learning_rate":0.04,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_int":null,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "ondevice_training":false,
+        "auto_quantization":false,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "variables":1,
+        "feature_extraction_name":null,
+        "sampling_rate":1,
+        "image_height":28,
+        "image_width":28,
+        "image_num_channel":1,
+        "image_mean":0.1307,
+        "image_scale":0.3081,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "augmentation_transform":[],
+        "nn_for_feature_extraction":false,
+        "feature_size_per_frame":null,
+        "gof_test":false,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "pad_value":0,
+        "binary_threshold":128,
+        "clahe_clip_limit":2.0,
+        "clahe_tile_grid_size":[
+          8,
+          8
+        ],
+        "sobel_mode":"magnitude",
+        "sobel_ksize":3,
+        "laplacian_ksize":3,
+        "horizontal_flip_prob":0.5,
+        "vertical_flip_prob":0.5,
+        "random_rotation_deg":15,
+        "color_jitter_brightness":0.1,
+        "color_jitter_contrast":0.1,
+        "color_jitter_saturation":0.05,
+        "color_jitter_hue":0.01
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "MobileNetV2_58k_NPU":{
+      "common":{
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"image_classification",
+        "task_category":"image_classification",
+        "target_device":null,
+        "target_module":"vision",
+        "run_name":"{date-time}/{model_name}",
+        "generic_model":true,
+        "model_details":"MobileNetV2_58k_NPU.\n NPU-compliant MobileNetV2-inspired tiny model."
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.6,
+          0.3,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":null,
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"MobileNetV2_58k_NPU",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericImageDataset",
+        "model_training_id":"CNN_IMG_MOBILENETV2_58K_NPU",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "MSPM0G3507":{},
+          "MSPM0G3519":{},
+          "MSPM0G5187":{},
+          "AM13E2":{}
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "early_stopping":true,
+        "early_stopping_patience":5,
+        "early_stopping_min_delta":0.0,
+        "batch_size":64,
+        "learning_rate":0.04,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0.0001,
+        "lr_scheduler":"cosineannealinglr",
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_int":null,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          },
+          {
+            "type":"group",
+            "dynamic":false,
+            "name":"train_group",
+            "label":"Training Parameters",
+            "default":[
+              "training_epochs",
+              "learning_rate"
+            ]
+          },
+          {
+            "label":"Epochs",
+            "name":"training_epochs",
+            "type":"integer",
+            "default":50,
+            "min":1,
+            "max":300
+          },
+          {
+            "label":"Learning Rate",
+            "name":"learning_rate",
+            "type":"float",
+            "default":0.04,
+            "min":0.001,
+            "max":0.1,
+            "decimal_places":3,
+            "increment":0.001
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "ondevice_training":false,
+        "auto_quantization":false,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "variables":1,
+        "feature_extraction_name":null,
+        "sampling_rate":1,
+        "image_height":28,
+        "image_width":28,
+        "image_num_channel":1,
+        "image_mean":0.1307,
+        "image_scale":0.3081,
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "augmentation_transform":[],
+        "nn_for_feature_extraction":false,
+        "feature_size_per_frame":null,
+        "gof_test":false,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "pad_value":0,
+        "binary_threshold":128,
+        "clahe_clip_limit":2.0,
+        "clahe_tile_grid_size":[
+          8,
+          8
+        ],
+        "sobel_mode":"magnitude",
+        "sobel_ksize":3,
+        "laplacian_ksize":3,
+        "horizontal_flip_prob":0.5,
+        "vertical_flip_prob":0.5,
+        "random_rotation_deg":15,
+        "color_jitter_brightness":0.1,
+        "color_jitter_contrast":0.1,
+        "color_jitter_saturation":0.05,
+        "color_jitter_hue":0.01
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "preset_descriptions":{
+    "AM13E2":{
+      "image_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      }
+    },
+    "AM263":{},
+    "F280015":{},
+    "F28004":{},
+    "F28P65":{},
+    "F28P55":{},
+    "F2837":{},
+    "F29H85":{},
+    "MSPM0G3507":{
+      "image_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      }
+    },
+    "MSPM0G3519":{
+      "image_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      }
+    },
+    "MSPM0G5187":{
+      "image_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m0plus",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type"
+          }
+        }
+      }
+    },
+    "MSPM33C32":{
+      "image_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
+          }
+        }
+      }
+    },
+    "MSPM33C34":{
+      "image_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
+          }
+        },
+        "forced_soft_npu_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
+          }
+        },
+        "compress_npu_layer_data":{
+          "compilation":{
+            "target":"c, ti-npu skip_normalize=true output_int=true opt_for_space=true",
+            "target_c_mcpu":"cortex-m33",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-O3 -mcpu=cortex-m33 -march=thumbv6m -mfpu=fpv5-sp-d16 -DARM_CPU_INTRINSICS_EXIST -mlittle-endian -mfloat-abi=hard -I. -Wno-return-type"
+          }
+        }
+      }
+    }
+  },
+  "target_device_descriptions":{
+    "F280013":{},
+    "F280015":{},
+    "F28003":{},
+    "F28004":{},
+    "F2837":{},
+    "F28P55":{},
+    "F28P65":{},
+    "F29H85":{},
+    "MSPM0G3507":{},
+    "MSPM0G3519":{},
+    "MSPM0G5187":{},
+    "MSPM33C32":{},
+    "MSPM33C34":{},
+    "CC2755":{},
+    "CC1352":{},
+    "CC35X1":{},
+    "CC1354":{},
+    "AM13E2":{}
+  },
+  "task_descriptions":{
+    "image_classification":{
+      "task_name":"MNIST Classification",
+      "target_module":"vision",
+      "target_devices":[
+        "AM13E2",
+        "MSPM0G3507",
+        "MSPM0G3519",
+        "MSPM0G5187"
+      ],
+      "stages":[
+        "dataset",
+        "data_processing_feature_extraction",
+        "training",
+        "compilation"
+      ]
+    }
+  },
+  "sample_dataset_descriptions":{
+    "mnist_image_classification":{
+      "common":{
+        "task_type":"image_classification",
+        "task_category":"image_classification"
+      },
+      "dataset":{
+        "dataset_name":"mnist_image_classification",
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip"
+      },
+      "info":{
+        "dataset_url":"http://yann.lecun.com/exdb/mnist/",
+        "dataset_detailed_name":"Modified National Institute of Standards and Technology (MNIST) Database",
+        "dataset_description":"The MNIST dataset is a large database of handwritten digits (0\u20139) commonly used for training and testing in the field of machine learning. It consists of 60,000 training images and 10,000 test images, each 28x28 grayscale. MNIST was created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges as a benchmark for image classification research.",
+        "dataset_size":"60,000 training images, 10,000 test images (28x28 grayscale)",
+        "dataset_source":"Created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges from NIST data",
+        "dataset_license":"Freely available for research and educational purposes",
+        "dataset_citation":"Yann LeCun, Corinna Cortes, and Christopher J.C. Burges. \"The MNIST Database of Handwritten Digits.\" 1998. http://yann.lecun.com/exdb/mnist/"
+      }
+    },
+    "coffee_bean_classification":{
+      "common":{
+        "task_type":"image_classification",
+        "task_category":"image_classification"
+      },
+      "dataset":{
+        "dataset_name":"coffee_bean_classification",
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/coffee_bean_classification.zip"
+      },
+      "info":{
+        "dataset_url":"https://www.kaggle.com/datasets/gpiosenka/coffee-bean-dataset-resized-224-x-224",
+        "dataset_detailed_name":"Coffee Bean Dataset Resized 224x224",
+        "dataset_description":"The Coffee Bean dataset is an image classification dataset containing coffee bean images grouped into roast/bean categories such as Dark, Green, Light, and Medium. It can be used to train and evaluate image classification models that distinguish coffee bean roast levels using visual cues such as color, texture, and surface appearance.",
+        "dataset_size":"Four classes: Dark, Green, Light, and Medium. Images are resized to 224x224 in the original dataset source.",
+        "dataset_source":"Kaggle dataset published as Coffee Bean Dataset Resized (224 X 224)",
+        "dataset_license":"Refer to the dataset page for the latest license/usage terms.",
+        "dataset_citation":"Coffee Bean Dataset Resized (224 X 224), Kaggle. https://www.kaggle.com/datasets/gpiosenka/coffee-bean-dataset-resized-224-x-224"
+      }
+    },
+    "machine_readable_code_classification":{
+      "common":{
+        "task_type":"image_classification",
+        "task_category":"image_classification"
+      },
+      "dataset":{
+        "dataset_name":"machine_readable_code_classification",
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/machine_readable_code_classification.zip"
+      },
+      "info":{
+        "dataset_url":"Generated locally using the repository dataset generation script.",
+        "dataset_detailed_name":"Synthetic Machine Readable Code 28x28 Dataset",
+        "dataset_description":"The Machine Readable Code dataset is a synthetic low-resolution image classification dataset created for tiny image classification experiments. It contains three classes: QR code, barcode, and other/non-code images. QR images are generated using random alphanumeric payloads, barcode images are generated as Code128 barcodes without printed text, and the other class contains blank, noise, line, and block-pattern images. All images are converted to 28x28 grayscale binary PNGs.",
+        "dataset_size":"3,000 images per class, 9,000 images total. Each image is 28x28 grayscale binary.",
+        "dataset_source":"Generated synthetically using Python packages qrcode, python-barcode, Pillow, and NumPy."
+      }
+    },
+    "mnist_classes":{
+      "common":{
+        "task_type":"image_classification",
+        "task_category":"image_classification"
+      },
+      "dataset":{
+        "dataset_name":"mnist_classes",
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/mnist_classes.zip"
+      },
+      "info":{
+        "dataset_url":"http://yann.lecun.com/exdb/mnist/",
+        "dataset_detailed_name":"MNIST Handwritten Digits Classification",
+        "dataset_description":"MNIST dataset with handwritten digit images (0-9) organized as class folders for image classification workflows. Standard 28x28 grayscale images used for image classification training and evaluation.",
+        "dataset_size":"Multiple classes of handwritten digit images (28x28 grayscale)",
+        "dataset_source":"Created by Yann LeCun, Corinna Cortes, and Christopher J.C. Burges from NIST data",
+        "dataset_license":"Freely available for research and educational purposes",
+        "dataset_citation":"Yann LeCun, Corinna Cortes, and Christopher J.C. Burges. \"The MNIST Database of Handwritten Digits.\" 1998. http://yann.lecun.com/exdb/mnist/"
+      }
+    }
+  },
+  "version_descriptions":{
+    "version":"1.5.0"
+  },
+  "tooltip_descriptions":{
+    "common":{},
+    "dataset":{},
+    "training":{
+      "training_epochs":{
+        "name":"Epochs",
+        "description":"Epoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs."
+      },
+      "learning_rate":{
+        "name":"Learning rate",
+        "description":"Learning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task."
+      },
+      "batch_size":{
+        "name":"Batch size",
+        "description":"Batch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy."
+      },
+      "weight_decay":{
+        "name":"Weight decay",
+        "description":"Weight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm."
+      },
+      "early_stopping":{
+        "name":"Early Stopping",
+        "description":"Stop training automatically once the validation metric stops improving. This helps avoid overfitting and can reduce unnecessary training time."
+      },
+      "early_stopping_patience":{
+        "name":"Early Stopping Patience",
+        "description":"Number of epochs with no improvement before stopping early. It is a hyper parameter that can be tuned along with Early Stopping."
+      }
+    },
+    "compilation":{
+      "preset_name":{
+        "name":"Preset Name",
+        "description":"Two presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), "
+      }
+    },
+    "deploy":{
+      "download_trained_model_to_pc":{
+        "name":"Download trained model",
+        "description":"Trained model can be downloaded to the PC for inspection."
+      },
+      "download_compiled_model_to_pc":{
+        "name":"Download compiled model artifacts to PC",
+        "description":"Compiled model can be downloaded to the PC for inspection."
+      },
+      "download_compiled_model_to_evm":{
+        "name":"Download compiled model artifacts to EVM",
+        "description":"Compiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section."
+      }
+    }
+  },
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* MNIST Classification\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\nSupported devices: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, MSPM33C34, CC2755, CC1352, CC35X1, CC1354, AM13E2\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n#### Early Stopping\nStop training automatically once the validation metric stops improving. This helps avoid overfitting and can reduce unnecessary training time.\n#### Early Stopping Patience\nNumber of epochs with no improvement before stopping early. It is a hyper parameter that can be tuned along with Early Stopping.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+}

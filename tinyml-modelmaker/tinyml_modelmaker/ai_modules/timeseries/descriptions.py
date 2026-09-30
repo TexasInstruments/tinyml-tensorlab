@@ -28,172 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #################################################################################
 
-import numbers
-
 from ... import utils, version
 from . import constants, training
-
-
-def _get_paretto_front_best(xy_list, x_index=0, y_index=1, inverse_relaionship=False):
-    xy_list = sorted(
-        xy_list, key=lambda x: x[x_index], reverse=inverse_relaionship)
-    paretto_front = [xy_list[0]]
-    for xy in xy_list[1:]:
-        if xy[y_index] >= paretto_front[-1][y_index]:
-            paretto_front.append(xy)
-        #
-    #
-    # sort based on first index - reverse order in inference time is ascending order in FPS (faster performance)
-    paretto_front = sorted(
-        paretto_front, key=lambda x: x[x_index], reverse=True)
-    return paretto_front
-
-
-def _get_paretto_front_approx(xy_list, x_index=0, y_index=1, inverse_relaionship=False):
-    # normalize the values
-    min_x = min(xy[0] for xy in xy_list)
-    max_x = max(xy[0] for xy in xy_list)
-    min_y = min(xy[1] for xy in xy_list)
-    max_y = max(xy[1] for xy in xy_list)
-    norm_xy_list = [[(xy[0] - min_x + 1) / (max_x - min_x + 1), (xy[1] - min_y + 1) / (max_y - min_y + 1), xy[2]] for xy
-                    in xy_list]
-    if inverse_relaionship:
-        efficiency_list = [list(xy) + [xy[y_index] * xy[x_index]]
-                           for xy in norm_xy_list]
-    else:
-        efficiency_list = [list(xy) + [xy[y_index] / xy[x_index]]
-                           for xy in norm_xy_list]
-    #
-    efficiency_list = sorted(
-        efficiency_list, key=lambda x: x[-1], reverse=True)
-    # take the good models
-    num_models_selected = max(len(efficiency_list) * 2 // 3, 1)
-    efficiency_list = efficiency_list[:num_models_selected]
-    selected_indices = [xy[2] for xy in efficiency_list]
-    selected_entries = [xy for xy in xy_list if xy[2] in selected_indices]
-    # sort based on first index - reverse order in inference time is ascending order in FPS (faster performance)
-    paretto_front = sorted(
-        selected_entries, key=lambda x: x[x_index], reverse=True)
-    return paretto_front
-
-
-def get_paretto_front_combined(xy_list, x_index=0, y_index=1, inverse_relaionship=False):
-    paretto_front_best = _get_paretto_front_best(xy_list, x_index=x_index, y_index=y_index,
-                                                 inverse_relaionship=inverse_relaionship)
-    paretto_front_approx = _get_paretto_front_approx(xy_list, x_index=x_index, y_index=y_index,
-                                                     inverse_relaionship=inverse_relaionship)
-    paretto_front_combined = paretto_front_best + paretto_front_approx
-    # de-duplicate
-    selected_indices = [xy[2] for xy in paretto_front_combined]
-    selected_indices = set(selected_indices)
-    paretto_front = [xy for xy in xy_list if xy[2] in selected_indices]
-    # sort based on first index - reverse order in inference time is ascending order in FPS (faster performance)
-    paretto_front = sorted(
-        paretto_front, key=lambda x: x[x_index], reverse=True)
-    return paretto_front
-
-
-def set_default_inference_time_us(model_descriptions):
-    for m in model_descriptions.values():
-        for target_device in m.training.target_devices.keys():
-            if not m.training.target_devices[target_device].get('inference_time_us'):
-                m.training.target_devices[target_device].inference_time_us = "TBD"
-
-
-def set_default_sram(model_descriptions):
-    for m in model_descriptions.values():
-        for target_device in m.training.target_devices.keys():
-            if not m.training.target_devices[target_device].get('sram'):
-                m.training.target_devices[target_device].sram = "TBD"
-
-
-def set_default_flash(model_descriptions):
-    for m in model_descriptions.values():
-        for target_device in m.training.target_devices.keys():
-            if not m.training.target_devices[target_device].get('flash'):
-                m.training.target_devices[target_device].flash = "TBD"
-
-
-def set_model_selection_factor(model_descriptions):
-    # for m in model_descriptions.values():
-    #     for target_device in m.training.target_devices.keys():
-    #         m.training.target_devices[target_device].model_selection_factor = None
-    task_types = set()
-    for m in model_descriptions.values():
-        if isinstance(m.common.task_type, list):
-            task_types.update(m.common.task_type)
-        else:
-            task_types.add(m.common.task_type)
-    target_devices = [list(m.training.target_devices.keys())
-                      for m in model_descriptions.values()]
-    target_devices = set([t for t_list in target_devices for t in t_list])
-    for target_device in target_devices:
-        for task_type in task_types:
-            model_desc_list = [
-                m for m in model_descriptions.values() if task_type in m.common.task_type]
-            model_desc_list = [m for m in model_desc_list if target_device in list(
-                m.training.target_devices.keys())]
-            inference_time_us = [m.training.target_devices[target_device].inference_time_us for m in
-                                 model_desc_list]
-            # accuracy_factor = [m.training.target_devices[target_device].accuracy_factor for m in model_desc_list]
-            accuracy_factor = ['TBD' for _ in model_desc_list]
-            xy_list = [(inference_time_us[i], accuracy_factor[i], i) for i in
-                       range(len(inference_time_us))]
-            xy_list_shortlisted = [(xy[0], xy[1], xy[2]) for xy in xy_list if
-                                   isinstance(xy[0], numbers.Real) and isinstance(xy[1], numbers.Real)]
-            # if no models have performance data for this device, then use some dummy data
-            if not xy_list_shortlisted:
-                xy_list_shortlisted = [(1, 1, xy[2]) for xy in xy_list]
-            #
-            if len(xy_list_shortlisted) > 0:
-                xy_list_shortlisted = get_paretto_front_combined(
-                    xy_list_shortlisted)
-                for paretto_id, xy in enumerate(xy_list_shortlisted):
-                    xy_id = xy[2]
-                    m = model_desc_list[xy_id]
-                    if m.training.target_devices[target_device].model_selection_factor is None:
-                        m.training.target_devices[target_device].model_selection_factor = paretto_id
-                    #
-                #
-            #
-        #
-    #
-
-
-def filter_model_target_devices_by_task_support(model_descriptions, task_type):
-    """
-    Filter model target devices to only include devices that support training for the given task type.
-
-    This ensures that only devices that can train for a specific task are available for compilation
-    of models for that same task type, maintaining consistency between training and compilation support.
-    """
-    # Get the task description for the given task type
-    task_descriptions = constants.TASK_DESCRIPTIONS
-
-    if task_type not in task_descriptions:
-        # If task type is not found, return models unchanged
-        return model_descriptions
-
-    # Get the list of devices that support training for this task type
-    supported_training_devices = set(task_descriptions[task_type].get('target_devices', []))
-
-    if not supported_training_devices:
-        # If no training devices specified, return models unchanged
-        return model_descriptions
-
-    # Filter each model's target_devices to only include training-supported devices
-    for model_name, model_desc in model_descriptions.items():
-        if 'training' in model_desc and 'target_devices' in model_desc['training']:
-            original_devices = model_desc['training']['target_devices']
-            # Keep only devices that are supported for training this task type
-            filtered_devices = {
-                device: device_info
-                for device, device_info in original_devices.items()
-                if device in supported_training_devices
-            }
-            model_desc['training']['target_devices'] = filtered_devices
-
-    return model_descriptions
 
 
 def get_model_descriptions(params):
@@ -204,14 +40,6 @@ def get_model_descriptions(params):
 
     #
     model_descriptions = utils.ConfigDict(model_descriptions)
-
-    # Filter model target devices to only include devices that support training for this task type
-    model_descriptions = filter_model_target_devices_by_task_support(model_descriptions, params.common.task_type)
-
-    set_default_inference_time_us(model_descriptions)
-    set_default_sram(model_descriptions)
-    set_default_flash(model_descriptions)
-    set_model_selection_factor(model_descriptions)
 
     return model_descriptions
 
@@ -253,7 +81,7 @@ def get_preset_compilations(params):
 
 
 def get_target_device_descriptions(params):
-    return constants.TARGET_DEVICE_DESCRIPTIONS
+    return constants.TARGET_DEVICES
 
 
 def get_sample_dataset_descriptions(params):
@@ -267,8 +95,6 @@ def get_task_descriptions(params):
 def get_version_descriptions(params):
     version_descriptions = {
         'version': version.get_version(),
-        # 'sdk_version': constants.TARGET_SDK_VERSION_C2000,
-        # 'sdk_release': constants.TARGET_SDK_RELEASE_C2000,
     }
     return version_descriptions
 
@@ -306,6 +132,16 @@ def get_tooltip_descriptions(params):
                                'stability and generalization of a machine learning algorithm. '
                                'It is typically done using L2 regularization that penalizes parameters '
                                '(weights, biases) according to their L2 norm.'
+            },
+            'early_stopping': {
+                'name': 'Early Stopping',
+                'description': 'Stop training automatically once the validation metric stops improving. '
+                               'This helps avoid overfitting and can reduce unnecessary training time.'
+            },
+            'early_stopping_patience': {
+                'name': 'Early Stopping Patience',
+                'description': 'Number of epochs with no improvement before stopping early. '
+                               'It is a hyper parameter that can be tuned along with Early Stopping.'
             },
         },
         'compilation': {
@@ -366,71 +202,7 @@ Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with y
 ## Supported target devices
 These are the devices that are supported currently. As additional devices are supported, this section will be updated.
 
-### {constants.TARGET_DEVICE_F28P55}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P55}
-
-### {constants.TARGET_DEVICE_F28P65}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P65}
-
-### {constants.TARGET_DEVICE_F2837}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837}
-
-### {constants.TARGET_DEVICE_F28004}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28004}
-
-### {constants.TARGET_DEVICE_F28003}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28003}
-
-### {constants.TARGET_DEVICE_F280013}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F280013}
-
-### {constants.TARGET_DEVICE_F280015}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F280015}
-
-### {constants.TARGET_DEVICE_F2807x}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F2807x}
-
-### {constants.TARGET_DEVICE_F28002x}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28002x}
-
-### {constants.TARGET_DEVICE_F28P551x}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F28P551x}
-
-### {constants.TARGET_DEVICE_F2837xS}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F2837xS}
-
-### {constants.TARGET_DEVICE_F2838x}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_F2838x}
-
-### {constants.TARGET_DEVICE_MSPM0G3507}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3507}
-
-### {constants.TARGET_DEVICE_MSPM0G3519}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G3519}
-
-### {constants.TARGET_DEVICE_MSPM0G5187}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_MSPM0G5187}
-
-### {constants.TARGET_DEVICE_CC2755}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2755}
-
-### {constants.TARGET_DEVICE_CC2745}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC2745}
-
-### {constants.TARGET_DEVICE_CC1352}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1352}
-
-### {constants.TARGET_DEVICE_CC1312}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1312}
-
-### {constants.TARGET_DEVICE_CC1354}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1354}
-
-### {constants.TARGET_DEVICE_CC1314}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC1314}
-
-### {constants.TARGET_DEVICE_CC35X1}
-{constants.TARGET_DEVICE_SETUP_INSTRUCTIONS_CC35X1}
+Supported devices: {', '.join(constants.TARGET_DEVICES)}
 
 
 ## Additional information
@@ -478,75 +250,3 @@ The config file can be in .yaml or in .json format
 {tooltip_string}
 '''
     return help_string
-
-
-def get_context_help_descriptions(params):
-    context_help_descriptions = {
-        'capture': {
-            'mce_arc_fault_default_capture': {
-                'context': {'task_type': ['arc_fault']},
-                'help_url': 'file://gettingStarted/capture_AFCI.md'},
-            'mce_pir_default_capture': {
-                'context': {'task_type': ['pir_detection']},
-                'help_url': 'file://gettingStarted/capture_PIR.md'},
-            'mce_motor_fault_default_capture': {
-                'context': {'task_type': ['motor_fault']},
-                'help_url': 'file://gettingStarted/capture_MotorFault.md'},
-            'mce_ecg_default_capture': {
-                'context': {'task_type': ['ecg_classification']},
-                'help_url': 'file://gettingStarted/capture_ECG.md'},
-            'mce_gts_default_capture': {
-                'context': {'task_type': ['generic_timeseries_classification']},
-                'help_url': 'file://gettingStarted/capture_GTS.md'},
-            'mce_grid_fault_default_capture': {
-                'context': {'task_type': ['generic_timeseries_classification']},
-                'help_url': 'file://gettingStarted/capture_GridFault.md'},
-            'mce_mosfet_temp_pred_default_capture': {
-                'context': {'task_type': ['generic_timeseries_regression']},
-                'help_url': 'file://gettingStarted/capture_FETTempPrediction.md'}
-        },
-        'livedemo': {
-            'mce_arc_fault_default_livedemo': {
-                'context': {'task_type': ['arc_fault']},
-                'help_url': 'file://gettingStarted/livedemo_AFCI.md'},
-            'mce_pir_default_livedemo': {
-                'context': {'task_type': ['pir_detection']},
-                'help_url': 'file://gettingStarted/livedemo_PIR.md'},
-            'mce_motor_fault_default_livedemo': {
-                'context': {'task_type': ['motor_fault']},
-                'help_url': 'file://gettingStarted/livedemo_MotorFault.md'},
-            'mce_ecg_default_livedemo': {
-                'context': {'task_type': ['ecg_classification']},
-                'help_url': 'file://gettingStarted/livedemo_ECG.md'},
-            'mce_gts_default_livedemo': {
-                'context': {'task_type': ['generic_timeseries_classification']},
-                'help_url': 'file://gettingStarted/livedemo_GTS.md'},
-            'mce_grid_fault_default_livedemo': {
-                'context': {'task_type': ['generic_timeseries_classification']},
-                'help_url': 'file://gettingStarted/livedemo_GridFault.md'},
-            'mce_mosfet_temp_pred_default_livedemo': {
-                'context': {'task_type': ['generic_timeseries_regression']},
-                'help_url': 'file://gettingStarted/livedemo_FETTempPrediction.md'}
-        },
-        'train': {
-            'mce_all_tasks_default_train': {
-                'context': {'task_type': ['arc_fault', 'motor_fault', 'ecg_classification', 'generic_timeseries_classification']},
-                'help_url': 'file://gettingStarted/train.md'}
-        },
-        'capture_visualization': {
-            'mce_all_task_default_visualization': {
-                'context': {'task_type': ['arc_fault', 'motor_fault', 'generic_timeseries_classification', 'ecg_classification', 'pir_detection']},
-                'help_url': 'file://gettingStarted/capture_visualization.md'}
-        },
-        'compile': {
-            'mce_all_task_default_compilation': {
-                'context': {'task_type': ['arc_fault', 'motor_fault', 'generic_timeseries_classification', 'ecg_classification', 'pir_detection', 'blower_imbalance', 'generic_timeseries_anomalydetection', 'generic_timeseries_forecasting', 'generic_timeseries_regression' ]},
-                'help_url': 'file://gettingStarted/compile.md'}
-        },
-    }
-    return context_help_descriptions
-
-
-def get_help_url_descriptions(params):
-    help_url_descriptions = "file://help.md"
-    return help_url_descriptions

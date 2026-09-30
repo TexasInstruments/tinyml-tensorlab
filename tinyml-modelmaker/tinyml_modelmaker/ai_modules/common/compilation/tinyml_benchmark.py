@@ -143,7 +143,8 @@ class ModelCompilation():
         os.makedirs(self.params.compilation.compilation_path, exist_ok=True)
 
         if self.params.training.ondevice_training:
-            model_file = os.path.join(self.params.training.training_path, 'frozen_model', 'model.onnx')
+            odl_base = self.params.training.training_path_quantization if self.params.training.quantization != TinyMLQuantizationVersion.NO_QUANTIZATION else self.params.training.training_path
+            model_file = os.path.join(odl_base, 'frozen_model', 'model.onnx')
         else:
             if self.params.compilation.model_path and os.path.exists(self.params.compilation.model_path):
                 model_file = self.params.compilation.model_path
@@ -200,6 +201,13 @@ class ModelCompilation():
         if self.params.training.quantization != TinyMLQuantizationVersion.QUANTIZATION_TINPU:
             target = re.sub(r'ti-npu type=hard', 'ti-npu type=soft', target)  # type=hard will fail for Quantization=0/1 as TINPU cant run Floating Point Ops/generic quantization models
 
+        _dpfe = getattr(self.params, 'data_processing_feature_extraction', None)
+        _audio_feature = getattr(_dpfe, 'audio_feature', None)
+        _filterbank_enabled = (self.params.training.model_name == "TCDS_ResNet_FB_NPU")
+        _fb_bitwidth = getattr(_dpfe, 'fb_bitwidth', 8)
+        _fb_conv_stride = getattr(_dpfe, 'fb_conv_stride', 4)
+        _fb_branched_bits = getattr(_dpfe, 'input_bit_depth', 16)
+
         argv = [
             '--FILE', f'{model_file}',
             '--output_dir', f'{self.params.compilation.compilation_path}',
@@ -211,6 +219,10 @@ class ModelCompilation():
             '--keep_libc_files' if self.params.compilation.keep_libc_files else '--no-keep_libc_files',
             '--lis', f'{self.params.compilation.log_file_path}',
             '--generic-model', f'{self.params.common.generic_model}',
+            '--filterbank_enabled' if _filterbank_enabled else '--no-filterbank_enabled',
+            '--fb_bitwidth', f'{_fb_bitwidth}',
+            '--fb_conv_stride', f'{_fb_conv_stride}',
+            '--fb_branched_bits', f'{_fb_branched_bits}',
         ]
         # compile_scr = utils.import_file_or_folder(os.path.join(tinyml_tinyverse_path, 'references', 'common', 'compilation.py'), __name__, force_import=True)
         args = compile_scr.get_args_parser().parse_args(argv)
@@ -218,8 +230,11 @@ class ModelCompilation():
         compile_scr.modify_user_input_config(user_input_config_h, target)
         exit_flag = compile_scr.run(args)
         config = self.get_device_fel_function(self.params.common.target_device)
-        if config:
-            compile_fel_scr.run(self.params.common.project_run_path, config[0], config[1], config[2])
+        artifacts_path = self.params.compilation.model_compiled_path
+        if user_input_config_h:
+            user_input_config_h = os.path.dirname(user_input_config_h)
+            if config:
+                compile_fel_scr.run(artifacts_path, user_input_config_h, config[0], config[1], config[2])
         return exit_flag
 
     def _get_compiled_artifact_dir(self):

@@ -35,6 +35,7 @@ from copy import deepcopy
 import torch.backends.mps
 
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
+from tinyml_tinyverse.common.utils.utils import split_filterbank_onnx
 
 import tinyml_modelmaker
 
@@ -185,11 +186,9 @@ def create_template_model_description(task_category, task_type, dataset_loader=N
         learning_rate=2e-3,
         model_spec=None,
         batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT.get(batch_size_key or task_type, 32),
-        target_devices={
-            constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None),
-        },
+        target_devices=[
+            constants.TARGET_DEVICE_MSPM0G5187,
+        ],
         training_devices={
             constants.TRAINING_DEVICE_CPU: True,
             constants.TRAINING_DEVICE_CUDA: True,
@@ -341,10 +340,26 @@ class BaseAudioModelTraining:
             '--normalize-audio', f'{self.params.data_processing_feature_extraction.normalize_audio}',
             '--mono', f'{self.params.data_processing_feature_extraction.mono}',
 
+            '--fb-conv-kernel', f'{self.params.data_processing_feature_extraction.fb_conv_kernel}',
+            '--fb-output-channel', f'{self.params.data_processing_feature_extraction.fb_output_channel}',
+            '--fb-bitwidth', f'{self.params.data_processing_feature_extraction.fb_bitwidth}',
+            '--fb-conv-stride', f'{self.params.data_processing_feature_extraction.fb_conv_stride}',
+            '--fb-context-ms', f'{self.params.data_processing_feature_extraction.fb_context_ms}',
+            '--input-bit-depth', f'{self.params.data_processing_feature_extraction.input_bit_depth}',
+
+            '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
+            '--frame-size', f'{self.params.data_processing_feature_extraction.frame_size}',
+            '--feature-size-per-frame', f'{self.params.data_processing_feature_extraction.feature_size_per_frame}',
+            '--num-frame-concat', f'{self.params.data_processing_feature_extraction.num_frame_concat}',
+            '--min-bin', f'{self.params.data_processing_feature_extraction.min_bin}',
+
             '--output-int', f'{self.params.training.output_int}',
             '--variables', f'{self.params.data_processing_feature_extraction.variables}',
             '--lis', f'{self.params.training.log_file_path}',
             '--ondevice-training', f'{self.params.training.ondevice_training}',
+            '--early-stopping', f'{self.params.training.early_stopping}',
+            '--early-stopping-patience', f'{self.params.training.early_stopping_patience}',
+            '--early-stopping-min-delta', f'{self.params.training.early_stopping_min_delta}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--epochs', f'{self.params.training.training_epochs}',
             '--lr', f'{self.params.training.learning_rate}',
@@ -388,6 +403,14 @@ class BaseAudioModelTraining:
 
             '--normalize-audio', f'{self.params.data_processing_feature_extraction.normalize_audio}',
             '--mono', f'{self.params.data_processing_feature_extraction.mono}',
+
+            '--input-bit-depth', f'{self.params.data_processing_feature_extraction.input_bit_depth}',
+
+            '--feat-ext-transform', self.params.data_processing_feature_extraction.feat_ext_transform,
+            '--frame-size', f'{self.params.data_processing_feature_extraction.frame_size}',
+            '--feature-size-per-frame', f'{self.params.data_processing_feature_extraction.feature_size_per_frame}',
+            '--num-frame-concat', f'{self.params.data_processing_feature_extraction.num_frame_concat}',
+            '--min-bin', f'{self.params.data_processing_feature_extraction.min_bin}',
 
             '--nn-for-feature-extraction', f'{self.params.data_processing_feature_extraction.nn_for_feature_extraction}',
             '--output-int', f'{self.params.training.output_int}',
@@ -520,6 +543,10 @@ class BaseAudioModelTraining:
             args.quit_event = self.quit_event
 
             self.test_module.run(args)
+
+        if args.audio_feature == 'FB':
+            split_filterbank_onnx(output_dir=self.params.training.training_path)
+            split_filterbank_onnx(output_dir=args.output_dir, quantization=True)
 
         return self.params
 

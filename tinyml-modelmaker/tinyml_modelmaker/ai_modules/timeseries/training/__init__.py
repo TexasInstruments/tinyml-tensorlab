@@ -50,6 +50,14 @@ _model_descriptions.update(timeseries_anomalydetection.get_model_descriptions())
 ## forecasting
 _model_descriptions.update(timeseries_forecasting.get_model_descriptions())
 
+# the get_model_descriptions() calls above re-export tinyml_modelzoo's shared
+# per-category registries unfiltered (their task_type param is a no-op there) -
+# they return every enabled model in that category, including other modules'
+# models (e.g. radar's Pose_and_Fall_model lives in the same shared classification
+# registry). Filter to task types timeseries actually owns.
+_model_descriptions = {k: v for k, v in _model_descriptions.items()
+                       if v.get('common', {}).get('task_type') in constants.TASK_TYPES}
+
 def get_model_descriptions(task_type=None, target_device=None, training_device=None):
     model_descriptions_selected = copy.deepcopy(_model_descriptions)
     if task_type is not None:

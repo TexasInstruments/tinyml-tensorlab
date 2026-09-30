@@ -70,6 +70,14 @@ def run(config):
                     property_dict['enum'] = new_enum
                     property_dict['default'] = new_enum[0]['value']  # Random to be set as default
 
+        # GUI expects an object (dict) here, matching description_timeseries.json's
+        # shape - per-device model_selection_factor/flash/inference_time_us/sram
+        # metadata doesn't exist in the current codebase, so empty per-device
+        # objects are the best available; keeps the shape stable for GUI parsing.
+        target_devices = s.get('training', {}).get('target_devices')
+        if isinstance(target_devices, list):
+            s['training']['target_devices'] = {d: {} for d in target_devices}
+        #
 
         model_descriptions_desc[k] = s
     #
@@ -79,6 +87,13 @@ def run(config):
 
     # get target device descriptions
     target_device_descriptions = ai_target_module.runner.ModelRunner.get_target_device_descriptions(params)
+    # GUI expects an object (dict) here too, matching description_timeseries.json's
+    # shape - per-device metadata (device_type/device_details/sdk_version/etc) no
+    # longer exists in the current codebase (see overrides.json's
+    # target_device_metadata for the last known values), so empty objects it is.
+    if isinstance(target_device_descriptions, list):
+        target_device_descriptions = {d: {} for d in target_device_descriptions}
+    #
 
     # task descriptions
     task_descriptions = ai_target_module.runner.ModelRunner.get_task_descriptions(params)
@@ -91,11 +106,9 @@ def run(config):
 
     # tooltip descriptions
     tooltip_descriptions = ai_target_module.runner.ModelRunner.get_tooltip_descriptions(params)
-    context_help_descriptions = ai_target_module.runner.ModelRunner.get_context_help_descriptions(params)
 
     # help descriptions - to be written to markdown (.md) file
     help_descriptions = ai_target_module.runner.ModelRunner.get_help_descriptions(params)
-    help_url_descriptions = ai_target_module.runner.ModelRunner.get_help_url_descriptions(params)
 
     # rex dependencies
     # rex_dependencies = ai_target_module.runner.ModelRunner.get_rex_dependencies(params)
@@ -107,50 +120,164 @@ def run(config):
                        sample_dataset_descriptions=sample_dataset_descriptions,
                        version_descriptions=version_descriptions,
                        tooltip_descriptions=tooltip_descriptions,
-                       context_help=context_help_descriptions,
                        help_descriptions=help_descriptions,
-                       help_url=help_url_descriptions,
                     )
     return description, help_descriptions
+
+
+def _sanitize_paths(written_file):
+    # written_file is the .yaml path written by tinyml_modelmaker.utils.write_dict
+    # (which also writes the sibling .json). Strip the local user's home dir out
+    # of any absolute paths baked into the description so it is portable to the
+    # mlbackend container.
+    yaml_file = os.path.splitext(written_file)[0] + '.yaml'
+    with open(yaml_file) as df_yaml_fh:
+        df_yaml_txt = df_yaml_fh.readlines()
+    with open(yaml_file, 'w') as df_yaml_fh:
+        for line in df_yaml_txt:
+            df_yaml_fh.write(re.sub(os.path.join('home', getpass.getuser(), '.*/'), os.path.join('opt', 'tinyml', 'code', 'tinyml-mlbackend', 'tinyml_proprietary_models', ''), line))
+
+    json_file = os.path.splitext(written_file)[0] + '.json'
+    with open(json_file) as df_json_fh:
+        df_json_txt = df_json_fh.readlines()
+    with open(json_file, 'w') as df_json_fh:
+        for line in df_json_txt:
+            df_json_fh.write(re.sub(os.path.join('home', getpass.getuser(), '.*/'), os.path.join('opt', 'tinyml', 'tinyml-mlbackend', 'tinyml_proprietary_models', ''), line))
+
+
+def _flatten_descriptions(combined_description):
+    # combined_description: {module_name: description_dict}. GUI wants the old
+    # single-namespace shape back (no top-level module key). model_descriptions/
+    # sample_dataset_descriptions/task_descriptions have zero name collisions across
+    # modules (verified) - straight merge, but assert loudly instead of silently
+    # overwriting if that ever stops being true (e.g. a future module reintroduces
+    # the registry-leak bug fixed for timeseries/radar).
+    modules = list(combined_description.keys())
+    flat = dict()
+
+    for section in ('model_descriptions', 'sample_dataset_descriptions', 'task_descriptions'):
+        merged = dict()
+        for m in modules:
+            for k, v in combined_description[m][section].items():
+                if k in merged:
+                    raise ValueError(f"_flatten_descriptions: key '{k}' in '{section}' collides "
+                                     f"across modules (module '{m}') - cannot flatten safely")
+                #
+                merged[k] = v
+            #
+        #
+        flat[section] = merged
+    #
+
+    # preset_descriptions: keyed by device name, second level keyed by task_type.
+    # Device names collide across modules (same physical device, different modules'
+    # task-type support) but task_type keys never collide across modules - deep
+    # merge at the device level instead of overwriting the whole device entry.
+    merged_presets = dict()
+    for m in modules:
+        for device, task_type_dict in combined_description[m]['preset_descriptions'].items():
+            existing = merged_presets.setdefault(device, dict())
+            for task_type, v in task_type_dict.items():
+                if task_type in existing:
+                    raise ValueError(f"_flatten_descriptions: task_type '{task_type}' for device "
+                                     f"'{device}' collides across modules (module '{m}')")
+                #
+                existing[task_type] = v
+            #
+        #
+    #
+    flat['preset_descriptions'] = merged_presets
+
+    # tooltip_descriptions: identical across modules in practice - deep-merge
+    # subcategories, assert no conflicting value for a key seen in >1 module.
+    merged_tooltips = dict()
+    for m in modules:
+        for category, entries in combined_description[m]['tooltip_descriptions'].items():
+            existing = merged_tooltips.setdefault(category, dict())
+            for k, v in entries.items():
+                if k in existing and existing[k] != v:
+                    raise ValueError(f"_flatten_descriptions: tooltip '{category}.{k}' conflicts "
+                                     f"across modules (module '{m}')")
+                #
+                existing[k] = v
+            #
+        #
+    #
+    flat['tooltip_descriptions'] = merged_tooltips
+
+    versions = {combined_description[m]['version_descriptions']['version'] for m in modules}
+    if len(versions) > 1:
+        raise ValueError(f"_flatten_descriptions: version_descriptions differ across modules: {versions}")
+    #
+    flat['version_descriptions'] = dict(version=next(iter(versions)))
+
+    # target_device_descriptions: object keyed by device name per module - union,
+    # first-appearance order preserved (dict insertion order).
+    merged_devices = dict()
+    for m in modules:
+        for device, meta in combined_description[m]['target_device_descriptions'].items():
+            merged_devices.setdefault(device, meta)
+        #
+    #
+    flat['target_device_descriptions'] = merged_devices
+
+    # help_descriptions: per-module prose - can't merge into one string without
+    # losing meaning, concatenate with module headers instead.
+    flat['help_descriptions'] = '\n\n'.join(
+        f'# {m}\n\n{combined_description[m]["help_descriptions"]}' for m in modules)
+
+    return flat
 
 
 def main(args):
     import tinyml_modelmaker
 
-    # prepare input config
     kwargs = vars(args)
-    config = dict(common=dict(), dataset=dict())
-    if 'target_module' in kwargs:
-        config['common']['target_module'] = kwargs['target_module']
+    target_modules = kwargs['target_module']
+    target_modules = [target_modules] if isinstance(target_modules, str) else target_modules
+
+    combined_description = dict()
+    combined_help = dict()
+    for target_module in target_modules:
+        config = dict(common=dict(target_module=target_module), dataset=dict())
+        if 'download_path' in kwargs:
+            config['common']['download_path'] = kwargs['download_path']
+        #
+
+        description, help = run(config)
+
+        # write per-module description (kept for backward compatibility - e.g.
+        # tinyml-mlbackend/model_composer_extensions/config.json points at description_timeseries.json)
+        description_file = os.path.join(args.description_path, f'description_{target_module}' + '.yaml')
+        tinyml_modelmaker.utils.write_dict(description, description_file)
+        _sanitize_paths(description_file)
+
+        help_file = os.path.join(args.description_path, f'help_{target_module}' + '.md')
+        with open(help_file, 'w') as fp:
+            fp.write(help)
+        #
+
+        combined_description[target_module] = description
+        combined_help[target_module] = help
+
+        print(f'description is written at: {description_file} and {help_file}')
     #
-    if 'download_path' in kwargs:
-        config['common']['download_path'] = kwargs['download_path']
+
+    # flatten every target module's description into a single descriptions.json/.yaml
+    # with no top-level module key (matches the old description_timeseries.json shape)
+    flat_description = _flatten_descriptions(combined_description)
+    combined_file = os.path.join(args.description_path, 'descriptions.yaml')
+    tinyml_modelmaker.utils.write_dict(flat_description, combined_file)
+    _sanitize_paths(combined_file)
+
+    combined_help_file = os.path.join(args.description_path, 'descriptions_help.md')
+    with open(combined_help_file, 'w') as fp:
+        for target_module, help_text in combined_help.items():
+            fp.write(f'# {target_module}\n\n{help_text}\n\n')
+        #
     #
 
-    # get description
-    description, help = run(config)
-
-    # write description
-    description_file = os.path.join(args.description_path, f'description_{args.target_module}' + '.yaml')
-    tinyml_modelmaker.utils.write_dict(description, description_file)
-    with open(description_file) as df_yaml_fh:
-        df_yaml_txt = df_yaml_fh.readlines()
-    with open(description_file, 'w') as df_yaml_fh:
-        for line in df_yaml_txt:
-            df_yaml_fh.write(re.sub(os.path.join('home', getpass.getuser(), '.*/'), os.path.join('opt', 'tinyml', 'code', 'tinyml-mlbackend', 'tinyml_proprietary_models', ''), line))
-    with open(os.path.splitext(description_file)[0]+'.json') as df_json_fh:
-        df_json_txt = df_json_fh.readlines()
-    with open(os.path.splitext(description_file)[0]+'.json', 'w') as df_json_fh:
-        for line in df_json_txt:
-            df_json_fh.write(re.sub(os.path.join('home', getpass.getuser(), '.*/'), os.path.join('opt', 'tinyml', 'tinyml-mlbackend', 'tinyml_proprietary_models', ''), line))
-
-
-    help_file = os.path.join(args.description_path, f'help_{args.target_module}' + '.md')
-    with open(help_file, 'w') as fp:
-        fp.write(help)
-    #
-
-    print(f'description is written at: {description_file} and {help_file}')
+    print(f'combined description is written at: {combined_file}')
 
 
 if __name__ == '__main__':
@@ -161,7 +288,7 @@ if __name__ == '__main__':
     #
 
     parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
-    parser.add_argument('--target_module', type=str, default='timeseries')
+    parser.add_argument('--target_module', type=str, nargs='+', default=['timeseries', 'audio', 'vision', 'radar'])
     parser.add_argument('--download_path', type=str, default=os.path.join('.', 'data', 'downloads'))
     parser.add_argument('--description_path', type=str, default=os.path.join('.', 'data', 'descriptions'))
     args = parser.parse_args()

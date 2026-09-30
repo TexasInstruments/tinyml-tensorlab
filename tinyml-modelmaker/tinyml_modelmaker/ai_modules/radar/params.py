@@ -40,14 +40,12 @@ from . import constants
 def init_params(*args, **kwargs):
     default_params = dict(
         common=dict(
-            verbose_mode=True,
             download_path=os.path.join('.', 'data', 'downloads'),
             projects_path=os.path.join('.', 'data', 'projects'),
             project_path=None,
             project_run_path=None,
             task_type=None,
             task_category=None,
-            target_machine='evm',
             target_device=None,
             target_module='radar',
             # run_name can be any string, but there are some special cases:
@@ -73,8 +71,6 @@ def init_params(*args, **kwargs):
             annotation_dir='annotations',
             annotation_prefix='instances',  # change this if your dataset has a different annotation prefix
             annotation_format='univ_ts_json',
-            dataset_download=False,
-            dataset_reload=False,
             split_type='amongst_files',
         ),
         training=dict(
@@ -96,23 +92,23 @@ def init_params(*args, **kwargs):
             file_level_classification_log_path=None,
             log_summary_regex=None,
             training_epochs=10,
-            warmup_epochs=0,
-            num_last_epochs=5,
+            early_stopping=True,
+            early_stopping_patience=5,
+            early_stopping_min_delta=0.0,
             batch_size=8,
             learning_rate=1e-4,
             lambda_reg=0,
             optimizer='sgd',
             weight_decay=0,
-            lr_scheduler='constantlr',
+            lr_scheduler='none',
             momentum=0,
             training_device='cuda',  # 'cpu', 'cuda'
             num_gpus=1,  # 0,1
             distributed=True,
-            training_master_port=29500,
             train_output_path=None,
             run_quant_train_only=False,
             # out_dir=os.getcwd())
-            autoquantization = False,
+            auto_quantization = False,
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
             quantization_method=TinyMLQuantizationMethod.QAT,
             quantization_weight_bitwidth=8,
@@ -144,7 +140,6 @@ def init_params(*args, **kwargs):
             load_saved_model=None,
             ondevice_training = False,
             trainable_layers_from_last = 1,
-            partial_quantization = False
         ),
         testing=dict(
             enable=True,

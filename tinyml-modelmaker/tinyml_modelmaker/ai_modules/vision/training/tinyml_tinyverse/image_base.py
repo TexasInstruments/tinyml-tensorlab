@@ -185,11 +185,11 @@ def create_template_model_description(task_category, task_type, dataset_loader=N
         learning_rate=2e-3,
         model_spec=None,
         batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT.get(batch_size_key or task_type, 32),
-        target_devices={
-            constants.TARGET_DEVICE_MSPM0G3507: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_MSPM0G3519: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_MSPM0G5187: dict(model_selection_factor=None),
-        },
+        target_devices=[
+            constants.TARGET_DEVICE_MSPM0G3507,
+            constants.TARGET_DEVICE_MSPM0G3519,
+            constants.TARGET_DEVICE_MSPM0G5187,
+        ],
         training_devices={
             constants.TRAINING_DEVICE_CPU: True,
             constants.TRAINING_DEVICE_CUDA: True,
@@ -301,17 +301,6 @@ class BaseImageModelTraining:
 
         return device, distributed
 
-    # def _get_device_flash_size(self):
-    #     """Get flash size in KB for the target device."""
-    #     device_name = self.params.common.target_device
-    #     device_info = constants.TARGET_DEVICE_DESCRIPTIONS.get(device_name, {})
-    #     flash_kb = device_info.get('flash_size_kb', None)
-        
-    #     if flash_kb is None:
-    #         self.logger.warning(f"Flash size not defined for device '{device_name}'")
-        
-    #     return flash_kb
-
     def _build_common_train_argv(self, device, distributed):
         """
         Common image training args.
@@ -378,6 +367,9 @@ class BaseImageModelTraining:
             '--lis', f'{self.params.training.log_file_path}',
             '--ondevice-training', f'{self.params.training.ondevice_training}',
             '--auto-quantization', f'{self.params.training.auto_quantization}',
+            '--early-stopping', f'{self.params.training.early_stopping}',
+            '--early-stopping-patience', f'{self.params.training.early_stopping_patience}',
+            '--early-stopping-min-delta', f'{self.params.training.early_stopping_min_delta}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--epochs', f'{self.params.training.training_epochs}',
             '--lr', f'{self.params.training.learning_rate}',

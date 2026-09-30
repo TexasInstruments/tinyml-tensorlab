@@ -108,15 +108,9 @@ class ModelRunner():
                                                                         self.params.common.run_name)) + f'_{self.params.common.target_device}.zip')
 
         if self.params.common.target_device in self.params.training.target_devices:
-            inference_time_us_list = {k:v['inference_time_us'] for k,v in self.params.training.target_devices.items()}
-            sram_usage_list = {k: v['sram'] for k, v in self.params.training.target_devices.items()}
-            flash_usage_list = {k: v['flash'] for k, v in self.params.training.target_devices.items()}
             print('---------------------------------------------------------------------')
             print(f'Run Name: {self.params.common.run_name}')
             print(f'- Model: {self.params.training.model_name}')
-            print(f'- TargetDevices & Estimated Inference Times (us): {inference_time_us_list}')
-            print(f'- TargetDevices & Estimated SRAM Usage (bytes): {sram_usage_list}')
-            print(f'- TargetDevices & Estimated Flash Usage (bytes): {flash_usage_list}')
             print('- This model can be compiled for the above device(s).')
             print('---------------------------------------------------------------------')
         #

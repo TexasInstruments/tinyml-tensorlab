@@ -1,0 +1,274 @@
+{
+  "model_descriptions":{
+    "Pose_and_Fall_model":{
+      "common":{
+        "download_path":"./data/downloads",
+        "projects_path":"./data/projects",
+        "project_path":null,
+        "project_run_path":null,
+        "task_type":"radar_classification",
+        "task_category":"timeseries_classification",
+        "target_device":null,
+        "target_module":"radar",
+        "run_name":"{date-time}/{model_name}",
+        "generic_model":false,
+        "model_details":"Pose and Fall Detection model for Radar Point Cloud data. "
+      },
+      "download":{
+        "download_url":"",
+        "download_path":""
+      },
+      "dataset":{
+        "enable":true,
+        "dataset_name":null,
+        "dataset_path":null,
+        "extract_path":null,
+        "split_factor":[
+          0.8,
+          0.1,
+          0.1
+        ],
+        "split_names":[
+          "train",
+          "val",
+          "test"
+        ],
+        "max_num_files":10000,
+        "input_data_path":null,
+        "input_annotation_path":null,
+        "data_path_splits":null,
+        "data_dir":null,
+        "annotation_path_splits":null,
+        "annotation_dir":"annotations",
+        "annotation_prefix":"instances",
+        "annotation_format":"univ_ts_json",
+        "split_type":"amongst_files"
+      },
+      "training":{
+        "enable":true,
+        "model_name":"Pose_and_Fall_model",
+        "augment_config":null,
+        "model_config":null,
+        "model_spec":null,
+        "dataset_loader":"GenericRadarDataset",
+        "model_training_id":"LINEAR_4L_PC",
+        "training_backend":"tinyml_tinyverse",
+        "pretrained_checkpoint_path":null,
+        "target_devices":{
+          "IWRL6432":{}
+        },
+        "project_path":null,
+        "dataset_path":null,
+        "training_path":null,
+        "training_path_quantization":null,
+        "log_file_path":null,
+        "file_level_classification_log_path":null,
+        "log_summary_regex":null,
+        "training_epochs":10,
+        "early_stopping":true,
+        "early_stopping_patience":5,
+        "early_stopping_min_delta":0.0,
+        "batch_size":64,
+        "learning_rate":0.002,
+        "lambda_reg":0,
+        "optimizer":"sgd",
+        "weight_decay":0,
+        "lr_scheduler":"none",
+        "momentum":0,
+        "training_device":"cuda",
+        "num_gpus":1,
+        "distributed":true,
+        "train_output_path":null,
+        "run_quant_train_only":false,
+        "auto_quantization":false,
+        "quantization":2,
+        "quantization_method":"QAT",
+        "quantization_weight_bitwidth":8,
+        "quantization_activation_bitwidth":8,
+        "output_int":null,
+        "dual_op":false,
+        "properties":[
+          {
+            "type":"group",
+            "dynamic":true,
+            "script":"generictimeseriesclassification.py",
+            "name":"preprocessing_group",
+            "label":"Preprocessing Parameters",
+            "default":[]
+          }
+        ],
+        "nas_enabled":false,
+        "nas_optimization_mode":"Memory",
+        "nas_epochs":10,
+        "nas_model_size":null,
+        "nas_nodes_per_layer":4,
+        "nas_layers":3,
+        "nas_init_channels":1,
+        "nas_init_channel_multiplier":3,
+        "nas_fanout_concat":4,
+        "load_saved_model":null,
+        "ondevice_training":false,
+        "trainable_layers_from_last":1,
+        "training_devices":{
+          "cpu":true,
+          "cuda":true,
+          "mps":true
+        }
+      },
+      "testing":{
+        "enable":true,
+        "skip_train":false,
+        "device_inference":false,
+        "test_data":null,
+        "model_path":null
+      },
+      "data_processing_feature_extraction":{
+        "sampling_rate":1,
+        "new_sr":1,
+        "frame_size":8,
+        "stride_size":0.5,
+        "variables":1,
+        "target_variables":[],
+        "feat_ext_transform":[],
+        "data_proc_transforms":[],
+        "feature_size_per_frame":null,
+        "num_frame_concat":1,
+        "store_feat_ext_data":false,
+        "feat_ext_store_dir":null,
+        "dont_train_just_feat_ext":false,
+        "offset":0,
+        "scale":null,
+        "nn_for_feature_extraction":false,
+        "gof_test":false
+      },
+      "compilation":{
+        "enable":true,
+        "model_path":null,
+        "compile_output_path":null,
+        "compile_preset_name":null,
+        "keep_libc_files":false,
+        "properties":[
+          {
+            "label":"Compilation Preset",
+            "name":"compile_preset_name",
+            "type":"enum",
+            "default":"default_preset",
+            "enum":[
+              {
+                "value":"default_preset",
+                "label":"Default best",
+                "tooltip":"Default Inference Mode"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "preset_descriptions":{
+    "IWRL6432":{
+      "radar_classification":{
+        "default_preset":{
+          "compilation":{
+            "target":"c, ti-npu type=soft skip_normalize=true output_int=true",
+            "target_c_mcpu":"cortex-m4",
+            "cross_compiler":"/opt/tinyml/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang",
+            "cross_compiler_options":"-DARM_CPU_INTRINSICS_EXIST -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O3 -Wl,-u,_c_int00 -Wno-return-type -march=armv7e-m -mthumb"
+          }
+        }
+      }
+    }
+  },
+  "target_device_descriptions":{
+    "IWRL6432":{}
+  },
+  "task_descriptions":{
+    "radar_classification":{
+      "task_name":"Radar Point Cloud Classification",
+      "target_module":"radar",
+      "target_devices":[
+        "IWRL6432"
+      ],
+      "stages":[
+        "dataset",
+        "data_processing_feature_extraction",
+        "training",
+        "compilation"
+      ]
+    }
+  },
+  "sample_dataset_descriptions":{
+    "Pose_and_Fall_Radar_Classification":{
+      "common":{
+        "task_type":"radar_classification",
+        "task_category":"radar_classification"
+      },
+      "dataset":{
+        "dataset_name":"radar_human_pose_detection",
+        "input_data_path":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/radar_human_pose_detection.zip"
+      },
+      "info":{
+        "dataset_url":"https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/radar_human_pose_detection.zip",
+        "dataset_detailed_name":"Radar Human Pose and Fall Detection Example (IWRL6432)",
+        "dataset_description":"Example mmWave radar point-cloud classification dataset with 5 categories - standing, sitting, lying, falling, walking. Collected using the IWRL6432 radar sensor for human pose and fall detection use cases.",
+        "dataset_size":null,
+        "dataset_source":"Generated by Texas Instruments at a specialised test bed",
+        "dataset_license":"TI Internal License"
+      }
+    }
+  },
+  "version_descriptions":{
+    "version":"1.5.0"
+  },
+  "tooltip_descriptions":{
+    "common":{},
+    "dataset":{},
+    "training":{
+      "training_epochs":{
+        "name":"Epochs",
+        "description":"Epoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs."
+      },
+      "learning_rate":{
+        "name":"Learning rate",
+        "description":"Learning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task."
+      },
+      "batch_size":{
+        "name":"Batch size",
+        "description":"Batch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy."
+      },
+      "weight_decay":{
+        "name":"Weight decay",
+        "description":"Weight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm."
+      },
+      "early_stopping":{
+        "name":"Early Stopping",
+        "description":"Stop training automatically once the validation metric stops improving. This helps avoid overfitting and can reduce unnecessary training time."
+      },
+      "early_stopping_patience":{
+        "name":"Early Stopping Patience",
+        "description":"Number of epochs with no improvement before stopping early. It is a hyper parameter that can be tuned along with Early Stopping."
+      }
+    },
+    "compilation":{
+      "preset_name":{
+        "name":"Preset Name",
+        "description":"Two presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), "
+      }
+    },
+    "deploy":{
+      "download_trained_model_to_pc":{
+        "name":"Download trained model",
+        "description":"Trained model can be downloaded to the PC for inspection."
+      },
+      "download_compiled_model_to_pc":{
+        "name":"Download compiled model artifacts to PC",
+        "description":"Compiled model can be downloaded to the PC for inspection."
+      },
+      "download_compiled_model_to_evm":{
+        "name":"Download compiled model artifacts to EVM",
+        "description":"Compiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section."
+      }
+    }
+  },
+  "help_descriptions":"\n## Overview\nThis is a tool for collecting data, training and compiling AI models for use on TI's embedded microcontrollers. The compiled models can be deployed on a local development board. A live preview/demo will also be provided to inspect the quality of the developed model while it runs on the development board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Radar Point Cloud Classification\n\n\n## Supported target devices\nThese are the devices that are supported currently. As additional devices are supported, this section will be updated.\n\nSupported devices: IWRL6432\n\n\n## Additional information\n\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands) dataset, but there are some changes as explained below.\n\n\n####  Dataset format\nThe dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n                             |\n                             |--classes\n                             |     |-- the directories should be here\n                             |     |-- class1\n                             |     |-- class2\n                             |\n                             |--annotations\n                                   |--file_list.txt\n                                   |--instances_train_list.txt\n                                   |--instances_val_list.txt\n                                   |--instances_test_list.txt\n</pre>\n\n- Use a suitable dataset name instead of dataset_name\n- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.\n- In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked with the config file.\n\n\n#### Notes\nIf the dataset has already been split into train and validation set already, it is possible to provide those paths separately as a tuple in input_data_path.\nAfter the model compilation, the compiled models will be available in a folder inside [./data/projects](./data/projects)\nThe config file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page provides a button to download the compiled model artifacts to the development board. \n- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over the entire training dataset. It is a hyper parameter that can be tuned to get best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the step size used by the optimization algorithm at each iteration while moving towards the optimal solution. It is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning Rate typically gives good accuracy while fine tuning a model for a different task.\n#### Batch size\nBatch size specifies the number of inputs that are propagated through the neural network in one iteration. Several such iterations make up one Epoch.Higher batch size require higher memory and too low batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay is a regularization technique that can improve stability and generalization of a machine learning algorithm. It is typically done using L2 regularization that penalizes parameters (weights, biases) according to their L2 norm.\n#### Early Stopping\nStop training automatically once the validation metric stops improving. This helps avoid overfitting and can reduce unnecessary training time.\n#### Early Stopping Patience\nNumber of epochs with no improvement before stopping early. It is a hyper parameter that can be tuned along with Early Stopping.\n### COMPILATION\n#### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model can be downloaded to the PC for inspection.\n#### Download compiled model artifacts to EVM\nCompiled model can be downloaded into the EVM for running model inference in SDK. Instructions are given in the help section.\n"
+}

@@ -1,29 +1,39 @@
 [build-system]
-requires = [ "setuptools>=80",
-	"wheel",]
+requires = [ "setuptools", "wheel",]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_modelmaker"
-version = "1.4.0"
+version = "1.5.0"
 description = "Tiny ML ModelMaker"
 readme = "README.md"
-requires-python = "==3.10.*"
-classifiers = [ "Development Status :: 4 - Beta",
-	"Programming Language :: Python :: 3.10",]
+requires-python = ">=3.10,<3.15"
+classifiers = [
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.14",]
 dependencies = [
 	"defusedxml==0.7.1",
-	"numpy==2.2.6",
 	"PyYAML==6.0.3",
-	"tqdm==4.67.1",
-	"requests==2.32.5",
-	"torch==2.7.1",
-	"tinyml_modelzoo @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.4#subdirectory=tinyml-modelzoo",
-	"tinyml_tinyverse @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.4#subdirectory=tinyml-tinyverse",
-	"tinyml_torchmodelopt @ git+https://github.com/TexasInstruments/tinyml-tensorlab.git@r1.4#subdirectory=tinyml-modeloptimization/torchmodelopt",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.2-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux'",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.2-cp310-cp310-win_amd64.whl ; platform_system == 'Windows'",
-	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.2-cp310-cp310-macosx_14_0_arm64.whl ; platform_system == 'Darwin'",
+	"tqdm==4.70.0",
+	"requests==2.34.2",
+	# numpy and torch are not pinned here - they're pinned in
+	# tinyml_torchmodelopt, pulled in transitively via the mandatory
+	# tinyml_tinyverse dependency below, so re-pinning them here would just
+	# be a third place to keep in sync.
+	# Loose constraint, not a URL pin: modelzoo is normally installed editable
+	# from a local clone (it's the actively-edited repo), and a URL-pinned
+	# requirement here would conflict with that - pip treats an editable
+	# install and a URL-pinned wheel as different, incompatible providers of
+	# the same package name and refuses to resolve.
+	"tinyml_modelzoo>=1.5.0",
+	"tinyml_tinyverse @ https://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_tinyverse-1.5.0-py3-none-any.whl",
+	"tinyml_torchmodelopt @ https://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_torchmodelopt-1.5.0-py3-none-any.whl",
+	# ti_mcu_nnc is cp310-only upstream (confirmed via HTTP 404 for a cp314
+	# build), so the marker just makes it absent under 3.14 - no wheel
+	# candidate matches, pip skips it silently, no extras flag needed.
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.2-cp310-cp310-linux_x86_64.whl ; platform_system == 'Linux' and python_version < '3.11'",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.2-cp310-cp310-win_amd64.whl ; platform_system == 'Windows' and python_version < '3.11'",
+	"ti_mcu_nnc @ https://software-dl.ti.com/mctools/esd/tvm/mcu/ti_mcu_nnc-2.1.2-cp310-cp310-macosx_14_0_arm64.whl ; platform_system == 'Darwin' and python_version < '3.11'",
 ]
 authors = [{name = "Adithya Thonse", email = "thonse@ti.com"}]
 

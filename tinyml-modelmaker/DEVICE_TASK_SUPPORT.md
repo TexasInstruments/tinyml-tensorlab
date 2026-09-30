@@ -26,10 +26,11 @@ The Tiny ML framework supports the following task categories:
 2. **Motor Fault Detection** - Identify faults in motor operation
 3. **Blower/Fan Imbalance Detection** - Detect imbalance in rotating equipment
 4. **PIR (Passive Infrared) Detection** - Motion/presence detection applications
-5. **Generic Timeseries Classification** - Custom classification tasks
-6. **Generic Timeseries Regression** - Custom regression tasks
-7. **Generic Timeseries Anomaly Detection** - Custom anomaly detection tasks
-8. **Generic Timeseries Forecasting** - Custom forecasting tasks
+5. **ECG Classification** - Cardiac signal classification (its own `task_type`, distinct from Generic Timeseries Classification)
+6. **Generic Timeseries Classification** - Custom classification tasks
+7. **Generic Timeseries Regression** - Custom regression tasks
+8. **Generic Timeseries Anomaly Detection** - Custom anomaly detection tasks
+9. **Generic Timeseries Forecasting** - Custom forecasting tasks
 
 ---
 
@@ -54,6 +55,7 @@ The Tiny ML framework supports the following task categories:
 
 ### MSPM0 Family (Arm Cortex-M0+)
 - **MSPM0G3507** - 80 MHz Arm Cortex-M0+ MCU with hardware NPU
+- **MSPM0G3519** - 80 MHz Arm Cortex-M0+ MCU with hardware NPU
 - **MSPM0G5187** - 80 MHz Arm Cortex-M0+ MCU with hardware NPU
 
 ### MSPM33C Family (Arm Cortex-M33)
@@ -81,83 +83,132 @@ The Tiny ML framework supports the following task categories:
 
 ## Task Support Matrix
 
+> **This table is derived, not hand-maintained.** For every timeseries `task_type`, the "Supported Devices" column below is the union of the `target_devices` declared by each model belonging to that `task_type` in `tinyml-modelzoo` (`tinyml_modelzoo/model_descriptions/{classification,regression,anomalydetection,forecasting}.py`). It is computed by `_get_task_target_devices_from_models()` / `_task_target_devices()` in `tinyml-modelmaker/tinyml_modelmaker/ai_modules/timeseries/constants.py`, and exposed as `TASK_DESCRIPTIONS[task_type]['target_devices']`. Because `tinyml-modelzoo` model descriptions are the single source of truth, this table stays in sync automatically as models are added, removed, or given new `target_devices` — it does **not** need to be hand-edited when models change. To regenerate the values below, run:
+> ```python
+> import sys
+> sys.path.insert(0, '.')  # from tinyml-modelmaker/
+> sys.path.insert(0, '../tinyml-modelzoo')
+> from tinyml_modelmaker.ai_modules.timeseries import constants
+> for tt in constants.TASK_TYPES:
+>     print(tt, sorted(constants.TASK_DESCRIPTIONS[tt]['target_devices']))
+> ```
+> The **Image Classification** row is the one exception: it belongs to a separate `target_module='image'` code path that is not part of this derivation, so its device list below remains hand-maintained.
+
 ### By Task Type
 
 | Task / Application | Supported Devices | Example Projects |
 |-------------------|-------------------|-----------------|
-| **Arc Fault Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `ac_arc_fault`, `dc_arc_fault` |
-| **Motor Fault Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G5187, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261, CC2755, CC2745, CC1312, CC1314, CC1352, CC1354, CC35X1 | `motor_bearing_fault`, `fan_blade_fault_classification`, `blower_imbalance` |
-| **Blower Imbalance Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `blower_imbalance` |
-| **PIR Detection** | CC2755, CC2745, CC1312, CC1352, CC1314, CC1354, CC35X1 | `pir_detection` |
-| **Generic Timeseries Classification** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, AM13E2, CC2755, CC2745, CC1312, CC1352, CC1314, CC1354, CC35X1, AM263, AM263P, AM261 | `hello_world`, `ecg_classification`, `electrical_fault`, `gas_sensor`, `grid_stability`, `nilm_appliance_usage_classification`, `PLAID_nilm_classification`, `branched_model_parameters` |
-| **Generic Timeseries Regression** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `induction_motor_speed_prediction`, `reg_washing_machine`, `torque_measurement_regression` |
-| **Generic Timeseries Anomaly Detection** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `dc_arc_fault_anomaly_detection`, `motor_bearing_fault_anomaly_detection`, `fan_blade_anomaly_detection`, `ecg_anomaly_detection` |
-| **Generic Timeseries Forecasting** | F280013, F280015, F28003, F28004, F2837, F2837xS, F2838x, F2807x, F28002x, F28P55, F28P65, F28P551x, F29H85, F29P58, F29P32, MSPM33C32, MSPM33C34, AM13E2, AM263, AM263P, AM261 | `forecasting_pmsm_rotor`, `hvac_indoor_temp_forecast` |
-| **Image Classification** | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32 | `MNIST_image_classification` |
+| **Arc Fault Detection** | AM13E2, AM263, F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P55, F28P551x, F28P65, F29H85, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | `ac_arc_fault`, `dc_arc_fault` |
+| **ECG Classification** | F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P551x, MSPM0G3507, MSPM0G3519, MSPM0G5187 | `ecg_classification` |
+| **Motor Fault Detection** | AM13E2, AM263, CC1312, CC1314, CC1352, CC1354, CC2745, CC2755, CC35X1, F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P55, F28P551x, F28P65, F29H85, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | `motor_bearing_fault`, `fan_blade_fault_classification` |
+| **Blower Imbalance Detection** | AM13E2, AM263, F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P55, F28P551x, F28P65, F29H85, MSPM33C32 | `blower_imbalance` |
+| **PIR Detection** | CC1312, CC1314, CC1352, CC1354, CC2745, CC2755, CC35X1, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | `pir_detection` |
+| **Generic Timeseries Classification** | AM13E2, AM261, AM263, AM263P, CC1312, CC1314, CC1352, CC1354, CC2745, CC2755, CC35X1, F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P55, F28P551x, F28P65, F29H85, F29P32, F29P58, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | `hello_world`, `electrical_fault`, `gas_sensor`, `grid_stability`, `nilm_appliance_usage_classification`, `PLAID_nilm_classification`, `human_activity_recognition` |
+| **Generic Timeseries Regression** | AM13E2, AM261, AM263, AM263P, F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P32, F29P58, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | `induction_motor_speed_prediction`, `washing_machine_load_weighing`, `torque_measurement_regression` |
+| **Generic Timeseries Anomaly Detection** | AM13E2, AM261, AM263, AM263P, F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P32, F29P58, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | `dc_arc_fault_anomaly_detection`, `motor_bearing_fault_anomaly_detection`, `fan_blade_anomaly_detection`, `ecg_anomaly_detection` |
+| **Generic Timeseries Forecasting** | AM13E2, AM261, AM263, AM263P, F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P32, F29P58, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 | `forecasting_pmsm_rotor`, `hvac_indoor_temp_forecast` |
+| **Image Classification**¹ | F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32 | `MNIST_image_classification` |
+
+¹ Not derived from `tinyml-modelzoo` (separate `target_module='image'` path) — hand-maintained.
+
+**Notable corrections from the previous hand-maintained version:** `MSPM33C34` is a defined device constant but currently has **no** `tinyml-modelzoo` model targeting it for any task, so it no longer appears anywhere below. `AM261`/`AM263P` support the generic tasks but not Arc Fault/Motor Fault/Blower Imbalance (only `AM263` does among the AM26x family). `F29P32`/`F29P58` support the generic tasks but not Arc Fault/Motor Fault/Blower Imbalance (only `F29H85` does among the C29x family). Motor Fault now also includes the wireless connectivity devices (CC1312/CC1314/CC1352/CC1354/CC2745/CC2755/CC35X1) — these were added to the `MotorFault_model_1/2/3_t` `target_devices` in `tinyml-modelzoo` so the `fan_blade_fault_classification` CC-device example configs resolve to a real model instead of an empty list. MSPM0G devices (`MSPM0G3507`, `MSPM0G3519`, `MSPM0G5187`) now support all generic tasks (previously thought to be classification-only) plus Arc Fault, Motor Fault, ECG Classification, and PIR Detection, but not Blower Imbalance. `MSPM0G3519` was previously missing from this document entirely.
 
 ### Summary by Device Capability
 
-| Device Category | All Generic Tasks | Specialized Tasks | Hardware NPU |
-|----------------|-------------------|-------------------|--------------|
-| **C2000 F28x (non-NPU)** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **C2000 F2807x, F28002x** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **C2000 F2837xS, F2838x** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **C2000 F28P551x** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **C2000 F28Px (NPU)** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ✅ (Hard) |
-| **C2000 F29x (C29 core)** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **MSPM0G (NPU)** | Classification only | Arc Fault, Motor Fault | ✅ (Hard) |
-| **MSPM33C32** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ (Soft) |
-| **MSPM33C34** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ✅ (Hard) |
-| **AM13E2** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ (Soft) |
-| **AM26x Series** | ✅ | Arc Fault, Motor Fault, Blower Imbalance | ❌ |
-| **CC2755** | ✅ Classification | PIR Detection, Motor Fault | ✅ (CDE) |
-| **CC2745** | ✅ Classification | PIR Detection, Motor Fault | ✅ (CDE) |
-| **CC1312** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC1314** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC1352** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC1354** | ✅ Classification | PIR Detection, Motor Fault | ❌ (Soft) |
-| **CC35X1** | ✅ Classification | PIR Detection, Motor Fault | ✅ (CDE) |
+Per-device support, derived the same way as the [Task Support Matrix](#task-support-matrix) above (see the note there). "Regr./AD/Fcst" covers Regression, Anomaly Detection, and Forecasting together since, for every device, all three are either all supported or all unsupported. For hardware-NPU-vs-software-NPU compilation details per device, see [Hardware NPU (TinyEngine) Support](#hardware-npu-tinyengine-support) — that categorization is independent of the `target_devices` derivation described above and is unchanged by this refactor.
+
+| Device | Classification | Regr./AD/Fcst | Arc Fault | Motor Fault | Blower Imbalance | ECG Classification | PIR Detection |
+|--------|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| F280013 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| F280015 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| F28003 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| F28004 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| F2837 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| F2837xS | ✅ | — | ✅ | ✅ | ✅ | ✅ | — |
+| F2838x | ✅ | — | ✅ | ✅ | ✅ | ✅ | — |
+| F2807x | ✅ | — | ✅ | ✅ | ✅ | ✅ | — |
+| F28002x | ✅ | — | ✅ | ✅ | ✅ | ✅ | — |
+| F28P551x | ✅ | — | ✅ | ✅ | ✅ | ✅ | — |
+| F28P55 | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| F28P65 | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| F29H85 | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| F29P58 | ✅ | ✅ | — | — | — | — | — |
+| F29P32 | ✅ | ✅ | — | — | — | — | — |
+| MSPM0G3507 | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ |
+| MSPM0G3519 | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ |
+| MSPM0G5187 | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ |
+| MSPM33C32 | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| MSPM33C34 | — | — | — | — | — | — | — |
+| AM13E2 | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| AM263 | ✅ | ✅ | ✅ | ✅ | ✅ | — | — |
+| AM263P | ✅ | ✅ | — | — | — | — | — |
+| AM261 | ✅ | ✅ | — | — | — | — | — |
+| CC2755 | ✅ | — | — | ✅ | — | — | ✅ |
+| CC2745 | ✅ | — | — | ✅ | — | — | ✅ |
+| CC1312 | ✅ | — | — | ✅ | — | — | ✅ |
+| CC1314 | ✅ | — | — | ✅ | — | — | ✅ |
+| CC1352 | ✅ | — | — | ✅ | — | — | ✅ |
+| CC1354 | ✅ | — | — | ✅ | — | — | ✅ |
+| CC35X1 | ✅ | — | — | ✅ | — | — | ✅ |
+
+`MSPM33C34` has an all-`—` row because it is a defined device constant with no `tinyml-modelzoo` model currently targeting it for any task (see the note above the Task Support Matrix).
 
 ---
 
 ## Device Support Details
 
+The groupings below follow from the per-device table in [Summary by Device Capability](#summary-by-device-capability), which is itself derived from `tinyml-modelzoo` model descriptions (see the note at the top of [Task Support Matrix](#task-support-matrix)).
+
 ### Full Support Devices
-These devices support **all** timeseries tasks (classification, regression, anomaly detection, forecasting) plus specialized applications:
+These devices support **all four** generic timeseries tasks (classification, regression, anomaly detection, forecasting) plus Arc Fault, Motor Fault, and Blower Imbalance:
 
 #### C2000 Family
-- **F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, F29P58, F29P32**
+- **F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85**
   - Generic Tasks: Classification, Regression, Anomaly Detection, Forecasting
   - Specialized: Arc Fault, Motor Fault, Blower Imbalance
-  - Compilation: Soft NPU (F28Px has Hard NPU option, F29x uses C29 core)
+  - Compilation: Soft NPU (F28P55/F28P65 have a Hard NPU option, F29H85 uses the C29 core)
+  - Note: `F29P32`/`F29P58` (also C29 core) are **not** in this group — they support the generic tasks but not Arc Fault/Motor Fault/Blower Imbalance; see "Generic-Task-Only Devices" below.
 
 #### ARM Cortex-R5 Family
-- **AM263, AM263P, AM261**
+- **AM263**
   - Generic Tasks: Classification, Regression, Anomaly Detection, Forecasting
   - Specialized: Arc Fault, Motor Fault, Blower Imbalance
   - Compilation: Soft NPU (no hardware accelerator)
+  - Note: `AM263P`/`AM261` are **not** in this group — see "Generic-Task-Only Devices" below.
 
 #### ARM Cortex-M33 Family
-- **MSPM33C32, MSPM33C34, AM13E2**
+- **MSPM33C32, AM13E2**
   - Generic Tasks: Classification, Regression, Anomaly Detection, Forecasting
-  - Specialized: Arc Fault, Motor Fault, Blower Imbalance
-  - Compilation: Soft NPU (MSPM33C34 has Hard NPU option)
+  - Specialized: Arc Fault, Motor Fault, Blower Imbalance (MSPM33C32 also supports PIR Detection)
+  - Compilation: Soft NPU
+  - Note: `MSPM33C34` is a defined device constant but currently has **no** `tinyml-modelzoo` model targeting it for any task — it is unsupported until a model adds it to `target_devices`.
+
+### Generic-Task-Only Devices
+These devices support all four generic timeseries tasks but none of Arc Fault, Motor Fault, or Blower Imbalance:
+- **F29P32, F29P58** (C29 core, Soft NPU)
+- **AM263P, AM261** (Cortex-R5, Soft NPU)
 
 ### Partial Support Devices
 
-#### MSPM0G Family (Classification Focus)
-- **MSPM0G3507, MSPM0G5187**
-  - Generic Tasks: Classification only
-  - Specialized: Arc Fault, Motor Fault
+#### C2000 Classification-Only Devices
+- **F2837xS, F2838x, F2807x, F28002x, F28P551x**
+  - Generic Tasks: Classification only (no Regression, Anomaly Detection, or Forecasting models target these devices)
+  - Specialized: Arc Fault, Motor Fault, Blower Imbalance, ECG Classification
+  - Compilation: Soft NPU
+
+#### MSPM0G Family
+- **MSPM0G3507, MSPM0G3519, MSPM0G5187**
+  - Generic Tasks: Classification, Regression, Anomaly Detection, Forecasting (all four — not classification-only)
+  - Specialized: Arc Fault, Motor Fault, ECG Classification, PIR Detection (**not** Blower Imbalance)
   - Compilation: Hard NPU available
-  - Note: Limited to classification tasks due to memory constraints
+  - Note: `MSPM0G3519` was missing from earlier revisions of this document.
 
 #### Wireless/Connectivity Devices
-- **CC2755, CC1312, CC1314, CC1352, CC1354, CC35X1**
-  - Generic Tasks: Classification, Regression, Anomaly Detection, Forecasting
-  - Specialized: PIR Detection (CC2755, CC1312, CC1352, CC1354, CC35X1), Motor Fault (all)
-  - Compilation: CDE/Soft NPU
-  - Note: Optimized for wireless/connectivity applications
+- **CC2755, CC2745, CC1312, CC1314, CC1352, CC1354, CC35X1**
+  - Generic Tasks: Classification only (no Regression, Anomaly Detection, or Forecasting models target these devices)
+  - Specialized: PIR Detection (all seven), Motor Fault (all seven)
+  - Compilation: CDE (CC2755, CC2745, CC35X1) / Soft NPU (CC1312, CC1314, CC1352, CC1354)
+  - Note: Optimized for wireless/connectivity applications. `MotorFault_model_1/2/3_t` in `tinyml-modelzoo` explicitly target these devices so the `fan_blade_fault_classification` CC-device example configs resolve to a real model.
 
 ---
 
@@ -296,7 +347,7 @@ These devices support **all** timeseries tasks (classification, regression, anom
 - ArcFault_model_300_t (300 parameters)
 - ArcFault_model_200_t (200 parameters)
 
-**Supported Devices:** F28x, MSPM0G, MSPM33C, AM13E2, AM26x series
+**Supported Devices:** AM13E2, AM263, F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P55, F28P551x, F28P65, F29H85, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 (derived from `tinyml-modelzoo`; see [Task Support Matrix](#task-support-matrix). Not included: AM261, AM263P, F29P32, F29P58, MSPM33C34, and the wireless/connectivity devices.)
 
 ---
 
@@ -313,7 +364,7 @@ These devices support **all** timeseries tasks (classification, regression, anom
 - MotorFault_model_2_t
 - MotorFault_model_1_t
 
-**Supported Devices:** F28x, MSPM0G, MSPM33C, AM13E2, AM26x series
+**Supported Devices:** AM13E2, AM263, CC1312, CC1314, CC1352, CC1354, CC2745, CC2755, CC35X1, F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P55, F28P551x, F28P65, F29H85, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 (derived from `tinyml-modelzoo`; see [Task Support Matrix](#task-support-matrix). Same as Arc Fault plus the CC13xx/CC27xx/CC35X1 wireless devices, which `MotorFault_model_1/2/3_t` explicitly target. Not included: AM261, AM263P, F29P32, F29P58, MSPM33C34.)
 
 ---
 
@@ -330,7 +381,7 @@ These devices support **all** timeseries tasks (classification, regression, anom
 - FanImbalance_model_2_t
 - FanImbalance_model_1_t
 
-**Supported Devices:** F28x (except MSPM0G), MSPM33C, AM13E2, AM26x series
+**Supported Devices:** AM13E2, AM263, F280013, F280015, F28002x, F28003, F28004, F2807x, F2837, F2837xS, F2838x, F28P55, F28P551x, F28P65, F29H85, MSPM33C32 (derived from `tinyml-modelzoo`; see [Task Support Matrix](#task-support-matrix). Unlike Arc Fault/Motor Fault, this task has no MSPM0G model, so `MSPM0G3507`/`MSPM0G3519`/`MSPM0G5187` are **not** supported. Also not included: AM261, AM263P, F29P32, F29P58, MSPM33C34.)
 
 ---
 
@@ -345,7 +396,7 @@ These devices support **all** timeseries tasks (classification, regression, anom
 **Available Models:**
 - PIRDetection_model_1_t
 
-**Supported Devices:** CC2755, CC1312, CC1352, CC1354, CC35X1 (wireless connectivity devices)
+**Supported Devices:** CC1312, CC1314, CC1352, CC1354, CC2745, CC2755, CC35X1, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32 (derived from `tinyml-modelzoo`; see [Task Support Matrix](#task-support-matrix). In addition to the wireless connectivity devices, MSPM0G and MSPM33C32 also support PIR Detection — this was missing from earlier revisions of this document.)
 
 ---
 
@@ -402,7 +453,7 @@ Models are sized to fit different MCU memory constraints:
 
 ## Example Projects
 
-The Tiny ML ecosystem includes comprehensive example projects demonstrating various use cases. All examples are located in `/tinyml-modelmaker/examples/`.
+The Tiny ML ecosystem includes comprehensive example projects demonstrating various use cases. All examples are located in `tinyml-modelzoo/examples/` (a sibling repository to `tinyml-modelmaker`; there is no `examples/` directory inside `tinyml-modelmaker` itself).
 
 ### Timeseries Classification Examples
 
@@ -414,10 +465,10 @@ The Tiny ML ecosystem includes comprehensive example projects demonstrating vari
 - **Key Features:** Simple dataset, fast training, ideal for getting started
 
 #### ecg_classification
-- **Task Type:** Generic Timeseries Classification
+- **Task Type:** ECG Classification (`ecg_classification`) — its own task_type, distinct from Generic Timeseries Classification; see the [Task Support Matrix](#task-support-matrix)
 - **Description:** ECG (electrocardiogram) signal classification for cardiac health monitoring
 - **Use Case:** Medical device applications, heart rhythm analysis
-- **Recommended Devices:** F28P55, F28P65, MSPM33C34 (hardware NPU for real-time processing)
+- **Recommended Devices:** F280013, F280015, F28003, F28004, MSPM0G3507, MSPM0G3519, MSPM0G5187 (this task has no `tinyml-modelzoo` model targeting F28P55/F28P65/MSPM33C34, unlike the other C2000/NPU-based tasks in this document)
 - **Key Features:** Multi-class classification, signal processing, medical diagnostics
 
 #### electrical_fault
@@ -455,7 +506,7 @@ The Tiny ML ecosystem includes comprehensive example projects demonstrating vari
 - **Recommended Devices:** F29H85, F29P58, F29P32, AM263P (high-parameter models)
 - **Key Features:** Large-scale appliance database, high-accuracy classification
 
-#### branched_model_parameters
+#### human_activity_recognition
 - **Task Type:** Generic Timeseries Classification
 - **Description:** Demonstrates branched neural network architectures with shared feature extraction
 - **Use Case:** Multi-task learning, parameter-efficient models
@@ -496,7 +547,7 @@ The Tiny ML ecosystem includes comprehensive example projects demonstrating vari
 - **Task Type:** Blower/Fan Imbalance Detection
 - **Description:** Blower imbalance detection using current/vibration signatures
 - **Use Case:** Industrial blowers, HVAC monitoring, rotating equipment
-- **Recommended Devices:** F28P65, F29H85, AM263P
+- **Recommended Devices:** F28P65, F29H85, AM263 (`AM263P` is not supported for this task — see [Task Support Matrix](#task-support-matrix))
 - **Key Features:** Real-time imbalance quantification, preventive maintenance
 
 ### Timeseries Regression Examples
@@ -508,7 +559,7 @@ The Tiny ML ecosystem includes comprehensive example projects demonstrating vari
 - **Recommended Devices:** F280013, F280015, F28003, F28004 (motor control MCUs)
 - **Key Features:** Real-time speed estimation, cost reduction (no speed sensor needed)
 
-#### reg_washing_machine
+#### washing_machine_load_weighing
 - **Task Type:** Generic Timeseries Regression
 - **Description:** Washing machine parameter regression for smart control
 - **Use Case:** Smart home appliances, energy optimization
@@ -568,7 +619,7 @@ The Tiny ML ecosystem includes comprehensive example projects demonstrating vari
 - **Task Type:** Generic Timeseries Anomaly Detection
 - **Description:** ECG signal anomaly detection for cardiac health monitoring
 - **Use Case:** Medical devices, wearable health monitors, arrhythmia detection
-- **Recommended Devices:** F28P55, F28P65, MSPM33C34 (hardware NPU for low-latency detection)
+- **Recommended Devices:** F28P55, F28P65 (hardware NPU for low-latency detection); `MSPM33C34` is not supported (no `tinyml-modelzoo` model targets it — see [Task Support Matrix](#task-support-matrix))
 - **Key Features:** Real-time anomaly detection, medical-grade signal processing, low-power operation
 - **Configuration:** `config_anomaly_detection.yaml`
 
@@ -597,10 +648,10 @@ The Tiny ML ecosystem includes comprehensive example projects demonstrating vari
 To train a model for a specific task and device:
 
 ```bash
-# Using ModelMaker CLI
+# Using ModelMaker CLI (examples live in the sibling tinyml-modelzoo repo)
 cd tinyml-modelmaker
-./run_tinyml_modelmaker.sh examples/<task_type>/config.yaml
+./run_tinyml_modelmaker.sh ../tinyml-modelzoo/examples/<project_name>/config.yaml
 ```
 
 For more information, refer to:
-- `./tinyml-modelmaker/examples/` - Example configurations
+- `../tinyml-modelzoo/examples/` (relative to `tinyml-modelmaker/`) - Example configurations, one subdirectory per example project (e.g. `ac_arc_fault`, `blower_imbalance`, `ecg_classification`, `generic_timeseries_classification`, `pir_detection`, etc.)

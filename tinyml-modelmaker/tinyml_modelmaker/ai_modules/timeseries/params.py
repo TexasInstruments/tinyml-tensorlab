@@ -41,14 +41,12 @@ from ...utils.hardware_defaults import apply_hardware_defaults
 def init_params(*args, **kwargs):
     default_params = dict(
         common=dict(
-            verbose_mode=True,
             download_path=os.path.join('.', 'data', 'downloads'),
             projects_path=os.path.join('.', 'data', 'projects'),
             project_path=None,
             project_run_path=None,
             task_type=None,
             task_category=None,
-            target_machine='evm',
             target_device=None,
             target_module='timeseries',
             # run_name can be any string, but there are some special cases:
@@ -74,8 +72,6 @@ def init_params(*args, **kwargs):
             annotation_dir='annotations',
             annotation_prefix='instances',  # change this if your dataset has a different annotation prefix
             annotation_format='univ_ts_json',
-            dataset_download=False,
-            dataset_reload=False,
             split_type='amongst_files',
         ),
         training=dict(
@@ -97,8 +93,9 @@ def init_params(*args, **kwargs):
             file_level_classification_log_path=None,
             log_summary_regex=None,
             training_epochs=10,
-            warmup_epochs=1,
-            num_last_epochs=5,
+            early_stopping=True,
+            early_stopping_patience=5,
+            early_stopping_min_delta=0.0,
             batch_size=8,
             learning_rate=2e-3,
             lambda_reg=0,
@@ -108,7 +105,6 @@ def init_params(*args, **kwargs):
             training_device=constants.TRAINING_DEVICE_CUDA,
             num_gpus=1,  # 0,1
             distributed=True,
-            training_master_port=29500,
             train_output_path=None,
             run_quant_train_only=False,
             # out_dir=os.getcwd())
@@ -142,6 +138,7 @@ def init_params(*args, **kwargs):
             
             load_saved_model=None,
             ondevice_training = False,
+            target_device_flash_kb = 100,
             #The order below maps to (train, val, test)
             export_samples_per_class = (10,10,10),
             trainable_layers_from_last = 1,
@@ -153,8 +150,6 @@ def init_params(*args, **kwargs):
             autoquant_tolerance_regression=0.05,      # fraction  — 0.05 = 5% R² drop tolerated
             autoquant_tolerance_forecasting=2.0,      # max tolerated SMAPE = float_SMAPE × (1 + 2.0) = 3× float baseline, 200% increase tolerated
             autoquant_tolerance_anomaly=2.0,          # max tolerated MSE   = float_MSE   × (1 + 2.0) = 3× float baseline, 200% increase tolerated
-
-            partial_quantization = False,
 
             # Performance optimization (opt-in, primarily beneficial on CUDA)
             compile_model=0,    # 1 to enable torch.compile (inductor on CUDA, aot_eager on MPS)

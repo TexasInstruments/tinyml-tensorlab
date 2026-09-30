@@ -1,0 +1,1062 @@
+help_descriptions: "\n## Overview\nThis is a tool for collecting data, training and\
+  \ compiling AI models for use on TI's embedded microcontrollers. The compiled models\
+  \ can be deployed on a local development board. A live preview/demo will also be\
+  \ provided to inspect the quality of the developed model while it runs on the development\
+  \ board.\n\n## Development flow\nBring your own data (BYOD): Retrain models from\
+  \ TI Model Zoo to fine-tune with your own data.\n\n## Tasks supported\n* Audio Classification\n\
+  \n## Supported target devices\nThese are the devices that are supported currently.\
+  \ As additional devices are supported, this section will be updated.\n\nSupported\
+  \ devices: MSPM0G5187\n\n\n## Additional information\n\n * Tiny ML model development\
+  \ information: https://github.com/TexasInstruments/tinyml-tensorlab \n\n\n## Dataset\
+  \ format\n- The dataset format is similar to that of the [Google Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)\
+  \ dataset, but there are some changes as explained below.\n\n\n####  Dataset format\n\
+  The dataset should have the following structure. \n\n<pre>\ndata/projects/<dataset_name>/dataset\n\
+  \                             |\n                             |--classes\n     \
+  \                        |     |-- the directories should be here\n            \
+  \                 |     |-- class1\n                             |     |-- class2\n\
+  \                             |\n                             |--annotations\n \
+  \                                  |--file_list.txt\n                          \
+  \         |--instances_train_list.txt\n                                   |--instances_val_list.txt\n\
+  \                                   |--instances_test_list.txt\n</pre>\n\n- Use\
+  \ a suitable dataset name instead of dataset_name\n- Look at the example dataset\
+  \ [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsk.zip)\
+  \ to understand further.\n- In the config file, provide the name of the dataset\
+  \ (dataset_name in this example) in the field dataset_name and provide the path\
+  \ or URL in the field input_data_path.\n- Then the ModelMaker tool can be invoked\
+  \ with the config file.\n\n\n#### Notes\nIf the dataset has already been split into\
+  \ train and validation set already, it is possible to provide those paths separately\
+  \ as a tuple in input_data_path.\nAfter the model compilation, the compiled models\
+  \ will be available in a folder inside [./data/projects](./data/projects)\nThe config\
+  \ file can be in .yaml or in .json format\n\n## Model deployment\n- The deploy page\
+  \ provides a button to download the compiled model artifacts to the development\
+  \ board. \n- The downloaded model artifacts are located in a folder inside /opt/projects.\
+  \ It can be used with the SDK to run inference. \n- Please see \"C2000Ware Reference\
+  \ Design\" in the SDK documentation for more information.\n\n## Glossary of terms\n\
+  \n### TRAINING\n#### Epochs\nEpoch is a term that is used to indicate a pass over\
+  \ the entire training dataset. It is a hyper parameter that can be tuned to get\
+  \ best accuracy. Eg. A model trained for 30 Epochs may give better accuracy than\
+  \ a model trained for 15 Epochs.\n#### Learning rate\nLearning Rate determines the\
+  \ step size used by the optimization algorithm at each iteration while moving towards\
+  \ the optimal solution. It is a hyper parameter that can be tuned to get best accuracy.\
+  \ Eg. A small Learning Rate typically gives good accuracy while fine tuning a model\
+  \ for a different task.\n#### Batch size\nBatch size specifies the number of inputs\
+  \ that are propagated through the neural network in one iteration. Several such\
+  \ iterations make up one Epoch.Higher batch size require higher memory and too low\
+  \ batch size can typically impact the accuracy.\n#### Weight decay\nWeight decay\
+  \ is a regularization technique that can improve stability and generalization of\
+  \ a machine learning algorithm. It is typically done using L2 regularization that\
+  \ penalizes parameters (weights, biases) according to their L2 norm.\n#### Early\
+  \ Stopping\nStop training automatically once the validation metric stops improving.\
+  \ This helps avoid overfitting and can reduce unnecessary training time.\n#### Early\
+  \ Stopping Patience\nNumber of epochs with no improvement before stopping early.\
+  \ It is a hyper parameter that can be tuned along with Early Stopping.\n### COMPILATION\n\
+  #### Preset Name\nTwo presets exist: \"default_preset\"(Recommended Option), \"\
+  forced_soft_npu_preset\"(Only available on HW-NPU devices to disable HW NPU), \n\
+  ### DEPLOY\n#### Download trained model\nTrained model can be downloaded to the\
+  \ PC for inspection.\n#### Download compiled model artifacts to PC\nCompiled model\
+  \ can be downloaded to the PC for inspection.\n#### Download compiled model artifacts\
+  \ to EVM\nCompiled model can be downloaded into the EVM for running model inference\
+  \ in SDK. Instructions are given in the help section.\n"
+model_descriptions:
+  DSCNN_32K_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: 'SRAM/Flash-optimized DSCNN for audio classification.
+
+        48 filters, DW 3x1 kernels, stride-2 downsample in DS block 1.
+
+        Target: SRAM < 32 KB, Flash < 128 KB, W8 quantization.'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_module: audio
+      task_category: audio_classification
+      task_type: audio_classification
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      audio_duration_ms: 1000
+      audio_feature: MFCC
+      augmentation_transform: []
+      data_proc_transforms: []
+      dont_train_just_feat_ext: false
+      fb_bitwidth: 8
+      fb_context_ms: 20
+      fb_conv_kernel: 64
+      fb_conv_stride: 4
+      fb_output_channel: 64
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: 32
+      frame_length_ms: 30
+      frame_size: 512
+      frame_step_ms: 20
+      gof_test: false
+      input_bit_depth: 16
+      lpc_order: 10
+      min_bin: 1
+      mono: true
+      n_mels: 40
+      n_mfcc: 10
+      nlpc: 70
+      nn_for_feature_extraction: false
+      normalize_audio: true
+      num_frame_concat: 1
+      q15_scale_factor: 8
+      sampling_rate: 16000
+      store_feat_ext_data: false
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_name: null
+      dataset_path: null
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      auto_quantization: false
+      batch_size: 64
+      dataset_loader: GenericAudioDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      early_stopping: true
+      early_stopping_min_delta: 0.0
+      early_stopping_patience: 5
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.001
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: DSCNN_32K_NPU
+      model_spec: null
+      model_training_id: CNN_AUDIO_DSCNN_32K_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: audio.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: audio.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G5187: {}
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_path: null
+      training_path_quantization: null
+      weight_decay: 0.0001
+  DSCNN_GB_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: 'Glass-break detection DSCNN with 32 filters and depthwise-separable
+        convolutions.
+
+        Input: (86, 32) FFT features.
+
+        Optimized for real-time edge inference.'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_module: audio
+      task_category: audio_classification
+      task_type: audio_classification
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      audio_duration_ms: 1000
+      audio_feature: MFCC
+      augmentation_transform: []
+      data_proc_transforms: []
+      dont_train_just_feat_ext: false
+      fb_bitwidth: 8
+      fb_context_ms: 20
+      fb_conv_kernel: 64
+      fb_conv_stride: 4
+      fb_output_channel: 64
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: 32
+      frame_length_ms: 30
+      frame_size: 512
+      frame_step_ms: 20
+      gof_test: false
+      input_bit_depth: 16
+      lpc_order: 10
+      min_bin: 1
+      mono: true
+      n_mels: 40
+      n_mfcc: 10
+      nlpc: 70
+      nn_for_feature_extraction: false
+      normalize_audio: true
+      num_frame_concat: 1
+      q15_scale_factor: 8
+      sampling_rate: 16000
+      store_feat_ext_data: false
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_name: null
+      dataset_path: null
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      auto_quantization: false
+      batch_size: 64
+      dataset_loader: GenericAudioDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      early_stopping: true
+      early_stopping_min_delta: 0.0
+      early_stopping_patience: 5
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.001
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: DSCNN_GB_NPU
+      model_spec: null
+      model_training_id: CNN_AUDIO_DSCNN_GB_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: audio.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: audio.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G5187: {}
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_path: null
+      training_path_quantization: null
+      weight_decay: 0.0001
+  DSCNN_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: 'Lenet5.
+
+        CNN for audio classification.
+
+        2 Conv+BatchNorm+Relu+MaxPool layers + 3 Linear layers.'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_module: audio
+      task_category: audio_classification
+      task_type: audio_classification
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      audio_duration_ms: 1000
+      audio_feature: MFCC
+      augmentation_transform: []
+      data_proc_transforms: []
+      dont_train_just_feat_ext: false
+      fb_bitwidth: 8
+      fb_context_ms: 20
+      fb_conv_kernel: 64
+      fb_conv_stride: 4
+      fb_output_channel: 64
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: 32
+      frame_length_ms: 30
+      frame_size: 512
+      frame_step_ms: 20
+      gof_test: false
+      input_bit_depth: 16
+      lpc_order: 10
+      min_bin: 1
+      mono: true
+      n_mels: 40
+      n_mfcc: 10
+      nlpc: 70
+      nn_for_feature_extraction: false
+      normalize_audio: true
+      num_frame_concat: 1
+      q15_scale_factor: 8
+      sampling_rate: 16000
+      store_feat_ext_data: false
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_name: null
+      dataset_path: null
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      auto_quantization: false
+      batch_size: 64
+      dataset_loader: GenericAudioDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      early_stopping: true
+      early_stopping_min_delta: 0.0
+      early_stopping_patience: 5
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.1
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: DSCNN_NPU
+      model_spec: null
+      model_training_id: CNN_AUDIO_DSCNN
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: audio.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: audio.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G5187: {}
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_path: null
+      training_path_quantization: null
+      weight_decay: 0.0001
+  TCDS_ResNet_FB_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: 'Temporal CNN with depthwise-separable residual blocks for filterbank
+        audio features.
+
+        Flexible channel sizing via model specification with mixed-precision quantization
+        support.'
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_module: audio
+      task_category: audio_classification
+      task_type: audio_classification
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      audio_duration_ms: 1000
+      audio_feature: MFCC
+      augmentation_transform: []
+      data_proc_transforms: []
+      dont_train_just_feat_ext: false
+      fb_bitwidth: 8
+      fb_context_ms: 20
+      fb_conv_kernel: 64
+      fb_conv_stride: 4
+      fb_output_channel: 64
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: 32
+      frame_length_ms: 30
+      frame_size: 512
+      frame_step_ms: 20
+      gof_test: false
+      input_bit_depth: 16
+      lpc_order: 10
+      min_bin: 1
+      mono: true
+      n_mels: 40
+      n_mfcc: 10
+      nlpc: 70
+      nn_for_feature_extraction: false
+      normalize_audio: true
+      num_frame_concat: 1
+      q15_scale_factor: 8
+      sampling_rate: 16000
+      store_feat_ext_data: false
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_name: null
+      dataset_path: null
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      auto_quantization: false
+      batch_size: 64
+      dataset_loader: GenericAudioDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      early_stopping: true
+      early_stopping_min_delta: 0.0
+      early_stopping_patience: 5
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.01
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: TCDS_ResNet_FB_NPU
+      model_spec: null
+      model_training_id: CNN_AUDIO_TCDS_ResNet_FB_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: audio.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: audio.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G5187: {}
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_path: null
+      training_path_quantization: null
+      weight_decay: 0.0001
+  TCDS_ResNet_NPU:
+    common:
+      download_path: ./data/downloads
+      generic_model: true
+      model_details: "Temporal Channel-Decoupled Separable ResNet for LPC audio features.\n\
+        Permutes input (N,1,T,F) \u2192 (N,F,T,1): LPC coefficients as channels,\n\
+        1D temporal convolutions only. Peak SRAM ~3-4 KB. Fits MSPM0G5187."
+      project_path: null
+      project_run_path: null
+      projects_path: ./data/projects
+      run_name: '{date-time}/{model_name}'
+      target_device: null
+      target_module: audio
+      task_category: audio_classification
+      task_type: audio_classification
+    compilation:
+      compile_output_path: null
+      compile_preset_name: null
+      enable: true
+      keep_libc_files: false
+      model_path: null
+      properties:
+      - default: default_preset
+        enum:
+        - label: Default best
+          tooltip: Default Inference Mode
+          value: default_preset
+        label: Compilation Preset
+        name: compile_preset_name
+        type: enum
+    data_processing_feature_extraction:
+      audio_duration_ms: 1000
+      audio_feature: MFCC
+      augmentation_transform: []
+      data_proc_transforms: []
+      dont_train_just_feat_ext: false
+      fb_bitwidth: 8
+      fb_context_ms: 20
+      fb_conv_kernel: 64
+      fb_conv_stride: 4
+      fb_output_channel: 64
+      feat_ext_store_dir: null
+      feat_ext_transform: []
+      feature_extraction_name: null
+      feature_size_per_frame: 32
+      frame_length_ms: 30
+      frame_size: 512
+      frame_step_ms: 20
+      gof_test: false
+      input_bit_depth: 16
+      lpc_order: 10
+      min_bin: 1
+      mono: true
+      n_mels: 40
+      n_mfcc: 10
+      nlpc: 70
+      nn_for_feature_extraction: false
+      normalize_audio: true
+      num_frame_concat: 1
+      q15_scale_factor: 8
+      sampling_rate: 16000
+      store_feat_ext_data: false
+      variables: 1
+    dataset:
+      annotation_dir: annotations
+      annotation_format: univ_ts_json
+      annotation_path_splits: null
+      annotation_prefix: instances
+      data_dir: null
+      data_path_splits: null
+      dataset_name: null
+      dataset_path: null
+      enable: true
+      extract_path: null
+      input_annotation_path: null
+      input_data_path: null
+      max_num_files: 10000
+      split_factor:
+      - 0.6
+      - 0.3
+      - 0.1
+      split_names:
+      - train
+      - val
+      - test
+      split_type: amongst_files
+    download:
+      download_path: ''
+      download_url: ''
+    testing:
+      device_inference: false
+      enable: true
+      model_path: null
+      skip_train: false
+      test_data: null
+    training:
+      augment_config: null
+      auto_quantization: false
+      batch_size: 64
+      dataset_loader: GenericAudioDataset
+      dataset_path: null
+      distributed: true
+      dual_op: false
+      early_stopping: true
+      early_stopping_min_delta: 0.0
+      early_stopping_patience: 5
+      enable: true
+      file_level_classification_log_path: null
+      lambda_reg: 0
+      learning_rate: 0.001
+      load_saved_model: null
+      log_file_path: null
+      log_summary_regex: null
+      lr_scheduler: cosineannealinglr
+      model_config: null
+      model_name: TCDS_ResNet_NPU
+      model_spec: null
+      model_training_id: CNN_AUDIO_TCDS_ResNet_NPU
+      nas_enabled: false
+      nas_epochs: 10
+      nas_fanout_concat: 4
+      nas_init_channel_multiplier: 3
+      nas_init_channels: 1
+      nas_layers: 3
+      nas_model_size: null
+      nas_nodes_per_layer: 4
+      nas_optimization_mode: Memory
+      num_gpus: 1
+      ondevice_training: false
+      optimizer: sgd
+      output_int: null
+      pretrained_checkpoint_path: null
+      project_path: null
+      properties:
+      - default: []
+        dynamic: true
+        label: Preprocessing Parameters
+        name: preprocessing_group
+        script: audio.py
+        type: group
+      - default: []
+        dynamic: true
+        label: Training Parameters
+        name: train_group
+        script: audio.py
+        type: group
+      quantization: 2
+      quantization_activation_bitwidth: 8
+      quantization_method: QAT
+      quantization_weight_bitwidth: 8
+      run_quant_train_only: false
+      target_devices:
+        MSPM0G5187: {}
+      train_output_path: null
+      trainable_layers_from_last: 1
+      training_backend: tinyml_tinyverse
+      training_device: cuda
+      training_devices:
+        cpu: true
+        cuda: true
+        mps: true
+      training_epochs: 10
+      training_path: null
+      training_path_quantization: null
+      weight_decay: 0.0001
+preset_descriptions:
+  MSPM0G5187:
+    audio_classification:
+      compress_npu_layer_data:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu skip_normalize=true output_int=true opt_for_space=true
+          target_c_mcpu: cortex-m0plus
+      default_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu skip_normalize=true output_int=true
+          target_c_mcpu: cortex-m0plus
+      forced_soft_npu_preset:
+        compilation:
+          cross_compiler: /opt/tinyml/code/tinyml-mlbackend/tinyml_proprietary_models/tiarmclang
+          cross_compiler_options: -Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus
+            -mthumb -mfloat-abi=soft -I. -Wno-return-type
+          target: c, ti-npu type=soft skip_normalize=true output_int=true
+          target_c_mcpu: cortex-m0plus
+sample_dataset_descriptions:
+  cough_detection:
+    common:
+      task_category: audio_classification
+      task_type: audio_classification
+    dataset:
+      dataset_name: cough_detection
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/cough_detection.zip
+    info:
+      dataset_description: Binary audio classification dataset (cough vs other) captured
+        with TI EdgeAI Studio via the LP-MSPM0G5187 I2S peripheral at 8820 Hz. Cough
+        clips are augmented with attenuated, noise-mixed copies so the model discriminates
+        on spectral shape rather than loudness.
+      dataset_detailed_name: Cough Detection
+      dataset_license: TI Internal License
+      dataset_size: '2 classes: cough, other. 2-second WAV clips at 8820 Hz.'
+      dataset_source: Generated by Texas Instruments using TI EdgeAI Studio
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/cough_detection.zip
+  glass_break_detection:
+    common:
+      task_category: audio_classification
+      task_type: audio_classification
+    dataset:
+      dataset_name: glass_break_detection
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/glass_break_detection.zip
+    info:
+      dataset_description: Binary audio classification dataset (glass_break vs other)
+        for detecting the sound of breaking glass.
+      dataset_detailed_name: Glass Break Detection
+      dataset_license: TI Internal License
+      dataset_size: null
+      dataset_source: Generated by Texas Instruments
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/glass_break_detection.zip
+  google_speech_commands_12class:
+    common:
+      task_category: audio_classification
+      task_type: audio_classification
+    dataset:
+      dataset_name: google_speech_commands_12class
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/google_speech_commands_12class.zip
+    info:
+      dataset_citation: 'Warden, P. Speech Commands: A Dataset for Limited-Vocabulary
+        Speech Recognition. arXiv:1804.03209, 2018.'
+      dataset_description: 'The Google Speech Commands 12-class dataset is a TensorLab-compatible
+        keyword spotting dataset generated from Google Speech Commands v0.02 using
+        TorchAudio. It contains 10 selected command classes: down, go, left, no, off,
+        on, right, stop, up, and yes. All remaining spoken-word classes are mapped
+        into _unknown_, and _silence_ samples are generated from the original _background_noise_
+        audio files. The dataset is arranged in class-folder format for audio classification
+        workflows.'
+      dataset_detailed_name: Google Speech Commands Classification
+      dataset_license: Refer to the original Google Speech Commands dataset license
+        and usage terms.
+      dataset_size: '12 classes: 10 keyword classes, 1 _unknown_ class, and 1 _silence_
+        class. Each sample is a 1-second 16 kHz WAV audio clip.'
+      dataset_source: Derived from Google Speech Commands v0.02 downloaded using torchaudio.datasets.SPEECHCOMMANDS.
+      dataset_url: https://pytorch.org/audio/stable/generated/torchaudio.datasets.SPEECHCOMMANDS.html
+  wake_word_detection:
+    common:
+      task_category: audio_classification
+      task_type: audio_classification
+    dataset:
+      dataset_name: wake_word_detection
+      input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wake_word_detection.zip
+    info:
+      dataset_description: Binary audio classification dataset (ok_kilby vs other).
+        Wake word used for training is "Ok Kilby"
+      dataset_detailed_name: Wake Word Detection
+      dataset_license: TI Internal License
+      dataset_size: null
+      dataset_source: Generated by Texas Instruments
+      dataset_url: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wake_word_detection.zip
+target_device_descriptions:
+  MSPM0G5187: {}
+task_descriptions:
+  audio_classification:
+    application_specific: false
+    checkDataEnough: false
+    stages:
+    - dataset
+    - data_processing_feature_extraction
+    - training
+    - compilation
+    target_devices:
+    - MSPM0G5187
+    target_module: audio
+    task_category: audio_classification
+    task_group: timeseries
+    task_name: Audio Classification
+tooltip_descriptions:
+  common: {}
+  compilation:
+    preset_name:
+      description: 'Two presets exist: "default_preset"(Recommended Option), "forced_soft_npu_preset"(Only
+        available on HW-NPU devices to disable HW NPU), '
+      name: Preset Name
+  dataset: {}
+  deploy:
+    download_compiled_model_to_evm:
+      description: Compiled model can be downloaded into the EVM for running model
+        inference in SDK. Instructions are given in the help section.
+      name: Download compiled model artifacts to EVM
+    download_compiled_model_to_pc:
+      description: Compiled model can be downloaded to the PC for inspection.
+      name: Download compiled model artifacts to PC
+    download_trained_model_to_pc:
+      description: Trained model can be downloaded to the PC for inspection.
+      name: Download trained model
+  training:
+    batch_size:
+      description: Batch size specifies the number of inputs that are propagated through
+        the neural network in one iteration. Several such iterations make up one Epoch.Higher
+        batch size require higher memory and too low batch size can typically impact
+        the accuracy.
+      name: Batch size
+    early_stopping:
+      description: Stop training automatically once the validation metric stops improving.
+        This helps avoid overfitting and can reduce unnecessary training time.
+      name: Early Stopping
+    early_stopping_patience:
+      description: Number of epochs with no improvement before stopping early. It
+        is a hyper parameter that can be tuned along with Early Stopping.
+      name: Early Stopping Patience
+    learning_rate:
+      description: Learning Rate determines the step size used by the optimization
+        algorithm at each iteration while moving towards the optimal solution. It
+        is a hyper parameter that can be tuned to get best accuracy. Eg. A small Learning
+        Rate typically gives good accuracy while fine tuning a model for a different
+        task.
+      name: Learning rate
+    training_epochs:
+      description: Epoch is a term that is used to indicate a pass over the entire
+        training dataset. It is a hyper parameter that can be tuned to get best accuracy.
+        Eg. A model trained for 30 Epochs may give better accuracy than a model trained
+        for 15 Epochs.
+      name: Epochs
+    weight_decay:
+      description: Weight decay is a regularization technique that can improve stability
+        and generalization of a machine learning algorithm. It is typically done using
+        L2 regularization that penalizes parameters (weights, biases) according to
+        their L2 norm.
+      name: Weight decay
+version_descriptions:
+  version: 1.5.0

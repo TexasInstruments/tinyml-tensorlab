@@ -40,14 +40,12 @@ from . import constants
 def init_params(*args, **kwargs):
     default_params = dict(
         common=dict(
-            verbose_mode=True,
             download_path=os.path.join('.', 'data', 'downloads'),
             projects_path=os.path.join('.', 'data', 'projects'),
             project_path=None,
             project_run_path=None,
             task_type=None,
             task_category=None,
-            target_machine='evm',
             target_device=None,
             # run_name can be any string, but there are some special cases:
             # {date-time} will be replaced with datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -72,8 +70,6 @@ def init_params(*args, **kwargs):
             annotation_dir='annotations',
             annotation_prefix='instances',  # change this if your dataset has a different annotation prefix
             annotation_format='univ_ts_json',
-            dataset_download=False,
-            dataset_reload=False,
             split_type='amongst_files',
         ),
         training=dict(
@@ -82,7 +78,7 @@ def init_params(*args, **kwargs):
             augment_config=None,
             model_config=None,
             model_spec=None,
-            dataset_loader='GoogleSpeechCommandsDataset',
+            dataset_loader='GenericAudioDataset',
             model_training_id=None,
             training_backend=None,
             pretrained_checkpoint_path=None,
@@ -95,18 +91,18 @@ def init_params(*args, **kwargs):
             file_level_classification_log_path=None,
             log_summary_regex=None,
             training_epochs=10,
-            warmup_epochs=1,
-            num_last_epochs=5,
+            early_stopping=True,
+            early_stopping_patience=5,
+            early_stopping_min_delta=0.0,
             batch_size=8,
             learning_rate=2e-3,
             lambda_reg=0,
             optimizer='sgd',
             weight_decay=1e-4,
             lr_scheduler='cosineannealinglr',
-            training_device='cuda',  # 'cpu', 'cuda'
+            training_device=constants.TRAINING_DEVICE_CUDA,
             num_gpus=1,  # 0,1
             distributed=True,
-            training_master_port=29500,
             train_output_path=None,
             run_quant_train_only=False,
             auto_quantization = False,
@@ -119,9 +115,6 @@ def init_params(*args, **kwargs):
             properties=[
                 dict(type="group", dynamic=True, name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                 dict(type="group", dynamic=False, name="train_group", label="Training Parameters", default=["training_epochs", "learning_rate"]),
-                dict(label="Epochs", name="training_epochs", type="integer", default=50, min=1, max=300),
-                dict(label="Learning Rate", name="learning_rate", type="float", default=0.04, min=0.001, max=0.1,
-                     decimal_places=3, increment=0.001),
                 ],
             
             #######################################
@@ -144,7 +137,6 @@ def init_params(*args, **kwargs):
             load_saved_model=None,
             ondevice_training = False,
             trainable_layers_from_last = 1,
-            partial_quantization = False
         ),
 
         testing=dict(
@@ -172,8 +164,23 @@ def init_params(*args, **kwargs):
             frame_step_ms=20,
 
             # LPC
-            nlpc=14,
-            lpc_order=14,
+            nlpc=70,
+            lpc_order=10,
+
+            # Filterbank
+            fb_conv_kernel=64,
+            fb_output_channel=64,
+            fb_bitwidth=8,
+            fb_conv_stride=4,
+            fb_context_ms=20,
+            input_bit_depth=16,
+
+            # FFT
+            frame_size=512,
+            num_frame_concat=1,
+            feature_size_per_frame=32,
+            q15_scale_factor=8,
+            min_bin=1,
 
             # Audio loading
             normalize_audio=True,
@@ -186,7 +193,6 @@ def init_params(*args, **kwargs):
 
             # Generic feature extraction controls
             nn_for_feature_extraction=False,
-            feature_size_per_frame=None,
             gof_test=False,
             store_feat_ext_data=False,
             feat_ext_store_dir=None,

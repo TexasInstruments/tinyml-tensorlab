@@ -533,15 +533,15 @@ def create_template_model_description(task_category, task_type, dataset_loader=N
         learning_rate=2e-3,
         model_spec=None,
         batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT.get(batch_size_key or task_type, 32),
-        target_devices={
-            constants.TARGET_DEVICE_F280013: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_F280015: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_F28003: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_F28004: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_F2837: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None),
-            constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None),
-        },
+        target_devices=[
+            constants.TARGET_DEVICE_F280013,
+            constants.TARGET_DEVICE_F280015,
+            constants.TARGET_DEVICE_F28003,
+            constants.TARGET_DEVICE_F28004,
+            constants.TARGET_DEVICE_F2837,
+            constants.TARGET_DEVICE_F28P65,
+            constants.TARGET_DEVICE_F28P55,
+        ],
         training_devices={
             constants.TRAINING_DEVICE_CPU: True,
             constants.TRAINING_DEVICE_CUDA: True,
@@ -693,14 +693,10 @@ class BaseModelTraining:
 
     def _get_device_flash_size(self):
         """Get flash size in KB for the target device."""
-        device_name = self.params.common.target_device
-        device_info = constants.TARGET_DEVICE_DESCRIPTIONS.get(device_name, {})
-        flash_kb = device_info.get('flash_size_kb', None)
-        
-        if flash_kb is None:
-            self.logger.warning(f"Flash size not defined for device '{device_name}'")
-        
-        return flash_kb
+        # No per-device flash size data source exists; user-configurable via
+        # training.target_device_flash_kb (default 100), since
+        # ondevice_training.export_training_data() raises ValueError if this is None.
+        return self.params.training.target_device_flash_kb
 
     def _build_common_train_argv(self, device, distributed):
         """
@@ -763,6 +759,24 @@ class BaseModelTraining:
             '--autoquant-tolerance-forecasting', f'{self.params.training.autoquant_tolerance_forecasting}',
             '--autoquant-tolerance-anomaly', f'{self.params.training.autoquant_tolerance_anomaly}',
             '--compile-model', f'{getattr(self.params.training, "compile_model", 0)}',
+            '--early-stopping', f'{self.params.training.early_stopping}',
+            '--early-stopping-patience', f'{self.params.training.early_stopping_patience}',
+            '--early-stopping-min-delta', f'{self.params.training.early_stopping_min_delta}',
+            # Passed through only so train.py's early memory pre-flight check (which runs
+            # before the real compilation stage even starts) can resolve the same
+            # cross-compiler/target the real compilation stage would use, instead of
+            # falling back to compilation.py's unusable bare argparse defaults. Empty
+            # string (not the literal "None") when unresolved, so train_base.py's
+            # `getattr(args, ..., None) or default` fallback treats it as absent.
+            # NOTE: must stay BEFORE the --data-path/--store-feat-ext-data/--epochs/--lr/
+            # --output-dir tail below -- run()/several call sites splice this argv list
+            # with fixed negative-index slices (argv[:-10], argv[:-8], argv[:-2]) that
+            # assume exactly that 10-item tail is last; appending anything after it shifts
+            # those slices and silently corrupts them.
+            '--cross-compiler', f'{self.params.compilation.get("cross_compiler") or ""}',
+            '--cross-compiler-options', f'{self.params.compilation.get("cross_compiler_options") or ""}',
+            '--target', f'{self.params.compilation.get("target") or ""}',
+            '--target-c-mcpu', f'{self.params.compilation.get("target_c_mcpu") or ""}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--store-feat-ext-data', f'{self.params.data_processing_feature_extraction.store_feat_ext_data}',
             '--epochs', f'{self.params.training.training_epochs}',
