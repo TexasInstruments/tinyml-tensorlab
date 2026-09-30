@@ -77,112 +77,92 @@ class TinyMLQConfigType:
                  inputs=None, targets=None, criterion=None,
                  calibration_dataloader=None, eval_dataloader=None,
                  task_type: str=None, float_metric: float=None, example_inputs=None,
-                 **kwargs):
+                 weight_mixed_precision=None, activation_mixed_precision=None, **kwargs):
+
         self.logger = getLogger("root.main.TinyMLQConfigType")
+
+        if weight_bitwidth is None:
+            weight_bitwidth = 8
+            self.logger.info("Default the weight bitwidth to 8")
+        if activation_bitwidth is None:
+            activation_bitwidth = 8
+            self.logger.info("Default the activation bitwidth to 8")
+
+        if weight_bitwidth not in [2, 4, 8] or activation_bitwidth not in [2, 4, 8]:
+            raise ValueError("Weight Bitwidth supported {2, 4, 8} and Activation Bitwidth supported {2, 4, 8}")
+
         if auto_quantization:
             self.logger.info("Quantization Bitwidths: Auto quantization")
         else:
             self.logger.info(f"Quantization Bitwidths: Weight-{weight_bitwidth} Activation-{activation_bitwidth}")
-        self.qconfig_type = None
-        if weight_bitwidth is None or activation_bitwidth is None:
-            '''
-            # 8bit weight / activation is default - no need to specify inside.
-            qconfig_type = {
-                'weight': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                },
-                'activation': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                }
-            }
-            '''
-            self.qconfig_type = None
-        elif weight_bitwidth == 8:
-            self.qconfig_type = {
-                'weight': {
-                    'bitwidth': weight_bitwidth,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                },
-                'activation': {
-                    'bitwidth': activation_bitwidth,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                },
-                'auto_quantization' : auto_quantization,
-            }
-        elif weight_bitwidth == 4:
-            self.qconfig_type = {
-                'weight': {
-                    'bitwidth': weight_bitwidth,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': False,
-                    'range_max': None,
-                    'fixed_range': False,
-                    'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
-                },
-                'activation': {
-                    'bitwidth': activation_bitwidth,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': False,
-                    'range_max': None,
-                    'fixed_range': False,
-                    'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
-                },
-                'auto_quantization' : auto_quantization,
-            }
-        elif weight_bitwidth == 2:
-            self.qconfig_type = {
-                'weight': {
-                    'bitwidth': weight_bitwidth,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': False,
-                    'range_max': None,
-                    'fixed_range': False,
-                    'soft_quant': 'dbq' # 'soft_sigmoid' 'soft_tanh' 'default'
-                },
-                'activation': {
-                    'bitwidth': activation_bitwidth,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': False,
-                    'range_max': None,
-                    'fixed_range': False,
-                    'soft_quant': 'soft_tanh' # 'soft_sigmoid' 'soft_tanh' 'default'
-                },
-                'auto_quantization' : auto_quantization,
-            }
-        else:
-            raise RuntimeError("unsupported quantization parameters")
+            if weight_mixed_precision:
+                self.logger.info(f"Mixed Precision for Weight enabled {weight_mixed_precision}")
+            if activation_mixed_precision:
+                self.logger.info(f"Mixed Precision for Activation enabled {activation_mixed_precision}")
 
+        '''
+        # 8bit weight / activation is default - no need to specify inside.
+        qconfig_type = {
+            'weight': {
+                'bitwidth': 8,
+                'qscheme': torch.per_channel_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            },
+            'activation': {
+                'bitwidth': 8,
+                'qscheme': torch.per_tensor_symmetric,
+                'power2_scale': True,
+                'range_max': None,
+                'fixed_range': False
+            }
+        }
+        '''
+
+        self.qconfig_type = {
+            'weight': {
+                'bitwidth': weight_bitwidth,
+                'qscheme': torch.per_channel_symmetric,
+                'power2_scale': True if weight_bitwidth == 8 else False,
+                'mixed_precision': weight_mixed_precision,
+                'range_max': None,
+                'fixed_range': False,
+                'soft_quant': 'soft_sigmoid' if weight_bitwidth == 4 else 'dbq' if weight_bitwidth == 2 else 'default'
+            },
+            'activation': {
+                'bitwidth': activation_bitwidth,
+                'qscheme': torch.per_tensor_symmetric,
+                'power2_scale': True if weight_bitwidth == 8 else False,
+                'mixed_precision': activation_mixed_precision,
+                'range_max': None,
+                'fixed_range': False,
+                'soft_quant': 'soft_sigmoid' if activation_bitwidth == 4 else 'dbq' if activation_bitwidth == 2 else 'default'
+            },
+            'auto_quantization' : auto_quantization,
+        }
         if self.qconfig_type is not None and auto_quantization:
-            if inputs is not None:
-                self.qconfig_type['inputs'] = inputs
-            if targets is not None:
-                self.qconfig_type['targets'] = targets
-            if criterion is not None:
-                self.qconfig_type['criterion'] = criterion
-            if calibration_dataloader is not None:
-                self.qconfig_type['calibration_dataloader'] = calibration_dataloader
-            if eval_dataloader is not None:
-                self.qconfig_type['eval_dataloader'] = eval_dataloader
-            if task_type is not None:
-                self.qconfig_type['task_type'] = task_type
-            if float_metric is not None:
-                self.qconfig_type['float_metric'] = float_metric
-            if example_inputs is not None:
-                self.qconfig_type['example_inputs'] = example_inputs
+            required_params = {
+                'inputs': inputs,
+                'targets': targets,
+                'criterion': criterion,
+                'calibration_dataloader': calibration_dataloader,
+                'eval_dataloader': eval_dataloader,
+                'task_type': task_type,
+                'float_metric': float_metric,
+                'example_inputs': example_inputs,
+            }
+
+            # missing_params = [name for name, value in required_params.items() if value is None]
+            # if missing_params:
+            #     raise ValueError(
+            #         f"Auto Quantization enabled but missing required parameters: {', '.join(missing_params)}. "
+            #         f"Either set auto_quantization to False or provide all required parameters."
+            #     )
+
+            for name, value in required_params.items():
+                self.qconfig_type[name] = value
+
             for key in (
                 'autoquant_tolerance_classification',
                 'autoquant_tolerance_regression',

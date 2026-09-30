@@ -29,19 +29,17 @@
 #
 #################################################################################
 
-import platform
-
 from ..common import *
 from ..base.fx import TinyMLQuantFxBaseModule
 
 from torch.fx import GraphModule
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from .quant_utils import GENERICQuantizedReplacementUtils
 from ...surgery import remove_identity
 
 class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
-    def __init__(self, model, *args, qconfig_type=None, output_int: bool = True, **kwargs):
+    def __init__(self, model, *args, qconfig_type: TinyMLQConfigType, output_int: bool = True, **kwargs):
         '''
         The QAT wrapper module does the preparation like in:
         qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
@@ -51,60 +49,25 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         But if you need to pass, it can be defined this way.
         # qconfig_type supported for TINPU in F28 devices
         '''
-        if qconfig_type == None:
-            qconfig_type = {
-                'weight': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': False,
-                    'range_max': None,
-                    'fixed_range': False
-                },
-                'activation': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': False,
-                    'range_max': None,
-                    'fixed_range': False
-                }
-            }
-            
-        self.weight_bw = qconfig_type['weight']['bitwidth']
-        self.activation_bw = qconfig_type['activation']['bitwidth']
-        self.power2_scale = qconfig_type['weight']['power2_scale']
-        self.output_int = output_int
-        self.float_ops = kwargs.get('float_ops', False)
-
         # qconfig_type = None is equivalent to WC8AT8 (or DEFAULT) which uses per_tensor_affine
         # Note: activation qscheme=torch.per_tensor_affine can be converted onnx model with QOperator using onnxruntime optimization
         # but activation qscheme=torch.per_tensor_symmetric stays as QDQ even when using onnxruntime optimization
-        # fbgemm is optimal for x86; qnnpack for ARM (Apple Silicon, mobile)
-        # Intel Mac (Darwin + x86_64) also benefits from fbgemm
-        _is_x86 = platform.machine() in ('x86_64', 'AMD64', 'x86')
-        backend = 'fbgemm' if (platform.system() == 'Windows' or (platform.system() == 'Darwin' and _is_x86)) else 'qnnpack'
-        super().__init__(model, *args, qconfig_type=qconfig_type, backend=backend, **kwargs)
+        self.output_int = output_int
+        super().__init__(model, *args, qconfig_type=qconfig_type, **kwargs)
     
-    def convert(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.INT_MODEL, **kwargs):
+    def convert(self, *args, **kwargs):
         '''
         The convert function is used to convert the model to TINPU supported ONNX model. 
-        Args:
-            model_qconfig_format: The model format to be converted to. Supports the following 
-                - TinyMLModelQConfigFormat.FLOAT_MODEL
-                - TinyMLModelQConfigFormat.FAKEQ_MODEL
-                - TinyMLModelQConfigFormat.QDQ_MODEL
-                - TinyMLModelQConfigFormat.INT_MODEL (default)
-                - TinyMLModelQConfigFormat.TINPU_INT_MODEL 
         '''
         # first convert the model to int
-        super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
+        super().convert(*args, **kwargs)
         # then apply the transformation to required output format
-        if model_qconfig_format == TinyMLModelQConfigFormat.INT_MODEL:
-            self.module = self._convert_replacement(self.module, self.output_int)
+        self.module = self._convert_replacement(self.module, self.output_int)
         return self
 
-    def export(self, *args, model_qconfig_format=TinyMLModelQConfigFormat.INT_MODEL, simplify=True, skipped_optimizers=None, **kwargs):
-        skipped_optimizers = skipped_optimizers or ['fuse_add_bias_into_conv', 'eliminate_nop_with_unit']
-        super().export(*args, model_qconfig_format=model_qconfig_format, simplify=simplify, skipped_optimizers=skipped_optimizers, **kwargs)
+    def export(self, *args, simplify=True, **kwargs):
+        skipped_optimizers = ['fuse_add_bias_into_conv', 'eliminate_nop_with_unit']
+        super().export(*args, simplify=simplify, skipped_optimizers=skipped_optimizers, **kwargs)
 
     def measure_stats(self, float_output, quant_output):
         diff_output = (float_output - quant_output)
@@ -140,7 +103,7 @@ class GenericTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         # Convert the module using symbolic trace
         module = torch.fx.symbolic_trace(module) if not isinstance(module, torch.fx.GraphModule) else module
         # Get the replacement rules to change the pattern
-        replacement_utils = GENERICQuantizedReplacementUtils(module, self.weight_bw, self.activation_bw, self.power2_scale)
+        replacement_utils = GENERICQuantizedReplacementUtils(module)
         replacement_rules = self.replacement_rules(replacement_utils)
         # Replace the patterns using the replacement function
         for replacement_pattern, replacement_function in replacement_rules:
@@ -155,7 +118,9 @@ class GenericTinyMLQATFxModule(GenericTinyMLQuantFxModule):
     The QAT base class.
     Any additional enhancements that we do specifically only QAT later can be added in this class.
     '''
-    pass
+
+    def __init__(self, *args, is_qat=True, model_output_format=TinyMLModelQConfigFormat.INT_MODEL ,**kwargs):
+        super().__init__(*args, is_qat=is_qat, model_output_format=model_output_format, **kwargs)
 
 
 class GenericTinyMLPTQFxModule(GenericTinyMLQuantFxModule):
@@ -164,5 +129,5 @@ class GenericTinyMLPTQFxModule(GenericTinyMLQuantFxModule):
     Any additional enhancements that we do specifically only PTQ later can be added in this class.
     '''
 
-    def __init__(self, *args, is_qat=False, **kwargs):
-        super().__init__(*args, is_qat=is_qat, **kwargs)
+    def __init__(self, *args, is_qat=False, model_output_format=TinyMLModelQConfigFormat.INT_MODEL , **kwargs):
+        super().__init__(*args, is_qat=is_qat, model_output_format=model_output_format, **kwargs)

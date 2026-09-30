@@ -226,7 +226,7 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
     The api being called doesn't actually pass qconfig_type - so it will be defined inside. 
     But if you need to pass, it can be defined.
     '''
-    qconfig_type = TinyMLQConfigType(weight_bitwidth=weight_bitwidth, activation_bitwidth=activation_bitwidth, auto_quantization=False).qconfig_type
+    qconfig_type = TinyMLQConfigType(weight_bitwidth=weight_bitwidth, activation_bitwidth=activation_bitwidth, auto_quantization=False)
 
     if quantization_device_type == 'TINPU':
         if quantization_method == 'QAT':

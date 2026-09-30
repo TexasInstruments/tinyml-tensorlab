@@ -163,6 +163,19 @@ def compute_offset_scale_shift(offset: torch.Tensor, weight: torch.Tensor, round
     offset = offset + shift_round_offset
     if int_bias:
         offset = torch.round(offset)
+
+    # Clip offset to valid range based on num_bits_scale
+    if num_bits_scale == 1:
+        # 24-bit signed integer range: [-(2^23), 2^23 - 1]
+        offset_max = 2**23 - 1
+        offset_min = -(2**23)
+        offset = offset.clamp(offset_min, offset_max)
+    elif num_bits_scale == 8:
+        # 16-bit signed integer range: [-(2^15), 2^15 - 1]
+        offset_max = 2**15 - 1
+        offset_min = -(2**15)
+        offset = offset.clamp(offset_min, offset_max)
+
     return offset, scaled_signed_weights, shift_mult
 
 def _get_parent_name(target: str):
@@ -270,7 +283,7 @@ def remove_intermediate_call_modules(main_module: GraphModule, new_node: Node, s
     ptr.replace_all_uses_with(new_node)
     main_module.graph.erase_node(end)
 
-def replace_call_function_or_method(main_module: GraphModule, start: torch.Node, end: torch.Node, replace_module: torch.nn.Module, module_no: int = 0) -> None:
+def replace_call_function_or_method(main_module: GraphModule, start: torch.Node, end: torch.Node, replace_module: torch.nn.Module, module_no: int = 0) -> torch.Node:
     """Replace nodes between start and end with a replacement module.
     
     Removes intermediate nodes and inserts the replacement module.
@@ -563,6 +576,44 @@ def assign_same_observers_for_residual_inputs(model: GraphModule) -> None:
             input_nodes = [arg for arg in node.args if isinstance(arg, Node)]
             if len(input_nodes) >= 2:
                 assign_same_observers(model, node, input_nodes)
+
+
+def assign_same_observers_for_flatten(model: GraphModule) -> None:
+    """Assign same observers to nodes before and after torch.nn.Flatten.
+
+    Finds Flatten nodes and synchronizes the activation observer of the
+    input node with the observer after Flatten, so both sides share the
+    same quantization parameters.
+
+    Args:
+        model: GraphModule to modify
+    """
+    named_modules = dict(model.named_modules())
+    for node in model.graph.nodes:
+        if node.op == 'call_module':
+            module = named_modules.get(node.target)
+            if isinstance(module, torch.nn.Flatten):
+                # Graph pattern: obs_before → Flatten → obs_after → next_module
+                obs_before_node = node.args[0] if isinstance(node.args[0], Node) else None
+                obs_after_node = node.next
+
+                if not obs_before_node or not obs_after_node or obs_after_node.op != 'call_module':
+                    continue
+
+                obs_before = getattr(model, str(obs_before_node.target), None)
+                obs_after = getattr(model, str(obs_after_node.target), None)
+
+                if not obs_before or not obs_after:
+                    continue
+
+                if not hasattr(obs_after, ACTIVATION_POST_PROCESS):
+                    continue
+
+                activation_post_proc = getattr(obs_after, ACTIVATION_POST_PROCESS)
+                setattr(obs_before, ACTIVATION_POST_PROCESS, activation_post_proc)
+
+    model.graph.lint()
+    model.recompile()
 
 
 def remove_identity(model: torch.nn.Module, verbose_mode: bool = False, **kwargs) -> torch.fx.GraphModule:

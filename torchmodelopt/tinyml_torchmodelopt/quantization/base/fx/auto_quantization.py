@@ -311,7 +311,7 @@ def find_optimal_bitwidth_binary_search(
         }
         probe_mapping = QConfigMapping().set_global(qconfig_types.get_default_qconfig(bw_qconfig_dict))
         qcd_copy = {'weight': dict(base.get('weight', {})), 'activation': dict(base.get('activation', {}))}
-        probe_mapping = qconfig_types.apply_mixed_precision(probe_mapping, qcd_copy, mixed_precision)
+        probe_mapping = qconfig_types.apply_mixed_precision(probe_mapping, qcd_copy, mixed_precision, on_weights=True)
         metric = calibrate_and_evaluate(
             model=model,
             qconfig_mapping=probe_mapping,
@@ -386,7 +386,7 @@ def try_downgrade_32bit_layers(
         }
         probe_mapping = QConfigMapping().set_global(get_default_qconfig_fn(bw_qconfig_dict))
         qcd_copy = {'weight': dict(base.get('weight', {})), 'activation': dict(base.get('activation', {}))}
-        probe_mapping = apply_mixed_precision_fn(probe_mapping, qcd_copy, trial)
+        probe_mapping = apply_mixed_precision_fn(probe_mapping, qcd_copy, trial, on_weights=True)
         metric = calibrate_and_evaluate(
             model=model,
             qconfig_mapping=probe_mapping,
@@ -515,7 +515,7 @@ def run_auto_quantization(model, qconfig_dict, qconfig_mapping, get_default_qcon
     }
     if any(bw < 32 for bw in mixed_precision.keys()):
         qconfig_mapping = QConfigMapping().set_global(get_default_qconfig_fn(bw_qconfig_dict))
-        qconfig_mapping = apply_mixed_precision_fn(qconfig_mapping, qconfig_dict, mixed_precision)
+        qconfig_mapping = apply_mixed_precision_fn(qconfig_mapping, qconfig_dict, mixed_precision, on_weights=True)
     else:
         logger.warning(
             "All layers assigned 32-bit by binary search — no compression found. "

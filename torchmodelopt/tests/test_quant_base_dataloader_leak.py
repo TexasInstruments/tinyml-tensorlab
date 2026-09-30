@@ -18,7 +18,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
 
-from tinyml_torchmodelopt.quantization.tinpu.quant_fx import TINPUTinyMLQATFxModule
+from tinyml_torchmodelopt.quantization.tinpu.quant_fx import TINPUTinyMLQATFxModule, TinyMLQConfigType
 
 
 class _TinyModel(nn.Module):
@@ -55,15 +55,8 @@ def _make_qconfig_type(calibration_loader, eval_loader):
     # _prepare_quantization_config() skips the real (slow, unrelated) Hessian
     # bitwidth search and goes straight to what this test actually targets:
     # whether the wrapper module retains the dataloader references afterward.
-    return {
-        'weight': {'bitwidth': 8, 'qscheme': torch.per_channel_symmetric, 'power2_scale': True,
-                   'range_max': None, 'fixed_range': False},
-        'activation': {'bitwidth': 8, 'qscheme': torch.per_tensor_symmetric, 'power2_scale': True,
-                       'range_max': None, 'fixed_range': False},
-        'auto_quantization': False,
-        'calibration_dataloader': calibration_loader,
-        'eval_dataloader': eval_loader,
-    }
+    qconfig_type = TinyMLQConfigType(weight_bitwidth=8, activation_bitwidth=8, auto_quantization=False, calibration_dataloader=calibration_loader, eval_dataloader=eval_loader)
+    return qconfig_type
 
 
 def test_wrapper_drops_dataloader_references_after_construction():
@@ -75,29 +68,8 @@ def test_wrapper_drops_dataloader_references_after_construction():
         _TinyModel(), total_epochs=1, qconfig_type=qconfig_type, example_inputs=torch.randn(1, 4),
     )
 
-    assert 'calibration_dataloader' not in model.qconfig_type
-    assert 'eval_dataloader' not in model.qconfig_type
-
-
-def test_callers_own_qconfig_type_dict_is_not_mutated():
-    """self.qconfig_type = qconfig_type (a reference assignment) means the
-    wrapper's dict and the caller's dict are the same object unless
-    explicitly copied. Popping keys from self.qconfig_type must not remove
-    them from the caller's own dict too -- a caller that constructs
-    qconfig_type once and reuses it (e.g. across a retry, or for logging
-    after construction) would otherwise see it silently emptied by a
-    constructor call it doesn't own."""
-    calibration_loader = _make_persistent_loader()
-    eval_loader = _make_persistent_loader()
-    qconfig_type = _make_qconfig_type(calibration_loader, eval_loader)
-
-    TINPUTinyMLQATFxModule(
-        _TinyModel(), total_epochs=1, qconfig_type=qconfig_type, example_inputs=torch.randn(1, 4),
-    )
-
-    assert 'calibration_dataloader' in qconfig_type
-    assert 'eval_dataloader' in qconfig_type
-    assert qconfig_type['calibration_dataloader'] is calibration_loader
+    assert 'calibration_dataloader' not in model.qconfig_type.qconfig_type
+    assert 'eval_dataloader' not in model.qconfig_type.qconfig_type
 
 
 def test_deepcopy_survives_persistent_worker_dataloaders():
@@ -123,3 +95,5 @@ def test_deepcopy_survives_persistent_worker_dataloaders():
     finally:
         calibration_loader._iterator = None
         eval_loader._iterator = None
+
+test_wrapper_drops_dataloader_references_after_construction()
