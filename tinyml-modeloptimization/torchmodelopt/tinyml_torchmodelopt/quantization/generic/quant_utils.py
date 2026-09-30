@@ -6,15 +6,14 @@ from .quant_modules import *
 from ...surgery.quant_helper_func import remove_hanging_nodes, simple_chain_searcher, add_node_after_node, is_both_node_equal, compute_offset_scale_shift, replace_call_function_or_method
 
 class GENERICQuantizedReplacementUtils():
-    def __init__(self, model: GraphModule, weight_bw: int, activation_bw: int, power2_scale: bool):
+    def __init__(self, model: GraphModule):
 
         self.module: GraphModule = model
         self.graph_quant_params: Dict[str, Dict] = dict()
         self.module_num: int = 0
 
-        self.weight_bw = weight_bw
-        self.activation_bw = activation_bw
-        self.num_bits_scale = 1 if power2_scale else 8
+        self.activation_bw = 8
+        self.num_bits_scale = 1
         self.rename_nodes_flag = False
 
         self._propagate_quant_params()

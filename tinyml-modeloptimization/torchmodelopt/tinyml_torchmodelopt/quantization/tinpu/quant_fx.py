@@ -32,20 +32,18 @@
 import warnings
 import torch
 
-import platform
-
 from ..common import *
 from ..base.fx import TinyMLQuantFxBaseModule
 
 from torch.fx import GraphModule
 from typing import List, Tuple, Optional
 
-from ...surgery.quant_helper_func import remove_identity, assign_same_observers_for_residual_inputs
+from ...surgery.quant_helper_func import remove_identity, assign_same_observers_for_residual_inputs, assign_same_observers_for_flatten
 from .quant_utils import TINPUQuantizedReplacementUtils
 
 
 class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
-    def __init__(self, *args, qconfig_type: Optional[dict] = None, output_int: bool = True, **kwargs) -> None:
+    def __init__(self, *args, qconfig_type: TinyMLQConfigType, output_int: bool = True, **kwargs) -> None:
         '''
         The QAT wrapper module does the preparation like in:
         qat_model = quantize_fx.prepare_qat_fx(nn_model, qconfig_mapping, example_input)
@@ -57,87 +55,27 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
         Args:
             qconfig_type: Similar representation of QConfig dict that defines the \
                 quantization configuration for the model.
-
-            >>> # qconfig_type supported for TINPU in F28 devices 
-        >>> qconfig_type = {
-                'weight': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                },
-                'activation': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                }
-            }
-
             output_int: The ONNX model output format. \
                 If True, the output of model will be quantized int8, if False, the output will be dequantized float
         '''
-        if qconfig_type == None:
-            qconfig_type = {
-                'weight': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                },
-                'activation': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': True,
-                    'range_max': None,
-                    'fixed_range': False
-                }
-            }
-        self.weight_bw = qconfig_type['weight']['bitwidth']
-        self.activation_bw = qconfig_type['activation']['bitwidth']
-        self.power2_scale = qconfig_type['weight']['power2_scale']
         self.output_int = output_int
-        self.float_ops = kwargs.get('float_ops', [])
-
-        if self.weight_bw >= 8:
-            assert self.power2_scale is True, 'for 8bit quantization, power2_scale must be set to True'
-        else:
-            if self.power2_scale:
-                warnings.warn('for bit_widths < 8, it power2_scale=False is supported and can be used for better accuracy.')
-            #
-        #
-
-        # fbgemm is optimal for x86; qnnpack for ARM (Apple Silicon, mobile)
-        # Intel Mac (Darwin + x86_64) also benefits from fbgemm
-        _is_x86 = platform.machine() in ('x86_64', 'AMD64', 'x86')
-        backend = 'fbgemm' if (platform.system() == 'Windows' or (platform.system() == 'Darwin' and _is_x86)) else 'qnnpack'
-        super().__init__(*args, qconfig_type=qconfig_type, backend=backend, **kwargs)
+        super().__init__(*args, qconfig_type=qconfig_type, **kwargs)
         assign_same_observers_for_residual_inputs(self.module)
+        assign_same_observers_for_flatten(self.module)
 
-    def convert(self, *args, model_qconfig_format: str = TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
+    def convert(self, *args, **kwargs):
         '''
         The convert function is used to convert the model to TINPU supported ONNX model. 
-        Args:
-            model_qconfig_format: The model format to be converted to. Supports the following 
-                - TinyMLModelQConfigFormat.FLOAT_MODEL
-                - TinyMLModelQConfigFormat.FAKEQ_MODEL
-                - TinyMLModelQConfigFormat.QDQ_MODEL
-                - TinyMLModelQConfigFormat.INT_MODEL
-                - TinyMLModelQConfigFormat.TINPU_INT_MODEL (default)
         '''
         # first convert the model to int
-        super().convert(*args, model_qconfig_format=model_qconfig_format, **kwargs)
+        super().convert(*args, **kwargs)
         # then apply the transformation to required output format
-        if model_qconfig_format == TinyMLModelQConfigFormat.TINPU_INT_MODEL:
-            self.module = self._convert_replacement(self.module, self.output_int)
+        self.module = self._convert_replacement(self.module, self.output_int)
         return self
 
-    def export(self, *args, model_qconfig_format: str = TinyMLModelQConfigFormat.TINPU_INT_MODEL, simplify: bool = True, skipped_optimizers=None, **kwargs):
-        skipped_optimizers = skipped_optimizers or ['fuse_add_bias_into_conv', 'eliminate_nop_with_unit']
-        super().export(*args, model_qconfig_format=model_qconfig_format, simplify=simplify, skipped_optimizers=skipped_optimizers, **kwargs)
+    def export(self, *args, simplify: bool = True, **kwargs):
+        skipped_optimizers = ['fuse_add_bias_into_conv', 'eliminate_nop_with_unit']
+        super().export(*args, simplify=simplify, skipped_optimizers=skipped_optimizers, **kwargs)
 
     def measure_stats(self, float_output, quant_output):
         diff_output = (float_output - quant_output)
@@ -159,19 +97,14 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
             max=quant_error_max)
         return diff_output_stats
 
-    def is_batch_normalized(self, module: GraphModule) -> bool:
-        named_modules = dict(module.named_modules())
-        batch_norm_modules = (torch.ao.nn.quantized.modules.batchnorm.BatchNorm2d, torch.nn.BatchNorm2d)
-        for name_entry, module_entry in named_modules.items():
-            if len(list(module_entry.parameters(recurse=False))) > 0 and isinstance(module_entry, batch_norm_modules):
-                return True
-        return False
-
-    def replacement_rules(self, replacement_utils: TINPUQuantizedReplacementUtils, is_batch_normalized: bool, output_int: bool) -> List[Tuple]:
+    def replacement_rules(self, replacement_utils: TINPUQuantizedReplacementUtils, output_int: bool) -> List[Tuple]:
         # List to store the pattern and corresponding replacement function
         replacement_rules = [
             ([torch.nn.BatchNorm2d, torch.quantize_per_tensor], replacement_utils.from_bnq),
             ([torch.ao.nn.intrinsic.modules.fused.ConvReLU2d], replacement_utils.from_conv_bn_relu),
+            (['dequantize', torch.nn.ConvTranspose2d, torch.nn.ReLU], replacement_utils.from_dq_t_conv_bn_relu),
+            ([torch.nn.ConvTranspose2d, torch.nn.ReLU], replacement_utils.from_t_conv_bn_relu),
+            ([torch.ao.nn.quantized.modules.conv.ConvTranspose2d], replacement_utils.from_t_conv),
             ([torch.ao.nn.intrinsic.modules.fused.ConvBn2d], replacement_utils.from_conv_bn),
             ([torch.ao.nn.intrinsic.modules.fused.LinearReLU], replacement_utils.from_linear_relu),
             ([torch.ao.nn.quantized.modules.batchnorm.BatchNorm2d], replacement_utils.from_qbn),
@@ -210,13 +143,11 @@ class TINPUTinyMLQuantFxModule(TinyMLQuantFxBaseModule):
     def _convert_replacement(self, module: GraphModule, output_int: bool = True) -> GraphModule:
         module = remove_identity(module)
         module.delete_all_unused_submodules()
-        # Check if the model has batch normalization
-        is_batch_normalized = self.is_batch_normalized(module)
         # Convert the module using symbolic trace
         module = torch.fx.symbolic_trace(module) if not isinstance(module, torch.fx.GraphModule) else module
         # Get the replacement rules to change the pattern
-        replacement_utils = TINPUQuantizedReplacementUtils(module, self.weight_bw, self.activation_bw, self.power2_scale, self.float_ops)
-        replacement_rules = self.replacement_rules(replacement_utils, is_batch_normalized, output_int)
+        replacement_utils = TINPUQuantizedReplacementUtils(module)
+        replacement_rules = self.replacement_rules(replacement_utils, output_int)
         # Replace the patterns using the replacement function
         for replacement_pattern, replacement_function in replacement_rules:
             matches = replacement_utils.search_pattern(replacement_pattern)
@@ -231,7 +162,9 @@ class TINPUTinyMLQATFxModule(TINPUTinyMLQuantFxModule):
     The QAT base class.
     Any additional enhancements that we do specifically only QAT later can be added in this class.
     '''
-    pass
+
+    def __init__(self, *args, is_qat=True, model_output_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
+        super().__init__(*args, is_qat=is_qat, model_output_format=model_output_format, **kwargs)
 
 
 class TINPUTinyMLPTQFxModule(TINPUTinyMLQuantFxModule):
@@ -240,5 +173,5 @@ class TINPUTinyMLPTQFxModule(TINPUTinyMLQuantFxModule):
     Any additional enhancements that we do specifically only PTQ later can be added in this class.
     '''
 
-    def __init__(self, *args, is_qat=False, **kwargs):
-        super().__init__(*args, is_qat=is_qat, **kwargs)
+    def __init__(self, *args, is_qat=False, model_output_format=TinyMLModelQConfigFormat.TINPU_INT_MODEL, **kwargs):
+        super().__init__(*args, is_qat=is_qat, model_output_format=model_output_format, **kwargs)

@@ -1,21 +1,34 @@
 [build-system]
-requires = [ "setuptools>=42",
-	"wheel",]
+requires = [ "setuptools", "wheel",]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_torchmodelopt"
-version = "1.4.0"
+version = "1.5.0"
 description = "Tiny ML Model Optimization ToolKit For Torch"
 readme = "README.md"
+requires-python = ">=3.10,<3.15"
+classifiers = [
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.14",]
 
 dependencies = [
+	"numpy==2.2.6 ; python_version < '3.11'",
+	"numpy==2.5.2 ; python_version >= '3.11'",
+	"onnx==1.22.0",
+	"onnxruntime==1.23.2 ; python_version < '3.11'",
+	"onnxruntime==1.29.0 ; python_version >= '3.11'",
+	# using onnxsim==0.4.36 is recommended, the later versions fold the Mul block of Add, Mul, Mul
+	"onnxsim==0.4.36",
+	"colorama==0.4.6",
+	"torch==2.11.0",
 	# "numpy==2.2.6",
 	# "onnxsim==0.4.36",
 	# "onnx==1.19.1",
 	# "onnxruntime==1.23.2",
 	# "colorama==0.4.6",
-	# "torch==2.7.1",
+	# "torch==2.11.0",
+	"soundfile==0.14.0",
 ]
 [[project.authors]]
 name = "Adithya Thonse"

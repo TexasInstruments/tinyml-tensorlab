@@ -98,7 +98,7 @@ def _get_observer_class_from_name(observer_name, qscheme, is_weight=True):
         )
 
 
-def get_default_qconfig(qconfig_dict=None):
+def get_default_qconfig(qconfig_dict: dict):
     '''
     This default qconfig uses symmetric, power2 quantization.
     It can be changed by passing appropriate qconfig_dict.
@@ -110,11 +110,11 @@ def get_default_qconfig(qconfig_dict=None):
     weight_quant_min = weight_qconfig.get('quant_min', -((2 ** (weight_bitwidth - 1)) - 1))
     weight_quant_max = weight_qconfig.get('quant_max', ((2 ** (weight_bitwidth - 1)) - 1))
     weight_qscheme = weight_qconfig.get('qscheme', torch.per_channel_symmetric)
-    weight_power2_scale = weight_qconfig.get('power2_scale', True)
+    weight_power2_scale = weight_qconfig.get('power2_scale', True if weight_bitwidth == 8 else False)
     weight_range_max = weight_qconfig.get('range_max', None)
     weight_fixed_range = weight_qconfig.get('fixed_range', False)
     weight_observer = weight_qconfig.get('observer', None)
-    weight_soft_quant = weight_qconfig.get('soft_quant', 'default')
+    weight_soft_quant = weight_qconfig.get('soft_quant', 'soft_sigmoid' if weight_bitwidth == 4 else 'dbq' if weight_bitwidth == 2 else 'default')
 
     activation_qconfig = qconfig_dict.get('activation', dict())
     activation_dtype = activation_qconfig.get('dtype', torch.quint8)
@@ -122,12 +122,12 @@ def get_default_qconfig(qconfig_dict=None):
     activation_quant_min = activation_qconfig.get('quant_min', 0)
     activation_quant_max = activation_qconfig.get('quant_max', (2 ** activation_bitwidth) - 1)
     activation_qscheme = activation_qconfig.get('qscheme', torch.per_tensor_symmetric)
-    activation_power2_scale = activation_qconfig.get('power2_scale', True)
+    activation_power2_scale = activation_qconfig.get('power2_scale', True if activation_bitwidth == 8 else False)
     activation_range_max = activation_qconfig.get('range_max', None)
     activation_fixed_range = activation_qconfig.get('fixed_range', False)
     activation_observer = activation_qconfig.get('observer', None)
     bias_calibration_factor = activation_qconfig.get('bias_calibration_factor', 0.0)
-    activation_soft_quant = activation_qconfig.get('soft_quant', 'default')
+    activation_soft_quant = activation_qconfig.get('soft_quant', 'soft_sigmoid' if activation_bitwidth == 4 else 'dbq' if activation_bitwidth == 2 else 'default')
 
     # Select weight observer based on observer parameter or default behavior
     weight_observer_base_class = _get_observer_class_from_name(weight_observer, weight_qscheme, is_weight=True)
@@ -159,7 +159,7 @@ def get_default_qconfig(qconfig_dict=None):
     return qconfig
 
 
-def apply_mixed_precision(qconfig_mapping, qconfig_dict, mixed_precision):
+def apply_mixed_precision(qconfig_mapping: QConfigMapping, qconfig_dict: dict, mixed_precision: dict, on_weights: bool=True) -> QConfigMapping:
     for bit_width in mixed_precision:
         layers = mixed_precision[bit_width]
         if bit_width == 32:
@@ -174,16 +174,21 @@ def apply_mixed_precision(qconfig_mapping, qconfig_dict, mixed_precision):
             # last, rather than the model's actual/intended default. Some callers
             # already built their own throwaway copy before calling in here as a
             # workaround; fixing it in this function protects every caller.
-            bw_qconfig_dict = {
-                'weight': {**qconfig_dict.get('weight', {}), 'bitwidth': bit_width},
-                'activation': {**qconfig_dict.get('activation', {}), 'bitwidth': bit_width},
-            }
+            bw_qconfig_dict = {}
+            if on_weights:
+                bw_qconfig_dict['weight'] = {'bitwidth': bit_width}
+            else:
+                bw_qconfig_dict['weight'] = {**qconfig_dict.get('weight', {})}
+            if not on_weights:
+                bw_qconfig_dict['activation'] = {'bitwidth': bit_width}
+            else:
+                bw_qconfig_dict['activation'] = {**qconfig_dict.get('activation', {})}
             qconfig = get_default_qconfig(qconfig_dict=bw_qconfig_dict)
             for layer in layers:
                 qconfig_mapping.set_module_name(layer, qconfig)
     return qconfig_mapping
 
-def get_default_qconfig_mapping(model, qconfig_type=None):
+def get_default_qconfig_mapping(model: torch.nn.Module, qconfig_type: dict):
     qconfig_dict = qconfig_type
     if isinstance(qconfig_dict, dict) or qconfig_dict is None:
         qconfig_type = get_default_qconfig(qconfig_dict=qconfig_dict)
@@ -197,7 +202,10 @@ def get_default_qconfig_mapping(model, qconfig_type=None):
 
     weight_mixed_precision = qconfig_dict.get('weight', {}).get('mixed_precision', {})
     if weight_mixed_precision:
-        qconfig_mapping = apply_mixed_precision(qconfig_mapping, qconfig_dict, weight_mixed_precision)
+        qconfig_mapping = apply_mixed_precision(qconfig_mapping, qconfig_dict, weight_mixed_precision, on_weights=True)
+    activation_mixed_precision = qconfig_dict.get('activation', {}).get('mixed_precision', {})
+    if activation_mixed_precision:
+        qconfig_mapping = apply_mixed_precision(qconfig_mapping, qconfig_dict, activation_mixed_precision, on_weights=False)
     auto_quantization_enabled = qconfig_dict.get('auto_quantization')
     if auto_quantization_enabled:
         qconfig_mapping = auto_quantization.run_auto_quantization(

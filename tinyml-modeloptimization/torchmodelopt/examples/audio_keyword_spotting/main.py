@@ -18,6 +18,8 @@ from typing import Tuple, List
 
 from tinyml_torchmodelopt.quantization import \
     TINPUTinyMLQATFxModule, TINPUTinyMLPTQFxModule, GenericTinyMLQATFxModule, GenericTinyMLPTQFxModule
+
+from tinyml_torchmodelopt.quantization.common import TinyMLQConfigType
 import onnx
 import onnxruntime as ort
 # other imports
@@ -25,7 +27,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 import torch.nn.functional as F
-
+import soundfile as sf
 
 from torchmetrics.classification import Accuracy
 from tqdm import tqdm
@@ -161,7 +163,10 @@ def prepare_background_data(bg_path, BACKGROUND_NOISE_DIR_NAME):
         wav_path = os.path.join(background_dir, wav)
         if not wav_path.endswith((".wav", ".WAV")):
             continue
-        audio, _ = torchaudio.load(wav_path)
+        # audio, _ = torchaudio.load(wav_path)
+        audio, _ = sf.read(wav_path, dtype="float32", always_2d=True)
+        audio = torch.from_numpy(audio.T.copy())
+        # background_data.append(audio.squeeze())
         background_data.append(audio.squeeze())
     if not background_data:
         raise Exception('No background wav files were found in ' + background_dir)
@@ -615,12 +620,14 @@ class SavedTensorDataset(Dataset):
                 label_dir = os.path.join(dataset_dir, label)
                 if os.path.isdir(label_dir):
                     for tensor_file in os.listdir(label_dir):
-                        audio_tensor = torch.load(os.path.join(label_dir, tensor_file), weights_only=True)
+                        file_path = os.path.join(label_dir, tensor_file)
+                        audio, _ = sf.read(file_path, dtype="float32", always_2d=True)
+                        audio_tensor = torch.from_numpy(audio.T.copy())
                         self.tensors.append(audio_tensor)
                         self.labels.append(label)
                         self.class_count[self.encode_labels[label]] += 1
                         pbar.update(1)
-                        self.filenames.append(os.path.join(label_dir, tensor_file))  # Store full path to file
+                        self.filenames.append(file_path)  # Store full path to file
         self.labels = [self.encode_labels[label] for label in self.labels]
         
         self.class_weights = self.class_count.sum().item() / (12 * self.class_count)
@@ -787,76 +794,10 @@ def get_quant_model(nn_model: nn.Module, example_input: torch.Tensor, total_epoc
     '''
     is_qat = (quantization_method == 'QAT')
 
-    if weight_bitwidth is None or activation_bitwidth is None:
-        '''
-        # 8bit weight / activation is default - no need to specify inside.
-        qconfig_type = {
-            'weight': {
-                'bitwidth': 8,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu,
-            },
-            'activation': {
-                'bitwidth': 8,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu,
-            }
-        }
-        '''
-        qconfig_type = None
-    elif weight_bitwidth == 8:
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu,
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu,
-            }
-        }
-    elif weight_bitwidth == 4:
-        mixed_precision = None if is_qat else \
-                    { 8: ['pointwise2', 'bn22', 'relu22', 'pointwise3', 'bn32', 'relu32', 
-                          'depthwise2', 'bn21', 'relu21', 'depthwise3', 'bn31', 'relu31']}
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu,
-                'mixed_precision': mixed_precision,
-                'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu,
-                'histogram_range': 1,
-                'soft_quant': 'default' # 'default' 'soft_tanh'
-            },
-        }
-    elif weight_bitwidth == 2:
-        qconfig_type = {
-            'weight': {
-                'bitwidth': weight_bitwidth,
-                'qscheme': torch.per_channel_symmetric,
-                'power2_scale': is_ti_npu,
-                'quant_min': -1,
-                'quant_max': 1,
-                'soft_quant': 'soft_sigmoid' # 'soft_sigmoid' 'soft_tanh' 'default'
-            },
-            'activation': {
-                'bitwidth': activation_bitwidth,
-                'qscheme': activation_qscheme,
-                'power2_scale': is_ti_npu,
-                'histogram_range': 1,
-                'soft_quant': 'default' # 'default' 'soft_tanh'
-            }
-        }
-    else:
-        raise RuntimeError("unsupported quantization parameters")
+    mixed_precision = None if is_qat else \
+            { 8: ['pointwise2', 'bn22', 'relu22', 'pointwise3', 'bn32', 'relu32', 
+                    'depthwise2', 'bn21', 'relu21', 'depthwise3', 'bn31', 'relu31']}
+    qconfig_type = TinyMLQConfigType(weight_bitwidth=weight_bitwidth, activation_bitwidth=activation_bitwidth, auto_quantization=False, weight_mixed_precision=mixed_precision)
  
     if quantization_device_type == 'TINPU':
         if quantization_method == 'QAT':
@@ -926,11 +867,11 @@ def export_model(quant_model, example_input: torch.Tensor, model_name: str, with
             quant_model = quantize_fx.convert_fx(quant_model.module)
    
     #  Export to ONNX
-    if hasattr(quant_model, "export"):
+    if with_quant and hasattr(quant_model, "export"):
         print(" Exporting to ONNX...")
-        quant_model.export(example_input, model_name, input_names=['input'])
+        quant_model.export(example_input.to(DEVICE), model_name, input_names=['input'])
     else:
-        torch.onnx.export(quant_model, example_input, model_name, input_names=['input'])
+        torch.onnx.export(quant_model, example_input.to(DEVICE), model_name, input_names=['input'])
 
     print("Model exported successfully")
     return quant_model

@@ -34,14 +34,19 @@ import warnings
 import copy
 import numpy as np
 import torch
-from torch.ao.quantization import quantize_fx
-from torch.ao.quantization import QConfigMapping
+import platform
+import sys
+import subprocess
 
-from ... import common
+from torch.ao.quantization import quantize_fx
+import onnxruntime as ort
+
 from . import qconfig_types
 from . import quant_utils
 from . import bias_calibration
 from . import fake_quant_types
+from . import quantize_model
+from ...common import TinyMLQConfigType, TinyMLModelQConfigFormat
 
 
 class TinyMLQuantFxBaseModule(torch.nn.Module):
@@ -51,27 +56,18 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
     using PyTorch's FX graph mode quantization framework.
 
     """
-
-    # ========================================================================
-    # Initialization
-    # ========================================================================
-
-    def __init__(self, model: torch.nn.Module, total_epochs: int, qconfig_type=None, example_inputs=None, is_qat=True, backend="qnnpack",
-                 num_batch_norm_update_epochs=None, num_observer_update_epochs=None,
-                 prepare_qdq=True, bias_calibration_factor=0.0, verbose=True, float_ops=[]):
+    def __init__(self, model: torch.nn.Module, total_epochs: int, qconfig_type: TinyMLQConfigType, example_inputs: torch.Tensor, 
+                 is_qat: bool, model_output_format: str, num_batch_norm_update_epochs: int=None, num_observer_update_epochs:int =None,
+                 bias_calibration_factor: float=0.0, output_int: bool=False, verbose: bool=True):
         """Initialize the TinyML quantization wrapper.
 
         Args:
             model: Input model to be quantized (torch.nn.Module)
-            total_epochs: Number of epochs of training
+            total_epochs: Number of epochs of training, affects the soft quantization temperatures
             qconfig_type: Quantization configuration type. Can be:
-                - dict: Custom quantization configuration
-                - None: Use default configuration
-                - torch.ao.quantization.QConfig: Single QConfig
-                - torch.ao.quantization.QConfigMapping: QConfigMapping instance
-            example_inputs: Example input tensor for model tracing
-            is_qat: If True, use QAT (Quantization-Aware Training); if False, use PTQ
-            backend: Quantization backend ('qnnpack', 'fbgemm', 'x86', 'onednn', etc.)
+                - TinyMLQConfigType: Custom quantization configuration
+            example_inputs: Example input tensor for model tracing and shape inference
+            is_qat: If True, use QAT (Quantization-Aware Training) prepare_qat_fx; if False, use PTQ prepare_fx
             num_batch_norm_update_epochs:
                 - False: Do not freeze batch norm
                 - None: Freeze batch norm at half the epochs (default)
@@ -80,28 +76,8 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                 - False: Do not freeze observers
                 - None: Freeze observers at half the epochs (default)
                 - int: Freeze observers at the specified number of epochs
-            prepare_qdq: If True, use prepare_qat_fx; if False, use prepare_fx
             bias_calibration_factor: Factor for bias calibration (0.0 = disabled)
             verbose: If False, suppress verbose quantization messages
-            float_ops: List of operations to keep in float (not quantized)
-
-        Example qconfig_type for TINPU in F28 devices:
-            qconfig_type = {
-                'weight': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_channel_symmetric,
-                    'power2_scale': True,  # True for TINPU, False for Generic
-                    'range_max': None,
-                    'fixed_range': False
-                },
-                'activation': {
-                    'bitwidth': 8,
-                    'qscheme': torch.per_tensor_symmetric,
-                    'power2_scale': True,  # True for TINPU, False for Generic
-                    'range_max': None,
-                    'fixed_range': False
-                }
-            }
         """
         super().__init__()
 
@@ -110,12 +86,21 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             raise ValueError("total_epochs must be a positive number, got: {}".format(total_epochs))
         if model and not isinstance(model, torch.nn.Module):
             raise TypeError("model must be a torch.nn.Module instance, got: {}".format(type(model)))
+        if qconfig_type and not isinstance(qconfig_type, TinyMLQConfigType):
+            raise TypeError("Qconfig Type must be an instance of TinyMLQConfigType")
+        
+        # oneDNN is optimal for x86 (fbgemm was merged into oneDNN in recent
+        # PyTorch builds and is no longer a registered quantized engine);
+        # qnnpack for ARM (Apple Silicon, mobile).
+        _is_x86 = platform.machine() in ('x86_64', 'AMD64', 'x86')
+        backend = 'onednn' if (platform.system() == 'Windows' or (platform.system() == 'Darwin' and _is_x86)) else 'qnnpack'
 
         # Core model and configuration parameters
+        self.original_module = model
         self.module = model
         self.is_qat = is_qat
-        self.backend = backend
         self.qconfig_type = qconfig_type
+        self.model_output_format = model_output_format
         self.example_inputs = example_inputs
 
         # Epoch and training tracking parameters
@@ -130,7 +115,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         self.temperature_log_space = np.exp(np.linspace(np.log(1), np.log(500), self.total_epochs))
 
         # Prepare quantization configuration
-        self._prepare_quantization_config(qconfig_type, model, example_inputs, prepare_qdq)
+        self._prepare_quantization_config(self.qconfig_type, model, example_inputs, is_qat)
 
         # The auto-quantization bitwidth search (if any) already consumed these
         # dataloaders synchronously above. Drop them so the wrapper module doesn't
@@ -146,7 +131,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             self.qconfig_type.pop('eval_dataloader', None)
 
         # Set quantization backend
-        self.set_quant_backend(self.backend)
+        self.set_quant_backend(backend)
 
         # Configure PTQ-specific settings
         if not self.is_qat:
@@ -157,35 +142,25 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         if not verbose:
             self._suppress_verbose_messages()
 
-    def _prepare_quantization_config(self, qconfig_type, model, example_inputs, prepare_qdq):
+    def _prepare_quantization_config(self, qconfig_type, model, example_inputs, is_qat):
         """Prepare and apply quantization configuration to the model.
 
         Args:
-            qconfig_type: Quantization configuration type
+            qconfig_type: Quantization configuration type TinyMLQConfigType
             model: Input model
             example_inputs: Example inputs for model tracing
-            prepare_qdq: Whether to use QAT (True) or PTQ (False) preparation
+            is_qat: Whether to use QAT (True) or PTQ (False) preparation
         """
         # Build QConfigMapping from various input formats
-        if isinstance(qconfig_type, dict) or qconfig_type is None:
-            qconfig_mapping = qconfig_types.get_default_qconfig_mapping(model, qconfig_type)
-        elif isinstance(qconfig_type, torch.ao.quantization.QConfig):
-            qconfig_mapping = QConfigMapping().set_global(qconfig_type)
-        elif isinstance(qconfig_type, torch.ao.quantization.QConfigMapping):
-            qconfig_mapping = qconfig_type
+        if isinstance(qconfig_type, TinyMLQConfigType):
+            qconfig_mapping = qconfig_types.get_default_qconfig_mapping(model, qconfig_type.qconfig_type)
         else:
-            raise TypeError("qconfig_type must be dict, QConfig, QConfigMapping, or None. "
-                          "Got: {}".format(type(qconfig_type)))
+            raise TypeError("Qconfig Type must be an instance of TinyMLQConfigType")
 
-        qconfig_mapping = self.apply_quantization_to_supported_layers(qconfig_mapping, model)
-        # Prepare model for quantization
-        if prepare_qdq:
-            self.module = quantize_fx.prepare_qat_fx(model, qconfig_mapping, example_inputs)
-        else:
-            self.module = quantize_fx.prepare_fx(model, qconfig_mapping, example_inputs)
-
-        # Remove input observer to avoid QuantizeLinear/DequantizeLinear on raw inputs
-        self._remove_input_observer()
+        # Prepare model with quantization applied to supported layers
+        self.module = quantize_model.prepare_quantized_model(
+            model, qconfig_mapping, example_inputs, is_qat
+        )
 
     def _configure_ptq_bias_calibration(self):
         """Configure bias calibration for PTQ mode."""
@@ -204,137 +179,6 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             'Freezing ranges for subsequent epochs': None
         })
 
-    def apply_quantization_to_supported_layers(self, qconfig_mapping, model):
-        """Remove quantization from layers that are not Conv, BatchNorm, Linear, or Pooling.
-
-        This function keeps the global qconfig but disables it for unsupported layer types,
-        restricting quantization to commonly quantizable layers. Only leaf (non-container)
-        modules are checked - container modules are allowed to propagate quantization to
-        their children.
-
-        Args:
-            qconfig_mapping: QConfigMapping instance to be configured
-            model: Model to iterate over
-
-        Returns:
-            Modified QConfigMapping with unsupported layers set to None
-        """
-        supported_types = (
-            torch.nn.Identity, torch.nn.Dropout,
-            torch.nn.Conv1d, torch.nn.Conv2d, torch.nn.Conv3d,
-            torch.nn.BatchNorm1d, torch.nn.BatchNorm2d, torch.nn.BatchNorm3d,
-            torch.nn.Linear,
-            torch.nn.MaxPool1d, torch.nn.MaxPool2d, torch.nn.MaxPool3d,
-            torch.nn.AvgPool1d, torch.nn.AvgPool2d, torch.nn.AvgPool3d,
-            torch.nn.AdaptiveAvgPool1d, torch.nn.AdaptiveAvgPool2d, torch.nn.AdaptiveAvgPool3d,
-            torch.nn.AdaptiveMaxPool1d, torch.nn.AdaptiveMaxPool2d, torch.nn.AdaptiveMaxPool3d,
-        )
-
-        # Recursively check modules and set unsupported leaf modules to None
-        for name, module in model.named_modules():
-            if name == '':
-                continue
-
-            # Only check leaf modules (modules with no children)
-            if list(module.children()):
-                continue
-
-            # Set qconfig to None for unsupported leaf modules
-            if not isinstance(module, supported_types):
-                qconfig_mapping.set_module_name(name, None)
-        return qconfig_mapping
-
-    def _has_batch_norm_after_observer(self, observer_node):
-        """Check if batch norm exists in the data flow after observer node.
-
-        Traverses the graph from observer node to find batch norm layers,
-        accounting for QuantizeLinear/DequantizeLinear operations.
-
-        Args:
-            observer_node: The observer node to check from
-
-        Returns:
-            bool: True if batch norm is found in the data flow
-        """
-        visited = set()
-        to_visit = list(observer_node.users.keys())
-
-        while to_visit:
-            node = to_visit.pop(0)
-            if node in visited:
-                continue
-            visited.add(node)
-
-            if node.op == 'call_module':
-                module = dict(self.module.named_modules()).get(node.target)
-                if isinstance(module, (torch.nn.BatchNorm1d, torch.nn.BatchNorm2d, torch.nn.BatchNorm3d, torch.nn.Identity)):
-                    return True
-                # Continue traversing through non-BN modules
-                to_visit.extend(node.users.keys())
-            elif node.op == 'call_function':
-                # Skip through function calls (e.g., quantize/dequantize operations)
-                to_visit.extend(node.users.keys())
-
-        return False
-
-    def _remove_input_observer(self):
-        """Remove observer attached to input placeholder node.
-
-        After FX model preparation, an observer is attached to the input placeholder
-        (activation_post_process_0). This removes that observer and rewires the graph
-        to pass input directly to the first layer, avoiding QuantizeLinear/DequantizeLinear
-        on raw inputs.
-
-        Only removes the observer if there is a batch normalization after it.
-        The graph is recompiled to maintain consistency after rewiring.
-        """
-        if not hasattr(self.module, 'graph'):
-            return
-
-        # Find the first placeholder node (model input)
-        placeholder_node = None
-        for node in self.module.graph.nodes:
-            if node.op == 'placeholder':
-                placeholder_node = node
-                break
-
-        if placeholder_node is None:
-            return
-
-        # Find observer call immediately after placeholder
-        observer_node = None
-        for user in placeholder_node.users:
-            if user.op == 'call_module' and 'activation_post_process' in user.target:
-                observer_node = user
-                break
-
-        if observer_node is None:
-            return
-
-        # Check if observer is followed by batch normalization (possibly through QDQ operations)
-        has_bn_after = self._has_batch_norm_after_observer(observer_node)
-
-        # Only remove observer if batch norm follows it
-        if not has_bn_after:
-            return
-
-        # Collect users first to avoid modification during iteration
-        observer_users = list(observer_node.users.keys())
-
-        # Rewire users of observer to use placeholder directly
-        for observer_user in observer_users:
-            observer_user.replace_input_with(observer_node, placeholder_node)
-
-        # Remove the observer node from graph
-        self.module.graph.erase_node(observer_node)
-
-        # Remove observer module from model
-        if hasattr(self.module, observer_node.target):
-            delattr(self.module, observer_node.target)
-
-        # Recompile to ensure consistency
-        self.module.graph.lint()
-        self.module.recompile()
 
     # ========================================================================
     # Configuration Management
@@ -541,21 +385,16 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                 fake_quant_module = original_modules[weight_fake_quant_name]
 
                 # Extract and attach scale
-                if hasattr(fake_quant_module, 'scale'):
+                if hasattr(fake_quant_module, 'scale') and hasattr(fake_quant_module, 'zero_point'):
                     scale_tensor = fake_quant_module.scale
-                    if isinstance(scale_tensor, torch.Tensor):
-                        module.scale = scale_tensor.detach().cpu()
-                    else:
-                        module.scale = scale_tensor
-
-                # Extract and attach zero_point
-                if hasattr(fake_quant_module, 'zero_point'):
-
                     zero_point_tensor = fake_quant_module.zero_point
-                    if isinstance(zero_point_tensor, torch.Tensor):
+                    if isinstance(scale_tensor, torch.Tensor) and isinstance(zero_point_tensor, torch.Tensor):
+                        module.scale = scale_tensor.detach().cpu()
                         module.zero_point = zero_point_tensor.detach().cpu()
                     else:
+                        module.scale = scale_tensor
                         module.zero_point = zero_point_tensor
+
 
     def _is_observed_module(self) -> bool:
         """Check if model is still in observed state (before conversion).
@@ -566,15 +405,13 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         # Reference: torch/ao/quantization/fx/graph_module.py
         return hasattr(self.module, "meta") and "_observed_graph_module_attrs" in self.module.meta
 
-    def convert(self, model_qconfig_format=None, inplace=False, device='cpu'):
+    def convert(self, device='cpu'):
         """Convert quantized model to use integer quantization.
 
         Converts FX quantized model from observed state to converted state,
         replacing FakeQuantize modules with actual quantization operations.
 
         Args:
-            model_qconfig_format: Output format specification
-            inplace: If True, modify in-place; if False, work on a copy
             device: Device to use for conversion ('cpu', 'cuda', etc.)
 
         Returns:
@@ -583,7 +420,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         self.freeze()
 
         # Make a copy if not converting in-place
-        model = self.module if inplace else copy.deepcopy(self.module)
+        model = copy.deepcopy(self.module)
 
         # Convert requires CPU model
         model = model.to(torch.device(device))
@@ -597,8 +434,8 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
         self.module = model
         return self
 
-    def export(self, example_inputs, filename='model.onnx', opset_version=17, model_qconfig_format=None,
-               preserve_qdq_model=True, simplify=True, skipped_optimizers=None, device='cpu', make_copy=True,
+    def export(self, example_inputs: torch.Tensor, filename: str = 'model.onnx', opset_version: int = 17,
+               preserve_qdq_model=True, simplify=True, skipped_optimizers=None, device='cpu',
                is_converted=True, verbose=False, **export_kwargs):
         """Export quantized model to ONNX format.
 
@@ -606,22 +443,20 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             example_inputs: Example input tensor(s) for model tracing
             filename: Output ONNX filename
             opset_version: ONNX opset version
-            model_qconfig_format: Output quantization format
             preserve_qdq_model: If True, keep QDQ intermediate file (for INT_MODEL format)
             simplify: If True, simplify the exported ONNX model
             skipped_optimizers: Optimizers to skip during simplification
             device: Device to use for export
-            make_copy: (Deprecated) unused parameter
             is_converted: If False, convert model before export
             verbose: If True, show warnings about model state
             **export_kwargs: Additional arguments passed to torch.onnx.export()
         """
         # Ensure model is converted before export
         if self._is_observed_module():
-            self.convert(device=device, model_qconfig_format=model_qconfig_format)
+            self.convert(device=device)
             model = self.module
         elif not is_converted:
-            self.convert(device=device, model_qconfig_format=model_qconfig_format)
+            self.convert(device=device)
             model = self.module
         else:
             model = self.module
@@ -629,19 +464,19 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
                 warnings.warn("Model has already been converted before export. "
                             "Please verify the model was converted correctly.")
 
-        # Export based on output format
-        if model_qconfig_format == common.TinyMLModelQConfigFormat.INT_MODEL:
-            self._export_int_model(model, example_inputs, filename, opset_version,
-                                 preserve_qdq_model, device, export_kwargs)
+        # Export qdq and converted model
+        if self.model_output_format == TinyMLModelQConfigFormat.INT_MODEL:
+            self._export_qdq_model(model, example_inputs, filename, opset_version,
+                                    preserve_qdq_model, device, export_kwargs)
         else:
             torch.onnx.export(model, example_inputs.to(device=device), filename,
-                            opset_version=opset_version, verbose=False, **export_kwargs)
+                            opset_version=opset_version, dynamo=False, verbose=False, **export_kwargs)
 
         # Optionally simplify the exported model
         if simplify:
             self._simplify_onnx_model(filename, skipped_optimizers)
 
-    def _export_int_model(self, model, example_inputs, filename, opset_version,
+    def _export_qdq_model(self, model, example_inputs, filename, opset_version,
                          preserve_qdq_model, device, export_kwargs):
         """Export model in INT format with QDQ nodes.
 
@@ -654,7 +489,6 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             device: Target device
             export_kwargs: Additional ONNX export arguments
         """
-        import onnxruntime as ort
 
         qdq_filename = os.path.splitext(filename)[0] + '_qdq.onnx'
 
@@ -685,9 +519,6 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             filename: ONNX model filename
             skipped_optimizers: Optimizers to skip
         """
-        import sys
-        import platform
-        import subprocess as _sp
 
         script = (
             'import onnx, sys; from onnxsim import simplify as _s; '
@@ -695,7 +526,7 @@ class TinyMLQuantFxBaseModule(torch.nn.Module):
             'onnx.save(m, sys.argv[1])'
         )
         if sys.platform == 'darwin' and platform.machine() == 'arm64':
-            result = _sp.run([sys.executable, '-c', script, filename], capture_output=True)
+            result = subprocess.run([sys.executable, '-c', script, filename], capture_output=True)
             if result.returncode not in (0, -11):  # -11 = SIGSEGV; both mean simplification ran
                 print(f"Warning: ONNX model simplification failed: {result.stderr.decode()}")
         else:

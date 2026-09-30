@@ -12,7 +12,7 @@ import onnxruntime as ort
 
 def get_args():
     parser = argparse.ArgumentParser(description="Run inference with FMNIST ONNX model")
-    parser.add_argument("--model-name", type=str, required=True, help="ONNX model name")
+    parser.add_argument("--model-name", default="fmnist_int8.onnx", type=str, help="ONNX model name")
 
     args = parser.parse_args()
 

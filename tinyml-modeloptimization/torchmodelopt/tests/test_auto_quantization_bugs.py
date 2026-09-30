@@ -31,7 +31,7 @@ def test_run_auto_quantization_falls_back_when_sensitivities_unavailable():
     returns ({}, {}) -> optimal_bitwidth stays None. Must fall back to the
     caller's already-built qconfig_mapping, not crash on None * total_params."""
     model = _TinyModel()
-    fallback_mapping = QConfigMapping().set_global(get_default_qconfig())
+    fallback_mapping = QConfigMapping().set_global(get_default_qconfig({}))
     qconfig_dict = {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}
 
     result = run_auto_quantization(
@@ -49,7 +49,7 @@ def test_run_auto_quantization_falls_back_when_no_calibration_dataloader():
     optimal_bitwidth still ends up None via a different path than the test
     above. Must not crash either."""
     model = _TinyModel()
-    fallback_mapping = QConfigMapping().set_global(get_default_qconfig())
+    fallback_mapping = QConfigMapping().set_global(get_default_qconfig({}))
     qconfig_dict = {
         "weight": {"bitwidth": 8}, "activation": {"bitwidth": 8},
         "inputs": torch.randn(4, 4), "targets": torch.zeros(4, dtype=torch.long),
@@ -67,40 +67,55 @@ def test_run_auto_quantization_falls_back_when_no_calibration_dataloader():
 
 
 def test_apply_mixed_precision_does_not_mutate_callers_qconfig_dict():
-    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig())
+    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig({}))
     qconfig_dict = {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}
     original_weight_bitwidth = qconfig_dict["weight"]["bitwidth"]
 
-    apply_mixed_precision(qconfig_mapping, qconfig_dict, {4: ["fc"]})
+    apply_mixed_precision(qconfig_mapping, qconfig_dict, {4: ["fc"]}, on_weights=True)
 
     assert qconfig_dict["weight"]["bitwidth"] == original_weight_bitwidth
     assert qconfig_dict["activation"]["bitwidth"] == original_weight_bitwidth
 
 
-def test_apply_mixed_precision_still_applies_the_requested_bitwidth_per_layer():
+def test_apply_mixed_precision_still_applies_the_requested_weight_bitwidth_per_layer():
     """Regression safety: the mutation fix must not break the actual mixed-
     precision assignment. bit_width < 32 takes the branch the fix rewrote
     (the local bw_qconfig_dict construction), so assert the produced qconfig
     genuinely reflects the requested 4-bit width -- signed 4-bit weights span
-    [-7, 7] and unsigned 4-bit activations span [0, 15]."""
-    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig())
+    [-7, 7]"""
+    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig({}))
 
     result = apply_mixed_precision(
-        qconfig_mapping, {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}, {4: ["fc"]}
+        qconfig_mapping, {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}, {4: ["fc"]}, on_weights=True,
     )
 
     qconfig = result.module_name_qconfigs["fc"]
     assert qconfig is not None
     assert qconfig.weight().quant_max == 7
+
+
+def test_apply_mixed_precision_still_applies_the_requested_activation_bitwidth_per_layer():
+    """Regression safety: the mutation fix must not break the actual mixed-
+    precision assignment. bit_width < 32 takes the branch the fix rewrote
+    (the local bw_qconfig_dict construction), so assert the produced qconfig
+    genuinely reflects the requested 4-bit width -- unsigned 4-bit activations span [0, 15]."""
+    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig({}))
+
+    result = apply_mixed_precision(
+        qconfig_mapping, {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}, {4: ["fc"]}, on_weights=False,
+    )
+
+    qconfig = result.module_name_qconfigs["fc"]
+    assert qconfig is not None
     assert qconfig.activation().quant_max == 15
 
 
 def test_apply_mixed_precision_bitwidth_32_disables_quantization_for_the_layer():
     """bit_width == 32 takes the separate "disable quantization" path."""
-    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig())
+    qconfig_mapping = QConfigMapping().set_global(get_default_qconfig({}))
 
     result = apply_mixed_precision(
-        qconfig_mapping, {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}, {32: ["fc"]}
+        qconfig_mapping, {"weight": {"bitwidth": 8}, "activation": {"bitwidth": 8}}, {32: ["fc"]}, on_weights=True
     )
 
     assert result.module_name_qconfigs["fc"] is None

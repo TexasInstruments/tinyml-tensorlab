@@ -4,3 +4,4 @@ torchmodelopt/examples/audio_keyword_spotting/SpeechCommands/
 *.pyc
 *.egg-info
 *.onnx
+build/
