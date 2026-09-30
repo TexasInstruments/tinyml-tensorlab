@@ -210,6 +210,31 @@ class NeuralNetworkWithPreprocess(torch.nn.Module):
         return x
 
 
+class FilterBank(GenericModelWithSpec):
+    def __init__(self, config=None, input_features=16000, in_channels=1, conv_kernel=(64, 1),
+                 n_out_channel=64, fb_bitwidth=None, conv_stride=4, maxpool_kernel=(40, 1)):
+        super().__init__(config, input_features=input_features, in_channels=in_channels,
+                         conv_kernel=conv_kernel, n_out_channel=n_out_channel,
+                         conv_stride=conv_stride, maxpool_kernel=maxpool_kernel)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.in_channels,
+                                   input_features=self.input_features)
+        effective_bitwidth = fb_bitwidth if fb_bitwidth is not None else 8
+        self.mixed_precision_config = {
+            8: ['conv'] if effective_bitwidth == 8 else [],
+            4: ['conv'] if effective_bitwidth == 4 else [],
+            2: ['conv'] if effective_bitwidth == 2 else [],
+        }
+
+    def gen_model_spec(self):
+        layers = py_utils.DictPlus()
+        layers += {'conv': dict(type='ConvLayer', in_channels=self.in_channels, out_channels=self.n_out_channel,
+                                kernel_size=self.conv_kernel, stride=self.conv_stride, padding=(0, 0))}
+        layers += {'pool': dict(type='MaxPoolLayer', kernel_size=self.maxpool_kernel, stride=self.maxpool_kernel, padding=(0, 0))}
+        layers += {'act_FE': dict(type='ReLULayer')}
+        model_spec = dict(model_spec=layers)
+        return model_spec
+
 # Export all feature extraction models
 __all__ = [
     'FEModel1',
@@ -218,6 +243,7 @@ __all__ = [
     'FEModelLinear',
     'CombinedModel',
     'NeuralNetworkWithPreprocess',
+    'FilterBank'
 ]
 
 # None of the classes above are meant to be selected by name through the

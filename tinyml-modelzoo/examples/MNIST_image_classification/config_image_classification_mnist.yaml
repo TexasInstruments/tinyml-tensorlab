@@ -11,7 +11,7 @@ training:
   model_name: Lenet5
   batch_size: 64
   training_epochs: 14
-  num_gpus: 0
+  num_gpus: 1
   quantization: 2
   learning_rate: 0.1
 testing: {}

@@ -17,6 +17,8 @@ training:
   model_name: REGR_1k
   batch_size: 256
   training_epochs: 50
+  early_stopping: true
+  early_stopping_patience: 5
   num_gpus: 0
   learning_rate: 0.000001
   output_int: false

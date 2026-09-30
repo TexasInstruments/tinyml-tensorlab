@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,10 +7,11 @@ name = "tinyml_modelzoo"
 version = "1.5.0"
 description = "TI's TinyML Model Zoo - Centralized model definitions for microcontrollers"
 readme = "README.md"
-requires-python = "==3.10.*"
+requires-python = ">=3.10,<3.15"
 classifiers = [
-    "Development Status :: 4 - Beta",
+
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.14",
 ]
 keywords = [
     "artificial intelligence",
@@ -20,9 +21,12 @@ keywords = [
     "model zoo",
 ]
 dependencies = [
-    "torch==2.7.1",
+    "torch==2.11.0",
     "PyYAML==6.0.3",
-    "numpy==2.2.6",
+    # numpy dropped cp310 wheels at 2.3.0; pin per-interpreter rather than a
+    # range so both targets stay on a version verified to have a real wheel.
+    "numpy==2.2.6 ; python_version < '3.11'",
+    "numpy==2.5.2 ; python_version >= '3.11'",
     # Pulls in tinyverse + torchmodelopt transitively. Hosted on TI's official
     # CDN (same host modelmaker/tinyverse use for their own sibling deps) -
     # modelzoo installs itself editable, so this must NOT also depend on modelzoo.

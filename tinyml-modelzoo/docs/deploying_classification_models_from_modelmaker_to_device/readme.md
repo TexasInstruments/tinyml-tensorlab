@@ -243,7 +243,7 @@ To explore more classification use cases, refer to the following examples:
 - [Grid Stability](../../examples/grid_stability/readme.md) - Predicting the stability of a grid
 - [MNIST Image Classification](../../examples/MNIST_image_classification/readme.md) - Classifying the images of integers
 - [DC Arc Fault](../../examples/dc_arc_fault/readme.md) - Predict whether an arc is present in circuit or not
-- [WISDM](../../examples/branched_model_parameters/readme.md) - Wearable Hand Movement detection from accelerometer
+- [WISDM](../../examples/human_activity_recognition/readme.md) - Wearable Hand Movement detection from accelerometer
 
 <hr>
 

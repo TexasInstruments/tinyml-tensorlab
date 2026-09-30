@@ -62,7 +62,7 @@ The following example of wisdm dataset is provided to
     - tinyml-tinyverse/tinyml_tinyverse/common/models/generic_models.py: `RES_CAT_CNN_TS_GEN_BASE_3K`
     - RES_CAT_CNN_TS_GEN_BASE_3K is the class name present in generic_models.py and can be called using the model_name CLS_ResCat_3k in yaml configuration.
 - **Using model_config to change model parameters**
-    - model_config: 'examples/branched_model_parameters/residual_network_config.yaml'
+    - model_config: 'examples/human_activity_recognition/residual_network_config.yaml'
     - It can be used to configure parameters related to model
 
 ## Model & Configuration
@@ -89,7 +89,7 @@ To run this example for device: `F28P55`, it should be mentioned inside the targ
 ```sh
 cd tinyml-modelzoo
 
-run_tinyml_modelzoo.sh examples/branched_model_parameters/config.yaml
+run_tinyml_modelzoo.sh examples/human_activity_recognition/config.yaml
 ```
 
 ## Comparison of models

@@ -1,0 +1,62 @@
+common:
+  task_type: generic_timeseries_classification
+  target_device: CC35X1
+  run_name: '{date-time}/{model_name}'
+
+dataset:
+  dataset_name: wifi_csi_occupancy_detection
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wifi_presence_detection_dsi.zip
+
+data_processing_feature_extraction:
+  feature_extraction_name: WiFiCSI_128Input_L2Norm2DFFT_64x26Feature_1Frame_52Subcarriers
+  # Downsample: 128 Hz -> 64 Hz  (factor = sampling_rate / new_sr = 128 / 64 = 2)
+  # data_proc_transforms:
+  #   - Downsample
+  #   - SimpleWindow
+  # sampling_rate: 128          # native rate of the preprocessed files
+  # new_sr: 64                  # target rate after decimation (Hz)
+  # frame_size: 128             # samples per frame  (2 s × 64 Hz)
+  stride_size: 0.7            # advance 70 % of frame per step → 30 % overlap
+
+  # L2_NORM_ROW  : row-wise L2 normalise each time step across all 52 subcarriers
+  # FFT_FE       : real FFT along the time axis  (128 → 65 bins)
+  # FFT_POS_HALF : keep positive-frequency half, drop Nyquist  (65 → 64 bins)
+  # ABS          : magnitude of complex FFT output
+  # LOG_DB       : log10(log_threshold + |F|)
+  # FFT_COL      : rFFT across the 52-subcarrier axis per window (52 → 26 bins)
+  #                produces final (64, 26) 2-D feature map per window
+  # feat_ext_transform:
+  #   - L2_NORM_ROW
+  #   - FFT_FE
+  #   - FFT_POS_HALF
+  #   - ABS
+  #   - LOG_DB
+  #   - FFT_COL
+
+  # variables: 52               # 52 non-DC subcarriers (hw index 26 excluded by in preprocesssing)
+  # feature_size_per_frame: 64  # FFT(128) → FFT_POS_HALF → 64 time-frequency bins
+  # num_frame_concat: 1         # single frame per sample; no temporal concatenation
+  # frame_skip: 1
+  # min_bin: 0
+
+  # # Log transform parameters  (log10(1.0 + |F|))
+  # log_threshold: 1.0
+  # log_mul: 1
+  # log_base: 10
+  # gof_test: True
+
+training:
+  model_name: SimpleCNN2D_BN_t
+  model_config: ''
+  batch_size: 32
+  training_epochs: 50
+  early_stopping: true
+  early_stopping_patience: 5
+  num_gpus: 0
+  learning_rate: 0.00005
+  quantization: 2
+  auto_quantization: False
+  output_int: False
+
+testing: {}
+compilation: {}

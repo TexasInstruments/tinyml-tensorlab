@@ -14,5 +14,7 @@ training:
   num_gpus: 0
   batch_size: 512
   training_epochs: 250
+  early_stopping: true
+  early_stopping_patience: 5
 testing: {}
 compilation: {}

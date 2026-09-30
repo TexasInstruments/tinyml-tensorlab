@@ -1,0 +1,28 @@
+common:
+  target_module: timeseries
+  task_type: generic_timeseries_regression
+  target_device: MSPM0G5187
+  run_name: '{date-time}/{model_name}'
+  
+dataset:
+  dataset_name: LG_18650HG2_Liion_Battery_Data
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/LG_18650HG2_Liion_Battery_Data.zip
+  
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - SimpleWindow
+  frame_size: 128
+  stride_size: 0.05
+  variables: 4
+  
+training:
+  enable: true
+  model_name: REGR_20k_NPU
+  quantization: 2
+  num_gpus: 0
+  training_epochs: 50
+
+
+testing: {}
+
+compilation: {}

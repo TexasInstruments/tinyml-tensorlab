@@ -12,10 +12,11 @@ data_processing_feature_extraction:
   variables: 3
 training:
   model_name: CLS_ResCat_3k
-  model_config: examples/branched_model_parameters/residual_network_config.yaml
+  model_config: examples/human_activity_recognition/residual_network_config.yaml
   batch_size: 32
   training_epochs: 10
+  early_stopping: true
+  early_stopping_patience: 5
   num_gpus: 0
-testing:
-  skip_train: false
+testing: {}
 compilation: {}

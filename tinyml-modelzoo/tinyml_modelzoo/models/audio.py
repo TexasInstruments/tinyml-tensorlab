@@ -2,6 +2,7 @@
 
 import torch
 
+from ..utils import py_utils
 from .base import GenericModelWithSpec
 
 
@@ -80,6 +81,7 @@ class CNN_AUDIO_DSCNN(GenericModelWithSpec):
             torch.nn.AdaptiveAvgPool2d((1, 1)),
             torch.nn.Flatten(start_dim=1),
             torch.nn.Linear(filters, self.num_classes),
+            torch.nn.Softmax(dim=1)
         )
 
     def forward(self, x):
@@ -181,6 +183,56 @@ class CNN_AUDIO_DSCNN_32K_NPU(GenericModelWithSpec):
         return self.layers(x)
 
 
+class CNN_AUDIO_DSCNN_GB_NPU(GenericModelWithSpec):
+    def __init__(self, config, input_features=(86, 32), variables=1, num_classes=3):
+        super().__init__(
+            config,
+            input_features=input_features,
+            variables=variables,
+            num_classes=num_classes,
+        )
+        self.bn0 = torch.nn.BatchNorm2d(1)
+        self.conv1 = torch.nn.Sequential(
+            torch.nn.Conv2d(1, 32, kernel_size=8, stride=4, padding=1),
+            torch.nn.BatchNorm2d(32),
+            torch.nn.ReLU(),
+        )
+        self.dsconv_blocks = torch.nn.Sequential(
+            self._depthwise_separable_conv(32, 32),
+            self._depthwise_separable_conv(32, 32)
+        )
+        self.dropout = torch.nn.Dropout(0.3)
+        self.pool = torch.nn.AdaptiveAvgPool2d((1, 1))
+        self.flatten = torch.nn.Flatten(start_dim=1)
+        self.fc1 = torch.nn.Linear(32, num_classes)
+        self.mixed_precision_config = {
+            8: ['model.bn0', 'model.conv1'],
+            4: ['model.dsconv_blocks'], 
+            2: []
+        }
+
+    def _depthwise_separable_conv(self, in_channels, out_channels):
+        """Depthwise (groups=in_channels) + Pointwise (1x1) convolution."""
+        return torch.nn.Sequential(
+            torch.nn.Conv2d(in_channels, in_channels, kernel_size=4, padding=1, groups=in_channels),
+            torch.nn.BatchNorm2d(in_channels),
+            torch.nn.ReLU(),
+            torch.nn.Conv2d(in_channels, out_channels, kernel_size=1),
+            torch.nn.BatchNorm2d(out_channels),
+            torch.nn.ReLU()
+        )
+
+    def forward(self, x):
+        x = self.bn0(x)
+        x = self.conv1(x)
+        x = self.dsconv_blocks(x)
+        x = self.dropout(x)  # Dropout for regularization
+        x = self.pool(x)
+        x = self.flatten(x)
+        y = self.fc1(x)
+        return y 
+
+
 class TCDSBasicBlock(torch.nn.Module):
     """Temporal Channel-Decoupled Separable block (no residual — avoids quantized-add issues)."""
 
@@ -279,10 +331,51 @@ class CNN_AUDIO_TCDS_ResNet_NPU(GenericModelWithSpec):
         return x
 
 
+
+class CNN_AUDIO_TCDS_ResNet_FB_NPU(GenericModelWithSpec):
+    """
+    Temporal CNN with Depthwise-Separable residual blocks (TCDSResNet).
+
+    Architecture: Conv3x1 -> [TCDSBasicBlock] x num_blocks -> FC
+
+    Each TCDSBasicBlock contains:
+      Main branch: DW(k) -> PW(1) -> DW(k) -> PW(1)  [4 convolutions]
+      Skip branch: Conv1x1 projection (when stride != 1 or channels change), else Identity
+      Output: ReLU(main + skip)
+    """    
+    def __init__(self, config, input_features=64, variables=1, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables, num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables, input_features=self.input_features, num_classes=self.num_classes)
+        self.mixed_precision_config = {
+            8: ['1', '4'],
+            4: [], 
+            2: ['block0', 'block1', 'block2']
+        }
+
+    def gen_model_spec(self):
+        num_blocks=3
+        channel_sizes = [32, 48, 64, 96]
+        layers = py_utils.DictPlus()
+        
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=32, kernel_size=(3, 1), stride=(1, 1))}
+        for i in range(num_blocks):
+            layers += {f'block{i}': dict(type='TCDSBasicBlockLayer',
+                                         in_channels=channel_sizes[i],
+                                         out_channels=channel_sizes[i + 1],
+                                         kernel_size=(9, 1),
+                                         stride=2)}
+        layers += {'2': dict(type='DropoutLayer', dropout_prob=0.5)}
+        layers += {'3': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'4': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
+        return dict(model_spec=layers)
+
 # Export all classification models
 __all__ = [
     'CNN_AUDIO_DSCNN',
     'CNN_AUDIO_DSCNN_32K_NPU',
+    'CNN_AUDIO_DSCNN_GB_NPU',
     'CNN_AUDIO_TCDS_ResNet_NPU',
+    'CNN_AUDIO_TCDS_ResNet_FB_NPU',
 ]
 

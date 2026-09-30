@@ -45,6 +45,7 @@ class GenericModelWithSpec(nn.Module):
         self.config = config
         self.model_spec = None
         self.features = None
+        self.mixed_precision_config = None
         self._init_args(config=config, **kwargs)
 
     def init_model_from_file(self, filename, variables=1, num_classes=2, **kwargs):

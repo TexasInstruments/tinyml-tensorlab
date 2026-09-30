@@ -21,6 +21,8 @@ training:
   model_name: Pose_and_Fall_model
   batch_size: 64
   training_epochs: 160
+  early_stopping: true
+  early_stopping_patience: 5
   num_gpus: 0
   quantization: 0
   learning_rate: 0.0001

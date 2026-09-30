@@ -13,6 +13,8 @@ training:
   model_name: REGR_3k
   batch_size: 128
   training_epochs: 100
+  early_stopping: true
+  early_stopping_patience: 5
   num_gpus: 0
   learning_rate: 0.01
   quantization: 0

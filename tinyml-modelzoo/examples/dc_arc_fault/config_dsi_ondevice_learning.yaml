@@ -1,0 +1,36 @@
+common:
+  task_type: arc_fault
+  target_device: AM13E2
+dataset:
+  dataset_name: arc_fault_example_dsi_odl
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/arc_fault_classification_dsi.zip
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - Downsample
+  - SimpleWindow
+  gain_variations:
+    arc:
+    - 0.9
+    - 1.1
+    normal:
+    - 0.8
+    - 1.2
+  sampling_rate: 313000
+  new_sr: 3130
+  frame_size: 128
+  stride_size: 0.01
+  variables: 1
+  gof_test: false
+training:
+  model_name: CLS_24k_NPU
+  model_config: ''
+  batch_size: 2048
+  training_epochs: 1
+  auto_quantization: false
+  num_gpus: 1
+  quantization: 2
+  ondevice_training: true
+  export_samples_per_class: [20,5,10]
+  trainable_layers_from_last: 3
+testing: {}
+compilation: {}

@@ -53,12 +53,12 @@ For regression tasks, the dataset structure is expected to be as follows :
 The example can be run directly using the following command
 
 ```
-./run_tinyml_modelzoo.sh  ./examples/reg_washing_machine/config.yaml
+./run_tinyml_modelzoo.sh  ./examples/washing_machine_load_weighing/config.yaml
 
 ```
 wherein 
 1.  ``` run_tinyml_modelzoo.sh``` is the script to run modelmaker. It takes input of CONFIG_FILE
-2. ``` ./examples/reg_washing_machine/config.yaml``` is the location of the CONFIG_FILE
+2. ``` ./examples/washing_machine_load_weighing/config.yaml``` is the location of the CONFIG_FILE
 
 We can change the training configurations, no. of features or variables for input regression (need to change dataset as well), feature extraction, frame size, etc. in the config file.
 

@@ -18,6 +18,7 @@ data_processing_feature_extraction:
 training:
   model_name: CLS_ResCat_3k
   num_gpus: 0
-testing:
-  skip_train: false
+  early_stopping: true
+  early_stopping_patience: 5
+testing: {}
 compilation: {}
