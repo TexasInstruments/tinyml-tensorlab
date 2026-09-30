@@ -38,10 +38,6 @@ def print_memory_report(memory_map, archive_totals, files_to_report):
     total_ro_data = 0
     total_rw_data = 0
 
-    logger.info("============================================================")
-    logger.info("TI Feature Extraction Library Memory Usage")
-    logger.info("============================================================")
-
     for file_key, display_name in files_to_report:
         if file_key in archive_totals:
             sizes = archive_totals[file_key]
@@ -53,12 +49,16 @@ def print_memory_report(memory_map, archive_totals, files_to_report):
         total_ro_data += sizes[1]
         total_rw_data += sizes[2]
 
-    logger.info(f"Code:                      {format_bytes(total_code)}")
-    logger.info(f"RO Data:                   {format_bytes(total_ro_data)}")
-    logger.info(f"RW Data:                   {format_bytes(total_rw_data)}")
-    total_bytes = total_code + total_ro_data + total_rw_data
-    logger.info(f"Total:                     {format_bytes(total_bytes)}")
-    logger.info("==============================================================")
+    if total_code and total_ro_data and total_rw_data:
+        logger.info("============================================================")
+        logger.info("TI Feature Extraction Library Memory Usage")
+        logger.info("============================================================")
+        logger.info(f"Code:                      {format_bytes(total_code)}")
+        logger.info(f"RO Data:                   {format_bytes(total_ro_data)}")
+        logger.info(f"RW Data:                   {format_bytes(total_rw_data)}")
+        total_bytes = total_code + total_ro_data + total_rw_data
+        logger.info(f"Total:                     {format_bytes(total_bytes)}")
+        logger.info("==============================================================")
 
 
 def get_memory(map_file):
@@ -66,58 +66,76 @@ def get_memory(map_file):
     archive_totals = {}
     in_archive = None
 
-    with open(Path(map_file), "r") as map_fp:
-        in_summary_section = False
+    if not os.path.exists(map_file):
+        logger.warning(f"Map file not found: {map_file}")
+        return memory_map, archive_totals
 
-        for line in map_fp:
-            if "MODULE SUMMARY" in line:
-                in_summary_section = True
-                continue
+    try:
+        with open(Path(map_file), "r") as map_fp:
+            in_summary_section = False
 
-            if not in_summary_section:
-                continue
+            for line in map_fp:
+                if "MODULE SUMMARY" in line:
+                    in_summary_section = True
+                    continue
 
-            stripped = line.strip()
+                if not in_summary_section:
+                    continue
 
-            if not stripped or stripped.startswith("+--"):
-                continue
+                stripped = line.strip()
 
-            parts = stripped.split()
+                if not stripped or stripped.startswith("+--"):
+                    continue
 
-            if len(parts) >= 1 and (parts[0].endswith(".a") or parts[0].endswith(".a/")):
-                in_archive = parts[0].replace("./", "").strip()
-                continue
+                parts = stripped.split()
 
-            if stripped.startswith("Total:"):
-                if len(parts) >= 4 and in_archive:
+                if len(parts) >= 1 and (parts[0].endswith(".a") or parts[0].endswith(".a/")):
+                    in_archive = parts[0].replace("./", "").strip()
+                    continue
+
+                if stripped.startswith("Total:"):
+                    if len(parts) >= 4 and in_archive:
+                        try:
+                            code = int(parts[1])
+                            ro_data = int(parts[2])
+                            rw_data = int(parts[3])
+                            archive_totals[in_archive] = [code, ro_data, rw_data]
+                        except (ValueError, IndexError):
+                            pass
+                    continue
+
+                if len(parts) >= 3:
                     try:
-                        code = int(parts[1])
-                        ro_data = int(parts[2])
-                        rw_data = int(parts[3])
-                        archive_totals[in_archive] = [code, ro_data, rw_data]
+                        code = int(parts[-3])
+                        ro_data = int(parts[-2])
+                        rw_data = int(parts[-1])
+
+                        file_name = " ".join(parts[:-3])
+                        file_name = file_name.replace("./", "").strip()
+
+                        if file_name and (file_name.endswith(".o") or file_name.endswith(".obj")):
+                            memory_map[file_name] = [code, ro_data, rw_data]
                     except (ValueError, IndexError):
                         pass
-                continue
 
-            if len(parts) >= 3:
-                try:
-                    code = int(parts[-3])
-                    ro_data = int(parts[-2])
-                    rw_data = int(parts[-1])
-
-                    file_name = " ".join(parts[:-3])
-                    file_name = file_name.replace("./", "").strip()
-
-                    if file_name and (file_name.endswith(".o") or file_name.endswith(".obj")):
-                        memory_map[file_name] = [code, ro_data, rw_data]
-                except (ValueError, IndexError):
-                    pass
+    except FileNotFoundError:
+        logger.warning(f"Map file not found or cannot be accessed: {map_file}")
+    except PermissionError:
+        logger.warning(f"Permission denied reading map file: {map_file}")
+    except IOError as e:
+        logger.warning(f"Error reading map file {map_file}: {e}")
+    except Exception as e:
+        logger.warning(f"Unexpected error parsing map file {map_file}: {e}")
 
     return memory_map, archive_totals
 
-def get_memory_mspm0(modelmaker_run, device, ARM_LLVM_CGT_PATH):
+def get_memory_mspm0(modelmaker_compilation, modelmaker_quantization, device, ARM_LLVM_CGT_PATH):
     fel_memory_dir = setup_paths()
     fel_memory_mspm0 = fel_memory_dir / "mspm0"
+
+    if not fel_memory_mspm0.exists():
+        logger.warning(f"FEL memory directory not found: {fel_memory_mspm0}")
+        return False
 
     files = [
       fel_memory_dir / "main_mspm0.c",
@@ -125,11 +143,24 @@ def get_memory_mspm0(modelmaker_run, device, ARM_LLVM_CGT_PATH):
     ]
 
     ti_cgt_dir = Path(ARM_LLVM_CGT_PATH)
-    ti_cgt_include = ti_cgt_dir / "include"
+    if not ti_cgt_dir.exists():
+        logger.warning(f"Compiler path not found: {ti_cgt_dir}")
+        return False
 
-    modelmaker_run_path = Path(modelmaker_run)
-    modelmaker_compilation = modelmaker_run_path / "compilation" / "artifacts"
-    modelmaker_quantization = modelmaker_run_path / "training" / "quantization" / "golden_vectors"
+    ti_cgt_include = ti_cgt_dir / "include"
+    if not ti_cgt_include.exists():
+        logger.warning(f"Compiler include path not found: {ti_cgt_include}")
+        return False
+
+    modelmaker_compilation = Path(modelmaker_compilation)
+    modelmaker_quantization = Path(modelmaker_quantization)
+
+    if not modelmaker_compilation.exists():
+        logger.warning(f"ModelMaker compilation path not found: {modelmaker_compilation}")
+        return False
+    if not modelmaker_quantization.exists():
+        logger.warning(f"ModelMaker quantization path not found: {modelmaker_quantization}")
+        return False
 
     compile_cmd = [
       f'{ti_cgt_dir / "bin" / "tiarmclang"}',
@@ -146,7 +177,7 @@ def get_memory_mspm0(modelmaker_run, device, ARM_LLVM_CGT_PATH):
       f'-I"{modelmaker_compilation}"',
       f'-I"{modelmaker_quantization}"',
       f'-I"{fel_memory_mspm0}"',
-    #   " > /dev/null 2>&1",
+      " > /dev/null 2>&1",
     ]
 
     for file_ in files:
@@ -175,13 +206,15 @@ def get_memory_mspm0(modelmaker_run, device, ARM_LLVM_CGT_PATH):
       './feature_extract.o',
       f'-Wl,{fel_a}',
       "-Wl,-llibc.a",
-    #   " > /dev/null 2>&1",
+      " > /dev/null 2>&1",
     ]
 
     cmd = " ".join(lnk_cmd)
     os.system(cmd)
 
     memory_map, archive_totals = get_memory("app.map")
+    if not memory_map and not archive_totals:
+        return False
 
     files_to_report = [
         ('main_mspm0.o', 'main_mspm0.o'),
@@ -193,11 +226,16 @@ def get_memory_mspm0(modelmaker_run, device, ARM_LLVM_CGT_PATH):
 
     cleanup_artifacts(['*.xml', 'app.map', '*.out', '*.o'])
     logger.info("TI memory calculation completed successfully")
+    return True
 
 
-def get_memory_am13(modelmaker_run, device, ARM_LLVM_CGT_PATH):
+def get_memory_am13(modelmaker_compilation, modelmaker_quantization, device, ARM_LLVM_CGT_PATH):
     fel_memory_dir = setup_paths()
     fel_memory_am13 = fel_memory_dir / "am13"
+
+    if not fel_memory_am13.exists():
+        logger.warning(f"FEL memory directory not found: {fel_memory_am13}")
+        return
 
     files = [
       fel_memory_dir / "main.c",
@@ -206,11 +244,24 @@ def get_memory_am13(modelmaker_run, device, ARM_LLVM_CGT_PATH):
     ]
 
     ti_cgt_dir = Path(ARM_LLVM_CGT_PATH)
-    ti_cgt_include = ti_cgt_dir / "include"
+    if not ti_cgt_dir.exists():
+        logger.warning(f"Compiler path not found: {ti_cgt_dir}")
+        return False
 
-    modelmaker_run_path = Path(modelmaker_run)
-    modelmaker_compilation = modelmaker_run_path / "compilation" / "artifacts"
-    modelmaker_quantization = modelmaker_run_path / "training" / "quantization" / "golden_vectors"
+    ti_cgt_include = ti_cgt_dir / "include"
+    if not ti_cgt_include.exists():
+        logger.warning(f"Compiler include path not found: {ti_cgt_include}")
+        return False
+
+    modelmaker_compilation = Path(modelmaker_compilation)
+    modelmaker_quantization = Path(modelmaker_quantization)
+
+    if not modelmaker_compilation.exists():
+        logger.warning(f"ModelMaker compilation path not found: {modelmaker_compilation}")
+        return False
+    if not modelmaker_quantization.exists():
+        logger.warning(f"ModelMaker quantization path not found: {modelmaker_quantization}")
+        return False
 
     compile_cmd = [
       f'{ti_cgt_dir / "bin" / "tiarmclang"}',
@@ -227,7 +278,7 @@ def get_memory_am13(modelmaker_run, device, ARM_LLVM_CGT_PATH):
       f'-I"{modelmaker_compilation}"',
       f'-I"{modelmaker_quantization}"',
       f'-I"{fel_memory_am13}"',
-    #   " > /dev/null 2>&1",
+      " > /dev/null 2>&1",
     ]
 
     for file_ in files:
@@ -255,13 +306,15 @@ def get_memory_am13(modelmaker_run, device, ARM_LLVM_CGT_PATH):
       './feature_extract.o',
       './feature_extract_am13.o',
       f"-Wl,{fel_a}",
-    #   " > /dev/null 2>&1",
+      " > /dev/null 2>&1",
     ]
 
     cmd = " ".join(lnk_cmd)
     os.system(cmd)
 
     memory_map, archive_totals = get_memory("app.map")
+    if not memory_map and not archive_totals:
+        return False
 
     files_to_report = [
         ('main.o', 'main.o'),
@@ -274,12 +327,21 @@ def get_memory_am13(modelmaker_run, device, ARM_LLVM_CGT_PATH):
 
     cleanup_artifacts(['*.xml', 'app.map', '*.out', '*.o'])
     logger.info("TI memory calculation completed successfully")
+    return True
 
 
-def get_memory_c28(modelmaker_run, device, C2000_CG_ROOT):
+def get_memory_c28(modelmaker_compilation, modelmaker_quantization, device, C2000_CG_ROOT):
+    if not device:
+        logger.warning("Device name not provided")
+        return False
+
     fel_memory_dir = setup_paths()
 
     fel_memory_c28 = fel_memory_dir / "c28"
+
+    if not fel_memory_c28.exists():
+        logger.warning(f"FEL memory directory not found: {fel_memory_c28}")
+        return
 
     files = [
       fel_memory_dir / "main.c",
@@ -288,13 +350,27 @@ def get_memory_c28(modelmaker_run, device, C2000_CG_ROOT):
     ]
 
     ti_cgt_c2000_dir = Path(C2000_CG_ROOT)
+    if not ti_cgt_c2000_dir.exists():
+        logger.warning(f"Compiler path not found: {ti_cgt_c2000_dir}")
+        return
+
     ti_cgt_c2000_include = ti_cgt_c2000_dir / "include"
+    if not ti_cgt_c2000_include.exists():
+        logger.warning(f"Compiler include path not found: {ti_cgt_c2000_include}")
+        return
+
     fel_memory_c28_fpu = fel_memory_c28 / "FPU"
     fel_memory_c28_device = fel_memory_c28 / "driverlib" / device
 
-    modelmaker_run_path = Path(modelmaker_run)
-    modelmaker_compilation = modelmaker_run_path / "compilation" / "artifacts"
-    modelmaker_quantization = modelmaker_run_path / "training" / "quantization" / "golden_vectors"
+    modelmaker_compilation = Path(modelmaker_compilation)
+    modelmaker_quantization = Path(modelmaker_quantization)
+
+    if not modelmaker_compilation.exists():
+        logger.warning(f"ModelMaker compilation path not found: {modelmaker_compilation}")
+        return False
+    if not modelmaker_quantization.exists():
+        logger.warning(f"ModelMaker quantization path not found: {modelmaker_quantization}")
+        return False
 
     compile_cmd = [
         f'{ti_cgt_c2000_dir / "bin" / "cl2000"}',
@@ -362,6 +438,8 @@ def get_memory_c28(modelmaker_run, device, C2000_CG_ROOT):
     os.system(cmd)
 
     memory_map, archive_totals = get_memory("app.map")
+    if not memory_map and not archive_totals:
+        return False
 
     files_to_report = [
         ('main.obj', 'main.obj'),
@@ -373,12 +451,17 @@ def get_memory_c28(modelmaker_run, device, C2000_CG_ROOT):
 
     cleanup_artifacts(['*.xml', 'app.map', '*.out', '*.obj'])
     logger.info("TI memory calculation completed successfully")
+    return True
 
 
-def get_memory_c29(modelmaker_run, device, CG_TOOL_ROOT):
+def get_memory_c29(modelmaker_compilation, modelmaker_quantization, device, CG_TOOL_ROOT):
     fel_memory_dir = setup_paths()
 
     fel_memory_c29 = fel_memory_dir / "c29"
+
+    if not fel_memory_c29.exists():
+        logger.warning(f"FEL memory directory not found: {fel_memory_c29}")
+        return
 
     files = [
       fel_memory_dir / "main.c",
@@ -386,13 +469,25 @@ def get_memory_c29(modelmaker_run, device, CG_TOOL_ROOT):
       fel_memory_c29 / "feature_extract_c29.c",
     ]
 
-    fel_memory_c29_driverlib = fel_memory_c29 / "driverlib"
     ti_cgt_c29_dir = Path(CG_TOOL_ROOT)
+    if not ti_cgt_c29_dir.exists():
+        logger.warning(f"Compiler path not found: {ti_cgt_c29_dir}")
+        return
+
     ti_cgt_c29_include = ti_cgt_c29_dir / "include"
+    if not ti_cgt_c29_include.exists():
+        logger.warning(f"Compiler include path not found: {ti_cgt_c29_include}")
+        return
     
-    modelmaker_run_path = Path(modelmaker_run)
-    modelmaker_compilation = modelmaker_run_path / "compilation" / "artifacts"
-    modelmaker_quantization = modelmaker_run_path / "training" / "quantization" / "golden_vectors"
+    modelmaker_compilation = Path(modelmaker_compilation)
+    modelmaker_quantization = Path(modelmaker_quantization)
+
+    if not modelmaker_compilation.exists():
+        logger.warning(f"ModelMaker compilation path not found: {modelmaker_compilation}")
+        return False
+    if not modelmaker_quantization.exists():
+        logger.warning(f"ModelMaker quantization path not found: {modelmaker_quantization}")
+        return False
 
     compile_cmd = [
         f'{ti_cgt_c29_dir / "bin" / "c29clang"}',
@@ -433,6 +528,8 @@ def get_memory_c29(modelmaker_run, device, CG_TOOL_ROOT):
     os.system(cmd)
 
     memory_map, archive_totals = get_memory("app.map")
+    if not memory_map and not archive_totals:
+        return False
 
     files_to_report = [
         ('main.o', 'main.o'),
@@ -444,42 +541,52 @@ def get_memory_c29(modelmaker_run, device, CG_TOOL_ROOT):
 
     cleanup_artifacts(['*.xml', 'app.map', '*.out', '*.o'])
     logger.info("TI memory calculation completed successfully")
+    return True
 
 
 def get_args_parser():
     DESCRIPTION = "Given user_input_config, this script generates .out, .map file for understanding the memory consumption of feature extraction"
     parser = ArgumentParser(description=DESCRIPTION)
-    parser.add_argument('--run-dir', type=str, required=True, help='Path of the run directory')
-    parser.add_argument('--func-name', type=str, required=True, help="Function name for the core, eg: get_memory_c28, get_memory_mspm0")
+    parser.add_argument('--artifacts-path', type=str, required=True, help='Path of the compiled model (tvmgen_default.h required)')
+    parser.add_argument('--user-input-config-path', type=str, required=True, help="Path of dir of user_input_config.h")
     parser.add_argument('--compiler-path', type=str, required=True, help="Path of the compiler of the device")
     parser.add_argument('--device-name', type=str, required=True, help="Name of the device")
     return parser
 
 
-def main(run_dir, config_func_name, config_tool_path, config_device_name):
+def main(artifacts_path, user_input_config_path, config_func_name, config_tool_path, config_device_name):
 
     func = config_func_name
     tool_path = Path(config_tool_path)
 
     if not tool_path.exists():
-        logger.error(f"Compiler tool path not found: {tool_path}")
+        logger.warning(f"Compiler tool path not found: {tool_path}")
         return 1
 
-    if func == 'get_memory_c28':
-        get_memory_c28(run_dir, config_device_name, tool_path)
-    elif func == 'get_memory_c29':
-        get_memory_c29(run_dir, config_device_name, tool_path)
-    elif func == 'get_memory_am13':
-        get_memory_am13(run_dir, config_device_name, tool_path)
-    elif func == 'get_memory_mspm0':
-        get_memory_mspm0(run_dir, config_device_name, tool_path)
-    else:
+    try:
+        result = False
+        if func == 'get_memory_c28':
+            result = get_memory_c28(artifacts_path, user_input_config_path, config_device_name, tool_path)
+        elif func == 'get_memory_c29':
+            result = get_memory_c29(artifacts_path, user_input_config_path, config_device_name, tool_path)
+        elif func == 'get_memory_am13':
+            result = get_memory_am13(artifacts_path, user_input_config_path, config_device_name, tool_path)
+        elif func == 'get_memory_mspm0':
+            result = get_memory_mspm0(artifacts_path, user_input_config_path, config_device_name, tool_path)
+        else:
+            logger.warning(f"Unknown function: {func}")
+            return 1
+        return 0 if result else 1
+    except Exception as e:
+        logger.warning(f"Execution failed: {e}", exc_info=True)
         return 1
-    return 0
 
-def run(run_dir, config_func_name, config_tool_path, config_device_name):
-    return main(run_dir, config_func_name, config_tool_path, config_device_name)
+def run(artifacts_path, user_input_config_path, config_func_name, config_tool_path, config_device_name):
+    result = main(artifacts_path, user_input_config_path, config_func_name, config_tool_path, config_device_name)
+    if result == 1:
+        logger.warning("Memory estimation for feature extraction not supported for this usecase.")
+    return result
 
 if __name__ == "__main__":
     args = get_args_parser().parse_args()
-    run(args.run_dir, args.func_name, args.compiler_path, args.device_name)
+    run(args.artifacts_path, args.user_input_config_path, args.func_name, args.compiler_path, args.device_name)

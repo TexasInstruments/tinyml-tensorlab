@@ -66,6 +66,7 @@ from ..common.train_base import (
     setup_training_environment,
     prepare_transforms,
     log_model_summary,
+    run_memory_preflight,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
     setup_distributed_model,
@@ -183,6 +184,7 @@ def main(gpu, args):
             model_spec=args.model_spec,
             dual_op=args.dual_op)
 
+        run_memory_preflight(model, args, (1,) + dataset.X.shape[1:], logger)
         log_model_summary(model, args, variables, input_features, logger)
         model = load_pretrained_weights(model, args, logger)
 
@@ -241,6 +243,8 @@ def main(gpu, args):
             'predictions': None,
             'overall_smape': float('inf'),
         }
+        early_stopper = utils.EarlyStopping(patience=args.early_stopping_patience, mode='min',
+                                             min_delta=args.early_stopping_min_delta, enabled=args.early_stopping)
 
         for epoch in range(args.start_epoch, args.epochs):
             if args.distributed:
@@ -276,6 +280,11 @@ def main(gpu, args):
                     utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
 
             logger.info(f"Epoch {epoch}: Best Overall SMAPE across all variables across all predicted timesteps so far: {best_epoch_values['overall_smape']:.2f}% (Epoch {best_epoch_values['epoch']})")
+
+            early_stopper.step(overall_smape)
+            if early_stopper.should_stop:
+                logger.info(f"Early stopping at epoch {epoch}: no improvement for {args.early_stopping_patience} epochs.")
+                break
 
         if not args.quantization and args.auto_quantization:
             _float_best_metric = float(best_epoch_values['overall_smape'])

@@ -42,7 +42,7 @@ import torch
 import torcheval
 from tabulate import tabulate
 
-from tinyml_tinyverse.common.datasets import GoogleSpeechCommandsDataset
+from tinyml_tinyverse.common.datasets import GenericAudioDataset
 
 # Tiny ML TinyVerse Modules
 from tinyml_tinyverse.common.utils import misc_utils, utils, mdcl_utils
@@ -58,7 +58,7 @@ from ..common.test_onnx_base import (
 )
 from ..common.train_base import shutdown_data_loaders
 
-dataset_loader_dict = {'GoogleSpeechCommandsDataset': GoogleSpeechCommandsDataset}
+dataset_loader_dict = {'GenericAudioDataset': GenericAudioDataset}
 
 
 def get_args_parser():
@@ -68,7 +68,8 @@ def get_args_parser():
     # Audio preprocessing / feature extraction params
     parser.add_argument('--sample-rate', help='Audio sample rate in Hz', default=16000, type=int)
     parser.add_argument('--audio-duration-ms', help='Audio clip duration in milliseconds', default=1000, type=int)
-    parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, or RAW', default='MFCC', type=str)
+    parser.add_argument('--audio-feature', help='Audio feature type: MFCC, LPC, FB, or RAW', default='MFCC', type=str)
+
     # MFCC params
     parser.add_argument('--n-mfcc', help='Number of MFCC coefficients', default=10, type=int)
     parser.add_argument('--n-mels', help='Number of Mel filterbank bins', default=40, type=int)
@@ -78,6 +79,9 @@ def get_args_parser():
     # LPC params
     parser.add_argument('--nlpc', help='Number of LPC output features/filterbank energies', default=14, type=int)
     parser.add_argument('--lpc-order', help='LPC analysis order', default=14, type=int)
+
+    # Filterbank params
+    parser.add_argument('--input-bit-depth', help='Bit depth for FB audio loading (16=int16, 14=int14, 12=int12). Only used when --audio-feature=FB', default=16, type=int)
 
     # Audio loading params
     parser.add_argument('--normalize-audio', help='Normalize waveform by max absolute value', default=True, type=misc_utils.str2bool)

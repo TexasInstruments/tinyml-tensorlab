@@ -63,6 +63,7 @@ from ..common.train_base import (
     prepare_transforms,
     create_model,
     log_model_summary,
+    run_memory_preflight,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
     setup_distributed_model,
@@ -179,6 +180,7 @@ def main(gpu, args):
 
         logger.info("Creating model")
         model = create_model(args, variables, num_classes, input_features, logger)
+        run_memory_preflight(model, args, (1,) + dataset.X.shape[1:], logger)
         log_model_summary(model, args, variables, input_features, logger)
         model = load_pretrained_weights(model, args, logger)
 
@@ -229,6 +231,8 @@ def main(gpu, args):
         logger.info("Start training")
         start_time = timeit.default_timer()
         best = dict(mse=np.inf, r2=0, epoch=None)
+        early_stopper = utils.EarlyStopping(patience=args.early_stopping_patience, mode='min',
+                                             min_delta=args.early_stopping_min_delta, enabled=args.early_stopping)
 
         for epoch in range(args.start_epoch, args.epochs):
             if args.distributed:
@@ -251,6 +255,11 @@ def main(gpu, args):
                 best['mse'], best['r2'], best['epoch'] = avg_mse, avg_r2_score, epoch
                 checkpoint = save_checkpoint(model_without_ddp, optimizer, lr_scheduler, epoch, args, model_ema)
                 utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
+
+            early_stopper.step(avg_mse)
+            if early_stopper.should_stop:
+                logger.info(f"Early stopping at epoch {epoch}: no improvement for {args.early_stopping_patience} epochs.")
+                break
 
         if not args.quantization and args.auto_quantization:
             _float_best_metric = best['r2']

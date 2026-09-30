@@ -384,7 +384,7 @@ class BaseGenericTSDataset(Dataset):
     def _transform_pos_half_fft(self, wave_frame):
         """Takes the DC + min_bin samples of the fft."""
         idx = self.frame_size // 2
-        idx += self.min_bin if self.min_bin else 1
+        idx += self.min_bin if self.min_bin is not None else 1
         result_wave = wave_frame[:idx]
         return wave_frame, result_wave
 
@@ -404,6 +404,53 @@ class BaseGenericTSDataset(Dataset):
     def _transform_normalize(self, wave_frame):
         result_wave = wave_frame / self.frame_size
         return wave_frame, result_wave
+
+    def _transform_l2_norm_row(self, x):
+        """Apply row-wise L2 normalization across the variables/subcarriers axis.
+
+        Each time step is independently normalized so that its L2 norm across
+        all variables equals 1.  This is applied on the full multi-variable
+        matrix *before* per-variable feature extraction begins.
+
+        Args:
+            x (np.ndarray): Shape (variables, time_samples) — the raw signal
+                matrix for one data file segment.
+
+        Returns:
+            np.ndarray: Same shape (variables, time_samples), with each column
+                (time step) having unit L2 norm across the variables axis.
+        """
+        # x.T -> (time_samples, variables); norm per row (axis=1)
+        norms = np.linalg.norm(x.T, axis=1, keepdims=True)   # (time_samples, 1)
+        # avoid division by zero for silent/zero frames
+        norms = np.where(norms == 0, 1.0, norms)
+        return (x.T / norms).T   # back to (variables, time_samples)
+
+    def _transform_fft_col(self, assembled):
+        """Apply rFFT column-wise (across variables/subcarriers axis) on an assembled
+        2D feature matrix produced after per-variable time-axis FFTs.
+
+        Args:
+            assembled (np.ndarray): Shape (variables, time_bins) — the stacked
+                per-variable feature vectors for one window.
+
+        Returns:
+            np.ndarray: Shape (time_bins, n_col_bins) where n_col_bins =
+                variables // 2, i.e. the positive-frequency half of the
+                column-wise rFFT (Nyquist bin dropped), with log10 applied.
+        """
+        # rFFT along axis=0 (across variables/subcarriers): (variables, time_bins) -> (variables//2 + 1, time_bins)
+        col_fft = np.fft.rfft(assembled, axis=0)
+        # magnitude
+        col_fft = np.abs(col_fft)
+        # drop Nyquist bin -> (variables//2, time_bins)
+        n_col_bins = assembled.shape[0] // 2
+        col_fft = col_fft[:n_col_bins, :]
+        # log10 — reuse the same threshold as LOG_DB
+        log_threshold = self.log_threshold if hasattr(self, 'log_threshold') and self.log_threshold else 1e-100
+        col_fft = np.log10(log_threshold + col_fft)
+        # transpose to (time_bins, n_col_bins) so final shape is (64, 26) for 128-sample / 52-subcarrier input
+        return col_fft.T
     
     def _transform_roundoff(self, wave_frame):
         result_wave = np.round((np.array(wave_frame)))
@@ -876,6 +923,8 @@ class BaseGenericTSDataset(Dataset):
             self.feature_extraction_params['FE_SCALE'] = self.scale
 
             # Store the preprocessing flags specifically related to AI Library
+            if 'L2_NORM_ROW' in self.transforms:
+                self.preprocessing_flags.append('FE_L2_NORM_ROW')
             if 'FFT_Q15' in self.transforms:
                 self.preprocessing_flags.append('FE_RFFT')
             if 'Q15_SCALE' in self.transforms:
@@ -912,7 +961,7 @@ class BaseGenericTSDataset(Dataset):
                 self.preprocessing_flags.append('FE_FFT')
                 self.feature_extraction_params['FE_FFT_STAGES'] = int(np.log2(self.frame_size))
                 self.feature_extraction_params['FE_MIN_FFT_BIN'] = self.min_bin
-                self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size // 2 + (self.min_bin if self.min_bin else 1)
+                self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.frame_size // 2 + (self.min_bin if self.min_bin is not None else 1)
             if 'DC_REMOVE' in self.transforms:
                 self.preprocessing_flags.append('FE_DC_REM')
                 self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] - 1
@@ -953,7 +1002,10 @@ class BaseGenericTSDataset(Dataset):
                     self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
 
                 try:
-                    self.log_threshold = eval(self.log_threshold)
+                    self.log_threshold = eval(str(self.log_threshold))
+                    if self.log_threshold is None:
+                        self.log_threshold = 1e-100
+                        self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Unable to evaluate log_threshold.")
                 except Exception as e:
                     self.log_threshold = 1e-100
                     self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")
@@ -964,6 +1016,12 @@ class BaseGenericTSDataset(Dataset):
                 self.wl = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] * self.num_frame_concat
                 if self.stacking == '1D':
                     self.wl *= self.variables
+                self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
+            if 'FFT_COL' in self.transforms:
+                self.preprocessing_flags.append('FE_FFT_COL')
+                self.ch = self.variables // 2
+                self.wl = self.feature_extraction_params['FE_FEATURE_SIZE_PER_FRAME'] * self.num_frame_concat
+                self.feature_extraction_params['FE_STACKING_CHANNELS'] = self.ch
                 self.feature_extraction_params['FE_STACKING_FRAME_WIDTH'] = self.wl
 
     # ==================== Feature Extraction ====================
@@ -977,7 +1035,10 @@ class BaseGenericTSDataset(Dataset):
         concatenated_features = []
         concatenated_raw_frames = []
 
-        # Iterate the number of variables in dataset
+        # L2_NORM_ROW: normalize each time step across all variables/subcarriers
+
+        if 'L2_NORM_ROW' in self.transforms:
+            x_temp = self._transform_l2_norm_row(x_temp)
         for ax in range(self.variables):
             x_temp_per_ax = x_temp[ax]
 
@@ -1035,6 +1096,16 @@ class BaseGenericTSDataset(Dataset):
 
         concatenated_features = np.array(concatenated_features)
         concatenated_raw_frames = np.array(concatenated_raw_frames)
+
+        # FFT_COL: apply column-wise rFFT across the variables axis, per window.
+        if 'FFT_COL' in self.transforms:
+            num_windows = concatenated_features.shape[1]
+            col_fft_windows = []
+            for w in range(num_windows):
+                assembled = concatenated_features[:, w, :]
+                col_fft_windows.append(self._transform_fft_col(assembled))
+            col_array = np.array(col_fft_windows)  # (N, time_bins, n_col_bins)
+            concatenated_features = col_array.transpose(2, 0, 1)[:, :, np.newaxis, :]  # (n_col_bins, N, 1, time_bins)
 
         if hasattr(self, 'dont_train_just_feat_ext') and str2bool(self.dont_train_just_feat_ext):
             x_raw_out_file_path = os.path.join(self.feat_ext_store_dir, os.path.splitext(os.path.basename(datafile))[0] + '_features.npy')
@@ -1384,7 +1455,7 @@ class GenericTSDatasetAD(BaseGenericTSDataset):
             else:
                 self.feature_extraction_params['FE_LOG_BASE'] = self.log_base
             try:
-                self.log_threshold = eval(self.log_threshold)
+                self.log_threshold = eval(str(self.log_threshold))
             except Exception as e:
                 self.log_threshold = 1e-100
                 self.logger.warning(f"Defaulting log threshold to: {self.log_threshold}. Because of exception: {e}")

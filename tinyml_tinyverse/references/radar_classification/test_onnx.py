@@ -109,22 +109,15 @@ def main(gpu, args):
 
     predicted = torch.tensor([]).to(device, non_blocking=True)
     ground_truth = torch.tensor([]).to(device, non_blocking=True)
-    for batched_raw_data, batched_data, batched_target in data_loader:
-        batched_raw_data = batched_raw_data.to(device, non_blocking=True).long()
+    for _, batched_data, batched_target in data_loader:
         batched_data = batched_data.to(device, non_blocking=True).float()
         batched_target = batched_target.to(device, non_blocking=True).long()
         if transform:
             batched_data = transform(batched_data)
-        if args.nn_for_feature_extraction:
-            for data in batched_raw_data:
-                predicted = torch.cat((predicted, torch.tensor(
-                    ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy().astype(np.float32)})[0]
-                ).to(device)))
-        else:
-            for data in batched_data:
-                predicted = torch.cat((predicted, torch.tensor(
-                    ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]
-                ).to(device)))
+        for data in batched_data:
+            predicted = torch.cat((predicted, torch.tensor(
+                ort_sess.run([output_name], {input_name: data.unsqueeze(0).cpu().numpy()})[0]
+            ).to(device)))
         ground_truth = torch.cat((ground_truth, batched_target))
 
     try:

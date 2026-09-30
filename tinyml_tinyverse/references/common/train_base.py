@@ -86,6 +86,7 @@ import torch
 from tinyml_tinyverse.common import models
 from tinyml_tinyverse.common.utils import misc_utils, utils, load_weights
 from tinyml_tinyverse.common.utils.mdcl_utils import create_dir, Logger
+from tinyml_tinyverse.common.utils.tinyml_header import tinyml_header_str
 
 
 def split_weights(weights_name):
@@ -160,6 +161,12 @@ def get_base_args_parser(description="This script loads time series data and tra
     parser.add_argument('--gpus', default=1, type=int, help='number of gpus')
     parser.add_argument('-b', '--batch-size', default=1024, type=int)
     parser.add_argument('--epochs', default=90, type=int, metavar='N', help='number of total epochs to run')
+    parser.add_argument("--early-stopping", default=True, type=misc_utils.str2bool,
+                        help="Stop training early if the validation metric stops improving")
+    parser.add_argument("--early-stopping-patience", default=5, type=int,
+                        help="Number of epochs with no improvement before stopping early")
+    parser.add_argument("--early-stopping-min-delta", default=0.0, type=float,
+                        help="Minimum change in the monitored metric to qualify as an improvement")
     parser.add_argument('-j', '--workers', default=0 if platform.system() in ['Windows'] else 8, type=int, metavar='N',
                         help='number of data loading workers (default: 8)')
     parser.add_argument('--opt', default='sgd', type=str, help='optimizer')
@@ -264,6 +271,19 @@ def get_base_args_parser(description="This script loads time series data and tra
     parser.add_argument("--autoquant-tolerance-anomaly", default=None, type=float,
                         help="Max allowable MSE increase for anomaly detection auto-quantization binary search. "
                              "Expressed as a multiplier on the float metric: 2 means 3x (200%%) worse is tolerated.")
+    parser.add_argument("--skip_memory_preflight", action='store_true',
+                        help="Skip the early (pre-training) NN model memory pre-flight estimate.")
+    parser.add_argument("--cross-compiler", default=None,
+                        help="Path to the target device's cross compiler, used only by the memory "
+                             "pre-flight estimate (see run_memory_preflight). Passed through from "
+                             "modelmaker's resolved compilation config when available; the real "
+                             "compilation stage resolves its own copy of this independently.")
+    parser.add_argument("--cross-compiler-options", default=None,
+                        help="Cross compiler options, used only by the memory pre-flight estimate.")
+    parser.add_argument("--target", default=None,
+                        help="TVM compile target string, used only by the memory pre-flight estimate.")
+    parser.add_argument("--target-c-mcpu", default=None,
+                        help="Target MCU core, used only by the memory pre-flight estimate.")
     return parser
 
 
@@ -289,6 +309,7 @@ def generate_user_input_config(output_dir, dataset, extra_defines=None):
     logger.info("Creating user_input_config.h at: {}".format(user_input_config_h))
 
     with open(user_input_config_h, 'w') as fp:
+        fp.write(tinyml_header_str)
         fp.write("#ifndef INPUT_CONFIG_H_\n")
         fp.write("#define INPUT_CONFIG_H_\n\n")
         fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
@@ -307,6 +328,7 @@ def generate_test_vector(output_dir, test_vector_data):
     test_vector_c = os.path.join(golden_vectors_dir, 'test_vector.c')
     logger.info("Creating test_vector.c at: {}".format(test_vector_c))
     with open(test_vector_c, 'w') as fp:
+        fp.write(tinyml_header_str)
         fp.write(test_vector_data)
     return
 
@@ -319,6 +341,7 @@ def generate_model_aux(output_dir, dataset):
                                      for label_index in sorted(dataset.inverse_label_map.keys())])
     logger.info("Creating model_aux.h at: {}".format(model_aux_h))
     with open(model_aux_h, 'w') as fp:
+        fp.write(tinyml_header_str)
         fp.write(f'const NUMBER_OF_CLASSES = {len(dataset.classes)};\n')
         fp.write('const char *classIdToName[NUMBER_OF_CLASSES] = {' + class_list_ordered + '};')
     return
@@ -674,6 +697,61 @@ def handle_export_only(model, args, variables, input_features, logger):
                                generic_model=args.generic_model)
         return True
     return False
+
+
+def run_memory_preflight(model, args, input_shape, logger):
+    """
+    Run the early (pre-training) memory pre-flight check on a freshly-created
+    model, so an oversized model is caught right after model creation instead
+    of only after full training + full compilation.
+
+    input_shape must be the FULL shape tuple, e.g. (1,) + dataset.X.shape[1:]
+    -- the same convention used by the proven-correct end-of-training export
+    (see e.g. classification train.py's post-training utils.export_model call).
+    Some model families (e.g. NPU-targeted conv2d models) are 4D with a
+    trailing singleton dim, so a truncated (1, variables, input_features)
+    3-tuple is not safe in general; callers must pass the real shape.
+
+    Only the NN-model half of the check runs from here. The FEL half (see
+    memory_preflight.estimate_memory's fel_config parameter) needs a
+    modelmaker-style project run directory (<run>/compilation/artifacts +
+    <run>/training/quantization/golden_vectors/user_input_config.h) that
+    doesn't exist yet at this point in a train.py run, and tinyverse must not
+    import tinyml_modelmaker to build one -- that's available via a
+    standalone modelmaker-side CLI instead.
+
+    target/cross_compiler/cross_compiler_options/target_c_mcpu are
+    compilation-stage-only arguments (see compilation.py's own
+    get_args_parser()) that are not part of train_base's argument namespace,
+    so any of them not already present on `args` fall back to
+    compilation.py's own parser defaults -- if that leaves an unusable
+    cross_compiler path, the compile step below simply fails to find the
+    memory report and estimate_memory() logs a warning; it never blocks
+    training.
+    """
+    if getattr(args, 'skip_memory_preflight', False):
+        return
+    try:
+        from tinyml_tinyverse.references.common import compilation, memory_preflight
+    except (ModuleNotFoundError, OSError) as e:
+        # ModuleNotFoundError: ti_mcu_nnc/tvm not installed at all.
+        # OSError: tvm is installed but its native lib won't load (e.g. a
+        # wheel built against a newer glibc than the host ships) - same
+        # "can't compile here" outcome, just a different failure mode.
+        logger.warning(f"Skipping memory pre-flight check: {e} (ti_mcu_nnc/tvm unusable)")
+        return
+
+    compile_defaults = compilation.get_args_parser().parse_args([])
+    target = getattr(args, 'target', None) or compile_defaults.target
+    cross_compiler = getattr(args, 'cross_compiler', None) or compile_defaults.cross_compiler
+    cross_compiler_options = getattr(args, 'cross_compiler_options', None) or compile_defaults.cross_compiler_options
+    target_c_mcpu = getattr(args, 'target_c_mcpu', None) or compile_defaults.target_c_mcpu
+
+    preflight_output_dir = os.path.join(args.output_dir, 'memory_preflight')
+    memory_preflight.estimate_memory(
+        model, input_shape=input_shape, output_dir=preflight_output_dir, target=target,
+        cross_compiler=cross_compiler, cross_compiler_options=cross_compiler_options,
+        target_c_mcpu=target_c_mcpu, opset_version=args.opset_version, fel_config=None, logger=logger)
 
 
 def move_model_to_device(model, device, logger):

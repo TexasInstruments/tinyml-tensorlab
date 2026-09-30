@@ -48,7 +48,6 @@ import pandas as pd
 from tabulate import tabulate
 
 from tinyml_tinyverse.common.models import NeuralNetworkWithPreprocess
-from torcheval.metrics.functional import multiclass_confusion_matrix, multiclass_f1_score, multiclass_auroc, r2_score, mean_squared_error
 from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion, TinyMLQuantizationMethod
 from tinyml_torchmodelopt.nas.train_cnn_search import search_and_get_model
 
@@ -75,6 +74,7 @@ from ..common.train_base import (
     prepare_transforms,
     create_data_loaders,
     log_model_summary,
+    run_memory_preflight,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
     setup_distributed_model,
@@ -241,6 +241,8 @@ def main(gpu, args):
     else:
         model = torch.load(args.load_saved_model, weights_only=False)
 
+    run_memory_preflight(model, args, (1,) + dataset.X.shape[1:], logger)
+
     if args.generic_model or args.nas_enabled:
         log_model_summary(model, args, variables, input_features, logger)
 
@@ -302,7 +304,7 @@ def main(gpu, args):
     logger.info(f"Best Epoch: {best['epoch']}")
     logger.info(f"Acc@1 {best['accuracy']:.3f}")
     logger.info(f"F1-Score {best['f1']:.3f}")
-    logger.info(f"AUC ROC Score {best['f1']:.3f}")
+    logger.info(f"AUC ROC Score {best['auc']:.3f}")
     logger.info("")
     logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
                   columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
@@ -333,195 +335,9 @@ def main(gpu, args):
         output_int = get_output_int_flag(args)
         generate_golden_vectors(args.output_dir, dataset, output_int, args.generic_model)
 
-def main_debug(gpu, args):
-    """Main training function for classification."""
-    # --------Following as close as possible steps from jupyter notebook to test if model learning plateau is coming from training loop
-    #First need to load everything in
-    torch.manual_seed(42)
-    logger, device = setup_training_environment(args, gpu, 'classification', __file__)
-    prepare_transforms(args)
-
-
-    # Load or reuse datasets
-    dataset, dataset_test, train_sampler, test_sampler = load_datasets(args.data_path, args, dataset_loader_dict)
-    dataset_load_state['dataset'], dataset_load_state['dataset_test'] = dataset, dataset_test
-    dataset_load_state['train_sampler'], dataset_load_state['test_sampler'] = train_sampler, test_sampler
-
-    num_classes = len(dataset.classes)
-    variables = 1
-    input_features = dataset.X.shape[1]
-
-    logger.info("Loading data:")
-    data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=args.batch_size, sampler=train_sampler, num_workers=args.workers,
-        pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn, drop_last=True)
-    data_loader_test = torch.utils.data.DataLoader(
-        dataset_test, batch_size=args.batch_size, sampler=test_sampler, num_workers=args.workers,
-        pin_memory=True if gpu > 0 else False, collate_fn=utils.collate_fn, drop_last=True)
-
-    #-------1. Define Model Size and send to CPU
-    logger.info("Creating model")
-    model = models.get_model(args.model, variables, num_classes, 
-                             input_features=input_features, model_config=args.model_config, 
-                             model_spec=args.model_spec, dual_op=args.dual_op)
-
-    model, model_without_ddp, model_ema = setup_distributed_model(model, args, device)
-
-    # Model_0.to(device)
-    move_model_to_device(model, device, logger)
-    # loss_fn in jupyter notebook
-    criterion = nn.CrossEntropyLoss()
-
-    #setup optimizer function
-    optimizer = torch.optim.SGD(
-                model.parameters(), lr =args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
-    
-    phase = 'FloatTrain'
-    logger.info("Start training")
-    start_time = timeit.default_timer()
-    best = dict(accuracy=0.0, f1=0, auc=0, conf_matrix=dict(), epoch=None, predictions=None, ground_truth=None)   
-
-    #Create empty loss lists to track values
-    train_loss_values = []
-    test_loss_values = []
-    epoch_count = []
-    
-    for epoch in range(args.start_epoch, args.epochs):
-        #--------Training
-        train_loss = 0
-        header = f"Epoch: [{epoch}]"
-        # Add a loop to loop through training batches
-        model.train()
-        for _, data, target in data_loader:
-            start_time = timeit.default_timer()
-            # 1. Forward pass
-            data = data.to(device).float()
-            target = target.to(device).long()
-            output = model(data)
-
-            # 2. Calculate loss(per batch)
-            loss = criterion(output, target)
-            train_loss += loss.item()
-
-            # 3. Zero gradients before forward pass
-            optimizer.zero_grad()
-
-            # 4. Loss backward
-            loss.backward()
-
-            # 5. Optimizer step
-            optimizer.step()
-
-        # Divide total train loss by length of train dataloader (average loss per batch per epoch)
-        train_loss /= len(data_loader)
-
-
-        ### Testing
-        # Setup variables for accumulatively adding up loss and accuracy 
-        test_loss, test_acc = 0, 0
-        model.eval()
-        all_preds = []
-        all_labels = []
-        distance = 0
-
-        with torch.inference_mode():
-            for _, data, target in data_loader_test:
-                # 1. Forward pass
-                data, target = data.to(device).float(), target.to(device)
-                
-                test_pred = model(data)
-
-                # 2. Calculate loss (accumulatively)
-                target = target.squeeze().long()
-                loss = criterion(test_pred, target)
-                test_loss += criterion(test_pred, target)
-
-                # 3. Calculate accuracy y_true=y, y_pred=test_pred
-                test_acc += ((test_pred.argmax(dim=1) == target).sum().item()) / len(target) * 100
-                f1_score_val = multiclass_f1_score(test_pred, target, num_classes=num_classes)
-
-                # COnvert logits to class mables
-                predicted_labels = torch.argmax(test_pred, dim=1)
-
-                # Store predictions and true labels
-                all_preds.extend(predicted_labels)
-                all_labels.extend(target)
-
-                # Calculate Hamming Distance between predictions and correct categories
-                a = predicted_labels.tolist()
-                b = target.tolist()
-
-                for i in range(len(a)):
-                    if a[i] != b[i]:
-                        distance +=1
-
-                        #Divide total test loss by length of test data loader (per batch
-            test_loss /= len(data_loader_test)
-            # Divide total accuracy by length of test dataloader ( per batch)
-            test_acc /= len(data_loader_test)
-
-        
-         # keep a history to view loss curves. Detach the tensors from the computation graphs.  
-        epoch_count.append(epoch)
-        train_loss_values.append(train_loss)
-        test_loss_values.append(test_loss.detach())    
-
-        # conf_matrix = multiclass_confusion_matrix(output, target, num_classes)
-        
-        avg_accuracy, avg_f1, auc, avg_conf_matrix, predictions, ground_truth = utils.evaluate_classification(
-            model, criterion, data_loader_test, device=device, transform=None, phase=phase,
-            num_classes=num_classes, dual_op=args.dual_op)
-
-        ## Print out what's happening in the epoch loop
-        if epoch % (args.epochs / 10) == 0 or epoch == args.epochs - 1:
-            print(f"EPOCH: {epoch} | F1: {f1_score_val:.5f}")
-            print(f"Train loss: {train_loss:.5f} | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")
-            print(f'Distance: {distance}')
-
-        if args.output_dir and avg_accuracy >= best['accuracy']:
-            logger.info(f"Epoch {epoch}: {avg_accuracy:.2f} (Val accuracy) >= {best['accuracy']:.2f} (So far best accuracy). Hence updating checkpoint.pth")
-            best['accuracy'], best['f1'], best['auc'], best['conf_matrix'], best['epoch'] = avg_accuracy, avg_f1, auc, avg_conf_matrix, epoch
-            best['predictions'], best['ground_truth'] = predictions, ground_truth
-            checkpoint = {'model': model_without_ddp.state_dict(), 'optimizer': optimizer.state_dict(), 'epoch': epoch, 'args': args}
-            utils.save_on_master(checkpoint, os.path.join(args.output_dir, 'checkpoint.pth'))
-
-
-        # Log best epoch results
-    logger = getLogger(f"root.main.{phase}.BestEpoch")
-    logger.info("")
-    logger.info("Printing statistics of best epoch:")
-    logger.info(f"Best Epoch: {best['epoch']}")
-    logger.info(f"Acc@1 {best['accuracy']:.3f}")
-    logger.info(f"F1-Score {best['f1']:.3f}")
-    logger.info(f"AUC ROC Score {best['f1']:.3f}")
-    logger.info("")
-    logger.info('Confusion Matrix:\n {}'.format(tabulate(pd.DataFrame(best['conf_matrix'],
-                  columns=[f"Predicted as: {x}" for x in dataset.inverse_label_map.values()],
-                  index=[f"Ground Truth: {x}" for x in dataset.inverse_label_map.values()]),
-                                                         headers="keys", tablefmt='grid')))
-
-    Logger(log_file=args.file_level_classification_log, DEBUG=args.DEBUG,
-           name="root.utils.print_file_level_classification_summary",
-           append_log=True if args.quantization else False, console_log=False)
-    getLogger("root.utils.print_file_level_classification_summary").propagate = False
-    utils.print_file_level_classification_summary(dataset_test, best['predictions'], best['ground_truth'], phase)
-    logger.info(f"Generated file-level classification summary in: {args.file_level_classification_log}")
-
-    # Export model
-    logger.info('Exporting model after training.')
-    if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
-        example_input = next(iter(data_loader_test))[1]
-        input_shape = (1,) + dataset.X.shape[1:]
-        utils.export_model(
-            model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
-            quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
-            remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
-
-    log_training_time(start_time)
-
 def run(args):
     """Run training with optional distributed mode."""
-    run_distributed(main_debug, args)
+    run_distributed(main, args)
 
 
 if __name__ == "__main__":
