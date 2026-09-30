@@ -37,7 +37,6 @@ from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 
 from ..... import utils
 from ... import constants
-from tinyml_modelzoo.device_info import DEVICE_RUN_INFO
 
 from .image_base import (
     BaseImageModelTraining,
@@ -67,40 +66,29 @@ _model_descriptions = {
             model_name='Lenet5',
             learning_rate=0.04,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_IMAGE_CLASSIFICATION],
-            target_devices={
-                constants.TARGET_DEVICE_MSPM0G3507:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['Lenet5'][constants.TARGET_DEVICE_MSPM0G3507],
-                constants.TARGET_DEVICE_MSPM0G3519:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['Lenet5'][constants.TARGET_DEVICE_MSPM0G3519],
-                constants.TARGET_DEVICE_MSPM0G5187:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['Lenet5'][constants.TARGET_DEVICE_MSPM0G5187],
-            },
+            target_devices=[
+                constants.TARGET_DEVICE_MSPM0G3507,
+                constants.TARGET_DEVICE_MSPM0G3519,
+                constants.TARGET_DEVICE_MSPM0G5187,
+            ],
         ),
     }),
-    'MobileNetV1_58k_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
+    'MobileNetV1_28k_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
-            model_details='MobileNetV1_58k_NPU.\n NPU-compliant MobileNetV1-inspired tiny model.\n'
+            model_details='MobileNetV1_28k_NPU.\n NPU-compliant MobileNetV1-inspired tiny model.\n'
                           '2 Conv+BatchNorm+Relu+MaxPool layers + 3 Linear layers.'
         ),
         'training': dict(
-            model_training_id='CNN_IMG_MOBILENETV1_58K_NPU',
-            model_name='MobileNetV1_58k_NPU',
+            model_training_id='CNN_IMG_MOBILENETV1_28K_NPU',
+            model_name='MobileNetV1_28k_NPU',
             learning_rate=0.04,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_IMAGE_CLASSIFICATION],
-            target_devices={
-                constants.TARGET_DEVICE_MSPM0G3507:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['MobileNetV1_58k_NPU'][constants.TARGET_DEVICE_MSPM0G3507],
-                constants.TARGET_DEVICE_MSPM0G3519:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['MobileNetV1_58k_NPU'][constants.TARGET_DEVICE_MSPM0G3519],
-                constants.TARGET_DEVICE_MSPM0G5187:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['MobileNetV1_58k_NPU'][constants.TARGET_DEVICE_MSPM0G5187],
-            },
+            target_devices=[
+                constants.TARGET_DEVICE_MSPM0G3507,
+                constants.TARGET_DEVICE_MSPM0G3519,
+                constants.TARGET_DEVICE_MSPM0G5187,
+                constants.TARGET_DEVICE_AM13E2,
+            ],
         ),
     }),
     'MobileNetV2_58k_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
@@ -112,22 +100,17 @@ _model_descriptions = {
             model_name='MobileNetV2_58k_NPU',
             learning_rate=0.04,
             batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_IMAGE_CLASSIFICATION],
-            target_devices={
-                constants.TARGET_DEVICE_MSPM0G3507:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['MobileNetV2_58k_NPU'][constants.TARGET_DEVICE_MSPM0G3507],
-                constants.TARGET_DEVICE_MSPM0G3519:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['MobileNetV2_58k_NPU'][constants.TARGET_DEVICE_MSPM0G3519],
-                constants.TARGET_DEVICE_MSPM0G5187:
-                    dict(model_selection_factor=None) |
-                    DEVICE_RUN_INFO['MobileNetV2_58k_NPU'][constants.TARGET_DEVICE_MSPM0G5187],
-            },
+            target_devices=[
+                constants.TARGET_DEVICE_MSPM0G3507,
+                constants.TARGET_DEVICE_MSPM0G3519,
+                constants.TARGET_DEVICE_MSPM0G5187,
+                constants.TARGET_DEVICE_AM13E2,
+            ],
         ),
     }),
 }
 
-enabled_models_list = ['Lenet5', 'MobileNetV1_58k_NPU', 'MobileNetV2_58k_NPU']
+enabled_models_list = ['Lenet5', 'MobileNetV1_28k_NPU', 'MobileNetV2_58k_NPU']
 
 
 def get_model_descriptions(task_type=None):

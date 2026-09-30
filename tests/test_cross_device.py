@@ -1,12 +1,11 @@
 """Tier 3 — Cross-Device Validation Tests.
 
 Validates device-specific configuration is correct without running training.
-Covers Tests 15-19 from the test analysis:
+Covers Tests 15-17, 19 from the test analysis:
 
   Test 15: NPU device config — hard NPU devices set type=hard in compilation
   Test 16: Non-NPU device config — soft NPU devices set type=soft
-  Test 17: MSPM0 classification-only — MSPM0G3507 rejects non-classification tasks
-  Test 18: Device model size constraints — device_selection_factor consistency
+  Test 17: MSPM0 task support — matches tinyml-modelzoo model target_devices, not a hand-typed list
   Test 19: Compilation profile correctness — all devices have valid profiles
 
 Marked with @pytest.mark.device — run with: pytest -m device
@@ -34,7 +33,7 @@ SOFT_NPU_DEVICES = [
     "CC2755", "CC1352", "CC1354", "CC35X1",
 ]
 
-# MSPM0 devices — classification only
+# MSPM0 devices under test — supports classification and, per model data, the other generic tasks too
 MSPM0_CLASSIFICATION_ONLY = ["MSPM0G3507", "MSPM0G3519", "MSPM0G5187"]
 
 # Non-classification task types
@@ -116,111 +115,40 @@ class TestSoftNPUDeviceConfig:
 # ---------------------------------------------------------------------------
 
 @pytest.mark.device
-class TestMSPM0ClassificationOnly:
-    """MSPM0 devices should only support classification task types."""
-
-    @pytest.mark.parametrize("device", MSPM0_CLASSIFICATION_ONLY)
-    def test_mspm0_limited_tasks(self, device):
-        """MSPM0 devices should have explicit task_types list in profile."""
-        profile = constants._DEVICE_PROFILES[device]
-        assert "task_types" in profile, (
-            f"MSPM0 device {device} should have explicit task_types list"
-        )
-
-    @pytest.mark.parametrize("device", MSPM0_CLASSIFICATION_ONLY)
-    def test_mspm0_no_regression(self, device):
-        """MSPM0 devices should not support regression."""
-        profile = constants._DEVICE_PROFILES[device]
-        task_types = profile.get("task_types", [])
-        assert constants.TASK_TYPE_GENERIC_TS_REGRESSION not in task_types, (
-            f"MSPM0 device {device} should not support regression"
-        )
-
-    @pytest.mark.parametrize("device", MSPM0_CLASSIFICATION_ONLY)
-    def test_mspm0_no_forecasting(self, device):
-        """MSPM0 devices should not support forecasting."""
-        profile = constants._DEVICE_PROFILES[device]
-        task_types = profile.get("task_types", [])
-        assert constants.TASK_TYPE_GENERIC_TS_FORECASTING not in task_types, (
-            f"MSPM0 device {device} should not support forecasting"
-        )
+class TestMSPM0TaskSupport:
+    """MSPM0 device/task support is derived from tinyml-modelzoo model target_devices
+    (constants.TASK_DESCRIPTIONS), not a hand-typed per-device task_types list.
+    MSPM0G3507/3519/5187 actually have models targeting all four generic timeseries
+    tasks, not just classification — this used to be asserted otherwise via a stale
+    _DEVICE_PROFILES['task_types'] field that had no real consumer and disagreed with
+    the model data; that field has been removed.
+    """
 
     @pytest.mark.parametrize("device", MSPM0_CLASSIFICATION_ONLY)
     def test_mspm0_supports_classification(self, device):
-        """MSPM0 devices should support classification."""
-        profile = constants._DEVICE_PROFILES[device]
-        task_types = profile.get("task_types", [])
-        assert constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION in task_types, (
-            f"MSPM0 device {device} should support classification"
+        """MSPM0 devices should support generic timeseries classification."""
+        devices = constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION]["target_devices"]
+        assert device in devices, (
+            f"MSPM0 device {device} should support generic_timeseries_classification"
         )
 
     @pytest.mark.parametrize("device", MSPM0_CLASSIFICATION_ONLY)
-    def test_mspm0_no_regression_compilation(self, device):
-        """MSPM0 devices should not have compilation_regression profile."""
-        profile = constants._DEVICE_PROFILES[device]
-        assert "compilation_regression" not in profile, (
-            f"MSPM0 device {device} should not have compilation_regression"
+    @pytest.mark.parametrize("task_type", NON_CLASSIFICATION_TASKS)
+    def test_mspm0_supports_non_classification_tasks(self, device, task_type):
+        """MSPM0 devices also have models for regression/anomaly/forecasting."""
+        devices = constants.TASK_DESCRIPTIONS[task_type]["target_devices"]
+        assert device in devices, (
+            f"MSPM0 device {device} should support {task_type} "
+            f"(a model in tinyml-modelzoo targets it)"
         )
 
-
-# ---------------------------------------------------------------------------
-# Test 18: Device model size constraints — device_selection_factor
-# ---------------------------------------------------------------------------
-
-@pytest.mark.device
-class TestDeviceSelectionFactor:
-    """Validate device_selection_factor ordering and consistency."""
-
-    def test_all_devices_have_descriptions(self):
-        """Every device in TARGET_DEVICES should have a description."""
-        for device in constants.TARGET_DEVICES:
-            assert device in constants.TARGET_DEVICE_DESCRIPTIONS, (
-                f"Device {device} missing from TARGET_DEVICE_DESCRIPTIONS"
-            )
-
-    def test_selection_factors_are_non_negative(self):
-        """All device_selection_factor values should be non-negative integers."""
-        for device, desc in constants.TARGET_DEVICE_DESCRIPTIONS.items():
-            factor = desc.get("device_selection_factor")
-            assert factor is not None, (
-                f"Device {device} missing device_selection_factor"
-            )
-            assert isinstance(factor, int) and factor >= 0, (
-                f"Device {device} has invalid factor: {factor}"
-            )
-
-    def test_selection_factors_are_unique(self):
-        """Device selection factors should ideally be unique (warn if not)."""
-        factors = {}
-        for device, desc in constants.TARGET_DEVICE_DESCRIPTIONS.items():
-            f = desc["device_selection_factor"]
-            if f in factors:
-                # Not a hard failure — just tracked
-                pass
-            factors.setdefault(f, []).append(device)
-        # At least some differentiation should exist
-        assert len(factors) > 1, "All devices have the same selection factor"
-
-    def test_hard_npu_devices_higher_factor(self):
-        """Devices with hard NPU should generally have higher selection factor."""
-        npu_factors = []
-        for device in HARD_NPU_DEVICES:
-            if device in constants.TARGET_DEVICE_DESCRIPTIONS:
-                npu_factors.append(
-                    constants.TARGET_DEVICE_DESCRIPTIONS[device]["device_selection_factor"]
-                )
-        if npu_factors:
-            avg_npu = sum(npu_factors) / len(npu_factors)
-            # Hard NPU devices should have above-average selection factor
-            all_factors = [
-                d["device_selection_factor"]
-                for d in constants.TARGET_DEVICE_DESCRIPTIONS.values()
-            ]
-            avg_all = sum(all_factors) / len(all_factors)
-            assert avg_npu >= avg_all, (
-                f"Hard NPU devices avg factor ({avg_npu:.1f}) should be "
-                f">= overall avg ({avg_all:.1f})"
-            )
+    @pytest.mark.parametrize("device", MSPM0_CLASSIFICATION_ONLY)
+    def test_mspm0_no_regression_compilation_override(self, device):
+        """MSPM0 devices use the base compilation config, no dedicated regression override."""
+        profile = constants._DEVICE_PROFILES[device]
+        assert "compilation_regression" not in profile, (
+            f"MSPM0 device {device} should not have a compilation_regression override"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -279,15 +207,6 @@ class TestCompilationProfileCorrectness:
             f"Device {device} missing from _CROSS_COMPILER_OPTIONS"
         )
 
-    def test_all_devices_have_sdk_info(self):
-        """Every device description should include SDK version and release."""
-        for device, desc in constants.TARGET_DEVICE_DESCRIPTIONS.items():
-            assert "sdk_version" in desc, (
-                f"Device {device} missing sdk_version"
-            )
-            assert "sdk_release" in desc, (
-                f"Device {device} missing sdk_release"
-            )
 
 
 # ---------------------------------------------------------------------------

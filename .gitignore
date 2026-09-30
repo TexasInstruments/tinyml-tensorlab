@@ -10,4 +10,5 @@ data/downloads
 .pkl_memoize_py3
 __pycache__/
 build/
+dist_wheels/
 test_logs/

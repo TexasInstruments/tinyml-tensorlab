@@ -40,7 +40,12 @@ _training_module_descriptions = {}
 from .tinyml_tinyverse import radar_classification
 
 ## radar classification
-_model_descriptions.update(radar_classification.get_model_descriptions())
+# radar_classification.get_model_descriptions() re-exports tinyml_modelzoo's shared
+# classification registry unfiltered (its task_type param is a no-op there) - it
+# returns every enabled classification model, including timeseries-only ones, not
+# just radar's. Filter to radar-owned entries here at the module boundary instead.
+_model_descriptions.update({k: v for k, v in radar_classification.get_model_descriptions().items()
+                            if v.get('common', {}).get('task_type') == constants.TASK_TYPE_RADAR_CLASSIFICATION})
 _training_module_descriptions.update({'radar_classification':[constants.TASK_CATEGORY_RADAR_CLASSIFICATION]})
 
 def get_training_module_descriptions(target_device=None, training_device=None):

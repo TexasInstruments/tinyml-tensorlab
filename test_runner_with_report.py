@@ -1,21 +1,34 @@
 #!/usr/bin/env python3
 """
 Test All ModelZoo Configs with HTML Report Generation
-Runs all configs from tinyml-modelzoo/examples and generates an interactive HTML report
-with sortable table, charts, and detailed test results.
+Discovers every training config under tinyml-modelzoo/examples/, runs each one
+through run_tinyml_modelmaker.py as a subprocess, and generates an interactive
+HTML report (sortable table, pass/fail/timeout charts, per-config logs).
+
+By default, every config is run with training.num_gpus forced to 1 (see
+--num-gpus / --no-gpu-override below) via a throwaway copy of the config --
+the original files under tinyml-modelzoo/examples/ are never modified on disk.
+This exists because most example configs ship with num_gpus: 0 (CPU) for a
+typical end-user run, but CPU-bound paths (e.g. auto_quantization's
+Hessian-based bitwidth search) can be an order of magnitude slower than GPU on
+a beefy multi-core CPU, which matters a lot when testing dozens of configs
+back to back. Run --help for the full flag list.
 
 Usage:
     source ~/.pyenv/versions/py310_tinyml/bin/activate
-    python test_runner_with_report.py [--timeout 2400] [--config-pattern PATTERN] \\
-        [--output-file NAME.html] [--save-logs] [--verbose]
+    python test_runner_with_report.py [--timeout SECONDS] [--config-pattern PATTERN] \\
+        [--output-file NAME.html] [--no-save-logs] [--verbose] [--workers N] \\
+        [--examples-dir DIR] [--fresh-datasets] [--num-gpus N] [--no-gpu-override]
 
 Example:
-    python test_runner_with_report.py --timeout 300 --config-pattern "*motor*" --save-logs
+    python test_runner_with_report.py --timeout 300 --config-pattern "*motor*" --verbose
 """
 
 import os
+import shutil
 import sys
 import subprocess
+import tempfile
 import time
 import argparse
 import json
@@ -36,11 +49,9 @@ except ImportError:
 _SCRIPT_DIR = Path(__file__).parent
 MODELZOO_DIR = _SCRIPT_DIR.parent / "tinyml-modelzoo"
 EXAMPLES_DIR = MODELZOO_DIR / "examples"
-LOGS_DIR = _SCRIPT_DIR / "test_logs"
+PROJECTS_DIR = _SCRIPT_DIR / "data" / "projects"
+LOGS_ROOT_DIR = _SCRIPT_DIR / "test_logs"
 RUN_SCRIPT = _SCRIPT_DIR / "tinyml_modelmaker" / "run_tinyml_modelmaker.py"
-
-# Create logs directory
-LOGS_DIR.mkdir(exist_ok=True)
 
 # Error patterns from ModelMaker test suite
 ERROR_PATTERNS = [
@@ -72,8 +83,8 @@ ERROR_PATTERNS = [
     'please check if the given model_name',  # silent exit: unrecognized model_name
 ]
 
-# Lines containing these substrings are known-harmless noise on Python 3.12+ and
-# must not trigger error detection even if they match an ERROR_PATTERN above.
+# Lines containing these substrings are known-harmless noise and must not
+# trigger error detection even if they match an ERROR_PATTERN above.
 NOISE_SUPPRESSIONS = [
     '/loky-',                           # Python 3.12+ multiprocessing resource_tracker
     'resource_tracker',                 # same
@@ -84,6 +95,7 @@ NOISE_SUPPRESSIONS = [
     'BaseConverter.h',                  # same
     'FutureWarning',                    # deprecation notices
     'isinstance(treespec, LeafSpec)',   # torch internal FutureWarning
+    'Memory pre-flight: could not find the NN model memory report',  # non-fatal log.warning(), compiler report just missing
 ]
 
 
@@ -100,12 +112,18 @@ def _has_real_error(text: str) -> bool:
 class ConfigTestRunner:
     """Discovers and runs all configs, capturing results."""
 
-    def __init__(self, examples_dir: Path, timeout: int = 2400, save_logs: bool = False, verbose: bool = False, workers: int = 1):
+    def __init__(self, examples_dir: Path, logs_dir: Path, timeout: int = 2400, save_logs: bool = False,
+                 verbose: bool = False, workers: int = 1, fresh_datasets: bool = False,
+                 num_gpus_override: int = 1):
         self.examples_dir = Path(examples_dir)
+        self.logs_dir = Path(logs_dir)
         self.timeout = timeout
         self.save_logs = save_logs
         self.verbose = verbose
         self.workers = workers
+        self.fresh_datasets = fresh_datasets
+        # None disables the override and runs each config's own num_gpus value as-is.
+        self.num_gpus_override = num_gpus_override
 
     def discover_configs(self, pattern: str = None) -> List[Dict]:
         """
@@ -146,9 +164,30 @@ class ConfigTestRunner:
                 'config_relative': config_relative_str,
                 'folder': folder,
                 'config_name': config_path.name,
+                'dataset_name': (_data.get('dataset') or {}).get('dataset_name'),
             })
 
         return configs
+
+    def _write_gpu_override_config(self, config_path: Path, num_gpus: int) -> Path:
+        """
+        Write a throwaway copy of config_path with training.num_gpus forced to
+        num_gpus, sitting next to the original so any config-relative fields
+        (e.g. model_config: examples/foo/bar.yaml) keep resolving the same way.
+        Caller is responsible for deleting the returned path.
+        """
+        import yaml as _yaml
+        with open(config_path) as f:
+            data = _yaml.safe_load(f)
+        data.setdefault('training', {})['num_gpus'] = num_gpus
+        fd, tmp_name = tempfile.mkstemp(
+            prefix=f".{config_path.stem}.gpu{num_gpus}.",
+            suffix='.yaml',
+            dir=config_path.parent,
+        )
+        with os.fdopen(fd, 'w') as f:
+            _yaml.safe_dump(data, f, sort_keys=False)
+        return Path(tmp_name)
 
     def run_single_config(self, config_info: Dict) -> Dict:
         """
@@ -158,11 +197,27 @@ class ConfigTestRunner:
         """
         config_path = config_info['config_absolute']
 
+        # Force a fresh download/extract instead of reusing whatever a previous
+        # run already cached under data/projects/<dataset_name>/dataset.
+        if self.fresh_datasets and config_info.get('dataset_name'):
+            dataset_dir = PROJECTS_DIR / config_info['dataset_name'] / "dataset"
+            shutil.rmtree(dataset_dir, ignore_errors=True)
+
+        # Run a generated copy with num_gpus forced, instead of editing the
+        # example configs on disk. auto_quantization's Hessian search and
+        # repeated FX-quantized eval passes are far cheaper on GPU; without
+        # this most example configs (num_gpus: 0) would train on CPU here.
+        run_config_path = config_path
+        override_file = None
+        if self.num_gpus_override is not None:
+            override_file = self._write_gpu_override_config(config_path, self.num_gpus_override)
+            run_config_path = override_file
+
         # Build command
         cmd = [
             sys.executable,
             str(RUN_SCRIPT),
-            str(config_path)
+            str(run_config_path)
         ]
 
         # Note: epochs override currently not supported via CLI.
@@ -221,14 +276,15 @@ class ConfigTestRunner:
                 'timestamp': timestamp,
             }
 
-        except subprocess.TimeoutExpired:
+        except subprocess.TimeoutExpired as e:
             duration = time.time() - start_time
             error_message = f"Timeout after {self.timeout}s"
 
             log_file = None
             if self.save_logs:
-                # Create timeout log
-                log_file_path = self._save_timeout_log(config_info, duration, timestamp)
+                # e.stdout/e.stderr hold whatever the subprocess had already
+                # printed before it was killed - worth keeping for debugging.
+                log_file_path = self._save_timeout_log(config_info, duration, timestamp, e.stdout, e.stderr)
                 # Store as filename only
                 log_file = log_file_path.name
 
@@ -260,6 +316,10 @@ class ConfigTestRunner:
                 'timestamp': timestamp,
             }
 
+        finally:
+            if override_file is not None:
+                override_file.unlink(missing_ok=True)
+
     def run_all(self, pattern: str = None) -> Tuple[List[Dict], Dict]:
         """
         Run all discovered configs, return (results, summary).
@@ -277,7 +337,7 @@ class ConfigTestRunner:
         print(f"Total configs:       {len(configs)}")
         print(f"Workers:             {self.workers}")
         print(f"Save logs:           {self.save_logs}")
-        print(f"Logs directory:      {LOGS_DIR}")
+        print(f"Logs directory:      {self.logs_dir}")
         print("=" * 80)
         print()
 
@@ -354,7 +414,7 @@ class ConfigTestRunner:
     def _save_log(self, config_info: Dict, result, status: str, timestamp: str, duration: float) -> Path:
         """Save detailed log for this config run."""
         config_name = config_info['config_relative'].replace('/', '_').replace('.yaml', '')
-        log_file = LOGS_DIR / f"{timestamp}_{config_name}_{status}.log"
+        log_file = self.logs_dir / f"{timestamp}_{config_name}_{status}.log"
 
         with open(log_file, 'w') as f:
             f.write("=" * 80 + "\n")
@@ -376,10 +436,18 @@ class ConfigTestRunner:
 
         return log_file
 
-    def _save_timeout_log(self, config_info: Dict, duration: float, timestamp: str) -> Path:
-        """Save timeout log."""
+    def _save_timeout_log(self, config_info: Dict, duration: float, timestamp: str,
+                          partial_stdout=None, partial_stderr=None) -> Path:
+        """Save timeout log, including whatever output was captured before the kill."""
         config_name = config_info['config_relative'].replace('/', '_').replace('.yaml', '')
-        log_file = LOGS_DIR / f"{timestamp}_{config_name}_TIMEOUT.log"
+        log_file = self.logs_dir / f"{timestamp}_{config_name}_TIMEOUT.log"
+
+        # TimeoutExpired attaches whatever was already buffered as bytes,
+        # even when the subprocess.run() call itself used text=True.
+        def _to_str(output):
+            if isinstance(output, bytes):
+                return output.decode(errors='replace')
+            return output or ""
 
         with open(log_file, 'w') as f:
             f.write("=" * 80 + "\n")
@@ -388,6 +456,15 @@ class ConfigTestRunner:
             f.write(f"Config:      {config_info['config_relative']}\n")
             f.write(f"Status:      TIMEOUT\n")
             f.write(f"Duration:    {duration:.2f}s (timeout: {self.timeout}s)\n")
+            f.write("\n" + "=" * 80 + "\n")
+            f.write("STDOUT (captured before kill):\n")
+            f.write("=" * 80 + "\n")
+            f.write(_to_str(partial_stdout))
+            f.write("\n\n" + "=" * 80 + "\n")
+            f.write("STDERR (captured before kill):\n")
+            f.write("=" * 80 + "\n")
+            f.write(_to_str(partial_stderr))
+            f.write("\n")
 
         return log_file
 
@@ -412,7 +489,8 @@ class HTMLReportGenerator:
     def __init__(self):
         self.env = Environment()
 
-    def generate(self, results: List[Dict], summary: Dict, output_file: str = 'tinyml_test_report.html') -> str:
+    def generate(self, results: List[Dict], summary: Dict, logs_dir: Path,
+                 output_file: str = 'tinyml_test_report.html') -> str:
         """
         Generate HTML report and save to file.
         Returns path to generated report.
@@ -427,7 +505,7 @@ class HTMLReportGenerator:
         html_content = self._render_template(results_by_folder, folder_stats, summary)
 
         # Save to file
-        output_path = LOGS_DIR / output_file
+        output_path = Path(logs_dir) / output_file
         with open(output_path, 'w') as f:
             f.write(html_content)
 
@@ -869,18 +947,33 @@ class HTMLReportGenerator:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Test all ModelZoo configs and generate HTML report',
+        description=(
+            'Run every training config under tinyml-modelzoo/examples/ through '
+            'run_tinyml_modelmaker.py and generate an interactive HTML pass/fail/timeout '
+            'report. By default, training.num_gpus is forced to 1 for every config via a '
+            'throwaway copy of its YAML (see --num-gpus / --no-gpu-override) -- the example '
+            'config files on disk are never modified.'
+        ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='''
 Examples:
-  # Test all configs
+  # Test all configs (num_gpus forced to 1 for every config, see --num-gpus)
   python test_runner_with_report.py
 
-  # Test only motor_bearing_fault configs with 1 epoch (flow testing)
-  python test_runner_with_report.py --timeout 300 --config-pattern "*motor*" --epochs 1
+  # Quick smoke test of just the motor_bearing_fault configs
+  python test_runner_with_report.py --timeout 300 --config-pattern "*motor*" --verbose
 
-  # Test with verbose output and custom output file
-  python test_runner_with_report.py --verbose --output-file custom_report.html --epochs 2
+  # Test with each config's own num_gpus value instead of forcing GPU
+  python test_runner_with_report.py --no-gpu-override
+
+  # Force CPU instead of GPU for every config (e.g. to reproduce a CPU-only bug)
+  python test_runner_with_report.py --num-gpus 0
+
+  # Run 4 configs at a time instead of sequentially
+  python test_runner_with_report.py --workers 4
+
+  # Re-download every config's dataset instead of reusing a cached copy
+  python test_runner_with_report.py --fresh-datasets
         '''
     )
     parser.add_argument('--timeout', type=int, default=2400,
@@ -897,6 +990,18 @@ Examples:
                        help='Number of parallel workers (default: 1, sequential)')
     parser.add_argument('--examples-dir', type=str, default=None,
                        help=f'Examples directory (default: {EXAMPLES_DIR})')
+    parser.add_argument('--fresh-datasets', action='store_true',
+                       help='Delete each config\'s cached data/projects/<dataset_name>/dataset '
+                            'directory before running it, forcing a fresh download+extract '
+                            'instead of reusing a previous run\'s cache')
+    parser.add_argument('--num-gpus', type=int, default=1,
+                       help='Force training.num_gpus to this value in every config before '
+                            'running it (default: 1). The original example config files on '
+                            'disk are never modified -- a throwaway override copy is used '
+                            'for the subprocess run and deleted immediately after.')
+    parser.add_argument('--no-gpu-override', action='store_true',
+                       help='Run each config with its own num_gpus value as-is, '
+                            'instead of forcing --num-gpus')
 
     args = parser.parse_args()
 
@@ -906,13 +1011,22 @@ Examples:
         print(f"ERROR: Examples directory not found: {examples_dir}")
         return 1
 
+    # Every invocation gets its own timestamped subdirectory so results from
+    # different runs never mix or get overwritten.
+    run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    logs_dir = LOGS_ROOT_DIR / run_timestamp
+    logs_dir.mkdir(parents=True, exist_ok=True)
+
     # Run tests
     runner = ConfigTestRunner(
         examples_dir=examples_dir,
+        logs_dir=logs_dir,
         timeout=args.timeout,
         save_logs=not args.no_save_logs,
         verbose=args.verbose,
-        workers=args.workers
+        workers=args.workers,
+        fresh_datasets=args.fresh_datasets,
+        num_gpus_override=None if args.no_gpu_override else args.num_gpus,
     )
 
     results, summary = runner.run_all(pattern=args.config_pattern)
@@ -923,7 +1037,7 @@ Examples:
     # Generate HTML report
     print("Generating HTML report...")
     generator = HTMLReportGenerator()
-    report_path = generator.generate(results, summary, args.output_file)
+    report_path = generator.generate(results, summary, logs_dir, args.output_file)
     print(f"✓ Report saved to: {report_path}")
     print()
 

@@ -6,17 +6,12 @@ This is a tool for collecting data, training and compiling AI models for use on 
 Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.
 
 ## Tasks supported
-* Time Series Classification
-* ARC Fault
-* ECG Classification
-* Motor Fault
-* Fan Blower Imbalance Fault
-* PIR Detection
+* MNIST Classification
 
 ## Supported target devices
 These are the devices that are supported currently. As additional devices are supported, this section will be updated.
 
-Supported devices: F280013, F28E12, F280015, F28003, F28004, F2837, F28P55, F28P65, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, F29H85, F29P58, F29P32, F2807x, F28002x, F28P551x, F2837xS, F2838x, CC2755, CC2745, CC1352, CC1312, CC1354, CC1314, CC35X1, AM263, AM263P, AM261, AM13E2
+Supported devices: F280013, F280015, F28003, F28004, F2837, F28P55, F28P65, F29H85, MSPM0G3507, MSPM0G3519, MSPM0G5187, MSPM33C32, MSPM33C34, CC2755, CC1352, CC35X1, CC1354, AM13E2
 
 
 ## Additional information
@@ -29,7 +24,7 @@ Supported devices: F280013, F28E12, F280015, F28003, F28004, F2837, F28P55, F28P
 
 
 ####  Dataset format
-The dataset should have the following structure.
+The dataset should have the following structure. 
 
 <pre>
 data/projects/<dataset_name>/dataset
@@ -58,8 +53,8 @@ After the model compilation, the compiled models will be available in a folder i
 The config file can be in .yaml or in .json format
 
 ## Model deployment
-- The deploy page provides a button to download the compiled model artifacts to the development board.
-- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference.
+- The deploy page provides a button to download the compiled model artifacts to the development board. 
+- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. 
 - Please see "C2000Ware Reference Design" in the SDK documentation for more information.
 
 ## Glossary of terms

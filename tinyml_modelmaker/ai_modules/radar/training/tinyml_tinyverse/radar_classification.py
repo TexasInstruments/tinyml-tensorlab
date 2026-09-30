@@ -86,8 +86,6 @@ class ModelTraining(BaseRadarModelTraining):
     def _get_task_specific_test_argv(self):
         """Get classification-specific test arguments."""
         return [
-            # Feature Extraction based on Neural Networks
-            '--nn-for-feature-extraction', f'{self.params.data_processing_feature_extraction.nn_for_feature_extraction}',
             # Classification Task Specific Params
             '--file-level-classification-log', f'{self.params.training.file_level_classification_log_path}',
         ]

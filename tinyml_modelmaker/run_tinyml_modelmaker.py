@@ -156,6 +156,11 @@ def main(config):
     # update the params with model_description, preset and config
     params = params.update(model_description or {}).update(dataset_preset_description).update(feature_extraction_preset_description).update(compilation_preset_description).update(config)
 
+    # auto_quantization needs NPU hardware; force off on non-NPU devices unless the user explicitly set it
+    has_npu = getattr(ai_target_module.constants, 'has_npu', None)
+    if has_npu is not None and 'auto_quantization' not in config.get('training', {}) and not has_npu(target_device):
+        params.training.auto_quantization = False
+
     # create the runner
     model_runner = ai_target_module.runner.ModelRunner(params)
 
