@@ -53,10 +53,28 @@ Compact in-house dataset and the default for the example `config.yaml`. Point `i
 
 Larger, more diverse dataset intended for robust model evaluation. Requires running `preprocess_dsd.py` before training — update `IN_ROOT` and `OUT_ROOT` in the script, run it, then point `input_data_path` in `config.yaml` to the output directory.
 
-- 650 MB+ compressed; over 6.4 million data points
+- 2GB+ compressed; over 6.4 million data points
 - Captured across 8 recording days
 - 13 fine-grained activity conditions collapsed to binary presence/no-presence
 - Generalises well across different indoor rooms regardless of layout or size
+
+## wifi_presence_detection_dsd_2000.zip
+
+Uniformly sampled subset of `wifi_presence_detection_dsd`, containing 2000 samples split
+evenly among `presence`, and `no_presence` classes. Maintains dataset diversity by sampling equally from each fine-grained activity, while remaining relatively compact for easy testing.
+
+- 111.94 MB compressed and post preprocessing; over 0.5 million data points
+- Generalizes well in confined indoor environments
+- Can be used directly, already preprocessed
+
+## wifi_presence_detection_dsd_4400.zip
+
+Uniformly sampled subset of `wifi_presence_detection_dsd`, containing 4400 samples split
+evenly among `presence`, and `no_presence` classes. Maintains dataset diversity by sampling equally from each fine-grained activity, while remaining relatively compact for easy testing.
+
+- 246.31 MB compressed post preprocessing; over 1.1 million data points
+- Generalizes well in confined indoor environments
+- Can be used directly, already preprocessed
 
 ### Preprocessing
 
@@ -122,9 +140,25 @@ The model accepts input of shape `(1, 26, 1, 64)` (batch × subcarrier-frequency
 
 | Metric | Float model | 8W8A quantized (QAT) | Test set |
 |--------|------------|----------------|----------|
-| **Accuracy (Acc@1)** | 95.58% | 95.62% | 98.90% |
+| **Accuracy (Acc@1)** | 95.47% | 95.60% | 98.85% |
 | **F1-Score** | 0.956 | 0.956 | — |
 | **AUC ROC** | 0.986 | 0.986 | 0.997 |
+
+**`wifi_presence_detection_dsd_2000.zip`**
+
+| Metric | Float model | 8W8A quantized (QAT) | Test set |
+|--------|------------|----------------|----------|
+| **Accuracy (Acc@1)** | 97.67% | 97.67% | 99.00% |
+| **F1-Score** | 0.973 | 0.973 | — |
+| **AUC ROC** | 0.991 | 0.990 | 0.995 |
+
+**`wifi_presence_detection_dsd_4400.zip`**
+
+| Metric | Float model | 8W8A quantized (QAT) | Test set |
+|--------|------------|----------------|----------|
+| **Accuracy (Acc@1)** | 97.27% | 97.35% | 99.50% |
+| **F1-Score** | 0.977 | 0.977 | — |
+| **AUC ROC** | 0.971 | 0.971 | 0.979 |
 
 ## Training and Deployment Process
 
