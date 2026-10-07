@@ -53,6 +53,10 @@ tinyml-modelzoo/
    ```
    This pulls in the rest of the toolchain as prebuilt wheels automatically -
    no need to clone anything else.
+3. (or) if you want to directly use this as a Python package and plan to make no model additions/changes, you might as well install the python package directly:
+    ```commandline
+    pip install http://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_modelzoo-1.5.0-py3-none-any.whl
+    ```
 
 ### Running an Example
 
@@ -190,6 +194,7 @@ purpose-built config for that specific use case.
 | Example | Data Type | Description |
 |---------|-----------|--------------|
 | [generic_timeseries_regression](examples/generic_timeseries_regression/) | — | Generic regression example for continuous value prediction. |
+| [bms_soc_estimation](examples/bms_soc_estimation/) | Voltage/Current/Temperature | Estimate lithium-ion battery State of Charge (SOC) for battery management systems. |
 | [mosfet_temp_prediction](examples/mosfet_temp_prediction/) | Temperature/Power | Predict MOSFET temperature from electrical parameters. |
 | [torque_measurement_regression](examples/torque_measurement_regression/) | Voltage/Current/Speed/Temperature | Predict PMSM motor torque from current measurements. |
 | [induction_motor_speed_prediction](examples/induction_motor_speed_prediction/) | Voltage/Current | Predict induction motor speed from electrical signals. |
@@ -220,6 +225,8 @@ purpose-built config for that specific use case.
 |---------|-----------|--------------|
 | [google_speech_command](examples/google_speech_command/) | Audio | 12-class keyword spotting from audio using MFCC + DSCNN model. |
 | [cough_detection](examples/cough_detection/) | Audio | Binary cough vs. other-sound detection using LPC features + ResNet model. |
+| [glass_break_detection](examples/glass_break_detection/) | Audio | Detect glass-breaking acoustic events for security/home-automation systems using FFT features + DSCNN model. |
+| [wake_word_detection](examples/wake_word_detection/) | Audio | Detect the "OK Kilby" wake word using a learned-filterbank front-end + TCDS-ResNet model. |
 
 ### Image Classification
 
@@ -277,6 +284,7 @@ For detailed guidelines, see [NPU Configuration Guidelines](docs/NPU_CONFIGURATI
 | `CLS_8k_NPU` | ~8K | CNN (DW-Sep) | Yes | Depthwise separable |
 | `CLS_13k_NPU` | ~13K | CNN | Yes | Higher capacity |
 | `CLS_20k_NPU` | ~20K | CNN | Yes | High capacity |
+| `CLS_24k_NPU` | ~24K | CNN | Yes | Supports integer on-device learning (ODL) fine-tuning |
 | `CLS_40k_NPU` | ~40K | CNN | Yes | Advanced model for complex tasks |
 | `CLS_55k_NPU` | ~55K | CNN | Yes | Maximum accuracy |
 | `ArcFault_model_200_t` | ~200 | Specialized | No | Arc fault detection |
@@ -353,6 +361,8 @@ Note: LSTM models are not NPU-supported.
 |------------|------------|--------------|-----|-------------|
 | `DSCNN_NPU` | ~9K | DSCNN | Yes | Depthwise separable CNN for keyword spotting; input (1, 49, 10) MFCC |
 | `TCDS_ResNet_NPU` | ~24K | Temporal Channel-Decoupled Separable CNN | Yes | Cough detection from LPC features; input (1, 100, 70), SRAM-efficient (no 2D spatial buffers) |
+| `DSCNN_GB_NPU` | ~6K | DSCNN | Yes | Glass break detection from FFT-binned features; input (1, 86, 32), mixed-precision (4-bit DW/PW, 8-bit stem) |
+| `TCDS_ResNet_FB_NPU` | Varies | Learned Filterbank + TCDS-ResNet | Yes | Wake word detection directly from raw audio via a jointly-trained Conv1D filterbank front-end; mixed-precision (2-bit backbone, 8-bit stem/head) |
 
 ### Image Classification Models
 
@@ -412,17 +422,19 @@ These categories can look similar from a distance, so here's how to tell them ap
   <details>
 
   - Until **1.4.0** (2026-Jun), this history lived in the [tinyml-tensorlab](https://github.com/TexasInstruments/tinyml-tensorlab) repository on GitHub; that repository's source is now private. Starting with **1.5.0** (2026-Sep), `tinyml-modelzoo` (this repo) is the standalone, pip-installable entry point to TI's MCU AI flow — a simplified, easy-to-install replacement for what previously required cloning `tinyml-tensorlab`'s full set of component repos.
-  - Device Support: 30 MCU/wireless devices supported
+  - Device Support: 33 MCU/wireless devices supported
     - Added AM13E2 support for vision classification and added radar tasks
     - Added fel_memory support (feature-extraction library) for AM13 and C28x (F280013x, F280015x, F28002x) devices — enables on-device RAM/Flash estimation
     - Gen3 F28x device support reconciled: F2838x, F28P551x, F28002x, and new F28E12x device profile added across regression, forecasting, and anomaly-detection models; over-broad device lists tightened (e.g. arc fault, generic timeseries classification) to match verified per-model support
     - Task-level target device lists for radar, image, and audio classification are now derived from each model's real device support instead of a hand-maintained list, fixing several tasks (e.g. radar classification) that had advertised devices no model actually supported
-  - Applications Supported: 34 example applications (4 generic timeseries tasks + 30 specific applications)
-  - Models: 81 models across classification/regression/forecasting/anomaly-detection (timeseries + radar) plus vision and audio classification
+  - Applications Supported: 37 example applications (4 generic timeseries tasks + 33 specific applications)
+  - Models: 78 models across classification/regression/forecasting/anomaly-detection (timeseries + radar) plus vision and audio classification
     - Added TCDSResNet and a compressed DSCNN for audio classification (cough detection), both NPU-compliant
     - Compressed MobileNet_v1 to fit AM13 memory budget
     - Added Radar Point Cloud Classification support (new model + dataset flow )
-    - New example applications: cough detection (audio), WiFi CSI presence detection, Google speech command
+    - Added a learned-filterbank front-end (jointly trained Conv1D bank) paired with TCDS-ResNet for wake word detection, and a compact DSCNN variant for glass break detection, both NPU-compliant with mixed-precision quantization
+    - Added a 24K-parameter NPU classification model with integer on-device learning (ODL) support, plus new integer ODL documentation
+    - New example applications: cough detection (audio), WiFi CSI presence detection, Google speech command, glass break detection (audio), wake word detection (audio), BMS State-of-Charge estimation (regression)
     - Re-enabled and renamed the washing machine load weighing regression example (`washing_machine_load_weighing`, was `reg_washing_machine`)
   - Flows:
     - Added early stopping for training (patience + min-delta, on by default) across all task types — timeseries classification/regression/forecasting/anomaly-detection and image classification
@@ -588,8 +600,10 @@ These categories can look similar from a distance, so here's how to tell them ap
 
 ## Additional Resources
 
+- [User Guide](docs/user_guide/readme.md) - install methods (wheel or clone), the full applications list, and a per-category (timeseries/audio/image/radar) YAML config reference
 - [TI's Neural Network Compiler Documentation](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
 - [NPU Configuration Guidelines](docs/NPU_CONFIGURATION_GUIDELINES.md) - Design models optimized for TI NPU acceleration
+- [Integer On-Device Learning](docs/integer_ondevice_training/readme.md) - Fine-tune a deployed classification model on-device using integer-only arithmetic
 - [Edge AI Studio for MCUs](https://www.ti.com/tool/download/EDGE-AI-STUDIO-MCU/) - No-code GUI for data collection & model development
 
 ---

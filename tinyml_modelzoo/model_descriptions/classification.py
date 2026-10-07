@@ -1504,7 +1504,7 @@ _model_descriptions = {
                         dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
         ),
     }),
-    'SimpleCNN2D_BN_t': deep_update_dict(deepcopy(template_model_description), {
+    'WiFiPresDet_4.7k_CDE': deep_update_dict(deepcopy(template_model_description), {
     'common': dict(
         task_type=constants.TASK_TYPE_GENERIC_TS_CLASSIFICATION,
         generic_model=False,
@@ -1512,14 +1512,14 @@ _model_descriptions = {
     ),
     'training': dict(
         model_training_id='SimpleCNN2D_BN',
-        model_name='SimpleCNN2D_BN_t',
+        model_name='WiFiPresDet_4.7k_CDE',
             target_devices=[
                 constants.TARGET_DEVICE_CC35X1,
             ],
         properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
                     dict(type="group", dynamic=True, script="generictimeseriesclassification.py", name="train_group", label="Training Parameters", default=[])]
-    ),
-}),
+        ),
+    }),
     'Pose_and_Fall_model': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
             generic_model=False,
@@ -1564,7 +1564,7 @@ enabled_models_list = [
     'ArcFault_model_200_t', 'ArcFault_model_300_t', 'ArcFault_model_700_t', 'ArcFault_model_1400_t',
     'MotorFault_model_1_t', 'MotorFault_model_2_t', 'MotorFault_model_3_t', 'PIRDetection_model_1_t',
     'FanImbalance_model_1_t', 'FanImbalance_model_2_t', 'FanImbalance_model_3_t', 'Pose_and_Fall_model', 'ElectricalFault_model_40k_t',
-    'GearboxFault_model_1.2k_t', 'GearboxFault_model_1.5k_t', 'SimpleCNN2D_BN_t'
+    'GearboxFault_model_1.2k_t', 'GearboxFault_model_1.5k_t', 'WiFiPresDet_4.7k_CDE'
 ]
 
 

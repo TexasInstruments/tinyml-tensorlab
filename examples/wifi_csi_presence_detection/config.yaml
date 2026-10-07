@@ -46,7 +46,7 @@ data_processing_feature_extraction:
   # gof_test: True
 
 training:
-  model_name: SimpleCNN2D_BN_t
+  model_name: WiFiPresDet_4.7k_CDE
   model_config: ''
   batch_size: 32
   training_epochs: 50
