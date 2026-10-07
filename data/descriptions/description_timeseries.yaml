@@ -14656,7 +14656,7 @@ model_descriptions:
       training_path: null
       training_path_quantization: null
       weight_decay: 0.0001
-  SimpleCNN2D_BN_t:
+  WiFiPresDet_4.7k_CDE:
     common:
       download_path: ./data/downloads
       generic_model: false
@@ -14780,7 +14780,7 @@ model_descriptions:
       log_summary_regex: null
       lr_scheduler: cosineannealinglr
       model_config: null
-      model_name: SimpleCNN2D_BN_t
+      model_name: WiFiPresDet_4.7k_CDE
       model_spec: null
       model_training_id: SimpleCNN2D_BN
       nas_enabled: false

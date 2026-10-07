@@ -549,7 +549,7 @@ FEATURE_EXTRACTION_PRESET_DESCRIPTIONS = dict(
         common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
     WiFiCSI_128Input_L2Norm2DFFT_64x26Feature_1Frame_52Subcarriers=dict(
         data_processing_feature_extraction=dict(feat_ext_transform=['L2_NORM_ROW', 'FFT_FE', 'FFT_POS_HALF', 'ABS', 'LOG_DB', 'FFT_COL'], data_proc_transforms=['Downsample', 'SimpleWindow'], sampling_rate=128, new_sr=64, frame_size=128, feature_size_per_frame=64, num_frame_concat=1, frame_skip=1, min_bin=0, variables=52, log_threshold=1.0, log_mul=1, log_base=10),
-        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION), ),
+        common=dict(task_type=TASK_TYPE_GENERIC_TS_CLASSIFICATION),),
 )
 
 DATASET_EXAMPLES = dict(
@@ -997,8 +997,10 @@ def _get_device_to_tasks_mapping():
             # Add only the task type (not task_category)
             device_to_tasks[device].add(task_type)
 
-    # Convert sets to lists
-    return {device: list(tasks) for device, tasks in device_to_tasks.items()}
+    # Convert sets to lists; sort for deterministic output (set iteration order
+    # is hash-randomized across process runs, which made PRESET_DESCRIPTIONS'
+    # task_type key order change on every run)
+    return {device: sorted(tasks) for device, tasks in device_to_tasks.items()}
 
 
 def _build_preset_descriptions():
