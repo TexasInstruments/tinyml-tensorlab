@@ -214,7 +214,7 @@ def create_template_model_description(task_category, task_type, dataset_loader=N
 
 
 def get_model_descriptions_filtered(model_descriptions, enabled_models_list, task_type=None):
-    return {k: v for k, v in model_descriptions.items() if k in enabled_models_list}
+    return {k: model_descriptions[k] for k in enabled_models_list if k in model_descriptions}
 
 
 def get_model_description_by_name(model_descriptions, enabled_models_list, model_name):
