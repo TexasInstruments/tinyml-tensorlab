@@ -178,7 +178,7 @@ def get_data_proc_feat_ext_recommendations(
     prefer_fft: bool,
     need_full_spectrum: bool,
     need_temporal_ctx: bool,
-    min_sample_or_seq_length: int,
+    shortest_sample_len: int,
     variables: Optional[int] = None,
     sampling_rate: Optional[int] = None,
     new_sr: Optional[int] = None,
@@ -186,28 +186,19 @@ def get_data_proc_feat_ext_recommendations(
     """
     Tool: Get intelligently ranked recommendations for data processing & feature extraction.
 
-    Enhanced behavior:
-    1. Dynamically ranks ALL compatible presets by multi-factor scoring
-    2. Returns top 3 in recommended_presets
-    3. Returns full ranked list in ranked_presets_detailed
-    4. Filters by variables, memory constraint, spectrum preference
-    5. Provides reasoning for each recommendation
-
     Args:
         task_type: Task type (e.g., 'motor_fault', 'arc_fault', 'generic_timeseries_classification').
+        shortest_sample_len: The SHORTEST sample length (rows) measured in the dataset.
+            Presets with frame_size > shortest_sample_len are excluded — those samples
+            would be silently skipped during training, causing data loss.
         variables: Number of sensor channels. Filters to compatible presets.
         sampling_rate: Original data sampling rate in Hz. Triggers DownSample suggestions.
         new_sr: Target sampling rate if downsampling desired.
-        prefer_fft: True = prefer FFT presets, False = prefer RAW, None = no preference.
+        prefer_fft: True = prefer FFT presets, False = prefer RAW.
 
     Returns:
-        Dict with:
-        - success: bool
-        - recommended_presets: list of top 3 preset dicts
-        - ranked_presets_detailed: list of ALL compatible presets ranked by score
-        - preset_ranking_factors: dict showing what drove the ranking
-        - required_data_proc, optional_data_proc_transforms, notes: from schema
-        - all_preset_names, custom_pipeline_option, context_paths: unchanged
+        ranked_presets_detailed: all compatible presets ranked by score (frame_size <= shortest_sample_len enforced)
+        required_data_proc, optional_data_proc_transforms, downsample_suggestion, context_paths
     """
     try:
 
@@ -226,7 +217,7 @@ def get_data_proc_feat_ext_recommendations(
             prefer_fft=prefer_fft,
             need_full_spectrum=need_full_spectrum,
             need_temporal_ctx=need_temporal_ctx,
-            min_sample_or_seq_length=min_sample_or_seq_length
+            shortest_sample_len=shortest_sample_len
         )
 
 
@@ -245,22 +236,13 @@ def get_data_proc_feat_ext_recommendations(
 
         if task_recs:
             optional_transforms = task_recs.get("optional_data_proc", [])
-            transform_descriptions = {
-                "SimpleWindow": "Segment continuous time series into overlapping fixed-length windows (frame_size samples each).",
-                "DownSample": "Reduce sampling rate by decimating — useful for high-frequency signals or reducing data size.",
-                "AddNoise": "Data augmentation: add Gaussian/Laplace/uniform noise to training samples. Improves noise robustness.",
-                "Crop": "Data augmentation: randomly crop sub-sequences. Increases effective dataset size.",
-                "Drift": "Data augmentation: add smooth baseline drift. Simulates sensor drift.",
-                "Dropout": "Data augmentation: randomly zero-out time points. Simulates missing data.",
-                "TimeWarp": "Data augmentation: randomly speed up/slow down sub-sequences. Useful for gesture/activity recognition.",
-                "Pool": "Data augmentation: apply max/min/average pooling to reduce temporal resolution.",
-                "Quantize": "Data augmentation: quantize signal to discrete levels.",
-            }
 
-            optional_with_desc = [
-                {"name": t, "description": transform_descriptions.get(t, "")}
-                for t in optional_transforms
-            ]
+            optional_with_desc = []
+            for t in optional_transforms:
+                aug_def = feature_schema.get_augmenter(t)
+                transform_def = feature_schema.get_transform(t)
+                desc = (aug_def or transform_def or {}).get("description", "")
+                optional_with_desc.append({"name": t, "description": desc})
 
             required_data_proc = [
                 {
@@ -290,11 +272,9 @@ def get_data_proc_feat_ext_recommendations(
                 "Use feature_extraction_name='Custom_<YourName>' to identify a custom pipeline."
             ),
             "context_paths": {
-                "feat_ext_docs":             CONTEXT_PATHS["feat_ext_docs"],
-                "preset_definitions":        CONTEXT_PATHS["feat_ext_presets"],
-                "augmenters_and_transforms": CONTEXT_PATHS["augmenters_doc"],
-                "basic_transforms":          CONTEXT_PATHS["basic_transforms"],
-                "examples_directory":        CONTEXT_PATHS["examples_dir"],
+                "fe_transforms_reference": CONTEXT_PATHS["fe_transforms_doc"],
+                "data_proc_reference":     CONTEXT_PATHS["data_proc_doc"],
+                "examples_directory":      CONTEXT_PATHS["examples_dir"],
             },
         }
     except Exception as e:
@@ -302,85 +282,7 @@ def get_data_proc_feat_ext_recommendations(
         raise
 
 
-# ─── Tool 2: Context for answering user questions ─────────────────────────────
-
-def get_transform_context(transform_or_preset: str) -> Dict[str, Any]:
-    """
-    Tool: Return file paths and descriptions for the agent to read when the user
-    asks a question about a specific data processing transform or feature extraction.
-
-    The agent should READ the returned file_paths to gain enough context to
-    answer the user's question accurately.
-
-    Args:
-        transform_or_preset: Name of a transform or preset the user is asking about.
-            Examples: 'SimpleWindow', 'AddNoise', 'FFT_FE', 'BINNING',
-                      'Generic_1024Input_FFTBIN_64Feature_8Frame', 'Custom_Default'.
-
-    Returns:
-        Dict with:
-        - file_paths: list of file paths the agent should read for context
-        - inline_description: brief description from local knowledge (if available)
-        - is_augmenter: whether this is a data augmentation transform
-        - is_feat_ext_step: whether this is a feature extraction pipeline step
-        - is_preset: whether this is a named feature extraction preset
-    """
-    name = transform_or_preset.strip()
-    result = {
-        "name": name,
-        "file_paths": [],
-        "inline_description": "",
-        "is_augmenter": False,
-        "is_feat_ext_step": False,
-        "is_preset": False,
-    }
-
-    # Check if it's a known augmenter
-    aug_def = feature_schema.get_augmenter(name)
-    if aug_def:
-        # augmenters_doc is a consolidated local .md file covering all augmenters
-        result["file_paths"].append(CONTEXT_PATHS["augmenters_doc"])
-        result["is_augmenter"] = True
-        result["inline_description"] = aug_def.get("description", "")
-
-    # Check if it's a basic data proc transform
-    elif name in ("SimpleWindow", "DownSample", "Downsample"):
-        result["file_paths"].append(CONTEXT_PATHS["basic_transforms"])
-        result["is_feat_ext_step"] = True
-        transform_def = feature_schema.get_transform(name if name != "Downsample" else "DownSample")
-        if transform_def:
-            result["inline_description"] = transform_def.get("description", "")
-        else:
-            result["inline_description"] = f"Data processing transform: {name}"
-
-    # Check if it's a named preset
-    else:
-        cfg = feature_schema.get_preset(name)
-        if cfg:
-            result["file_paths"].append(CONTEXT_PATHS["feat_ext_docs"])
-            result["file_paths"].append(CONTEXT_PATHS["feat_ext_presets"])
-            result["is_preset"] = True
-            result["inline_description"] = cfg.get("description", "")
-            result["preset_config"] = {k: v for k, v in cfg.items() if k != "description"}
-            return result
-
-    # Feature extraction pipeline steps (FFT_FE, BINNING, etc.)
-    transform_def = feature_schema.get_transform(name)
-    if transform_def:
-        result["file_paths"].append(CONTEXT_PATHS["feat_ext_docs"])
-        result["file_paths"].append(CONTEXT_PATHS["feat_ext_presets"])
-        result["is_feat_ext_step"] = True
-        result["inline_description"] = transform_def.get("description", f"See feature extraction documentation for details on '{name}'.")
-    else:
-        result["file_paths"].append(CONTEXT_PATHS["feat_ext_docs"])
-        result["file_paths"].append(CONTEXT_PATHS["feat_ext_presets"])
-        result["is_feat_ext_step"] = True
-        result["inline_description"] = f"See feature extraction documentation for details on '{name}'."
-
-    return result
-
-
-# ─── Tool 3: Validate data shape ──────────────────────────────────────────────
+# ─── Tool 2: Validate data shape ──────────────────────────────────────────────
 
 def validate_feat_ext_data_shape(
     data_path: str,
