@@ -8,7 +8,7 @@ from typing import Optional, Dict, Any
 
 import yaml
 
-_DEFAULT_MODELZOO_PATH = os.path.expanduser("~/tinyml-tensorlab/tinyml-modelzoo")
+_DEFAULT_MODELZOO_PATH = os.path.expanduser("~/tinyml-modelzoo")
 _DEFAULT_EXAMPLES_DIR = os.path.join(_DEFAULT_MODELZOO_PATH, "examples")
 _DEFAULT_RUN_SCRIPT = os.path.join(_DEFAULT_MODELZOO_PATH, "run_tinyml_modelzoo.sh")
 
@@ -30,7 +30,7 @@ def _read_yaml_source(yaml_str: Optional[str], yaml_file: Optional[str], section
 
 def generate_complete_config_file(
     task_name: str,
-    tinyml_base_path: Optional[str] = None,
+    tinyml_base_path: Optional[str] = None,   # legacy alias — pass modelzoo path here
     output_dir: Optional[str] = None,
     # Inline YAML strings (legacy / fallback)
     common_yaml: Optional[str] = None,
@@ -55,7 +55,7 @@ def generate_complete_config_file(
     PREFERRED USAGE — pass yaml_file paths produced by --save-yaml in earlier steps:
         {
           "task_name": "motor_fault_demo",
-          "tinyml_base_path": "/home/user/tinyml-tensorlab",
+          "output_dir": "/home/user/tinyml-modelzoo/examples/motor_fault_demo",
           "common_yaml_file": "/tmp/tinyml_work/common.yaml",
           "dataset_yaml_file": "/tmp/tinyml_work/dataset.yaml",
           "feature_extraction_yaml_file": "/tmp/tinyml_work/feat_ext.yaml",
@@ -70,9 +70,9 @@ def generate_complete_config_file(
     File-based variants take precedence over inline strings when both are provided.
 
     Output path resolution (first match wins):
-        1. output_dir — explicit override
-        2. {tinyml_base_path}/tinyml-modelzoo/examples/{task_name}/
-        3. ~/tinyml-tensorlab/tinyml-modelzoo/examples/{task_name}/ (default)
+        1. output_dir — explicit override (preferred)
+        2. {tinyml_base_path}/examples/{task_name}/  (tinyml_base_path = modelzoo root)
+        3. ~/tinyml-modelzoo/examples/{task_name}/ (default)
 
     Returns:
         success, yaml_file_path, config (dict), errors, warnings
@@ -134,8 +134,7 @@ def generate_complete_config_file(
     if output_dir:
         out_dir = os.path.expanduser(output_dir)
     elif tinyml_base_path:
-        modelzoo_path = os.path.join(os.path.expanduser(tinyml_base_path), "tinyml-modelzoo")
-        examples_dir = os.path.join(modelzoo_path, "examples")
+        examples_dir = os.path.join(os.path.expanduser(tinyml_base_path), "examples")
         safe_task = task_name.replace(" ", "_").replace("/", "_")
         out_dir = os.path.join(examples_dir, safe_task)
     else:
@@ -168,12 +167,12 @@ def generate_complete_config_file(
 
 def run_example(
     config_yaml_path: str,
-    tinyml_base_path: Optional[str] = None,
+    tinyml_base_path: Optional[str] = None,   # legacy alias — pass modelzoo path here
 ) -> Dict[str, Any]:
     """
     Tool: Run tinyml-modelzoo with the given config.yaml.
 
-    Executes: bash {tinyml_base_path}/tinyml-modelzoo/run_tinyml_modelzoo.sh <config_yaml_path>
+    Executes: bash {tinyml_modelzoo_path}/run_tinyml_modelzoo.sh <config_yaml_path>
 
     Call this only after generate_complete_config_file has succeeded and the user
     confirms they want to start training/compilation.
@@ -181,7 +180,7 @@ def run_example(
     Args:
         config_yaml_path: Absolute path to the config.yaml file to run.
             Use yaml_file_path from generate_complete_config_file.
-        tinyml_base_path: Path to tinyml-tensorlab root. Defaults to ~/tinyml-tensorlab.
+        tinyml_base_path: Path to tinyml-modelzoo root. Defaults to ~/tinyml-modelzoo.
 
     Returns:
         success, returncode, stdout, stderr, errors
@@ -199,7 +198,7 @@ def run_example(
 
     if tinyml_base_path:
         run_script = os.path.join(
-            os.path.expanduser(tinyml_base_path), "tinyml-modelzoo", "run_tinyml_modelzoo.sh"
+            os.path.expanduser(tinyml_base_path), "run_tinyml_modelzoo.sh"
         )
     else:
         run_script = _DEFAULT_RUN_SCRIPT

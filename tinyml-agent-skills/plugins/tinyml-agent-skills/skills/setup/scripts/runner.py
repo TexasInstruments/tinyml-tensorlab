@@ -23,17 +23,16 @@ FUNCTION_MAP = {
 
 
 def _check_installation(kwargs):
-    """Built-in function: verify a tinyml-tensorlab installation path."""
-    base = kwargs.get("tinyml_base_path", "")
+    """Built-in function: verify a tinyml-modelzoo installation path."""
+    base = kwargs.get("tinyml_modelzoo_path", "") or kwargs.get("tinyml_base_path", "")
     if not base:
-        return {"success": False, "errors": ["tinyml_base_path is required"]}
+        return {"success": False, "errors": ["tinyml_modelzoo_path is required"]}
 
     base = os.path.expanduser(base)
     checks = {
-        "tinyml-modelzoo":         os.path.join(base, "tinyml-modelzoo"),
-        "tinyml-modelzoo/examples": os.path.join(base, "tinyml-modelzoo", "examples"),
-        "run_script":              os.path.join(base, "tinyml-modelzoo", "run_tinyml_modelzoo.sh"),
-        "tinyml-modelmaker":       os.path.join(base, "tinyml-modelmaker"),
+        "examples":     os.path.join(base, "examples"),
+        "run_script":   os.path.join(base, "run_tinyml_modelzoo.sh"),
+        "tinyml_modelzoo": os.path.join(base, "tinyml_modelzoo"),
     }
     results = {}
     all_ok = True
@@ -45,7 +44,7 @@ def _check_installation(kwargs):
 
     return {
         "success": all_ok,
-        "tinyml_base_path": base,
+        "tinyml_modelzoo_path": base,
         "checks": results,
         "errors": [] if all_ok else [
             f"Missing: {name} at {info['path']}"
@@ -53,8 +52,8 @@ def _check_installation(kwargs):
         ],
         "hint": (
             "Installation looks good." if all_ok
-            else "Verify the path is the root of the tinyml-tensorlab checkout, "
-                 "containing tinyml-modelzoo/ and tinyml-modelmaker/ subdirectories."
+            else "Verify the path points to the cloned tinyml-modelzoo directory "
+                 "(should contain examples/, run_tinyml_modelzoo.sh, tinyml_modelzoo/)."
         ),
     }
 

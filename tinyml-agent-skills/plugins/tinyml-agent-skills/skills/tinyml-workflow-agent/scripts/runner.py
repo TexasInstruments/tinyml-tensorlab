@@ -5,7 +5,7 @@ Dispatcher for tinyml-workflow-agent skill functions.
 Usage:
     python3 runner.py <function_name> '<json_args>' [--save-yaml <file>] [--save-result <file>]
     python3 runner.py --list
-    python3 runner.py check_installation '{"tinyml_base_path": "/home/user/tinyml-tensorlab"}'
+    python3 runner.py check_installation '{"tinyml_modelzoo_path": "/home/user/tinyml-modelzoo"}'
 
 Flags (must come after json_args):
     --save-yaml <file>    Extract the 'yaml' field from the result and write it to <file>.
@@ -34,9 +34,7 @@ from update_manager import check_updates, get_update_status, do_update
 
 FUNCTION_MAP = {
     # common_section_tools
-    "validate_common_section":                ("common_section_tools",    "validate_common_section"),
     "generate_common_section_yaml":           ("common_section_tools",    "generate_common_section_yaml"),
-    "list_supported_values":                  ("common_section_tools",    "list_supported_values"),
     # dataset_section_tools
     "validate_dataset_section":               ("dataset_section_tools",   "validate_dataset_section"),
     "generate_dataset_section_yaml":          ("dataset_section_tools",   "generate_dataset_section_yaml"),
@@ -49,12 +47,10 @@ FUNCTION_MAP = {
     "analyse_dataset":                        ("dataset_analysis",      "analyse_dataset"),
     # feature_extraction
     "get_data_proc_feat_ext_recommendations": ("feature_extraction",      "get_data_proc_feat_ext_recommendations"),
-    "get_transform_context":                  ("feature_extraction",      "get_transform_context"),
     "validate_feat_ext_data_shape":           ("feature_extraction",      "validate_feat_ext_data_shape"),
     "generate_feat_ext_section_yaml":         ("feature_extraction",      "generate_feat_ext_section_yaml"),
     # model_selection_tools
     "select_model_for_task":                  ("model_selection_tools",   "select_model_for_task"),
-    "list_available_models":                  ("model_selection_tools",   "list_available_models"),
     # training_section_tools
     "get_training_recommendations":           ("training_section_tools",  "get_training_recommendations"),
     "validate_training_section":              ("training_section_tools",  "validate_training_section"),
@@ -141,10 +137,11 @@ def main():
         except json.JSONDecodeError as e:
             print(json.dumps({"error": f"Invalid JSON args: {e}"}))
             sys.exit(1)
-        if "tinyml_base_path" not in kwargs:
-            print(json.dumps({"error": "Missing required parameter: tinyml_base_path"}))
+        param = kwargs.get("tinyml_modelzoo_path") or kwargs.get("tinyml_base_path")
+        if not param:
+            print(json.dumps({"error": "Missing required parameter: tinyml_modelzoo_path"}))
             sys.exit(1)
-        result = do_update(kwargs["tinyml_base_path"])
+        result = do_update(param)
         _output_result(result, save_yaml_path, save_result_path)
         if not result.get("success"):
             sys.exit(1)

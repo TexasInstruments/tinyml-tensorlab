@@ -24,7 +24,7 @@ class PresetRanker:
         prefer_fft: bool,
         need_full_spectrum: bool,
         need_temporal_ctx: bool,
-        min_sample_or_seq_length: int,
+        shortest_sample_len: int,
         variables: Optional[int] = None,
         sampling_rate: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
@@ -47,7 +47,7 @@ class PresetRanker:
 
                 score, reasons = self._score_preset(
                     preset_name, preset_cfg, task_type, variables, 
-                    prefer_fft, need_full_spectrum, need_temporal_ctx, min_sample_or_seq_length 
+                    prefer_fft, need_full_spectrum, need_temporal_ctx, shortest_sample_len 
                 )
 
                 if score > 0:  # Only include compatible presets
@@ -82,19 +82,21 @@ class PresetRanker:
         prefer_fft: bool,
         need_full_spectrum: bool,
         need_temporal_ctx: bool,
-        min_sample_or_seq_length: int,
+        shortest_sample_len: int,
     ) -> Tuple[float, List[str]]:
         """
         Score a single preset. Returns (score: 0-10, reasoning: list[str]).
 
         Scoring factors (normalized to max 10):
-          - Variables match: +3 (exact) or +1.5 (flexible)
+          - Variables match: +3 (exact) or +1.5 (flexible); incompatible vars → score=0, excluded
           - FFT vs Raw Preset:
             - If freq content and FFT - +1
                 - If full spectrum not needed + FFTBIN - +0.5
             - If not freq content and RAW - +1
                 - If need temporal context and multi-frame preset - + 0.5
-          - Frame size: +3 (appropriate)
+          - Frame size: +3 if frame_size <= shortest_sample_len; excluded if frame_size > shortest_sample_len
+            (shortest_sample_len = MEASURED shortest sample in the dataset; presets with larger
+             frame_size silently skip those samples, causing data loss)
           - Use case: +1 (matches)
 
         """
@@ -141,11 +143,15 @@ class PresetRanker:
                         score += 0.5
                         reasons.append("multi-frame preset chosen since temporal context needed")
 
-            # === 3. Frame size appropriateness (+3) === -> can be expanded later to a multi-step scorer that checks optimal framesize
+            # === 3. Frame size — hard gate: exclude if frame_size > shortest_sample_len ===
+            # shortest_sample_len is the MEASURED shortest sample in the dataset.
+            # A preset with frame_size > shortest_sample_len silently skips those samples → data loss.
             frame_size = preset_cfg.get("frame_size")
-            if frame_size and frame_size <= min_sample_or_seq_length:
+            if frame_size:
+                if frame_size > shortest_sample_len:
+                    return 0.0, [f"excluded: frame_size ({frame_size}) > shortest sample ({shortest_sample_len}) — would skip files"]
                 score += 3
-                reasons.append(f"adequate frame size ({frame_size})")
+                reasons.append(f"frame_size ({frame_size}) fits within shortest sample ({shortest_sample_len})")
 
             # === 4. Use case alignment (+1 if matches) ===
             if any(task_keyword in preset_use_case

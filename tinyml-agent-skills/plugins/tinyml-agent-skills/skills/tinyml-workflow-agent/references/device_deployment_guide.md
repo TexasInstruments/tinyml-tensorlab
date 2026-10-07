@@ -61,7 +61,7 @@ If `success: false`: check that both training and compilation completed without 
 
 ## Step B: Set up CCS project
 
-**Device/SDK reference:** See `assets/deployment_sdk_reference.md` for device family → SDK mapping, device types, and installation paths.
+**Device/SDK reference:** Use `ccs-project → getProducts` to discover installed SDKs, or run `check_sdk_installation` for the target device.
 
 ### B1: Check SDK installation
 

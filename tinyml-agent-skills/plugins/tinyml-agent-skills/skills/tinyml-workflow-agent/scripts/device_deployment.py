@@ -1,5 +1,5 @@
 """
-Device deployment tools for tinyml-tensorlab.
+Device deployment tools for tinyml-modelzoo.
 
 Workflow (Steps 13A–13D in SKILL.md):
   A. find_run_artifacts       — locate and validate ModelMaker outputs (mod.a, tvmgen_default.h, test_vector.c, user_input_config.h)
@@ -8,40 +8,52 @@ Workflow (Steps 13A–13D in SKILL.md):
   D. flash_ccs_project        — flash compiled .out to device via dslite
 
 See references/device_deployment_guide.md for full deployment walkthrough.
-See assets/deployment_sdk_reference.md for device family → SDK mapping.
+SDK family → device mapping is discovered dynamically via check_sdk_installation.
 """
 
 import os
 import glob
+import json
 import shutil
 import subprocess
+import urllib.parse
 import xml.etree.ElementTree as ET
 from typing import Optional, Dict, Any, List, Tuple
 import stat
 from pathlib import Path
 
-_DEFAULT_TINYML_BASE     = os.path.expanduser("~/tinyml-tensorlab")
-_DEFAULT_MODELMAKER_RUNS = os.path.join(_DEFAULT_TINYML_BASE, "tinyml-modelmaker", "data", "projects")
+try:
+    from .constants import CLASSIFICATION_TASKS, ANOMALY_TASKS, REGRESSION_TASKS, FORECASTING_TASKS
+except ImportError:
+    from constants import CLASSIFICATION_TASKS, ANOMALY_TASKS, REGRESSION_TASKS, FORECASTING_TASKS
+
+_DEFAULT_TINYML_BASE     = os.path.expanduser("~/tinyml-modelzoo")
+_DEFAULT_MODELMAKER_RUNS = os.path.join(_DEFAULT_TINYML_BASE, "data", "projects")
 
 
 # ── Device family + SDK metadata ───────────────────────────────────────────────
 
 # Maps each device ID to its family name
 DEVICE_FAMILY: Dict[str, str] = {
-    # C2000 (F28x / F29x) — uses C2000Ware SDK
+    # C2000 F28x — uses C2000Ware SDK
     "F280013": "c2000", "F280015": "c2000", "F28003": "c2000", "F28004": "c2000",
-    "F2837":   "c2000", "F28P55":  "c2000", "F28P65": "c2000", "F29H85": "c2000",
-    "F29P58":  "c2000", "F29P32":  "c2000",
+    "F2837":   "c2000", "F28P55":  "c2000", "F28P65": "c2000",
+    # C2000 F29x — uses F29H85X-SDK (separate from C2000Ware)
+    "F29H85": "f29", "F29P58": "f29", "F29P32": "f29",
     # MSPM0 — uses MSPM0 SDK
     "MSPM0G3507": "mspm0", "MSPM0G3519": "mspm0", "MSPM0G5187": "mspm0",
     # MSPM33 — uses MSPM33 SDK
     "MSPM33C32": "mspm33", "MSPM33C34": "mspm33",
-    # AM13 — uses MCU+ SDK
+    # AM13 — uses AM13E2X-SDK
     "AM13E2": "am13",
     # AM26x — uses MCU+ SDK
     "AM263": "am26x", "AM263P": "am26x", "AM261": "am26x",
-    # Connectivity (CC27xx / CC13xx / CC35x) — uses SimpleLink SDK
-    "CC2755": "simplelink", "CC1352": "simplelink", "CC1354": "simplelink", "CC35X1": "simplelink",
+    # SimpleLink F3 (CC27xx) — uses SimpleLink LP F3 SDK
+    "CC2755": "simplelink_f3",
+    # SimpleLink F2 (CC13xx) — uses SimpleLink LP F2 SDK
+    "CC1352": "simplelink_f2", "CC1354": "simplelink_f2",
+    # SimpleLink Wi-Fi (CC35x) — uses SimpleLink Wi-Fi SDK
+    "CC35X1": "simplelink_wifi",
 }
 
 # Per-family SDK information: name, install search globs, AI examples subpath, download URL
@@ -54,6 +66,9 @@ SDK_INFO: Dict[str, Dict] = {
             "/opt/ti/c2000ware_*",
             "/opt/ti/C2000Ware_*",
             os.path.expanduser("~/ti/ccs*/c2000/C2000Ware_*"),
+            "C:/ti/c2000ware_*",
+            "C:/ti/C2000Ware_*",
+            "C:/ti/ccs*/c2000/C2000Ware_*",
         ],
         "ai_examples_subpath": "libraries/ai/examples",
         "download_url": "https://www.ti.com/tool/C2000WARE",
@@ -63,8 +78,9 @@ SDK_INFO: Dict[str, Dict] = {
         "install_globs": [
             os.path.expanduser("~/ti/mspm0_sdk_*"),
             "/opt/ti/mspm0_sdk_*",
+            "C:/ti/mspm0_sdk_*",
         ],
-        "ai_examples_subpath": "examples",  # adjust if SDK ships AI examples elsewhere
+        "ai_examples_subpath": "examples",
         "download_url": "https://www.ti.com/tool/MSPM0-SDK",
     },
     "mspm33": {
@@ -72,19 +88,30 @@ SDK_INFO: Dict[str, Dict] = {
         "install_globs": [
             os.path.expanduser("~/ti/mspm33_sdk_*"),
             "/opt/ti/mspm33_sdk_*",
+            "C:/ti/mspm33_sdk_*",
         ],
         "ai_examples_subpath": "examples",
         "download_url": "https://www.ti.com/tool/download/MSPM33-SDK",
     },
-    "am13": {
-        "name":         "MCU+ SDK (AM13x)",
+    "f29": {
+        "name":         "C2000 SDK (F29H85X)",
         "install_globs": [
-            os.path.expanduser("~/ti/mcu_plus_sdk_am263x_*"),
-            os.path.expanduser("~/ti/mcu_plus_sdk_*"),
-            "/opt/ti/mcu_plus_sdk_*",
+            os.path.expanduser("~/ti/f29h85_sdk_*"),
+            "/opt/ti/f29h85_sdk_*",
+            "C:/ti/f29h85_sdk_*",
+        ],
+        "ai_examples_subpath": "libraries/ai/examples",
+        "download_url": "https://www.ti.com/tool/download/F29H85X-SDK/",
+    },
+    "am13": {
+        "name":         "AM13E2X SDK",
+        "install_globs": [
+            os.path.expanduser("~/ti/am13e230x_sdk_*"),
+            "/opt/ti/am13e230x_sdk_*",
+            "C:/ti/am13e230x_sdk_*",
         ],
         "ai_examples_subpath": "examples",
-        "download_url": "https://www.ti.com/tool/MCU-PLUS-SDK-AM263X",
+        "download_url": "https://www.ti.com/tool/AM13E2X-SDK",
     },
     "am26x": {
         "name":         "MCU+ SDK (AM26x)",
@@ -92,19 +119,44 @@ SDK_INFO: Dict[str, Dict] = {
             os.path.expanduser("~/ti/mcu_plus_sdk_am263x_*"),
             os.path.expanduser("~/ti/mcu_plus_sdk_*"),
             "/opt/ti/mcu_plus_sdk_*",
+            "C:/ti/mcu_plus_sdk_am263x_*",
+            "C:/ti/mcu_plus_sdk_*",
         ],
         "ai_examples_subpath": "examples",
         "download_url": "https://www.ti.com/tool/MCU-PLUS-SDK-AM263X",
     },
-    "simplelink": {
-        "name":         "SimpleLink Low Power SDK",
+    "simplelink_f3": {
+        "name":         "SimpleLink LP F3 SDK",
         "install_globs": [
-            os.path.expanduser("~/ti/simplelink_cc13xx_cc26xx_sdk_*"),
             os.path.expanduser("~/ti/simplelink_lowpower_f3_sdk_*"),
-            "/opt/ti/simplelink_*",
+            "/opt/ti/simplelink_lowpower_f3_sdk_*",
+            "C:/ti/simplelink_lowpower_f3_sdk_*",
         ],
         "ai_examples_subpath": "examples",
         "download_url": "https://www.ti.com/tool/SIMPLELINK-LOWPOWER-F3-SDK",
+    },
+    "simplelink_f2": {
+        "name":         "SimpleLink LP F2 SDK",
+        "install_globs": [
+            os.path.expanduser("~/ti/simplelink_lowpower_f2_sdk_*"),
+            os.path.expanduser("~/ti/simplelink_cc13xx_cc26xx_sdk_*"),
+            "/opt/ti/simplelink_lowpower_f2_sdk_*",
+            "/opt/ti/simplelink_cc13xx_cc26xx_sdk_*",
+            "C:/ti/simplelink_lowpower_f2_sdk_*",
+            "C:/ti/simplelink_cc13xx_cc26xx_sdk_*",
+        ],
+        "ai_examples_subpath": "examples",
+        "download_url": "https://www.ti.com/tool/SIMPLELINK-LOWPOWER-F2-SDK",
+    },
+    "simplelink_wifi": {
+        "name":         "SimpleLink Wi-Fi SDK",
+        "install_globs": [
+            os.path.expanduser("~/ti/simplelink_wifi_sdk_*"),
+            "/opt/ti/simplelink_wifi_sdk_*",
+            "C:/ti/simplelink_wifi_sdk_*",
+        ],
+        "ai_examples_subpath": "examples",
+        "download_url": "https://www.ti.com/tool/SIMPLELINK-WIFI-SDK",
     },
 }
 
@@ -120,14 +172,89 @@ def _find_sdk_root(family: str) -> Optional[str]:
     matches = []
     for pattern in info.get("install_globs", []):
         matches += glob.glob(pattern)
-    # Return the lexicographically last match (usually highest version)
-    return sorted(matches)[-1] if matches else None
+    if not matches:
+        return None
+    # Sort by basename only so parent directory path doesn't affect version comparison.
+    # TI zero-pads version strings (e.g. mspm0_sdk_2_10_00_04), so lexicographic
+    # sort of the folder name reliably picks the highest version.
+    return max(matches, key=os.path.basename)
 
 
 def _sdk_ai_examples_path(family: str, sdk_root: str) -> str:
     """Return the AI examples directory within an SDK root."""
     subpath = SDK_INFO.get(family, {}).get("ai_examples_subpath", "examples")
     return os.path.join(sdk_root, subpath)
+
+
+def _detect_ccs_workspace() -> str:
+    """
+    Auto-detect the active CCS workspace directory.
+    Reads Theia-based CCS recentworkspace.json, falls back to common paths.
+    """
+    config_pattern = os.path.expanduser(
+        "~/.config/Texas Instruments/CCS/ccs*/0/theia/recentworkspace.json"
+    )
+    config_files = sorted(glob.glob(config_pattern), key=os.path.basename, reverse=True)
+    for cfg in config_files:
+        try:
+            with open(cfg) as f:
+                data = json.load(f)
+            for entry in data.get("recentRoots", []):
+                # entries are file:// URLs — strip prefix and URL-decode
+                if entry.startswith("file://"):
+                    path = urllib.parse.unquote(entry[len("file://"):])
+                    if os.path.isdir(path):
+                        return path
+        except Exception:
+            continue
+    for fallback in ("~/workspace_ccstheia", "~/workspace", "~/ccs_workspace"):
+        expanded = os.path.expanduser(fallback)
+        if os.path.isdir(expanded):
+            return expanded
+    return os.path.expanduser("~/ccs_workspace")
+
+
+def _find_best_template(
+    ai_examples_path: str,
+    task_type: str,
+    device_type: str,
+) -> tuple:
+    """
+    Return (template_task_dir, template_name) for the best matching CCS template.
+
+    Prefers a task-specific SDK example; falls back to the appropriate generic
+    timeseries template based on task family. Raises FileNotFoundError if neither
+    exists for the requested device_type.
+    """
+    task_normalized = task_type.lower().replace(" ", "_")
+
+    # 1. Task-specific template
+    specific_dev_dir = os.path.join(ai_examples_path, task_normalized, device_type)
+    if os.path.isdir(specific_dev_dir):
+        return os.path.join(ai_examples_path, task_normalized), task_normalized
+
+    # 2. Map task → generic family template
+    if task_type in CLASSIFICATION_TASKS:
+        generic_name = "generic_timeseries_classification"
+    elif task_type in ANOMALY_TASKS:
+        generic_name = "generic_timeseries_anomalydetection"
+    elif task_type in REGRESSION_TASKS:
+        generic_name = "generic_timeseries_regression"
+    elif task_type in FORECASTING_TASKS:
+        generic_name = "generic_timeseries_forecasting"
+    else:
+        generic_name = "generic_timeseries_classification"
+
+    generic_dev_dir = os.path.join(ai_examples_path, generic_name, device_type)
+    if os.path.isdir(generic_dev_dir):
+        return os.path.join(ai_examples_path, generic_name), generic_name
+
+    raise FileNotFoundError(
+        f"No CCS template found for task='{task_type}', device_type='{device_type}'.\n"
+        f"Tried task-specific: {specific_dev_dir}\n"
+        f"Tried generic fallback: {generic_dev_dir}\n"
+        f"Verify the SDK AI examples path: {ai_examples_path}"
+    )
 
 
 # ── Tool: check_sdk_installation ───────────────────────────────────────────────
@@ -218,8 +345,9 @@ def check_sdk_installation(
 # ── Shared helpers ─────────────────────────────────────────────────────────────
 
 def _runs_path(tinyml_base_path: Optional[str]) -> str:
+    # tinyml_base_path is now the modelzoo root; output goes to {modelzoo}/data/projects/
     base = os.path.expanduser(tinyml_base_path) if tinyml_base_path else _DEFAULT_TINYML_BASE
-    return os.path.join(base, "tinyml-modelmaker", "data", "projects")
+    return os.path.join(base, "data", "projects")
 
 
 def _run_base(tinyml_base_path, task_type, run_id, model_id) -> str:
@@ -247,18 +375,18 @@ def find_run_artifacts(
     completed successfully and all 4 required files exist.
 
     Args:
-        tinyml_base_path: Root of tinyml-tensorlab checkout.
+        tinyml_base_path: Root of tinyml-modelzoo clone (output goes to {modelzoo}/data/projects/).
         task_type: Task type (e.g., 'motor_fault').
         run_id: Run directory name from training output (e.g., '20240115_143022').
         model_id: Model name (matches model_name from training config).
         quantization: True if quantized training was performed.
 
-    Returns:
+    Returns:i_examples_subpath": "examples",
         Dict with required_files (name → {path, exists}), missing list,
         artifacts_dir, golden_dir, and success flag.
 
     How to find run_id and model_id:
-        ls {tinyml_base_path}/tinyml-modelmaker/data/projects/{task_type}/run/
+        ls {tinyml_base_path}/data/projects/{task_type}/run/
     """
     run_dir   = _run_base(tinyml_base_path, task_type, run_id, model_id)
     art_dir   = os.path.join(run_dir, "compilation", "artifacts")
@@ -401,8 +529,9 @@ def flash_ccs_project(
         ccs_install_path: CCS installation root (e.g., '/opt/ti/ccs1260').
         project_name: Name of the compiled binary (defaults to folder name).
         ccxml_path: Path to the device .ccxml target config file.
-            If not provided, auto-searched in the project folder.
-            Use the LaunchPad variant (e.g., TMS320F28P550SJ9_LaunchPad.ccxml).
+            If not provided, auto-searched in targetConfigs/ (standard CCS location),
+            then project root, then CCS/ subdirectory.
+            Use the LaunchPad variant if present (e.g., TMS320F28P550SJ9_LaunchPad.ccxml).
         out_file: Explicit path to the .out binary. If not provided, searched
             in project/Debug/<project_name>.out.
 
@@ -450,8 +579,12 @@ def flash_ccs_project(
     if ccxml_path:
         ccxml = os.path.expanduser(ccxml_path)
     else:
-        # Search project root and CCS/ subdirectory
-        search_dirs = [project_path, os.path.join(project_path, "CCS")]
+        # targetConfigs/ is the standard CCS location; also check project root and CCS/
+        search_dirs = [
+            os.path.join(project_path, "targetConfigs"),
+            project_path,
+            os.path.join(project_path, "CCS"),
+        ]
         ccxml_files = []
         for d in search_dirs:
             if os.path.isdir(d):
@@ -462,13 +595,13 @@ def flash_ccs_project(
                 "success": False, "stdout": "", "stderr": "",
                 "errors": [
                     "No .ccxml target config file found in project. "
-                    "Provide ccxml_path explicitly. "
-                    "Use the LaunchPad variant (e.g., TMS320F28P550SJ9_LaunchPad.ccxml). "
+                    "Searched: targetConfigs/, project root, CCS/. "
+                    "Provide ccxml_path explicitly (e.g., '<project>/targetConfigs/MSPM0G5187.ccxml'). "
                     "In CCS: right-click the .ccxml → Set as Active Target Configuration first."
                 ],
             }
 
-        # Prefer LaunchPad variant
+        # Prefer LaunchPad variant; otherwise take first found (targetConfigs/ is searched first)
         launchpad = [f for f in ccxml_files if "LaunchPad" in os.path.basename(f) or "launchpad" in os.path.basename(f).lower()]
         ccxml = launchpad[0] if launchpad else ccxml_files[0]
 
@@ -586,49 +719,65 @@ class DeviceDeployer:
         self.artifacts_dir   = os.path.join(runs_path, task_type, "run", run_id, model_id, "compilation", "artifacts")
         self.golden_dir      = _golden_dir(tinyml_base_path, task_type, run_id, model_id, quantization)
 
-    def create_new_ccs_project(self, project_name, device_type, ccs_templates_path):
+    def create_new_ccs_project(
+        self,
+        project_name: str,
+        device_type: str,
+        template_task_dir: str,
+        workspace_path: str,
+        sdk_root: Optional[str] = None,
+    ):
         """
+        Create a CCS project in the given workspace directory from the specified template.
+
         Args:
-            ccs_templates_path: Absolute path to the SDK's AI examples directory
-                (e.g., C2000Ware_6.xx/libraries/ai/examples).
-                Must be resolved by the caller using check_sdk_installation or explicit sdk_path.
-                Project will be created as a sibling in this directory.
+            template_task_dir: Task-level template directory inside the SDK AI examples
+                (e.g., .../libraries/ai/examples/arc_fault/ or .../generic_timeseries_classification/).
+                Selected by the caller via _find_best_template.
+            workspace_path: Root directory of the CCS workspace. Project is created here.
+                Never writes into the SDK directory.
+            sdk_root: SDK installation root (e.g., .../C2000Ware_26.../). Used to rewrite
+                relative pathVariables in the projectspec to absolute paths so the project
+                works from any location outside the SDK tree.
 
         Returns:
             Tuple[str, Dict[str, Any]]: (project_path, validation_result)
             validation_result has keys: timestamp_validation_passed (bool), validation_errors (List[str])
         """
-        templates_path = os.path.expanduser(ccs_templates_path)
+        template_task_dir = os.path.expanduser(template_task_dir)
+        template_name     = os.path.basename(template_task_dir.rstrip(os.sep))
+        task_type_dev_dir = os.path.join(template_task_dir, device_type)
 
-        task_normalized    = self.task_type.lower().replace(" ", "_")
-        task_type_base_dir = os.path.join(templates_path, task_normalized)
-        task_type_dev_dir  = os.path.join(task_type_base_dir, device_type)
-
-        if not os.path.exists(task_type_dev_dir):
+        if not os.path.isdir(task_type_dev_dir):
             raise FileNotFoundError(
-                f"Template not found: {task_type_dev_dir}\n"
-                f"Searched SDK AI examples at: {templates_path}\n"
-                "Verify the SDK is installed and ccs_templates_path points to its AI examples folder."
+                f"Device template not found: {task_type_dev_dir}\n"
+                f"Template task dir: {template_task_dir}"
             )
 
-        new_project_path = os.path.join(templates_path, project_name)
+        new_project_path = os.path.join(os.path.expanduser(workspace_path), project_name)
         if os.path.exists(new_project_path):
             raise FileExistsError(f"Project already exists: {new_project_path}")
 
-        os.makedirs(templates_path, exist_ok=True)
+        os.makedirs(new_project_path, exist_ok=True)
         device_folder = os.path.join(new_project_path, device_type)
         shutil.copytree(task_type_dev_dir, device_folder)
 
-        app_main_src = os.path.join(task_type_base_dir, "application_main.c")
+        app_main_src = os.path.join(template_task_dir, "application_main.c")
         if os.path.exists(app_main_src):
             shutil.copy2(app_main_src, os.path.join(new_project_path, "application_main.c"))
 
-        ccs_dir       = os.path.join(device_folder, "CCS")
-        old_spec      = os.path.join(ccs_dir, f"{device_type}_{task_normalized}.projectspec")
-        new_spec      = os.path.join(ccs_dir, f"{device_type}_{project_name}.projectspec")
+        ccs_dir  = os.path.join(device_folder, "CCS")
+        old_spec = os.path.join(ccs_dir, f"{device_type}_{template_name}.projectspec")
+        new_spec = os.path.join(ccs_dir, f"{device_type}_{project_name}.projectspec")
+
+        original_template_ccs_dir = os.path.join(template_task_dir, device_type, "CCS")
 
         if os.path.exists(old_spec):
-            self._update_projectspec(old_spec, new_spec, project_name, task_normalized)
+            self._update_projectspec(
+                old_spec, new_spec, project_name, template_name,
+                sdk_root=sdk_root,
+                original_template_ccs_dir=original_template_ccs_dir,
+            )
             os.remove(old_spec)
         else:
             raise FileNotFoundError(f"Projectspec not found: {old_spec}")
@@ -656,15 +805,37 @@ class DeviceDeployer:
 
         return new_project_path, validation_result
 
-    def _update_projectspec(self, old_path, new_path, project_name, task_normalized):
+    def _update_projectspec(
+        self,
+        old_path: str,
+        new_path: str,
+        project_name: str,
+        template_name: str,
+        sdk_root: Optional[str] = None,
+        original_template_ccs_dir: Optional[str] = None,
+    ):
         tree = ET.parse(old_path)
         root = tree.getroot()
+
+        # Step 1: rename template_name → project_name in all text and attributes
         for elem in root.iter():
             if elem.text and isinstance(elem.text, str):
-                elem.text = elem.text.replace(task_normalized, project_name)
+                elem.text = elem.text.replace(template_name, project_name)
             for k, v in elem.attrib.items():
                 if isinstance(v, str):
-                    elem.set(k, v.replace(task_normalized, project_name))
+                    elem.set(k, v.replace(template_name, project_name))
+
+        # Step 2: rewrite relative pathVariable paths → absolute so project works
+        # outside the SDK directory tree
+        if sdk_root and original_template_ccs_dir:
+            for elem in root.iter("pathVariable"):
+                rel = elem.get("path", "")
+                if rel.startswith("../") or rel == "..":
+                    abs_path = os.path.normpath(
+                        os.path.join(original_template_ccs_dir, rel)
+                    )
+                    elem.set("path", abs_path)
+
         tree.write(new_path, encoding="utf-8", xml_declaration=False)
 
     def _copy_artifacts(self, project_path):
@@ -703,76 +874,100 @@ def create_ccs_project(
     tinyml_base_path: Optional[str] = None,
     sdk_path: Optional[str] = None,
     ccs_templates_path: Optional[str] = None,
+    workspace_path: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
-    Tool: Create a CCS project from a device-family SDK template with compiled artifacts.
+    Tool: Create a CCS project in the active CCS workspace from the best matching SDK template.
 
-    Creates the project as a sibling in the SDK's AI examples directory.
-    Automatically detects which SDK is required based on target_device (device family),
-    searches common installation paths, and returns a helpful error with download URL
-    if the SDK is not installed.
+    Selects the most appropriate template (task-specific example first, then generic fallback),
+    copies it into the CCS workspace directory (never modifying the SDK), replaces artifacts
+    and golden vectors, and fixes SDK path variables in the projectspec so the project works
+    from any location.
 
     Args:
-        project_name: Name for the new CCS project folder (created in ai/examples/).
+        project_name: Name for the new CCS project folder.
         device_type: CCS device variant string (e.g., 'f28p55x', 'f28p65x', 'mspm0g3507').
         run_id: Run directory name from training output.
-        task_type: Task type string (e.g., 'motor_fault').
+        task_type: Task type string (e.g., 'motor_fault', 'arc_fault').
         quantization: True if quantized model artifacts should be used.
         model_id: Model name from training artifacts.
         target_device: Canonical device ID (e.g., 'F28P55', 'MSPM0G3507') — used to
             determine device family and required SDK.
-        tinyml_base_path: Path to tinyml-tensorlab root. Defaults to ~/tinyml-tensorlab.
+        tinyml_base_path: Path to tinyml-modelzoo root. Defaults to ~/tinyml-modelzoo.
         sdk_path: Optional explicit path to SDK root (overrides auto-detection).
-            E.g., '/home/user/ti/c2000ware_6.00.00.00'
         ccs_templates_path: Optional explicit path to SDK AI examples directory
-            (overrides both sdk_path and auto-detection).
+            (overrides both sdk_path and auto-detection). sdk_root will be None in this mode.
+        workspace_path: Directory where the project will be created. Defaults to the
+            most recently used CCS workspace (auto-detected from CCS config).
 
     Returns:
-        Dict with success, project_path, family, sdk_name, errors.
-        Errors include SDK download URL if SDK not found.
+        Dict with success, project_path, workspace_path, template_used, family, sdk_name, errors.
         On success, call build_ccs_project and flash_ccs_project to complete deployment.
     """
-    # Resolve templates path: explicit > sdk_path+subpath > auto-detect by family
+    # Resolve workspace (never the SDK dir)
+    workspace = (
+        os.path.expanduser(workspace_path) if workspace_path else _detect_ccs_workspace()
+    )
+    os.makedirs(workspace, exist_ok=True)
+
+    # Resolve SDK / AI examples path.
+    # sdk_root is needed independently to fix projectspec path variables; always try to detect it.
     if ccs_templates_path:
-        templates_path = os.path.expanduser(ccs_templates_path)
-        sdk_check = {"found": True, "family": None, "sdk_name": "custom", "sdk_root": None}
+        ai_examples_path = os.path.expanduser(ccs_templates_path)
+        # Explicit templates path overrides examples dir, but still detect sdk_root for
+        # projectspec path-fixing (relative ../../.. variables break outside the SDK tree).
+        sdk_detect = check_sdk_installation(target_device, sdk_path)
+        sdk_root  = sdk_detect.get("sdk_root")   # None if not found — path-fixing skipped gracefully
+        sdk_check = {"found": True, "family": sdk_detect.get("family"),
+                     "sdk_name": sdk_detect.get("sdk_name") or "custom", "sdk_root": sdk_root}
     else:
         sdk_check = check_sdk_installation(target_device, sdk_path)
         if not sdk_check["found"]:
             return {
-                "success":      False,
-                "project_path": None,
-                "family":       sdk_check.get("family"),
-                "sdk_name":     sdk_check.get("sdk_name"),
-                "errors":       sdk_check["errors"],
+                "success":        False,
+                "project_path":   None,
+                "workspace_path": workspace,
+                "family":         sdk_check.get("family"),
+                "sdk_name":       sdk_check.get("sdk_name"),
+                "errors":         sdk_check["errors"],
             }
         if not sdk_check.get("ai_examples_path"):
             return {
-                "success":      False,
-                "project_path": None,
-                "family":       sdk_check["family"],
-                "sdk_name":     sdk_check["sdk_name"],
-                "errors":       sdk_check["errors"],
+                "success":        False,
+                "project_path":   None,
+                "workspace_path": workspace,
+                "family":         sdk_check["family"],
+                "sdk_name":       sdk_check["sdk_name"],
+                "errors":         sdk_check["errors"],
             }
-        templates_path = sdk_check["ai_examples_path"]
+        ai_examples_path = sdk_check["ai_examples_path"]
+        sdk_root         = sdk_check["sdk_root"]
 
     try:
+        # Pick best template: task-specific first, generic fallback
+        template_task_dir, template_name = _find_best_template(
+            ai_examples_path, task_type, device_type
+        )
+
         deployer = DeviceDeployer(run_id, task_type, quantization, model_id, tinyml_base_path)
-        project_path, validation_result = deployer.create_new_ccs_project(project_name, device_type, templates_path)
+        project_path, validation_result = deployer.create_new_ccs_project(
+            project_name, device_type, template_task_dir, workspace, sdk_root
+        )
 
         result = {
-            "success":      True,
-            "project_path": project_path,
-            "family":       sdk_check.get("family"),
-            "sdk_name":     sdk_check.get("sdk_name"),
-            "sdk_root":     sdk_check.get("sdk_root"),
-            "errors":       [],
+            "success":        True,
+            "project_path":   project_path,
+            "workspace_path": workspace,
+            "template_used":  template_name,
+            "family":         sdk_check.get("family"),
+            "sdk_name":       sdk_check.get("sdk_name"),
+            "sdk_root":       sdk_root,
+            "errors":         [],
             "timestamp_validation_passed": validation_result["timestamp_validation_passed"],
             "validation_warnings": validation_result["validation_errors"],
-            "next_step":    f"Build the project: run build_ccs_project with ccs_project_path='{project_path}'.",
+            "next_step": f"Build the project: run build_ccs_project with ccs_project_path='{project_path}'.",
         }
 
-        # If timestamp validation failed, add critical warning but don't fail (user can manually verify)
         if not validation_result["timestamp_validation_passed"]:
             result["errors"].extend(validation_result["validation_errors"])
             result["critical_warning"] = (
@@ -782,17 +977,21 @@ def create_ccs_project(
             )
 
         return result
+
     except FileNotFoundError as e:
-        family  = sdk_check.get("family")
+        family   = sdk_check.get("family")
         sdk_info = SDK_INFO.get(family, {}) if family else {}
-        errors = [str(e)]
+        errors   = [str(e)]
         if sdk_info.get("download_url"):
             errors.append(
                 f"If this is an SDK installation issue, ensure {sdk_info['name']} "
                 f"is fully installed: {sdk_info['download_url']}"
             )
-        return {"success": False, "project_path": None, "family": family, "errors": errors}
+        return {"success": False, "project_path": None, "workspace_path": workspace,
+                "family": family, "errors": errors}
     except FileExistsError as e:
-        return {"success": False, "project_path": None, "errors": [str(e)]}
+        return {"success": False, "project_path": None, "workspace_path": workspace,
+                "errors": [str(e)]}
     except Exception as e:
-        return {"success": False, "project_path": None, "errors": [f"Unexpected error: {e}"]}
+        return {"success": False, "project_path": None, "workspace_path": workspace,
+                "errors": [f"Unexpected error: {e}"]}

@@ -26,31 +26,6 @@ TASK_TYPE_TO_MODULE = {
     "image_classification": "vision",
 }
 
-# Device support matrix for specialized tasks
-DEVICE_TASK_SUPPORT = {
-    "arc_fault": ["F280013", "F280015", "F28003", "F28004", "F2837", "F28P55", "F28P65", "MSPM0G3507", "MSPM0G3519", "MSPM0G5187", "MSPM33C32", "F29H85", "AM13E2", "AM263"],
-    "ecg_classification": ["MSPM0G3507", "MSPM0G5187", "MSPM0G3519"],
-    "motor_fault": ["F280013", "F280015", "F28003", "F28004", "F2837", "F28P55", "F28P65", "MSPM0G3507", "MSPM0G3519", "MSPM0G5187", "MSPM33C32", "F29H85", "AM13E2", "AM263"],
-    "blower_imbalance": ["F280013", "F280015", "F28003", "F28004", "F2837", "F28P55", "F28P65", "F29H85", "MSPM33C32", "AM13E2", "AM263"],
-    "pir_detection": ["CC2755", "CC1352", "CC1354", "CC35X1", "MSPM0G5187", "MSPM0G3507", "MSPM0G3519", "MSPM33C32"],
-    "image_classification": ["F280013", "F280015", "F28003", "F28004", "F2837", "F28P55", "F28P65", "F29H85", "F29P58", "F29P32"],
-}
-
-# All supported target devices
-ALL_TARGET_DEVICES = [
-    # C2000 DSP Family
-    "F280013", "F280015", "F28003", "F28004", "F2837", "F28P55", "F28P65", "F29H85", "F29P58", "F29P32",
-    # MSPM0 Family
-    "MSPM0G3507", "MSPM0G3519", "MSPM0G5187",
-    # MSPM33 Family
-    "MSPM33C32", "MSPM33C34",
-    # AM13 Family
-    "AM13E2",
-    # AM26x Family
-    "AM263", "AM263P", "AM261",
-    # Connectivity Devices
-    "CC2755", "CC2745", "CC1352", "CC1354", "CC35X1", "CC1312", "CC1314",
-]
 
 ### Dataset section constants
 
@@ -66,25 +41,18 @@ _SKILL_DIR = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _REFS_DIR  = _os.path.join(_SKILL_DIR, "references")
 _ASSETS_DIR = _os.path.join(_SKILL_DIR, "assets")
 
-TINYML_TENSORLAB_PATH = _os.environ.get("TINYML_BASE_PATH")
-TINYML_DOCS_PATH = _os.environ.get("TINYML_TENSORLAB_DOCS_PATH")
+TINYML_MODELZOO_PATH = _os.environ.get("TINYML_MODELZOO_PATH")
 
-if not TINYML_TENSORLAB_PATH or not TINYML_DOCS_PATH:
+if not TINYML_MODELZOO_PATH:
     raise RuntimeError(
-        "Environment variables TINYML_BASE_PATH and TINYML_TENSORLAB_DOCS_PATH must be set. "
+        "Environment variable TINYML_MODELZOO_PATH must be set. "
         "Run: /tinyml-agent-skills:setup"
     )
 
 CONTEXT_PATHS = {
-    # Feature extraction documentation (local .rst) -> to be changed
-    "feat_ext_docs":    _os.path.join(TINYML_DOCS_PATH, "source", "features", "feature_extraction.rst"),
-    # Timeseries module constants — presets, feat_ext transforms (local .md)
-    "feat_ext_presets": _os.path.join(_ASSETS_DIR, "timeseries_data_proc_feat_ext_consts.md"),
-    # Data processing transforms + augmenters reference
-    "basic_transforms": _os.path.join(TINYML_DOCS_PATH, "source", "features", "feature_extraction.rst"),
-    "augmenters_doc":   _os.path.join(TINYML_DOCS_PATH, "source", "features", "feature_extraction.rst"),
-    # Reference example configs
-    "examples_dir":     _os.path.join(TINYML_TENSORLAB_PATH, "tinyml-modelzoo", "examples"),
+    "fe_transforms_doc":  _os.path.join(_REFS_DIR, "FE_and_Data_Processing_Transforms", "FE_transforms.md"),
+    "data_proc_doc":      _os.path.join(_REFS_DIR, "FE_and_Data_Processing_Transforms", "Data_processing_transforms.md"),
+    "examples_dir":       _os.path.join(TINYML_MODELZOO_PATH, "examples"),
 }
 
 

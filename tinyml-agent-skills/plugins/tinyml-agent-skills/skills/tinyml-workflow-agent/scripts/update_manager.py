@@ -36,8 +36,8 @@ def _read_env_vars() -> Dict:
     return vars_dict
 
 
-def _get_tinyml_base_path() -> Optional[str]:
-    return _read_env_vars().get("TINYML_BASE_PATH")
+def _get_tinyml_modelzoo_path() -> Optional[str]:
+    return _read_env_vars().get("TINYML_MODELZOO_PATH")
 
 
 def get_current_version() -> str:
@@ -83,7 +83,7 @@ def get_update_status() -> Dict:
 
 def check_updates() -> Dict:
     """
-    Check if tinyml-tensorlab is behind origin by comparing commit counts.
+    Check if tinyml-modelzoo is behind origin by comparing commit counts.
     Only runs when mode is 'auto'.
     """
     env_vars = _read_env_vars()
@@ -95,9 +95,9 @@ def check_updates() -> Dict:
     if mode != "auto":
         return {"success": True, "update_available": False, "reason": "pinned_version"}
 
-    base = _get_tinyml_base_path()
+    base = _get_tinyml_modelzoo_path()
     if not base:
-        return {"success": False, "errors": ["TINYML_BASE_PATH not set in .env. Run setup first."]}
+        return {"success": False, "errors": ["TINYML_MODELZOO_PATH not set in .env. Run setup first."]}
 
     repo_root = Path(base).expanduser()
     if not repo_root.exists():
@@ -112,7 +112,6 @@ def check_updates() -> Dict:
         if fetch.returncode != 0:
             return {"success": False, "errors": [f"git fetch failed: {fetch.stderr.strip()}"]}
 
-        # Try origin/HEAD first, fall back to origin/main
         for ref in ("origin/HEAD", "origin/main"):
             behind = subprocess.run(
                 ["git", "rev-list", "--count", f"HEAD..{ref}"],
@@ -129,7 +128,7 @@ def check_updates() -> Dict:
                     "update_available": True,
                     "current": current,
                     "commits_behind": commits_behind,
-                    "message": f"tinyml-tensorlab local is {commits_behind} commit(s) behind origin/main.",
+                    "message": f"tinyml-modelzoo is {commits_behind} commit(s) behind origin/main.",
                 }
 
         return {"success": False, "errors": ["Could not determine commit distance from origin."]}
@@ -140,22 +139,18 @@ def check_updates() -> Dict:
         return {"success": False, "errors": [str(e)]}
 
 
-def do_update(tinyml_base_path: str) -> Dict:
+def do_update(tinyml_modelzoo_path: str) -> Dict:
     """
-    Update tinyml-tensorlab and all submodules via git_pull_all.sh.
+    Update tinyml-modelzoo via git pull.
     """
-    repo_root = Path(tinyml_base_path).expanduser()
+    repo_root = Path(tinyml_modelzoo_path).expanduser()
 
     if not repo_root.exists():
         return {"success": False, "errors": [f"Path does not exist: {repo_root}"]}
 
-    pull_script = repo_root / "git_pull_all.sh"
-    if not pull_script.exists():
-        return {"success": False, "errors": [f"git_pull_all.sh not found at: {pull_script}"]}
-
     try:
         result = subprocess.run(
-            ["bash", str(pull_script)],
+            ["git", "pull"],
             cwd=str(repo_root),
             capture_output=True, text=True, timeout=120,
         )
@@ -164,12 +159,12 @@ def do_update(tinyml_base_path: str) -> Dict:
 
         return {
             "success": True,
-            "message": "tinyml-tensorlab updated successfully.",
+            "message": "tinyml-modelzoo updated successfully.",
             "output": result.stdout.strip(),
             "new_version": get_current_version(),
         }
 
     except subprocess.TimeoutExpired:
-        return {"success": False, "errors": ["git_pull_all.sh timed out."]}
+        return {"success": False, "errors": ["git pull timed out."]}
     except Exception as e:
         return {"success": False, "errors": [str(e)]}
