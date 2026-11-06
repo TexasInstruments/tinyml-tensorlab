@@ -45,13 +45,13 @@ def init_params(*args, **kwargs):
             project_path=None,
             project_run_path=None,
             task_type=None,
-            task_category=None,
+            task_category='radar_classification',
             target_device=None,
             target_module='radar',
             # run_name can be any string, but there are some special cases:
             # {date-time} will be replaced with datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
             # {model_name} will be replaced with the name of the model
-            run_name=os.path.join('{date-time}', '{model_name}'),
+            run_name=os.path.join('{date-time}','{model_name}'),
             generic_model=False,
         ),
         download=None,
@@ -60,13 +60,13 @@ def init_params(*args, **kwargs):
             dataset_name=None,
             dataset_path=None,  # dataset split will be created here
             extract_path=None,
-            split_factor=(0.8, 0.1, 0.1),
+            split_factor=(0.7, 0.2, 0.1),
             split_names=('train', 'val', 'test'),
             max_num_files=10000,
-            input_data_path=None,  # input images
+            input_data_path=None,  # url/zip folder
             input_annotation_path=None,  # annotation file
             data_path_splits=None,
-            data_dir=None,  # None = auto-detect based on task_category
+            data_dir=None,  # None = auto-detect based on task_category - classes (mostly)
             annotation_path_splits=None,
             annotation_dir='annotations',
             annotation_prefix='instances',  # change this if your dataset has a different annotation prefix
@@ -91,29 +91,30 @@ def init_params(*args, **kwargs):
             log_file_path=None,
             file_level_classification_log_path=None,
             log_summary_regex=None,
-            training_epochs=10,
-            early_stopping=True,
+            training_epochs=100,
+            early_stopping=False,
             early_stopping_patience=5,
             early_stopping_min_delta=0.0,
-            batch_size=8,
+            batch_size=64,
             learning_rate=1e-4,
             lambda_reg=0,
             optimizer='sgd',
             weight_decay=0,
-            lr_scheduler='none',
+            lr_scheduler=None,
             momentum=0,
-            training_device='cuda',  # 'cpu', 'cuda'
-            num_gpus=1,  # 0,1
+            training_device=constants.TRAINING_DEVICE_CPU,  # 'cpu', 'cuda'
+            num_gpus=0,  # 0,1
             distributed=True,
             train_output_path=None,
             run_quant_train_only=False,
+            label_smoothing=0,
             # out_dir=os.getcwd())
             auto_quantization = False,
             quantization=TinyMLQuantizationVersion.NO_QUANTIZATION,
             quantization_method=TinyMLQuantizationMethod.QAT,
             quantization_weight_bitwidth=8,
             quantization_activation_bitwidth=8,
-            output_int=None,  # Dynamic default based on task_category and quantization
+            output_int=False,  # Dynamic default based on task_category and quantization
             dual_op=False,
             properties=[
                 dict(type="group", dynamic=True, name="preprocessing_group", label="Preprocessing Parameters", default=[]),
@@ -152,16 +153,16 @@ def init_params(*args, **kwargs):
         ),
         data_processing_feature_extraction=dict(
             sampling_rate=1,
-            new_sr=1,
-            frame_size=8,
-            stride_size=0.5,
-            variables=1,  # Column selection (after time columns): int (first n columns), list of ints [0,2,4], or list of strings ['col1','col2']
+            new_sr=None,
+            frame_size=1,
+            stride_size=0.125,
+            variables=1, #Not considered separately in radar datasets
             target_variables=[],
- 
-            feat_ext_transform=[],  # FFT512 FFT256'
-            data_proc_transforms=[], #'DownSample, SimpleWindow
+
+            feat_ext_transform=[],  # Getting used for custom presets
+            data_proc_transforms=[], # Array consisting 5 stage Radar Data Processing Pipeline 
             feature_size_per_frame=None,
-            num_frame_concat=1,
+            num_frame_concat=None,
 
             store_feat_ext_data=False,
             feat_ext_store_dir=None,
@@ -171,6 +172,38 @@ def init_params(*args, **kwargs):
             scale=None,
             nn_for_feature_extraction=False,
             gof_test=False,
+
+            # [min_bin, max_bin] array index range to keep; None = keep all 'bin*' columns.
+            radar_range_bins_bounds=None,
+            radar_point_cloud_data_selector=None,  # sub-array ['x','y','z','doppler','snr']; 
+            radar_point_cloud_coordinate_system='absolute',  # 'absolute' or 'relative'
+            radar_point_cloud_relative_coordinate_filter=None,  # sub-array ['x','y','z']; 
+            # Array [min_x, max_x, min_y, max_y, min_z, max_z].
+            # None = no spatial filtering (equivalent to leaving every bound at its
+            # sentinel of +-1e9/None).
+            radar_point_cloud_spatial_filter_bounds=None,
+            # Array [min_doppler, max_doppler, min_snr, max_snr]. None = no filtering.
+            radar_point_cloud_non_spatial_filter_bounds=None,
+
+            radar_track_data_selector=None,  # from array ['velocity','x','y','z','acceleration']; 
+            # array [min_velocity, max_velocity] applied to all track_velocity_* columns. None = no filtering.
+            radar_track_velocity_bounds=None,
+            # array [min_acceleration, max_acceleration] applied to all track_acc_* columns. None = no filtering.
+            radar_track_acceleration_bounds=None,
+            # array [min_x, max_x, min_y, max_y, min_z, max_z]
+            # applied to track position columns. None = no filtering.
+            radar_track_spatial_filter_bounds=None,
+
+            # Based on Applications in future : Can be made dynamic
+            radar_data_scaling_track_velocity=None,
+
+            radar_max_points_per_frame=100,
+            radar_min_points_per_frame=0,
+            radar_min_points_per_window=12, 
+            radar_point_cloud_structure_strategy='highest and lowest',
+            radar_point_cloud_sort_by=None,  # which selected point feature to sort/rank points by (x, y, z)
+            radar_frames_quality_index=None,  # None, 'per_radar_frame', or 'per_window'
+            radar_feature_ordering='frame_major' #'frame_major'/'feature_major'
         ),
         compilation=dict(
             enable=True,
@@ -182,7 +215,6 @@ def init_params(*args, **kwargs):
                 label="Compilation Preset", name="compile_preset_name", type="enum",
                 default=constants.COMPILATION_DEFAULT,
                 enum=[
-                    # {"value": constants.COMPILATION_FORCED_SOFT_NPU, "label": "Forced Software NPU", "tooltip": "Only for F28P55, to disable HW NPU"},
                     {"value": constants.COMPILATION_DEFAULT, "label": "Default best", "tooltip": "Default Inference Mode"},
                 ]
             )

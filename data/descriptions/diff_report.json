@@ -18759,7 +18759,7 @@
           {
             "entry": "hand_gesture_dataset",
             "kind": "changed",
-            "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip",
+            "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip",
             "new": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip"
           }
         ]
@@ -18777,7 +18777,7 @@
           {
             "entry": "hand_gesture_dataset",
             "kind": "changed",
-            "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip",
+            "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip",
             "new": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip"
           }
         ]
@@ -18827,13 +18827,13 @@
         {
           "path": "dataset.input_data_path",
           "kind": "changed",
-          "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip",
+          "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip",
           "new": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip"
         },
         {
           "path": "info.dataset_url",
           "kind": "changed",
-          "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/01_04_00/datasets/hand_gesture_dataset.zip",
+          "old": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip",
           "new": "https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip"
         }
       ],

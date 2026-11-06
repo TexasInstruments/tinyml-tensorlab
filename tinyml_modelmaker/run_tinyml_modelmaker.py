@@ -73,6 +73,7 @@ for _noisy_logger in (
 
 
 def main(config):
+   
     target_device = config['common']['target_device']
     task_type = config['common']['task_type']  # Because SDTO-CCS was unwilling to change task_type to application_type
     config['common']['task_type'] = task_type
@@ -80,6 +81,7 @@ def main(config):
     import tinyml_modelmaker
     task_category = tinyml_modelmaker.get_task_category_type_from_task_type(task_type)
     config['common']['task_category'] = task_category
+
 
     # Infer target_module from task_type if not explicitly provided
     if 'target_module' in config['common']:
@@ -101,9 +103,16 @@ def main(config):
     # get pretrained model for the given model_name
     model_name = config['training']['model_name']
     nas_enabled = config.get('training', {}).get('nas_enabled', False)
+    custom_model_path = config.get('training', {}).get('custom_model_path')
+
+    # Validate custom_model_path early before expensive setup
+    if custom_model_path and not os.path.isfile(custom_model_path):
+        logger.error(f"training.custom_model_path does not exist or is not a file: {custom_model_path}")
+        return False
+
     model_description = ai_target_module.runner.ModelRunner.get_model_description(model_name)
     if config.get('training').get('enable', True):
-        if model_description is None and not nas_enabled:
+        if model_description is None and not nas_enabled and not custom_model_path:
             logger.error(f"please check if the given model_name is a supported one: {model_name}")
             return False
     # When NAS is enabled, provide a minimal model description so the pipeline
@@ -114,6 +123,19 @@ def main(config):
             'training': {
                 'training_backend': 'tinyml_tinyverse',
                 'model_training_id': model_name,  # e.g. 'NAS_m'
+            },
+        }
+
+    # BYOM: synthesize a stub model_description from custom_model_path.
+    # params.update() will overlay model_spec and model_training_id into params.training,
+    # which timeseries_base.py line 713 already forwards as --model-spec to train.py.
+    if custom_model_path and model_description is None:
+        model_description = {
+            'common': {'generic_model': True},
+            'training': {
+                'training_backend': 'tinyml_tinyverse',
+                'model_training_id': model_name,
+                'model_spec': custom_model_path,
             },
         }
 

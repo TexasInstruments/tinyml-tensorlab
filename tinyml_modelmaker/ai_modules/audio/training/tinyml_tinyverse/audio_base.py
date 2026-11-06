@@ -177,48 +177,6 @@ def get_audio_classification_log_summary_regex():
              },
         ]
     }
-def create_template_model_description(task_category, task_type, dataset_loader=None, batch_size_key=None):
-    training_dict = dict(
-        quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
-        training_backend='tinyml_tinyverse',
-        model_training_id='',
-        model_name='',
-        learning_rate=2e-3,
-        model_spec=None,
-        batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT.get(batch_size_key or task_type, 32),
-        target_devices=[
-            constants.TARGET_DEVICE_MSPM0G5187,
-        ],
-        training_devices={
-            constants.TRAINING_DEVICE_CPU: True,
-            constants.TRAINING_DEVICE_CUDA: True,
-            constants.TRAINING_DEVICE_MPS: True,
-        },
-    )
-
-    if dataset_loader:
-        training_dict['dataset_loader'] = dataset_loader
-
-    return dict(
-        common=dict(
-            task_category=task_category,
-            task_type=task_type,
-            generic_model=True,
-            model_details='',
-        ),
-        download=dict(download_url='', download_path=''),
-        training=training_dict,
-        compilation=dict()
-    )
-
-
-def get_model_descriptions_filtered(model_descriptions, enabled_models_list, task_type=None):
-    return {k: model_descriptions[k] for k in enabled_models_list if k in model_descriptions}
-
-
-def get_model_description_by_name(model_descriptions, enabled_models_list, model_name):
-    filtered = get_model_descriptions_filtered(model_descriptions, enabled_models_list)
-    return filtered.get(model_name, None)
 
 class BaseAudioModelTraining:
     """

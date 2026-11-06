@@ -117,32 +117,21 @@ TRAINING_DEVICES = [
     TRAINING_DEVICE_MPS
 ]
 
-TRAINING_BATCH_SIZE_DEFAULT = {
- 
-    TASK_TYPE_AUDIO_CLASSIFICATION: 64,
-
-}
-
-
 TINYML_TARGET_DEVICE_ADDITIONAL_INFORMATION = '\n * Tiny ML model development information: https://github.com/TexasInstruments/tinyml-tensorlab \n'
 
 
 def _task_target_devices(task_type):
-    """
-    Derive target_devices for task_type from the audio model registry
-    (audio has no tinyml_modelzoo backing, so models live under
-    ai_modules/audio/training/tinyml_tinyverse/*.py). Deferred import
-    avoids the constants <-> training import cycle.
-    """
-    from .training import get_model_descriptions as _get_model_descriptions
+    """Sorted target_devices for task_type, derived from tinyml_modelzoo models."""
+    from tinyml_modelzoo.model_descriptions import audio
+
     devices = set()
-    for model_desc in _get_model_descriptions(task_type=task_type).values():
-        devices.update(model_desc['training'].get('target_devices', []))
+    for model_desc in audio.get_model_descriptions().values():
+        if model_desc['common']['task_type'] == task_type:
+            devices.update(model_desc['training'].get('target_devices', []))
     return sorted(devices)
 
 
 TASK_DESCRIPTIONS = {
-
     TASK_TYPE_AUDIO_CLASSIFICATION: {
         'task_name': 'Audio Classification',
         'task_group': 'timeseries',
@@ -207,11 +196,6 @@ TOOLS_PATH = os.path.abspath(os.getenv('TOOLS_PATH', os.path.join(f'{HOME_DIR}',
 MSPM0_CGT_VERSION= 'ti-cgt-armllvm_5.1.1.LTS'
 ARM_LLVM_CGT_PATH = os.path.abspath(os.getenv('ARM_LLVM_CGT_PATH', os.path.join(TOOLS_PATH, MSPM0_CGT_VERSION)))
 MSPM0_CROSS_COMPILER = os.path.join(ARM_LLVM_CGT_PATH, 'bin', 'tiarmclang')
-# MSPM0 SDK --> SDK is no longer required for TVM from ti-mcu-nnc-2.0.0
-# M0SDK_VERSION='mspm0_sdk_2_10_00_04'
-# M0SDK_PATH = os.path.abspath(os.getenv('M0SDK_PATH', os.path.join(TOOLS_PATH, M0SDK_VERSION)))
-# M0SDK_INCLUDE = os.path.join(M0SDK_PATH, 'source')
-# MSPM0_SOURCE_INCLUDE = os.path.join(M0SDK_PATH, 'source', 'third_party', 'CMSIS', 'Core', 'Include')
 
 CROSS_COMPILER_OPTIONS_MSPM0 = ("-Os -mcpu=cortex-m0plus -march=thumbv6m -mtune=cortex-m0plus -mthumb -mfloat-abi=soft -I. -Wno-return-type")
 

@@ -1,12 +1,14 @@
 [build-system]
-requires = [ "setuptools", "wheel",]
+requires = [ "setuptools>=77", "wheel",]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_modelmaker"
-version = "1.5.0"
+version = "1.6.0"
 description = "Tiny ML ModelMaker"
 readme = "README.md"
+license = "BSD-3-Clause"
+license-files = [ "LICENSE",]
 requires-python = ">=3.10,<3.15"
 classifiers = [
 	"Programming Language :: Python :: 3.10",
@@ -25,9 +27,9 @@ dependencies = [
 	# requirement here would conflict with that - pip treats an editable
 	# install and a URL-pinned wheel as different, incompatible providers of
 	# the same package name and refuses to resolve.
-	"tinyml_modelzoo>=1.5.0",
-	"tinyml_tinyverse @ https://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_tinyverse-1.5.0-py3-none-any.whl",
-	"tinyml_torchmodelopt @ https://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_torchmodelopt-1.5.0-py3-none-any.whl",
+	"tinyml_modelzoo>=1.6.0",
+	"tinyml_tinyverse @ https://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_tinyverse-1.6.0-py3-none-any.whl",
+	"tinyml_torchmodelopt @ https://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_torchmodelopt-1.6.0-py3-none-any.whl",
 	# ti_mcu_nnc is cp310-only upstream (confirmed via HTTP 404 for a cp314
 	# build), so the marker just makes it absent under 3.14 - no wheel
 	# candidate matches, pip skips it silently, no extras flag needed.
@@ -37,11 +39,8 @@ dependencies = [
 ]
 authors = [{name = "Adithya Thonse", email = "thonse@ti.com"}]
 
-[project.license]
-text = "BSD 3-Clause"
-
 [project.urls]
-Homepage = "https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelmaker"
+Homepage = "https://github.com/TexasInstruments/tinyml-modelzoo"
 
 [tool.setuptools]
 include-package-data = true
