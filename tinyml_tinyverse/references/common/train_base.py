@@ -136,7 +136,6 @@ def get_base_args_parser(description="This script loads time series data and tra
     parser.add_argument('--stacking', help="1D/2D1/None")
     parser.add_argument('--offset', help="Index for data overlap; 0: no overlap, n: start index for overlap")
     parser.add_argument('--scale', help="Scaling factor to input data")
-    
 
     # Model arguments
     parser.add_argument('--generic-model', help="Open Source models", type=misc_utils.str_or_bool, default=False)
@@ -410,7 +409,7 @@ def create_golden_vectors_base(output_dir, dataset, output_int, generic_model, o
         # ADC/Raw data
         np.savetxt(half_path + f'adc_{index}.txt', np_raw.flatten(),
                    fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,',
-                   header=f'//(Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{',
+                   header=f'//(Index: {index}): ADC Data\nconst float raw_input_test[{len(np_raw.flatten())}]= {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'adc_{index}.txt')
 
@@ -418,14 +417,14 @@ def create_golden_vectors_base(output_dir, dataset, output_int, generic_model, o
         if include_features:
             np.savetxt(half_path + f'features_{index}.txt', np_feat.flatten(),
                        fmt='%.5f,',
-                       header=f'//(Index: {index}): Extracted Features\nfloat model_test_input[{len(np_feat.flatten())}] = {{',
+                       header=f'//(Index: {index}): Extracted Features\nconst float model_test_input[{len(np_feat.flatten())}] = {{',
                        footer='}', comments='', newline=' ')
             vector_files.append(half_path + f'features_{index}.txt')
 
         # Output
         np.savetxt(half_path + f'output_{index}.txt', pred.flatten(),
                    fmt='%d,' if output_int else '%f,',
-                   header=f'//(Index: {index}): Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{',
+                   header=f'//(Index: {index}): Expected Model Output\nconst {"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'output_{index}.txt')
 
