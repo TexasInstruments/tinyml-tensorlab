@@ -8,133 +8,91 @@ An end-to-end Claude Code plugin for building, training, compiling, and deployin
 
 | Skill | Command | Purpose |
 |-------|---------|---------|
-| **setup** | `/tinyml-agent-skills:setup` | One-time configuration: update mode, tinyml-modelzoo path, virtual environment, package installation (incl. AutoNAS), optional verification training |
-| **tinyml-workflow-agent** | `/tinyml-agent-skills:tinyml-workflow-agent` | End-to-end workflow: config creation, training, compilation, CCS project build, and device flashing. Can start at Step 1 or jump to any intermediate step |
+| **setup** | `/tinyml-agent-skills:setup` | One-time configuration: tinyml-modelzoo path, virtual environment, package installation, optional verification training [Currently Not Used in the officially released version (i.e. in `ti-ccstudio-tinyml-workflow` skill)] |
+| **ti-ccstudio-tinyml-workflow** | `/tinyml-agent-skills:ti-ccstudio-tinyml-workflow` | End-to-end workflow: config creation, training, compilation, CCS project build, and device flashing. Can start at Step 1 or jump to any intermediate step |
 
 ## Installation
 
 ### Prerequisites
 
-- `tinyml-modelzoo` cloned on your system
-- Python 3.10+ (setup creates or detects a virtual environment and installs the TinyML packages)
-- **Code Composer Studio (CCS)** with the SDK for your target device (C2000Ware, MSPM0 SDK, or MCU+ SDK). The workflow imports an SDK AI-example template into a CCS project and uses it as the working directory
-- A TI compiler (C2000 CGT or ARM CGT) for compilation
-- A cleaned and ready-to-use dataset (CSV, TXT, or NumPy format)
+- CCStudio IDE or VS Code IDE with CCStudio Extension installed
+- TI CCStudio Edge AI Toolkit
 
-### Register Plugin Marketplace
+**Currently we make the tinyml-workflow skill available via only the ti-ccstudio suite of AI Skills & Agents. Future releases aim to make a generic version available that is accessible via the terminal as well.**
 
-Add this repository as a marketplace in Claude Code:
-```
-/plugin marketplace add path/to/tinyml-agent-skills
-# Replace path/to/tinyml-agent-skills with your actual path to the directory
-```
-
-### Install the Plugin
-
-```
-/plugin install tinyml-agent-skills@tinyml-agent-skills
-```
-
-## Initial Setup (Required)
-
-**Before using the tinyml-workflow-agent skill, complete the one-time setup:**
-
-```
-/tinyml-agent-skills:setup
-```
-
-Setup walks through:
-1. **Script discovery** — Locates the plugin's `runner.py` scripts
-2. **Update mode** — Pinned or auto-update (see below)
-3. **tinyml-modelzoo path** — Prompts for the path and verifies it (`examples/`, `run_tinyml_modelzoo.sh`, `tinyml_modelzoo/`)
-4. **Virtual environment & packages** — Uses a `.venv` inside the modelzoo directory if present; otherwise asks whether to use system Python or create a new `.venv`. Verifies `tinyml_modelmaker`, `tinyml_tinyverse`, `tinyml_torchmodelopt`, and `tinyml_modelzoo` import cleanly, installs the AutoNAS MCP (custom dataset formats and Neural Architecture Search) if missing, and records the installed package paths
-5. **Verification training (optional)** — Runs a small C2000 example end-to-end to confirm training and compilation work
-6. **Save configuration** — Writes `~/.tinyml-agent-skills/.env`
-
-Configuration is stored in `~/.tinyml-agent-skills/.env` in your home directory (same location on Linux, macOS, and Windows). It persists across plugin updates, reinstalls, and Claude Code sessions. It holds `IS_REPO_SETUP`, `TINYML_MODELZOO_PATH`, `UPDATE_MODE`, `UPDATE_PINNED_VERSION`, and the modelmaker/tinyverse/modelopt package paths. Re-run setup if you move or reinstall tinyml-modelzoo, or want to change update mode.
-
-### Update Modes
-
-Choose your preferred update strategy during setup:
-
-#### Pinned Mode
-
-Skill remains on the installed version. No automatic updates.
-
-- Use when: Reproducibility is critical and you want to stick to one version
-- Manual updates: Re-run setup skill post update or if you want to switch update modes
-
-#### Auto-update Mode
-
-Skill checks for updates at the start of each session.
-
-- **How it works:** Fetches the tinyml-modelzoo repository and compares the local checkout against `origin/main`
-- **When updates occur:** Checked on every session start. If updates are available, you are asked for confirmation before `git pull` runs
-- **Use when:** You want latest features and improvements automatically
-
-Your choice persists in `~/.tinyml-agent-skills/.env` and survives session restarts, plugin updates, and reinstalls.
+All initial setup tasks including skill installation into the workspace's .claude/ directory, .env file generation, and its subsequent population are taken care of by the TI CCStudio Edge AI Toolkit (and CCStudio Extension in VS Code IDE) automatically.
 
 ## Workflow Overview
 
-After setup, invoke the tinyml-workflow-agent skill. Every session begins with a **session setup** (load `.env`, activate the venv, check for updates, probe CCS MCP availability), then runs the steps below. Configs, training outputs, and compilation artifacts all live in the imported **CCS project directory** (`$CCS_PROJECT_PATH`), not in tinyml-modelzoo.
+The ti-ccstudio-tinyml-workflow skill automates the complete ML model lifecycle on embedded devices. Every invocation begins with a **session setup** phase (load configuration, verify environment, detect CCS MCP servers), then proceeds through configurable workflow steps. All configs, training outputs, and compilation artifacts live in the **CCS project directory** (`$CCS_PROJECT_PATH`), not in tinyml-modelzoo.
+
+### Workflow Phases
+
+| Phase | Steps | Purpose |
+|-------|-------|---------|
+| **Project Definition & CCS Import** | 1–3 | Select task type and target device; import SDK AI-example template into CCS workspace |
+| **Data Analysis & Preparation** | 4–8 | Validate dataset format; analyze statistics; select feature extraction transforms |
+| **Model & Training Configuration** | 9–11 | Choose model, quantization mode, hyperparameters, and compilation settings |
+| **Build, Compile & Deploy** | 12–14 | Assemble config, train/compile with live logs, verify artifacts, build and flash device |
+
+### Detailed Step Breakdown
 
 | Step | Description |
 |------|-------------|
-| 1 | **Session setup** — load `.env`, activate venv, check for updates, detect CCS MCP servers |
-| 2 | **Requirements** — task type and target device (valid values are read from modelmaker source) |
-| 3 | **Early CCS import** — find the SDK, locate the AI example template for your device, import it into your CCS workspace |
-| 3.5 | **Example check** — if a tinyml-modelzoo example matches your task and device, choose: use it as-is (bundled dataset + config), use its config as a template with your own dataset, or build from scratch |
-| 4 | **Dataset & task name** — dataset location and channel count |
-| 5 | **Common section** — generate the `common` config section |
-| 6 | **Dataset validation** — validate format and auto-fix common issues |
-| 7 | **Dataset section** — generate the `dataset` config section |
-| 8A | **Dataset analysis** — statistical insights used to guide later choices |
-| 8B | **Feature extraction & data processing** — recommended presets/transforms (FFT-based, raw, multi-frame) |
-| 8 | **Model selection** — ranked recommendations from tinyml-modelzoo |
-| 9 | **Training section** — model, hyperparameters, quantization mode, NAS, GPU usage |
-| 10 | **Testing section** |
-| 11 | **Compilation section** — device-aware preset recommendations |
-| 12 | **Assemble `config.yaml`** — written to `$CCS_PROJECT_PATH` with absolute output paths |
-| 13 | **Run training & compilation** — compiler path is discovered (via CCS MCP or filesystem) and exported in the same shell call; logs stream live |
-| 13A | **Verify artifacts** — `mod.a` present and FLASH/SRAM footprint shown and acknowledged (blocking gate) |
-| 14 | **Deploy** — exclude `training/`, `compilation/`, `config.yaml` from the CCS build, copy artifacts and golden vectors, build, flash |
+| **Session Setup** | Load `.env`, verify venv, detect CCS MCP servers/CCS Project CLI tools, probe compiler availability |
+| **1. Requirements** | Select task type (classification, anomaly detection, regression, forecasting) and target device; valid values read from modelmaker source |
+| **2. CCS Import** | Locate SDK for target device, find AI-example template, import into CCS workspace |
+| **3. Example Check** | If a bundled example (`references/examples/`) matches your task and device, optionally reuse its config and/or dataset |
+| **4. Dataset & Task Name** | Specify dataset location (CSV, TXT, or NumPy format) and channel count |
+| **5. Dataset Validation** | Auto-detect validate compatibility with tinyml-modelzoo |
+| **6. Dataset Analysis** | Generate statistical insights (distribution, normalization, imbalance) to guide feature extraction and model selection |
+| **7. Feature Extraction & Data Processing** | Review recommended presets/transforms (FFT-based, raw, multi-frame); apply based on data characteristics |
+| **8. Model Selection** | Explore ranked recommendations from tinyml-modelzoo; view latency/accuracy/footprint trade-offs |
+| **9. Training Section** | Configure model, hyperparameters, quantization mode, NAS settings, and GPU usage |
+| **10. Testing Section** | Set test parameters and metrics |
+| **11. Compilation Section** | Review device-aware preset recommendations; configure output settings |
+| **12. Assemble config.yaml** | Generate and review complete configuration with absolute output paths; written to `$CCS_PROJECT_PATH` |
+| **13. Run Training & Compilation** | Execute training and compilation; compiler path auto-discovered (via CCS MCP or filesystem); logs stream live |
+| **13A. Verify Artifacts** | Confirm `mod.a` present; display FLASH/SRAM footprint; must fit target device (blocking gate) |
+| **14. Deploy** | Exclude training/compilation artifacts and config from CCS build; copy model and golden vectors; build and flash device |
 
-After every step that generates a config section, the skill shows you the config built so far and proceeds only with your approval.
+After every step that generates a config section, the skill displays the config built so far and proceeds only with your approval.
 
-**Mid-workflow entry:** If you already have a config, trained model, or compiled artifacts, you can jump straight to the relevant step (e.g. "just run training on my config" → Step 13; "just deploy my compiled model" → Step 14). Session setup still runs first.
+**Mid-workflow entry:** Jump to any step if you already have partial progress:
+- Start at **Step 9** (training only) if you have a config and dataset
+- Start at **Step 13** (compile & verify) if you have a trained model
+- Start at **Step 14** (deploy only) if you have compiled artifacts
+- Session setup always runs first to verify environment health
 
 ## Key Features
 
-- **End-to-end automation** — Handles configuration, training, compilation, and deployment in one workflow
-- **CCS-integrated** — Works inside a CCS project imported from the SDK template; builds and flashes through the CCS MCP servers (`ccs-project`, `ccs-debug`) when available, falling back to headless dslite otherwise
-- **Example reuse** — Matches tinyml-modelzoo examples to your task/device and lets you reuse their config and dataset
-- **Device-aware optimization** — Recommends quantization modes and presets specific to your MCU (F28P55, MSPM0, AM26x, etc.) and NPU availability
-- **Intelligent data handling** — Validates dataset format, detects common issues, applies fixes automatically
-- **AutoNAS** — Custom dataset formats and Neural Architecture Search, installed during setup
-- **Guided decisions** — Explains trade-offs for advanced features including quantization, and feature extraction presets/transforms
-- **Error diagnosis** — Captures failures, suggests fixes, and re-runs until training completes cleanly
-- **Memory verification** — Tracks FLASH/SRAM usage and ensures the model fits the target device before deployment
+- **End-to-end automation** — Single skillCurrently we make the tinyml-workflow skill available via only the ti-ccstudio suite of AI Skills & Agents. Future releases aim to make a generic version available that is accessible via the terminal as well. handles configuration, training, compilation, and device deployment
+- **CCS-integrated** — Imports SDK AI-example templates directly into CCS workspace; uses CCS MCP servers (`ccs-project`, `ccs-debug`) for builds and flashing when available, with headless fallback via dslite
+- **Flexible entry points** — Start from Step 1 or jump to any intermediate step (e.g., train an existing config, deploy compiled artifacts)
+- **Example-driven development** — Bundled examples (`references/examples/`) for each device/task combo; optionally reuse config, dataset, or both
+- **Device-aware optimization** — Quantization modes (Float32, INT8, NPU) and compilation presets tuned to specific MCUs (F28P55, MSPM0, AM26x) and hardware capabilities
+- **Intelligent data handling** — Auto-detects and fixes common dataset format issues; validates compatibility before training
+- **Statistical guidance** — Dataset analysis informs feature extraction strategy and model recommendations
+- **Ranked model selection** — Prioritized recommendations from tinyml-modelzoo with latency/accuracy/footprint trade-offs
+- **Interactive configuration** — Approval gates after each config section; review and edit before proceeding
+- **Live training logs** — Compiler path auto-discovery (CCS MCP or filesystem); training and compilation logs stream in real-time
+- **Memory verification** — FLASH/SRAM footprint checked and confirmed before deployment (blocking gate ensures model fits device)
+- **Deployment automation** — Artifact staging, golden-vector inclusion, CCS project build, and device flashing in one step
 
 ## Data Requirements
 
-The skill handles format conversion for tinyml-modelzoo compatibility. You must provide:
-- **Pre-processed data** — Cleaned, normalized, and formatted (CSV, TXT, or NumPy). The skill does not perform raw data cleaning or preprocessing
-- **Appropriate size** — Dataset must be suitable for your task type and target device constraints
+The skill auto-detects and validates dataset formats for tinyml-modelzoo compatibility. You must provide:
+
+- **Pre-processed data** — Cleaned, normalized, and formatted in CSV, TXT, or NumPy format. The skill does not perform raw data cleaning; bring data ready for training
+- **Appropriate size** — Dataset must be suitable for your task type (classification, anomaly detection, regression, forecasting) and target device memory constraints
+- **Supported formats** — CSV, TXT (space/comma-delimited), or NumPy arrays; the skill auto-converts and validates before training
 
 ## Getting Started
 
-### First Time: Complete Setup
-
-Run the setup skill immediately after installing the plugin. This is a one-time configuration:
+Invoke the ti-ccstudio-tinyml-workflow skill to begin:
 
 ```
-/tinyml-agent-skills:setup
-```
-
-### Trigger the Workflow
-
-```
-/tinyml-agent-skills:tinyml-workflow-agent
+/tinyml-agent-skills:ti-ccstudio-tinyml-workflow
 ```
 
 Or use natural language:
@@ -143,32 +101,7 @@ Or use natural language:
 - "Deploy a model to F28P55"
 - "Build a Tiny ML model with tinyml-modelzoo"
 
-### Workflow Execution
-
-**Phase 1: Project Definition & CCS Import**
-- Select task type (classification, anomaly detection, regression, forecasting) and target device
-- Import the SDK AI-example template into a CCS project
-- Optionally reuse a matching tinyml-modelzoo example (config and/or dataset)
-
-**Phase 2: Data Analysis & Preparation**
-- Validate dataset format (auto-corrects common issues)
-- Review statistical properties and data distribution
-- Select feature extraction transforms and data processing presets
-
-**Phase 3: Model & Training Configuration**
-- Review ranked model recommendations from tinyml-modelzoo
-- Select quantization mode:
-  - `0` = Float32 (no compression, largest model, slowest)
-  - `1` = Standard quantization (4× smaller, all devices)
-  - `2` = NPU-optimized (smallest model, fastest, requires NPU hardware)
-- Configure hyperparameters and training settings (GPU use is offered if detected)
-
-**Phase 4: Build, Compile & Deploy**
-- Generate the complete `config.yaml` in the CCS project and review it
-- Train and compile; check artifacts and the FLASH/SRAM footprint
-- Build the CCS project with golden vectors and flash the device
-
-**Note:** For best results deploying to CCStudio, use Claude Code within the TI Code Composer Studio IDE to ensure seamless project creation and build integration.
+The skill will guide you through project definition, data preparation, model training configuration, and device deployment. You can start from the beginning or jump to any step if you have existing configs or artifacts.
 
 ## Technical Concepts
 

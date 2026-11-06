@@ -1,0 +1,24 @@
+common:
+  task_type: generic_timeseries_regression
+  target_device: F28P55
+dataset:
+  dataset_name: torque_measurement
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip
+data_processing_feature_extraction:
+  data_proc_transforms:
+  - SimpleWindow
+  variables: 10
+  frame_size: 128
+  stride_size: 0.25
+training:
+  model_name: REGR_10k
+  batch_size: 512
+  training_epochs: 50
+  early_stopping: true
+  early_stopping_patience: 5
+  num_gpus: 1
+  learning_rate: 0.001
+  output_int: false
+  auto_quantization: true
+testing: {}
+compilation: {}

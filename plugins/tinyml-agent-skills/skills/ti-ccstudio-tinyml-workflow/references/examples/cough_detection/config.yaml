@@ -1,0 +1,29 @@
+common:
+  target_module: audio
+  task_type: audio_classification
+  target_device: MSPM0G5187
+
+dataset:
+
+  dataset_name: cough_detection
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/cough_detection.zip
+
+data_processing_feature_extraction:
+  feature_extraction_name: MSPM0_LPC_8820
+
+
+training:
+  model_name: TCDS_ResNet_NPU
+  batch_size: 64
+  training_epochs: 40       # Increase from 20 to 50 for better convergence with small dataset
+  early_stopping: true
+  early_stopping_patience: 5
+  num_gpus: 1                # CPU training (set to 1 if you have a CUDA GPU)
+  learning_rate: 0.01        # Reduced from 0.1 for fine-tuning with limited data
+  weight_decay: 4e-4
+
+testing: {}
+
+compilation:
+  # Uses TI Neural Network Compiler to generate model.a for MSPM0G5187 NPU
+  compile_preset_name: default_preset

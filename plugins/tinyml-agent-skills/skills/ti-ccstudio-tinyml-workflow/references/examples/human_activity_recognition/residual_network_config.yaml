@@ -1,0 +1,3 @@
+out_channel_layer1: 8
+out_channel_layer2: 16
+out_channel_layer3: 32

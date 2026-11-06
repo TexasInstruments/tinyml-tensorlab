@@ -4,7 +4,6 @@ Dispatcher for setup skill functions.
 
 Usage:
     python3 runner.py <function_name> '<json_args>'
-    python3 runner.py set_update_mode '{"mode": "auto"}'
 """
 
 import sys
@@ -13,12 +12,14 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from update_setup import set_update_mode, save_config
+from update_setup import save_config
+from modelzoo_detect import detect_modelzoo, check_wheel_install
 
 
 FUNCTION_MAP = {
-    "set_update_mode": set_update_mode,
     "save_config": save_config,
+    "detect_modelzoo": detect_modelzoo,
+    "check_wheel_install": check_wheel_install,
 }
 
 

@@ -1,72 +1,23 @@
 #!/usr/bin/env python3
 """
-Update mode setup for tinyml-workflow-agent.
-Called by setup skill during Step 2.
-Writes UPDATE_MODE to .env file.
+Config writer for the setup skill.
+Called by setup skill at Step 5 to write ~/.tinyml-agent-skills/.env.
 """
 
-import json
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 
 
-SKILL_ROOT = Path(__file__).parent.parent.parent / "tinyml-workflow-agent"
 ENV_FILE = Path.home() / ".tinyml-agent-skills" / ".env"
-
-
-def _read_plugin_json() -> Dict:
-    # plugin.json is at <skills_root>/../.claude-plugin/plugin.json
-    plugin_file = SKILL_ROOT.parent.parent / ".claude-plugin" / "plugin.json"
-    if plugin_file.exists():
-        try:
-            with open(plugin_file) as f:
-                return json.load(f)
-        except (json.JSONDecodeError, IOError):
-            pass
-    return {}
-
-
-def get_current_version() -> str:
-    data = _read_plugin_json()
-    return data.get("version", "unknown")
-
-
-def _read_env_vars() -> Dict:
-    """Read all vars from .env file."""
-    vars_dict = {}
-    if ENV_FILE.exists():
-        try:
-            with open(ENV_FILE) as f:
-                for line in f:
-                    line = line.strip()
-                    if line and not line.startswith("#"):
-                        if "=" in line:
-                            key, val = line.split("=", 1)
-                            vars_dict[key.strip()] = val.strip()
-        except IOError:
-            pass
-    return vars_dict
-
-
-def _write_env_var(key: str, value: str):
-    """Update or add a key=value pair in .env file."""
-    ENV_FILE.parent.mkdir(parents=True, exist_ok=True)
-
-    vars_dict = _read_env_vars()
-    vars_dict[key] = value
-
-    with open(ENV_FILE, "w") as f:
-        for k, v in vars_dict.items():
-            f.write(f"{k}={v}\n")
 
 
 def save_config(
     tinyml_modelzoo_path: str,
-    update_mode: str,
-    pinned_version: str = "",
     tinyml_modelmaker_path: str = "",
     tinyml_tinyverse_path: str = "",
     tinyml_modelopt_path: str = "",
+    modelzoo_install_mode: str = "repo",
+    venv_python: str = "",
     **kwargs,
 ) -> Dict:
     """
@@ -74,14 +25,19 @@ def save_config(
     Called at end of setup to persist the full configuration.
     Uses pathlib for cross-platform compatibility.
     """
+    if modelzoo_install_mode not in ("repo", "wheel"):
+        return {"success": False, "errors": [f"Invalid modelzoo_install_mode '{modelzoo_install_mode}'. Use 'repo' or 'wheel'."]}
     try:
         ENV_FILE.parent.mkdir(parents=True, exist_ok=True)
+        # repo:  TINYML_MODELZOO_PATH = git checkout root
+        # wheel: TINYML_MODELZOO_PATH = site-packages dir containing tinyml_modelzoo/
         config = {
             "IS_REPO_SETUP": "1",
             "TINYML_MODELZOO_PATH": tinyml_modelzoo_path,
-            "UPDATE_MODE": update_mode,
-            "UPDATE_PINNED_VERSION": pinned_version or "",
+            "MODELZOO_INSTALL_MODE": modelzoo_install_mode,
         }
+        if venv_python:
+            config["VENV_PYTHON"] = venv_python
         if tinyml_modelmaker_path:
             config["TINYML_MODELMAKER_PATH"] = tinyml_modelmaker_path
         if tinyml_tinyverse_path:
@@ -98,32 +54,3 @@ def save_config(
         }
     except Exception as e:
         return {"success": False, "errors": [str(e)]}
-
-
-def set_update_mode(mode: str) -> Dict:
-    """
-    Store user's chosen update mode in .env.
-    mode: "pinned" or "auto"
-    """
-    if mode not in ("pinned", "auto"):
-        return {"success": False, "errors": [f"Invalid mode '{mode}'. Use 'pinned' or 'auto'."]}
-
-    current_version = get_current_version()
-    _write_env_var("UPDATE_MODE", mode)
-
-    if mode == "pinned":
-        _write_env_var("UPDATE_PINNED_VERSION", current_version)
-    else:
-        _write_env_var("UPDATE_PINNED_VERSION", "")
-
-    return {
-        "success": True,
-        "mode": mode,
-        "pinned_version": current_version if mode == "pinned" else None,
-        "current_version": current_version,
-        "message": (
-            f"Pinned to v{current_version}. Skill will not auto-update."
-            if mode == "pinned"
-            else "Auto-update enabled. Skill will check for updates on each session."
-        ),
-    }

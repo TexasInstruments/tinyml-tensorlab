@@ -9,11 +9,10 @@
         "tinyml-agent",
         "tinyml-agentic-skill",
         "tinyml-tensorlab",
-        "tinyml-workflow-agent"
+        "ti-ccstudio-tinyml-workflow"
     ],
     "skills": [
         "./skills/setup",
-        "./skills/tinyml-workflow-agent",
-        "./skills/tinyml-modelzoo-agent"
+        "./skills/ti-ccstudio-tinyml-workflow"
     ]
 }
