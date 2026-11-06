@@ -22,7 +22,11 @@ def test_radar_default_lr_scheduler_is_accepted_by_init_lr_scheduler():
     dummy_optimizer = torch.optim.SGD([torch.nn.Parameter(torch.zeros(1))], lr=0.01)
 
     # Should not raise. Pre-fix: RuntimeError("Invalid lr scheduler 'constantlr'...")
+    # radar_training_base builds argv with f'{params.training.lr_scheduler}', so
+    # the value reaches init_lr_scheduler as a string even when the default is
+    # Python None (-> 'None' -> .lower() == 'none', the constant-LR path).
+    # Convert the same way here rather than passing the raw default.
     scheduler = init_lr_scheduler(
-        lr_scheduler=lr_scheduler_value, optimizer=dummy_optimizer, epochs=10, lr_warmup_epochs=0,
+        lr_scheduler=f'{lr_scheduler_value}', optimizer=dummy_optimizer, epochs=10, lr_warmup_epochs=0,
     )
     assert scheduler is not None

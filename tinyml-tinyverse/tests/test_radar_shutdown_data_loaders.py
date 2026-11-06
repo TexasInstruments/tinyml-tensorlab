@@ -58,7 +58,7 @@ def test_main_calls_shutdown_data_loaders():
             return_value=(fake_dataset, fake_dataset, None, None)))
         stack.enter_context(patch.object(radar_train, "create_data_loaders", return_value=fake_loaders))
         stack.enter_context(patch.object(radar_train.models, "get_model", return_value=torch.nn.Linear(8, 2)))
-        stack.enter_context(patch.object(radar_train, "log_model_summary"))
+        stack.enter_context(patch.object(radar_train, "log_model_graph"))
         stack.enter_context(patch.object(radar_train, "load_pretrained_weights", side_effect=lambda m, a, l: m))
         stack.enter_context(patch.object(radar_train, "handle_export_only", return_value=False))
         stack.enter_context(patch.object(radar_train, "move_model_to_device"))

@@ -13,7 +13,7 @@ explicit compile_model=0. See docs/superpowers/plans/
 from unittest.mock import patch
 
 from tinyml_modelmaker.ai_modules.radar.params import init_params
-from tinyml_modelmaker.ai_modules.radar.training.tinyml_tinyverse.radar_base import BaseRadarModelTraining
+from tinyml_modelmaker.ai_modules.radar.training.tinyml_tinyverse.radar_training_base import BaseRadarModelTraining
 
 
 def test_init_params_carries_compile_model_field():
@@ -42,7 +42,7 @@ def test_compile_model_not_auto_enabled_on_cuda():
 
 
 def test_build_common_train_argv_includes_compile_model():
-    """Regression test: radar_base.py's train argv must include --compile-model,
+    """Regression test: radar_training_base.py's train argv must include --compile-model,
     sourced from params.training.compile_model -- otherwise the field added
     above has nowhere to go and remains dead."""
     params = init_params()

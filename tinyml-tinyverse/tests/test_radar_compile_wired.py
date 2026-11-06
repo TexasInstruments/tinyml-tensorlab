@@ -76,7 +76,7 @@ def test_main_calls_compile_model_if_enabled_and_uses_its_return_value():
             return_value=(fake_dataset, fake_dataset, None, None)))
         stack.enter_context(patch.object(radar_train, "create_data_loaders", return_value=fake_loaders))
         stack.enter_context(patch.object(radar_train.models, "get_model", return_value=pre_wrap_model))
-        stack.enter_context(patch.object(radar_train, "log_model_summary"))
+        stack.enter_context(patch.object(radar_train, "log_model_graph"))
         stack.enter_context(patch.object(radar_train, "load_pretrained_weights", side_effect=lambda m, a, l: m))
         stack.enter_context(patch.object(radar_train, "handle_export_only", return_value=False))
         # Shared recorder so we can assert move_model_to_device runs BEFORE
