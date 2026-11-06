@@ -1,0 +1,21 @@
+{% extends "!layout.html" %}
+
+{# Add the TI header banner at the top of the page using extrahead #}
+{% block extrahead %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var banner = document.createElement('div');
+  banner.id = 'ti-header-banner';
+  banner.innerHTML = '<a href="https://www.ti.com" target="_blank" title="Visit Texas Instruments"><img src="{{ pathto('_static/img/ti_logo.png', 1) }}" alt="Texas Instruments"/></a>';
+  document.body.insertBefore(banner, document.body.firstChild);
+});
+</script>
+{% endblock %}
+
+{# Override the sidebar title area #}
+{% block sidebartitle %}
+<a href="{{ pathto(master_doc) }}">{{ project }}</a>
+<div class="version">{{ version }}</div>
+{% include "searchbox.html" %}
+{% endblock %}

@@ -63,7 +63,7 @@ Data was captured using the EdgeAI Sensor Boosterpack with motion recorded from 
      - Dominant Frequency
   9. Feature Concatenation
 
-## Model Architecture Options (Available on Tensorlab CLI Tools)
+## Model Architecture Options (Available in tinyml-modelzoo)
 
   1. **PIRDetection_model_1_t** (Default):
      - Compact CNN architecture
@@ -73,8 +73,8 @@ Data was captured using the EdgeAI Sensor Boosterpack with motion recorded from 
 
 ## AI Model Performance
 
-  - **Accuracy:** ~98% (*Accuracy numbers for CC1352 with floating point feature extraction*)
-  - **Accuracy:** ~92.46% (*Accuracy numbers on MSPM0 with fixed point feature extraction*)
+  - **Accuracy:** ~98% (*from an earlier release: CC1352 with floating point feature extraction*); a short 1.5.0 test run of `config_CC1352.yaml` (50 epochs) gave 94.81% test accuracy
+  - **Accuracy:** ~92.46% (*from an earlier release: MSPM0 with fixed point feature extraction*); a short 1.5.0 test run of `config_MSPM0.yaml` gave 65.40% test accuracy
 
 
 ## Training and Deployment Process
@@ -82,10 +82,10 @@ Data was captured using the EdgeAI Sensor Boosterpack with motion recorded from 
   NOTE: Running the config yaml handles everything including feature extraction, training, quantization, and compilation.
 
   1. Training:
-     - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-     - Batch size: 64, Learning rate: 0.00001, Optimizer: Adam
-     - Weight decay: 1e-20
-     - Training epochs: 100
+     - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+     - MSPM0 (`config_MSPM0.yaml`): batch size 64, learning rate 0.00001, weight decay 1e-20, 100 epochs, feature extraction `PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D_FixedPoint`
+     - CC13xx/CC27xx/CC35X1 (`config_CC*.yaml`): batch size 64, learning rate 0.001, 50 epochs, feature extraction `PIRDetection_125Input_25Feature_25Frame_1InputChannel_2D`
+     - Optimizer: SGD (default, not overridden in the configs)
 
   2. Quantization:
      - INT8 quantization for NPU compatibility
@@ -126,7 +126,7 @@ Data was captured using the EdgeAI Sensor Boosterpack with motion recorded from 
   - MSPM0G5187 Technical Reference Manual https://www.ti.com/product/MSPM0G5187
   - EdgeAI Sensor Boosterpack (TIDA-010997) https://www.ti.com/tool/TIDA-010997
   - https://software-dl.ti.com/mctools/nnc/mcu/users_guide/
-  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-tensorlab/tree/main
+  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-modelzoo
   - https://en.wikipedia.org/wiki/Passive_infrared_sensor
   - EdgeAI Software Guide: https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST
 - MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK

@@ -15,7 +15,7 @@
 
 This guide walks you through the process of taking a timeseries regression model trained in **TinyML Modelzoo** and running it on a Texas Instruments (TI) microcontroller. Timeseries regression predicts target variable based on independent variables, and previous context.
 
-To learn more about running timeseries regression examples on ModelMaker, refer to the [Generic TimeSeries Regression Example](../../examples/generic_timeseries_regression/readme.md), which demonstrates how to run regression examples using a synthetically generated dataset.
+To learn more about running timeseries regression examples on ModelMaker, refer to the [Generic TimeSeries Regression Example](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/generic_timeseries_regression/readme.md), which demonstrates how to run regression examples using a synthetically generated dataset.
 
 ---
 
@@ -38,9 +38,9 @@ Ensure you have a TI LaunchPad for your target device. The following devices are
 
 ### Software
 
-1. **TinyML ModelMaker**: Latest version from [TinyML Tensorlab GitHub Repository](https://github.com/TexasInstruments/tinyml-tensorlab) Current version: 1.3.0.
+1. **TinyML ModelMaker**: Latest version from the [TinyML ModelZoo GitHub Repository](https://github.com/TexasInstruments/tinyml-modelzoo). Current version: 1.6.0.
 
-After running a regression example, ModelMaker generates the following files required for deploying the model on MCUs (Refer to the [Generic Timeseries Regression Example](../../examples/generic_timeseries_regression/readme.md)).
+After running a regression example, ModelMaker generates the following files required for deploying the model on MCUs (Refer to the [Generic Timeseries Regression Example](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/generic_timeseries_regression/readme.md)).
 
 | File | Description |
 |------|-------------|
@@ -254,9 +254,9 @@ With this workflow, you can create your own generic time series regression appli
 
 To explore more regression examples refer to the following examples:
 
-- [Washing Machine load weighing](../../examples/washing_machine_load_weighing/readme.md) - Washing machine load weighing using current, voltage, speed data
-- [Torque Measurement](../../examples/torque_measurement_regression/readme.md) - Predicting torque of motor using current, voltage, collant temperature and other features.
-- [Induction Motor Speed Prediction](../../examples/induction_motor_speed_prediction/readme.md) Induction motor speed prediction
+- [Washing Machine load weighing](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/washing_machine_load_weighing/readme.md) - Washing machine load weighing using current, voltage, speed data
+- [Torque Measurement](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/torque_measurement_regression/readme.md) - Predicting torque of motor using current, voltage, collant temperature and other features.
+- [Induction Motor Speed Prediction](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/induction_motor_speed_prediction/readme.md) Induction motor speed prediction
 
 
 **Update History:**

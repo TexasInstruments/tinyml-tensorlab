@@ -1,6 +1,6 @@
  # Google Speech Commands 12-Class Dataset
 
-  A TensorLab-compatible 12-class variant of the Google Speech Commands dataset for keyword spotting and audio            classification experiments using TinyML models such as DSCNN.
+  A ModelZoo-compatible 12-class variant of the Google Speech Commands dataset for keyword spotting and audio            classification experiments using TinyML models such as DSCNN.
                                                                                                                           ---
 
   ## Dataset Source
@@ -51,7 +51,7 @@
   │   ├── down/
   │   ├── go/
   │   └── _background_noise_/
-  └── classes/                     # TensorLab-ready dataset
+  └── classes/                     # ModelZoo-ready dataset
       ├── down/
       ├── go/
       ├── left/
@@ -164,3 +164,24 @@
   This reduces computation and model size while maintaining strong keyword spotting accuracy, making it suitable for
   embedded deployment.
 
+  ## Training Configuration (`config_MSPM0.yaml`)
+
+  The example config trains the `DSCNN_NPU` model for `MSPM0G5187` using the pre-generated dataset
+  `google_speech_commands_12class`
+  (`https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/google_speech_commands_12class.zip`), the
+  `GoogleSpeechCommands_MFCC_Default` preset (`sampling_rate: 16000`, `audio_duration_ms: 1000`), and these training settings:
+  `batch_size: 64`, `training_epochs: 20`, `learning_rate: 0.1`, `weight_decay: 1e-5`, `num_gpus: 1`, `quantization: 2`.
+
+  Run it from the `tinyml-modelzoo` directory:
+
+  Linux:
+
+```
+  ./run_tinyml_modelzoo.sh examples/google_speech_command/config_MSPM0.yaml
+```
+
+  Windows:
+
+```
+  .\run_tinyml_modelzoo.bat examples\google_speech_command\config_MSPM0.yaml
+```

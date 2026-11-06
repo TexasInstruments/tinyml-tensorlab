@@ -1,126 +1,142 @@
-# How to Add a New Model to Tiny ML ModelZoo
+# Model Registration Reference
 
-This guide explains how to add a new model to the Tiny ML ModelZoo. With the dynamic registration system, you only need to modify files in `tinyml-modelzoo` - **no changes are required in `tinyml-tinyverse` or `tinyml-modelmaker`**.
+Reference for how models are defined, registered and resolved in Tiny ML
+ModelZoo. For a step-by-step walkthrough that adds a model and trains it on an
+example, see the **[Bring Your Own Model (BYOM) Guide](docs/BRING_YOUR_OWN_MODEL.md)**.
 
-## Quick Summary
+This reference describes the **permanent** route: model classes and descriptions registered inside
+`tinyml-modelzoo`. `tinyml-tinyverse` and `tinyml-modelmaker` import them from `tinyml_modelzoo`.
 
-To add a new model:
+To try a model without editing `tinyml-modelzoo`, use `training.custom_model_path` instead (see **Option A** in the
+[BYOM Guide](docs/BRING_YOUR_OWN_MODEL.md)). The file only needs a class whose name equals `training.model_name`; no
+description, `__all__` entry or `enabled_models_list` entry is required.
 
-1. Add your model class to the appropriate file in `tinyml_modelzoo/models/`
-2. Add the class name to that file's `__all__` list
-3. Add device performance info to `device_info/run_info.py`. You can leave the content 'TBD' if you do not know the real values.
-4. Add a model description to `model_descriptions/` for GUI integration
+- [Files](#files)
+- [Name Resolution](#name-resolution)
+- [Model Classes](#model-classes)
+- [Spec Layer Types](#spec-layer-types)
+- [Model Descriptions](#model-descriptions)
+- [Registry API](#registry-api)
+- [Naming Conventions](#naming-conventions)
+- [Test Snippets](#test-snippets)
+- [Troubleshooting](#troubleshooting)
 
-That's it! The model is automatically registered and available everywhere. **No changes are required in `tinyml-tinyverse` or `tinyml-modelmaker`.**
+---
 
-## Step-by-Step Guide
+## Files
 
-### Step 1: Choose the Right Model File
+| Task type | Model classes (`tinyml_modelzoo/models/`) | Model descriptions (`tinyml_modelzoo/model_descriptions/`) |
+|-----------|-------------------------------------------|------------------------------------------------------------|
+| Time series classification | `classification.py` | `classification.py` |
+| Time series regression | `regression.py` | `regression.py` |
+| Time series anomaly detection | `anomalydetection.py` | `anomalydetection.py` |
+| Time series forecasting | `forecasting.py` | `forecasting.py` |
+| Feature extraction | `feature_extraction.py` | — |
+| Image classification | `image.py` | — |
+| Audio classification | `audio.py` | — |
+| Radar | `radar.py` | — |
 
-Models are organized by task type in `tinyml_modelzoo/models/`:
+The model modules auto-discovered by the registry are listed in
+`_MODEL_MODULES` in `tinyml_modelzoo/models/__init__.py`.
 
-| Task Type                  | File                    | Examples                                   |
-|----------------------------|-------------------------|--------------------------------------------|
-| Time series classification | `classification.py`     | CNN_TS_GEN_BASE_1K_NPU, HAR_TINIE_CNN_2K       |
-| Time series regression     | `regression.py`         | REG_TS_GEN_BASE_1K, REG_TS_CNN_13K         |
-| Anomaly detection          | `anomalydetection.py`   | AE_CNN_TS_GEN_BASE_4K, AD_CNN_TS_17K       |
-| Time series forecasting    | `forecasting.py`        | FC_CNN_TS_GEN_BASE_13K, LSTM10_TS_GEN_BASE |
-| Feature extraction         | `feature_extraction.py` | FEModel, FEModelLinear                     |
-| Image classification       | `image.py`              | CNN_LENET5                                 |
+---
 
-### Step 2: Create Your Model Class
+## Name Resolution
 
-Your model should inherit from `GenericModelWithSpec` (for spec-based models) or `torch.nn.Module` (for custom architectures).
+A model has two names:
 
-#### Option A: Spec-Based Model (Recommended)
+| Name | Defined in | Used by |
+|------|------------|---------|
+| **Description name** (e.g. `CLS_1k_NPU`) | Key of `_model_descriptions` in `model_descriptions/<task>.py`, and listed in `enabled_models_list` | `training.model_name` in the config YAML, and the GUI |
+| **Class name** (e.g. `CNN_TS_GEN_BASE_1K_NPU`) | Python class in `models/<task>.py`, listed in that file's `__all__` | `model_training_id` in the description; `get_model()` |
 
-Use this approach for models that can be defined as a sequence of standard layers:
+Resolution path when a config is run:
+
+```
+config.yaml: training.model_name ──► model_descriptions: _model_descriptions[<name>]   (must be in enabled_models_list)
+                                         └─ training.model_training_id ──► models: model_dict[<class name>]
+```
+
+- `tinyml_modelmaker/run_tinyml_modelmaker.py` resolves `training.model_name`
+  with `get_model_description()`. If no **enabled** description has that name,
+  the run stops with:
+  `please check if the given model_name is a supported one: <name>`.
+- A description is therefore **required** for any model used from a config.
+  A class with no description can only be used directly through `get_model()`.
+
+---
+
+## Model Classes
+
+A model class must:
+
+- be listed in the `__all__` list of its model file, and
+- accept a `config` argument: `get_model()` instantiates every model as
+  `ModelClass(config=config_dict)`, where `config_dict` contains
+  `variables`, `num_classes`, `input_features` and `dual_op`.
+
+Names in a module's optional `_REGISTRY_EXCLUDE` set are exported but not
+added to `model_dict`.
+
+Input tensor shape:
+
+| Data | Shape |
+|------|-------|
+| Time series | `(batch, variables, input_features, 1)` |
+| Images | `(batch, channels, height, width)` |
+
+### Option A: Spec-based model (`GenericModelWithSpec`)
+
+The network is an ordered dict of layer specs, built by `gen_model_spec()` and
+instantiated by `_init_model_from_spec()`. `forward()` runs the layers in order.
 
 ```python
 from ..utils import py_utils
 from .base import GenericModelWithSpec
 
 
-class MY_NEW_MODEL_2K(GenericModelWithSpec):
-    """
-    My new 2K parameter classification model.
-
-    Architecture: 2 Conv+BN+ReLU layers + MaxPool + Linear
-    """
-
-    def __init__(self, config, input_features=128, variables=1, num_classes=3):
-        super().__init__(config, input_features=input_features,
-                        variables=variables, num_classes=num_classes)
+class MY_NEW_MODEL_2K_NPU(GenericModelWithSpec):
+    def __init__(self, config, input_features=512, variables=1, num_classes=2):
+        super().__init__(config, input_features=input_features, variables=variables,
+                         num_classes=num_classes)
         self.model_spec = self.gen_model_spec()
-        self._init_model_from_spec(
-            model_spec=self.model_spec,
-            variables=self.variables,
-            input_features=self.input_features,
-            num_classes=self.num_classes
-        )
+        self._init_model_from_spec(model_spec=self.model_spec, variables=self.variables,
+                                   input_features=self.input_features, num_classes=self.num_classes)
 
     def gen_model_spec(self):
-        """Define the model architecture using layer specifications."""
         layers = py_utils.DictPlus()
-
-        # Input normalization
         layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
-
-        # Conv block 1
-        layers += {'1': dict(type='ConvBNReLULayer',
-                            in_channels=self.variables,
-                            out_channels=16,
-                            kernel_size=(5, 1),
-                            stride=(1, 1))}
-        layers += {'2': dict(type='MaxPoolLayer',
-                            kernel_size=(2, 1),
-                            stride=(2, 1))}
-
-        # Conv block 2
-        layers += {'3': dict(type='ConvBNReLULayer',
-                            in_channels=16,
-                            out_channels=32,
-                            kernel_size=(3, 1),
-                            stride=(1, 1))}
-        layers += {'4': dict(type='MaxPoolLayer',
-                            kernel_size=(2, 1),
-                            stride=(2, 1))}
-
-        # Global pooling and classifier
-        layers += {'5': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
-        layers += {'6': dict(type='ReshapeLayer', ndim=2)}
-        layers += {'7': dict(type='LinearLayer',
-                            in_features=32 * 4,
-                            out_features=self.num_classes)}
-
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables, out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='MaxPoolLayer', kernel_size=(2, 1), stride=(2, 1))}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=8, out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'4': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'5': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'6': dict(type='LinearLayer', in_features=None, out_features=self.num_classes)}
         return dict(model_spec=layers)
 ```
 
-#### Option B: Custom PyTorch Model
+`_init_model_from_spec()` overrides these values automatically:
 
-For more complex architectures:
+| Layer position | Condition | Overridden value |
+|----------------|-----------|------------------|
+| First layer | `type='BatchNormLayer'` | `num_features = variables` |
+| Second layer | `type` is `ConvLayer` or `ConvBNReLULayer` | `in_channels = variables` |
+| Last layer | `type='LinearLayer'` | `out_features = num_classes` |
+| Any `LinearLayer` | `in_features=None` | inferred from the previous layer's output size |
+
+### Option B: Custom `torch.nn.Module`
 
 ```python
-import torch
 import torch.nn as nn
 
 
 class MY_CUSTOM_MODEL(nn.Module):
-    """Custom model with non-standard architecture."""
-
     def __init__(self, config, input_features=128, variables=1, num_classes=3):
         super().__init__()
-        # Extract config values (may come from get_model() call)
         if isinstance(config, dict):
             variables = config.get('variables', variables)
             num_classes = config.get('num_classes', num_classes)
             input_features = config.get('input_features', input_features)
-
-        self.variables = variables
-        self.num_classes = num_classes
-        self.input_features = input_features
-
-        # Define your layers
         self.conv1 = nn.Conv2d(variables, 32, kernel_size=(3, 1), padding=(1, 0))
         self.bn1 = nn.BatchNorm2d(32)
         self.relu = nn.ReLU()
@@ -128,245 +144,162 @@ class MY_CUSTOM_MODEL(nn.Module):
         self.fc = nn.Linear(32, num_classes)
 
     def forward(self, x):
-        # x shape: (batch, variables, input_features) or (batch, variables, input_features, 1)
         if x.dim() == 3:
-            x = x.unsqueeze(-1)  # Add channel dimension
-
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.pool(x)
-        x = x.view(x.size(0), -1)
-        x = self.fc(x)
-        return x
+            x = x.unsqueeze(-1)
+        x = self.pool(self.relu(self.bn1(self.conv1(x))))
+        return self.fc(x.view(x.size(0), -1))
 ```
 
-### Step 3: Add to `__all__`
+Any class listed in `__all__` that has a `forward` attribute is registered.
 
-At the bottom of the model file, add your class name to the `__all__` list:
+---
+
+## Spec Layer Types
+
+Valid `type` values are the layer factory functions in
+`tinyml_modelzoo/layers/tinynn.py`.
+
+| Type | PyTorch layer(s) | Parameters |
+|------|------------------|------------|
+| `IdentityLayer` | `Identity` | — |
+| `BatchNormLayer` | `BatchNorm2d` | `num_features` |
+| `ReLULayer` / `ReluLayer` | `ReLU` | — |
+| `ConvLayer` | `Conv2d` | `in_channels`, `out_channels`, `kernel_size` (2-tuple), `stride=1`, `padding=None`, `dilation=1` |
+| `ConvBNReLULayer` | `Conv2d` + `BatchNorm2d` + `ReLU` | `in_channels`, `out_channels`, `kernel_size` (2-tuple), `stride`, `padding=None`, `dilation=1` |
+| `MaxPoolLayer` | `MaxPool2d` | `kernel_size` (2-tuple), `stride=1`, `padding=None`, `dilation=1` |
+| `AvgPoolLayer` | `AvgPool2d` | `kernel_size` (2-tuple), `stride=1`, `padding=None` |
+| `AdaptiveAvgPoolLayer` | `AdaptiveAvgPool2d` | `output_size` (2-tuple) |
+| `ReshapeLayer` | Flatten to 2D | `ndim=2` (only 2 supported) |
+| `LinearLayer` | `Linear` | `in_features` (`None` = inferred), `out_features` |
+| `LinearBNReLULayer` | `Linear` + `BatchNorm1d` + `ReLU` | `in_features`, `out_features` |
+| `DropoutLayer` | `Dropout` | `dropout_prob` |
+| `TCDSBasicBlockLayer` | Depthwise-separable residual block | `in_channels`, `out_channels`, `kernel_size`, `stride=2` |
+| `RNNLayer` | `RNN` / `LSTM` / `GRU` | `input_size`, `hidden_size`, `return_last_timestep=False`, `num_layers=1`, `dropout=0.1`, `batch_first=True`, `rnn_type='RNN'` |
+| `LSTMLayer` | `LSTM` | Same as `RNNLayer` (without `rnn_type`) |
+| `GRULayer` | `GRU` | Same as `RNNLayer` (without `rnn_type`) |
+
+Conventions for `ConvLayer`, `ConvBNReLULayer` and the pooling layers:
+
+- `padding=None` means "same" padding: `k // 2` per kernel dimension.
+- An integer `padding`, `stride` or `dilation` applies to the height dimension
+  only: `n` becomes `(n, 0)` for padding and `(n, 1)` for stride and dilation.
+
+For layer configurations that the TI NPU can accelerate, see
+[NPU Configuration Guidelines](docs/NPU_CONFIGURATION_GUIDELINES.md).
+
+---
+
+## Model Descriptions
+
+Each `model_descriptions/<task>.py` defines:
+
+| Symbol | Purpose |
+|--------|---------|
+| `template_model_description` | Default description for the task. New entries start from `deepcopy(template_model_description)` |
+| `_model_descriptions` | Dict of description name → description |
+| `enabled_models_list` | Description names that are visible. Entries not listed here are ignored |
+| `get_model_descriptions()` / `get_model_description(name)` | Return enabled descriptions only |
+
+Entry format:
 
 ```python
-# Export all classification models
-__all__ = [
-    'CNN_TS_GEN_BASE_100',
-    'CNN_TS_GEN_BASE_1K_NPU',
-    # ... existing models ...
-    'MY_NEW_MODEL_2K',  # <-- Add your model here
-]
-```
-
-### Step 4: Verify Your Model
-
-Run the test script to verify your model works:
-
-```bash
-source ~/.pyenv/versions/py310_tinyml/bin/activate
-cd tinyml-modelzoo
-./run_tests.sh --skip-training
-```
-
-You should see your model in the count and be able to instantiate it:
-
-```python
-from tinyml_modelzoo.models import get_model, list_models
-
-# Check if model is registered
-print('MY_NEW_MODEL_2K' in list_models())  # Should print True
-
-# Instantiate the model
-model = get_model('MY_NEW_MODEL_2K', variables=1, num_classes=3, input_features=128)
-print(model)
-```
-
-### Step 5 (Optional): Add Device Performance Info
-
-If you have benchmarked your model on target devices, add the info to `device_info/run_info.py`:
-
-```python
-DEVICE_RUN_INFO = {
-    # ... existing models ...
-
-    'MyModelName_ForGUI': {
-        'F28P55': {'flash': 2500, 'inference_time_us': 150, 'sram': 1200},
-        'F28P65': {'flash': 2500, 'inference_time_us': 400, 'sram': 1200},
-        'F2837': {'flash': 2500, 'inference_time_us': 800, 'sram': 1200},
-        # Add TBD for untested devices
-        'MSPM0G3507': {'flash': 'TBD', 'inference_time_us': 'TBD', 'sram': 'TBD'},
-    },
-}
-```
-
-### Step 6 (Optional): Add GUI Model Description
-
-If you want the model to appear in the Tiny ML Studio GUI, add a description to the appropriate file in `tinyml_modelzoo/model_descriptions/`:
-
-| Task Type | Description File |
-|-----------|------------------|
-| Time series classification | `model_descriptions/classification.py` |
-| Time series regression | `model_descriptions/regression.py` |
-| Anomaly detection | `model_descriptions/anomalydetection.py` |
-| Time series forecasting | `model_descriptions/forecasting.py` |
-
-Add your model to the `_model_descriptions` dict and `enabled_models_list`:
-
-```python
-# In tinyml_modelzoo/model_descriptions/classification.py
-
-from tinyml_modelzoo import constants
-from tinyml_modelzoo.utils import deep_update_dict
-from tinyml_modelzoo.device_info import DEVICE_RUN_INFO
-
-_model_descriptions = {
-    # ... existing models ...
-
-    'My_Model_Name_2k_t': deep_update_dict(deepcopy(template_model_description), {
+    'MY_CLS_2k_NPU': deep_update_dict(deepcopy(template_model_description), {
         'common': dict(
-            model_details='My new 2K model. 2 Conv+BN+ReLU layers.'
+            model_details='Short architecture description shown in the GUI.',
         ),
         'training': dict(
-            model_training_id='MY_NEW_MODEL_2K',  # Must match class name in models/!
-            model_name='My_Model_Name_2k_t',
-            properties=[dict(type="group", dynamic=True, script="generictimeseriesclassification.py",
-                           name="preprocessing_group", label="Preprocessing Parameters", default=[])] + template_gui_model_properties,
-            target_devices={
-                constants.TARGET_DEVICE_F28P55: dict(model_selection_factor=None) |
-                    (DEVICE_RUN_INFO['My_Model_Name_2k_t'][constants.TARGET_DEVICE_F28P55]),
-                constants.TARGET_DEVICE_F28P65: dict(model_selection_factor=None) |
-                    (DEVICE_RUN_INFO['My_Model_Name_2k_t'][constants.TARGET_DEVICE_F28P65]),
-                # ... add other target devices ...
-            },
+            model_training_id='MY_NEW_MODEL_2K_NPU',   # class name in models/
+            model_name='MY_CLS_2k_NPU',                # same as the dict key
+            target_devices=[
+                constants.TARGET_DEVICE_F28P55,
+                constants.TARGET_DEVICE_MSPM0G5187,
+            ],
         ),
     }),
-}
-
-enabled_models_list = [
-    # ... existing models ...
-    'My_Model_Name_2k_t',  # Add to enable in GUI
-]
 ```
 
-**Important fields:**
-- `model_training_id`: Must exactly match your model class name in `models/`
-- `model_name`: The display name shown in the GUI
-- `model_details`: Brief description of the model architecture
-- `target_devices`: Dict of supported devices with performance info from `DEVICE_RUN_INFO`
-- `properties`: GUI properties for training parameters (use the template)
+| Field | Required | Description |
+|-------|----------|-------------|
+| `training.model_training_id` | Yes | Class name, exactly as registered in `model_dict` |
+| `training.model_name` | Yes | Same string as the `_model_descriptions` key |
+| `training.target_devices` | Yes | List of `constants.TARGET_DEVICE_*` values the model is intended for |
+| `common.model_details` | No | Free-text description shown in the GUI |
+| `training.properties` | No | GUI parameter groups. Only used by the GUI; copy from an existing entry such as `CLS_1k_NPU` |
 
-After adding, verify the description is generated correctly:
+All other fields (task category, quantization default, batch size, training
+devices, learning rate) are inherited from `template_model_description`.
 
-```bash
-cd tinyml-modelmaker
-python scripts/run_generate_description.py
-# Check data/descriptions/description_timeseries.json for your model
-```
+---
 
-## Available Layer Types
+## Registry API
 
-For spec-based models, you can use these layer types in `gen_model_spec()`:
+Defined in `tinyml_modelzoo/models/__init__.py`:
 
-| Layer Type | Description | Key Parameters |
-|------------|-------------|----------------|
-| `BatchNormLayer` | Batch normalization | `num_features` |
-| `ConvBNReLULayer` | Conv2d + BatchNorm + ReLU | `in_channels`, `out_channels`, `kernel_size`, `stride`, `padding` |
-| `MaxPoolLayer` | Max pooling | `kernel_size`, `stride`, `padding` |
-| `AvgPoolLayer` | Average pooling | `kernel_size`, `stride`, `padding` |
-| `AdaptiveAvgPoolLayer` | Adaptive average pooling | `output_size` |
-| `ReshapeLayer` | Flatten/reshape | `ndim` |
-| `LinearLayer` | Fully connected | `in_features`, `out_features` |
-| `ReluLayer` | ReLU activation | - |
-| `SigmoidLayer` | Sigmoid activation | - |
-| `LSTMLayer` | LSTM layer | `input_size`, `hidden_size` |
-| `TransposeConvBNReLULayer` | Transposed conv | Same as ConvBNReLULayer |
-| `ConvTranspose` | Transposed conv (no BN/ReLU) | Same as Conv2d |
-| `CatLayer` | Concatenation | - |
-| `AddLayer` | Element-wise addition | - |
+| Symbol | Description |
+|--------|-------------|
+| `model_dict` | Dict of class name → model class, built from each module's `__all__` |
+| `get_model(model_name, variables, num_classes, input_features=None, model_config=None, model_spec=None, dual_op=False)` | Instantiate a registered class by class name. Raises `ValueError` if not found. `model_config` is not implemented and only emits a warning |
+| `list_models()` | Sorted list of registered class names |
+| `get_model_count()` | Number of registered classes |
+
+---
 
 ## Naming Conventions
 
-- **Class names** (in `models/`): Use SCREAMING_SNAKE_CASE with model type and parameter count
-  - Classification: `CNN_TS_GEN_BASE_1K_NPU`, `RES_ADD_CNN_TS_GEN_BASE_3K`
-  - Regression: `REG_TS_GEN_BASE_1K`, `REG_TS_CNN_13K`
-  - Anomaly Detection: `AE_CNN_TS_GEN_BASE_4K`, `AD_CNN_TS_17K`
-  - Forecasting: `FC_CNN_TS_GEN_BASE_13K`, `LSTM10_TS_GEN_BASE`
+| Name | Style | Examples |
+|------|-------|----------|
+| Class name | `SCREAMING_SNAKE_CASE`, model family + parameter count, `_NPU` suffix if NPU-compliant | `CNN_TS_GEN_BASE_1K_NPU`, `RES_ADD_CNN_TS_GEN_BASE_3K`, `REG_TS_GEN_BASE_1K`, `AE_CNN_TS_GEN_BASE_4K`, `FC_CNN_TS_GEN_BASE_13K` |
+| Description name | Task prefix + parameter count, `_NPU` suffix if NPU-compliant | `CLS_1k_NPU`, `CLS_ResAdd_3k`, `REGR_2k`, `AD_17k`, `FCST_LSTM10` |
 
-- **GUI names** (in `model_descriptions/`): Use `TimeSeries_Generic_Xk_t` or `TimeSeries_Generic_Xk_NPU_t` pattern
-  - `TimeSeries_Generic_1k_NPU_t`, `TimeSeries_Generic_Regr_10k_t`, `TimeSeries_Generic_AD_4k_t`
+---
 
-## Testing Your Model
+## Test Snippets
 
-### Basic Import Test
+Registration and forward pass (time series):
 
 ```python
+import torch
+from tinyml_modelzoo.models import get_model, list_models
+
+assert 'MY_NEW_MODEL_2K_NPU' in list_models()
+model = get_model('MY_NEW_MODEL_2K_NPU', variables=1, num_classes=3, input_features=128)
+y = model(torch.randn(1, 1, 128, 1))
+print(tuple(y.shape))                                  # (1, 3)
+print(sum(p.numel() for p in model.parameters()))      # parameter count
+```
+
+Description lookup:
+
+```python
+from tinyml_modelzoo.model_descriptions.classification import get_model_description
+
+d = get_model_description('MY_CLS_2k_NPU')             # None if missing or not enabled
+print(d['training']['model_training_id'])
+```
+
+ONNX export:
+
+```python
+import torch
 from tinyml_modelzoo.models import get_model
 
-model = get_model('MY_NEW_MODEL_2K', variables=1, num_classes=3, input_features=128)
-print(f"Model parameters: {sum(p.numel() for p in model.parameters())}")
+model = get_model('MY_NEW_MODEL_2K_NPU', variables=1, num_classes=3, input_features=128).eval()
+torch.onnx.export(model, torch.randn(1, 1, 128, 1), 'my_model.onnx', opset_version=11)
 ```
 
-### Forward Pass Test
+Full training run: set `training.model_name` to the **description name** in a
+copy of an example config, then run it with `run_tinyml_modelzoo.sh` /
+`run_tinyml_modelzoo.bat`. See the [BYOM Guide](docs/BRING_YOUR_OWN_MODEL.md).
 
-```python
-import torch
-
-model = get_model('MY_NEW_MODEL_2K', variables=1, num_classes=3, input_features=128)
-x = torch.randn(1, 1, 128)  # (batch, variables, features)
-y = model(x)
-print(f"Output shape: {y.shape}")  # Should be (1, 3)
-```
-
-### ONNX Export Test
-
-```python
-import torch
-import torch.onnx
-
-model = get_model('MY_NEW_MODEL_2K', variables=1, num_classes=3, input_features=128)
-model.eval()
-x = torch.randn(1, 1, 128, 1)
-torch.onnx.export(model, x, "my_model.onnx", opset_version=11)
-```
-
-### Full Training Test
-
-To test your model with an actual training run, use the training wrapper:
-
-```bash
-# Linux
-./run_tinyml_modelzoo.sh examples/generic_timeseries_classification/config.yaml
-
-# Windows
-run_tinyml_modelzoo.bat examples\hello_world\config.yaml
-```
-
-You can modify an example config to use your new model by changing the `model_training_id` field.
+---
 
 ## Troubleshooting
 
-### Model not appearing in `model_dict`
-
-1. Check that the class name is in the file's `__all__` list
-2. Verify there are no import errors in your model file:
-   ```bash
-   python -c "from tinyml_modelzoo.models.classification import *"
-   ```
-
-### Model instantiation fails
-
-1. Ensure your `__init__` accepts a `config` dict parameter
-2. Handle both dict-style config and keyword arguments
-
-### Model training fails
-
-1. Verify input/output shapes match the data pipeline
-2. For time series: input is typically `(batch, variables, features, 1)`
-3. For images: input is typically `(batch, channels, height, width)`
-
-## Summary Checklist
-
-- [ ] Model class added to appropriate file in `tinyml_modelzoo/models/`
-- [ ] Class name added to file's `__all__` list
-- [ ] Model instantiates correctly via `get_model()`
-- [ ] Forward pass produces correct output shape
-- [ ] (Optional) Device performance info added to `device_info/run_info.py`
-- [ ] (Optional) GUI description added to `model_descriptions/` and `enabled_models_list`
-- [ ] (Optional) Verified with `run_generate_description.py`
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `please check if the given model_name is a supported one: <name>` | `training.model_name` is not a key of `_model_descriptions`, or it is not in `enabled_models_list` | Add both; use the description name, not the class name |
+| `Model '<name>' not found in registry or specified model_spec` | Class name not in `model_dict` | Check `__all__` and the spelling of `model_training_id` |
+| Warning `Could not import model module '<module>': ...`, and that module's models are missing | `ImportError` while importing the model file | Run `python -c "import tinyml_modelzoo.models.<module>"` to see the error |
+| `SyntaxError` on `import tinyml_modelzoo.models` | Syntax error in a model file (not caught by the registry) | Fix the reported line |
+| Shape mismatch at a `LinearLayer` | `in_features` does not match the flattened previous output | Set `in_features=None` to infer it, or recompute channels × pooled height × pooled width |
+| `AssertionError: kernel_size must be a tuple of size 2` | Integer `kernel_size` passed to a conv or pooling layer | Use a 2-tuple such as `(5, 1)` |

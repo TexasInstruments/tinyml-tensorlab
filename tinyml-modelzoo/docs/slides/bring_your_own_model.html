@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bring Your Own Model to Tiny ML ModelZoo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+:root {
+  --accent:  #e42125;
+  --bg:      #0d1117;
+  --card:    #161b22;
+  --border:  #30363d;
+  --text:    #e6edf3;
+  --muted:   #8b949e;
+  --code-bg: #1c2128;
+  --green:   #3fb950;
+  --yellow:  #d29922;
+  --blue:    #58a6ff;
+  --font:    "Inter", system-ui, sans-serif;
+  --mono:    "JetBrains Mono", "Courier New", monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100vw; height:100vh; overflow:hidden;
+  background:var(--bg); color:var(--text);
+  font-family:var(--font); -webkit-font-smoothing:antialiased;
+}
+#progress {
+  position:fixed; bottom:0; left:0; height:3px;
+  background:var(--accent); box-shadow:0 0 10px var(--accent);
+  transition:width 0.35s cubic-bezier(0.4,0,0.2,1); z-index:200;
+}
+#counter {
+  position:fixed; top:18px; right:28px;
+  font-family:var(--mono); font-size:12px; color:var(--muted);
+  letter-spacing:0.5px; z-index:200; user-select:none;
+}
+#slides { width:100vw; height:100vh; position:relative; }
+.slide {
+  position:absolute; inset:0; display:none; flex-direction:column;
+  padding:56px 80px 48px; opacity:0; transition:opacity 0.25s ease;
+}
+.slide.active { display:flex; opacity:1; }
+.eyebrow {
+  font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--accent); font-weight:600; margin-bottom:14px;
+}
+.title      { font-size:52px; font-weight:800; line-height:1.1; margin-bottom:14px; }
+.subtitle   { font-size:22px; color:var(--muted); font-weight:400; }
+.slide-title { font-size:34px; font-weight:700; margin-bottom:6px; }
+.slide-sub  { font-size:16px; color:var(--muted); margin-bottom:28px; }
+.label {
+  font-size:11px; font-weight:600; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted); margin-bottom:8px;
+}
+.body-text  { font-size:17px; line-height:1.65; color:var(--text); }
+.divider    { height:1px; background:var(--border); margin:24px 0; }
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:22px 24px;
+}
+.card.accent { border-left:3px solid var(--accent); }
+.card.green  { border-left:3px solid var(--green); }
+.card.blue   { border-left:3px solid var(--blue); }
+.card.yellow { border-left:3px solid var(--yellow); }
+.card-title  { font-size:17px; font-weight:700; margin-bottom:10px; }
+.card-body   { font-size:16px; color:var(--muted); line-height:1.6; }
+.grid   { display:grid; gap:16px; }
+.grid-2 { grid-template-columns:1fr 1fr; }
+.grid-3 { grid-template-columns:1fr 1fr 1fr; }
+.grid-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+.data-table { width:100%; border-collapse:collapse; font-size:15px; }
+.data-table th {
+  background:var(--card); padding:11px 16px; text-align:left;
+  font-size:12px; font-weight:600; letter-spacing:0.8px;
+  text-transform:uppercase; color:var(--accent); border-bottom:2px solid var(--border);
+}
+.data-table td { padding:11px 16px; border-bottom:1px solid var(--border); color:var(--text); vertical-align:middle; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.steps { display:flex; align-items:stretch; gap:0; }
+.step {
+  flex:1; background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:20px 18px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.step-arrow { display:flex; align-items:center; color:var(--muted); font-size:20px; padding:0 6px; flex-shrink:0; }
+.step-num {
+  width:30px; height:30px; border-radius:50%; background:var(--accent);
+  color:#fff; font-size:14px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.step-label { font-size:16px; font-weight:700; color:var(--text); }
+.step-desc  { font-size:14px; color:var(--muted); line-height:1.5; }
+.checklist { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.checklist li {
+  padding:13px 18px; background:var(--card);
+  border:1px solid var(--border); border-radius:8px;
+  border-left:3px solid var(--border); font-size:16px; line-height:1.45;
+}
+.checklist li.hi   { border-left-color:var(--accent); }
+.checklist li.ok   { border-left-color:var(--green); }
+.checklist li.info { border-left-color:var(--blue); }
+.callout {
+  padding:18px 22px; border-radius:8px; border-left:4px solid;
+  margin:14px 0; font-size:16px; line-height:1.6;
+}
+.callout.red    { background:rgba(228,33,37,0.1);  border-color:var(--accent); }
+.callout.green  { background:rgba(63,185,80,0.1);  border-color:var(--green); }
+.callout.yellow { background:rgba(210,153,34,0.1); border-color:var(--yellow); }
+.callout.blue   { background:rgba(88,166,255,0.1); border-color:var(--blue); }
+.callout strong { color:var(--text); }
+.badge {
+  display:inline-block; padding:3px 10px; border-radius:20px;
+  font-size:12px; font-weight:700; letter-spacing:0.3px; vertical-align:middle;
+}
+.badge.red    { background:rgba(228,33,37,0.2);  color:var(--accent); }
+.badge.green  { background:rgba(63,185,80,0.2);  color:var(--green); }
+.badge.yellow { background:rgba(210,153,34,0.2); color:var(--yellow); }
+.badge.blue   { background:rgba(88,166,255,0.2); color:var(--blue); }
+.badge.gray   { background:var(--card);           color:var(--muted); }
+.code-block {
+  background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+  padding:20px 22px; font-family:var(--mono); font-size:13px;
+  line-height:1.7; color:#a8c5da; white-space:pre-wrap; word-break:break-word; flex:1;
+}
+.code-block .hl  { color:#e6edf3; }
+.code-block .dim { color:#556069; }
+.agenda-list  { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.agenda-item  {
+  display:flex; align-items:center; gap:16px; padding:12px 18px;
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+}
+.agenda-time  { font-family:var(--mono); font-size:13px; color:var(--accent); min-width:50px; }
+.agenda-label { font-size:15px; font-weight:500; }
+.agenda-dur   { margin-left:auto; font-size:13px; color:var(--muted); }
+.slide[data-layout="title"] {
+  justify-content:center;
+  background:radial-gradient(ellipse at 20% 50%, rgba(228,33,37,0.06) 0%, transparent 60%);
+}
+.title-meta {
+  position:absolute; bottom:48px; left:80px; right:80px;
+  font-size:13px; color:var(--muted); border-top:1px solid var(--border); padding-top:18px;
+}
+.mermaid-wrap {
+  flex:1; background:var(--code-bg); border:1px solid var(--border);
+  border-radius:10px; padding:16px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; min-height:0;
+}
+.mermaid-wrap svg, .mermaid-wrap img {
+  max-width:100%; max-height:100%; height:auto; object-fit:contain; display:block;
+}
+.flex    { display:flex; }
+.col     { flex-direction:column; }
+.gap-sm  { gap:10px; }
+.gap-md  { gap:18px; }
+.gap-lg  { gap:28px; }
+.grow    { flex:1; }
+.center  { text-align:center; }
+.mt-auto { margin-top:auto; }
+.fw-7    { font-weight:700; }
+.fs-sm   { font-size:13px; }
+.fs-lg   { font-size:20px; }
+.accent  { color:var(--accent); }
+.muted   { color:var(--muted); }
+.green   { color:var(--green); }
+.blue    { color:var(--blue); }
+.yellow  { color:var(--yellow); }
+.slide a { color:var(--blue); text-decoration:none; }
+.slide a:hover { text-decoration:underline; opacity:0.85; }
+.ti-logo {
+  position:fixed; bottom:18px; right:28px; z-index:200;
+  opacity:0.45; pointer-events:none; line-height:0;
+}
+.ti-logo svg { width:170px; height:20px; }
+.ti-logo path[fill="#CC0000"], .ti-logo path[fill="#cc0000"] { fill:var(--accent) !important; }
+#ti-header {
+  position:fixed; top:16px; left:24px; z-index:200;
+  opacity:0.55; pointer-events:none; line-height:0;
+}
+#ti-header svg { width:140px; height:17px; }
+@media print {
+  .slide { display:flex !important; opacity:1 !important; position:relative !important; page-break-after:always; height:100vh; }
+  #progress, #counter { display:none; }
+}
+/* ---- Light theme (white background) override ---- */
+:root {
+  --accent:  #cc0000;
+  --bg:      #ffffff;
+  --card:    #f6f8fa;
+  --border:  #d0d7de;
+  --text:    #1f2328;
+  --muted:   #59636e;
+  --code-bg: #f6f8fa;
+  --green:   #1a7f37;
+  --yellow:  #9a6700;
+  --blue:    #0969da;
+}
+#progress { box-shadow:none; }
+.card, .step { box-shadow:0 1px 3px rgba(31,35,40,0.08); }
+.data-table tr:nth-child(even) td { background:rgba(31,35,40,0.03); }
+.code-block { color:#424a53; }
+.code-block .hl  { color:#1f2328; font-weight:600; }
+.code-block .dim { color:#6e7781; }
+.callout.red    { background:rgba(204,0,0,0.06); }
+.callout.green  { background:rgba(26,127,55,0.07); }
+.callout.yellow { background:rgba(154,103,0,0.08); }
+.callout.blue   { background:rgba(9,105,218,0.06); }
+.badge.red    { background:rgba(204,0,0,0.12); }
+.badge.green  { background:rgba(26,127,55,0.12); }
+.badge.yellow { background:rgba(154,103,0,0.14); }
+.badge.blue   { background:rgba(9,105,218,0.12); }
+.badge.gray   { background:#eaeef2; }
+.ti-logo { opacity:0.8; }
+#ti-header { opacity:0.85; }
+.ti-logo text, #ti-header text { fill:#1f2328; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  </head>
+  <body>
+    <div id="progress"></div>
+    <div id="counter"></div>
+<!-- TI Logo (bottom-right) -->
+<div class="ti-logo">
+  <svg viewBox="0 0 170 20" xmlns="http://www.w3.org/2000/svg">
+    <g transform="scale(0.555)">
+      <path fill="#CC0000" d="M34.616,11.575V7.276h-6.904l-0.871,4.339h2.483l-0.795,3.999h-2.484l-0.86,4.328c-0.067,0.294-0.117,0.506-0.147,0.71c-0.204,1.328,0.374,1.261,2.233,1.261l-0.85,4.257h-3.25c-3.072,0-5.571-0.026-4.922-3.177c0.103-0.481,0.226-0.967,0.313-1.433l1.161-5.942h-2.389l0.797-3.999h2.388l0.869-4.339h-2.233V0.721h-8.266v13.322H1C1.245,17.497,4.301,18,5.416,20.454c0.768,1.691,1.439,4.672,3.681,4.692c1.717,0.021,1.717-2.222,3.928-2.222c2.208,0,3.188,4.195,5.152,7.649c1.472,2.712,3.917,4.532,6.133,4.688c1.819,0.126,2.699-0.492,2.699-0.492c-0.491-0.988-0.737-1.973-0.737-3.455c0-2.221,1.719-4.44,3.682-5.919c2.699-1.972,5.644-2.719,6.625-2.959v-6.912C36.579,15.524,34.616,14.474,34.616,11.575z M23.355,21.902L26.259,7.27h-3.346l-2.9,14.632H23.355z M27.156,2.644h-3.347l-0.64,3.227h3.345L27.156,2.644z"/>
+    </g>
+    <text x="23" y="14" font-family="'Inter', Arial, Helvetica, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.9)" letter-spacing="0.6">TEXAS INSTRUMENTS</text>
+  </svg>
+</div>
+
+<!-- TI Header (top-left) -->
+<div id="ti-header">
+  <svg viewBox="0 0 170 20" xmlns="http://www.w3.org/2000/svg">
+    <g transform="scale(0.555)">
+      <path fill="#CC0000" d="M34.616,11.575V7.276h-6.904l-0.871,4.339h2.483l-0.795,3.999h-2.484l-0.86,4.328c-0.067,0.294-0.117,0.506-0.147,0.71c-0.204,1.328,0.374,1.261,2.233,1.261l-0.85,4.257h-3.25c-3.072,0-5.571-0.026-4.922-3.177c0.103-0.481,0.226-0.967,0.313-1.433l1.161-5.942h-2.389l0.797-3.999h2.388l0.869-4.339h-2.233V0.721h-8.266v13.322H1C1.245,17.497,4.301,18,5.416,20.454c0.768,1.691,1.439,4.672,3.681,4.692c1.717,0.021,1.717-2.222,3.928-2.222c2.208,0,3.188,4.195,5.152,7.649c1.472,2.712,3.917,4.532,6.133,4.688c1.819,0.126,2.699-0.492,2.699-0.492c-0.491-0.988-0.737-1.973-0.737-3.455c0-2.221,1.719-4.44,3.682-5.919c2.699-1.972,5.644-2.719,6.625-2.959v-6.912C36.579,15.524,34.616,14.474,34.616,11.575z M23.355,21.902L26.259,7.27h-3.346l-2.9,14.632H23.355z M27.156,2.644h-3.347l-0.64,3.227h3.345L27.156,2.644z"/>
+    </g>
+    <text x="23" y="14" font-family="'Inter', Arial, Helvetica, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.9)" letter-spacing="0.6">TEXAS INSTRUMENTS</text>
+  </svg>
+</div>
+
+    <div id="slides">
+      <!-- ============================================================ -->
+<!-- SLIDE 01 · Quick Start: Point the Config at Your Own File    -->
+<!-- ============================================================ -->
+<section class="slide active">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Quick Start: Point the Config at Your Own File</div>
+        <div class="slide-sub">No edits to <code style="font-family:var(--mono);font-size:14px">tinyml-modelzoo</code>. Works with the wheel install too. The full train, ONNX export and compile pipeline runs</div>
+        <div class="grid" style="grid-template-columns:1.1fr 1fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">1 · Your model file</div>
+            <div class="code-block" style="flex:1;font-size:clamp(9px,1.55vh,14px);line-height:1.5;white-space:pre;overflow:hidden"><span class="dim"># /path/to/my_model.py</span>
+import torch.nn as nn
+
+class <span style="color:var(--green)">MyModel</span>(nn.Module):
+    def __init__(self, <span class="hl">variables=1, num_classes=2,
+                 input_features=512, **kwargs</span>):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(variables * input_features, 64),
+            nn.ReLU(),
+            nn.Linear(64, num_classes))
+
+    def forward(self, x):
+        <span class="dim"># x: (batch, variables, input_features, 1)</span>
+        return self.net(x)    <span class="dim"># (batch, num_classes)</span></div>
+            <div class="label" style="margin-bottom:0">2 · Config</div>
+            <div class="code-block" style="flex:0;font-size:clamp(9px,1.55vh,14px);line-height:1.5;white-space:pre;padding:12px 16px"><span class="hl">training:</span>
+  model_name: <span style="color:var(--green)">MyModel</span>               <span class="dim"># = class name</span>
+  custom_model_path: /path/to/my_model.py
+  quantization: 2                      <span class="dim"># optional: QAT + hardware NPU</span></div>
+          </div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">3 · Run</div>
+            <div class="code-block" style="flex:0;font-size:clamp(9px,1.55vh,14px);line-height:1.5;white-space:pre;padding:12px 16px">./run_tinyml_modelzoo.sh config.yaml
+<span class="dim"># or, from any folder:</span>
+python -m tinyml_modelmaker.run_tinyml_modelmaker config.yaml</div>
+            <div class="card green" style="display:flex;flex-direction:column;gap:6px;padding:14px 18px;flex:1">
+              <div class="label" style="margin-bottom:0;color:var(--green)">Two styles, detected automatically</div>
+              <div class="card-body" style="font-size:clamp(11px,1.8vh,16px)">Plain <code style="font-family:var(--mono);font-size:0.9em">nn.Module</code> (gets <code style="font-family:var(--mono);font-size:0.9em">variables</code>, <code style="font-family:var(--mono);font-size:0.9em">num_classes</code>, <code style="font-family:var(--mono);font-size:0.9em">input_features</code> keyword arguments) or a <code style="font-family:var(--mono);font-size:0.9em">GenericModelWithSpec</code> subclass (gets <code style="font-family:var(--mono);font-size:0.9em">config=dict(...)</code>).</div>
+            </div>
+            <div class="card blue" style="display:flex;flex-direction:column;gap:6px;padding:14px 18px;flex:1">
+              <div class="label" style="margin-bottom:0;color:var(--blue)">What you get</div>
+              <div class="card-body" style="font-size:clamp(11px,1.8vh,16px)"><code style="font-family:var(--mono);font-size:0.9em">quantization</code> unset: float model in <code style="font-family:var(--mono);font-size:0.9em">training/base/</code>, compiled to <code style="font-family:var(--mono);font-size:0.9em">mod.a</code> (soft NPU). <code style="font-family:var(--mono);font-size:0.9em">quantization: 2</code>: also <code style="font-family:var(--mono);font-size:0.9em">training/quantization/</code>, compiled for the hardware NPU.</div>
+            </div>
+            <div class="card yellow" style="display:flex;flex-direction:column;gap:6px;padding:14px 18px;flex:1">
+              <div class="label" style="margin-bottom:0;color:var(--yellow)">Watch out</div>
+              <div class="card-body" style="font-size:clamp(11px,1.8vh,16px)">Class name must equal <code style="font-family:var(--mono);font-size:0.9em">model_name</code>. The model must return <code style="font-family:var(--mono);font-size:0.9em">(batch, num_classes)</code>. Needs a ModelMaker release with <code style="font-family:var(--mono);font-size:0.9em">custom_model_path</code>; otherwise the run stops with <em>please check if the given model_name is a supported one</em>.</div>
+            </div>
+          </div>
+        </div>
+        <div class="fs-sm muted" style="margin-top:10px">Adithya Thonse · October 2026</div>
+      </section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 02 · Permanent Addition: What You Change               -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Permanent Addition: What You Change</div>
+        <div class="slide-sub">To ship the model with ModelZoo: three files inside <code style="font-family:var(--mono);font-size:14px">tinyml-modelzoo</code> (clone install). No changes in <code style="font-family:var(--mono);font-size:14px">tinyml-tinyverse</code> or <code style="font-family:var(--mono);font-size:14px">tinyml-modelmaker</code></div>
+        <div class="grid grid-3" style="gap:16px;align-items:stretch">
+          <div class="card blue" style="display:flex;flex-direction:column;gap:10px;padding:20px 22px">
+            <div class="label" style="margin-bottom:0;color:var(--blue)">1 · Model class</div>
+            <code style="font-family:var(--mono);font-size:clamp(11px,1.8vh,15px);color:var(--text)">tinyml_modelzoo/models/classification.py</code>
+            <div class="card-body" style="font-size:clamp(12px,2.1vh,18px)">Add your class and its name to <code style="font-family:var(--mono);font-size:0.9em">__all__</code></div>
+          </div>
+          <div class="card green" style="display:flex;flex-direction:column;gap:10px;padding:20px 22px">
+            <div class="label" style="margin-bottom:0;color:var(--green)">2 · Model description</div>
+            <code style="font-family:var(--mono);font-size:clamp(11px,1.8vh,15px);color:var(--text)">tinyml_modelzoo/model_descriptions/classification.py</code>
+            <div class="card-body" style="font-size:clamp(12px,2.1vh,18px)">Add an entry and its name to <code style="font-family:var(--mono);font-size:0.9em">enabled_models_list</code></div>
+          </div>
+          <div class="card yellow" style="display:flex;flex-direction:column;gap:10px;padding:20px 22px">
+            <div class="label" style="margin-bottom:0;color:var(--yellow)">3 · Config</div>
+            <code style="font-family:var(--mono);font-size:clamp(11px,1.8vh,15px);color:var(--text)">examples/&lt;example&gt;/config_&lt;your_model&gt;.yaml</code>
+            <div class="card-body" style="font-size:clamp(12px,2.1vh,18px)">Copy an example config and set <code style="font-family:var(--mono);font-size:0.9em">training.model_name</code></div>
+          </div>
+        </div>
+        <div class="label" style="margin:26px 0 10px">How the names connect</div>
+        <div class="steps" style="align-items:stretch">
+          <div class="step" style="justify-content:flex-start;gap:10px;padding:20px 18px">
+            <div class="step-label">config.yaml</div>
+            <div class="code-block" style="flex:0;width:100%;text-align:left;font-size:clamp(11px,1.9vh,16px);white-space:pre;padding:12px 16px"><span class="hl">training:</span>
+  model_name: <span style="color:var(--green)">MY_CLS_2k_NPU</span></div>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step" style="justify-content:flex-start;gap:10px;padding:20px 18px">
+            <div class="step-label">model_descriptions/</div>
+            <div class="code-block" style="flex:0;width:100%;text-align:left;font-size:clamp(11px,1.9vh,16px);white-space:pre;padding:12px 16px">&#39;<span style="color:var(--green)">MY_CLS_2k_NPU</span>&#39;: {
+  model_training_id=&#39;<span style="color:var(--blue)">MY_CNN_TS_2K_NPU</span>&#39;</div>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step" style="justify-content:flex-start;gap:10px;padding:20px 18px">
+            <div class="step-label">models/</div>
+            <div class="code-block" style="flex:0;width:100%;text-align:left;font-size:clamp(11px,1.9vh,16px);white-space:pre;padding:12px 16px">class <span style="color:var(--blue)">MY_CNN_TS_2K_NPU</span>(
+    GenericModelWithSpec)</div>
+          </div>
+        </div>
+        <div class="grid grid-2" style="gap:16px;margin-top:20px">
+          <div class="callout green" style="margin:0;font-size:clamp(12px,2vh,17px)"><strong>Description name</strong> goes in the config. It must be a key in <code style="font-family:var(--mono);font-size:0.9em">_model_descriptions</code> <strong>and</strong> be listed in <code style="font-family:var(--mono);font-size:0.9em">enabled_models_list</code>.</div>
+          <div class="callout blue" style="margin:0;font-size:clamp(12px,2vh,17px)"><strong>Class name</strong> is the Python class. It must be in <code style="font-family:var(--mono);font-size:0.9em">__all__</code> and match <code style="font-family:var(--mono);font-size:0.9em">model_training_id</code> exactly.</div>
+        </div>
+        <div class="label" style="margin:26px 0 10px">Other task types: same steps, matching file in <code style="font-family:var(--mono)">models/</code> and <code style="font-family:var(--mono)">model_descriptions/</code></div>
+        <div class="grid grid-4" style="gap:12px">
+          <div class="card" style="padding:14px 18px;text-align:center"><div class="card-body" style="font-size:clamp(12px,1.9vh,16px)">Classification</div><code style="font-family:var(--mono);font-size:clamp(11px,1.8vh,15px);color:var(--text)">classification.py</code></div>
+          <div class="card" style="padding:14px 18px;text-align:center"><div class="card-body" style="font-size:clamp(12px,1.9vh,16px)">Regression</div><code style="font-family:var(--mono);font-size:clamp(11px,1.8vh,15px);color:var(--text)">regression.py</code></div>
+          <div class="card" style="padding:14px 18px;text-align:center"><div class="card-body" style="font-size:clamp(12px,1.9vh,16px)">Anomaly detection</div><code style="font-family:var(--mono);font-size:clamp(11px,1.8vh,15px);color:var(--text)">anomalydetection.py</code></div>
+          <div class="card" style="padding:14px 18px;text-align:center"><div class="card-body" style="font-size:clamp(12px,1.9vh,16px)">Forecasting</div><code style="font-family:var(--mono);font-size:clamp(11px,1.8vh,15px);color:var(--text)">forecasting.py</code></div>
+        </div>
+      </section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 03 · Step 1 · Add the Model Class: Two Ways            -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Step 1 · Add the Model Class: Two Ways</div>
+        <div class="slide-sub">The same model written both ways: identical layers, 1,700 parameters and the same ONNX graph. Pick one and add it to <code style="font-family:var(--mono);font-size:14px">models/classification.py</code></div>
+        <div class="grid grid-2" style="gap:18px;flex:1;min-height:0;align-items:stretch">
+          <div class="flex col" style="gap:8px;min-height:0">
+            <div class="flex" style="align-items:center;gap:10px"><span class="badge green">Option A</span><span class="fw-7" style="font-size:clamp(13px,2vh,17px)">Spec-based: <code style="font-family:var(--mono);font-size:0.9em">GenericModelWithSpec</code></span><span class="badge gray" style="margin-left:auto">Recommended</span></div>
+            <div class="code-block" style="font-size:clamp(7px,1.24vh,14px);line-height:1.42;white-space:pre;overflow:hidden;padding:14px 18px"><span class="hl">class MY_CNN_TS_2K_NPU(GenericModelWithSpec):</span>
+    <span class="hl">def __init__(self, config, input_features=512, variables=1, num_classes=2):</span>
+        super().__init__(config, input_features=input_features,
+                         variables=variables, num_classes=num_classes)
+        self.model_spec = self.gen_model_spec()
+        self._init_model_from_spec(
+            model_spec=self.model_spec, variables=self.variables,
+            input_features=self.input_features, num_classes=self.num_classes)
+
+    <span class="hl">def gen_model_spec(self):</span>
+        layers = py_utils.DictPlus()
+        layers += {'0': dict(type='BatchNormLayer', num_features=self.variables)}
+        layers += {'1': dict(type='ConvBNReLULayer', in_channels=self.variables,
+                             out_channels=8, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'2': dict(type='MaxPoolLayer', kernel_size=(2, 1),
+                             stride=(2, 1), <span style="color:var(--yellow)">padding=(0, 0)</span>)}
+        layers += {'3': dict(type='ConvBNReLULayer', in_channels=8,
+                             out_channels=16, kernel_size=(5, 1), stride=(1, 1))}
+        layers += {'4': dict(type='MaxPoolLayer', kernel_size=(2, 1),
+                             stride=(2, 1), <span style="color:var(--yellow)">padding=(0, 0)</span>)}
+        layers += {'5': dict(type='ConvBNReLULayer', in_channels=16,
+                             out_channels=16, kernel_size=(3, 1), stride=(1, 1))}
+        layers += {'6': dict(type='AdaptiveAvgPoolLayer', output_size=(4, 1))}
+        layers += {'7': dict(type='ReshapeLayer', ndim=2)}
+        layers += {'8': dict(type='LinearLayer', in_features=16 * 4,
+                             out_features=self.num_classes)}
+        return dict(model_spec=layers)</div>
+          </div>
+          <div class="flex col" style="gap:8px;min-height:0">
+            <div class="flex" style="align-items:center;gap:10px"><span class="badge blue">Option B</span><span class="fw-7" style="font-size:clamp(13px,2vh,17px)">Native PyTorch: <code style="font-family:var(--mono);font-size:0.9em">torch.nn.Module</code></span></div>
+            <div class="code-block" style="font-size:clamp(7px,1.24vh,14px);line-height:1.42;white-space:pre;overflow:hidden;padding:14px 18px"><span class="hl">class MY_CNN_TS_2K_NPU(torch.nn.Module):</span>
+    <span class="hl">def __init__(self, config, input_features=512, variables=1, num_classes=2):</span>
+        super().__init__()
+        <span style="color:var(--blue)">variables = config.get('variables', variables)</span>
+        <span style="color:var(--blue)">num_classes = config.get('num_classes', num_classes)</span>
+        self.features = torch.nn.Sequential(
+            torch.nn.BatchNorm2d(variables),
+            torch.nn.Conv2d(variables, 8, kernel_size=(5, 1), <span style="color:var(--yellow)">padding=(2, 0)</span>),
+            torch.nn.BatchNorm2d(8),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.Conv2d(8, 16, kernel_size=(5, 1), <span style="color:var(--yellow)">padding=(2, 0)</span>),
+            torch.nn.BatchNorm2d(16),
+            torch.nn.ReLU(),
+            torch.nn.MaxPool2d(kernel_size=(2, 1), stride=(2, 1)),
+            torch.nn.Conv2d(16, 16, kernel_size=(3, 1), <span style="color:var(--yellow)">padding=(1, 0)</span>),
+            torch.nn.BatchNorm2d(16),
+            torch.nn.ReLU(),
+            torch.nn.AdaptiveAvgPool2d((4, 1)),
+        )
+        self.classifier = torch.nn.Linear(16 * 4, num_classes)
+
+    <span class="hl">def forward(self, x):</span>
+        x = self.features(x)
+        return self.classifier(x.reshape(x.shape[0], -1))</div>
+          </div>
+        </div>
+        <div class="grid grid-2" style="gap:18px;margin-top:12px"><div class="callout green" style="margin:0;padding:12px 20px;font-size:clamp(12px,1.8vh,16px)"><strong>Option A:</strong> the base class fills in <code style="font-family:var(--mono);font-size:0.9em">variables</code>, <code style="font-family:var(--mono);font-size:0.9em">input_features</code> and <code style="font-family:var(--mono);font-size:0.9em">num_classes</code>. Spec layers pad <code style="font-family:var(--mono);font-size:0.9em">k // 2</code> by default, so pass <code style="font-family:var(--mono);font-size:0.9em">padding=(0, 0)</code> on the pools.</div><div class="callout blue" style="margin:0;padding:12px 20px;font-size:clamp(12px,1.8vh,16px)"><strong>Option B:</strong> read <code style="font-family:var(--mono);font-size:0.9em">variables</code> and <code style="font-family:var(--mono);font-size:0.9em">num_classes</code> from the <code style="font-family:var(--mono);font-size:0.9em">config</code> dict. PyTorch does not pad by default, so set <code style="font-family:var(--mono);font-size:0.9em">padding=(k // 2, 0)</code> on each <code style="font-family:var(--mono);font-size:0.9em">Conv2d</code> to match Option A.</div></div>
+        <div class="fs-sm muted" style="margin-top:10px">Either way, add <code style="font-family:var(--mono);font-size:0.9em">&#39;MY_CNN_TS_2K_NPU&#39;</code> to <code style="font-family:var(--mono);font-size:0.9em">__all__</code>. <code style="font-family:var(--mono);font-size:0.9em">torch</code>, <code style="font-family:var(--mono);font-size:0.9em">py_utils</code> and <code style="font-family:var(--mono);font-size:0.9em">GenericModelWithSpec</code> are already imported at the top of <code style="font-family:var(--mono);font-size:0.9em">models/classification.py</code>.</div>
+      </section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 04 · Step 1 · Layer by Layer, Then Check It            -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Step 1 · Layer by Layer, Then Check It</div>
+        <div class="slide-sub">What each layer does to a 256-feature input, and how to check the model before a full run</div>
+        <div class="grid" style="grid-template-columns:1.25fr 1fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="flex col gap-sm" style="min-height:0">
+            <table class="data-table" style="font-size:clamp(11px,1.85vh,16px)">
+              <thead><tr><th>#</th><th>Layer</th><th>Settings</th><th>Height (256 in)</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td><code style="font-family:var(--mono)">BatchNormLayer</code></td><td>variables</td><td>256</td></tr>
+                <tr><td>1</td><td><code style="font-family:var(--mono)">ConvBNReLULayer</code></td><td>1 → 8, (5, 1)</td><td>256</td></tr>
+                <tr><td>2</td><td><code style="font-family:var(--mono)">MaxPoolLayer</code></td><td>(2, 1), stride 2, <span style="color:var(--yellow)">padding (0, 0)</span></td><td>128</td></tr>
+                <tr><td>3</td><td><code style="font-family:var(--mono)">ConvBNReLULayer</code></td><td>8 → 16, (5, 1)</td><td>128</td></tr>
+                <tr><td>4</td><td><code style="font-family:var(--mono)">MaxPoolLayer</code></td><td>(2, 1), stride 2, <span style="color:var(--yellow)">padding (0, 0)</span></td><td>64</td></tr>
+                <tr><td>5</td><td><code style="font-family:var(--mono)">ConvBNReLULayer</code></td><td>16 → 16, (3, 1)</td><td>64</td></tr>
+                <tr><td>6</td><td><code style="font-family:var(--mono)">AdaptiveAvgPoolLayer</code></td><td>output (4, 1)</td><td>4</td></tr>
+                <tr><td>7</td><td><code style="font-family:var(--mono)">ReshapeLayer</code></td><td>ndim 2</td><td>16 × 4 = 64</td></tr>
+                <tr><td>8</td><td><code style="font-family:var(--mono)">LinearLayer</code></td><td>64 → num_classes</td><td>—</td></tr>
+              </tbody>
+            </table>
+            <div class="code-block" style="flex:0;font-size:clamp(10px,1.7vh,15px);white-space:pre;padding:14px 18px"><span class="hl">layers +=</span> {&#39;2&#39;: dict(type=&#39;MaxPoolLayer&#39;, kernel_size=(2, 1),
+                     stride=(2, 1), padding=(0, 0))}
+<span class="dim"># ... and add &#39;MY_CNN_TS_2K_NPU&#39; to __all__</span></div>
+          </div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="card blue" style="display:flex;flex-direction:column;gap:12px;padding:18px 22px">
+              <div class="card-body" style="font-size:clamp(12px,2vh,17px)"><strong style="color:var(--text)">Keep the signature</strong> <code style="font-family:var(--mono);font-size:0.85em">__init__(self, config, input_features, variables, num_classes)</code>. The pipeline fills these from your dataset, so do not hard-code them.</div>
+              <div class="card-body" style="font-size:clamp(12px,2vh,17px)"><strong style="color:var(--text)">Input shape</strong> is <code style="font-family:var(--mono);font-size:0.9em">(batch, variables, input_features, 1)</code>, so kernels are <code style="font-family:var(--mono);font-size:0.9em">(k, 1)</code>.</div>
+            </div>
+            <div class="callout yellow" style="margin:0;font-size:clamp(12px,2vh,17px)"><strong>Why padding (0, 0)?</strong> <code style="font-family:var(--mono);font-size:0.9em">MaxPoolLayer</code> pads <code style="font-family:var(--mono);font-size:0.9em">k // 2</code> by default: 256 → 129 → 65. ONNX export of <code style="font-family:var(--mono);font-size:0.9em">AdaptiveAvgPool(4, 1)</code> needs a height divisible by 4, so 65 fails.</div>
+            <div class="card green" style="display:flex;flex-direction:column;gap:8px;padding:16px 22px;margin-top:auto">
+              <div class="label" style="margin-bottom:0;color:var(--green)">Check it</div>
+              <div class="card-body" style="font-size:clamp(12px,2vh,17px)">Build with <code style="font-family:var(--mono);font-size:0.9em">get_model(...)</code> at the real <code style="font-family:var(--mono);font-size:0.9em">input_features</code>, run a forward pass <strong style="color:var(--text)">and export to ONNX</strong>.</div>
+              <div class="card-body" style="font-size:clamp(12px,2vh,17px)">Expect: <code style="font-family:var(--mono);font-size:0.9em">output: (1, 2)</code> · <code style="font-family:var(--mono);font-size:0.9em">params: 1700</code> · <code style="font-family:var(--mono);font-size:0.9em">onnx export: OK</code></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 05 · Step 2 · Add the Model Description                -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Step 2 · Add the Model Description</div>
+        <div class="slide-sub">Required: the config refers to models by their <strong style="color:var(--text)">description name</strong>, not their class name</div>
+        <div class="grid" style="grid-template-columns:1.25fr 1fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="code-block" style="font-size:clamp(10px,1.85vh,16px);white-space:pre;overflow:hidden;line-height:1.65"><span class="dim"># model_descriptions/classification.py</span>
+<span class="hl">&#39;MY_CLS_2k_NPU&#39;</span>: deep_update_dict(deepcopy(template_model_description), {
+    &#39;common&#39;: dict(
+        model_details=&#39;My NPU-compliant model with ~1.7k params.&#39;,
+    ),
+    &#39;training&#39;: dict(
+        <span class="hl">model_training_id=&#39;MY_CNN_TS_2K_NPU&#39;</span>,  <span class="dim"># = class name</span>
+        <span class="hl">model_name=&#39;MY_CLS_2k_NPU&#39;</span>,            <span class="dim"># = dict key</span>
+        target_devices=[
+            constants.TARGET_DEVICE_F28P55,
+            constants.TARGET_DEVICE_MSPM0G5187,
+            constants.TARGET_DEVICE_F29H85,
+        ],
+    ),
+}),
+
+<span class="hl">enabled_models_list</span> = [
+    <span class="dim"># ... existing models ...</span>
+    &#39;...last existing entry...&#39;,   <span class="dim"># &lt;-- ends with a comma</span>
+    <span class="hl">&#39;MY_CLS_2k_NPU&#39;</span>,
+]</div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <ul class="checklist">
+              <li class="info" style="font-size:clamp(12px,2vh,17px)">Start from <code style="font-family:var(--mono);font-size:0.9em">template_model_description</code> and override only what is specific to your model.</li>
+              <li class="info" style="font-size:clamp(12px,2vh,17px)">List every <code style="font-family:var(--mono);font-size:0.9em">target_devices</code> entry you plan to compile for.</li>
+              <li class="info" style="font-size:clamp(12px,2vh,17px)">The description does not need to match the config&#39;s <code style="font-family:var(--mono);font-size:0.9em">task_type</code>: generic models like <code style="font-family:var(--mono);font-size:0.9em">CLS_1k_NPU</code> serve every classification example.</li>
+            </ul>
+            <div class="callout red" style="margin:0;font-size:clamp(12px,2vh,17px)"><strong>Watch the comma.</strong> Without a trailing comma on the last existing entry, Python silently joins two strings and your model is reported as <em>not supported</em>.</div>
+            <div class="card green" style="display:flex;flex-direction:column;gap:8px;padding:16px 22px;margin-top:auto">
+              <div class="label" style="margin-bottom:0;color:var(--green)">Check it</div>
+              <div class="card-body" style="font-size:clamp(12px,2vh,17px)"><code style="font-family:var(--mono);font-size:0.9em">get_model_description(&#39;MY_CLS_2k_NPU&#39;)</code> returns an entry whose <code style="font-family:var(--mono);font-size:0.9em">model_training_id</code> is <code style="font-family:var(--mono);font-size:0.9em">MY_CNN_TS_2K_NPU</code>.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 06 · Steps 3–5 · Configure, Run, Check                 -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Steps 3–5 · Configure, Run, Check</div>
+        <div class="slide-sub">Worked example: DC arc fault, <code style="font-family:var(--mono);font-size:14px">config_dsk.yaml</code>, target F28P55</div>
+        <div class="steps" style="flex:1;min-height:0;align-items:stretch">
+          <div class="step" style="justify-content:flex-start;gap:14px;padding:22px 20px;text-align:left;align-items:stretch">
+            <div class="flex" style="align-items:center;gap:12px"><div class="step-num" style="width:34px;height:34px;font-size:16px">3</div><div class="step-label" style="font-size:clamp(14px,2.3vh,20px)">Create the config</div></div>
+            <div class="code-block" style="flex:0;font-size:clamp(10px,1.65vh,14px);white-space:pre;padding:12px 14px">cp config_dsk.yaml \
+   config_dsk_my_model.yaml</div>
+            <div class="code-block" style="flex:0;font-size:clamp(10px,1.65vh,14px);white-space:pre;padding:12px 14px"><span class="hl">training:</span>
+  model_name: MY_CLS_2k_NPU
+  <span class="dim"># was: CLS_1k_NPU</span></div>
+            <div class="step-desc" style="font-size:clamp(12px,1.95vh,16px)">Copy rather than edit, so the original example stays intact. Leave the other sections unchanged.</div>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step" style="justify-content:flex-start;gap:14px;padding:22px 20px;text-align:left;align-items:stretch">
+            <div class="flex" style="align-items:center;gap:12px"><div class="step-num" style="width:34px;height:34px;font-size:16px">4</div><div class="step-label" style="font-size:clamp(14px,2.3vh,20px)">Train, quantize, compile</div></div>
+            <div class="code-block" style="flex:0;font-size:clamp(10px,1.65vh,14px);white-space:pre;padding:12px 14px">./run_tinyml_modelzoo.sh \
+  examples/dc_arc_fault/\
+  config_dsk_my_model.yaml</div>
+            <div class="step-desc" style="font-size:clamp(12px,1.95vh,16px)"><strong style="color:var(--text)">Confirm the model:</strong> the run folder is <code style="font-family:var(--mono);font-size:0.9em">.../MY_CLS_2k_NPU/</code> and the summary shows <code style="font-family:var(--mono);font-size:0.9em">MY_CNN_TS_2K_NPU</code>, <code style="font-family:var(--mono);font-size:0.9em">Total params: 1,700</code>.</div>
+            <div class="step-desc" style="font-size:clamp(12px,1.95vh,16px)"><strong style="color:var(--text)">~14 min</strong> on a 16-core CPU; most of it is quantized training.</div>
+            <div class="step-desc" style="font-size:clamp(12px,1.95vh,16px)"><strong style="color:var(--text)">Compiler</strong> is looked up under <code style="font-family:var(--mono);font-size:0.9em">~/ti</code>; set <code style="font-family:var(--mono);font-size:0.9em">TOOLS_PATH</code> otherwise.</div>
+          </div>
+          <div class="step-arrow">→</div>
+          <div class="step" style="justify-content:flex-start;gap:14px;padding:22px 20px;text-align:left;align-items:stretch">
+            <div class="flex" style="align-items:center;gap:12px"><div class="step-num" style="width:34px;height:34px;font-size:16px">5</div><div class="step-label" style="font-size:clamp(14px,2.3vh,20px)">Check the results</div></div>
+            <div class="code-block" style="flex:0;font-size:clamp(10px,1.65vh,14px);white-space:pre;padding:12px 14px">data/projects/&lt;dataset&gt;/run/
+  &lt;date-time&gt;/MY_CLS_2k_NPU/
+    training/base/
+    training/quantization/
+    compilation/artifacts/</div>
+            <div class="step-desc" style="font-size:clamp(12px,1.95vh,16px)"><code style="font-family:var(--mono);font-size:0.9em">Test Data Evaluation Accuracy</code>: quantized ONNX model on the test split.</div>
+            <div class="step-desc" style="font-size:clamp(12px,1.95vh,16px)"><code style="font-family:var(--mono);font-size:0.9em">TI Model Library Memory Usage (mod.a)</code>: compiled size on the device.</div>
+          </div>
+        </div>
+        <div class="callout blue" style="margin:16px 0 0;font-size:clamp(12px,2vh,17px)">Compare both numbers with a run of the original <code style="font-family:var(--mono);font-size:0.9em">config_dsk.yaml</code> (<code style="font-family:var(--mono);font-size:0.9em">CLS_1k_NPU</code>). DC arc fault is an easy dataset, so use it to prove the flow end to end and your own data to judge accuracy.</div>
+      </section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 07 · Troubleshooting                                   -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Troubleshooting</div>
+        <div class="slide-sub">The errors you are most likely to hit, and what fixes them</div>
+        <table class="data-table" style="font-size:clamp(11px,1.95vh,17px)">
+          <thead><tr><th style="width:38%">Symptom</th><th style="width:28%">Likely cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:0.9em">please check if the given model_name is a supported one</code></td>
+              <td>Config uses a name with no enabled description</td>
+              <td>Add the description <strong>and</strong> the <code style="font-family:var(--mono);font-size:0.9em">enabled_models_list</code> entry; use the description name, not the class name</td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:0.9em">KeyError</code> / model not found during training</td>
+              <td><code style="font-family:var(--mono);font-size:0.9em">model_training_id</code> does not match a registered class</td>
+              <td>Check the spelling, and that the class is in <code style="font-family:var(--mono);font-size:0.9em">__all__</code></td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:0.9em">SyntaxError</code> / <code style="font-family:var(--mono);font-size:0.9em">IndentationError</code> on import</td>
+              <td>Typo in <code style="font-family:var(--mono);font-size:0.9em">models/classification.py</code></td>
+              <td>Fix the line shown in the traceback</td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:0.9em">Could not import model module &#39;classification&#39;</code> warning</td>
+              <td>Your edit imports something unavailable</td>
+              <td><code style="font-family:var(--mono);font-size:0.9em">python -c "import tinyml_modelzoo.models.classification"</code> shows the <code style="font-family:var(--mono);font-size:0.9em">ImportError</code></td>
+            </tr>
+            <tr>
+              <td><code style="font-family:var(--mono);font-size:0.9em">ONNX export of operator adaptive_avg_pool2d, output size that are not factor of input size</code></td>
+              <td>Pooled height not a multiple of <code style="font-family:var(--mono);font-size:0.9em">output_size</code></td>
+              <td><code style="font-family:var(--mono);font-size:0.9em">padding=(0, 0)</code> on pools, or adjust <code style="font-family:var(--mono);font-size:0.9em">output_size</code> / <code style="font-family:var(--mono);font-size:0.9em">input_features</code></td>
+            </tr>
+            <tr>
+              <td>Edits have no effect</td>
+              <td>Python imports an installed copy, not your clone</td>
+              <td><code style="font-family:var(--mono);font-size:0.9em">pip install -e .</code> from <code style="font-family:var(--mono);font-size:0.9em">tinyml-modelzoo</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout green" style="margin-top:auto;font-size:clamp(12px,2vh,17px)"><strong>Expected and harmless:</strong> <code style="font-family:var(--mono);font-size:0.9em">model_config () was provided but is not implemented</code> and DataLoader worker-count warnings.</div>
+      </section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 08 · Guidelines for Designing Your Model               -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Bring Your Own Model</div>
+        <div class="slide-title">Guidelines for Designing Your Model</div>
+        <div class="slide-sub">Run on the NPU, fit the device, and stay compiler-friendly</div>
+        <div class="grid grid-3" style="gap:16px;flex:1;min-height:0;align-items:stretch">
+          <div class="card green" style="display:flex;flex-direction:column;gap:12px;padding:22px 24px">
+            <div class="label" style="margin-bottom:0;color:var(--green)">Run efficiently on the NPU</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)"><strong style="color:var(--text)">Channels</strong> in multiples of 4: 4, 8, 12, 16, ...</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)"><strong style="color:var(--text)">First conv</strong> (FCONV): 1 input channel, output a multiple of 4.</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)"><strong style="color:var(--text)">Kernels:</strong> 1D <code style="font-family:var(--mono);font-size:0.9em">(k, 1)</code>; split large kernels into smaller ones.</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)"><strong style="color:var(--text)">MaxPool:</strong> one kernel dimension 1–4.</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)"><strong style="color:var(--text)">FC input</strong> ≥ 16 features (8-bit) or ≥ 8 (4-bit). Pool to <code style="font-family:var(--mono);font-size:0.9em">(4, 1)</code> when channels are few.</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)"><strong style="color:var(--text)">Global AvgPool</strong> needs &gt; 2 spatial elements.</div>
+            <div class="fs-sm muted" style="margin-top:auto">Full rules: <code style="font-family:var(--mono)">docs/NPU_CONFIGURATION_GUIDELINES.md</code></div>
+          </div>
+          <div class="card blue" style="display:flex;flex-direction:column;gap:12px;padding:22px 24px">
+            <div class="label" style="margin-bottom:0;color:var(--blue)">Size the model for your device</div>
+            <table class="data-table" style="font-size:clamp(11px,1.9vh,16px)">
+              <thead><tr><th>Parameters</th><th>Typical target</th></tr></thead>
+              <tbody>
+                <tr><td>100 – 1K</td><td>Ultra-minimal MCUs</td></tr>
+                <tr><td>1K – 4K</td><td>Small MCUs (Cortex-M0+)</td></tr>
+                <tr><td>4K – 6K</td><td>Standard MCUs (Cortex-M4)</td></tr>
+                <tr><td>6K – 13K</td><td>Larger MCUs (Cortex-R5)</td></tr>
+                <tr><td>13K+</td><td>Devices with more memory</td></tr>
+              </tbody>
+            </table>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)">Flash and SRAM grow with parameters; activations grow with <code style="font-family:var(--mono);font-size:0.9em">input_features</code>. Start small, grow only if accuracy needs it.</div>
+          </div>
+          <div class="card yellow" style="display:flex;flex-direction:column;gap:12px;padding:22px 24px">
+            <div class="label" style="margin-bottom:0;color:var(--yellow)">Compiler-friendly &amp; naming</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)">Prefer spec layers (<code style="font-family:var(--mono);font-size:0.9em">ConvBNReLULayer</code>, <code style="font-family:var(--mono);font-size:0.9em">MaxPoolLayer</code>, <code style="font-family:var(--mono);font-size:0.9em">LinearLayer</code>, ...): they export, quantize and compile cleanly.</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)">Plain <code style="font-family:var(--mono);font-size:0.9em">torch.nn.Module</code>? Stick to Conv / BN / ReLU / Pool / Linear; no data-dependent control flow.</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)">Keep <code style="font-family:var(--mono);font-size:0.9em">quantization: 2</code> (TI-NPU) for NPU devices.</div>
+            <div class="card-body" style="font-size:clamp(12px,1.95vh,17px)"><strong style="color:var(--text)">Names:</strong> class <code style="font-family:var(--mono);font-size:0.9em">MY_CNN_TS_2K_NPU</code>, description <code style="font-family:var(--mono);font-size:0.9em">MY_CLS_2k_NPU</code>; <code style="font-family:var(--mono);font-size:0.9em">_NPU</code> suffix if NPU-compliant.</div>
+          </div>
+        </div>
+        <div class="callout blue" style="margin:16px 0 8px"><strong>Full guide:</strong> <code style="font-family:var(--mono);font-size:14px">tinyml-modelzoo/docs/BRING_YOUR_OWN_MODEL.md</code> · Model internals: <code style="font-family:var(--mono);font-size:14px">ADDING_NEW_MODELS.md</code></div>
+        <div class="fs-sm muted">Adithya Thonse · October 2026</div>
+      </section>
+    </div><!-- /#slides -->
+    <script>
+(async function () {
+  const slides   = document.querySelectorAll(".slide");
+  const progress = document.getElementById("progress");
+  const counter  = document.getElementById("counter");
+  let current = 0;
+
+  function goTo(n) {
+    if (!slides.length) return;
+    slides[current].classList.remove("active");
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add("active");
+    counter.textContent  = `${current + 1} / ${slides.length}`;
+    progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+  }
+  window.goTo   = goTo;
+  window.goToId = function(id) {
+    const list = document.querySelectorAll(".slide");
+    for (let i = 0; i < list.length; i++) { if (list[i].id === id) { goTo(i); return; } }
+  };
+
+  if (window.mermaid) {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "dark",
+      themeVariables: {
+        background:         "#0D1117",
+        primaryColor:       "#E42125",
+        primaryTextColor:   "#E6EDF3",
+        primaryBorderColor: "#30363D",
+        lineColor:          "#8B949E",
+        secondaryColor:     "#161B22",
+        tertiaryColor:      "#1C2128",
+        noteBkgColor:       "#161B22",
+        noteTextColor:      "#E6EDF3",
+        fontFamily:         "'Inter', system-ui, sans-serif",
+        fontSize:           "14px",
+      },
+    });
+    slides.forEach((s) => { s.style.display = "flex"; s.style.visibility = "hidden"; });
+    await mermaid.run({ querySelector: ".mermaid" });
+    slides.forEach((s) => { s.style.display = ""; s.style.visibility = ""; });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (["ArrowRight", "ArrowDown", " "].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+    if (["ArrowLeft",  "ArrowUp"        ].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+    if (e.key === "Home") goTo(0);
+    if (e.key === "End")  goTo(slides.length - 1);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("a, button")) return;
+    goTo(current + 1);
+  });
+
+  goTo(0);
+})();
+    </script>
+  </body>
+</html>

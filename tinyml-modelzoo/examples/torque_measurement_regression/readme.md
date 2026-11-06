@@ -44,7 +44,7 @@ In our regression example we’ll use `i_d, i_q, u_d, u_q, motor_speed, ambient,
 You can run this example directly in **Tiny ML ModelMaker** using the following command:
 
 ```bash
-./run_tinyml_modelzoo.sh ./examples/torque_measurement_regression/config.yaml
+./run_tinyml_modelzoo.sh examples/torque_measurement_regression/config.yaml
 ```
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
 
@@ -53,12 +53,28 @@ You can see the output from running modelmaker in the following folder **tinyml-
 ## Configuring the YAML File
 
 ```yaml
+dataset:
+    dataset_name: torque_measurement
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/torque_measurement_dataset.zip
+
 data_processing_feature_extraction:
     data_proc_transforms: [SimpleWindow]
     variables: 10
-    frame_size: 256 # 64, 128
+    frame_size: 128 # 64, 256
     stride_size: 0.25 # 0.5 1
+
+training:
+    model_name: REGR_10k
+    batch_size: 512
+    training_epochs: 50
+    early_stopping: true
+    early_stopping_patience: 5
+    num_gpus: 1
+    learning_rate: 0.001
+    auto_quantization: true
 ```
+
+The target device in the config is `F28P55`.
 
 Try tweaking the frame size and stride size to see how it affects the model training. For this example, having a smaller frame size results in better r2-score. Tweaking them should produce similar results as shown in results section.
 
@@ -104,7 +120,7 @@ Steps to run a regression example on-device can be found in the following guide:
 
 The model successfully completed training on the dataset with notable performance metrics. Analysis of the training logs revealed that the floating-point model achieved an impressive MSE of 12.98 and an R2-Score of 0.994, demonstrating strong predictive accuracy. In comparison, the quantized model showed somewhat diminished but still acceptable performance with an MSE of 83.59 and an R2-Score of 0.963. The model when evalated for test data gave RMSE of 9.40, MSE of 88.36 and R2-Score of 0.98.
 
-We have summarized the results for two frame sizes (128, 256) in the table below.
+We have summarized the results for two frame sizes (128, 256) in the table below. These numbers are from an earlier release and were not re-measured with the current 1.5.0 config (the shipped config uses frame size 128).
 
 ## Results
 

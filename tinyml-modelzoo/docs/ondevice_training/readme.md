@@ -8,7 +8,7 @@
 - [Quickstart](#quickstart)
   - [Step 1: Configure YAML](#step-1-configure-yaml)
   - [Step 2: Run ModelZoo](#step-2-run-modelzoo)
-  - [Step 3: Copy Artifacts to CCS Project](#step-3-copy-artifacts-to-ccs-project)
+  - [Step 3: Import CCS Project and Copy Artifacts](#step-3-import-ccs-project-and-copy-artifacts)
   - [Step 4: Build, Flash, and Run](#step-4-build-flash-and-run)
   - [Step 5: Trigger Training](#step-5-trigger-training)
   - [What to Expect](#what-to-expect)
@@ -38,8 +38,8 @@ On-Device:     Train on PC → Split model → Deploy frozen + trainable parts �
 | **Hardware** | A supported TI MCU LaunchPad. Currently, examples are available for the **F29H85x** (C29x family). |
 | **SDK** | The corresponding device SDK and Code generation tools (e.g., F29H85x SDK for C29x) |
 | **IDE** | Code Composer Studio (CCS)|
-| **ModelZoo** | tinyml-tensorlab ModelZoo environment set up ([setup instructions](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo)) |
-| **Baseline working** | The standard (non-ODT) anomaly detection example for your device should build and run successfully before attempting on-device training. This verifies your SDK, CCS, and hardware setup are correct. See the [fan blade example readme](../../examples/fan_blade_fault_classification/readme_anomaly_detection.md). |
+| **ModelZoo** | `tinyml-modelzoo` installed and working (`pip install -e .` from the `tinyml-modelzoo` folder, see the repository README) |
+| **Baseline working** | The standard (non-ODT) anomaly detection example for your device should build and run successfully before attempting on-device training. This verifies your SDK, CCS, and hardware setup are correct. See the [fan blade example readme](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/fan_blade_fault_classification/readme_anomaly_detection.md). |
 ---
 
 ## Key Concepts

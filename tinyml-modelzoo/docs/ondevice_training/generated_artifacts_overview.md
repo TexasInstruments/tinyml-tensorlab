@@ -101,7 +101,7 @@ Defines the feature extraction pipeline configuration and the initial anomaly de
 
 **How it's used:** The feature extraction library reads these defines at compile time to configure its processing pipeline. When `FE_runFeatureExtract()` is called, it applies the enabled processing steps in sequence: raw input → FFT → DC removal → binning → log scaling → frame concatenation → model input. The output is a feature vector of size `FE_NN_OUT_SIZE` that feeds into the frozen model.
 
-For a detailed explanation of the feature extraction library, its API, and the full processing pipeline, see the [Feature Extraction Library Reference](../../../tinyml-sdk/c29/ai/docs/feature_extract.md).
+For a detailed explanation of the feature extraction library, its API, and the full processing pipeline, see the Feature Extraction Library Reference (`tinyml-sdk/c29/ai/docs/feature_extract.md`).
 
 ### 3.4 `test_vector.c` — Golden Vectors
 

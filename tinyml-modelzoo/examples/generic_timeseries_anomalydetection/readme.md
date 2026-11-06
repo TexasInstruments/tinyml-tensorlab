@@ -173,13 +173,13 @@ Set the task type to `generic_timeseries_anomalydetection` along with other basi
 common:
     target_module: 'timeseries'
     task_type: 'generic_timeseries_anomalydetection'
-    target_device: 'F28P55'
+    target_device: 'F29H85'
     run_name: '{date-time}/{model_name}'
 ```
 
 **Key parameters:**
 - `task_type`: Must be `generic_timeseries_anomalydetection` for anomaly detection tasks
-- `target_device`: Target MCU (F28P55X in this example)
+- `target_device`: Target MCU (F29H85 in `config.yaml`; `config_NPU.yaml` uses F28P55)
 ---
 ### `dataset` Section
 
@@ -189,13 +189,13 @@ Defines dataset details and splitting strategy:
 dataset:
     enable: True
     dataset_name: generic_timeseries_anomalydetection
-    input_data_path: '/path/to/generic_anomaly_detection.zip'
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/generic_timeseries_anomalydetection.zip
     split_factor: [0.5, 0.1, 0.4]
 ```
 
 **Key parameters:**
 - **`dataset_name`**: Name for your dataset (appears in logs)
-- **`input_data_path`**: Path to the dataset zip file
+- **`input_data_path`**: Path or URL of the dataset zip file
 - **`split_type`**: How to split data
   - `'amongst_files'`: Divide files into train/val/test sets 
   - `'within_files'`: Split each file internally
@@ -242,8 +242,9 @@ training:
     model_config: ''
     batch_size: 64
     training_epochs: 50
-    num_gpus: 1
-    learning_rate: 0.001
+    early_stopping: true
+    early_stopping_patience: 5
+    num_gpus: 0
     quantization: 1
     output_int: False
 ```
@@ -254,14 +255,14 @@ training:
   - `'AD_17k'`: ~17,000 parameters (used in this example)
 
 - **`training_epochs`**: Number of training iterations
-  - 50 epochs is sufficient for this simple dataset
-  - Model converged at epoch 46 in this run
+  - 50 epochs is the upper limit; with `early_stopping: true` and `early_stopping_patience: 5`, training stops earlier if the validation metric stops improving
+  - Model converged at epoch 46 in the earlier-release run shown below
 
 - **`batch_size`**: Number of samples per training step
 
 - **`num_gpus`**: Use GPU acceleration if available
   - 1 = use GPU (faster training)
-  - 0 = use CPU only
+  - 0 = use CPU only (used in this example)
 
 - **`quantization`**: Model precision
   - `0` = Float model (no quantization)
@@ -284,17 +285,15 @@ testing:
 
 compilation:
     enable: True 
-    compile_preset_name: 'forced_soft_npu_preset'
 ```
 
 **Key parameters:**
 - **`testing.enable`**: Runs evaluation on test set (normal + anomaly samples)
-- **`compilation.enable`**: Compiles model for F28P55X deployment
-- **`compile_preset_name`**: `'forced_soft_npu_preset'` compiles for CPU
+- **`compilation.enable`**: Compiles model for F29H85 deployment (default compilation preset; optionally set `compile_preset_name` under `compilation`)
 
 ## Results
 
-This section explains the training process, how anomaly detection works, and how to interpret the results from your actual run.
+This section explains the training process, how anomaly detection works, and how to interpret the results. The numbers and logs below are from an earlier release (not re-measured with the current 1.5.0 config), so exact values will differ slightly when you rerun.
 
 ### How Autoencoder-Based Anomaly Detection Works
 
@@ -484,11 +483,11 @@ tinyml-modelmaker/data/projects/generic_anomaly_detection/run/{run-id}/AD_17k
 | **`training/quantization/post_training_analysis/threshold_performance.csv`** | **Complete metrics table** |
 | **`training/quantization/post_training_analysis/reconstruction_error_histogram.png`** | **Error distribution (linear)** |
 | **`training/quantization/post_training_analysis/reconstruction_error_histogram_log.png`** | **Error distribution (log scale)** |
-| **`compilation/artifacts/`** | Compiled model for F28P55X |
+| **`compilation/artifacts/`** | Compiled model for F29H85 |
 
 ### Files for On-Device Deployment
 
-To run the model on F28P55X, you need:
+To run the model on the target device (F29H85), you need:
 
 1. **Compiled model artifacts:**
    ```
@@ -522,6 +521,14 @@ After successfully running ModelZoo, you will get the compiled model artifacts:
 
 Steps to run this example on-device can be found by following this guide: [Deploying Anomaly Detection Models from ModelZoo to Device](../../docs/deploying_anomaly_detection_models_from_modelzoo_to_device/readme.md)
 
+
+### NPU variant (`config_NPU.yaml`)
+
+`config_NPU.yaml` runs the same dataset on the `F28P55` (with NPU) using the NPU-friendly autoencoder `AD_11k_NPU`: `frame_size: 128`, `training_epochs: 30`, `num_gpus: 0`, `quantization: 2`, `auto_quantization: False`, `output_int: False`.
+
+```bash
+./run_tinyml_modelzoo.sh examples/generic_timeseries_anomalydetection/config_NPU.yaml
+```
 
 For more complex real-world examples, see:
 - [Fan Blade Anomaly Detection](../fan_blade_fault_classification/readme_anomaly_detection.md)

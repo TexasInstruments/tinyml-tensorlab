@@ -96,29 +96,28 @@ training:
     model_config: ''
     batch_size: 6
     training_epochs: 10
+    early_stopping: true
+    early_stopping_patience: 5
     num_gpus: 0
-    quantization: 2
+    quantization: 1
     optimizer: adamw
     learning_rate: 0.003
     weight_decay: 0.001
     lr_scheduler: none
     output_int: False
 
-testing:
-    enable: True # False
+testing: {}
 
 compilation:
-    # enable/disable compilationp
-    enable: True # False
-    keep_libc_files: True
+    compile_preset_name: forced_soft_npu_preset
 ```
-The data is then trained using `FCST_LSTM10` model which is 611 paramters LSTM based model to learn indoor thermal dynamic. `quantization` is set to 2 which means we use TI NPU quantization. We are compiling this example using the ti-npu soft preset, which means the software emulation of the TI-NPU with some optimized operations.
+The data is then trained using `FCST_LSTM10` model which is 611 paramters LSTM based model to learn indoor thermal dynamic. `quantization` is set to 1 (generic quantization; `2` selects TI NPU-optimized quantization). We are compiling this example using the ti-npu soft preset (`compile_preset_name: forced_soft_npu_preset`), which means the software emulation of the TI-NPU with some optimized operations.
 
 
 
 ## Results
 
-On running the YAML file, the following accuracies were observed:
+On running the YAML file, the following accuracies were observed (these logs are from an earlier release and were not regenerated for 1.5.0, so your numbers may differ):
 
 ### **I. Float Train**
 ```

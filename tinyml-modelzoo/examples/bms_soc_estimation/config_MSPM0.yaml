@@ -11,16 +11,18 @@ dataset:
 data_processing_feature_extraction:
   data_proc_transforms:
   - SimpleWindow
-  frame_size: 128
-  stride_size: 0.05
+  frame_size: 16
+  stride_size: 0.5
   variables: 4
   
 training:
   enable: true
   model_name: REGR_20k_NPU
   quantization: 2
-  num_gpus: 0
+  num_gpus: 1
   training_epochs: 50
+  batch_size: 128
+  learning_rate: 0.001
 
 
 testing: {}

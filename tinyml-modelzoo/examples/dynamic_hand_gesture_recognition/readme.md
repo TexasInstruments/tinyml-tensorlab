@@ -39,7 +39,7 @@
     - Class 3 — Tap
     - Class 4 — Others (non-gesture or unrecognized motion)
   - **Sensor:** 3-axis accelerometer (X, Y, Z) from TI Sensor BoosterPack
-  - **Download:** [hand_gesture_dataset.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/01_05_00/datasets/hand_gesture_dataset.zip)
+  - **Download:** [hand_gesture_dataset.zip](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/hand_gesture_dataset.zip)
 
 ## Feature Extraction Pipeline
 
@@ -49,7 +49,7 @@
   4. Normalization: Range normalization applied per frame
   5. Single frame input to model
 
-## Model Architecture Options (Available on Tensorlab CLI Tools)
+## Model Architecture Options (Available in tinyml-modelzoo)
 
   1. **CLS_55k_NPU** (Default):
      - CNN architecture optimized for NPU execution
@@ -65,8 +65,8 @@
   NOTE: Running the config yaml handles everything including feature extraction, training, quantization, and compilation.
 
   1. Training:
-     - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-     - Batch size: 30, Learning rate: 0.001, Optimizer: Adam
+     - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+     - Batch size: 30, Learning rate: 0.001, Optimizer: SGD (default, not overridden in the config)
      - Training epochs: 40
 
   2. Quantization:
@@ -96,6 +96,6 @@
   - MSPM0G5187 Technical Reference Manual https://www.ti.com/product/MSPM0G5187
   - TI Sensor BoosterPack https://www.ti.com/tool/BOOSTXL-SENSORS
   - https://software-dl.ti.com/mctools/nnc/mcu/users_guide/
-  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-tensorlab/tree/main
+  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-modelzoo
   - EdgeAI Software Guide: https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST
   - MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK

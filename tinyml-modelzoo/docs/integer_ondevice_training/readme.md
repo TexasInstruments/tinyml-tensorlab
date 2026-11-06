@@ -11,7 +11,6 @@
   - [Step 2: Run ModelMaker](#step-2-run-modelmaker)
   - [Step 3: Copy Artifacts to CCS Project](#step-3-copy-artifacts-to-ccs-project)
   - [Step 4: Build, Flash, and Run](#step-4-build-flash-and-run)
-  - [What to Expect](#what-to-expect)
 - [Documentation Map](#documentation-map)
 - [Reading Paths](#reading-paths)
 
@@ -59,7 +58,7 @@ For background on what on-device training is and why the frozen+trainable split 
 | **Hardware** | AM13E230X LaunchPad |
 | **SDK** | AM13E230X SDK with TI ARM Clang toolchain |
 | **IDE** | Code Composer Studio (CCS) |
-| **ModelMaker** | tinyml-tensorlab ModelMaker environment set up and working |
+| **ModelMaker** | `tinyml-modelzoo` installed and working (it pulls in ModelMaker; see the repository README) |
 | **Baseline working** | The standard (non-ODT) arc fault classification example should build and run before attempting integer ODT. This verifies your SDK, CCS, and hardware setup are correct. |
 
 ---

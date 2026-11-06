@@ -25,7 +25,7 @@
 2. Software:
     - Code Composer Studio 12.x or later
     - MSPM0 SDK 2.08.00 or later
-    - tinyml-tensorlab (CLI)
+    - tinyml-modelzoo (CLI)
 
 ## Dataset Operations
 
@@ -43,7 +43,7 @@
 
 ## Feature Extraction Pipeline
 
-  1. Windowing: raw `SimpleWindow`, frame_size = 128 samples, stride_size = 0.05 (dense overlap)
+  1. Windowing: raw `SimpleWindow`, frame_size = 16 samples, stride_size = 0.5 (50% overlap)
   2. 4 input channels per window: voltage, current, temperature, capacity (coulomb count)
 
 ## Model Architecture
@@ -57,7 +57,7 @@
   - Test RMSE: 2.56% (0.0256)
   - Test R²: 0.99
   - Best-epoch R² during training: 0.987
-  - Training epochs: 50, stride_size: 0.05
+  - Training epochs: 50, frame_size: 16, stride_size: 0.5
   - Device: MSPM0G5187, quantization mode 2 (NPU)
 
 ## Training and Deployment Process
@@ -65,7 +65,7 @@
 NOTE: Running the config yaml takes care of everything including feature extraction, training, quantization and compilation.
 
 1. Training:
-   - Use tinyml-tensorlab (CLI) via the tinyml-workflow-agent skill or directly with the config file
+   - Use tinyml-modelzoo (CLI) with the config file
    - Quantization mode 2 (TI NPU-optimized) enabled by default in the config file
 2. Quantization:
    - INT8 NPU-optimized quantization, enabled via `quantization: 2` in the config
@@ -91,5 +91,5 @@ After completing the repository setup, run the following command from the `tinym
 
 - MSPM0G5187 Technical Reference Manual [Link](https://www.ti.com/product/MSPM0G5187)
 - [TI Neural Network Compiler Guide](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
-- TI Model Training Guide: [tinyml-tensorlab](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main)
+- TI Model Training Guide: [tinyml-modelzoo](https://github.com/TexasInstruments/tinyml-modelzoo)
 - MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK

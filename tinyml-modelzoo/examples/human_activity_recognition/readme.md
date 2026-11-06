@@ -89,8 +89,10 @@ To run this example for device: `F28P55`, it should be mentioned inside the targ
 ```sh
 cd tinyml-modelzoo
 
-run_tinyml_modelzoo.sh examples/human_activity_recognition/config.yaml
+./run_tinyml_modelzoo.sh examples/human_activity_recognition/config.yaml
 ```
+
+`config.yaml` uses the `wisdm_example` dataset (`wisdm_dataset.zip`, hosted online), 3 variables, `SimpleWindow` with frame size 128 and stride 0.01, model `CLS_ResCat_3k` with `model_config` set to `residual_network_config.yaml` (out channels 8, 16, 32), batch size 32, 10 epochs and early stopping (patience 5).
 
 ## Comparison of models
 

@@ -9,8 +9,8 @@ tinyml-modelzoo/
 ├── examples/               # Ready-to-run example configurations
 ├── tinyml_modelzoo/
 │   ├── models/             # Neural network model definitions
-│   ├── model_descriptions/ # Model metadata for GUI integration
-│   └── device_info/        # Target device performance data
+│   └── model_descriptions/ # Model metadata (names used in configs and the GUI)
+├── docs/                   # Guides (config YAML, bring your own model, NPU guidelines)
 ├── run_tinyml_modelzoo.sh  # Training wrapper (Linux)
 ├── run_tinyml_modelzoo.bat # Training wrapper (Windows)
 └── ADDING_NEW_MODELS.md    # Guide for adding custom models
@@ -31,7 +31,7 @@ tinyml-modelzoo/
   - [Anomaly Detection](#anomaly-detection)
   - [Audio Classification](#audio-classification)
   - [Image Classification](#image-classification)
-  - [Radar Point Cloud Classification](#radar-point-cloud-classification)
+  - [Radar Classification](#radar-classification)
 - [Available Models](#available-models)
 - [Adding New Models](#adding-new-models)
 - [About the Task Types](#about-the-task-types)
@@ -55,7 +55,7 @@ tinyml-modelzoo/
    no need to clone anything else.
 3. (or) if you want to directly use this as a Python package and plan to make no model additions/changes, you might as well install the python package directly:
     ```commandline
-    pip install http://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_modelzoo-1.5.0-py3-none-any.whl
+    pip install http://software-dl.ti.com/C2000/esd/mcu_ai/wheel/tinyml_modelzoo-1.6.0-py3-none-any.whl
     ```
 
 ### Running an Example
@@ -94,6 +94,8 @@ common:
     projects_path: './your/choice'  # or an absolute path
 ```
 
+To run the result on a board, follow the **[Deploying to an SDK Example](docs/DEPLOYING_TO_SDK_EXAMPLE.md)** guide. It covers which four files to copy from the run into a C2000Ware / F29 / MSPM33 / AM13 / AM26 SDK example, and how to check that the device matches the golden vectors.
+
 ---
 
 ## Supported Target Devices
@@ -130,7 +132,7 @@ common:
 
 ### Radar (Arm Cortex-M4)
 
-* IWRL6432
+* xWRL6432
 
 ---
 
@@ -155,6 +157,7 @@ For the reasoning behind how these categories differ from one another, see
 
 1. **Look for your use case** in the [Examples Reference](#examples-reference) tables below. If one matches (e.g. `motor_bearing_fault`, `pir_detection`), start there — it ships with a dataset, a tuned model, and a device-specific config.
 2. **If nothing matches**, use the generic example for your task type instead (the first row in each table below, e.g. [generic_timeseries_classification](examples/generic_timeseries_classification/)) and point it at your own dataset. This is also the recommended **first example to run** to learn the toolchain.
+3. **Adapt the config** to your dataset and device. See the [Config YAML Guide](docs/CONFIG_YAML_GUIDE.md) for the structure of the config file and the most useful options.
 
 ---
 
@@ -236,15 +239,31 @@ purpose-built config for that specific use case.
 | [machine_readable_code_classification](examples/machine_readable_code_classification/) | Image | Classify QR codes, barcodes, and other symbols (28×28 images). |
 | [coffee_bean_classification](examples/coffee_bean_classification/) | Image | Classify coffee bean quality from images. |
 
-### Radar Point Cloud Classification
+### Radar Classification
 
 | Example | Data Type | Description |
 |---------|-----------|--------------|
-| [radar_pose_and_fall_detection](examples/radar_pose_and_fall_detection/) | Radar point cloud | Human pose and fall detection from radar point-cloud frames. |
+| [radar_posture_and_fall_detection](examples/radar_posture_and_fall_detection/) | Radar point cloud + track | Classify 5 postures (falling, laying, sitting, standing, walking) with `RF_DualStream_PointCloud_19K` on xWRL6432. |
+| [radar_surface_classification](examples/radar_surface_classification/) | Radar range profile | Classify surface/material (e.g. grass vs not grass) from 1-D FFT range-profile data (130 inputs) with `RF_MLP_3L_11K` on xWRL6432. |
 
 ---
 
 ## Available Models
+
+**85 models** are enabled in 1.6.0:
+
+| Task | Models |
+|------|--------|
+| Classification (timeseries) | 38 |
+| Regression | 11 |
+| Forecasting | 12 |
+| Anomaly Detection | 13 |
+| Audio Classification | 5 |
+| Image Classification | 3 |
+| Radar Classification | 3 |
+| **Total** | **85** |
+
+The counts are the entries of each task's `enabled_models_list` (radar models are part of the classification list; audio and image lists live in `tinyml-modelmaker`). A model must be in this list to be selectable through `training.model_name`.
 
 Models are organized by task type. The **NPU** column indicates hardware acceleration support on TI devices with NPU (F28P55, AM13E2, MSPM0G5187).
 
@@ -300,7 +319,9 @@ For detailed guidelines, see [NPU Configuration Guidelines](docs/NPU_CONFIGURATI
 | `FanImbalance_model_2_t` | Varies | Specialized | No | Fan imbalance variant 2 |
 | `FanImbalance_model_3_t` | Varies | Specialized | No | Fan imbalance variant 3 |
 | `PIRDetection_model_1_t` | Varies | Specialized | No | PIR-based presence detection |
-| `SimpleCNN2D_BN_t` | ~3K | CNN | No | Wi-Fi CSI presence detection (2-layer 2D CNN over time-frequency features). CC35X1 only. |
+| `WiFiPresDet_4.7k_CDE` | ~4.7K | CNN | No | Wi-Fi CSI presence detection. CC35X1 only. |
+| `ECG_55k_NPU` | ~55K | CNN | Yes | ECG classification: 12 Conv+BatchNorm+ReLU layers, MaxPool and a Linear layer |
+| `ElectricalFault_model_40k_t` | ~40K | CNN | Yes | Electrical (transmission line) fault classification: 6 channels x 128 steps, 6 fault classes. MSPM0 only |
 
 ### Regression Models
 
@@ -308,6 +329,7 @@ For detailed guidelines, see [NPU Configuration Guidelines](docs/NPU_CONFIGURATI
 |------------|------------|--------------|-----|-------------|
 | `REGR_500_NPU` | ~500 | CNN | Yes | Compact regression |
 | `REGR_1k` | ~1K | CNN | No | Lightweight regression model |
+| `REGR_2k` | ~2K | CNN | No | Small regression model: 3 Conv+BatchNorm+ReLU layers and 2 Linear layers |
 | `REGR_2k_NPU` | ~2K | CNN | Yes | 2-layer model |
 | `REGR_3k` | ~3K | MLP | No | 4-layer fully connected network |
 | `REGR_4k` | ~4K | CNN | No | 2 Conv+BN+ReLU + Linear |
@@ -332,6 +354,7 @@ Note: For NPU models, encoder convolutions are NPU-accelerated but decoder upsam
 | `AD_10k_NPU` | ~10K | CNN AE | Yes | 3-layer autoencoder |
 | `AD_16k` | ~16K | Autoencoder | No | 4-layer CNN autoencoder |
 | `AD_17k` | ~17K | Autoencoder | No | Fan blade anomaly detection |
+| `AD_11k_NPU` | ~11K | Autoencoder | Yes | NPU-compliant fan blade anomaly detection |
 | `AD_20k_NPU` | ~20K | CNN AE | Yes | High capacity autoencoder |
 | `AD_Linear` | Varies | Linear AE | No | 3-layer deep linear autoencoder |
 | `Ondevice_Trainable_AD_Linear` | Varies | Linear AE | No | On-device trainable variant |
@@ -360,6 +383,7 @@ Note: LSTM models are not NPU-supported.
 | Model Name | Parameters | Architecture | NPU | Description |
 |------------|------------|--------------|-----|-------------|
 | `DSCNN_NPU` | ~9K | DSCNN | Yes | Depthwise separable CNN for keyword spotting; input (1, 49, 10) MFCC |
+| `DSCNN_32K_NPU` | Varies | DSCNN | Yes | SRAM/Flash-optimized DSCNN (48 filters, 3x1 depthwise kernels). Target: SRAM < 32 KB, Flash < 128 KB, W8 quantization |
 | `TCDS_ResNet_NPU` | ~24K | Temporal Channel-Decoupled Separable CNN | Yes | Cough detection from LPC features; input (1, 100, 70), SRAM-efficient (no 2D spatial buffers) |
 | `DSCNN_GB_NPU` | ~6K | DSCNN | Yes | Glass break detection from FFT-binned features; input (1, 86, 32), mixed-precision (4-bit DW/PW, 8-bit stem) |
 | `TCDS_ResNet_FB_NPU` | Varies | Learned Filterbank + TCDS-ResNet | Yes | Wake word detection directly from raw audio via a jointly-trained Conv1D filterbank front-end; mixed-precision (2-bit backbone, 8-bit stem/head) |
@@ -369,26 +393,33 @@ Note: LSTM models are not NPU-supported.
 | Model Name | Parameters | Architecture | NPU | Description |
 |------------|------------|--------------|-----|-------------|
 | `Lenet5` | ~60K | LeNet-5 | No | Classic CNN for image classification |
-| `MobileNetV1_58k_NPU` | ~58K | MobileNetV1-style DW-Sep | Yes | Compact NPU-optimized image classifier |
+| `MobileNetV1_28k_NPU` | ~28K | MobileNetV1-style DW-Sep | Yes | Compact NPU-optimized image classifier |
 | `MobileNetV2_58k_NPU` | ~58K | MobileNetV2-style DW-Sep | Yes | Inverted residual image classifier |
 
-### Radar Point Cloud Classification Models
+### Radar Classification Models
 
 | Model Name | Parameters | Architecture | NPU | Description |
 |------------|------------|--------------|-----|-------------|
-| `Pose_and_Fall_model` | Varies | Linear (4-layer) | No | Human pose and fall detection from radar point-cloud data |
+| `RF_MLP_3L_11K` | ~11K (10,982 at 130 inputs) | Linear (3-layer MLP) | No | Surface classification (default for `radar_surface_classification`); also usable for posture detection. xWRL6432 |
+| `RF_MLP_4L_19K` | ~19K (19,298 at 248 inputs; 11,510 at 130) | Linear (4-layer MLP) | No | Flat-vector MLP for posture/fall detection or surface classification; size scales with input features. xWRL6432 |
+| `RF_DualStream_PointCloud_19K` | ~19K (19,421 at frame_size 4; 18,941 at 8, 248 inputs, 5 classes) | Dual-stream MLP (position + velocity) | No | Default for `radar_posture_and_fall_detection`; splits velocity and position features. xWRL6432 |
 
 ---
 
 ## Adding New Models
 
-Want to add your own model? See the comprehensive guide: **[ADDING_NEW_MODELS.md](ADDING_NEW_MODELS.md)**
+Want to bring your own model? Follow the step-by-step **[Bring Your Own Model (BYOM) Guide](docs/BRING_YOUR_OWN_MODEL.md)**. It adds a small NPU-friendly classification model and trains it on the DC arc fault example, and ends with guidelines for NPU compliance and model sizing.
 
-Key steps:
-1. Add model class to `tinyml_modelzoo/models/`
-2. Add class name to the file's `__all__` list
-3. (Optional) Add device performance info to `device_info/run_info.py`
-4. (Optional) Add model description to `model_descriptions/` for GUI integration
+There are two ways to bring a model:
+
+- **Quick start (no source edits):** write the model class in your own `.py` file and point the config at it with
+  `training.model_name: MyModel` and `training.custom_model_path: /path/to/my_model.py`. Plain `torch.nn.Module` and `GenericModelWithSpec` classes both work, and the full train, ONNX export and compile pipeline runs. This works with the wheel install too, and needs a `tinyml-modelmaker` release that supports `custom_model_path`.
+- **Permanent addition:**
+  1. Add the model class to `tinyml_modelzoo/models/` and its name to the file's `__all__` list
+  2. Add a model description to `model_descriptions/` and its name to `enabled_models_list`. This is required: the config's `training.model_name` refers to the description name
+  3. Set `training.model_name` in a copy of an example config and run it
+
+For more on model internals (layer types, custom `torch.nn.Module` models), see [ADDING_NEW_MODELS.md](ADDING_NEW_MODELS.md).
 
 No changes required outside this repo.
 
@@ -418,6 +449,16 @@ These categories can look similar from a distance, so here's how to tell them ap
 
 
 
+- [2026-Oct] Release version 1.6.0 of the software
+  <details>
+
+  - Radar:
+    - Added `radar_surface_classification` example — classify floor/terrain type from 1-D FFT range-profile data on xWRL6432
+    - Added two new radar models: `RF_MLP_3L_11K` (surface + posture classification) and `RF_DualStream_PointCloud_19K` (dual-stream velocity/position split for pose and fall detection)
+    - Added `docs/RADAR_PROCESSING_PIPELINE.md` covering the end-to-end radar pre-processing and inference pipeline
+  - Models: 85 total (up from 83 in 1.5.0)
+
+  </details>
 - [2026-Sep] Release version 1.5.0 of the software
   <details>
 
@@ -428,7 +469,7 @@ These categories can look similar from a distance, so here's how to tell them ap
     - Gen3 F28x device support reconciled: F2838x, F28P551x, F28002x, and new F28E12x device profile added across regression, forecasting, and anomaly-detection models; over-broad device lists tightened (e.g. arc fault, generic timeseries classification) to match verified per-model support
     - Task-level target device lists for radar, image, and audio classification are now derived from each model's real device support instead of a hand-maintained list, fixing several tasks (e.g. radar classification) that had advertised devices no model actually supported
   - Applications Supported: 37 example applications (4 generic timeseries tasks + 33 specific applications)
-  - Models: 78 models across classification/regression/forecasting/anomaly-detection (timeseries + radar) plus vision and audio classification
+  - Models: 83 models across classification/regression/forecasting/anomaly-detection (timeseries + radar) plus vision and audio classification
     - Added TCDSResNet and a compressed DSCNN for audio classification (cough detection), both NPU-compliant
     - Compressed MobileNet_v1 to fit AM13 memory budget
     - Added Radar Point Cloud Classification support (new model + dataset flow )
@@ -600,7 +641,11 @@ These categories can look similar from a distance, so here's how to tell them ap
 
 ## Additional Resources
 
-- [User Guide](docs/user_guide/readme.md) - install methods (wheel or clone), the full applications list, and a per-category (timeseries/audio/image/radar) YAML config reference
+- [User Guide](https://software-dl.ti.com/C2000/esd/mcu_ai/user_guide/index.html) - install methods (pip install or clone), the full examples and applications list, and a section-by-section YAML config reference
+- **Full User Guide (Sphinx)** - the 1.6.0 user guide source lives in [docs/](docs/index.rst): installation (wheel or clone), task types, bring-your-own-data, devices, every example, features, deployment, troubleshooting and a config reference. Build it with `pip install -r docs/requirements.txt && make -C docs html`, then open `docs/_build/html/index.html`.
+- [Config YAML Guide](docs/CONFIG_YAML_GUIDE.md) - How to create and adapt an example config YAML: section-by-section skeleton, feature extraction options and useful knobs
+- [Bring Your Own Model (BYOM) Guide](docs/BRING_YOUR_OWN_MODEL.md) - Add your own model to the ModelZoo, train it on an example, and design it for NPU acceleration
+- [Deploying to an SDK Example](docs/DEPLOYING_TO_SDK_EXAMPLE.md) - Copy a run's compiled model, feature-extraction config and golden vectors into an SDK example, then verify on the device
 - [TI's Neural Network Compiler Documentation](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
 - [NPU Configuration Guidelines](docs/NPU_CONFIGURATION_GUIDELINES.md) - Design models optimized for TI NPU acceleration
 - [Integer On-Device Learning](docs/integer_ondevice_training/readme.md) - Fine-tune a deployed classification model on-device using integer-only arithmetic

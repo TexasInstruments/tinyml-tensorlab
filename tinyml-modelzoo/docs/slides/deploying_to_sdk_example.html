@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deploying a ModelZoo Run to an SDK Example</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+:root {
+  --accent:  #e42125;
+  --bg:      #0d1117;
+  --card:    #161b22;
+  --border:  #30363d;
+  --text:    #e6edf3;
+  --muted:   #8b949e;
+  --code-bg: #1c2128;
+  --green:   #3fb950;
+  --yellow:  #d29922;
+  --blue:    #58a6ff;
+  --font:    "Inter", system-ui, sans-serif;
+  --mono:    "JetBrains Mono", "Courier New", monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100vw; height:100vh; overflow:hidden;
+  background:var(--bg); color:var(--text);
+  font-family:var(--font); -webkit-font-smoothing:antialiased;
+}
+#progress {
+  position:fixed; bottom:0; left:0; height:3px;
+  background:var(--accent); box-shadow:0 0 10px var(--accent);
+  transition:width 0.35s cubic-bezier(0.4,0,0.2,1); z-index:200;
+}
+#counter {
+  position:fixed; top:18px; right:28px;
+  font-family:var(--mono); font-size:12px; color:var(--muted);
+  letter-spacing:0.5px; z-index:200; user-select:none;
+}
+#slides { width:100vw; height:100vh; position:relative; }
+.slide {
+  position:absolute; inset:0; display:none; flex-direction:column;
+  padding:56px 80px 48px; opacity:0; transition:opacity 0.25s ease;
+}
+.slide.active { display:flex; opacity:1; }
+.eyebrow {
+  font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--accent); font-weight:600; margin-bottom:14px;
+}
+.title      { font-size:52px; font-weight:800; line-height:1.1; margin-bottom:14px; }
+.subtitle   { font-size:22px; color:var(--muted); font-weight:400; }
+.slide-title { font-size:34px; font-weight:700; margin-bottom:6px; }
+.slide-sub  { font-size:16px; color:var(--muted); margin-bottom:28px; }
+.label {
+  font-size:11px; font-weight:600; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted); margin-bottom:8px;
+}
+.body-text  { font-size:17px; line-height:1.65; color:var(--text); }
+.divider    { height:1px; background:var(--border); margin:24px 0; }
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:22px 24px;
+}
+.card.accent { border-left:3px solid var(--accent); }
+.card.green  { border-left:3px solid var(--green); }
+.card.blue   { border-left:3px solid var(--blue); }
+.card.yellow { border-left:3px solid var(--yellow); }
+.card-title  { font-size:17px; font-weight:700; margin-bottom:10px; }
+.card-body   { font-size:16px; color:var(--muted); line-height:1.6; }
+.grid   { display:grid; gap:16px; }
+.grid-2 { grid-template-columns:1fr 1fr; }
+.grid-3 { grid-template-columns:1fr 1fr 1fr; }
+.grid-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+.data-table { width:100%; border-collapse:collapse; font-size:15px; }
+.data-table th {
+  background:var(--card); padding:11px 16px; text-align:left;
+  font-size:12px; font-weight:600; letter-spacing:0.8px;
+  text-transform:uppercase; color:var(--accent); border-bottom:2px solid var(--border);
+}
+.data-table td { padding:11px 16px; border-bottom:1px solid var(--border); color:var(--text); vertical-align:middle; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.steps { display:flex; align-items:stretch; gap:0; }
+.step {
+  flex:1; background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:20px 18px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.step-arrow { display:flex; align-items:center; color:var(--muted); font-size:20px; padding:0 6px; flex-shrink:0; }
+.step-num {
+  width:30px; height:30px; border-radius:50%; background:var(--accent);
+  color:#fff; font-size:14px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.step-label { font-size:16px; font-weight:700; color:var(--text); }
+.step-desc  { font-size:14px; color:var(--muted); line-height:1.5; }
+.checklist { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.checklist li {
+  padding:13px 18px; background:var(--card);
+  border:1px solid var(--border); border-radius:8px;
+  border-left:3px solid var(--border); font-size:16px; line-height:1.45;
+}
+.checklist li.hi   { border-left-color:var(--accent); }
+.checklist li.ok   { border-left-color:var(--green); }
+.checklist li.info { border-left-color:var(--blue); }
+.callout {
+  padding:18px 22px; border-radius:8px; border-left:4px solid;
+  margin:14px 0; font-size:16px; line-height:1.6;
+}
+.callout.red    { background:rgba(228,33,37,0.1);  border-color:var(--accent); }
+.callout.green  { background:rgba(63,185,80,0.1);  border-color:var(--green); }
+.callout.yellow { background:rgba(210,153,34,0.1); border-color:var(--yellow); }
+.callout.blue   { background:rgba(88,166,255,0.1); border-color:var(--blue); }
+.callout strong { color:var(--text); }
+.badge {
+  display:inline-block; padding:3px 10px; border-radius:20px;
+  font-size:12px; font-weight:700; letter-spacing:0.3px; vertical-align:middle;
+}
+.badge.red    { background:rgba(228,33,37,0.2);  color:var(--accent); }
+.badge.green  { background:rgba(63,185,80,0.2);  color:var(--green); }
+.badge.yellow { background:rgba(210,153,34,0.2); color:var(--yellow); }
+.badge.blue   { background:rgba(88,166,255,0.2); color:var(--blue); }
+.badge.gray   { background:var(--card);           color:var(--muted); }
+.code-block {
+  background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+  padding:20px 22px; font-family:var(--mono); font-size:13px;
+  line-height:1.7; color:#a8c5da; white-space:pre-wrap; word-break:break-word; flex:1;
+}
+.code-block .hl  { color:#e6edf3; }
+.code-block .dim { color:#556069; }
+.agenda-list  { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.agenda-item  {
+  display:flex; align-items:center; gap:16px; padding:12px 18px;
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+}
+.agenda-time  { font-family:var(--mono); font-size:13px; color:var(--accent); min-width:50px; }
+.agenda-label { font-size:15px; font-weight:500; }
+.agenda-dur   { margin-left:auto; font-size:13px; color:var(--muted); }
+.slide[data-layout="title"] {
+  justify-content:center;
+  background:radial-gradient(ellipse at 20% 50%, rgba(228,33,37,0.06) 0%, transparent 60%);
+}
+.title-meta {
+  position:absolute; bottom:48px; left:80px; right:80px;
+  font-size:13px; color:var(--muted); border-top:1px solid var(--border); padding-top:18px;
+}
+.mermaid-wrap {
+  flex:1; background:var(--code-bg); border:1px solid var(--border);
+  border-radius:10px; padding:16px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; min-height:0;
+}
+.mermaid-wrap svg, .mermaid-wrap img {
+  max-width:100%; max-height:100%; height:auto; object-fit:contain; display:block;
+}
+.flex    { display:flex; }
+.col     { flex-direction:column; }
+.gap-sm  { gap:10px; }
+.gap-md  { gap:18px; }
+.gap-lg  { gap:28px; }
+.grow    { flex:1; }
+.center  { text-align:center; }
+.mt-auto { margin-top:auto; }
+.fw-7    { font-weight:700; }
+.fs-sm   { font-size:13px; }
+.fs-lg   { font-size:20px; }
+.accent  { color:var(--accent); }
+.muted   { color:var(--muted); }
+.green   { color:var(--green); }
+.blue    { color:var(--blue); }
+.yellow  { color:var(--yellow); }
+.slide a { color:var(--blue); text-decoration:none; }
+.slide a:hover { text-decoration:underline; opacity:0.85; }
+.ti-logo {
+  position:fixed; bottom:18px; right:28px; z-index:200;
+  opacity:0.45; pointer-events:none; line-height:0;
+}
+.ti-logo svg { width:170px; height:20px; }
+.ti-logo path[fill="#CC0000"], .ti-logo path[fill="#cc0000"] { fill:var(--accent) !important; }
+#ti-header {
+  position:fixed; top:16px; left:24px; z-index:200;
+  opacity:0.55; pointer-events:none; line-height:0;
+}
+#ti-header svg { width:140px; height:17px; }
+@media print {
+  .slide { display:flex !important; opacity:1 !important; position:relative !important; page-break-after:always; height:100vh; }
+  #progress, #counter { display:none; }
+}
+/* ---- Light theme (white background) override ---- */
+:root {
+  --accent:  #cc0000;
+  --bg:      #ffffff;
+  --card:    #f6f8fa;
+  --border:  #d0d7de;
+  --text:    #1f2328;
+  --muted:   #59636e;
+  --code-bg: #f6f8fa;
+  --green:   #1a7f37;
+  --yellow:  #9a6700;
+  --blue:    #0969da;
+}
+#progress { box-shadow:none; }
+.card, .step { box-shadow:0 1px 3px rgba(31,35,40,0.08); }
+.data-table tr:nth-child(even) td { background:rgba(31,35,40,0.03); }
+.code-block { color:#424a53; }
+.code-block .hl  { color:#1f2328; font-weight:600; }
+.code-block .dim { color:#6e7781; }
+.callout.red    { background:rgba(204,0,0,0.06); }
+.callout.green  { background:rgba(26,127,55,0.07); }
+.callout.yellow { background:rgba(154,103,0,0.08); }
+.callout.blue   { background:rgba(9,105,218,0.06); }
+.badge.red    { background:rgba(204,0,0,0.12); }
+.badge.green  { background:rgba(26,127,55,0.12); }
+.badge.yellow { background:rgba(154,103,0,0.14); }
+.badge.blue   { background:rgba(9,105,218,0.12); }
+.badge.gray   { background:#eaeef2; }
+.ti-logo { opacity:0.8; }
+#ti-header { opacity:0.85; }
+.ti-logo text, #ti-header text { fill:#1f2328; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  </head>
+  <body>
+    <div id="progress"></div>
+    <div id="counter"></div>
+<!-- TI Logo (bottom-right) -->
+<div class="ti-logo">
+  <svg viewBox="0 0 170 20" xmlns="http://www.w3.org/2000/svg">
+    <g transform="scale(0.555)">
+      <path fill="#CC0000" d="M34.616,11.575V7.276h-6.904l-0.871,4.339h2.483l-0.795,3.999h-2.484l-0.86,4.328c-0.067,0.294-0.117,0.506-0.147,0.71c-0.204,1.328,0.374,1.261,2.233,1.261l-0.85,4.257h-3.25c-3.072,0-5.571-0.026-4.922-3.177c0.103-0.481,0.226-0.967,0.313-1.433l1.161-5.942h-2.389l0.797-3.999h2.388l0.869-4.339h-2.233V0.721h-8.266v13.322H1C1.245,17.497,4.301,18,5.416,20.454c0.768,1.691,1.439,4.672,3.681,4.692c1.717,0.021,1.717-2.222,3.928-2.222c2.208,0,3.188,4.195,5.152,7.649c1.472,2.712,3.917,4.532,6.133,4.688c1.819,0.126,2.699-0.492,2.699-0.492c-0.491-0.988-0.737-1.973-0.737-3.455c0-2.221,1.719-4.44,3.682-5.919c2.699-1.972,5.644-2.719,6.625-2.959v-6.912C36.579,15.524,34.616,14.474,34.616,11.575z M23.355,21.902L26.259,7.27h-3.346l-2.9,14.632H23.355z M27.156,2.644h-3.347l-0.64,3.227h3.345L27.156,2.644z"/>
+    </g>
+    <text x="23" y="14" font-family="'Inter', Arial, Helvetica, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.9)" letter-spacing="0.6">TEXAS INSTRUMENTS</text>
+  </svg>
+</div>
+
+<!-- TI Header (top-left) -->
+<div id="ti-header">
+  <svg viewBox="0 0 170 20" xmlns="http://www.w3.org/2000/svg">
+    <g transform="scale(0.555)">
+      <path fill="#CC0000" d="M34.616,11.575V7.276h-6.904l-0.871,4.339h2.483l-0.795,3.999h-2.484l-0.86,4.328c-0.067,0.294-0.117,0.506-0.147,0.71c-0.204,1.328,0.374,1.261,2.233,1.261l-0.85,4.257h-3.25c-3.072,0-5.571-0.026-4.922-3.177c0.103-0.481,0.226-0.967,0.313-1.433l1.161-5.942h-2.389l0.797-3.999h2.388l0.869-4.339h-2.233V0.721h-8.266v13.322H1C1.245,17.497,4.301,18,5.416,20.454c0.768,1.691,1.439,4.672,3.681,4.692c1.717,0.021,1.717-2.222,3.928-2.222c2.208,0,3.188,4.195,5.152,7.649c1.472,2.712,3.917,4.532,6.133,4.688c1.819,0.126,2.699-0.492,2.699-0.492c-0.491-0.988-0.737-1.973-0.737-3.455c0-2.221,1.719-4.44,3.682-5.919c2.699-1.972,5.644-2.719,6.625-2.959v-6.912C36.579,15.524,34.616,14.474,34.616,11.575z M23.355,21.902L26.259,7.27h-3.346l-2.9,14.632H23.355z M27.156,2.644h-3.347l-0.64,3.227h3.345L27.156,2.644z"/>
+    </g>
+    <text x="23" y="14" font-family="'Inter', Arial, Helvetica, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.9)" letter-spacing="0.6">TEXAS INSTRUMENTS</text>
+  </svg>
+</div>
+
+    <div id="slides">
+      <!-- ============================================================ -->
+<!-- SLIDE 01 · The 4 Files and Where They Go                     -->
+<!-- ============================================================ -->
+<section class="slide active">
+        <div class="eyebrow">ModelZoo · Deploying to an SDK Example</div>
+        <div class="slide-title">The 4 Files and Where They Go</div>
+        <div class="slide-sub">Copy them from one run folder (<code style="font-family:var(--mono);font-size:0.9em">data/projects/&lt;dataset&gt;/run/&lt;date-time&gt;/&lt;model&gt;/</code>) into the imported SDK project, keeping the same names</div>
+        <table class="data-table" style="font-size:clamp(12px,2.2vh,20px)">
+          <thead><tr><th style="width:17%">File</th><th style="width:34%">From the run folder</th><th style="width:20%">Into the CCS project</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono);font-size:0.9em">mod.a</code></td><td><code style="font-family:var(--mono);font-size:0.9em"><span style="color:var(--yellow)">compilation/</span>artifacts/mod.a</code></td><td><code style="font-family:var(--mono);font-size:0.9em">artifacts/mod.a</code></td><td>Compiled model library, built for one device</td></tr>
+            <tr><td><code style="font-family:var(--mono);font-size:0.9em">tvmgen_default.h</code></td><td><code style="font-family:var(--mono);font-size:0.9em"><span style="color:var(--yellow)">compilation/</span>artifacts/tvmgen_default.h</code></td><td><code style="font-family:var(--mono);font-size:0.9em">artifacts/tvmgen_default.h</code></td><td>Model API (<code style="font-family:var(--mono);font-size:0.9em">tvmgen_default_run</code>) and input bias/scale/shift</td></tr>
+            <tr><td><code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code></td><td><code style="font-family:var(--mono);font-size:0.9em"><span style="color:var(--green)">training/quantization/</span>golden_vectors/</code></td><td><code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code></td><td>Configures the SDK feature-extraction library to match training</td></tr>
+            <tr><td><code style="font-family:var(--mono);font-size:0.9em">test_vector.c</code></td><td><code style="font-family:var(--mono);font-size:0.9em"><span style="color:var(--green)">training/quantization/</span>golden_vectors/</code></td><td><code style="font-family:var(--mono);font-size:0.9em">test_vector.c</code></td><td>Raw input, expected features and expected output (<code style="font-family:var(--mono);font-size:0.9em">golden_output</code>) for a few samples</td></tr>
+          </tbody>
+        </table>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:20px;margin-top:auto;align-items:stretch">
+          <div class="callout green" style="margin:0;padding:14px 18px;font-size:clamp(11px,1.8vh,16px)"><strong>Shortcut:</strong> <code style="font-family:var(--mono);font-size:0.9em">compilation/&lt;date-time&gt;_&lt;model&gt;_&lt;device&gt;.zip</code> already bundles the matching set: <code style="font-family:var(--mono);font-size:0.9em">artifacts/</code>, <code style="font-family:var(--mono);font-size:0.9em">golden_vectors/</code>, plus <code style="font-family:var(--mono);font-size:0.9em">model_aux.h</code> (class names). Unzip and copy from there.</div>
+          <div class="callout yellow" style="margin:0;padding:14px 18px;font-size:clamp(11px,1.8vh,16px)"><strong>Use the quantized golden vectors.</strong> <code style="font-family:var(--mono);font-size:0.9em">mod.a</code> is compiled from <code style="font-family:var(--mono);font-size:0.9em">training/quantization/model.onnx</code>. The <code style="font-family:var(--mono);font-size:0.9em">training/base/</code> golden vectors are float outputs of the float model and will not match.</div>
+        </div>
+        <div class="fs-sm muted" style="margin-top:10px">Adithya Thonse · October 2026</div>
+      </section>
+      <!-- ============================================================ -->
+<!-- SLIDE 02 · The One Rule: All Four From the Same Run          -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Deploying to an SDK Example</div>
+        <div class="slide-title">The One Rule: All Four From the Same Run</div>
+        <div class="slide-sub">Golden outputs and normalization parameters are tied to the trained weights. Two runs of the <em>same</em> config still differ</div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">SDK <code style="font-family:var(--mono);font-size:0.9em">arc_fault</code> example vs. a fresh <code style="font-family:var(--mono);font-size:0.9em">dc_arc_fault/config_dsk.yaml</code> run (CLS_1k_NPU, F28P55)</div>
+            <table class="data-table" style="font-size:clamp(12px,2.1vh,19px)">
+              <thead><tr><th style="width:34%">File</th><th>SDK example</th><th>Fresh run</th><th style="width:14%"></th></tr></thead>
+              <tbody>
+                <tr><td><code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code></td><td colspan="2">identical <code style="font-family:var(--mono);font-size:0.9em">#define</code>s (same config)</td><td style="color:var(--green);font-weight:700">same</td></tr>
+                <tr><td><code style="font-family:var(--mono);font-size:0.9em">golden_output</code></td><td><code style="font-family:var(--mono);font-size:0.9em">{ 43, -52 }</code></td><td><code style="font-family:var(--mono);font-size:0.9em">{ 61, -73 }</code></td><td style="color:var(--accent);font-weight:700">differs</td></tr>
+                <tr><td><code style="font-family:var(--mono);font-size:0.9em">tvmgen_default_bias_data</code></td><td><code style="font-family:var(--mono);font-size:0.9em">20.710558</code></td><td><code style="font-family:var(--mono);font-size:0.9em">20.517256</code></td><td style="color:var(--accent);font-weight:700">differs</td></tr>
+                <tr><td><code style="font-family:var(--mono);font-size:0.9em">mod.a</code> weights</td><td colspan="2">retrained, so different</td><td style="color:var(--accent);font-weight:700">differs</td></tr>
+              </tbody>
+            </table>
+            <div class="card-body" style="font-size:clamp(12px,2.1vh,19px)">Replacing only <code style="font-family:var(--mono);font-size:0.9em">mod.a</code> (or only <code style="font-family:var(--mono);font-size:0.9em">test_vector.c</code>) gives a project that builds fine but fails the check.</div>
+          </div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="card green" style="display:flex;flex-direction:column;gap:8px;padding:18px 22px;flex:0">
+              <div class="label" style="margin-bottom:0;color:var(--green)">Do</div>
+              <div class="card-body" style="font-size:clamp(12px,2.1vh,19px)">Copy all four files from <strong>one</strong> <code style="font-family:var(--mono);font-size:0.9em">&lt;date-time&gt;/&lt;model&gt;/</code> folder, or from its compilation zip.</div>
+            </div>
+            <div class="card blue" style="display:flex;flex-direction:column;gap:8px;padding:18px 22px;flex:0">
+              <div class="label" style="margin-bottom:0;color:var(--blue)">Quick check</div>
+              <div class="card-body" style="font-size:clamp(12px,2.1vh,19px)">The header of <code style="font-family:var(--mono);font-size:0.9em">tvmgen_default.h</code> names its source model: <code style="font-family:var(--mono);font-size:0.9em">input model file: .../&lt;model&gt;/training/quantization/model.onnx</code>. That path should be the same run as your golden vectors.</div>
+            </div>
+            <div class="card" style="display:flex;flex-direction:column;gap:8px;padding:18px 22px;flex:0">
+              <div class="label" style="margin-bottom:0">Leave the rest of the example alone</div>
+              <div class="card-body" style="font-size:clamp(12px,2.1vh,19px)"><code style="font-family:var(--mono);font-size:0.9em">application_main.c</code>, <code style="font-family:var(--mono);font-size:0.9em">.syscfg</code> and <code style="font-family:var(--mono);font-size:0.9em">lnk.cmd</code> are generic. What makes an example &quot;arc fault&quot; lives in the four files.</div>
+            </div>
+          </div>
+        </div>
+        <div class="fs-sm muted" style="margin-top:10px">Adithya Thonse · October 2026</div>
+      </section>
+      <!-- ============================================================ -->
+<!-- SLIDE 03 · Step 1: Pick the SDK and the Example              -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Deploying to an SDK Example</div>
+        <div class="slide-title">Step 1: Pick the SDK and the Example</div>
+        <div class="slide-sub">The SDK follows <code style="font-family:var(--mono);font-size:0.9em">common.target_device</code>; the example follows <code style="font-family:var(--mono);font-size:0.9em">common.task_type</code></div>
+        <div class="grid" style="grid-template-columns:1.25fr 1fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">SDK by target_device</div>
+            <table class="data-table" style="font-size:clamp(10px,1.65vh,15px)">
+              <thead><tr><th>target_device</th><th>SDK</th><th>Examples under</th><th>Device folder</th></tr></thead>
+              <tbody>
+                <tr><td>F28P55, F28P65, F28004, F28003</td><td>C2000Ware 6.01</td><td><code style="font-family:var(--mono);font-size:0.9em">libraries/ai/examples/</code></td><td><code style="font-family:var(--mono);font-size:0.9em">f28p55x/</code> …</td></tr>
+                <tr><td>F29H85</td><td>F29H85x SDK 1.04</td><td><code style="font-family:var(--mono);font-size:0.9em">examples/ai/</code></td><td><code style="font-family:var(--mono);font-size:0.9em">f29h85x/</code></td></tr>
+                <tr><td>MSPM33C32</td><td>MSPM33 SDK 1.03</td><td><code style="font-family:var(--mono);font-size:0.9em">examples/ai/</code></td><td><code style="font-family:var(--mono);font-size:0.9em">mspm33c321a/</code></td></tr>
+                <tr><td>AM13E2</td><td>MCU-SDK 1.00</td><td><code style="font-family:var(--mono);font-size:0.9em">examples/ai/</code></td><td><span class="muted">(single)</span></td></tr>
+                <tr><td>AM263</td><td>MCU-PLUS-SDK 11.03</td><td><code style="font-family:var(--mono);font-size:0.9em">examples/ai/</code></td><td><code style="font-family:var(--mono);font-size:0.9em">am263x_lp/</code></td></tr>
+              </tbody>
+            </table>
+            <div class="callout yellow" style="margin:auto 0 0;padding:12px 16px;font-size:clamp(11px,1.7vh,15px)"><code style="font-family:var(--mono);font-size:0.9em">mod.a</code> is compiled for one device (instruction set, NPU or not). Use the device folder that matches the run&#39;s <code style="font-family:var(--mono);font-size:0.9em">target_device</code>.</div>
+          </div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">Example by task_type (any one works)</div>
+            <table class="data-table" style="font-size:clamp(10px,1.65vh,15px)">
+              <thead><tr><th style="width:28%">Task</th><th>Examples</th></tr></thead>
+              <tbody>
+                <tr><td>Classification</td><td><code style="font-family:var(--mono);font-size:0.9em">generic_timeseries_classification</code>, <code style="font-family:var(--mono);font-size:0.9em">arc_fault</code>, <code style="font-family:var(--mono);font-size:0.9em">motor_fault</code>, <code style="font-family:var(--mono);font-size:0.9em">blower_imbalance</code></td></tr>
+                <tr><td>Regression</td><td><code style="font-family:var(--mono);font-size:0.9em">generic_timeseries_regression</code>, <code style="font-family:var(--mono);font-size:0.9em">torque_measurement</code>, <code style="font-family:var(--mono);font-size:0.9em">washing_machine_load_weighing</code></td></tr>
+                <tr><td>Forecasting</td><td><code style="font-family:var(--mono);font-size:0.9em">generic_timeseries_forecasting</code>, <code style="font-family:var(--mono);font-size:0.9em">forecasting_pmsm_rotor_temp</code>, <code style="font-family:var(--mono);font-size:0.9em">hvac_indoor_temp_forecast</code></td></tr>
+                <tr><td>Anomaly detection</td><td><code style="font-family:var(--mono);font-size:0.9em">generic_timeseries_anomalydetection</code>, <code style="font-family:var(--mono);font-size:0.9em">fan_blade_anomalydetection</code></td></tr>
+              </tbody>
+            </table>
+            <div class="callout blue" style="margin:auto 0 0;padding:12px 16px;font-size:clamp(11px,1.7vh,15px)">Within a task, the examples share the same <code style="font-family:var(--mono);font-size:0.9em">application_main.c</code>. Pick the one named after your application, or the <code style="font-family:var(--mono);font-size:0.9em">generic_*</code> one.</div>
+          </div>
+        </div>
+        <div class="fs-sm muted" style="margin-top:10px">Adithya Thonse · October 2026</div>
+      </section>
+      <!-- ============================================================ -->
+<!-- SLIDE 04 · Steps 2–3: Import the Example, Replace the Files  -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Deploying to an SDK Example</div>
+        <div class="slide-title">Steps 2–3: Import the Example, Replace the Files</div>
+        <div class="slide-sub">The project spec copies the example files into your CCS workspace, so you edit the workspace copy and the SDK install stays untouched</div>
+        <div class="grid" style="grid-template-columns:1fr 1.2fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">Import in Code Composer Studio</div>
+            <ul class="checklist">
+              <li class="info" style="font-size:clamp(11px,1.8vh,16px)"><strong>View → Resource Explorer</strong></li>
+              <li class="info" style="font-size:clamp(11px,1.8vh,16px)">Filter by board (e.g. <strong>LAUNCHXL-F28P55X</strong>), search the example (e.g. <code style="font-family:var(--mono);font-size:0.9em">f28p55x_arc_fault</code>)</li>
+              <li class="info" style="font-size:clamp(11px,1.8vh,16px)"><strong>Import</strong>, and install the dependencies it asks for</li>
+            </ul>
+            <div class="code-block" style="flex:1;font-size:clamp(9px,1.55vh,14px);line-height:1.5;white-space:pre;overflow:hidden">f28p55x_arc_fault/        <span class="dim"># imported project</span>
+├── application_main.c    <span class="dim"># leave as is</span>
+├── artifacts/
+│   ├── <span class="hl">mod.a</span>             <span style="color:var(--accent)">&lt;- replace</span>
+│   └── <span class="hl">tvmgen_default.h</span>  <span style="color:var(--accent)">&lt;- replace</span>
+├── <span class="hl">test_vector.c</span>         <span style="color:var(--accent)">&lt;- replace</span>
+├── <span class="hl">user_input_config.h</span>   <span style="color:var(--accent)">&lt;- replace</span>
+├── c2000.syscfg          <span class="dim"># board + NPU init</span>
+└── lnk.cmd               <span class="dim"># memory map</span></div>
+          </div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">Copy the 4 files over the originals</div>
+            <div class="code-block" style="flex:1;font-size:clamp(8px,1.4vh,13px);line-height:1.6;white-space:pre;overflow:hidden">RUN=data/projects/&lt;dataset&gt;/run/&lt;date-time&gt;/&lt;model&gt;
+PRJ=&lt;ccs_workspace&gt;/f28p55x_arc_fault
+
+cp $RUN/<span style="color:var(--yellow)">compilation/artifacts</span>/mod.a             $PRJ/artifacts/
+cp $RUN/<span style="color:var(--yellow)">compilation/artifacts</span>/tvmgen_default.h  $PRJ/artifacts/
+cp $RUN/<span style="color:var(--green)">training/quantization/golden_vectors</span>/test_vector.c        $PRJ/
+cp $RUN/<span style="color:var(--green)">training/quantization/golden_vectors</span>/user_input_config.h  $PRJ/
+
+<span class="dim"># Windows: drag and drop in Explorer or the CCS Project Explorer</span></div>
+            <div class="callout yellow" style="margin:0;padding:12px 16px;font-size:clamp(11px,1.8vh,16px)"><strong>AM13E2:</strong> the project links <code style="font-family:var(--mono);font-size:0.9em">artifacts/mod_m33_ti_arm_clang.a</code>. Copy <code style="font-family:var(--mono);font-size:0.9em">mod.a</code> in under that name.</div>
+          </div>
+        </div>
+        <div class="fs-sm muted" style="margin-top:10px">Adithya Thonse · October 2026</div>
+      </section>
+      <!-- ============================================================ -->
+<!-- SLIDE 05 · Step 4: Build, Flash and Read the Result          -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Deploying to an SDK Example</div>
+        <div class="slide-title">Step 4: Build, Flash and Read the Result</div>
+        <div class="slide-sub">The example runs two checks on the active <code style="font-family:var(--mono);font-size:0.9em">SET</code> of <code style="font-family:var(--mono);font-size:0.9em">test_vector.c</code>, each within ±1</div>
+        <div class="grid" style="grid-template-columns:1fr 1.25fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="flex col gap-sm" style="min-height:0">
+            <ul class="checklist">
+              <li class="info" style="font-size:clamp(11px,1.8vh,16px)"><strong>Project → Build Project</strong></li>
+              <li class="info" style="font-size:clamp(11px,1.8vh,16px)">Set the active target to the LaunchPad config, e.g. <code style="font-family:var(--mono);font-size:0.9em">TMS320F28P550SJ9_LaunchPad.ccxml</code></li>
+              <li class="info" style="font-size:clamp(11px,1.8vh,16px)"><strong>Run → Debug Project</strong> (flashes the board), watch <code style="font-family:var(--mono);font-size:0.9em">test_result</code>, press <strong>Continue</strong></li>
+            </ul>
+            <div class="label" style="margin-bottom:0">Expected console (CIO)</div>
+            <div class="code-block" style="flex:0;font-size:clamp(9px,1.6vh,14px);line-height:1.6;white-space:pre;padding:12px 16px">Feature extraction mismatches <span style="color:var(--green)">0</span>
+<span style="color:var(--green)">All tests have passed.</span>
+Golden vectors matched: <span style="color:var(--green)">2</span> not matched: <span style="color:var(--green)">0</span></div>
+            <div class="card-body" style="font-size:clamp(11px,1.8vh,16px)"><code style="font-family:var(--mono);font-size:0.9em">test_result</code> = <strong>1</strong> (PASS). The matched count equals the number of model outputs (<code style="font-family:var(--mono);font-size:0.9em">FE_NN_OUT_SIZE</code>).</div>
+            <div class="callout blue" style="margin:auto 0 0;padding:12px 16px;font-size:clamp(11px,1.7vh,15px)"><strong>More sets:</strong> wrap SET 0 in <code style="font-family:var(--mono);font-size:0.9em">/* */</code>, unwrap another SET (one at a time), rebuild, flash. Each array is commented with its class and sample index.</div>
+          </div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="code-block" style="flex:0;font-size:clamp(8px,1.4vh,13px);line-height:1.6;white-space:pre;padding:14px 16px">raw_input_test ─► <span class="hl">FE_runFeatureExtract</span> ─► model_input ─► <span class="hl">tvmgen_default_run</span> ─► model_output
+                                               │                                     │
+                                 <span style="color:var(--blue)">check 1</span>: vs model_test_input            <span style="color:var(--blue)">check 2</span>: vs golden_output</div>
+            <div class="card blue" style="display:flex;flex-direction:column;gap:6px;padding:14px 18px;flex:1">
+              <div class="label" style="margin-bottom:0;color:var(--blue)">Check 1 · feature extraction</div>
+              <div class="card-body" style="font-size:clamp(11px,1.8vh,16px)">The SDK library, set up by <code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code>, must reproduce the PC features. Non-zero count: look at <code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code> / <code style="font-family:var(--mono);font-size:0.9em">test_vector.c</code>.</div>
+            </div>
+            <div class="card blue" style="display:flex;flex-direction:column;gap:6px;padding:14px 18px;flex:1">
+              <div class="label" style="margin-bottom:0;color:var(--blue)">Check 2 · model</div>
+              <div class="card-body" style="font-size:clamp(11px,1.8vh,16px)">The compiled model must reproduce the PC output. Mismatch with check 1 at 0: look at <code style="font-family:var(--mono);font-size:0.9em">mod.a</code> / <code style="font-family:var(--mono);font-size:0.9em">tvmgen_default.h</code>. On NPU devices the app first waits for <code style="font-family:var(--mono);font-size:0.9em">tvmgen_default_finished</code>.</div>
+            </div>
+            <div class="card yellow" style="display:flex;flex-direction:column;gap:6px;padding:14px 18px;flex:1">
+              <div class="label" style="margin-bottom:0;color:var(--yellow)">Anomaly detection is different</div>
+              <div class="card-body" style="font-size:clamp(11px,1.8vh,16px)">Outputs may deviate by up to 4; the reconstruction error is compared with <code style="font-family:var(--mono);font-size:0.9em">RECONSTRUCTION_ERROR_THRESHOLD</code> from <code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code>. Here <code style="font-family:var(--mono);font-size:0.9em">test_result</code> means <strong>1 = anomaly, 0 = normal</strong>.</div>
+            </div>
+          </div>
+        </div>
+        <div class="fs-sm muted" style="margin-top:10px">Adithya Thonse · October 2026</div>
+      </section>
+      <!-- ============================================================ -->
+<!-- SLIDE 06 · When It Does Not Match                            -->
+<!-- ============================================================ -->
+<section class="slide">
+        <div class="eyebrow">ModelZoo · Deploying to an SDK Example</div>
+        <div class="slide-title">When It Does Not Match</div>
+        <div class="slide-sub">Read the two console counts first: they tell you which files to look at</div>
+        <table class="data-table" style="font-size:clamp(10px,1.7vh,15px)">
+          <thead><tr><th style="width:30%">Symptom</th><th style="width:36%">Likely cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td><code style="font-family:var(--mono);font-size:0.9em">Feature extraction mismatches</code> &gt; 0</td><td><code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code> and <code style="font-family:var(--mono);font-size:0.9em">test_vector.c</code> from different runs, or an older SDK</td><td>Copy both from one <code style="font-family:var(--mono);font-size:0.9em">golden_vectors/</code>; use the recommended SDK version</td></tr>
+            <tr><td>FE mismatches 0, <code style="font-family:var(--mono);font-size:0.9em">not matched</code> &gt; 0</td><td><code style="font-family:var(--mono);font-size:0.9em">mod.a</code> from another run, or <code style="font-family:var(--mono);font-size:0.9em">base/</code> golden vectors with the quantized <code style="font-family:var(--mono);font-size:0.9em">mod.a</code></td><td>All four from one run; golden vectors from <code style="font-family:var(--mono);font-size:0.9em">training/quantization/</code> (or the zip)</td></tr>
+            <tr><td>Type errors on <code style="font-family:var(--mono);font-size:0.9em">model_input_t</code> / <code style="font-family:var(--mono);font-size:0.9em">model_output_t</code></td><td><code style="font-family:var(--mono);font-size:0.9em">SKIP_NORMALIZE</code> / <code style="font-family:var(--mono);font-size:0.9em">OUTPUT_INT</code> in <code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code> switch them to <code style="font-family:var(--mono);font-size:0.9em">int8_t</code></td><td>Use the <code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code> that matches <code style="font-family:var(--mono);font-size:0.9em">mod.a</code></td></tr>
+            <tr><td>Undefined <code style="font-family:var(--mono);font-size:0.9em">tvmgen_default_run</code>, incompatible object</td><td><code style="font-family:var(--mono);font-size:0.9em">mod.a</code> built for another device; AM13 file name</td><td>Re-run with the right <code style="font-family:var(--mono);font-size:0.9em">target_device</code>; AM13: <code style="font-family:var(--mono);font-size:0.9em">mod_m33_ti_arm_clang.a</code></td></tr>
+            <tr><td><code style="font-family:var(--mono);font-size:0.9em">RECONSTRUCTION_ERROR_THRESHOLD</code> undeclared</td><td>Anomaly-detection <code style="font-family:var(--mono);font-size:0.9em">user_input_config.h</code> is missing its defines</td><td>Check the file has the FE defines and the threshold; regenerate the run if it is empty</td></tr>
+            <tr><td>Hangs at <code style="font-family:var(--mono);font-size:0.9em">while (!tvmgen_default_finished)</code></td><td>NPU model, but the NPU is not initialized</td><td>Keep the NPU module in the <code style="font-family:var(--mono);font-size:0.9em">.syscfg</code> (C2000) or <code style="font-family:var(--mono);font-size:0.9em">TI_NPU_init()</code> (F29H85)</td></tr>
+            <tr><td>Linker: section does not fit</td><td>Model or feature extraction larger than the example&#39;s</td><td>Start from an example with a similar FE preset; adjust <code style="font-family:var(--mono);font-size:0.9em">lnk.cmd</code></td></tr>
+          </tbody>
+        </table>
+        <div class="callout green" style="margin:auto 0 0;padding:12px 18px;font-size:clamp(11px,1.8vh,16px)"><strong>After it passes:</strong> keep the feature-extraction and <code style="font-family:var(--mono);font-size:0.9em">tvmgen_default_run</code> calls, and feed <code style="font-family:var(--mono);font-size:0.9em">fe_handle-&gt;input_buffer</code> from your ADC/sensor instead of <code style="font-family:var(--mono);font-size:0.9em">raw_input_test</code>. Full walkthrough: <code style="font-family:var(--mono);font-size:0.9em">docs/DEPLOYING_TO_SDK_EXAMPLE.md</code>.</div>
+        <div class="fs-sm muted" style="margin-top:10px">Adithya Thonse · October 2026</div>
+      </section>
+    </div><!-- /#slides -->
+    <script>
+(async function () {
+  const slides   = document.querySelectorAll(".slide");
+  const progress = document.getElementById("progress");
+  const counter  = document.getElementById("counter");
+  let current = 0;
+
+  function goTo(n) {
+    if (!slides.length) return;
+    slides[current].classList.remove("active");
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add("active");
+    counter.textContent  = `${current + 1} / ${slides.length}`;
+    progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+  }
+  window.goTo   = goTo;
+  window.goToId = function(id) {
+    const list = document.querySelectorAll(".slide");
+    for (let i = 0; i < list.length; i++) { if (list[i].id === id) { goTo(i); return; } }
+  };
+
+  if (window.mermaid) {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "dark",
+      themeVariables: {
+        background:         "#0D1117",
+        primaryColor:       "#E42125",
+        primaryTextColor:   "#E6EDF3",
+        primaryBorderColor: "#30363D",
+        lineColor:          "#8B949E",
+        secondaryColor:     "#161B22",
+        tertiaryColor:      "#1C2128",
+        noteBkgColor:       "#161B22",
+        noteTextColor:      "#E6EDF3",
+        fontFamily:         "'Inter', system-ui, sans-serif",
+        fontSize:           "14px",
+      },
+    });
+    slides.forEach((s) => { s.style.display = "flex"; s.style.visibility = "hidden"; });
+    await mermaid.run({ querySelector: ".mermaid" });
+    slides.forEach((s) => { s.style.display = ""; s.style.visibility = ""; });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (["ArrowRight", "ArrowDown", " "].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+    if (["ArrowLeft",  "ArrowUp"        ].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+    if (e.key === "Home") goTo(0);
+    if (e.key === "End")  goTo(slides.length - 1);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("a, button")) return;
+    goTo(current + 1);
+  });
+
+  goTo(0);
+})();
+    </script>
+  </body>
+</html>

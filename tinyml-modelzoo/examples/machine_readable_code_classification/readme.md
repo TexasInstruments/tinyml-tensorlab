@@ -162,11 +162,11 @@ The script creates the following folder in the current working directory:
 machine_readable_code/
 ```
 
-## Recommended TensorLab / ModelMaker Preset
-For the clean 28x28 dataset, use a simple preprocessing preset:
+## Recommended ModelZoo / ModelMaker Preset
+For the clean 28x28 dataset, use the `MachineReadable_Default` preprocessing preset (this is what `config_MSPM0.yaml` uses):
 
 ```python
-VisualCode_28_Default = dict(
+MachineReadable_Default = dict(
     data_processing_feature_extraction=dict(
         variables         = 1,
         image_height      = 28,
@@ -199,3 +199,17 @@ This dataset is useful for:
 - QR-vs-barcode visual structure classification
 
 A later version can extend this dataset to 32x32 or 64x64 for better preservation of barcode and QR structure.
+
+---
+
+## Training Configuration and How to Run
+
+The example config `config_MSPM0.yaml` targets `MSPM0G5187` (`task_type: image_classification`, `target_module: vision`) and downloads the prepared dataset from
+`https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/machine_readable_code_classification.zip`. It uses the `MachineReadable_Default` feature extraction preset and trains the `Lenet5` model with
+`batch_size: 64`, `training_epochs: 10`, `learning_rate: 0.1`, `weight_decay: 1e-5`, `num_gpus: 0` and `quantization: 2`.
+
+From the `tinyml-modelzoo` directory:
+
+```bash
+./run_tinyml_modelzoo.sh examples/machine_readable_code_classification/config_MSPM0.yaml
+```

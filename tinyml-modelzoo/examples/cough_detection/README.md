@@ -30,7 +30,7 @@ No cloud, no OS, no external ML framework.
 | Audio interface | Native I2S/TDM peripheral |
 | Power | 1.5 µA standby, 103 µA/MHz active |
 | Data capture | TI EdgeAI Studio (browser GUI, no firmware required) |
-| Training | TI TensorLab (YAML-configured) |
+| Training | tinyml-modelzoo (YAML-configured) |
 | Compiler | TI Neural Network Compiler (NNC) → `model.a` |
 | IDE | Code Composer Studio (CCS), no RTOS |
 
@@ -85,7 +85,7 @@ for augmentation — they are never added as training clips.
 ## 3. Dataset Preparation (v2)
 
 `prepare_dataset.py` converts the raw EdgeAI CSV files to segmented 8820 Hz WAV
-clips ready for TensorLab. It mirrors the firmware signal path exactly so that
+clips ready for ModelZoo. It mirrors the firmware signal path exactly so that
 every clip the model trains on is byte-for-byte equivalent to what the firmware
 would produce from the same audio.
 
@@ -163,7 +163,9 @@ training:
   model_name: TCDS_ResNet_NPU
   batch_size: 64
   training_epochs: 40
-  num_gpus: 0
+  early_stopping: true
+  early_stopping_patience: 5
+  num_gpus: 1
   learning_rate: 0.01
   weight_decay: 4e-4
 
@@ -178,7 +180,9 @@ compilation:
 | `target_device` | `MSPM0G5187` | NNC compiles specifically for this NPU |
 | `feature_extraction_name` | `MSPM0_LPC_8820` | Selects the firmware-matched LPC preset (see below) |
 | `model_name` | `TCDS_ResNet_NPU` | Temporal CNN with depthwise-separable convolutions |
-| `training_epochs` | `40` | Sufficient for this dataset size; increase to 100+ for larger datasets |
+| `training_epochs` | `40` | Upper limit on epochs; training can stop earlier (see `early_stopping`). Increase for larger datasets |
+| `early_stopping` / `early_stopping_patience` | `true` / `5` | Stops training when the validation metric has not improved for 5 epochs |
+| `num_gpus` | `1` | Trains on one CUDA GPU; set to `0` for CPU-only training |
 | `learning_rate` | `0.01` | Conservative — appropriate for a small dataset (~500 clips) |
 | `compile_preset_name` | `default_preset` | Runs NNC to produce `model.a` + `tvmgen_default.h` |
 
@@ -311,7 +315,7 @@ in 45 KB of flash.
 
 ## 5. Training Results
 
-Results on the v2 dataset (562 clips total, 80/20 train/val split):
+Results on the v2 dataset (562 clips total, 80/20 train/val split), from an earlier release (not re-measured with the current 1.5.0 config):
 
 | Metric | Value |
 |--------|-------|
@@ -369,7 +373,7 @@ buffers, and future model improvements.
 
 ### Prerequisites
 
-- TI TensorLab installed and on `PATH`
+- tinyml-modelzoo installed (`pip install -e .`, see the repository README)
 - Python 3.10+, `numpy`, `pandas`, `scipy`
 
 ### Step 1 — Prepare the dataset (if using your own recordings)
@@ -386,13 +390,17 @@ Verify that both classes have clips in overlapping RMS buckets before training.
 
 ### Step 2 — Train
 
+From the `tinyml-modelzoo` directory:
+
 ```bash
-tinyml_modelmaker config.yaml
+./run_tinyml_modelzoo.sh examples/cough_detection/config.yaml
 ```
 
-TensorLab will:
+On Windows: `.\run_tinyml_modelzoo.bat examples\cough_detection\config.yaml`
+
+ModelZoo will:
 1. Load and preprocess WAVs using the `MSPM0_LPC_8820` preset
-2. Train `TCDS_ResNet_NPU` for 40 epochs
+2. Train `TCDS_ResNet_NPU` for up to 40 epochs (early stopping with patience 5)
 3. Quantize to INT8
 4. Compile via NNC to `model.a` and `tvmgen_default.h`
 

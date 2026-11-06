@@ -178,8 +178,10 @@ training:
     model_config: ''
     batch_size: 32
     training_epochs: 50
-    num_gpus: 1
-    quantization: 1
+    early_stopping: true
+    early_stopping_patience: 5
+    num_gpus: 0
+    quantization: 2  # 2 = TI NPU-optimized quantization
     optimizer: adam
     output_int: false
 ```
@@ -191,8 +193,7 @@ You can enable or disable compilation and testing as needed:
 ```yaml
 testing: {}
 
-compilation:
-    keep_libc_files: true
+compilation: {}
 ```
 
 ## Results
@@ -225,6 +226,8 @@ A score close to 1 means the model explains most of the variation in the data.
 The model can predict multiple future timesteps for multiple target variables. For each epoch, SMAPE is computed across all target variables and across all predicted timesteps. The epoch with the lowest average SMAPE is selected as the best epoch. For the best epoch, both R² and SMAPE are reported for each predicted timestep of each target variable. Similar scores are reported during testing as well.
 
 ### Viewing Detailed Results
+
+The example result tables below are from an earlier release and were not regenerated for 1.5.0; your numbers will differ slightly.
 
 #### Float Train Best Epoch Results
 
@@ -308,7 +311,7 @@ Steps to run this example on-device can be found by following this guide: [Deplo
 
 <hr>
 
-This example demonstrates the fundamentals of time series forecasting with TinyML ModelMaker. Once you understand this example, you can apply the same concepts to more complex, industry-specific forecasting problems like the [PMSM Temperature Forecasting](../forecasting_pmsm_rotor/readme.md) or [HVAC Indoor Temperature Forecasting](../hvac_indoor_temp_forecast/readme.md) examples.
+This example demonstrates the fundamentals of time series forecasting with TinyML ModelMaker. Once you understand this example, you can apply the same concepts to more complex, industry-specific forecasting problems like the [PMSM Temperature Forecasting](../forecasting_pmsm_rotor_temp/readme.md) or [HVAC Indoor Temperature Forecasting](../hvac_indoor_temp_forecast/readme.md) examples.
 
 <hr>
 

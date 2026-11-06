@@ -1,7 +1,7 @@
 """
 prepare_dataset.py  —  v2
 
-Full pipeline: raw EdgeAI Studio CSV → segmented 8820 Hz WAVs ready for TensorLab.
+Full pipeline: raw EdgeAI Studio CSV → segmented 8820 Hz WAVs ready for ModelZoo.
 
 HOW THIS MATCHES THE C FIRMWARE
 ---------------------------------
@@ -250,7 +250,7 @@ def main() -> None:
         total += len(wavs)
     print(f"\n  Total: {total} clips across {len(set(CLASS_MAP.values()))} classes")
 
-    print(f"\nTensorLab config:")
+    print(f"\nModelZoo config:")
     print(f"  input_data_path : {OUTPUT_DIR.parent.parent}")
     print(f"  data_dir        : {'/'.join(OUTPUT_DIR.parts[-2:])}")
     print(f"  sampling_rate   : 8820")

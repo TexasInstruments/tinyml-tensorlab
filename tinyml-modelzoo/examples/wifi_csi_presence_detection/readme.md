@@ -28,7 +28,7 @@ The Wi-Fi CSI Presence Detection application is an Edge AI solution that detects
 
 - Code Composer Studio 12.x or later
 - TI Edge AI Studio
-- tinyml-tensorlab CLI
+- tinyml-modelzoo CLI
 
 ## Dataset Information
 
@@ -36,7 +36,7 @@ Two dataset packages are provided for this example. Both contain CSI recordings 
 
 ### wifi_presence_detection_dsi.zip
 
-Compact in-house dataset and the default for the example `config.yaml`. Point `input_data_path` in `config.yaml` to the extracted dataset directory and run directly — no preprocessing required.
+Compact in-house dataset and the default for the example `config.yaml` (`input_data_path` is set to `https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/wifi_presence_detection_dsi.zip`, so it is downloaded automatically). Already preprocessed — no preprocessing required.
 
 **Hardware:**
 - Receiver: CC35X1 LP with XDS110 Debugger
@@ -122,11 +122,13 @@ The pipeline converts raw 52-subcarrier CSI magnitude windows into a 2-D time-fr
 
 | Model | Parameters | Task |
 |-------|-----------|------|
-| **SimpleCNN2D_BN_t** | ~4.7K | Binary presence classification |
+| **WiFiPresDet_4.7k_CDE** | ~4.7K | Binary presence classification |
 
 The model accepts input of shape `(1, 26, 1, 64)` (batch × subcarrier-frequency bins × 1 × time-frequency bins) and uses a compact 2-D CNN with batch normalisation suitable for deployment on CC35X1.
 
 ## AI Model Performance
+
+The numbers below are from an earlier release and were not re-measured with the current 1.5.0 config.
 
 **`wifi_presence_detection_dsi.zip`**
 
@@ -165,14 +167,16 @@ The model accepts input of shape `(1, 26, 1, 64)` (batch × subcarrier-frequency
 NOTE: Running the config YAML handles everything including feature extraction, training, quantization, and compilation.
 
 1. **Preprocessing (one-time):**
-   - DSI: `python preprocess.py` (update `IN_ROOT` and `OUT_ROOT` in the script)
-   - DSD: `python preprocess_dsd.py` (update `IN_ROOT` and `OUT_ROOT` in the script)
-   - Set `input_data_path` in `config.yaml` to the preprocessed output directory
+   - Only needed if you start from raw data; the default config downloads the already preprocessed DSI dataset.
+   - DSI raw data: `python preprocess.py` (update `IN_ROOT` and `OUT_ROOT` in the script)
+   - DSD raw data: `python preprocess_dsd.py` (update `IN_ROOT` and `OUT_ROOT` in the script)
+   - To use your own preprocessed data, set `input_data_path` in `config.yaml` to the preprocessed output directory
 
 2. **Training:**
-   - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-   - Batch size: 32, Learning rate: 0.00005, Optimizer: Adam
-   - Training epochs: 50
+   - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+   - Batch size: 32, Learning rate: 0.00005, `num_gpus: 0`
+   - Training epochs: 50 (with early stopping, patience 5)
+   - Model: `WiFiPresDet_4.7k_CDE`, feature extraction preset `WiFiCSI_128Input_L2Norm2DFFT_64x26Feature_1Frame_52Subcarriers` (`stride_size: 0.7`)
 
 3. **Quantization:**
    - 8-bit Weight, 8-bit Activation (8W8A) quantization for reduced model size - default quantization setting.
@@ -197,6 +201,6 @@ After completing the repository setup, run the following command from the `tinym
 
 ## References
 
-- [TI Model Training Guide](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main)
+- [TI Model Training Guide](https://github.com/TexasInstruments/tinyml-modelzoo)
 - [TI Neural Network Compiler User Guide](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
 - [CC35X1 Product Page](https://www.ti.com/product/CC3531)

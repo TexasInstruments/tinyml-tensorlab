@@ -52,7 +52,7 @@ Check the `config_<device>.yaml` files for device-specific configurations.
   2. Signal Normalization by Rounding Off
   3. Single frame input to model
 
-## Model Architecture Options (Available on Tensorlab CLI Tools)
+## Model Architecture Options (Available in tinyml-modelzoo)
 
 1. ECG_55k_NPU (Default):
 - CNN architecture optimized for NPU
@@ -68,7 +68,7 @@ Check the `config_<device>.yaml` files for device-specific configurations.
 NOTE: Running the config yaml handles everything including feature extraction, training, quantization, and compilation.
 
 1. Training:
-- Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
+- Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
 - Batch size: 12, Learning rate: 0.001, Optimizer: Adam
 - Weight decay: 4e-5
 - Training epochs: 25
@@ -97,15 +97,16 @@ NOTE: Running the config yaml handles everything including feature extraction, t
 ## Available Default Configurations For Each Device Family
 
  
-  - config.yaml - AM13E2
-  - config_MSPM0.yaml - MSPM0G5187
+  - config.yaml - AM13E2 (2-class `ecg` dataset, model CLS_4k_NPU, frame size 128, 50 epochs with early stopping)
+  - config_MSPM0.yaml - MSPM0G5187 (4-class `ecg_classification_4class` dataset, model ECG_55k_NPU)
+  - config_anomaly_detection.yaml - F28P55 (ECG anomaly detection, `ecg_ad` dataset, model AD_Linear, frame size 140, 200 epochs)
 
 ## References
 
   - MSPM0G5187 Technical Reference Manual https://www.ti.com/product/MSPM0G5187
   - AFE1594 ECG Analog Front End https://www.ti.com/drr/opn/AFE159RP4-DESIGN  
   - https://software-dl.ti.com/mctools/nnc/mcu/users_guide/
-  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-tensorlab/tree/main
+  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-modelzoo
   - https://en.wikipedia.org/wiki/Electrocardiography
   - MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
 - EdgeAI Software Guide: https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST

@@ -46,6 +46,9 @@ from .anomalydetection import get_model_description as get_anomalydetection_mode
 from .forecasting import get_model_descriptions as get_forecasting_model_descriptions
 from .forecasting import get_model_description as get_forecasting_model_description
 
+from .audio import get_model_descriptions as get_audio_model_descriptions
+from .audio import get_model_description as get_audio_model_description
+
 __all__ = [
     "get_model_descriptions_filtered",
     "get_model_description_by_name",
@@ -57,4 +60,6 @@ __all__ = [
     "get_anomalydetection_model_description",
     "get_forecasting_model_descriptions",
     "get_forecasting_model_description",
+    "get_audio_model_descriptions",
+    "get_audio_model_description",
 ]

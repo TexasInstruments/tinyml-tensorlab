@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to Create a ModelZoo Config YAML</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+:root {
+  --accent:  #e42125;
+  --bg:      #0d1117;
+  --card:    #161b22;
+  --border:  #30363d;
+  --text:    #e6edf3;
+  --muted:   #8b949e;
+  --code-bg: #1c2128;
+  --green:   #3fb950;
+  --yellow:  #d29922;
+  --blue:    #58a6ff;
+  --font:    "Inter", system-ui, sans-serif;
+  --mono:    "JetBrains Mono", "Courier New", monospace;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100vw; height:100vh; overflow:hidden;
+  background:var(--bg); color:var(--text);
+  font-family:var(--font); -webkit-font-smoothing:antialiased;
+}
+#progress {
+  position:fixed; bottom:0; left:0; height:3px;
+  background:var(--accent); box-shadow:0 0 10px var(--accent);
+  transition:width 0.35s cubic-bezier(0.4,0,0.2,1); z-index:200;
+}
+#counter {
+  position:fixed; top:18px; right:28px;
+  font-family:var(--mono); font-size:12px; color:var(--muted);
+  letter-spacing:0.5px; z-index:200; user-select:none;
+}
+#slides { width:100vw; height:100vh; position:relative; }
+.slide {
+  position:absolute; inset:0; display:none; flex-direction:column;
+  padding:56px 80px 48px; opacity:0; transition:opacity 0.25s ease;
+}
+.slide.active { display:flex; opacity:1; }
+.eyebrow {
+  font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--accent); font-weight:600; margin-bottom:14px;
+}
+.title      { font-size:52px; font-weight:800; line-height:1.1; margin-bottom:14px; }
+.subtitle   { font-size:22px; color:var(--muted); font-weight:400; }
+.slide-title { font-size:34px; font-weight:700; margin-bottom:6px; }
+.slide-sub  { font-size:16px; color:var(--muted); margin-bottom:28px; }
+.label {
+  font-size:11px; font-weight:600; letter-spacing:1px;
+  text-transform:uppercase; color:var(--muted); margin-bottom:8px;
+}
+.body-text  { font-size:17px; line-height:1.65; color:var(--text); }
+.divider    { height:1px; background:var(--border); margin:24px 0; }
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:22px 24px;
+}
+.card.accent { border-left:3px solid var(--accent); }
+.card.green  { border-left:3px solid var(--green); }
+.card.blue   { border-left:3px solid var(--blue); }
+.card.yellow { border-left:3px solid var(--yellow); }
+.card-title  { font-size:17px; font-weight:700; margin-bottom:10px; }
+.card-body   { font-size:16px; color:var(--muted); line-height:1.6; }
+.grid   { display:grid; gap:16px; }
+.grid-2 { grid-template-columns:1fr 1fr; }
+.grid-3 { grid-template-columns:1fr 1fr 1fr; }
+.grid-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+.data-table { width:100%; border-collapse:collapse; font-size:15px; }
+.data-table th {
+  background:var(--card); padding:11px 16px; text-align:left;
+  font-size:12px; font-weight:600; letter-spacing:0.8px;
+  text-transform:uppercase; color:var(--accent); border-bottom:2px solid var(--border);
+}
+.data-table td { padding:11px 16px; border-bottom:1px solid var(--border); color:var(--text); vertical-align:middle; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.steps { display:flex; align-items:stretch; gap:0; }
+.step {
+  flex:1; background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:20px 18px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.step-arrow { display:flex; align-items:center; color:var(--muted); font-size:20px; padding:0 6px; flex-shrink:0; }
+.step-num {
+  width:30px; height:30px; border-radius:50%; background:var(--accent);
+  color:#fff; font-size:14px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.step-label { font-size:16px; font-weight:700; color:var(--text); }
+.step-desc  { font-size:14px; color:var(--muted); line-height:1.5; }
+.checklist { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.checklist li {
+  padding:13px 18px; background:var(--card);
+  border:1px solid var(--border); border-radius:8px;
+  border-left:3px solid var(--border); font-size:16px; line-height:1.45;
+}
+.checklist li.hi   { border-left-color:var(--accent); }
+.checklist li.ok   { border-left-color:var(--green); }
+.checklist li.info { border-left-color:var(--blue); }
+.callout {
+  padding:18px 22px; border-radius:8px; border-left:4px solid;
+  margin:14px 0; font-size:16px; line-height:1.6;
+}
+.callout.red    { background:rgba(228,33,37,0.1);  border-color:var(--accent); }
+.callout.green  { background:rgba(63,185,80,0.1);  border-color:var(--green); }
+.callout.yellow { background:rgba(210,153,34,0.1); border-color:var(--yellow); }
+.callout.blue   { background:rgba(88,166,255,0.1); border-color:var(--blue); }
+.callout strong { color:var(--text); }
+.badge {
+  display:inline-block; padding:3px 10px; border-radius:20px;
+  font-size:12px; font-weight:700; letter-spacing:0.3px; vertical-align:middle;
+}
+.badge.red    { background:rgba(228,33,37,0.2);  color:var(--accent); }
+.badge.green  { background:rgba(63,185,80,0.2);  color:var(--green); }
+.badge.yellow { background:rgba(210,153,34,0.2); color:var(--yellow); }
+.badge.blue   { background:rgba(88,166,255,0.2); color:var(--blue); }
+.badge.gray   { background:var(--card);           color:var(--muted); }
+.code-block {
+  background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+  padding:20px 22px; font-family:var(--mono); font-size:13px;
+  line-height:1.7; color:#a8c5da; white-space:pre-wrap; word-break:break-word; flex:1;
+}
+.code-block .hl  { color:#e6edf3; }
+.code-block .dim { color:#556069; }
+.agenda-list  { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.agenda-item  {
+  display:flex; align-items:center; gap:16px; padding:12px 18px;
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+}
+.agenda-time  { font-family:var(--mono); font-size:13px; color:var(--accent); min-width:50px; }
+.agenda-label { font-size:15px; font-weight:500; }
+.agenda-dur   { margin-left:auto; font-size:13px; color:var(--muted); }
+.slide[data-layout="title"] {
+  justify-content:center;
+  background:radial-gradient(ellipse at 20% 50%, rgba(228,33,37,0.06) 0%, transparent 60%);
+}
+.title-meta {
+  position:absolute; bottom:48px; left:80px; right:80px;
+  font-size:13px; color:var(--muted); border-top:1px solid var(--border); padding-top:18px;
+}
+.mermaid-wrap {
+  flex:1; background:var(--code-bg); border:1px solid var(--border);
+  border-radius:10px; padding:16px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; min-height:0;
+}
+.mermaid-wrap svg, .mermaid-wrap img {
+  max-width:100%; max-height:100%; height:auto; object-fit:contain; display:block;
+}
+.flex    { display:flex; }
+.col     { flex-direction:column; }
+.gap-sm  { gap:10px; }
+.gap-md  { gap:18px; }
+.gap-lg  { gap:28px; }
+.grow    { flex:1; }
+.center  { text-align:center; }
+.mt-auto { margin-top:auto; }
+.fw-7    { font-weight:700; }
+.fs-sm   { font-size:13px; }
+.fs-lg   { font-size:20px; }
+.accent  { color:var(--accent); }
+.muted   { color:var(--muted); }
+.green   { color:var(--green); }
+.blue    { color:var(--blue); }
+.yellow  { color:var(--yellow); }
+.slide a { color:var(--blue); text-decoration:none; }
+.slide a:hover { text-decoration:underline; opacity:0.85; }
+.ti-logo {
+  position:fixed; bottom:18px; right:28px; z-index:200;
+  opacity:0.45; pointer-events:none; line-height:0;
+}
+.ti-logo svg { width:170px; height:20px; }
+.ti-logo path[fill="#CC0000"], .ti-logo path[fill="#cc0000"] { fill:var(--accent) !important; }
+#ti-header {
+  position:fixed; top:16px; left:24px; z-index:200;
+  opacity:0.55; pointer-events:none; line-height:0;
+}
+#ti-header svg { width:140px; height:17px; }
+@media print {
+  .slide { display:flex !important; opacity:1 !important; position:relative !important; page-break-after:always; height:100vh; }
+  #progress, #counter { display:none; }
+}
+/* ---- Light theme (white background) override ---- */
+:root {
+  --accent:  #cc0000;
+  --bg:      #ffffff;
+  --card:    #f6f8fa;
+  --border:  #d0d7de;
+  --text:    #1f2328;
+  --muted:   #59636e;
+  --code-bg: #f6f8fa;
+  --green:   #1a7f37;
+  --yellow:  #9a6700;
+  --blue:    #0969da;
+}
+#progress { box-shadow:none; }
+.card, .step { box-shadow:0 1px 3px rgba(31,35,40,0.08); }
+.data-table tr:nth-child(even) td { background:rgba(31,35,40,0.03); }
+.code-block { color:#424a53; }
+.code-block .hl  { color:#1f2328; font-weight:600; }
+.code-block .dim { color:#6e7781; }
+.callout.red    { background:rgba(204,0,0,0.06); }
+.callout.green  { background:rgba(26,127,55,0.07); }
+.callout.yellow { background:rgba(154,103,0,0.08); }
+.callout.blue   { background:rgba(9,105,218,0.06); }
+.badge.red    { background:rgba(204,0,0,0.12); }
+.badge.green  { background:rgba(26,127,55,0.12); }
+.badge.yellow { background:rgba(154,103,0,0.14); }
+.badge.blue   { background:rgba(9,105,218,0.12); }
+.badge.gray   { background:#eaeef2; }
+.ti-logo { opacity:0.8; }
+#ti-header { opacity:0.85; }
+.ti-logo text, #ti-header text { fill:#1f2328; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  </head>
+  <body>
+    <div id="progress"></div>
+    <div id="counter"></div>
+<!-- TI Logo (bottom-right) -->
+<div class="ti-logo">
+  <svg viewBox="0 0 170 20" xmlns="http://www.w3.org/2000/svg">
+    <g transform="scale(0.555)">
+      <path fill="#CC0000" d="M34.616,11.575V7.276h-6.904l-0.871,4.339h2.483l-0.795,3.999h-2.484l-0.86,4.328c-0.067,0.294-0.117,0.506-0.147,0.71c-0.204,1.328,0.374,1.261,2.233,1.261l-0.85,4.257h-3.25c-3.072,0-5.571-0.026-4.922-3.177c0.103-0.481,0.226-0.967,0.313-1.433l1.161-5.942h-2.389l0.797-3.999h2.388l0.869-4.339h-2.233V0.721h-8.266v13.322H1C1.245,17.497,4.301,18,5.416,20.454c0.768,1.691,1.439,4.672,3.681,4.692c1.717,0.021,1.717-2.222,3.928-2.222c2.208,0,3.188,4.195,5.152,7.649c1.472,2.712,3.917,4.532,6.133,4.688c1.819,0.126,2.699-0.492,2.699-0.492c-0.491-0.988-0.737-1.973-0.737-3.455c0-2.221,1.719-4.44,3.682-5.919c2.699-1.972,5.644-2.719,6.625-2.959v-6.912C36.579,15.524,34.616,14.474,34.616,11.575z M23.355,21.902L26.259,7.27h-3.346l-2.9,14.632H23.355z M27.156,2.644h-3.347l-0.64,3.227h3.345L27.156,2.644z"/>
+    </g>
+    <text x="23" y="14" font-family="'Inter', Arial, Helvetica, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.9)" letter-spacing="0.6">TEXAS INSTRUMENTS</text>
+  </svg>
+</div>
+
+<!-- TI Header (top-left) -->
+<div id="ti-header">
+  <svg viewBox="0 0 170 20" xmlns="http://www.w3.org/2000/svg">
+    <g transform="scale(0.555)">
+      <path fill="#CC0000" d="M34.616,11.575V7.276h-6.904l-0.871,4.339h2.483l-0.795,3.999h-2.484l-0.86,4.328c-0.067,0.294-0.117,0.506-0.147,0.71c-0.204,1.328,0.374,1.261,2.233,1.261l-0.85,4.257h-3.25c-3.072,0-5.571-0.026-4.922-3.177c0.103-0.481,0.226-0.967,0.313-1.433l1.161-5.942h-2.389l0.797-3.999h2.388l0.869-4.339h-2.233V0.721h-8.266v13.322H1C1.245,17.497,4.301,18,5.416,20.454c0.768,1.691,1.439,4.672,3.681,4.692c1.717,0.021,1.717-2.222,3.928-2.222c2.208,0,3.188,4.195,5.152,7.649c1.472,2.712,3.917,4.532,6.133,4.688c1.819,0.126,2.699-0.492,2.699-0.492c-0.491-0.988-0.737-1.973-0.737-3.455c0-2.221,1.719-4.44,3.682-5.919c2.699-1.972,5.644-2.719,6.625-2.959v-6.912C36.579,15.524,34.616,14.474,34.616,11.575z M23.355,21.902L26.259,7.27h-3.346l-2.9,14.632H23.355z M27.156,2.644h-3.347l-0.64,3.227h3.345L27.156,2.644z"/>
+    </g>
+    <text x="23" y="14" font-family="'Inter', Arial, Helvetica, sans-serif" font-size="10" font-weight="500" fill="rgba(255,255,255,0.9)" letter-spacing="0.6">TEXAS INSTRUMENTS</text>
+  </svg>
+</div>
+
+    <div id="slides">
+      <!-- ============================================================ -->
+      <!-- SLIDE 01 · Config Skeleton &amp; 4-Step Recipe                -->
+      <!-- ============================================================ -->
+      <section class="slide active">
+        <div class="eyebrow">ModelZoo · Config YAML</div>
+        <div class="slide-title">How to Create a ModelZoo Config YAML</div>
+        <div class="slide-sub">Every example in <code style="font-family:var(--mono);font-size:14px">examples/</code> follows the same 6-section skeleton</div>
+        <div class="grid" style="grid-template-columns:1.15fr 1fr;gap:20px;flex:1;min-height:0;align-items:stretch">
+          <div class="code-block" style="font-size:clamp(10px,1.85vh,16px);line-height:1.65;overflow:hidden;white-space:pre"><span class="hl">common:</span>                          <span class="dim"># WHAT task, WHICH device</span>
+  task_type: generic_timeseries_classification
+  target_device: F28P55          <span class="dim"># F28P55, MSPM0G5187, CC2755, ...</span>
+
+<span class="hl">dataset:</span>                         <span class="dim"># WHERE the data is</span>
+  dataset_name: my_dataset
+  input_data_path: &lt;URL | .zip | local folder&gt;
+
+<span class="hl">data_processing_feature_extraction:</span>  <span class="dim"># HOW signal becomes input</span>
+  feature_extraction_name: Generic_1024Input_FFTBIN_64Feature_8Frame
+  variables: 1                   <span class="dim"># no. of input channels</span>
+
+<span class="hl">training:</span>                        <span class="dim"># WHICH model, HOW to train</span>
+  model_name: CLS_1k_NPU         <span class="dim"># from ModelZoo</span>
+  batch_size: 256
+  training_epochs: 20
+  quantization: 2                <span class="dim"># 0 float, 1 generic INT, 2 TI-NPU INT</span>
+
+<span class="hl">testing:</span> {}                      <span class="dim"># {} = use defaults</span>
+<span class="hl">compilation:</span> {}                  <span class="dim"># {} = default_preset</span></div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">4-Step Recipe</div>
+            <div class="card blue" style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
+              <div class="card-title" style="margin-bottom:0;font-size:clamp(13px,2.4vh,20px)">1 · Copy the closest example</div>
+              <div class="card-body" style="font-size:clamp(12px,2.25vh,19px);line-height:1.5">Use the use-case folder if one matches (e.g. <code style="font-family:var(--mono);font-size:0.9em">motor_bearing_fault</code>). Otherwise use <code style="font-family:var(--mono);font-size:0.9em">generic_timeseries_&lt;task&gt;</code>.</div>
+            </div>
+            <div class="card blue" style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
+              <div class="card-title" style="margin-bottom:0;font-size:clamp(13px,2.4vh,20px)">2 · Set <code style="font-family:var(--mono);font-size:0.9em">common</code></div>
+              <div class="card-body" style="font-size:clamp(12px,2.25vh,19px);line-height:1.5">Pick <code style="font-family:var(--mono);font-size:0.9em">task_type</code> and <code style="font-family:var(--mono);font-size:0.9em">target_device</code>. Device variants exist: <code style="font-family:var(--mono);font-size:0.9em">config_MSPM0.yaml</code>, <code style="font-family:var(--mono);font-size:0.9em">config_CC2755.yaml</code>, ...</div>
+            </div>
+            <div class="card blue" style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
+              <div class="card-title" style="margin-bottom:0;font-size:clamp(13px,2.4vh,20px)">3 · Point <code style="font-family:var(--mono);font-size:0.9em">dataset</code> at your data</div>
+              <div class="card-body" style="font-size:clamp(12px,2.25vh,19px);line-height:1.5">Set <code style="font-family:var(--mono);font-size:0.9em">input_data_path</code> (URL, .zip or local folder) and match <code style="font-family:var(--mono);font-size:0.9em">variables</code> to your input channels.</div>
+            </div>
+            <div class="card blue" style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:6px">
+              <div class="card-title" style="margin-bottom:0;font-size:clamp(13px,2.4vh,20px)">4 · Pick features + model, then run</div>
+              <div class="card-body" style="font-size:clamp(12px,2.25vh,19px);line-height:1.5"><code style="font-family:var(--mono);font-size:0.9em">./run_tinyml_modelzoo.sh examples/&lt;name&gt;/config.yaml</code></div>
+            </div>
+            <div class="callout green" style="margin:0;padding:12px 18px;font-size:clamp(12px,2.25vh,19px)">
+              <strong>Tip:</strong> any key you leave out uses its default, so <code style="font-family:var(--mono);font-size:0.9em">testing: {}</code> and <code style="font-family:var(--mono);font-size:0.9em">compilation: {}</code> are valid as written.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 02 · Feature Extraction: Preset vs. Custom             -->
+      <!-- ============================================================ -->
+      <section class="slide">
+        <div class="eyebrow">ModelZoo · Config YAML</div>
+        <div class="slide-title">Feature Extraction: Preset vs. Custom</div>
+        <div class="slide-sub">The <code style="font-family:var(--mono);font-size:14px">data_processing_feature_extraction</code> section decides how raw signals become model input</div>
+        <table class="data-table" style="font-size:clamp(12px,2.1vh,18px)">
+          <thead><tr><th style="width:18%">Approach</th><th style="width:24%">When</th><th>Example keys</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="badge green">Preset</span></td>
+              <td>Classification, audio, image</td>
+              <td><code style="font-family:var(--mono);font-size:0.9em">feature_extraction_name: Generic_512Input_FFTBIN_32Feature_8Frame</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge yellow">Custom transforms</span></td>
+              <td>Fine-tuning a preset</td>
+              <td><code style="font-family:var(--mono);font-size:0.9em">frame_size</code>, <code style="font-family:var(--mono);font-size:0.9em">feature_size_per_frame</code>, <code style="font-family:var(--mono);font-size:0.9em">num_frame_concat</code>, <code style="font-family:var(--mono);font-size:0.9em">feat_ext_transform: [FFT_FE, FFT_POS_HALF, DC_REMOVE, ABS, BINNING, LOG_DB, CONCAT]</code></td>
+            </tr>
+            <tr>
+              <td><span class="badge blue">Windowing only</span></td>
+              <td>Regression, forecasting, anomaly detection</td>
+              <td><code style="font-family:var(--mono);font-size:0.9em">data_proc_transforms: [SimpleWindow, Downsample]</code>, <code style="font-family:var(--mono);font-size:0.9em">frame_size</code>, <code style="font-family:var(--mono);font-size:0.9em">stride_size</code>, <code style="font-family:var(--mono);font-size:0.9em">sampling_rate</code>, <code style="font-family:var(--mono);font-size:0.9em">new_sr</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="grid grid-2" style="gap:20px;flex:1;min-height:0;margin-top:20px;align-items:stretch">
+          <div class="card" style="display:flex;flex-direction:column;gap:18px;padding:22px 26px">
+            <div class="card-title" style="margin-bottom:0">How the task type changes the config</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><strong style="color:var(--text)">Forecasting:</strong> <code style="font-family:var(--mono);font-size:0.9em">SimpleWindow</code> is mandatory; add <code style="font-family:var(--mono);font-size:0.9em">forecast_horizon</code> and <code style="font-family:var(--mono);font-size:0.9em">target_variables</code>.</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><strong style="color:var(--text)">Anomaly detection:</strong> <code style="font-family:var(--mono);font-size:0.9em">split_factor: [0.5, 0.1, 0.4]</code> and an <code style="font-family:var(--mono);font-size:0.9em">AD_*</code> model.</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><strong style="color:var(--text)">Regression:</strong> usually <code style="font-family:var(--mono);font-size:0.9em">SimpleWindow</code> only, with a <code style="font-family:var(--mono);font-size:0.9em">REGR_*</code> model.</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><strong style="color:var(--text)">Image:</strong> <code style="font-family:var(--mono);font-size:0.9em">target_module: vision</code> with a preset such as <code style="font-family:var(--mono);font-size:0.9em">Mnist_Default</code>.</div>
+          </div>
+          <div class="flex col gap-sm" style="min-height:0">
+            <div class="label" style="margin-bottom:0">Selecting input channels with <code style="font-family:var(--mono)">variables</code></div>
+            <div class="code-block" style="font-size:clamp(11px,2.1vh,18px);line-height:1.9;white-space:pre;overflow:hidden"><span class="hl">variables:</span> 3                       <span class="dim"># first N columns</span>
+<span class="hl">variables:</span> [0, 2, 4]               <span class="dim"># column indices</span>
+<span class="hl">variables:</span> ['accel_x', 'accel_y']  <span class="dim"># names (CSV header)</span></div>
+            <div class="callout blue" style="margin:0;padding:12px 18px;font-size:clamp(12px,2.25vh,19px)">Column indices are 0-indexed, counted <strong>after</strong> time columns are removed.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 03 · Useful Knobs                                      -->
+      <!-- ============================================================ -->
+      <section class="slide">
+        <div class="eyebrow">ModelZoo · Config YAML</div>
+        <div class="slide-title">Useful Knobs</div>
+        <div class="slide-sub">Optional keys you will reach for most often. Omit them to keep the defaults</div>
+        <div class="grid grid-2" style="gap:16px;flex:1;min-height:0;grid-template-rows:1fr 1fr;align-items:stretch">
+          <div class="card blue" style="display:flex;flex-direction:column;gap:16px;padding:22px 26px">
+            <div class="label" style="margin-bottom:0;color:var(--blue)">training</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">early_stopping</code>, <code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">early_stopping_patience</code>: stop when validation stops improving</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">optimizer</code> (e.g. <code style="font-family:var(--mono);font-size:0.9em">adam</code>), <code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">lr_scheduler</code> (e.g. <code style="font-family:var(--mono);font-size:0.9em">cosineannealinglr</code>)</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">learning_rate</code>: initial learning rate</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">num_gpus</code>: <code style="font-family:var(--mono);font-size:0.9em">0</code> for CPU training</div>
+          </div>
+          <div class="card green" style="display:flex;flex-direction:column;gap:16px;padding:22px 26px">
+            <div class="label" style="margin-bottom:0;color:var(--green)">training · quantization</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">quantization</code>: <code style="font-family:var(--mono);font-size:0.9em">0</code> float · <code style="font-family:var(--mono);font-size:0.9em">1</code> generic integer · <code style="font-family:var(--mono);font-size:0.9em">2</code> TI-NPU integer</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">quantization_method</code>: <code style="font-family:var(--mono);font-size:0.9em">QAT</code> (quantization-aware training) or <code style="font-family:var(--mono);font-size:0.9em">PTQ</code> (post-training)</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">quantization_weight_bitwidth</code>: <code style="font-family:var(--mono);font-size:0.9em">8</code> | <code style="font-family:var(--mono);font-size:0.9em">4</code> | <code style="font-family:var(--mono);font-size:0.9em">2</code> · <code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">quantization_activation_bitwidth</code>: <code style="font-family:var(--mono);font-size:0.9em">8</code></div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">auto_quantization</code>: automatically select per-layer precision</div>
+          </div>
+          <div class="card yellow" style="display:flex;flex-direction:column;gap:16px;padding:22px 26px">
+            <div class="label" style="margin-bottom:0;color:var(--yellow)">compilation</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">compile_preset_name</code>:</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><span class="badge gray">any device</span> <code style="font-family:var(--mono);font-size:0.9em">default_preset</code></div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><span class="badge yellow">NPU only</span> <code style="font-family:var(--mono);font-size:0.9em">compress_npu_layer_data</code>, <code style="font-family:var(--mono);font-size:0.9em">forced_soft_npu_preset</code></div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)">See <code style="font-family:var(--mono);font-size:0.9em">docs/NPU_CONFIGURATION_GUIDELINES.md</code> for NPU-friendly models</div>
+          </div>
+          <div class="card" style="display:flex;flex-direction:column;gap:16px;padding:22px 26px">
+            <div class="label" style="margin-bottom:0">common · output</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">projects_path</code>: where artifacts are written</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)">Default: <code style="font-family:var(--mono);font-size:0.9em">./data/projects/&lt;project_name&gt;/</code>, relative to the directory you run from</div>
+            <div class="card-body" style="font-size:clamp(12px,2.25vh,19px)"><code style="font-family:var(--mono);font-size:0.9em;color:var(--text)">run_name</code>: run sub-folder, e.g. <code style="font-family:var(--mono);font-size:0.9em">&#39;{date-time}/{model_name}&#39;</code></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 04 · Common Pitfalls                                   -->
+      <!-- ============================================================ -->
+      <section class="slide">
+        <div class="eyebrow">ModelZoo · Config YAML</div>
+        <div class="slide-title">Common Pitfalls</div>
+        <div class="slide-sub">Three things to check before you run a modified config</div>
+        <div class="grid grid-3" style="flex:1;min-height:0;align-items:stretch;margin-top:8px">
+          <div class="card yellow" style="padding:28px 26px;display:flex;flex-direction:column;gap:20px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow)">Inconsistent indentation</div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">What:</strong> examples use either 2-space indents with bare values or 4-space indents with quoted values.
+            </div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">Why it matters:</strong> both are valid YAML, but keys that are not aligned within one file break parsing.
+            </div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">Fix:</strong> pick one style per file and keep every key under a section at the same indent.
+            </div>
+          </div>
+          <div class="card accent" style="padding:28px 26px;display:flex;flex-direction:column;gap:20px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent)"><code style="font-family:var(--mono)">variables</code> mismatch</div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">What:</strong> <code style="font-family:var(--mono);font-size:0.9em">variables</code> does not match the number of channels in your CSV files.
+            </div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">Why it matters:</strong> a common source of errors when moving from an example dataset to your own.
+            </div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">Fix:</strong> count channels after time columns are removed, or list indices / column names explicitly.
+            </div>
+          </div>
+          <div class="card blue" style="padding:28px 26px;display:flex;flex-direction:column;gap:20px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue)">NPU-only compile presets</div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">What:</strong> <code style="font-family:var(--mono);font-size:0.9em">compress_npu_layer_data</code> and <code style="font-family:var(--mono);font-size:0.9em">forced_soft_npu_preset</code> are set for a device without an NPU.
+            </div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">Why it matters:</strong> these presets apply only to TinyEngine NPU devices (e.g. F28P55, MSPM0G5187, AM13E2).
+            </div>
+            <div style="font-size:clamp(12px,2.35vh,20px);color:var(--muted);line-height:1.65">
+              <strong style="color:var(--text)">Fix:</strong> use <code style="font-family:var(--mono);font-size:0.9em">default_preset</code>, or leave <code style="font-family:var(--mono);font-size:0.9em">compilation: {}</code>.
+            </div>
+          </div>
+        </div>
+        <div class="callout blue" style="margin:16px 0 8px">
+          <strong>Full reference:</strong> <code style="font-family:var(--mono);font-size:14px">tinyml-modelzoo/docs/CONFIG_YAML_GUIDE.md</code>
+        </div>
+        <div class="fs-sm muted">Adithya Thonse · October 2026</div>
+      </section>
+    </div><!-- /#slides -->
+    <script>
+(async function () {
+  const slides   = document.querySelectorAll(".slide");
+  const progress = document.getElementById("progress");
+  const counter  = document.getElementById("counter");
+  let current = 0;
+
+  function goTo(n) {
+    if (!slides.length) return;
+    slides[current].classList.remove("active");
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add("active");
+    counter.textContent  = `${current + 1} / ${slides.length}`;
+    progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+  }
+  window.goTo   = goTo;
+  window.goToId = function(id) {
+    const list = document.querySelectorAll(".slide");
+    for (let i = 0; i < list.length; i++) { if (list[i].id === id) { goTo(i); return; } }
+  };
+
+  if (window.mermaid) {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "dark",
+      themeVariables: {
+        background:         "#0D1117",
+        primaryColor:       "#E42125",
+        primaryTextColor:   "#E6EDF3",
+        primaryBorderColor: "#30363D",
+        lineColor:          "#8B949E",
+        secondaryColor:     "#161B22",
+        tertiaryColor:      "#1C2128",
+        noteBkgColor:       "#161B22",
+        noteTextColor:      "#E6EDF3",
+        fontFamily:         "'Inter', system-ui, sans-serif",
+        fontSize:           "14px",
+      },
+    });
+    slides.forEach((s) => { s.style.display = "flex"; s.style.visibility = "hidden"; });
+    await mermaid.run({ querySelector: ".mermaid" });
+    slides.forEach((s) => { s.style.display = ""; s.style.visibility = ""; });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (["ArrowRight", "ArrowDown", " "].includes(e.key)) { e.preventDefault(); goTo(current + 1); }
+    if (["ArrowLeft",  "ArrowUp"        ].includes(e.key)) { e.preventDefault(); goTo(current - 1); }
+    if (e.key === "Home") goTo(0);
+    if (e.key === "End")  goTo(slides.length - 1);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("a, button")) return;
+    goTo(current + 1);
+  });
+
+  goTo(0);
+})();
+    </script>
+  </body>
+</html>

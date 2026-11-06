@@ -51,11 +51,18 @@ python electrical_fault_6class.py
 ```
 This creates `electrical_fault_6class_dataset.zip`
 
-The path to the appropriate zipped dataset file should be mentioned in [configuration](config.yaml) yaml under `dataset.input_data_path`, make sure it matches the script you ran.
+The provided configurations already point `dataset.input_data_path` to the pre-built zipped datasets hosted online, so running the scripts is only needed if you want to regenerate them. To use a locally generated zip instead, set the path in the yaml under `dataset.input_data_path`, and make sure it matches the script you ran.
 
 ```yaml
+# config.yaml (2-class, F28P55)
 dataset:
-    input_data_path: 'examples/electrical_fault/electrical_fault_dataset.zip'   # OR 'examples/electrical_fault/electrical_fault_6class_dataset.zip'
+    dataset_name: electrical_fault_2class
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_dataset.zip
+# config_MSPM0.yaml (6-class, MSPM0G5187)
+dataset:
+    dataset_name: electrical_fault
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/electrical_fault_6class_dataset.zip
+# local alternative: 'examples/electrical_fault/electrical_fault_dataset.zip' OR 'examples/electrical_fault/electrical_fault_6class_dataset.zip'
 ```
 
 ## Usage in Tiny ML ModelZoo
@@ -63,11 +70,15 @@ dataset:
 This zipped dataset is designed to work with Tiny ML ModelZoo. Run the modelzoo with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml
+./run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml
 ```
 
-1. `run_tinyml_modelzoo.sh` is the script to run modelzoo. It take two required arguments.
+1. `run_tinyml_modelzoo.sh` is the script to run modelzoo (run it from the `tinyml-modelzoo` directory).
 2. `examples/electrical_fault/config.yaml` path of the yaml configuration to run
+
+Two configurations are provided:
+- `config.yaml`: 2-class fault detection (`electrical_fault_2class`) on F28P55, 6 variables, model `CLS_ResCat_3k`, early stopping (patience 5).
+- `config_MSPM0.yaml`: 6-class fault classification (`electrical_fault`) on MSPM0G5187, 3 variables, frame size 128, `FFT_Q15`/`DC_REMOVE`/`Q15_MAG`/`BIN_Q15`/`LOG_DB`/`CONCAT` feature extraction (32 features per frame, 8 frames concatenated), model `ElectricalFault_model_40k_t`, 25 epochs. Run it with `./run_tinyml_modelzoo.sh examples/electrical_fault/config_MSPM0.yaml`.
 
 The users can configure the yaml [configuration](config.yaml) to change parameters related to **data preprocessing feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. 
 
@@ -150,7 +161,7 @@ data_processing_feature_extraction:
 After doing the above changes in yaml [configuration](config.yaml) file. Run the modelzoo again for this dataset.
 
 ```bash
-run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml
+./run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml
 ```
 
 You can see that, you don't encounter any error during modelmaker run. This is because the feature extraction was succesfully able to mitigate the mulitcollinearity problem. This will resolve the error of to train the model properly with good hyper parameters.
