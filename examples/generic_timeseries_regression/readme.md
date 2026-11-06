@@ -72,7 +72,7 @@ For this example, we have already prepared the dataset in the required format. Y
 You can run this example directly in **TinyML ModelMaker** using the following command:
 
 ```bash
-./run_tinyml_modelzoo.sh ./examples/generic_timeseries_regression/config.yaml 
+./run_tinyml_modelzoo.sh examples/generic_timeseries_regression/config.yaml 
 ```
 
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
@@ -132,10 +132,12 @@ training:
   optimizer: adam
   lr_scheduler: cosineannealinglr
   model_name: REGR_2k
-  batch_size: 128
+  batch_size: 256
   training_epochs: 45 
+  early_stopping: true
+  early_stopping_patience: 5
   lambda_reg: 0.01
-  num_gpus: 1 # 1 when using gpu if using cpu use 0
+  num_gpus: 0 # 1 when using gpu, 0 for cpu
   quantization: 2 # 0 for float model, 2 for 8 bit quantized model
   auto_quantization: True 
 ```
@@ -198,7 +200,7 @@ They are located at `data/projects/{dataset_name}/run/{date-time}/{model_name}/t
 Also you can see the compiled model at: `data/projects/{dataset_name}/run/{date-time}/{model_name}/compilation`
 
 
-For the generic_timeseries_regression dataset the results on the test set are 
+For the generic_timeseries_regression dataset the results on the test set were as follows (from an earlier release, not re-measured with the current 1.5.0 config):
 
 | Model | RMSE | R2 Score  |
 |----------|----------|----------|

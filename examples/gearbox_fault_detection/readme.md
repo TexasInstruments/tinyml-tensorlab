@@ -46,7 +46,7 @@ Each CSV file contains:
 
 1. Sensor Input: 4-channel accelerometer data
 2. Windowing: Extract fixed-length windows (256 samples) from continuous vibration data
-3. Single frame input to model
+3. Stride size 1 (as set in the config); single frame input to model, stacked as 2D1
 
 ## Model Architecture Options
 
@@ -54,8 +54,8 @@ The example includes multiple optimized 1D CNN-based models targeting different 
 
 | Model | Parameters | Flash (bytes) | Description |
 |-------|-----------|---------------|-------------|
-| **GearboxFault_model_1.2k** | ~1,174 | ~8,233 | 4-layer network with progressive channel reduction (12→12→8→8) |
-| **GearboxFault_model_1.5k** | ~1,914 | ~8,878 | 3-layer network with constant channels (16→16→16) |
+| **GearboxFault_model_1.2k_t** | ~1,174 | ~8,233 | 4-layer network with progressive channel reduction (12→12→8→8) |
+| **GearboxFault_model_1.5k_t** | ~1,914 | ~8,878 | 3-layer network with constant channels (16→16→16) |
 
 Both models use:
 - INT8 quantization for reduced memory footprint
@@ -71,10 +71,12 @@ Both models use:
 NOTE: Running the config yaml handles everything including dataset loading, feature extraction, training, quantization, and compilation.
 
 1. **Training:**
-   - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-   - Batch size: 32-64
-   - Training epochs: 20-30
-   - Optimizer: Adam with learning rate 0.001
+   - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+   - Model: GearboxFault_model_1.2k_t (default in the config; GearboxFault_model_1.5k_t is the alternative)
+   - Windowing: frame size 256, stride 1, 4 variables, 2D1 stacking
+   - Batch size: 256
+   - Training epochs: 50
+   - Optimizer: SGD (default; not overridden in the config)
 
 2. **Quantization:**
    - INT8 quantization for reduced model size
@@ -102,5 +104,5 @@ After completing the repository setup, run the following command from the `tinym
 
 - [SpectraQuest Gearbox Dataset on Kaggle](https://www.kaggle.com/datasets/brjapon/gearbox-fault-diagnosis)
 - [TI Neural Network Compiler User Guide](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
-- [TI Model Training Guide](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main)
+- [TI Model Training Guide](https://github.com/TexasInstruments/tinyml-modelzoo)
 - [EdgeAI Software Guide](https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST)

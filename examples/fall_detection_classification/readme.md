@@ -57,7 +57,7 @@ The SisFall dataset contains data from three sensors, but only the **ADXL345 acc
 - This ensures consistency between the training data distribution and the live sensor data fed during inference on the MCU
 
 **3. Format Conversion:**
-- The cleaned and scaled dataset is converted into a format compatible with tinyml-tensorlab for model training
+- The cleaned and scaled dataset is converted into a format compatible with tinyml-modelzoo for model training
 - Each file is parsed, labeled (ADL or Fall), and exported into the required input structure
 
 ## Feature Extraction Pipeline
@@ -75,7 +75,7 @@ A generic time-series classification CNN model is used:
 
 | Model | Parameters | Flash (kB) | RAM (kB) | Inference Latency (NPU) | Accuracy |
 |-------|-----------|------------|----------|--------------------------|----------|
-| **CLS_6k** | ~6,000 | 14 | 0.7 | 0.67 ms | 97.65% |
+| **CLS_6k_NPU** | ~6,000 | 14 | 0.7 | 0.67 ms | 97.65% |
 
 _NOTE: The above statistics was measured on LP-MSPM0G5187 Launchpad_
 
@@ -88,8 +88,8 @@ The model uses:
 NOTE: Running the config yaml handles everything including dataset loading, data cleaning, feature extraction, training, quantization, and compilation.
 
 1. **Training:**
-   - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-   - Batch size: 256
+   - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+   - Model: CLS_6k_NPU, Batch size: 256
    - Training epochs: 50
 
 2. **Quantization:**
@@ -118,5 +118,5 @@ After completing the repository setup, run the following command from the `tinym
 
 - [SisFall Dataset](https://www.mdpi.com/1424-8220/17/1/198)
 - [TI Neural Network Compiler User Guide](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
-- [TI Model Training Guide](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main)
+- [TI Model Training Guide](https://github.com/TexasInstruments/tinyml-modelzoo)
 - [EdgeAI Software Guide](https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST)

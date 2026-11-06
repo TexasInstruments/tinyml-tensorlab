@@ -162,10 +162,18 @@ training:
     batch_size: 256
     training_epochs: 20
     num_gpus: 0
-    quantization: 1
+    quantization: 2  # 2 = TI NPU-optimized quantization
+    early_stopping: true
+    early_stopping_patience: 5
     optimizer: adam
     learning_rate: 0.005
     output_int: false
+```
+
+A second config, `config_MSPM0.yaml`, targets `MSPM0G5187` with the same dataset, feature settings and model, but without early stopping:
+
+```bash
+./run_tinyml_modelzoo.sh examples/forecasting_pmsm_rotor_temp/config_MSPM0.yaml
 ```
 
 ## `testing` and `compilation` section
@@ -207,7 +215,7 @@ A score close to 1 means the model explains most of the variation in the data.
 
 ### How the Best Epoch is Chosen?
 
-The model can predict multiple future timesteps for multiple target variables. For each epoch, SMAPE is computed across all target variables and across all predicted timesteps. The epoch with the lowest average SMAPE is selected as the best epoch. For the best epoch, both R² and SMAPE are reported for each predicted timestep of each target variable. Similar scores are reported during testing as well. Let's have a look at the results we got here:-
+The model can predict multiple future timesteps for multiple target variables. For each epoch, SMAPE is computed across all target variables and across all predicted timesteps. The epoch with the lowest average SMAPE is selected as the best epoch. For the best epoch, both R² and SMAPE are reported for each predicted timestep of each target variable. Similar scores are reported during testing as well. Let's have a look at the results we got here (these logs and plots are from an earlier release and were not regenerated for 1.5.0):-
 
 Float train best epoch:-
 

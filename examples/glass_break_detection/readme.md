@@ -16,7 +16,7 @@ The Glass Break Detection application is an Edge AI solution that runs on the MS
 ## Key Performance Targets
 
 - Less than 100ms response time
-- Greater than 95% detection accuracy
+- Greater than 95% detection accuracy (goal; a short 1.5.0 test run with the default config reached 92.42% test accuracy, see below)
 - Low power consumption for battery-operated devices
 
 ## System Components
@@ -33,13 +33,13 @@ The Glass Break Detection application is an Edge AI solution that runs on the MS
 ## Dataset Operations
 
 Data collection requires multiple scenarios:
-- Glass Breaking: Various glass types (tempered, laminated, plate glass)
-- Background Noise: Normal household sounds, music, voices
-- Similar Sounds: Dishes breaking, metal impacts, door slams
+- Glass Breaking (`glass_break`): Various glass types (tempered, laminated, plate glass)
+- Human speech (`human_speech`): Voices and speech
+- Others (`others`): Background noise and other household sounds, including sounds similar to glass breaking
 
 Example dataset includes:
 - 100+ captures per class
-- Classes: Glass Break, Background Noise, Similar Non-Glass Sounds
+- Classes (folder names in the dataset): `glass_break`, `human_speech`, `others`
 
 All data prior to augmentation is sourced from the following public datasets:
 - DEMAND (noise): [Link](https://zenodo.org/records/1227121)
@@ -63,24 +63,24 @@ This model uses **FFT-based feature extraction** over a 1-second audio window.
 
 The DSCNN_GB_NPU model is a lightweight DSCNN architecture:
 
-| Model | Parameters | Flash | Inference Time | Expected Accuracy | Notes |
-|-------|------------|-------|----------------|-------------------|-------|
-| DSCNN_GB_NPU | ~6K | ~8 KB | <10 ms | >95% | **Recommended** - Optimized for MSPM0G5187 |
+| Model | Memory (NNC, 1.5.0 test run) | Accuracy goal | Accuracy (1.5.0 test run) | Notes |
+|-------|------------------------------|---------------|---------------------------|-------|
+| DSCNN_GB_NPU | Code 2.03 KB + RO data 9.09 KB (flash), RW data 15.86 KB (SRAM) | >95% | 92.42% test accuracy (20 epochs, short test run) | **Recommended** - Optimized for MSPM0G5187 |
 
 **Architecture:**
 - Input: (N, 1, 86, 32) [86 time frames × 32 FFT features]
 - BatchNorm → Conv 8×8/s4 → [DW 4×4 + PW 1×1] × 2 → Dropout → GlobalAvgPool → FC
-- Output: 3 classes (Glass Break, Background, Similar Sounds)
+- Output: 3 classes (`glass_break`, `human_speech`, `others`)
 - DW/PW convolutions quantized at 4-bit (mixed precision), activations at 8-bit
 
 **Training hyperparameters:**
-- Epochs: 20, Batch size: 32, Learning rate: 0.001 (Adam)
+- Epochs: 20, Batch size: 32, Learning rate: 0.001, Weight decay: 1e-5, `num_gpus: 0`, `quantization: 2`, `auto_quantization: False`
 
 ## Performance Metrics for MSPM0G5187 with NPU
 
 - End-to-end latency: <100ms
-- Detection accuracy: >95%
-- False positive rate: <5%
+- Detection accuracy: >95% (goal; 92.42% in a short 1.5.0 test run)
+- False positive rate: <5% (goal)
 - Memory footprint: <32KB SRAM, <128KB Flash
 
 ## Training and Deployment Process
@@ -88,12 +88,12 @@ The DSCNN_GB_NPU model is a lightweight DSCNN architecture:
 NOTE: Running the config yaml takes care of everything including feature extraction, training, quantization and compilation.
 
 1. Training:
-   - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-   - Epochs: 20, Batch size: 32, Learning rate: 0.001, Optimizer: Adam
+   - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+   - Epochs: 20, Batch size: 32, Learning rate: 0.001, Weight decay: 1e-5
    - Enable Quantize-Aware Training (QAT) for quantized accuracy
 2. Quantization:
    - Mixed precision quantization - Enabled in the config file by default as well as in Edge AI Studio
-   - Activations: 8-bit; DW/PW convolution weights: 4-bit
+   - Activations: 8-bit; DW/PW convolution weights: 4-bit; first convolution weights: 8-bit
    - ~4-8x reduction in model size vs. FP32
 3. Compilation:
    - TI Neural Network Compiler converts trained model
@@ -117,7 +117,7 @@ After completing the repository setup, run the following command from the `tinym
 
 - MSPM0G5187 Technical Reference Manual [Link](https://www.ti.com/product/MSPM0G5187)
 - [TI Neural Network Compiler Guide](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
-- TI Model Training Guide: [tinyml-tensorlab](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main)
+- TI Model Training Guide: [tinyml-modelzoo](https://github.com/TexasInstruments/tinyml-modelzoo)
 - EdgeAI Software Guide: https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST
 - MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK
 - DEMAND dataset: https://zenodo.org/records/1227121

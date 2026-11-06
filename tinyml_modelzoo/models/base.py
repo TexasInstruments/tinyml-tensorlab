@@ -80,7 +80,6 @@ class GenericModelWithSpec(nn.Module):
         layers_spec = model_spec['model_spec'] if isinstance(model_spec, dict) and 'model_spec' in model_spec else model_spec
         if isinstance(layers_spec, list):
             layers_spec = {str(k): v for k, v in enumerate(layers_spec)}
-        #
 
         # update model_spec based on input/output channels
         first_key = list(layers_spec.keys())[0]

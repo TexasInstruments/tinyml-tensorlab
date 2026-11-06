@@ -204,9 +204,9 @@ Defines dataset details and splitting strategy:
 ```yaml
 dataset:
     enable: True
-    dataset_name: fan_blade_fault
+    dataset_name: fan_blade_fault_ad
     input_data_path: 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blade_ad_dataset.zip'
-    split_type: 'amongst_files'
+    split_type: 'within_files'
     split_factor: [0.6, 0.1, 0.3]
 ```
 
@@ -218,7 +218,7 @@ dataset:
   - `'within_files'`: Split each file internally
 - **`split_factor`**: `[train, val, test]` ratios (must sum to ≤ 1.0)
 
-**Important:** For anomaly detection:
+**Important:** For anomaly detection (the description below applies to the file-level split, `split_type: 'amongst_files'`; this example's `config_anomaly_detection.yaml` uses `within_files`):
 - **Training set**: 60% of Normal files only
 - **Validation set**: 10% of Normal files only
 - **Test set**: 30% of Normal files + **ALL Anomaly files**
@@ -452,7 +452,7 @@ ModelZoo generates a CSV file with metrics for different threshold values (k = 0
 
 **Location:** 
 ```
-tinyml-modelmaker/data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_training_analysis/threshold_performance.csv
+tinyml-modelmaker/data/projects/fan_blade_fault_ad/run/{date-time}/AD_17k/training/quantization/post_training_analysis/threshold_performance.csv
 ```
 
 **Complete table:**
@@ -481,7 +481,7 @@ ModelZoo generates histogram plots showing the distribution of reconstruction er
 
 **Location:**
 ```
-tinyml-modelmaker/data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/quantization/post_training_analysis/
+tinyml-modelmaker/data/projects/fan_blade_fault_ad/run/{date-time}/AD_17k/training/quantization/post_training_analysis/
 ```
 
 ![](assets/reconstruction_error_log_scale.png)
@@ -490,7 +490,7 @@ tinyml-modelmaker/data/projects/fan_blade_fault/run/{date-time}/AD_17k/training/
 After training completes, all results are stored in:
 
 ```
-tinyml-modelmaker/data/projects/fan_blade_fault/run/{date-time}/AD_17k/
+tinyml-modelmaker/data/projects/fan_blade_fault_ad/run/{date-time}/AD_17k/
 ```
 
 ### **Key Output Directories**

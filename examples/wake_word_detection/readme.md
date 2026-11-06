@@ -62,7 +62,7 @@ This model uses **learnable filterbanks** for feature extraction instead of a fi
 
 1. Audio Sampling: 8000 Hz (8 kHz), 2-second window per inference (16000 samples total)
 2. Framing: each frame covers a 20 ms context, i.e. 160 samples (20 ms at 8 kHz)
-3. Learned Filterbank Front-End: strided Conv1D bank (kernel 64, stride 4) slides over the raw 8 kHz audio and projects it into 64 channels; a max-pool over each 160-sample (20 ms) context then produces one feature vector per frame. Filterbank weights are learned jointly during training, not fixed
+3. Learned Filterbank Front-End: strided Conv1D bank (kernel 64, stride 4) slides over the raw 8 kHz audio and projects it into 32 channels (`fb_output_channel: 32` in the `WakeWordDetection_Filterbank_Default` preset); a max-pool over each 160-sample (20 ms) context then produces one feature vector per frame. Filterbank weights are learned jointly during training, not fixed
 4. Filterbank weights quantized to 2-bit; input audio quantized to 16-bit
 5. Output features feed directly into the TCDS-ResNet backbone
 
@@ -75,7 +75,7 @@ The TCDS_ResNet_FB_NPU model pairs a learned filterbank front-end with a Tempora
 | TCDS_ResNet_FB_NPU | **Recommended** - Filterbank front-end + TCDS-ResNet, optimized for MSPM0G5187 NPU |
 
 **Architecture:**
-- Front-end: Learned Filterbank (Conv1D, kernel 64, stride 4, 64 output channels, 2-bit weights)
+- Front-end: Learned Filterbank (Conv1D, kernel 64, stride 4, 32 output channels, 2-bit weights)
 - Stem: Conv3x1 -> BatchNorm -> ReLU (32 channels)
 - Backbone: 3 x TCDSBasicBlock (channels 32 -> 48 -> 64 -> 96), each block:
   - Main branch: Depthwise(9x1) -> Pointwise(1x1) -> Depthwise(9x1) -> Pointwise(1x1)
@@ -96,8 +96,8 @@ The TCDS_ResNet_FB_NPU model pairs a learned filterbank front-end with a Tempora
 NOTE: Running the config yaml takes care of everything including feature extraction, training, quantization and compilation.
 
 1. Training:
-   - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-   - Batch size: 256, Learning rate: 0.001, Weight decay: 1e-5
+   - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+   - Batch size: 4096, Learning rate: 0.01, Weight decay: 1e-5, Training epochs: 100, `num_gpus: 1`, `quantization: 2`, `auto_quantization: False`
    - Enable Quantize-Aware Training for INT8/mixed-precision accuracy
 2. Quantization:
    - Mixed precision quantization: 8-bit stem/head, 2-bit residual blocks, 2-bit filterbank front-end
@@ -123,6 +123,6 @@ After completing the repository setup, run the following command from the `tinym
 
 - MSPM0G5187 Technical Reference Manual [Link](https://www.ti.com/product/MSPM0G5187)
 - [TI Neural Network Compiler Guide](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
-- TI Model Training Guide: [tinyml-tensorlab](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main)
+- TI Model Training Guide: [tinyml-modelzoo](https://github.com/TexasInstruments/tinyml-modelzoo)
 - EdgeAI Software Guide: https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST
 - MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK

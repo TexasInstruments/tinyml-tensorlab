@@ -46,34 +46,37 @@ Derived quantities included in the dataset
 
 ## Usage in Tiny ML ModelZoo
 
-Prepare the zipped dataset by running the induction_motor_speed_prediction python file. The script will create zipped dataset as `induction_motor_speed_prediction_dataset.zip`. 
-```bash
-cd examples/induction_motor_speed_prediction
-python induction_motor_speed_prediction.py
-```
-The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
+The config downloads the prepared dataset automatically from the TI CDN, so no local dataset preparation is needed:
 
 ```yaml
 dataset:
-    input_data_path: 'examples/induction_motor_speed_prediction/induction_motor_speed_prediction_dataset.zip'
+    dataset_name: induction_motor_speed_prediction
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/induction_motor_speed_prediction_dataset.zip
+```
+
+Optionally, to regenerate the dataset yourself, run the induction_motor_speed_prediction python file. The script creates a zipped dataset named `induction_motor_speed_prediction_dataset.zip`; to use it, point `input_data_path` in the [configuration](config.yaml) to that local zip.
+
+```bash
+cd examples/induction_motor_speed_prediction
+python induction_motor_speed_prediction.py
 ```
 
 This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelzoo.sh examples/induction_motor_speed_prediction/config.yaml
+./run_tinyml_modelzoo.sh examples/induction_motor_speed_prediction/config.yaml
 ```
 
 1. `run_tinyml_modelzoo.sh` is the script to run modelmaker. It take two required arguments.
 2. `examples/induction_motor_speed_prediction/config.yaml` path of the yaml configuration to run
 
-The users can configure the yaml [configuration](config.yaml) to change parameters related to **data preprocessing, feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. In this example we will be using REGR_1k model.
+The users can configure the yaml [configuration](config.yaml) to change parameters related to **data preprocessing, feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. The default configuration (target device `F29H85`) uses `SimpleWindow` with `frame_size: 8` and `stride_size: 1`, the `Generic_8Input_ABS_8Feature_1Frame` feature extraction preset, `variables: 11`, and the REGR_1k model, trained for up to 50 epochs (`batch_size: 256`, `learning_rate: 0.000001`, early stopping with patience 5, `num_gpus: 0`).
 
 REGR_1k is a regression model designed with keeping memory in consideration. It consists of 2 BatchNorm+Conv+Relu layer and 2 light Linear layers. This model is compatible to run on TINIE HW accelerator.
 
 ## Output of Running modelmaker
 
-After running the modelmaker you can find the following results for different size of frames. This dataset is not a timeseries dataset, so using frame size of 1 will produce better result.
+After running the modelmaker you can find the following results for different size of frames (from an earlier release, not re-measured with the current 1.5.0 config; the shipped config uses a frame size of 8). This dataset is not a timeseries dataset, so using frame size of 1 will produce better result.
 
 |**Frame Size**| **Float R2-Score (MSE)** | **Quant R2-Score (MSE)** | **Exported R2-Score (RMSE)** |
 |--------------|--------------------------|--------------------------|------------------------------|

@@ -74,7 +74,7 @@ These devices use **MCU-PLUS-SDK**. It is recommended to use the SDK Version: 11
 
 ## Output From Modelzoo
 
-Modelzoo will start by loading the dataset, train the model, test the model, compile the model. Modelzoo will create the output folder in `tinyml-modelmaker/data/projects/{dataset_name}`. You can find the dataset name in the [configuration](config.yaml) yaml. Let's assume the dataset_name to be hello_world_example_dsg as we will use the hello world example for generic timeseries classification.
+Modelzoo will start by loading the dataset, train the model, test the model, compile the model. Modelzoo will create the output folder in `tinyml-modelmaker/data/projects/{dataset_name}`. You can find the dataset name in the [configuration](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/generic_timeseries_classification/config.yaml) yaml. Let's assume the dataset_name to be hello_world_example_dsg as we will use the hello world example for generic timeseries classification.
 
 ```bash
 cd tinyml-Modelzoo
@@ -233,17 +233,17 @@ With this workflow, you can create your own generic time series classification a
 
 To explore more classification use cases, refer to the following examples:
 
-- [Hello World](../../examples/generic_timeseries_classification/readme.md) - Prediction of the type of waveform of signal
-- [AC Arc Fault](../../examples/ac_arc_fault/readme.md) - Predict whether an arc is present in circuit or not
-- [Blower Imbalance](../../examples/blower_imbalance/readme.md) - Prediction of imbalance present in fan blowers
-- [ECG Classification](../../examples/ecg_classification/readme.md) - Classifying ECG Signals
-- [Electrical Fault](../../examples/electrical_fault/readme.md) - Predicting presence of electrical faults between lines 
-- [Fan Blade Fault Classification](../../examples/fan+blade_fault_classification/readme.md) - Prediction of faults in blades of fans
-- [Gas Sensor](../../examples/gas_sensor/readme.md) - Prediction of the type of gas present in a room
-- [Grid Stability](../../examples/grid_stability/readme.md) - Predicting the stability of a grid
-- [MNIST Image Classification](../../examples/MNIST_image_classification/readme.md) - Classifying the images of integers
-- [DC Arc Fault](../../examples/dc_arc_fault/readme.md) - Predict whether an arc is present in circuit or not
-- [WISDM](../../examples/human_activity_recognition/readme.md) - Wearable Hand Movement detection from accelerometer
+- [Hello World](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/generic_timeseries_classification/readme.md) - Prediction of the type of waveform of signal
+- [AC Arc Fault](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/ac_arc_fault/readme.md) - Predict whether an arc is present in circuit or not
+- [Blower Imbalance](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/blower_imbalance/readme.md) - Prediction of imbalance present in fan blowers
+- [ECG Classification](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/ecg_classification/readme.md) - Classifying ECG Signals
+- [Electrical Fault](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/electrical_fault/readme.md) - Predicting presence of electrical faults between lines 
+- [Fan Blade Fault Classification](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/fan_blade_fault_classification/readme.md) - Prediction of faults in blades of fans
+- [Gas Sensor](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/gas_sensor/readme.md) - Prediction of the type of gas present in a room
+- [Grid Stability](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/grid_stability/readme.md) - Predicting the stability of a grid
+- [MNIST Image Classification](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/MNIST_image_classification/readme.md) - Classifying the images of integers
+- [DC Arc Fault](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/dc_arc_fault/readme.md) - Predict whether an arc is present in circuit or not
+- [WISDM](https://github.com/TexasInstruments/tinyml-modelzoo/blob/main/examples/human_activity_recognition/readme.md) - Wearable Hand Movement detection from accelerometer
 
 <hr>
 

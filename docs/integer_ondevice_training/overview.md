@@ -98,7 +98,6 @@ The shift adapts automatically across:
 - **Different batch sizes:** larger batches accumulate larger gradients; NITI scales appropriately
 - **Different training stages:** large gradients early in training, small gradients near convergence
 ### Worked Example
----
 
 ## 4. The Frozen + Trainable Split for Integer Models
 

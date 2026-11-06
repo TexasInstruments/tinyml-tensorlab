@@ -606,7 +606,7 @@ Before writing the training loop, it helps to understand how data flows from raw
     Raw sensor data (e.g., accelerometer samples)
             │
             ▼
-    Feature Extraction (FE)  ← User must implement if they need additional ones that are not offered by Tinyml-Tensorlab
+    Feature Extraction (FE)  ← User must implement if they need additional ones that are not offered by Tiny ML ModelZoo
             │
             ▼
     feature_input [FE_NN_OUT_SIZE]  (extracted features)
@@ -854,5 +854,3 @@ To extend the library with a new layer type (e.g., Conv1D):
 | `ODT_LinearBackward(ctx, grad_out, grad_in, in, layer)` | Linear backward: input grad + weight update/accumulate | void |
 | `ODT_ReLUForward(in, out, size)` | ReLU: out = max(0, in) | void |
 | `ODT_ReLUBackward(grad_out, grad_in, fwd_out, size)` | ReLU backward: pass grad where fwd > 0 | void |
-
----

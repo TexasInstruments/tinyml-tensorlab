@@ -19,6 +19,7 @@ Involves using TI toolchains to collect the data and train the model and preview
   - **CC1354**
   - **CC2755**
   - **CC35X1**
+  - **MSPM0G5187** (`config_MSPM0.yaml`)
 
 Check the `config_<device>.yaml` files for device-specific configurations.
 
@@ -86,13 +87,13 @@ This application example showcases the following story:
 * You can use the Model Composer GUI or Tiny ML Modelmaker to train your model and compile it.
 * In Model Composer, you can play with different settings that can get your model to accuracy suited to you
 * For Tiny ML Modelmaker, you can use [this](config.yaml) config file and run it as follows from the `tinyml-modelzoo` directory
-  * `run_tinyml_modelzoo.sh fan_blade_fault_classification/config.yaml`
-* This configuration file should give you a 100% accuracy
+  * `./run_tinyml_modelzoo.sh examples/fan_blade_fault_classification/config.yaml`
+* This configuration file should give you a 100% accuracy (confirmed in a short 1.5.0 test run)
 
 ## Live Preview
 
-* This should give you a compiled model in the `tinyml-modelmaker/data/projects/fan_blade_fault_dsi/run/<time_stamp>/<model_name>/compilation/artifacts`
-* And few feature extraction related artifacts are a part of: `tinyml-modelmaker/data/projects/fan_blade_fault_dsi/run/<time_stamp>/<model_name>/training/quantization/golden_vectors`
+* This should give you a compiled model in the `tinyml-modelmaker/data/projects/fan_blade_fault/run/<time_stamp>/<model_name>/compilation/artifacts`
+* And few feature extraction related artifacts are a part of: `tinyml-modelmaker/data/projects/fan_blade_fault/run/<time_stamp>/<model_name>/training/quantization/golden_vectors`
 * This model is ready to be deployed into the CCS project with the application code of your choice.
 * You can refer to [this](https://dev.ti.com/tirex/explore/node?node=A__AYjCIAmJIjRiZJ7OuRmv0w__motor_control_c2000ware_sdk_software_package__0.jXikd__LATEST) for how to plug and play these artifacts.
 * To run in Live Preview Mode, as shown in the TIREX above, a sample project with just 1 sensor is attached here: [eAI_mfd_eval_f28p55x.zip](assets/eAI_mfd_eval_f28p55x.zip)
@@ -109,6 +110,11 @@ This application example showcases the following story:
   - config_CC1354.yaml - CC1354
   - config_CC2755.yaml - CC2755
   - config_CC35X1.yaml - CC35X1
+  - config_MSPM0.yaml - MSPM0G5187
+  - config_anomaly_detection.yaml - F28P55 (anomaly detection, see [readme_anomaly_detection.md](readme_anomaly_detection.md))
+  - fan_blade_anomaly_detection_ondevice_training.yaml - F29H85 (anomaly detection with on-device training, see [readme_anomaly_detection.md](readme_anomaly_detection.md))
+
+The classification configs (`config.yaml`, CC*) use model `CLS_4k_NPU`, batch size 256 and 20 epochs; only `config.yaml` enables early stopping (patience 5). `config_MSPM0.yaml` uses `CLS_1k_NPU` with 20 epochs and 4-bit weight QAT quantization.
 
 ## Other Tiny ML Modelmaker Features
 

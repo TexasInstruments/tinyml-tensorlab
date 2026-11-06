@@ -17,7 +17,7 @@
 This guide explains how to use TI's ModelZoo pipeline to generate all the artifacts needed for on-device training on microcontrollers. By the end of this page, you will have a set of files ready to copy into a CCS project for on-device training.
 
 **Prerequisites:**
-- ModelZoo environment set up ([setup instructions](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modelzoo))
+- `tinyml-modelzoo` installed and working (`pip install -e .` from the `tinyml-modelzoo` folder, see the repository README)
 - A YAML configuration file with on-device training enabled
 
 For conceptual background on what on-device training is and why it uses a frozen+trainable split, see [Overview](overview.md).
@@ -215,7 +215,7 @@ The frozen model ONNX is then compiled by TVM into `mod.a` through the standard 
 After a successful run, the ModelMaker output directory contains:
 
 ```
-tinyml-modelmaker/data/projects/<project_name>/run/<date-time>/<model_name>/
+./data/projects/<project_name>/run/<date-time>/<model_name>/   (relative to where you ran the script)
 ├── training/base/
 │   ├── model.onnx                          # Full trained ONNX model
 │   ├── checkpoint.pth                      # PyTorch checkpoint
@@ -226,10 +226,9 @@ tinyml-modelmaker/data/projects/<project_name>/run/<date-time>/<model_name>/
 │   │   ├── trainable_model_config.c        # ★ Trainable weights + buffers
 |   |   ├── ondevice_training_data.h        # ★ Dataset dimensions + declarations
 |   |   └── ondevice_training_data.c        # ★ Embedded train/val/test data
-│   └── quantization/
-│       └── golden_vectors/
-│           ├── test_vector.c               # ★ Golden test vectors
-│           └── user_input_config.h         # ★ Feature extraction config
+│   └── golden_vectors/
+│       ├── test_vector.c                   # ★ Golden test vectors
+│       └── user_input_config.h             # ★ Feature extraction config
 │
 ├── compilation/
 │   └── artifacts/

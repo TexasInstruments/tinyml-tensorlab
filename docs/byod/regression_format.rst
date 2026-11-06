@@ -1,0 +1,271 @@
+===========================
+Regression Dataset Format
+===========================
+
+This guide explains how to format datasets for time series regression tasks.
+
+Directory Structure
+-------------------
+
+Regression datasets use a flat ``files/`` folder structure (not class folders):
+
+.. code-block:: text
+
+   my_dataset/
+   ├── files/                          # MUST be named "files"
+   │   ├── datafile1.csv
+   │   ├── datafile2.csv
+   │   └── datafileN.csv
+   └── annotations/                    # Optional - auto-generated if missing
+       ├── instances_train_list.txt
+       └── instances_val_list.txt
+
+.. important::
+   The data directory **must** be named ``files/``, not ``classes/`` or anything else.
+
+Data File Format
+----------------
+
+**Critical**: The target value must be in the **last column**.
+
+.. code-block:: text
+
+   feature1,feature2,feature3,...,target
+   0.5,18.2,45.5,...,0.187
+   0.6,18.5,45.6,...,0.245
+   ...
+
+**Example: Motor Torque Prediction**
+
+.. code-block:: text
+
+   current_d,current_q,voltage_d,voltage_q,motor_speed,pm_temp,target_torque
+   -0.450,0.032,18.805,1.499,0.002,24.55,0.187
+   -0.325,0.045,18.818,1.542,0.003,24.54,0.245
+   -0.440,0.028,18.876,1.456,0.002,24.54,0.176
+
+* Columns 1-6: Input features
+* Column 7 (last): Target value to predict
+
+Time Column Handling
+--------------------
+
+Any column containing "time" is automatically dropped:
+
+.. code-block:: text
+
+   Time,feature1,feature2,target
+   0.001,0.5,18.2,0.187
+   0.002,0.6,18.5,0.245
+
+The "Time" column will be removed automatically.
+
+Annotation Files (Optional)
+---------------------------
+
+Annotation files list the files that belong to each split, one name per line
+(relative to ``files/``). Providing them is recommended for regression so that the
+train/val/test split is reproducible:
+
+**instances_train_list.txt**:
+
+.. code-block:: text
+
+   datafile1.csv
+   datafile3.csv
+   datafile5.csv
+
+**instances_val_list.txt**:
+
+.. code-block:: text
+
+   datafile2.csv
+   datafile4.csv
+
+**instances_test_list.txt** (optional):
+
+.. code-block:: text
+
+   datafile6.csv
+
+If you don't provide annotations, ModelMaker auto-generates them using ``split_type`` and
+``split_factor`` (see :doc:`data_splitting`).
+
+Configuration
+-------------
+
+.. code-block:: yaml
+
+   dataset:
+     enable: True
+     dataset_name: 'my_regression_data'
+     input_data_path: '/path/to/my_dataset'
+     data_dir: 'files'
+     annotation_dir: 'annotations'
+
+   data_processing_feature_extraction:
+     data_proc_transforms: ['SimpleWindow']  # Required!
+     frame_size: 128
+     stride_size: 0.25
+     variables: 6                            # Input columns (excluding target)
+
+.. important::
+   ``SimpleWindow`` transform is **required** for regression tasks.
+
+Target Processing
+-----------------
+
+The target value (last column) is processed as follows:
+
+1. Each window of ``frame_size`` rows is extracted
+2. The target value is **averaged** across the window
+3. This averaged value becomes the label for that window
+
+Example with ``frame_size=4``:
+
+.. code-block:: text
+
+   Window 1: rows 0-3, targets [0.18, 0.24, 0.17, 0.19] → avg = 0.195
+   Window 2: rows 2-5, targets [0.17, 0.19, 0.22, 0.20] → avg = 0.195
+
+Complete Example
+----------------
+
+**Dataset structure:**
+
+.. code-block:: text
+
+   torque_measurement/
+   ├── files/
+   │   ├── experiment_001.csv
+   │   ├── experiment_002.csv
+   │   ├── experiment_003.csv
+   │   └── experiment_004.csv
+   └── annotations/
+       ├── instances_train_list.txt    # experiment_001.csv, experiment_002.csv
+       └── instances_val_list.txt      # experiment_003.csv, experiment_004.csv
+
+**experiment_001.csv:**
+
+.. code-block:: text
+
+   i_d,i_q,u_d,u_q,speed,temp,torque
+   -0.45,0.03,18.80,1.49,0.002,24.5,0.187
+   -0.32,0.04,18.81,1.54,0.003,24.5,0.245
+   ...
+
+**config.yaml** (excerpt; see ``examples/generic_timeseries_regression/config.yaml`` for a tested config):
+
+.. code-block:: yaml
+
+   common:
+     task_type: 'generic_timeseries_regression'
+     target_device: 'F28P55'
+
+   dataset:
+     dataset_name: 'torque_measurement'
+     input_data_path: '/data/torque_measurement'
+
+   data_processing_feature_extraction:
+     data_proc_transforms: ['SimpleWindow']
+     frame_size: 128
+     stride_size: 0.25
+     variables: 6
+
+   training:
+     model_name: 'REGR_2k_NPU'
+     training_epochs: 100      # early stopping (on by default) may end training sooner
+
+Troubleshooting
+---------------
+
+**"Target column not found" error**
+
+The target variable must be in the **last column** of every CSV file. If your target
+is not the last column, either reorder the columns or specify ``target_variables``
+explicitly in the configuration. Double-check that no extra trailing delimiter is
+creating a phantom empty column after your intended target.
+
+**"Insufficient sequence length" error**
+
+Each data file must contain enough rows to produce at least one window. The minimum
+row count per file is::
+
+   frame_size + (stride as absolute rows)
+
+For example, with ``frame_size=128`` and ``stride_size=0.25`` (which translates to a
+stride of 32 rows), you need at least 128 rows per file. If files are shorter, either
+increase their length or reduce ``frame_size``.
+
+**Incomplete annotation files**
+
+If some but not all of the split lists (``train``, ``val``, ``test``) exist in
+``annotations/``, ModelMaker regenerates all of them. Provide either the complete
+set of lists or none; with none, splits are generated automatically.
+
+**"Data dimension mismatch" error**
+
+All CSV files in the ``files/`` directory must have the **same number of columns**.
+Verify that:
+
+* No files have extra or missing columns
+* The ``variables`` parameter in the config matches the actual number of input
+  feature columns (i.e., total columns minus the target column, minus any
+  auto-dropped time column)
+* Delimiters are consistent across all files
+
+**"Time column" gotcha**
+
+.. warning::
+   Do **not** name any feature column with the word "time" (case-insensitive).
+   Any column whose header contains "time" (e.g., ``Time``, ``Timestamp``,
+   ``TIME (microsec)``) is **automatically dropped** during data loading. If you
+   need a temporal feature, use a name like ``elapsed_sec`` or ``sample_index``
+   instead.
+
+Best Practices
+--------------
+
+* **Use consistent column ordering** across all files in the dataset. Every CSV
+  should have the same columns in the same order.
+* **Avoid naming columns "time"**. Use ``timestamp``, ``elapsed_sec``, or
+  ``sample_index`` if you need a temporal reference column, since any column
+  with "time" in its name is silently dropped.
+* **Ensure numerical-only data**. All values (except the optional header row)
+  must be numeric (integers or floats). String values, NaN entries, or missing
+  fields will cause errors during data loading.
+* **Include enough variety in the target range** for the model to generalize.
+  If all target values cluster in a narrow range, the model may fail to learn
+  meaningful regression. Aim for training data that covers the full expected
+  operating range of the target variable.
+* **Remove outliers and NaN values** before preparing the dataset. Extreme
+  outliers can disproportionately affect MSE-based training.
+* **Use descriptive filenames** (e.g., ``motor_test_001.csv``) to make
+  annotation files easier to manage.
+* **Test with a small subset first** to validate the dataset format before
+  launching a full training run.
+
+Common Issues
+-------------
+
+**"Target not found" error**
+
+Ensure the target is in the last column of your CSV.
+
+**"No windows generated" error**
+
+Check that files have at least ``frame_size`` rows.
+
+**Poor regression performance**
+
+* Try different ``frame_size`` values
+* Ensure input features are relevant to target
+* Normalize extreme values in your data
+
+See Also
+--------
+
+* :doc:`/task_types/timeseries_regression` - Regression task overview
+* :doc:`/examples/generic_regression` - Complete example with a public dataset
+* :doc:`data_splitting` - Data splitting strategies
+* :doc:`/features/early_stopping` - Early stopping (default on in 1.5.0)

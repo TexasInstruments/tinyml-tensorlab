@@ -69,13 +69,12 @@ The important parameters here are: task type `generic_timeseries_classification`
 We have configured to include feature extraction before training so that the model can better predict the correct appliance.
 
 ```yaml
-data_processing_feature_extraction: 
-    feat_ext_transform: ['FFT_FE', 'FFT_POS_HALF', 'WINDOWING', 'BINNING', 'NORMALIZE', 'ABS','LOG_DB', 'CONCAT',]
-    frame_size: 32
-    feature_size_per_frame: 8
-    num_frame_concat: 8                                                            
+data_processing_feature_extraction:
+    feature_extraction_name: Generic_32Input_FFTBIN_4Feature_8Frame
     variables: 2
 ```
+
+The `Generic_32Input_FFTBIN_4Feature_8Frame` preset expands to the transforms `FFT_FE`, `FFT_POS_HALF`, `DC_REMOVE`, `ABS`, `BINNING`, `LOG_DB`, `CONCAT` with `frame_size: 32`, `feature_size_per_frame: 4` and `num_frame_concat: 8`.
 
 ### training, testing and compilation section
 
@@ -86,6 +85,8 @@ training:
     model_config: ''
     batch_size: 256
     training_epochs: 30
+    early_stopping: true
+    early_stopping_patience: 5
     num_gpus: 0
     quantization: 2
     learning_rate: 0.04
@@ -100,13 +101,13 @@ compilation:
 
 In this configuration, we have used the `CLS_13k_NPU` model, which is a generic classification model available in our model zoo with approximately 13k parameters. This model consists of 6 Conv+BatchNorm+ReLU layers followed by a Linear layer.
 
-We have configured other training parameters, such as an appropriate learning rate (0.04), batch size (256), and the number of training epochs (30). The quantization is set to 2, which means the model uses TI-NPU quantized operations for efficient inference on TI hardware.
+We have configured other training parameters, such as an appropriate learning rate (0.04), batch size (256), the number of training epochs (30) and early stopping with a patience of 5. The quantization is set to 2, which means the model uses TI-NPU quantized operations for efficient inference on TI hardware.
 
 Both testing and compilation are enabled. We are compiling this example using the ti-npu hard preset, which runs on the TI-NPU with full quantization.
 
 ## Results
 
-On running the YAML file, the following accuracies were observed:
+The following accuracies were observed on running the YAML file in an earlier release:
 
 ### **I. Float Train**
 - **Best Epoch**: 29  

@@ -69,7 +69,7 @@
   | ArcFault_model_1400_t | ~1600 | 5.6 KB | 0.7 ms | 99.88% | **Recommended** - Most accurate |
 
 
-## Model Architecture Options(Available on Tensorlab CLI Tools)
+## Model Architecture Options(Available in tinyml-modelzoo)
 
 Eleven pre-configured CNN/ResNet models available (~100 to ~20K parameters), most with NPU support.
 
@@ -89,8 +89,8 @@ Eleven pre-configured CNN/ResNet models available (~100 to ~20K parameters), mos
 NOTE: Running the config yaml takes care of everything including feature extraction, training, quantization and compilation. 
 
 1. Training:
-- Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
-- Batch size: 50, Learning rate: 0.04, Optimizer: SGD
+- Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
+- Model: CLS_1k_NPU, Batch size: 30, Learning rate: 0.001, Epochs: 30, Optimizer: SGD (default)
 - Enable Quantize-Aware Training for INT8 accuracy
 2. Quantization:
 - INT8 quantization required-Enabled in the config file by default aswell as in Edge AI Studio
@@ -120,7 +120,7 @@ NOTE: Running the config yaml takes care of everything including feature extract
 - MSPM0G5187 Technical Reference Manual [Link](https://www.ti.com/product/MSPM0G5187)
 - UL 1699 Standard for Arc-Fault Circuit Interrupters [Link](https://code-authorities.ul.com/wp-content/uploads/2014/05/Dini2.pdf)
 - [TI Neural Network Compiler Guide](https://software-dl.ti.com/mctools/nnc/mcu/users_guide/)
-- TI Model Training Guide: [tinyml-tensorlab](https://github.com/TexasInstruments/tinyml-tensorlab/tree/main)
+- TI Model Training Guide: [tinyml-modelzoo](https://github.com/TexasInstruments/tinyml-modelzoo)
 - [AC Arc Fault Detection Theory](https://en.wikipedia.org/wiki/Arc-fault_circuit_interrupter)
 - EdgeAI Software Guide: https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST
 - MSPM0 SDK: https://www.ti.com/tool/MSPM0-SDK

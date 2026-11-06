@@ -1,0 +1,34 @@
+################################################################################
+# RADAR SURFACE CLASSIFICATION APPLICATION 
+################################################################################
+
+common:
+  task_type: radar_surface_classification
+  target_module: radar
+  target_device: xWRL6432
+  run_name: '{date-time}_{model_name}'
+
+dataset:
+  dataset_name: radar_surface_classification
+  input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/radar_grass_surface_dataset.zip
+  split_type: amongst_files
+  split_factor: [0.7, 0.2, 0.1]
+
+data_processing_feature_extraction:
+   
+  feature_extraction_name: Generic_130Input_Radar_SurfaceClassification
+  frame_size: 5
+  stride_size: 0.2
+  radar_range_bins_bounds: [null,null] # [null,null] for no bounds - accept all range bins Or specific range bins extraction eg. [6,31]
+
+training:
+  model_name: RF_MLP_3L_11K
+  training_epochs: 100
+  learning_rate: 0.001
+  optimizer: SGD
+  output_int: false
+  num_gpus: 0
+
+testing: {}
+
+compilation: {}

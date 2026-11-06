@@ -199,7 +199,7 @@ Some metrics are provided to help you understand the computational requirements 
 
 ## Model Accuracy Comparison Across Different Feature Extraction Presets
 
-To evaluate the performance of generic models for motor fault classification, we use the **Motor Fault Dataset** ([Dataset Link](https://software-dl.ti.com/C2000/esd/mcu_ai/01_02_00/datasets/motor_fault_classification_dsk.zip)). The dataset is processed using four different feature extraction presets, and the models are trained on the extracted features.  
+To evaluate the performance of generic models for motor fault classification, we use the **Motor Fault Dataset** ([Dataset Link](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/motor_fault_classification_dsk.zip)). The dataset is processed using four different feature extraction presets, and the models are trained on the extracted features.  
 
 ### Feature Extraction Presets 
 

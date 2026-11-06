@@ -172,7 +172,7 @@ For detailed information on dataset format and splitting strategy, see: **[Datas
 You can run this example directly in **TinyML ModelZoo** using the following command:
 
 ```bash
-./run_tinyml_modelzoo.sh examples/motor_fault_detection/config_anomaly_detection.yaml
+./run_tinyml_modelzoo.sh examples/motor_bearing_fault/config_anomaly_detection.yaml
 ```
 
 The model pipeline is configured using a YAML file, where you can enable or disable different stages such as dataset loading, data processing, feature extraction, training, testing, and compilation depending on your needs.
@@ -277,19 +277,19 @@ training:
     enable: True
     model_name: 'AD_Linear'
     model_config: ''
-    batch_size: 64
+    batch_size: 50
     learning_rate: 0.001
-    training_epochs: 200
-    num_gpus: 1
+    training_epochs: 50
+    num_gpus: 0
     quantization: 1
     output_int: False
 ```
 
 **Key parameters:**
 - **`model_name`**: `'AD_Linear'` (lightweight linear autoencoder)
-- **`training_epochs`**: 200 epochs (model converged at epoch 182)
-- **`batch_size`**: 64
-- **`num_gpus`**: 1 (set to 0 for CPU-only training)
+- **`training_epochs`**: 50 epochs in the shipped config (the results below are from an earlier release run with 200 epochs, where the model converged at epoch 182)
+- **`batch_size`**: 50 in the shipped config (the earlier run used 64)
+- **`num_gpus`**: 0 (CPU-only training; set to 1 to use a GPU)
 - **`quantization`**:
   - `0` = No quantization (float model)
   - `1` = Quantization for CPU (QAT - used in this example)

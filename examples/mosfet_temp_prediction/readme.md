@@ -55,7 +55,7 @@ The dataset contains temperature data for various ambient temperatures, coolant 
 
 ## Usage in Tiny ML ModelZoo
 
-The datset for this project is `mosfet_temp_prediction_dataset.zip`. The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
+The datset for this project is `mosfet_temp_prediction.zip`. The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
 
 ```yaml
 dataset:
@@ -65,13 +65,15 @@ dataset:
 This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelzoo.sh examples/mosfet_temp_prediction/config.yaml
+./run_tinyml_modelzoo.sh examples/mosfet_temp_prediction/config.yaml
 ```
 
 1. `run_tinyml_modelzoo.sh` is the script to run Tiny ML Modelzoo. 
 2. `examples/mosfet_temp_prediction/config.yaml` path of the yaml configuration to run
 
-The users can configure the yaml [configuration](config.yaml) to change parameters related to **data preprocessing, feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. In this example we will be using REGR_1k model.
+The users can configure the yaml [configuration](config.yaml) to change parameters related to **data preprocessing, feature extraction**, training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. In this example we will be using the REGR_3k model (target device `F29H85`).
+
+The default configuration uses `SimpleWindow` with `frame_size: 1` and `stride_size: 1` on 43 input variables (columns 1 to 43), and trains for up to 100 epochs (`batch_size: 128`, `learning_rate: 0.01`, early stopping with patience 5, `num_gpus: 0`, `quantization: 0`, i.e. a float model).
 
 REGR_3k is a regression model designed with MLP architecture. You can use any of the other models as well. There are plenty other Regression models (starting with REGR*) as mentioned in the main [readme](../../README.md)
 

@@ -48,7 +48,7 @@ For dataset recreation instructions, refer to `readme_dataset_creation.md`.
   4. Tensor Conversion: Convert to PyTorch tensor
   5. Normalization: Mean = 0.1307, Scale = 0.3081
 
-## Model Architecture Options (Available on Tensorlab CLI Tools)
+## Model Architecture Options (Available in tinyml-modelzoo)
 
   1. **Lenet5** (Default):
      - Classic LeNet-5 CNN architecture
@@ -57,16 +57,16 @@ For dataset recreation instructions, refer to `readme_dataset_creation.md`.
 
 ## Model Performance
 
-  - Accuracy: ~99%
+  - Accuracy: ~99% (98.93% test accuracy in a 1.5.0 test run with the default config)
 
 ## Training and Deployment Process
 
   NOTE: Running the config yaml handles everything including feature extraction, training, quantization, and compilation.
 
   1. Training:
-     - Use TI Edge AI Studio (GUI) or tinyml-tensorlab (CLI)
+     - Use TI Edge AI Studio (GUI) or tinyml-modelzoo (CLI)
      - Batch size: 64, Learning rate: 0.1
-     - Training epochs: 14
+     - Training epochs: 14, `num_gpus: 1`, `quantization: 2`
 
   2. Quantization:
      - INT8 quantization for reduced model size
@@ -95,7 +95,7 @@ After completing the repository setup, run the following command from the `tinym
 
   - MSPM0G5187 Technical Reference Manual https://www.ti.com/product/MSPM0G5187
   - https://software-dl.ti.com/mctools/nnc/mcu/users_guide/
-  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-tensorlab/tree/main
+  - TI Model Training Guide: https://github.com/TexasInstruments/tinyml-modelzoo
   - http://yann.lecun.com/exdb/mnist/
   - https://en.wikipedia.org/wiki/LeNet
   - EdgeAI Software Guide: https://dev.ti.com/tirex/explore/node?node=A__AKCnvqDed-Plz2JO5Umb3Q__MSPM0-SDK__a3PaaoK__LATEST

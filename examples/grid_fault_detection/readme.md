@@ -18,7 +18,7 @@ Given that there are no well defined fault categories for AC grid faults, it is 
 
 ## Downloading dataset
 
-The zipped example dataset is provided in this project folder `grid_fault_dataset.zip`. 
+The zipped example dataset `grid_fault_dataset.zip` is hosted online and downloaded automatically.
 The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
 
 ```yaml
@@ -31,11 +31,11 @@ dataset:
 This zipped dataset is designed to work with Tiny ML ModelMaker. Run through ModelZoo with the yaml [configuration](config.yaml) using the below code.
 
 ```bash
-run_tinyml_modelzoo.sh examples/grid_fault_detection/config.yaml  # Use .\run_tinyml_modelzoo.bat for Windows Terminal/Powershell
+./run_tinyml_modelzoo.sh examples/grid_fault_detection/config.yaml  # Use .\run_tinyml_modelzoo.bat for Windows Terminal/Powershell
 ```
 
 1. `run_tinyml_modelzoo.sh` is the script to run ModelZoo. "run_tinyml_modelzoo.bat" for Windows Terminal/Powershell
-2. `examples/grid_fault_detection/config.yaml` path of the yaml configuration to run
+2. `examples/grid_fault_detection/config.yaml` path of the yaml configuration to run (target device F29H85, model `CLS_1k_NPU`, batch size 512, up to 250 epochs with early stopping, patience 5)
 
 The users can configure the yaml [configuration](config.yaml) to change parameters related to training, testing, model and model compilation. In this example, we will configure the parameters of feature extraction. Since the feature extraction step is handled outside the Tiny ML model maker tool, we set feature extraction to
 
@@ -50,7 +50,7 @@ data_processing_feature_extraction:
 After doing the above changes in yaml [configuration](config.yaml) file. Run the ModelZoo again for this dataset.
 
 ```bash
-run_tinyml_modelzoo.sh examples/electrical_fault/config.yaml  # Use .\run_tinyml_modelzoo.bat for Windows Terminal/Powershell
+./run_tinyml_modelzoo.sh examples/grid_fault_detection/config.yaml  # Use .\run_tinyml_modelzoo.bat for Windows Terminal/Powershell
 ```
 
 Steps to run this example on-device can be found by following this guide: [Deploying Classification Models from ModelMaker to Device](../../docs/deploying_classification_models_from_modelmaker_to_device/readme.md).

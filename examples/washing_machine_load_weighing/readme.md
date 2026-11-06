@@ -53,12 +53,12 @@ For regression tasks, the dataset structure is expected to be as follows :
 The example can be run directly using the following command
 
 ```
-./run_tinyml_modelzoo.sh  ./examples/washing_machine_load_weighing/config.yaml
+./run_tinyml_modelzoo.sh examples/washing_machine_load_weighing/config.yaml
 
 ```
 wherein 
 1.  ``` run_tinyml_modelzoo.sh``` is the script to run modelmaker. It takes input of CONFIG_FILE
-2. ``` ./examples/washing_machine_load_weighing/config.yaml``` is the location of the CONFIG_FILE
+2. ``` examples/washing_machine_load_weighing/config.yaml``` is the location of the CONFIG_FILE (use `examples/washing_machine_load_weighing/config_MSPM0.yaml` for the MSPM0G5187 target: same settings but `frame_size: 1024` and no early stopping)
 
 We can change the training configurations, no. of features or variables for input regression (need to change dataset as well), feature extraction, frame size, etc. in the config file.
 
@@ -85,6 +85,7 @@ In the data_processing_feature_extraction section
 ``` 
 data_proc_transforms: 'SimpleWindow'
 frame_size: 512
+stride_size: 0.1
 variables: 6
 ``` 
 
@@ -97,18 +98,24 @@ In the training section
 
 ``` 
 model_name: 'REGR_13k'
+optimizer: adam
+lr_scheduler: cosineannealinglr
 batch_size: 128
-training_epochs: 500
+training_epochs: 100   # use 500 epochs for a better RMSE
+early_stopping: true
+early_stopping_patience: 5
+lambda_reg: 0.01
 num_gpus: 1
-quantization: 0
+quantization: 2
+auto_quantization: True
 ``` 
 
 * 'REGR_13k' is the model_name which consists of 12477 trainable parameters, REGR_4k can also be used, it contains 4093 trainable parameters 
 * Batch size can be tuned, 128 is used in this example. 
-* Quantization set to 0 is float float, and quantization set to 2 can be used for partially quantized model. 
+* Quantization set to 0 gives a float model, and quantization set to 2 (as in the shipped config, together with `auto_quantization: True`) gives the partially quantized model. 
 * In regression currently the first input batch norm layer, first conv/linear layer and the last linear layer are not quantized i.e. kept in float rest all other layers are quantized to int8
 * The Loss used for Training is Mean Squared Error (MSE) and metric used is RMSE
-* It's recommended to run the model for at least 500 training epochs to obtain good RMSE in weight loading prediction
+* The shipped config uses 100 training epochs (with early stopping, patience 5) to keep the example quick; it's recommended to run the model for at least 500 training epochs to obtain good RMSE in weight loading prediction
 ## Dataset Split
 The dataset consists of 391 files, each file consists of 12300 datapoints on average of the washing machine running in constant torque mode (Mode 2)
 
@@ -127,7 +134,7 @@ RMSE values obtained for both the models and different frame sizes on the test s
 | 512 | 46.91 | 32.58 | 52.42 | 31.23 |
 | 1024 | 59.01 | 25.78 | 64.59 | 36.78 |
 
-The above table shows results after training the models for 500 epochs each
+The above table shows results after training the models for 500 epochs each (from an earlier release, not re-measured with the shipped 100-epoch config)
 
 We observe that for the 13K parameter model, the RMSE reduces as the frame size is increased. This can be attributed to the larger context with which the model learns when frame size is large.
 

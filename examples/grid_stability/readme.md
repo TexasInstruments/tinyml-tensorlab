@@ -26,11 +26,12 @@ Prepare the zipped dataset by running the grid_stability python file. The script
 cd examples/grid_stability
 python grid_stability.py
 ```
-The path of this zipped dataset file is already mentioned in [configuration](config.yaml) yaml, make sure it is same.
+The [configuration](config.yaml) yaml points to the pre-built zipped dataset hosted online, so running the script is only needed to regenerate it. To use your locally generated zip instead, change the path in the yaml.
 
 ```yaml
 dataset:
-    input_data_path: 'examples/grid_stability/grid_stability_dataset.zip'
+    input_data_path: https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/grid_stability_dataset.zip
+    # local alternative: 'examples/grid_stability/grid_stability_dataset.zip'
 ```
 
 This zipped dataset is designed to work with Tiny ML ModelMaker. Run the modelmaker with the [configuration](config.yaml) yaml.
@@ -47,8 +48,10 @@ Interpreting PCA plots:
 
 ```bash
 cd tinyml-modelzoo
-run_tinyml_modelzoo.sh examples/grid_stability/config.yaml
+./run_tinyml_modelzoo.sh examples/grid_stability/config.yaml
 ```
+
+The configuration targets F28P55 with model `CLS_ResCat_3k`, 6 variables, frame size 256, stride 0.01 and early stopping (patience 5).
 
 ModelMaker will start by loading the dataset, train the model, test the model, compile the model. ModelMaker will create the output folder in `tinyml-modelmaker/data/projects/{dataset_name}`. For this example dataset_name is `grid_stability`. You can find the dataset name in the [configuration](config.yaml) yaml.
 
@@ -75,7 +78,7 @@ tinyml-modelmaker
                     |_ class1_unstable
             |_ run
                 |_ 20250226-132343  # (date-time)
-                    |_ CLS_ResSlice_3k    # (model_name)
+                    |_ CLS_ResCat_3k    # (model_name)
                         |_ compilation
                         |_ training
                             |_ base
@@ -85,7 +88,7 @@ tinyml-modelmaker
 ```
 Tiny ML ModelMaker outputs extracted features, pca analysis of extracted features, model, compiled model, analysis of extracted features, test setup for testing model on device in `data/projects/grid_stability/run/date-time/model_name`. Let's look at this folder in depth.
 ```
-|_ CLS_ResSlice_3k (model_name)
+|_ CLS_ResCat_3k (model_name)
     |_ compilation
         |_ artifacts
             |_ mod.a

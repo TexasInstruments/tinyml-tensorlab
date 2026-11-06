@@ -307,5 +307,3 @@ static const int8_t layer0_k[] = { 9, 8, 9 };
 ```
 
 **What gets modified during ODT:** Only `weights` and `offset` arrays. The `mult` and `k` arrays are `const` and remain unchanged for the lifetime of the model.
-
----
