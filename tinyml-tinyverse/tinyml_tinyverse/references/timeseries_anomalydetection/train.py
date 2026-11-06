@@ -52,6 +52,7 @@ import torch.nn as nn
 from tinyml_tinyverse.common import models
 from tinyml_tinyverse.common.datasets import GenericTSDatasetAD
 from tinyml_tinyverse.common.utils import misc_utils, utils, ondevice_training
+from tinyml_tinyverse.common.utils.tinyml_header import tinyml_header_str
 
 # Import common functions from base module
 from ..common.train_base import (
@@ -113,6 +114,7 @@ def generate_user_input_config_ad(output_dir, dataset, threshold):
     logger.info("Creating user_input_config.h at: {}".format(user_input_config_h))
 
     with open(user_input_config_h, 'w') as fp:
+        fp.write(tinyml_header_str)
         fp.write("#ifndef INPUT_CONFIG_H_\n")
         fp.write("#define INPUT_CONFIG_H_\n\n")
         fp.write(''.join([f'#define {flag}\n' for flag in dataset.preprocessing_flags]))
@@ -138,17 +140,17 @@ def generate_golden_vectors(output_dir, dataset, output_int, threshold, generic_
 
         np.savetxt(half_path + f'adc_{index}.txt', np_raw.flatten(),
                    fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,',
-                   header=f'//(Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{',
+                   header=f'//(Index: {index}): ADC Data\nconst float raw_input_test[{len(np_raw.flatten())}]= {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'adc_{index}.txt')
         np.savetxt(half_path + f'features_{index}.txt', np_feat.flatten(),
                    fmt='%f,' if np_feat.dtype.kind == 'f' else '%d,',
-                   header=f'//(Index: {index}): Extracted Features\nfloat model_test_input[{len(np_feat.flatten())}] = {{',
+                   header=f'//(Index: {index}): Extracted Features\nconst float model_test_input[{len(np_feat.flatten())}] = {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'features_{index}.txt')
         np.savetxt(half_path + f'output_{index}.txt', pred.flatten(),
                    fmt='%d,' if output_int else '%f,',
-                   header=f'//(Index: {index}):  Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{',
+                   header=f'//(Index: {index}):  Expected Model Output\nconst {"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'output_{index}.txt')
 

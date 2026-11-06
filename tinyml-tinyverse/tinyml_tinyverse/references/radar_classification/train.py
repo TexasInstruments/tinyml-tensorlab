@@ -33,10 +33,11 @@
 #################################################################################
 
 """
-Radar classification training script.
+Radar Classification Training Pipeline.
 """
 
 import os
+import onnx
 import random
 import sys
 import timeit
@@ -60,6 +61,64 @@ from tinyml_tinyverse.common.datasets import GenericRadarDataset
 from tinyml_tinyverse.common.utils import misc_utils, utils, gof_utils
 from tinyml_tinyverse.common.utils.mdcl_utils import Logger
 
+def log_model_graph(model, args, input_size, logger):
+    """
+    Log model graph using torchinfo.
+    Shows: model architecture, parameter counts, MACs, memory.
+    """
+    logger.info("=" * 80)
+    logger.info("=== MODEL GRAPH (FloatTrain) ===")
+    logger.info("=" * 80)
+
+    logger.info(f"Model: {args.model} | Input Size: {input_size}")
+    logger.info("")
+
+    try:
+        model_summary = torchinfo.summary(
+            model,
+            input_size=input_size,
+            verbose=0,
+            col_names=["input_size", "output_size", "num_params", "mult_adds"],
+            depth=4,
+        )
+        logger.info(str(model_summary))
+    except Exception as e:
+        logger.info(f"torchinfo summary failed ({e}); falling back to model repr")
+        logger.info(str(model))
+        total = sum(p.numel() for p in model.parameters())
+        trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        logger.info(f"Total params: {total:,} | Trainable: {trainable:,}")
+
+    logger.info("=" * 80)
+    logger.info("=== END MODEL GRAPH ===")
+    logger.info("=" * 80)
+    logger.info("")
+
+
+# Quantization Configuration Logging - prints during QuantTrain phase
+def log_quant_config(args, logger):
+    """
+    Log quantization configuration - called during QuantTrain phase.
+    Only prints quantization settings
+    """
+    logger.info("=" * 80)
+    logger.info("=== QUANTIZATION CONFIGURATION (QuantTrain) ===")
+    logger.info("=" * 80)
+
+    logger.info(f"Quantization Version: {args.quantization}")
+    logger.info(f"Quantization Method:  {args.quantization_method}")
+    logger.info(f"Weight Bitwidth:      {args.weight_bitwidth}")
+    logger.info(f"Activation Bitwidth:  {args.activation_bitwidth}")
+    logger.info(f"Output Integer:       {args.output_int}")
+
+    # Check for quantization stubs in model if available
+    logger.info("")
+
+    logger.info("=" * 80)
+    logger.info("=== END QUANTIZATION CONFIG ===")
+    logger.info("=" * 80)
+    logger.info("")
+
 # Import common functions from base module
 from ..common.train_base import (
     get_base_args_parser,
@@ -73,7 +132,6 @@ from ..common.train_base import (
     setup_training_environment,
     prepare_transforms,
     create_data_loaders,
-    log_model_summary,
     run_memory_preflight,
     load_pretrained_weights,
     setup_optimizer_and_scheduler,
@@ -101,8 +159,41 @@ def get_args_parser():
     parser.add_argument('--gof-test', type=misc_utils.str2bool, default=False, help='Enable goodness-of-fit test')
     parser.add_argument('--file-level-classification-log', help='File level classification log file', type=str)
 
-    # Radar Detection related params
-    #parser.add_argument('--frame-size', default=8, type=int, help='Number of frames per window ')
+    # Radar Processing Pipeline Arguments
+    parser.add_argument('--radar-range-bins-bounds',
+                         help="[min_bin, max_bin] index range of 'bin*' columns to keep. Unset/None = keep all.")
+    parser.add_argument('--radar-point-cloud-data-selector',
+                         help="List of point cloud features to keep, from ['distance','height','azimuth','doppler','snr']")
+    parser.add_argument('--radar-point-cloud-coordinate-system', help="'absolute' or 'relative' point cloud coordinates")
+    parser.add_argument('--radar-point-cloud-relative-coordinate-filter',
+                         help="List from ['distance','height'] - which axes to make relative to track position")
+    parser.add_argument('--radar-point-cloud-spatial-filter-bounds',
+                         help="[min_distance, max_distance, min_height, max_height, min_azimuth, max_azimuth]. "
+                              "Unset/None = no filtering (equivalent to +-1e9 on every bound).")
+    parser.add_argument('--radar-point-cloud-non-spatial-filter-bounds',
+                         help="[min_doppler, max_doppler, min_snr, max_snr]. Unset/None = no filtering.")
+    parser.add_argument('--radar-track-data-selector',
+                         help="List of track features to keep, from ['velocity','distance','height','azimuth','acceleration']")
+    parser.add_argument('--radar-track-velocity-bounds',
+                         help="[min_velocity, max_velocity] applied to all track_velocity_* columns. Unset/None = no filtering.")
+    parser.add_argument('--radar-track-acceleration-bounds',
+                         help="[min_acceleration, max_acceleration] applied to all track_acc_* columns. Unset/None = no filtering.")
+    parser.add_argument('--radar-track-spatial-filter-bounds',
+                         help="[min_distance, max_distance, min_height, max_height, min_azimuth, max_azimuth] "
+                              "applied to track position columns. Unset/None = no filtering.")
+    parser.add_argument('--radar-data-scaling-track-velocity', help="Multiplier applied to track_velocity_* columns")
+    parser.add_argument('--radar-max-points-per-frame', help="Max point cloud points kept per frame (zero-padded if fewer)")
+    parser.add_argument('--radar-min-points-per-frame', help="Min real (pre-padding) points required per frame before it's dropped (for per_radar_frame mode)")
+    parser.add_argument('--radar-min-points-per-window', help="Min real points required across entire window (sum of per-frame points) before window is dropped (for per_window mode)")
+    parser.add_argument('--radar-point-cloud-structure-strategy',
+                         help="'highest only' / 'lowest only' / 'highest and lowest' - which points to keep, per frame")
+    parser.add_argument('--radar-point-cloud-sort-by', default='height',
+                         help="Which selected point feature ('distance'/'height'/'azimuth'/'doppler'/'snr') to rank points by "
+                              "before applying --radar-point-cloud-structure-strategy")
+    parser.add_argument('--radar-frames-quality-index',
+                         help="Quality filtering mode: 'per_radar_frame' (drop sparse frames), 'per_window' (drop sparse windows), or unset (no filtering)")
+    parser.add_argument('--radar-feature-ordering',
+                         help="Choose the method for window concatenation and flattening - Either 'frame_major' or 'feature_major'")
 
     # NAS arguments
     parser.add_argument("--nas_enabled", default=False, help="Enable/ Disable NAS", type=misc_utils.str2bool)
@@ -234,8 +325,43 @@ def main(gpu, args):
                     sys.exit(1)
                 torch.save(model, os.path.join(args.output_dir, 'nas_model.pt'))
         else:
+            # Prepare model_config with frame_size for models that need it - Internal features splitting required
+            # in Dual Stream Architecture models 
+            model_config_dict = {}
+            if args.model_config:
+                import os
+                if isinstance(args.model_config, dict):
+                    model_config_dict = args.model_config.copy()
+                elif isinstance(args.model_config, str) and os.path.exists(args.model_config):
+                    # Load existing config from file
+                    if args.model_config.endswith(('.yaml', '.yml')):
+                        import yaml
+                        with open(args.model_config) as fp:
+                            model_config_dict = yaml.safe_load(fp) or {}
+                    elif args.model_config.endswith('.json'):
+                        import json
+                        with open(args.model_config) as fp:
+                            model_config_dict = json.load(fp) or {}
+                    else:
+                        model_config_dict = {}
+                else:
+                    model_config_dict = {}
+            
+
+            # Only pass frame_size to model if Simple Window transform is active (windowing mode)
+            # If Simple Window is not active, dataset runs in pass-through mode (per-frame), so frame_size should be 1/None
+            simple_window_active = False
+            if hasattr(dataset, '_transform_active'):
+                simple_window_active = dataset._transform_active(dataset.TRANSFORM_SIMPLE_WINDOW)
+
+            if simple_window_active and args.frame_size not in (None, 'None'):
+                model_config_dict['frame_size'] = int(args.frame_size)
+            elif not simple_window_active:
+                model_config_dict['frame_size'] = 1
+
             model = models.get_model(
-                args.model, variables, num_classes, input_features=input_features, model_config=args.model_config,
+                args.model, variables, num_classes, input_features=input_features,
+                model_config=model_config_dict,
                 model_spec=args.model_spec,
                 dual_op=args.dual_op)
     else:
@@ -243,8 +369,10 @@ def main(gpu, args):
 
     run_memory_preflight(model, args, (1,) + dataset.X.shape[1:], logger)
 
-    if args.generic_model or args.nas_enabled:
-        log_model_summary(model, args, variables, input_features, logger)
+    phase = 'QuantTrain' if args.quantization else 'FloatTrain'
+
+    if phase == 'FloatTrain':
+        log_model_graph(model, args, (1,) + dataset.X.shape[1:], logger)
 
     model = load_pretrained_weights(model, args, logger)
 
@@ -258,7 +386,6 @@ def main(gpu, args):
     optimizer, lr_scheduler = setup_optimizer_and_scheduler(model, args)
     resume_from_checkpoint(model_without_ddp, optimizer, lr_scheduler, model_ema, args)
 
-    phase = 'QuantTrain' if args.quantization else 'FloatTrain'
     logger.info("Start training")
     start_time = timeit.default_timer()
     best = dict(accuracy=0.0, f1=0, conf_matrix=dict(), epoch=None)
@@ -271,8 +398,12 @@ def main(gpu, args):
     model = utils.quantization_wrapped_model(
         model, args.quantization, args.quantization_method, args.weight_bitwidth, args.activation_bitwidth,
         args.epochs, args.output_int)
-    
-    
+
+    # Log quantization configuration (QuantTrain only)
+    if args.quantization and args.quantization != 0:
+        log_quant_config(args, logger)
+
+
 
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
@@ -321,12 +452,13 @@ def main(gpu, args):
     # Export model
     logger.info('Exporting model after training.')
     if args.distributed is False or (args.distributed is True and int(os.environ['LOCAL_RANK']) == 0):
-        example_input = next(iter(data_loader_test))[1]
+        example_input = next(iter(data_loader_test))[1] 
         input_shape = (1,) + dataset.X.shape[1:]
         utils.export_model(
             model, input_shape=input_shape, output_dir=args.output_dir, opset_version=args.opset_version,
             quantization=args.quantization, example_input=example_input, generic_model=args.generic_model,
-            remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False)
+            remove_hooks_for_jit=True if (args.quantization_method == TinyMLQuantizationMethod.PTQ and args.quantization) else False,
+            input_names=["input"])
 
     log_training_time(start_time)
 

@@ -127,16 +127,16 @@ def generate_golden_vectors(output_dir, output_int, dataset, generic_model=False
 
         np.savetxt(half_path + f'adc_{index}.txt', np_raw.flatten(),
                    fmt='%f,' if np_raw.dtype.kind == 'f' else '%d,',
-                   header=f'//(Index: {index}): ADC Data\nfloat raw_input_test[{len(np_raw.flatten())}]= {{',
+                   header=f'//(Index: {index}): ADC Data\nconst float raw_input_test[{len(np_raw.flatten())}]= {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'adc_{index}.txt')
         np.savetxt(half_path + f'features_{index}.txt', np_feat.flatten(), fmt='%.5f,',
-                   header=f'//(Index: {index}): Extracted Features\nfloat model_test_input[{len(np_feat.flatten())}] = {{',
+                   header=f'//(Index: {index}): Extracted Features\nconst float model_test_input[{len(np_feat.flatten())}] = {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'features_{index}.txt')
         np.savetxt(half_path + f'output_{index}.txt', pred.flatten(),
                    fmt='%d,' if output_int else '%f,',
-                   header=f'//(Index: {index}): Expected Model Output\n{"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{',
+                   header=f'//(Index: {index}): Expected Model Output\nconst {"int8_t" if output_int else "float"} golden_output[{len(pred.flatten())}] = {{',
                    footer='}', comments='', newline=' ')
         vector_files.append(half_path + f'output_{index}.txt')
 

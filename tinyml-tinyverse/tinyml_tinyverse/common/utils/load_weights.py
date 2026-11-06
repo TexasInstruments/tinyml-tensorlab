@@ -34,7 +34,7 @@ import torch
 import copy
 from argparse import Namespace
 from collections import OrderedDict
-from . import print_utils
+from logging import getLogger
 from . import data_utils
 
 ######################################################
@@ -50,11 +50,12 @@ except ImportError:
 def load_weights(model, pretrained, change_names_dict=None, keep_original_names=False, width_mult=1.0,
                         ignore_size=True, verbose=False, num_batches_tracked = None, download_root=None,
                         state_dict_name='state_dict', **kwargs):
+    logger = getLogger("root.load_weights")
     device = next(model.parameters()).device
 
     download_root = './' if (download_root is None) else download_root
     if pretrained is None or pretrained is False:
-        print_utils.print_yellow(f'=> weights could not be loaded. pretrained data given is {pretrained}')
+        logger.warning(f'=> weights could not be loaded. pretrained data given is {pretrained}')
         return model
 
     if isinstance(pretrained, str):
@@ -151,7 +152,7 @@ def load_weights(model, pretrained, change_names_dict=None, keep_original_names=
             try:
                 model.load_state_dict(data, strict=False)
             except:
-                print_utils.print_yellow('=> WARNING: weights could not be loaded completely.')
+                logger.warning('=> WARNING: weights could not be loaded completely.')
         else:
             model.load_state_dict(data, strict=False)
         #
@@ -160,10 +161,11 @@ def load_weights(model, pretrained, change_names_dict=None, keep_original_names=
 
 
 def check_model_data(model, data, verbose=False, ignore_names=('num_batches_tracked',)):
+    logger = getLogger("root.load_weights.check_model_data")
     model_dict = model.state_dict()
     missing_weights = [k for k, v in model_dict.items() if k not in list(data.keys())]
     extra_weights = [k for k, v in data.items() if k not in list(model_dict.keys())]
-    
+
     missing_weights = [name for name in missing_weights if not _match_name_partial(ignore_names, name)]
     extra_weights = [name for name in extra_weights if not _match_name_partial(ignore_names, name)]
     not_matching_sizes = [k for k in model_dict.keys() if ((k in data.keys()) and (data[k].size() != model_dict[k].size()))]
@@ -172,11 +174,11 @@ def check_model_data(model, data, verbose=False, ignore_names=('num_batches_trac
     #         print(f"size mismatch for layer k expected:{model_dict[k].size()}, got:{data[k].size()}")
 
     if missing_weights:
-        print_utils.print_yellow("=> The following layers in the model could not be loaded from pre-trained: ", *missing_weights, sep = "\n")
+        logger.warning("=> The following layers in the model could not be loaded from pre-trained: \n" + "\n".join(missing_weights))
     if not_matching_sizes:
-        print_utils.print_yellow("=> The shape of the following weights did not match: ", *not_matching_sizes, sep = "\n")
+        logger.warning("=> The shape of the following weights did not match: \n" + "\n".join(not_matching_sizes))
     if extra_weights:
-        print_utils.print_yellow("=> The following weights in pre-trained were not used: ", *extra_weights, sep = "\n")
+        logger.warning("=> The following weights in pre-trained were not used: \n" + "\n".join(extra_weights))
                 
     return missing_weights, extra_weights, not_matching_sizes
 

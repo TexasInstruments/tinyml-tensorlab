@@ -1709,7 +1709,8 @@ def unwrap_compiled_submodules(model):
 
 
 def export_model(model, input_shape, output_dir, opset_version=17, quantization=0,
-                 example_input=None, generic_model=False, remove_hooks_for_jit=False):
+                 example_input=None, generic_model=False, remove_hooks_for_jit=False,
+                 input_names=None):
     logger = getLogger("root.export_model")
     device="cpu"  # torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # example_input[0].unsqueeze(0) will create a tensor with batch size 1: n,c,h,w -> 1,c,h,w
@@ -1803,7 +1804,8 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
         # convert the model
         model_copy = model_copy.convert()
         # export converted onnx model
-        model_copy.export(dummy_input, onnx_file, opset_version=opset_version)
+        model_copy.export(dummy_input, onnx_file, opset_version=opset_version,
+                          input_names=input_names)
 
         if remove_hooks_for_jit:   
             remove_hooks(model_copy)
@@ -1812,7 +1814,8 @@ def export_model(model, input_shape, output_dir, opset_version=17, quantization=
             torch.jit.save(ts_model, os.path.splitext(onnx_file)[0]+"_ts.pth")
             encrypt(os.path.splitext(onnx_file)[0]+"_ts.pth", get_crypt_key())
     else:
-        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version, verbose=False, dynamo=False)
+        torch.onnx.export(model_copy, dummy_input, onnx_file, opset_version=opset_version, verbose=False,
+                          dynamo=False, input_names=input_names)
 
     onnx.shape_inference.infer_shapes_path(onnx_file, onnx_file)
     if not generic_model:
