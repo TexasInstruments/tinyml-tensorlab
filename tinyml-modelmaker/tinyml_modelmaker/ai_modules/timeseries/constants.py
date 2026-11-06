@@ -105,6 +105,8 @@ def get_skip_normalize_and_output_int(task_category, quantization, auto_quantiza
     image_classification            | 0            | FALSE          | FALSE
     image_classification            | 1            | TRUE           | TRUE
     image_classification            | 2            | TRUE           | TRUE
+    radar_classification            | 0            | FALSE          | FALSE
+    radar_classification            | 1            | TRUE           | TRUE
 
     Args:
         task_category: One of TASK_CATEGORY_TS_* constants or 'image_classification'
@@ -1736,10 +1738,10 @@ SAMPLE_DATASET_DESCRIPTIONS = {
         },
         'dataset': {
             'dataset_name': 'fan_blower_imbalance_dataset',
-            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip',
+            'input_data_path': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip',
         },
         'info': {
-            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/fan_blower_imbalance_dsi.zip',
+            'dataset_url': 'https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/fan_blower_imbalance_dsi.zip',
             'dataset_detailed_name': 'Fan Blower Imbalance Dataset',
             'dataset_description': 'Example fan blower imbalance',
             'dataset_size': None,

@@ -41,7 +41,7 @@ import tinyml_modelmaker
 from ..... import utils
 from ... import constants
 
-def get_radar_classification_log_summary_regex():
+def get_radar_base_log_summary_regex():
     return {
         'js': [
             # Floating Point Training
@@ -177,22 +177,15 @@ def get_radar_classification_log_summary_regex():
     }
 def create_template_model_description(task_category, task_type, dataset_loader=None, batch_size_key=None):
     training_dict = dict(
-        quantization=TinyMLQuantizationVersion.QUANTIZATION_TINPU,
+        quantization=TinyMLQuantizationVersion.QUANTIZATION_GENERIC,
         training_backend='tinyml_tinyverse',
         model_training_id='',
         model_name='',
         learning_rate=1e-4,
         model_spec=None,
-        batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT.get(batch_size_key or task_type, 32),
+        batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT.get(batch_size_key or task_type, 64),
         target_devices=[
-            constants.TARGET_DEVICE_MSPM0G3507,
-            constants.TARGET_DEVICE_MSPM0G3519,
-            constants.TARGET_DEVICE_MSPM0G5187,
-            constants.TARGET_DEVICE_F28003,
-            constants.TARGET_DEVICE_F28004,
-            constants.TARGET_DEVICE_F2837,
-            constants.TARGET_DEVICE_F28P65,
-            constants.TARGET_DEVICE_F28P55,
+            constants.TARGET_DEVICE_xWRL6432
         ],
         training_devices={
             constants.TRAINING_DEVICE_CPU: True,
@@ -208,7 +201,7 @@ def create_template_model_description(task_category, task_type, dataset_loader=N
         common=dict(
             task_category=task_category,
             task_type=task_type,
-            generic_model=True,
+            generic_model=False,
             model_details='',
         ),
         download=dict(download_url='', download_path=''),
@@ -275,7 +268,7 @@ class BaseRadarModelTraining:
             )
 
     def _get_log_summary_regex(self):
-        return get_radar_classification_log_summary_regex()
+        return get_radar_base_log_summary_regex()
 
     def _init_task_specific_params(self):
         pass
@@ -312,7 +305,7 @@ class BaseRadarModelTraining:
             '--opt', f'{self.params.training.optimizer}',
             '--weight-decay', f'{self.params.training.weight_decay}',
             '--lr-scheduler', f'{self.params.training.lr_scheduler}',
-            '--lr-warmup-epochs', '1',
+            '--lr-warmup-epochs', f'{getattr(self.params.training, "lr_warmup_epochs", 0)}',
             '--distributed', f'{distributed}',
             '--device', f'{device}',
 
@@ -328,8 +321,6 @@ class BaseRadarModelTraining:
             '--sampling-rate', f'{self.params.data_processing_feature_extraction.sampling_rate}',
             '--frame-size', f'{self.params.data_processing_feature_extraction.frame_size}',
             '--feature-size-per-frame', f'{self.params.data_processing_feature_extraction.feature_size_per_frame}',
-            
-
 
             '--output-int', f'{self.params.training.output_int}',
             '--variables', f'{self.params.data_processing_feature_extraction.variables}',
@@ -338,11 +329,62 @@ class BaseRadarModelTraining:
             '--early-stopping', f'{self.params.training.early_stopping}',
             '--early-stopping-patience', f'{self.params.training.early_stopping_patience}',
             '--early-stopping-min-delta', f'{self.params.training.early_stopping_min_delta}',
+
+            # Passed through only so train.py's early memory pre-flight check (which runs
+            # before the real compilation stage even starts) can resolve the same
+            # cross-compiler/target the real compilation stage would use, instead of
+            # falling back to compilation.py's unusable bare argparse defaults. Empty
+            # string (not the literal "None") when unresolved, so train_base.py's
+            # `getattr(args, ..., None) or default` fallback treats it as absent.
+            # NOTE: must stay BEFORE the --data-path/--store-feat-ext-data/--epochs/--lr/
+            # --output-dir tail below -- run()/several call sites splice this argv list
+            # with fixed negative-index slices (argv[:-10], argv[:-8], argv[:-2]) that
+            # assume exactly that 10-item tail is last; appending anything after it shifts
+            # those slices and silently corrupts them.
+            '--cross-compiler', f'{self.params.compilation.get("cross_compiler") or ""}',
+            '--cross-compiler-options', f'{self.params.compilation.get("cross_compiler_options") or ""}',
+            '--target', f'{self.params.compilation.get("target") or ""}',
+            '--target-c-mcpu', f'{self.params.compilation.get("target_c_mcpu") or ""}',
             '--data-path', os.path.join(self.params.dataset.dataset_path, self.params.dataset.data_dir),
             '--epochs', f'{self.params.training.training_epochs}',
             '--lr', f'{self.params.training.learning_rate}',
             '--output-dir', f'{self.params.training.training_path}',
+        ] + self._build_radar_data_proc_argv()
+
+    def _build_radar_data_proc_argv(self):
+        """
+        Radar-specific data processing / feature extraction args ,
+        shared between train and test argv. Each param mirrors a key in
+        params.data_processing_feature_extraction (see params.py) and a --flag defined
+        in tinyml_tinyverse train_base.py's get_base_args_parser().
+        """
+        dpfe = self.params.data_processing_feature_extraction
+        return [
+
+            '--radar-range-bins-bounds', f'{dpfe.radar_range_bins_bounds}',
+
+            '--radar-point-cloud-data-selector', dpfe.radar_point_cloud_data_selector,
+            '--radar-point-cloud-coordinate-system', f'{dpfe.radar_point_cloud_coordinate_system}',
+            '--radar-point-cloud-relative-coordinate-filter', dpfe.radar_point_cloud_relative_coordinate_filter,
+            '--radar-point-cloud-spatial-filter-bounds', f'{dpfe.radar_point_cloud_spatial_filter_bounds}',
+            '--radar-point-cloud-non-spatial-filter-bounds', f'{dpfe.radar_point_cloud_non_spatial_filter_bounds}',
+
+            '--radar-track-data-selector', dpfe.radar_track_data_selector,
+            '--radar-track-velocity-bounds', f'{dpfe.radar_track_velocity_bounds}',
+            '--radar-track-acceleration-bounds', f'{dpfe.radar_track_acceleration_bounds}',
+            '--radar-track-spatial-filter-bounds', f'{dpfe.radar_track_spatial_filter_bounds}',
+
+            '--radar-data-scaling-track-velocity', f'{dpfe.radar_data_scaling_track_velocity}',
+            
+            '--radar-max-points-per-frame', f'{dpfe.radar_max_points_per_frame}',
+            '--radar-min-points-per-frame', f'{dpfe.radar_min_points_per_frame}',
+            '--radar-min-points-per-window', f'{dpfe.radar_min_points_per_window}',
+            '--radar-point-cloud-structure-strategy', f'{dpfe.radar_point_cloud_structure_strategy}',
+            '--radar-point-cloud-sort-by', f'{dpfe.radar_point_cloud_sort_by}',
+            '--radar-frames-quality-index', f'{dpfe.radar_frames_quality_index}',
+            '--radar-feature-ordering', f'{dpfe.radar_feature_ordering}'
         ]
+    
     def _get_task_specific_train_argv(self):
         return []
 
@@ -377,7 +419,8 @@ class BaseRadarModelTraining:
             '--output-dir', output_dir,
             '--model-path', f'{model_path}',
             '--generic-model', f'{self.params.common.generic_model}',
-        ]
+        ] + self._build_radar_data_proc_argv()
+    
     def _get_task_specific_test_argv(self):
         return []
 

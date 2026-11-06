@@ -34,7 +34,8 @@ from tinyml_tinyverse.references.radar_classification import test_onnx as test
 from tinyml_tinyverse.references.radar_classification import train
 
 from ..... import utils
-from .radar_base import BaseRadarModelTraining
+
+from .radar_training_base import BaseRadarModelTraining
 
 # Import model descriptions from modelzoo *********ADD
 from tinyml_modelzoo.model_descriptions.classification import (
@@ -76,9 +77,6 @@ class ModelTraining(BaseRadarModelTraining):
             '--nas_init_channel_multiplier', f'{self.params.training.nas_init_channel_multiplier}',
             '--nas_fanout_concat', f'{self.params.training.nas_fanout_concat}',
             '--load_saved_model', f'{self.params.training.load_saved_model}',
-            # Feature Extraction based on Neural Networks
-            
-            
             # Classification Task Specific Params
             '--file-level-classification-log', f'{self.params.training.file_level_classification_log_path}',
         ]

@@ -48,7 +48,6 @@ def get_model_descriptions(params):
                                                          target_device=params.common.target_device,
                                                          training_device=params.training.training_device)
 
-    #
     model_descriptions = utils.ConfigDict(model_descriptions)
 
     return model_descriptions
@@ -198,7 +197,8 @@ This is a tool for collecting data, training and compiling AI models for use on 
 Bring your own data (BYOD): Retrain models from TI Model Zoo to fine-tune with your own data.
 
 ## Tasks supported
-* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_RADAR_CLASSIFICATION]['task_name']}
+* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_RADAR_POINT_CLOUD_CLASSIFICATION]['task_name']}
+* {constants.TASK_DESCRIPTIONS[constants.TASK_TYPE_RADAR_SURFACE_CLASSIFICATION]['task_name']}
 
 
 ## Supported target devices
@@ -233,7 +233,7 @@ data/projects/<dataset_name>/dataset
 </pre>
 
 - Use a suitable dataset name instead of dataset_name
-- Look at the example dataset [Arc Fault Classification](https://software-dl.ti.com/C2000/esd/mcu_ai/01_03_00/datasets/arc_fault_classification_dsk.zip) to understand further.
+- Look at the example dataset [Radar Posture and Fall Detection](https://software-dl.ti.com/C2000/esd/mcu_ai/datasets/posture_and_fall_detection_dataset.zip) to understand further.
 - In the config file, provide the name of the dataset (dataset_name in this example) in the field dataset_name and provide the path or URL in the field input_data_path.
 - Then the ModelMaker tool can be invoked with the config file.
 
@@ -245,8 +245,7 @@ The config file can be in .yaml or in .json format
 
 ## Model deployment
 - The deploy page provides a button to download the compiled model artifacts to the development board. 
-- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the SDK to run inference. 
-- Please see "C2000Ware Reference Design" in the SDK documentation for more information.
+- The downloaded model artifacts are located in a folder inside /opt/projects. It can be used with the specified Demo Application to run inference. 
 
 ## Glossary of terms
 {tooltip_string}

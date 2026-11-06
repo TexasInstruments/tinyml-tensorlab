@@ -167,7 +167,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -200,7 +200,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -365,7 +365,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -398,7 +398,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -563,7 +563,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -596,7 +596,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -761,7 +761,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -794,7 +794,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -959,7 +959,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -992,7 +992,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -1157,7 +1157,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -1190,7 +1190,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -1355,7 +1355,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -1388,7 +1388,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -1553,7 +1553,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -1586,7 +1586,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -1751,7 +1751,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -1784,7 +1784,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -1949,7 +1949,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -1982,7 +1982,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -2147,7 +2147,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -2180,7 +2180,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -2345,7 +2345,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -2378,7 +2378,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -2544,7 +2544,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 32
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -2577,7 +2577,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -2739,7 +2739,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 32
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -2772,7 +2772,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -2935,7 +2935,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 32
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -2968,7 +2968,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -3130,7 +3130,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 32
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -3163,7 +3163,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -3327,7 +3327,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -3360,7 +3360,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -3533,7 +3533,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -3566,7 +3566,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -3739,7 +3739,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -3772,7 +3772,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -3945,7 +3945,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -3978,7 +3978,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -4151,7 +4151,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -4184,7 +4184,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -4357,7 +4357,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -4390,7 +4390,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -4563,7 +4563,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -4596,7 +4596,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -4769,7 +4769,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -4802,7 +4802,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -4973,7 +4973,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -5006,7 +5006,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -5179,7 +5179,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -5212,7 +5212,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -5385,7 +5385,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -5418,7 +5418,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -5591,7 +5591,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -5624,7 +5624,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -5797,7 +5797,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -5830,7 +5830,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -6003,7 +6003,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -6036,7 +6036,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -6209,7 +6209,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -6242,7 +6242,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -6415,7 +6415,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -6448,7 +6448,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -6622,7 +6622,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -6655,7 +6655,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -6828,7 +6828,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -6861,7 +6861,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -7035,7 +7035,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -7068,7 +7068,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -7241,7 +7241,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -7274,7 +7274,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -7450,7 +7450,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -7483,7 +7483,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -7659,7 +7659,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -7692,7 +7692,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -7866,7 +7866,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -7899,7 +7899,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -8060,7 +8060,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -8093,7 +8093,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -8240,7 +8240,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -8273,7 +8273,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -8438,7 +8438,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -8471,7 +8471,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -8637,7 +8637,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -8670,7 +8670,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -8837,7 +8837,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -8870,7 +8870,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -9036,7 +9036,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -9069,7 +9069,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -9236,7 +9236,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -9269,7 +9269,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -9435,7 +9435,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -9468,7 +9468,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -9634,7 +9634,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -9667,7 +9667,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -9834,7 +9834,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -9867,7 +9867,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -10033,7 +10033,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -10066,7 +10066,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -10231,7 +10231,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -10264,7 +10264,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -10429,7 +10429,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetForecasting
       dataset_path: null
       distributed: true
@@ -10462,7 +10462,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -10627,7 +10627,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 256
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -10660,7 +10660,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -10819,7 +10819,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 256
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -10852,7 +10852,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -11011,7 +11011,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 256
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -11044,7 +11044,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -11208,7 +11208,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -11241,7 +11241,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -11392,7 +11392,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -11425,7 +11425,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -11572,7 +11572,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 256
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -11605,7 +11605,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -11775,7 +11775,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 256
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -11808,7 +11808,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -11978,7 +11978,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 256
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -12011,7 +12011,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -12181,7 +12181,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetAD
       dataset_path: null
       distributed: true
@@ -12214,7 +12214,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -12380,7 +12380,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -12413,7 +12413,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -12567,7 +12567,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -12600,7 +12600,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -12765,7 +12765,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -12798,7 +12798,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -12963,7 +12963,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -12996,7 +12996,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -13164,7 +13164,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -13197,7 +13197,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -13362,7 +13362,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -13395,7 +13395,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -13563,7 +13563,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -13596,7 +13596,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -13761,7 +13761,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -13794,7 +13794,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -13959,7 +13959,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -13992,7 +13992,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -14160,7 +14160,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -14193,7 +14193,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -14361,7 +14361,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -14394,7 +14394,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -14562,7 +14562,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDatasetReg
       dataset_path: null
       distributed: true
@@ -14595,7 +14595,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd
@@ -14759,7 +14759,7 @@ model_descriptions:
       autoquant_tolerance_forecasting: 2.0
       autoquant_tolerance_regression: 0.05
       batch_size: 64
-      compile_model: 1
+      compile_model: 0
       dataset_loader: GenericTSDataset
       dataset_path: null
       distributed: true
@@ -14792,7 +14792,7 @@ model_descriptions:
       nas_model_size: null
       nas_nodes_per_layer: 4
       nas_optimization_mode: Memory
-      native_amp: true
+      native_amp: false
       num_gpus: 1
       ondevice_training: false
       optimizer: sgd

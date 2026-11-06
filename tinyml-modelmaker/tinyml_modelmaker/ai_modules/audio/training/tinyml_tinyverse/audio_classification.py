@@ -13,131 +13,15 @@ from tinyml_torchmodelopt.quantization import TinyMLQuantizationVersion
 from ..... import utils
 from ... import constants
 
-from .audio_base import (
-    BaseAudioModelTraining,
-    create_template_model_description,
-    get_model_descriptions_filtered,
-    get_model_description_by_name,
+from .audio_base import BaseAudioModelTraining
+
+# Import model descriptions from modelzoo
+from tinyml_modelzoo.model_descriptions.audio import (
+    _model_descriptions,
+    enabled_models_list,
+    get_model_descriptions,
+    get_model_description,
 )
-
-
-model_info_str = "Inference time numbers are for comparison purposes only. (Input Size: {})"
-
-template_model_description = create_template_model_description(
-    task_category=constants.TASK_TYPE_AUDIO_CLASSIFICATION,
-    task_type=constants.TASK_TYPE_AUDIO_CLASSIFICATION,
-    dataset_loader='GenericAudioDataset',
-    batch_size_key=constants.TASK_TYPE_AUDIO_CLASSIFICATION,
-)
-
-_model_descriptions = {
-    'DSCNN_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
-        'common': dict(
-            model_details='Lenet5.\nCNN for audio classification.\n'
-                          '2 Conv+BatchNorm+Relu+MaxPool layers + 3 Linear layers.'
-        ),
-        'training': dict(
-            model_training_id='CNN_AUDIO_DSCNN',
-            model_name='DSCNN_NPU',
-            learning_rate=0.1,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_AUDIO_CLASSIFICATION],
-            target_devices=[
-                constants.TARGET_DEVICE_MSPM0G5187,
-            ],
-            properties=[dict(type="group", dynamic=True, script="audio.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
-                        dict(type="group", dynamic=True, script="audio.py", name="train_group", label="Training Parameters", default=[])]
-        ),
-    }),
-    'DSCNN_32K_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
-        'common': dict(
-            model_details='SRAM/Flash-optimized DSCNN for audio classification.\n'
-                          '48 filters, DW 3x1 kernels, stride-2 downsample in DS block 1.\n'
-                          'Target: SRAM < 32 KB, Flash < 128 KB, W8 quantization.'
-        ),
-        'training': dict(
-            model_training_id='CNN_AUDIO_DSCNN_32K_NPU',
-            model_name='DSCNN_32K_NPU',
-            learning_rate=0.001,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_AUDIO_CLASSIFICATION],
-            target_devices=[
-                constants.TARGET_DEVICE_MSPM0G5187,
-            ],
-            properties=[dict(type="group", dynamic=True, script="audio.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
-                        dict(type="group", dynamic=True, script="audio.py", name="train_group", label="Training Parameters", default=[])]
-        ),
-    }),
-    'DSCNN_GB_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
-        'common': dict(
-            model_details='Glass-break detection DSCNN with 32 filters and depthwise-separable convolutions.\n'
-                          'Input: (86, 32) FFT features.\n'
-                          'Optimized for real-time edge inference.'
-        ),
-        'training': dict(
-            model_training_id='CNN_AUDIO_DSCNN_GB_NPU',
-            model_name='DSCNN_GB_NPU',
-            learning_rate=0.001,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_AUDIO_CLASSIFICATION],
-            target_devices=[
-                constants.TARGET_DEVICE_MSPM0G5187,
-            ],
-            properties=[dict(type="group", dynamic=True, script="audio.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
-                        dict(type="group", dynamic=True, script="audio.py", name="train_group", label="Training Parameters", default=[])]
-        ),
-    }),
-    'TCDS_ResNet_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
-        'common': dict(
-            model_details='Temporal Channel-Decoupled Separable ResNet for LPC audio features.\n'
-                          'Permutes input (N,1,T,F) → (N,F,T,1): LPC coefficients as channels,\n'
-                          '1D temporal convolutions only. Peak SRAM ~3-4 KB. Fits MSPM0G5187.'
-        ),
-        'training': dict(
-            model_training_id='CNN_AUDIO_TCDS_ResNet_NPU',
-            model_name='TCDS_ResNet_NPU',
-            learning_rate=0.001,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_AUDIO_CLASSIFICATION],
-            target_devices=[
-                constants.TARGET_DEVICE_MSPM0G5187,
-            ],
-            properties=[dict(type="group", dynamic=True, script="audio.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
-                        dict(type="group", dynamic=True, script="audio.py", name="train_group", label="Training Parameters", default=[])]
-        ),
-    }),
-    'TCDS_ResNet_FB_NPU': utils.deep_update_dict(deepcopy(template_model_description), {
-        'common': dict(
-            model_details='Temporal CNN with depthwise-separable residual blocks for filterbank audio features.\n'
-                          'Flexible channel sizing via model specification with mixed-precision quantization support.'
-        ),
-        'training': dict(
-            model_training_id='CNN_AUDIO_TCDS_ResNet_FB_NPU',
-            model_name='TCDS_ResNet_FB_NPU',
-            learning_rate=0.01,
-            batch_size=constants.TRAINING_BATCH_SIZE_DEFAULT[constants.TASK_TYPE_AUDIO_CLASSIFICATION],
-            target_devices=[
-                constants.TARGET_DEVICE_MSPM0G5187,
-            ],
-            properties=[dict(type="group", dynamic=True, script="audio.py", name="preprocessing_group", label="Preprocessing Parameters", default=[]),
-                        dict(type="group", dynamic=True, script="audio.py", name="train_group", label="Training Parameters", default=[])]
-        ),
-    }),
-}
-
-enabled_models_list = ['DSCNN_NPU', 'DSCNN_32K_NPU', 'DSCNN_GB_NPU', 'TCDS_ResNet_NPU', 'TCDS_ResNet_FB_NPU']
-
-
-def get_model_descriptions(task_type=None):
-    return get_model_descriptions_filtered(
-        _model_descriptions,
-        enabled_models_list,
-        task_type=task_type,
-    )
-
-
-def get_model_description(model_name):
-    return get_model_description_by_name(
-        _model_descriptions,
-        enabled_models_list,
-        model_name,
-    )
 
 
 class ModelTraining(BaseAudioModelTraining):
