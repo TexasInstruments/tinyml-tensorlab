@@ -332,7 +332,9 @@ def main(gpu, args):
                 # in Dual Stream Architecture models 
                 model_config_dict = {}
                 if args.model_config:
-                    import os
+                    # (`os` is imported at module level; a function-local `import os`
+                    # here would make `os` a local for all of main() and raise
+                    # UnboundLocalError on any run where model_config is falsy.)
                     if isinstance(args.model_config, dict):
                         model_config_dict = args.model_config.copy()
                     elif isinstance(args.model_config, str) and os.path.exists(args.model_config):
