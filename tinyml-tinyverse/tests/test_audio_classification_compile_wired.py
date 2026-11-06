@@ -43,6 +43,7 @@ def _base_audio_args(tmp_dir, **overrides):
         output_dir=tmp_dir, weight_bitwidth=8, activation_bitwidth=8,
         autoquant_tolerance_classification=0.1, opset_version=17, device='cpu',
         file_level_classification_log=os.path.join(tmp_dir, 'file_level.log'), DEBUG=False,
+        audio_feature='MFCC',
     )
     for key, value in overrides.items():
         setattr(args, key, value)
@@ -94,6 +95,8 @@ def _patch_audio_common_pipeline(stack, dataset, pre_wrap_model, compiled_model_
     stack.enter_context(patch.object(audio_train.utils, "quantization_wrapped_model", side_effect=lambda model, *a, **kw: model))
     stack.enter_context(patch.object(audio_train.utils, "export_model"))
     stack.enter_context(patch.object(audio_train, "log_training_time"))
+    # run_memory_preflight shells out to the TI compiler; irrelevant here.
+    stack.enter_context(patch.object(audio_train, "run_memory_preflight"))
     return mock_compile, mock_setup_distributed, call_order
 
 

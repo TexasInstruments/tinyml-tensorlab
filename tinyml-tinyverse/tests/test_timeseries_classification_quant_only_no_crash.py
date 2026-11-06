@@ -61,6 +61,7 @@ def test_main_does_not_crash_when_quantization_cache_is_empty():
         autoquant_tolerance_classification=0.1, opset_version=17, device='cpu',
         file_level_classification_log='/tmp/fake-tsc-quant-only/file_level.log',
         DEBUG=False,
+        early_stopping=False, early_stopping_patience=5, early_stopping_min_delta=0.0,
     )
 
     fake_dataset = _FakeTSClassificationDataset()
@@ -90,6 +91,8 @@ def test_main_does_not_crash_when_quantization_cache_is_empty():
         stack.enter_context(patch.object(tsc_train.utils, "quantization_wrapped_model", side_effect=lambda model, *a, **kw: model))
         stack.enter_context(patch.object(tsc_train.utils, "export_model"))
         stack.enter_context(patch.object(tsc_train, "log_training_time"))
+        # run_memory_preflight shells out to the TI compiler; irrelevant here.
+        stack.enter_context(patch.object(tsc_train, "run_memory_preflight"))
         stack.enter_context(patch.object(tsc_train, "shutdown_data_loaders"))
 
         # Should not raise. Pre-fix: AttributeError on dataset_load_state['dataset'] is None.
