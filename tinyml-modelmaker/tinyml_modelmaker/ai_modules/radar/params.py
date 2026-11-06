@@ -102,6 +102,7 @@ def init_params(*args, **kwargs):
             weight_decay=0,
             lr_scheduler=None,
             momentum=0,
+            compile_model=0,    # 1 to enable torch.compile (inductor on CUDA, aot_eager on MPS)
             training_device=constants.TRAINING_DEVICE_CPU,  # 'cpu', 'cuda'
             num_gpus=0,  # 0,1
             distributed=True,
