@@ -399,7 +399,7 @@ class TINPUQuantizedReplacementUtils():
             oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -2**self.activation_bw + 1, 2**self.activation_bw - 1)
             seq_module = torch.nn.Sequential(conv_module, oss_module, torch.nn.ReLU(), torch.nn.Hardtanh(0, 2**self.activation_bw - 1))
         else:
-            oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -2**(self.activation_bw - 1) + 1, 2**(self.activation_bw - 1))
+            oss_module = TINPUOffsetScaleShift(oss_offset, oss_scale, oss_shift, -2**(self.activation_bw - 1), 2**(self.activation_bw - 1) - 1)
             seq_module = torch.nn.Sequential(conv_module, oss_module)
 
         replace_call_module(self.module, start, list(end.users)[0], seq_module, self._get_module_num(), self.rename_nodes_flag)

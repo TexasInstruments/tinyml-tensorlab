@@ -270,7 +270,7 @@ print(f"Evaluation accuracy on {num_eval_batches * BATCH_SIZE} images, {top1.avg
 # Runs the model once to trace its execution and then exports the traced model
 # to the specified file
 x = test_data[0][0]
-torch.onnx.export(model, x, "fmnist.onnx", input_names=["input"])
+torch.onnx.export(model, x, "fmnist.onnx", input_names=["input"], dynamo=False, verbose=False)
 x.numpy().tofile('input.dat')
 
 # Quantize model

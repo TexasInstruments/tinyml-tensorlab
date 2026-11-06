@@ -1,37 +1,26 @@
 # Standard library imports
 import os
-import re
 import random
-import argparse
-import tarfile
-import shutil
-from typing import Tuple, List
-from collections import Counter
+from typing import List
 
 # Third-party scientific libraries
 import numpy as np
 import pandas as pd
-from scipy.stats import norm
 from sklearn.metrics import confusion_matrix
 
 # PyTorch core
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils
 import torch.utils.data
 import torch.backends.cudnn as cudnn
-from torch.utils.data import Dataset, DataLoader, Subset, ConcatDataset
-from torch.nn import CrossEntropyLoss
-from torch.optim.lr_scheduler import StepLR
+from torch.utils.data import DataLoader
 
 # PyTorch vision
 from torchvision import datasets, transforms
 
 # PyTorch quantization
-import torch.ao.quantization as tq
-import torch.ao.quantization.quantize_fx as qfx
 from torch.ao.quantization import quantize_fx
 
 # TinyML quantization
@@ -258,7 +247,7 @@ def export_model(quant_model, example_input: torch.Tensor, model_name: str, with
         print(" Exporting to ONNX...")
         quant_model.export(example_input, model_name, input_names=['input'])
     else:
-        torch.onnx.export(quant_model, example_input, model_name, input_names=['input'])
+        torch.onnx.export(quant_model, example_input, model_name, input_names=['input'], dynamo=False, verbose=False)
 
     print("Model exported successfully")
     return quant_model

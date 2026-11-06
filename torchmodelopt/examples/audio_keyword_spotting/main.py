@@ -2,9 +2,7 @@
 import torch
 import torch.backends.cudnn as cudnn
 from torch.ao.quantization import quantize_fx
-import torch.utils
 import torch.nn as nn
-import torch.utils.data
 from torch.utils.data import Dataset, DataLoader, Subset
 import os
 import shutil
@@ -14,7 +12,7 @@ import numpy as np
 import torchaudio
 from scipy.io import wavfile
 from pydub import AudioSegment
-from typing import Tuple, List
+from typing import List
 
 from tinyml_torchmodelopt.quantization import \
     TINPUTinyMLQATFxModule, TINPUTinyMLPTQFxModule, GenericTinyMLQATFxModule, GenericTinyMLPTQFxModule
@@ -33,7 +31,6 @@ from torchmetrics.classification import Accuracy
 from tqdm import tqdm
 import tensorflow as tf
 import torch.optim as optim
-import hashlib
 import requests
 import tarfile
 
@@ -621,8 +618,7 @@ class SavedTensorDataset(Dataset):
                 if os.path.isdir(label_dir):
                     for tensor_file in os.listdir(label_dir):
                         file_path = os.path.join(label_dir, tensor_file)
-                        audio, _ = sf.read(file_path, dtype="float32", always_2d=True)
-                        audio_tensor = torch.from_numpy(audio.T.copy())
+                        audio_tensor = torch.load(file_path)
                         self.tensors.append(audio_tensor)
                         self.labels.append(label)
                         self.class_count[self.encode_labels[label]] += 1

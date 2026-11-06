@@ -29,13 +29,12 @@
 #
 #################################################################################
 
-
-from colorama import Fore
+ANSI_RESET = '\033[0m'
 
 
 def add_color(string, color=None):
     if color:
-        string = f'{color}{string}{Fore.RESET}'
+        string = f'{color}{string}{ANSI_RESET}'
     return string
 
 

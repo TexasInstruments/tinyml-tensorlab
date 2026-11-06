@@ -1,12 +1,14 @@
 [build-system]
-requires = [ "setuptools", "wheel",]
+requires = [ "setuptools>=77", "wheel",]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "tinyml_torchmodelopt"
-version = "1.5.0"
+version = "1.6.0"
 description = "Tiny ML Model Optimization ToolKit For Torch"
 readme = "README.md"
+license = "BSD-3-Clause"
+license-files = [ "LICENSE",]
 requires-python = ">=3.10,<3.15"
 classifiers = [
 	"Programming Language :: Python :: 3.10",
@@ -19,26 +21,17 @@ dependencies = [
 	"onnxruntime==1.23.2 ; python_version < '3.11'",
 	"onnxruntime==1.29.0 ; python_version >= '3.11'",
 	# using onnxsim==0.4.36 is recommended, the later versions fold the Mul block of Add, Mul, Mul
+	"onnxscript==0.7.1",
 	"onnxsim==0.4.36",
-	"colorama==0.4.6",
 	"torch==2.11.0",
-	# "numpy==2.2.6",
-	# "onnxsim==0.4.36",
-	# "onnx==1.19.1",
-	# "onnxruntime==1.23.2",
-	# "colorama==0.4.6",
-	# "torch==2.11.0",
-	"soundfile==0.14.0",
+	"tabulate==0.10.0",
 ]
 [[project.authors]]
 name = "Adithya Thonse"
 email = "thonse@ti.com"
 
-[project.license]
-text = "BSD 3-Clause"
-
 [project.urls]
-Homepage = "https://github.com/TexasInstruments/tinyml-tensorlab/tree/main/tinyml-modeloptimization"
+Homepage = "https://github.com/TexasInstruments/tinyml-modelzoo"
 
 [tool.setuptools]
 include-package-data = true

@@ -21,7 +21,6 @@ import onnxruntime as ort
 import numpy as np
 import pandas as pd
 from typing import Tuple, List
-from sklearn.metrics import confusion_matrix
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -344,7 +343,7 @@ def export_model(nn_model, example_input: torch.Tensor, model_name: str, with_qu
         # Export int8 quantized model to onnx.
         nn_model.export(example_input.to(DEVICE), model_name, input_names=['input'])
     else:
-        torch.onnx.export(nn_model, example_input.to(DEVICE), model_name, input_names=['input'])
+        torch.onnx.export(nn_model, example_input.to(DEVICE), model_name, input_names=['input'], dynamo=False, verbose=False)
 
     return nn_model
 
