@@ -28,12 +28,13 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+set -e # Exit on first error
+
 ######################################################################
 # Installing dependencies
-#################################################################################
-# upgrade pip
-python -m ensurepip --upgrade
-python -m pip install --no-input --upgrade pip setuptools
+######################################################################
 
-echo 'installing the pytorch model optimization toolkit...'
-python -m pip install --no-input --editable .
+python3 -m pip install --upgrade pip setuptools
+
+echo 'Installing the pytorch model optimization toolkit...'
+python3 -m pip install --no-input --editable .

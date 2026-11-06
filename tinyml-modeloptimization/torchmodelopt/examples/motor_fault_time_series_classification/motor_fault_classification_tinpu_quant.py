@@ -321,7 +321,7 @@ def export_model(nn_model, example_input: torch.Tensor, model_name: str, with_qu
         # Export int8 quantized model to onnx.
         nn_model.export(example_input.to(DEVICE), model_name, input_names=['input'])
     else:
-        torch.onnx.export(nn_model, example_input.to(DEVICE), model_name, input_names=['input'])
+        torch.onnx.export(nn_model, example_input.to(DEVICE), model_name, input_names=['input'], dynamo=False, verbose=False)
 
     # Set input name in the ONNX model to 'input' for consistency with float model
     #load_onnx = onnx.load(model_name)
