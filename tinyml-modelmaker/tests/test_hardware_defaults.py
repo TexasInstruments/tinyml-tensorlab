@@ -52,3 +52,33 @@ def test_safe_when_params_lacks_flags():
     with patch('torch.cuda.is_available', return_value=True):
         apply_hardware_defaults(params, set())  # must not raise
     assert params.training.batch_size == 32
+
+
+def test_logs_when_it_actually_changes_a_value(caplog):
+    """F-3: the policy must announce itself when it fires, so an effective
+    config that differs from the requested one isn't silently unexplained."""
+    from tinyml_modelmaker.utils.hardware_defaults import apply_hardware_defaults
+    params = _make_params()
+    with patch('torch.cuda.is_available', return_value=True):
+        with caplog.at_level('INFO'):
+            apply_hardware_defaults(params, set())
+    assert 'compile_model' in caplog.text
+    assert 'native_amp' in caplog.text
+
+
+def test_does_not_log_when_nothing_changes(caplog):
+    """No log noise when CUDA is unavailable, or the user already set both
+    flags -- only log on an actual mutation."""
+    from tinyml_modelmaker.utils.hardware_defaults import apply_hardware_defaults
+
+    params = _make_params()
+    with patch('torch.cuda.is_available', return_value=False):
+        with caplog.at_level('INFO'):
+            apply_hardware_defaults(params, set())
+    assert caplog.text == ''
+
+    params2 = _make_params()
+    with patch('torch.cuda.is_available', return_value=True):
+        with caplog.at_level('INFO'):
+            apply_hardware_defaults(params2, {'compile_model', 'native_amp'})
+    assert caplog.text == ''
